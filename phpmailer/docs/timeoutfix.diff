@@ -1,0 +1,23 @@
+*** /usr/local/src/php-4.0.4pl1/ext/standard/fsock.c.old	Mon Mar 26 13:07:40 2001
+--- /usr/local/src/php-4.0.4pl1/ext/standard/fsock.c	Mon Mar 26 13:12:03 2001
+***************
+*** 559,564 ****
+--- 559,565 ----
+  
+  static void php_sockread_total(php_sockbuf *sock, size_t maxread)
+  {
++         sock->timeout_event = 0;
+  	while(!sock->eof && TOREAD(sock) < maxread && !sock->timeout_event) {
+  		php_sockread_internal(sock);
+  	}
+***************
+*** 619,624 ****
+--- 620,627 ----
+  	}
+  
+  	SEARCHCR();
++ 
++         sock->timeout_event = 0;
+  
+  	if(!p) {
+  		if(sock->is_blocked) {

@@ -1,0 +1,10 @@
+ChangeLog
+
+Version 0.92 (Tue, May 15 2001)
+* Changed file names to class.phpmailer.php and class.smtp.php to match
+  current PHP class trend.
+* Fixed problem where body not being printed when a message is attached
+* Several small bug fixes
+
+Version 0.9 (Tue, April 17 2001)
+* Intial public release

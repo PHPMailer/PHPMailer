@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Extending phpmailer</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h2>Extending phpmailer (inheritance)</h2>
+
+Extending classes with inheritance is one of the most 
+powerful features of object-oriented 
+programming.  It allows you to make changes to the 
+original class for your 
+own personal use without hacking the original
+classes.  Plus, it is very 
+easy to do. I've provided an example:
+
+<p>
+Here's a class that extends the phpmailer class and sets the defaults
+for the particular site:<br>
+PHP include file: <b>mail.inc.php</b>
+<table cellpadding="4" border="1" width="80%">
+<tr>
+<td bgcolor="#CCCCCC">
+<pre>
+require("class.phpmailer.php");
+
+class my_phpmailer extends phpmailer {
+	// Set default variables for all new objects
+	var $From = "from@email.com";
+	var $FromName = "Mailer";
+	var $Host = "smtp1.site.com;smtp2.site.com";
+	var $Mailer = "smtp";
+	var $WordWrap = 75;
+	
+	// Replace the default error_handler
+	function error_handler($msg) {
+		print("My Site Error");
+		print("Description:");
+		printf("%s", $msg);
+		exit;
+	}
+	
+	// Create an additional function
+	function do_something($something) {
+		// Place your new code here
+	}
+}
+</td>
+</tr>
+</table>
+<br>
+
+Now here's a normal PHP page in the site:<br>
+Normal PHP file: <b>mail_test.php</b>
+<table cellpadding="4" border="1" width="80%">
+<tr>
+<td bgcolor="#CCCCCC">
+<pre>
+require("mail.inc.php");
+
+// Instantiate your new class
+$mail = new my_phpmailer;
+
+// Now you only need to add the necessary stuff
+$mail->AddAddress("josh@site.com", "Josh Adams");
+$mail->Subject = "Here is the subject";
+$mail->Body = "This is the message body";
+$mail->AddAttachment("c:/temp/11-10-00.zip");
+$mail->Send(); // send message
+
+echo "Message was sent successfully";
+</pre>
+</td>
+</tr>
+</table>
+</p>
+
+</body>
+</html>

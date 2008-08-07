@@ -1,0 +1,80 @@
+phpmailer - PHP email class
+==============================
+http://phpmailer.sourceforge.net
+
+Please read LICENSE for information on this softwares availability and
+distribution.
+
+Class Features:
+- Can send HTML emails, multiple attachments, use multiple main and 
+backup SMTP servers, wrap emails for Pine and Kmail client users
+- Can send using three different mail methods: via a SMTP class, the 
+/usr/sbin/sendmail program (and the qmail equivalent), and the PHP 
+mail() function. This can be changed without changing any existing 
+code
+- Uses the same methods as the very popular AspEmail and AspMail 
+Windows COM components
+- Class can be extended to include new methods or replace existing 
+methods
+- Ease transition of ASP based sites to PHP
+- Expose advanced email functionality without hacking headers
+- Works on both Windows and Unix
+- Hopes to provide a stable and standard way to access email 
+functions in PHP
+
+
+Why you might need it:
+
+Many PHP developers utilize email in their code.  The only PHP function 
+that supports this is the mail() function.  However, it does not expose 
+any of the popular features that many email clients use nowadays like 
+HTML-based emails and attachments. There are two proprietary 
+development tools out there that have all the functionality built into 
+easy to use classes: AspEmail(tm) and AspMail.  Both of these 
+programs are COM components only available on Windows.  They are also a 
+little pricey for smaller projects.  
+
+Since I do Linux development I’ve missed these tools for my PHP coding.  
+So I built a version myself that implements the same methods (object 
+calls) that the Windows-based components do. It is open source and the 
+LGPL license allows you to place the class in your proprietary PHP 
+projects.
+
+
+Installation:
+
+Copy class.phpmailer.php into your php.ini include_path. If you are 
+using the SMTP mailer then place class.smtp.php in your path as well.
+
+Example
+
+<?php
+require("class.phpmailer.php");
+
+$mail = new phpmailer;
+
+$mail->IsSMTP(); // set mailer to use SMTP
+$mail->From = "from@email.com";
+$mail->FromName = "Mailer";
+$mail->Host = "smtp1.site.com;smtp2.site.com";  // specify main and backup server
+$mail->AddAddress("josh@site.com", "Josh Adams");
+$mail->AddAddress("ellen@site.com");   // name is optional
+$mail->AddReplyTo("info@site.com", "Information");
+$mail->WordWrap = 50;    // set word wrap
+$mail->AddAttachment("c:\\temp\\js-bak.sql");  // add attachments
+$mail->AddAttachment("c:/temp/11-10-00.zip");
+
+$mail->IsHTML(true);    // set email format to HTML
+$mail->Subject = "Here is the subject";
+$mail->Body = "This is the message body";
+$mail->Send(); // send message
+?>
+
+CHANGELOG
+
+See ChangeLog.txt
+
+
+Download: http://phpmailer.sourceforge.net/phpmailer-0.92.tar.gz
+
+Brent R. Matzelle <bmatzelle@yahoo.com>

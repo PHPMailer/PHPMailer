@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>phpmailer Manual</title>
+</head>
+
+<STYLE type="text/css">
+.greytab {
+    text-align: center;
+    background-color: silver;
+    width: 25%;
+    font-family:courier,courier-new;
+}
+
+.greytab2 {
+    text-align: center;
+    background-color: silver;
+    width: 50%;
+    font-family:courier,courier-new;
+}
+
+.whitetab2 {
+    background-color: white;
+    width: 50%;
+    text-align: center;
+}
+
+.whitetab {
+    background-color: white;
+    width: 33%;
+    text-align: center;
+}
+
+.default {
+	width: 25%;
+	text-align: center;
+}
+
+.head {
+	color: white;
+	font-weight:BOLD;
+	background-color: black;
+	text-align: center;
+}
+</STYLE>
+
+<body bgcolor="#FFFFFF">
+
+<h2>phpmailer Manual</h2>
+
+<p>
+<b>Directions</b>
+<br>
+Variables are set like this:<br>
+$mail->Priority = 1;
+</p>
+
+<p>
+Methods are set like this:<br>
+$mail->AddCC("roger@email.com", "Roger Opus");
+</p>
+
+<h3>General Variables</h3>
+<p align="center">
+<table cellpadding="2" width="100%" border="1">
+<tr>
+<td class="head">Variable</td>
+<td class="head">Description</td>
+<td class="head">Default Value</td>
+</tr>
+<tr>
+<td class="greytab">string Mailer</td>
+<td class="whitetab">Set the mailer ("mail", "sendmail", or "smtp")</td>
+<td class="default">mail</td>
+<td>
+<tr>
+<td class="greytab">int Priority</td>
+<td class="whitetab">Set email priority (1 (High), 3 (Normal), 5 (low)</td>
+<td class="default">3</td>
+<td>
+</tr>
+<tr>
+<td class="greytab">string CharSet</td>
+<td class="whitetab">Set CharSet</td>
+<td class="default">iso-8859-1</td>
+</tr>
+<td class="greytab">string ContentType</td>
+<td class="whitetab">Set ContentType</td>
+<td class="default">text/plain</td>
+</tr>
+<tr>
+<td class="greytab">string Encoding</td>
+<td class="whitetab">Set Content-Transfer-Encoding</td>
+<td class="default">8bit</td>
+</tr>
+<tr>
+<td class="greytab">string From</td>
+<td class="whitetab">Set email address of sender</td>
+<td class="default">root@localhost</td>
+</tr>
+<tr>
+<td class="greytab">string FromName</td>
+<td class="whitetab">Set name of sender</td>
+<td class="default">root</td>
+</tr>
+<tr>
+<td class="greytab">string Subject</td>
+<td class="whitetab">Set message subject</td>
+<td class="default">none</td>
+</tr>
+<tr>
+<td class="greytab">string Body</td>
+<td class="whitetab">Set message body</td>
+<td class="default">none</td>
+</tr>
+<tr>
+<td class="greytab">int WordWrap</td>
+<td class="whitetab">Set word wrap on message body</td>
+<td class="default">false (off)</td>
+<tr>
+<tr>
+<td class="greytab">bool MailerDebug</td>
+<td class="whitetab">Turn debugging on or off</td>
+<td class="default">true (on)</td>
+<tr>
+</table>
+</p>
+
+<h3>SMTP-specific Variables</h3>
+<p align="center">
+<table cellpadding="2" width="100%" border="1">
+<tr>
+<td class="head">Variable</td>
+<td class="head">Description</td>
+<td class="head">Default Value</td>
+</tr>
+<tr>
+<td class="greytab">string Host</td>
+<td class="whitetab">Set mail servers (separated by semicolons (";")</td>
+<td class="default">localhost</td>
+<td>
+</tr>
+<tr>
+<td class="greytab">int Port</td>
+<td class="whitetab">SMTP port</td>
+<td class="default">25</td>
+</tr>
+<tr>
+<td class="greytab">string Helo</td>
+<td class="whitetab">Set SMTP HELO</td>
+<td class="default">localhost.localdomain</td>
+</tr>
+<tr>
+<td class="greytab">int Timeout</td>
+<td class="whitetab">Set connection timeout</td>
+<td class="default">10 (seconds)</td>
+</tr>
+<tr>
+<td class="greytab">bool SMTPDebug</td>
+<td class="whitetab">Set SMTP debugging on or off</td>
+<td class="default">false (off)</td>
+</tr>
+</tr>
+</table>
+
+<h3>General Methods</h3>
+
+<table cellpadding="2" width="100%" border="1">
+<tr>
+<td class="head">Method</td>
+<td class="head">Description</td>
+</tr>
+<tr>
+<td class="greytab2">IsHTML(bool)</td>
+<td class="whitetab2">Turn HTML format on/off</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">IsSMTP()</td>
+<td class="whitetab2">Set mailer to SMTP</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">IsMail()</td>
+<td class="whitetab2">Set mailer to PHP mail() function</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">IsSendmail()</td>
+<td class="whitetab2">Set mailer to $sendmail</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">IsQmail()</td>
+<td class="whitetab2">Set $sendmail to /var/qmail/bin/qmail-inject</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">AddAddress(string address, string name)</td>
+<td class="whitetab2">Add a "to" address (name optional)</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">AddCC(string address, string name)</td>
+<td class="whitetab2">Add a "cc" address (name optional)</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">AddBCC(string address, string name)</td>
+<td class="whitetab2">Add a "bcc" address (name optional)</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">AddReplyTo(string address, string name)</td>
+<td class="whitetab2">Add a "Reply-To" address (name optional)</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">AddAttachment(string path)</td>
+<td class="whitetab2">Add an attachment</td>
+<td>
+</tr>
+<tr>
+<td class="greytab2">Send()</td>
+<td class="whitetab2">Send the message</td>
+<td>
+</tr>
+</table>
+
+
+</body>
+</html>
