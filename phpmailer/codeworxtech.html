@@ -1,0 +1,120 @@
+<html>
+<head>
+<style>
+body, p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+div.width {
+  width: 500px;
+  text-align: left;
+}
+</style>
+<script>
+<!--
+var popsite="http://phpmailer.codeworxtech.com"
+var withfeatures="width=960,height=760,scrollbars=1,resizable=1,toolbar=1,location=1,menubar=1,status=1,directories=0"
+var once_per_session=0
+function get_cookie(Name) {
+  var search = Name + "="
+  var returnvalue = "";
+  if (document.cookie.length > 0) {
+    offset = document.cookie.indexOf(search)
+    if (offset != -1) { // if cookie exists
+      offset += search.length
+      // set index of beginning of value
+      end = document.cookie.indexOf(";", offset);
+      // set index of end of cookie value
+      if (end == -1)
+         end = document.cookie.length;
+      returnvalue=unescape(document.cookie.substring(offset, end))
+      }
+   }
+  return returnvalue;
+}
+function loadornot(){
+  if (get_cookie('popsite')=='') {
+    loadpopsite()
+    document.cookie="popsite=yes"
+  }
+}
+function loadpopsite(){
+  win2=window.open(popsite,"",withfeatures)
+  win2.blur()
+  window.focus()
+}
+if (once_per_session==0) {
+  loadpopsite()
+} else {
+  loadornot()
+}
+-->
+</script>
+</head>
+<body>
+<center>
+<div class="width">
+<hr>
+The http://phpmailer.codeworxtech.com/ website now carries a few
+advertisements through the Google Adsense network to help offset
+some of our costs.<br />
+Thanks ....<br />
+<hr>
+<p><b>My name is Andy Prevost, AKA "codeworxtech".</b><br />
+<a href="http://www.codeworxtech.com">www.codeworxtech.com</a> for more information.<br />
+</p>
+<p><strong>WHY USE OUR TOOLS &amp; WHAT&#39;S IN IT FOR YOU?</strong></p>
+<p>A valid question. We're developers too. We've been writing software, primarily for the internet, for more than 15 years. Along the way, there are two major things that had tremendous impact of our company: PHP and Open Source. PHP is without doubt the most popular platform for the internet. There has been more progress in this area of technology because of Open Source software than in any other IT segment. We have used many open source tools, some as learning tools, some as components in projects we were working on. To us, it's not about popularity ... we're committed to robust, stable, and efficient tools you can use to get your projects in your user's hands quickly. So the shorter answer: what's in it for you? rapid development and rapid deployment without fuss and with straight forward open source licensing.</p>
+<p>Now, the introductions:</p>
+<p>Our company, <strong>Codeworx Technologies</strong>, is the publisher of several Open Source applications and developer tools as well as several commercial PHP applications. The Open Source applications are ttCMS and DCP Portal. The Open Source developer tools include QuickComponents (QuickSkin, QuickCache, and QuickTabs) and now PHPMailer.
+We have staff and offices in the United States, Canada, Caribbean, the Middle
+East, and our primary development center in India. Our company is represented by
+agents and resellers globally.</p>
+<p><strong>Codeworx Technologies</strong> is at the forefront of developing PHP applications. Our staff are all Zend Certified university educated and experts at object oriented programming. While <strong>Codeworx Technologies</strong> can handle any project from trouble shooting programs written by others all the way to finished mission-critical applications, we specialize in taking projects from inception all the way through to implementation - on budget, and on time. If you need help with your projects, we&#39;re the team to get it done right at a reasonable price.</p>
+<p>Over the years, there have been a number of tools that have been constant favorites in all of our projects. We have become the project administrators for most of these tools.</p>
+<p>Our developer tools are all Open Source. Here&#39;s a brief description:</p>
+<ul>
+  <li><span style="background-color: #FFFF00"><strong>PHPMailer</strong></span>. Originally authored by Brent Matzelle, PHPMailer is the leading "email transfer class" for PHP. PHPMailer is downloaded more than 18000 times each and every month by developers looking for a stable, simple email solution. We used it ourselves for years as our favorite tool. It&#39;s always been small (the entire footprint is around 100 Kb), stable, and as complete a solution as you can find. Other tools are nowhere near as simple. And more importantly, most of our applications (including PHPMailer) is implemented in a smaller footprint than one competing email class. Our thanks to Brent Matzelle for this superb tool - our commitment is to keep it lean, keep it focused, and compliant with standards. Visit the PHPMailer website at
+  <a href="http://phpmailer.codeworxtech.com/">http://phpmailer.codeworxtech.com/</a>. <br />
+  Please note: <strong>all of our focus is now on the PHPMailer for PHP5.</strong><br />
+  <span style="background-color: #FFFF00">PS. While you are at it, please visit our sponsor&#39;s sites, click on their ads.
+  It helps offset some of our costs.</span><br />
+  Want to help? We're looking for progressive developers to join our team of volunteer professionals working on PHPMailer. Our entire focus is on PHPMailer for PHP5, and our next major task is to enhance our
+  exception/error handling with PHP 5's object oriented try/throw/catch mechanisms. If you are interested, let us know.<br />
+  <br />
+  </li>
+  <li><strong><span style="background-color: #FFFF00">QuickCache</span></strong>. Originally authored by Jean Pierre Deckers as jpCache, QuickCache is an HTTP OpCode caching strategy that works on your entire site with only one line of code at the top of your script. The cached pages can be stored as files or as database objects. The benefits are absolutely astounding: bandwidth savings of up to 80% and screen display times increased by 8 - 10x. Visit the QuickCache website at
+  <a href="http://quickcache.codeworxtech.com/">http://quickcache.codeworxtech.com/</a>.<br />
+  <br />
+  </li>
+  <li><strong><span style="background-color: #FFFF00">QuickSkin</span></strong>. Originally authored by Philipp v. Criegern and named "SmartTemplate". The project was taken over by Manuel 'EndelWar' Dalla Lana and now by "codeworxtech". QuickSkin is one of the truly outstanding templating engines available, but has always been confused with Smarty Templating Engine. QuickSkin is even more relevant today than when it was launched. It&#39;s a small footprint with big impact on your projects. It features a built in caching technology, token based substitution, and works on the concept of one single HTML file as the template. The HTML template file can contain variable information making it one small powerful tool for your developer tool kit. Visit the QuickSkin website at
+  <a href="http://quickskin.codeworxtech.com/">http://quickskin.codeworxtech.com/</a>.<br />
+  <br />
+  </li>
+</ul>
+<p>We're committed to PHP and to the Open Source community.</p>
+<p>Opportunities with <strong>Codeworx Technologies</strong>:</p>
+<ul>
+<li><span style="background-color: #FFFF00">Resellers/Agents</span>: We're always interested in talking with companies that
+want to represent
+<strong>Codeworx Technologies</strong> in their markets. We also have private label programs for our commercial products (in certain circumstances).</li>
+<li>Programmers/Developers: We are usually fully staffed, however, if you would like to be considered for a career with
+<strong>Codeworx Technologies</strong>, we would be pleased to hear from you.<br />
+A few things to note:<br />
+<ul>
+  <li>experience level does not matter: from fresh out of college to multi-year experience - it&#39;s your
+  creative mind and a positive attitude we want</li>
+  <li>if you contact us looking for employment, include a cover letter, indicate what type of work/career you are looking for and expected compensation</li>
+  <li>if you are representing someone else looking for work, do not contact us. We have an exclusive relationship with a recruiting partner already and not interested in altering the arrangement. We will not hire your candidate under any circumstances unless they wish to approach us individually.</li>
+  <li>any contact that ignores any of these points will be discarded</li>
+</ul></li>
+<li>Affiliates/Partnerships: We are interested in partnering with other firms who are leaders in their field. We clearly understand that successful companies are built on successful relationships in all industries world-wide. We currently have innovative relationships throughout the world that are mutually beneficial. Drop us a line and let&#39;s talk.</li>
+</ul>
+Regards,<br />
+Andy Prevost (aka, codeworxtech)<br />
+<a href="mailto:codeworxtech@users.sourceforge.net">codeworxtech@users.sourceforge.net</a><br />
+<br />
+</div>
+</center>
+</body>
+</html>
