@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class SMTP</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class SMTP</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">SMTP is rfc 821 compliant and implements all the rfc 821 SMTP  commands except TURN which will always return a not implemented  error. SMTP also provides some utility methods for sending mail  to an SMTP server.</p>
+	<ul class="tags">
+				<li><span class="field">author:</span> <p>Chris Ryan</p></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_class_smtp_php.html">Program_Root/class.smtp.php</a> (line <span class="field">24</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+								<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$CRLF" title="details" class="var-name">$CRLF</a>
+				</div>
+								<div class="var-title">
+					<span class="var-type">bool</span>
+					<a href="#$do_debug" title="details" class="var-name">$do_debug</a>
+				</div>
+								<div class="var-title">
+					<span class="var-type">int</span>
+					<a href="#$SMTP_PORT" title="details" class="var-name">$SMTP_PORT</a>
+				</div>
+							</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+								
+				<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#SMTP" title="details" class="method-name">SMTP</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Authenticate" title="details" class="method-name">Authenticate</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$username</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$password</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#Close" title="details" class="method-name">Close</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Connect" title="details" class="method-name">Connect</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$host</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$port</span>, [<span class="var-type">mixed</span>&nbsp;<span class="var-name">$tval</span> = <span class="var-default">30</span>])
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Data" title="details" class="method-name">Data</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$msg_data</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">string</span>
+										<a href="#Expand" title="details" class="method-name">Expand</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$name</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Hello" title="details" class="method-name">Hello</a>
+											([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$host</span> = <span class="var-default">""</span>])
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">string</span>
+										<a href="#Help" title="details" class="method-name">Help</a>
+											([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$keyword</span> = <span class="var-default">""</span>])
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Mail" title="details" class="method-name">Mail</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Noop" title="details" class="method-name">Noop</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Quit" title="details" class="method-name">Quit</a>
+											([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$close_on_error</span> = <span class="var-default">true</span>])
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Recipient" title="details" class="method-name">Recipient</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$to</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Reset" title="details" class="method-name">Reset</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Send" title="details" class="method-name">Send</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#SendAndMail" title="details" class="method-name">SendAndMail</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#SendOrMail" title="details" class="method-name">SendOrMail</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">bool</span>
+										<a href="#Turn" title="details" class="method-name">Turn</a>
+										()
+									</div>
+								
+				<div class="method-definition">
+											<span class="method-result">int</span>
+										<a href="#Verify" title="details" class="method-name">Verify</a>
+											(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$name</span>)
+									</div>
+							</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="var$CRLF" id="$CRLF"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$CRLF</span>
+			 = <span class="var-default"> &quot;\r\n&quot;</span>			(line <span class="line-number">36</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">SMTP reply line ending</p>
+	
+	
+		
+		
+
+</div>
+<a name="var$do_debug" id="$do_debug"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$do_debug</span>
+						(line <span class="line-number">42</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sets whether debugging is turned on</p>
+	
+	
+		
+		
+
+</div>
+<a name="var$SMTP_PORT" id="$SMTP_PORT"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$SMTP_PORT</span>
+			 = <span class="var-default"> 25</span>			(line <span class="line-number">30</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">SMTP server port</p>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+														<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodSMTP" id="SMTP"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor SMTP</span> (line <span class="line-number">57</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Initialize the class so that the data is in a known state.</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			SMTP
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodAuthenticate" id="Authenticate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Authenticate</span> (line <span class="line-number">144</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Performs SMTP authentication.  Must be run after running the  Hello() method.  Returns true if successfully authenticated.</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Authenticate
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$username</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$password</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodClose" id="Close"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Close</span> (line <span class="line-number">232</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Closes the socket and cleans up the state of the class.</p>
+<p class="description"><p>It is not considered good to use this function without  first trying to use QUIT.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			Close
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodConnect" id="Connect"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Connect</span> (line <span class="line-number">82</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Connect to the server specified on the port specified.</p>
+<p class="description"><p>If the port is not specified use the default SMTP_PORT.  If tval is specified then a connection will try and be  established with the server for that number of seconds.  If tval is not specified the default is 30 seconds to  try on the connection.</p><p>SMTP CODE SUCCESS: 220  SMTP CODE FAILURE: 421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Connect
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$host</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$port</span>, [<span class="var-type">mixed</span>&nbsp;<span class="var-name">$tval</span> = <span class="var-default">30</span>])
+			</div>
+	
+		
+		
+	</div>
+<a name="methodData" id="Data"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Data</span> (line <span class="line-number">266</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Issues a data command and sends the msg_data to the server</p>
+<p class="description"><p>finializing the mail transaction. $msg_data is the message  that is to be send with the headers. Each header needs to be  on a single line followed by a &lt;CRLF&gt; with the message headers  and the message body being seperated by and additional &lt;CRLF&gt;.</p><p>Implements rfc 821: DATA &lt;CRLF&gt;</p><p>SMTP CODE INTERMEDIATE: 354      [data]      &lt;CRLF&gt;.&lt;CRLF&gt;      SMTP CODE SUCCESS: 250      SMTP CODE FAILURE: 552,554,451,452  SMTP CODE FAILURE: 451,554  SMTP CODE ERROR  : 500,501,503,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Data
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$msg_data</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodExpand" id="Expand"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Expand</span> (line <span class="line-number">399</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Expand takes the name and asks the server to list all the  people who are members of the _list_. Expand will return  back and array of the result or false if an error occurs.</p>
+<p class="description"><p>Each value in the array returned has the format of:      [ &lt;full-name&gt; &lt;sp&gt; ] &lt;path&gt;  The definition of &lt;path&gt; is defined in rfc 821</p><p>Implements rfc 821: EXPN &lt;SP&gt; &lt;string&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE FAILURE: 550  SMTP CODE ERROR  : 500,501,502,504,421</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> <p>array</p></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			Expand
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodHello" id="Hello"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Hello</span> (line <span class="line-number">450</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sends the HELO command to the smtp server.</p>
+<p class="description"><p>This makes sure that we and the server are in  the same known state.</p><p>Implements from rfc 821: HELO &lt;SP&gt; &lt;domain&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE ERROR  : 500, 501, 504, 421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Hello
+		</span>
+					([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$host</span> = <span class="var-default">""</span>])
+			</div>
+	
+		
+		
+	</div>
+<a name="methodHelp" id="Help"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Help</span> (line <span class="line-number">524</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Gets help information on the keyword specified. If the keyword</p>
+<p class="description"><p>is not specified then returns generic help, ussually contianing  A list of keywords that help is available on. This function  returns the results back to the user. It is up to the user to  handle the returned data. If an error occurs then false is  returned with $this-&gt;error set appropiately.</p><p>Implements rfc 821: HELP [ &lt;SP&gt; &lt;string&gt; ] &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 211,214  SMTP CODE ERROR  : 500,501,502,504,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			Help
+		</span>
+					([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$keyword</span> = <span class="var-default">""</span>])
+			</div>
+	
+		
+		
+	</div>
+<a name="methodMail" id="Mail"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Mail</span> (line <span class="line-number">576</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Starts a mail transaction from the email address specified in  $from. Returns true if successful or false otherwise. If True  the mail transaction is started and then one or more Recipient  commands may be called followed by a Data command.</p>
+<p class="description"><p>Implements rfc 821: MAIL &lt;SP&gt; FROM:&lt;reverse-path&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE SUCCESS: 552,451,452  SMTP CODE SUCCESS: 500,501,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Mail
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodNoop" id="Noop"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Noop</span> (line <span class="line-number">618</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sends the command NOOP to the SMTP server.</p>
+<p class="description"><p>Implements from rfc 821: NOOP &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE ERROR  : 500, 421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Noop
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodQuit" id="Quit"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Quit</span> (line <span class="line-number">661</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sends the quit command to the server and then closes the socket  if there is no error or the $close_on_error argument is true.</p>
+<p class="description"><p>Implements from rfc 821: QUIT &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 221  SMTP CODE ERROR  : 500</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Quit
+		</span>
+					([<span class="var-type">mixed</span>&nbsp;<span class="var-name">$close_on_error</span> = <span class="var-default">true</span>])
+			</div>
+	
+		
+		
+	</div>
+<a name="methodRecipient" id="Recipient"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Recipient</span> (line <span class="line-number">715</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sends the command RCPT to the SMTP server with the TO: argument of $to.</p>
+<p class="description"><p>Returns true if the recipient was accepted false if it was rejected.</p><p>Implements from rfc 821: RCPT &lt;SP&gt; TO:&lt;forward-path&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250,251  SMTP CODE FAILURE: 550,551,552,553,450,451,452  SMTP CODE ERROR  : 500,501,503,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Recipient
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$to</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodReset" id="Reset"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Reset</span> (line <span class="line-number">759</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sends the RSET command to abort and transaction that is  currently in progress. Returns true if successful false  otherwise.</p>
+<p class="description"><p>Implements rfc 821: RSET &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE ERROR  : 500,501,504,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Reset
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodSend" id="Send"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Send</span> (line <span class="line-number">808</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Starts a mail transaction from the email address specified in</p>
+<p class="description"><p>$from. Returns true if successful or false otherwise. If True  the mail transaction is started and then one or more Recipient  commands may be called followed by a Data command. This command  will send the message to the users terminal if they are logged  in.</p><p>Implements rfc 821: SEND &lt;SP&gt; FROM:&lt;reverse-path&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE SUCCESS: 552,451,452  SMTP CODE SUCCESS: 500,501,502,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Send
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodSendAndMail" id="SendAndMail"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">SendAndMail</span> (line <span class="line-number">856</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Starts a mail transaction from the email address specified in</p>
+<p class="description"><p>$from. Returns true if successful or false otherwise. If True  the mail transaction is started and then one or more Recipient  commands may be called followed by a Data command. This command  will send the message to the users terminal if they are logged  in and send them an email.</p><p>Implements rfc 821: SAML &lt;SP&gt; FROM:&lt;reverse-path&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE SUCCESS: 552,451,452  SMTP CODE SUCCESS: 500,501,502,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			SendAndMail
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodSendOrMail" id="SendOrMail"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">SendOrMail</span> (line <span class="line-number">904</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Starts a mail transaction from the email address specified in</p>
+<p class="description"><p>$from. Returns true if successful or false otherwise. If True  the mail transaction is started and then one or more Recipient  commands may be called followed by a Data command. This command  will send the message to the users terminal if they are logged  in or mail it to them if they are not.</p><p>Implements rfc 821: SOML &lt;SP&gt; FROM:&lt;reverse-path&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE SUCCESS: 552,451,452  SMTP CODE SUCCESS: 500,501,502,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			SendOrMail
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$from</span>)
+			</div>
+	
+		
+		
+	</div>
+<a name="methodTurn" id="Turn"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Turn</span> (line <span class="line-number">949</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">This is an optional command for SMTP that this class does not  support. This method is here to make the RFC821 Definition  complete for this class and __may__ be implimented in the future</p>
+<p class="description"><p>Implements from rfc 821: TURN &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250  SMTP CODE FAILURE: 502  SMTP CODE ERROR  : 500, 503</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			Turn
+		</span>
+				()
+			</div>
+	
+		
+		
+	</div>
+<a name="methodVerify" id="Verify"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">Verify</span> (line <span class="line-number">971</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Verifies that the name is recognized by the server.</p>
+<p class="description"><p>Returns false if the name could not be verified otherwise  the response from the server is returned.</p><p>Implements rfc 821: VRFY &lt;SP&gt; &lt;string&gt; &lt;CRLF&gt;</p><p>SMTP CODE SUCCESS: 250,251  SMTP CODE FAILURE: 550,551,553  SMTP CODE ERROR  : 500,501,502,421</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">int</span>
+		<span class="method-name">
+			Verify
+		</span>
+					(<span class="var-type">mixed</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+	
+		
+		
+	</div>
+						
+		</div>
+	</div>
+	
+	<p class="notes" id="credit">
+		Documention generated on Mon, 28 Jul 2003 23:25:50 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.2.0</a>
+	</p>
+	</div></body>
+</html>

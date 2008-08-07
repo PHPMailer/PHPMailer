@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.5.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>phpmailer</name>
+ <uri>http://localhost/phpmailer-1.73.0.tgz</uri>
+ <summary>PHP api for sending e-mails.</summary>
+ <description>
+* Can send emails with multiple TOs, CCs, BCCs and REPLY-TOs
+* Redundant SMTP servers
+* Multipart/alternative emails for mail clients that do not read HTML email
+* Support for 8bit, base64, binary, and quoted-printable encoding
+* Uses the same methods as the very popular AspEmail active server (COM) component
+* SMTP authentication
+* Word wrap
+* Address reset functions
+* HTML email
+* Tested on multiple SMTP servers: Sendmail, qmail, Postfix, Imail, Exchange, etc
+* Works on any platform
+* Flexible debugging
+* Custom mail headers
+* Multiple fs, string, and binary attachments (those from database, string, etc)
+* Embedded image support
+ </description>
+ <lead>
+  <name>Brent Matzelle</name>
+  <user>bmatzelle</user>
+  <email>bmatzelle@users.sourceforge.net</email>
+  <active>yes</active>
+ </lead>
+ <developer>
+  <name>Patrice Fournier</name>
+  <user>pfournier</user>
+  <email>pfournier@users.sourceforge.net</email>
+  <active>yes</active>
+ </developer>
+ <contributor>
+  <name>Lars Olesen</name>
+  <user>lsolesen</user>
+  <email>lsolesen@users.sourceforge.net</email>
+  <active>yes</active>
+ </contributor>
+ <date>2007-04-27</date>
+ <time>14:35:49</time>
+ <version>
+  <release>1.73.0</release>
+  <api>1.73.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL License</license>
+ <notes>Initial release as a PEAR package</notes>
+ <contents>
+  <dir baseinstalldir="phpmailer" name="/">
+   <dir name="docs">
+    <file name="extending.html" role="doc">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="faq.html" role="doc">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="timeoutfix.diff" role="doc">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /docs -->
+   <dir name="language">
+    <file name="phpmailer.lang-br.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-ca.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-ch.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-cz.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-de.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-dk.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-en.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-es.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-fi.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-fo.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-fr.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-hu.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-it.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-ja.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-nl.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-no.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-pl.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-ro.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-ru.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-se.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer.lang-tr.php" role="php">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /language -->
+   <dir name="test">
+    <file name="AllTests.php" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="message.txt" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailerTestCase.php" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpmailer_test.php" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="phpunit.php" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+    <file name="test.png" role="test">
+     <tasks:replace from="@package-version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /test -->
+   <file name="ChangeLog.txt" role="doc">
+    <tasks:replace from="@package-version@" to="version" type="package-info" />
+   </file>
+   <file name="class.phpmailer.php" role="php">
+    <tasks:replace from="@package-version@" to="version" type="package-info" />
+   </file>
+   <file name="class.smtp.php" role="php">
+    <tasks:replace from="@package-version@" to="version" type="package-info" />
+   </file>
+   <file name="LICENSE" role="doc">
+    <tasks:replace from="@package-version@" to="version" type="package-info" />
+   </file>
+   <file name="README" role="doc">
+    <tasks:replace from="@package-version@" to="version" type="package-info" />
+   </file>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.3.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.5.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.73.0</release>
+    <api>1.73.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2007-04-27</date>
+   <license uri="http://www.gnu.org/licenses/lgpl.html">LGPL License</license>
+   <notes>Initial release as a PEAR package</notes>
+  </release>
+ </changelog>
+</package>
