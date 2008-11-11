@@ -2,6 +2,7 @@
 /**
  * PHPMailer language file.
  * German Version
+ * Thanks to Yann-Patrick Schlame for the latest update!
  */
 
 $PHPMAILER_LANG = array();
@@ -20,7 +21,6 @@ $PHPMAILER_LANG["connect_host"]         = 'SMTP Fehler: Konnte keine Verbindung 
 $PHPMAILER_LANG["file_access"]          = 'Zugriff auf folgende Datei fehlgeschlagen: ';
 $PHPMAILER_LANG["file_open"]            = 'Datei Fehler: konnte folgende Datei nicht &ouml;ffnen: ';
 $PHPMAILER_LANG["encoding"]             = 'Unbekanntes Encoding-Format: ';
-$PHPMAILER_LANG["signing"]              = 'Signing Error: ';
+$PHPMAILER_LANG["signing"]              = 'Fehler beim Signieren: ';
 
 ?>
-

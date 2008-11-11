@@ -1,5 +1,19 @@
 ChangeLog
 
+Version 2.0.3 (November 08 2008)
+* fixed line 1041 in class.smtp.php (endless loop from missing = sign)
+* fixed duplicate images in email body
+* removed English language from language files and made it a default within
+  class.phpmailer.php - if no language is found, it will default to use
+  the english language translation
+* corrected $basedir to $directory
+* changed default of $LE to "\r\n" to comply with RFC 2822. Can be set by the user
+  if default is not acceptable
+* removed trim() from return results in EncodeQP
+* changed $this->AltBody = $textMsg; to $this->AltBody = html_entity_decode($textMsg);
+* We have removed the /phpdoc from the downloads. All documentation is now on
+  the http://phpmailer.codeworxtech.com website.
+
 Version 2.0.2 (June 04 2008)
 
 ** NOTE: WE HAVE A NEW LANGUAGE VARIABLE FOR DIGITALLY SIGNED S/MIME EMAILS.
@@ -8,9 +22,9 @@ Version 2.0.2 (June 04 2008)
 
 * added S/MIME functionality (ability to digitally sign emails)
   BIG THANKS TO "sergiocambra" for posting this patch back in November 2007.
-	The "Signed Emails" functionality adds the Sign method to pass the private key
-	filename and the password to read it, and then email will be sent with
-	content-type multipart/signed and with the digital signature attached.
+  The "Signed Emails" functionality adds the Sign method to pass the private key
+  filename and the password to read it, and then email will be sent with
+  content-type multipart/signed and with the digital signature attached.
 * added ability to define path (mainly for embedded images)
   function MsgHTML($message,$basedir='') ... where:
   $basedir is the fully qualified path
@@ -90,11 +104,11 @@ Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
 * added TLS/SSL SMTP support
   example of use:
   $mail = new PHPMailer();
-	$mail->Mailer = "smtp";
-	$mail->Host = "smtp.example.com";
-	$mail->SMTPSecure   = "tls"; // option
-	//$mail->SMTPSecure   = "ssl";  // option
-	...
+  $mail->Mailer = "smtp";
+  $mail->Host = "smtp.example.com";
+  $mail->SMTPSecure   = "tls"; // option
+  //$mail->SMTPSecure   = "ssl";  // option
+  ...
   $mail->Send();
 * PHPMailer has been tested with PHP4 (4.4.7) and PHP5 (5.2.7)
 * Works with PHP installed as a module or as CGI-PHP
