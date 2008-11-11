@@ -2,7 +2,7 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 2.2.1                                                          |
+|   Version: 2.3                                                            |
 |   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
@@ -140,7 +140,7 @@ class PHPMailer {
    * Holds PHPMailer version.
    * @var string
    */
-  public $Version           = "2.2";
+  public $Version           = "2.3";
 
   /**
    * Sets the email address that a reading confirmation will be sent.
@@ -242,6 +242,12 @@ class PHPMailer {
    */
   public $SingleTo = false;
 
+  /**
+   * Provides the ability to change the line ending
+   * @var string
+   */
+  public $LE              = "\r\n";
+
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE
   /////////////////////////////////////////////////
@@ -257,7 +263,6 @@ class PHPMailer {
   private $boundary        = array();
   private $language        = array();
   private $error_count     = 0;
-  private $LE              = "\n";
   private $sign_cert_file  = "";
   private $sign_key_file   = "";
   private $sign_key_pass   = "";
@@ -604,7 +609,7 @@ class PHPMailer {
 
       if($this->smtp->Connect(($ssl ? 'ssl://':'').$host, $port, $this->Timeout)) {
 
-        $hello = ($this->Helo != '' ? $this->Hello : $this->ServerHostname());
+        $hello = ($this->Helo != '' ? $this->Helo : $this->ServerHostname());
         $this->smtp->Hello($hello);
 
         if($tls) {
@@ -660,8 +665,20 @@ class PHPMailer {
    */
   function SetLanguage($lang_type = 'en', $lang_path = 'language/') {
     if( !(@include $lang_path.'phpmailer.lang-'.$lang_type.'.php') ) {
-      $this->SetError('Could not load language file');
-      return false;
+      $PHPMAILER_LANG = array();
+      $PHPMAILER_LANG["provide_address"]      = 'You must provide at least one ' .
+      $PHPMAILER_LANG["mailer_not_supported"] = ' mailer is not supported.';
+      $PHPMAILER_LANG["execute"]              = 'Could not execute: ';
+      $PHPMAILER_LANG["instantiate"]          = 'Could not instantiate mail function.';
+      $PHPMAILER_LANG["authenticate"]         = 'SMTP Error: Could not authenticate.';
+      $PHPMAILER_LANG["from_failed"]          = 'The following From address failed: ';
+      $PHPMAILER_LANG["recipients_failed"]    = 'SMTP Error: The following ' .
+      $PHPMAILER_LANG["data_not_accepted"]    = 'SMTP Error: Data not accepted.';
+      $PHPMAILER_LANG["connect_host"]         = 'SMTP Error: Could not connect to SMTP host.';
+      $PHPMAILER_LANG["file_access"]          = 'Could not access file: ';
+      $PHPMAILER_LANG["file_open"]            = 'File Error: Could not open file: ';
+      $PHPMAILER_LANG["encoding"]             = 'Unknown encoding: ';
+      $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
     }
     $this->language = $PHPMAILER_LANG;
     return true;
@@ -874,9 +891,6 @@ class PHPMailer {
         $result .= $this->AddrAppend('To', $this->to);
       } elseif (count($this->cc) == 0) {
         $result .= $this->HeaderLine('To', 'undisclosed-recipients:;');
-      }
-      if(count($this->cc) > 0) {
-        $result .= $this->AddrAppend('Cc', $this->cc);
       }
     }
 
@@ -1423,7 +1437,7 @@ class PHPMailer {
       } // end of for
       $output .= $newline.$eol;
     } // end of while
-    return trim($output);
+    return $output;
   }
 
   /**
@@ -1711,8 +1725,7 @@ class PHPMailer {
           $ext = $fileParts[1];
           $mimeType = $this->_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir,-1) != '/') { $basedir .= '/'; }
-          if ( strlen($directory) > 1 && substr($basedir,-1) != '/') { $directory .= '/'; }
-          $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64', $mimeType);
+          if ( strlen($directory) > 1 && substr($directory,-1) != '/') { $directory .= '/'; }
           if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64',$mimeType) ) {
             $message = preg_replace("/".$images[1][$i]."=\"".preg_quote($url, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $message);
           }
@@ -1723,7 +1736,7 @@ class PHPMailer {
     $this->Body = $message;
     $textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$message)));
     if ( !empty($textMsg) && empty($this->AltBody) ) {
-      $this->AltBody = $textMsg;
+      $this->AltBody = html_entity_decode($textMsg);
     }
     if ( empty($this->AltBody) ) {
       $this->AltBody = 'To view this email message, open the email in with HTML compatibility!' . "\n\n";

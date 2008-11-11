@@ -2,8 +2,7 @@
 /**
  * PHPMailer language file.
  * Danish Version
- * Author: Mikael Stokkebro <info@stokkebro.dk>
- */
+ * Author: Mikael Stokkebro <info@stokkebro.dk> */
 
 $PHPMAILER_LANG = array();
 

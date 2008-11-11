@@ -2,6 +2,25 @@ ChangeLog
 
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6. IT WILL NOT WORK WITH PHP4.
 
+Version 2.3 (November 06, 2008)
+
+* added Arabic language (many thanks to Bahjat Al Mostafa)
+* removed English language from language files and made it a default within
+  class.phpmailer.php - if no language is found, it will default to use
+  the english language translation
+* fixed public/private declarations
+* corrected line 1728, $basedir to $directory
+* added $sign_cert_file to avoid improper duplicate use of $sign_key_file
+* corrected $this->Hello on line 612 to $this->Helo
+* changed default of $LE to "\r\n" to comply with RFC 2822. Can be set by the user
+  if default is not acceptable
+* removed trim() from return results in EncodeQP
+* /test and three files it contained are removed from version 2.3
+* fixed phpunit.php for compliance with PHP5
+* changed $this->AltBody = $textMsg; to $this->AltBody = html_entity_decode($textMsg);
+* We have removed the /phpdoc from the downloads. All documentation is now on
+  the http://phpmailer.codeworxtech.com website.
+
 Version 2.2.1 () July 19 2008
 
 * fixed line 1092 in class.smtp.php (my apologies, error on my part)

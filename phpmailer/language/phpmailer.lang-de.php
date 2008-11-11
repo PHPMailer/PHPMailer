@@ -24,4 +24,3 @@ $PHPMAILER_LANG["encoding"]             = 'Unbekanntes Encoding-Format: ';
 $PHPMAILER_LANG["signing"]              = 'Fehler beim Signieren: ';
 
 ?>
-
