@@ -30,7 +30,7 @@
 // SOFTWARE.
 //
 error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE |
-		E_CORE_ERROR | E_CORE_WARNING);
+    E_CORE_ERROR | E_CORE_WARNING);
 
 /*
 interface Test {
@@ -46,11 +46,13 @@ function trace($msg) {
 }
 
 
-class Exception {
+class phpUnitException {
     /* Emulate a Java exception, sort of... */
   var $message;
-  function Exception($message) {
+  var $type;
+  function phpUnitException($message, $type = 'FAILURE') {
     $this->message = $message;
+    $this->type = $type;
   }
   function getMessage() {
     return $this->message;
@@ -82,7 +84,7 @@ class Assert {
     $htmlExpected = htmlspecialchars($expected);
     $htmlActual = htmlspecialchars($actual);
     $str .= sprintf("<pre>%s\n--------\n%s</pre>",
-		    $htmlExpected, $htmlActual);
+        $htmlExpected, $htmlActual);
     $this->fail($str);
   }
 }
@@ -194,24 +196,24 @@ class TestSuite /* implements Test */ {
       // get matched below and then treated (incorrectly) as a test
       // method.  So don't name any TestCase subclasses as "Test..."!
       if (floor(phpversion()) >= 4) {
-	// PHP4 introspection, submitted by Dylan Kuhn
-	$names = get_class_methods($classname);
-	while (list($key, $method) = each($names)) {
-	  if (preg_match('/^test/', $method) && $method != "testcase") {  
-	    $this->addTest(new $classname($method));
-	  }
-	}
+  // PHP4 introspection, submitted by Dylan Kuhn
+  $names = get_class_methods($classname);
+  while (list($key, $method) = each($names)) {
+    if (preg_match('/^test/', $method) && $method != "testcase") {
+      $this->addTest(new $classname($method));
+    }
+  }
       }
       else {
-	$dummy = new $classname("dummy");
-	$names = (array) $dummy;
-	while (list($key, $value) = each($names)) {
-	  $type = gettype($value);
-	  if ($type == "user function" && preg_match('/^test/', $key)
-	  && $key != "testcase") {  
-	    $this->addTest(new $classname($key));
-	  }
-	}
+  $dummy = new $classname("dummy");
+  $names = (array) $dummy;
+  while (list($key, $value) = each($names)) {
+    $type = gettype($value);
+    if ($type == "user function" && preg_match('/^test/', $key)
+    && $key != "testcase") {
+      $this->addTest(new $classname($key));
+    }
+  }
       }
     }
   }
@@ -227,7 +229,7 @@ class TestSuite /* implements Test */ {
     reset($this->fTests);
     while (list($na, $test) = each($this->fTests)) {
       if ($testResult->shouldStop())
-	break;
+  break;
       $test->run(&$testResult);
     }
   }
@@ -275,7 +277,7 @@ class TestResult {
 
   function _endTest($test) /* protected */ {
       /* specialize this for end-of-test action, such as progress
-	 reports  */
+   reports  */
   }
 
   function getFailures() {
@@ -324,7 +326,7 @@ class TextTestResult extends TestResult {
   function TextTestResult() {
     $this->TestResult();  // call superclass constructor
   }
-  
+
   function report() {
     /* report result of test run */
     $nRun = $this->countTests();
@@ -343,7 +345,7 @@ class TextTestResult extends TestResult {
       $exceptions = $failure->getExceptions();
       print("<ul>");
       while (list($na, $exception) = each($exceptions))
-	printf("<li>%s\n", $exception->getMessage());
+  printf("<li>%s\n", $exception->getMessage());
       print("</ul>");
     }
     print("</ol>\n");

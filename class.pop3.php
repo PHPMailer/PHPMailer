@@ -2,7 +2,7 @@
 /*~ class.pop3.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 2.2.1                                                          |
+|   Version: 2.3                                                            |
 |   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
@@ -26,7 +26,7 @@
 
 /**
  * POP Before SMTP Authentication Class
- * Version 2.1
+ * Version 2.3
  *
  * Author: Richard Davey (rich@corephp.co.uk)
  * Modifications: Andy Prevost

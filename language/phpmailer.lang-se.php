@@ -2,8 +2,7 @@
 /**
  * PHPMailer language file.
  * Swedish Version
- * Author: Johan Linnér <johan@linner.biz>
- */
+ * Author: Johan Linnér <johan@linner.biz> */
 
 $PHPMAILER_LANG = array();
 
