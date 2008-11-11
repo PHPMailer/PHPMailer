@@ -9,6 +9,23 @@ PHPMailer
 Full Featured Email Transfer Class for PHP
 ==========================================
 
+Version 2.3 (November 08, 2008)
+
+PHP4 continues to be a major platform for developers. We are responding
+to the emails received to continue development for PHP4 with this 
+release.
+
+We have removed the /phpdoc from the downloads. All documentation is now on
+the http://phpmailer.codeworxtech.com website.
+
+For all other changes and notes, please see the changelog.
+
+Donations are accepted at PayPal with our id "paypal@worxteam.com".
+
+Version 2.2 (July 15 2008)
+
+- see the changelog.
+
 Version 2.0.2 (June 04 2008)
 
 With this release, we are announcing that the development of PHPMailer for PHP5
@@ -47,7 +64,7 @@ its leadership position. Our goals are to simplify use of PHPMailer, provide
 good documentation and examples, and retain backward compatibility to level
 1.7.3 standards.
 
-If you are interested in helping out, visit http://sourceforge.net/phpmailer
+If you are interested in helping out, visit http://sourceforge.net/projects/phpmailer
 and indicate your interest.
 
 **
