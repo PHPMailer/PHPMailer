@@ -23,6 +23,17 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
+*/
+
+/**
+ * PHPMailer - PHP POP Before SMTP Authentication Class
+ * NOTE: Designed for use with PHP version 5 and up
+ * @package PHPMailer
+ * @author Andy Prevost
+ * @copyright 2004 - 2008 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * @version $Id$
+ */
 
 /**
  * POP Before SMTP Authentication Class

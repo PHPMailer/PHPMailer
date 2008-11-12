@@ -23,6 +23,7 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
+*/
 
 /**
  * PHPMailer - PHP email transport class
@@ -30,8 +31,15 @@
  * @package PHPMailer
  * @author Andy Prevost
  * @copyright 2004 - 2008 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * @version $Id$
  */
 
+/**
+ * PHPMailer - PHP email transport class
+ * @package PHPMailer
+ * @author Andy Prevost
+ */
 class PHPMailer {
 
   /////////////////////////////////////////////////
@@ -314,7 +322,7 @@ class PHPMailer {
    */
   public function IsQmail() {
     $this->Sendmail = '/var/qmail/bin/sendmail';
-    $this->Mailer   = 'sendmail';
+    $this->Mailer = 'sendmail';
   }
 
   /////////////////////////////////////////////////
@@ -510,11 +518,12 @@ class PHPMailer {
   }
 
   /**
-   * Sends mail via SMTP using PhpSMTP (Author:
-   * Chris Ryan).  Returns bool.  Returns false if there is a
-   * bad MAIL FROM, RCPT, or DATA input.
+   * Sends mail via SMTP using PhpSMTP
+   * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
+   * @uses SMTP
    * @access public
    * @return bool
+   * @author Chris Ryan
    */
   public function SmtpSend($header, $body) {
     include_once($this->PluginDir . 'class.smtp.php');
@@ -578,8 +587,9 @@ class PHPMailer {
   }
 
   /**
-   * Initiates a connection to an SMTP server.  Returns false if the
-   * operation failed.
+   * Initiates a connection to an SMTP server.
+   * Returns false if the operation failed.
+   * @uses SMTP
    * @access public
    * @return bool
    */
@@ -643,6 +653,7 @@ class PHPMailer {
 
   /**
    * Closes the active SMTP session if one exists.
+   * @uses SMTP
    * @return void
    */
   public function SmtpClose() {
@@ -1711,7 +1722,7 @@ class PHPMailer {
    * @access public
    * @return $message
    */
-  public function MsgHTML($message,$basedir='') {
+  public function MsgHTML($message, $basedir = '') {
     preg_match_all("/(src|background)=\"(.*)\"/Ui", $message, $images);
     if(isset($images[2])) {
       foreach($images[2] as $i => $url) {

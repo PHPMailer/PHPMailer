@@ -23,6 +23,17 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
+*/
+
+/**
+ * PHPMailer - PHP SMTP email transport class
+ * NOTE: Designed for use with PHP version 5 and up
+ * @package PHPMailer
+ * @author Andy Prevost
+ * @copyright 2004 - 2008 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * @version $Id$
+ */
 
 /**
  * SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
@@ -96,7 +107,7 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Connect($host,$port=0,$tval=30) {
+  public function Connect($host, $port = 0, $tval = 30) {
     /* set the error val to null so there is no confusion */
     $this->error = null;
 
@@ -154,7 +165,7 @@ class SMTP {
   }
 
   /**
-   * Initiate a TSL communication with the server.
+   * Initiate a TLS communication with the server.
    *
    * SMTP CODE 220 Ready to start TLS
    * SMTP CODE 501 Syntax error (no parameters allowed)
@@ -520,7 +531,7 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Hello($host="") {
+  public function Hello($host = '') {
     $this->error = null; // so no confusion is caused
 
     if(!$this->connected()) {
@@ -594,7 +605,7 @@ class SMTP {
    * @access public
    * @return string
    */
-  public function Help($keyword="") {
+  public function Help($keyword = '') {
     $this->error = null; // to avoid confusion
 
     if(!$this->connected()) {
@@ -732,7 +743,7 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Quit($close_on_error=true) {
+  public function Quit($close_on_error = true) {
     $this->error = null; // so there is no confusion
 
     if(!$this->connected()) {
