@@ -1405,12 +1405,13 @@ class PHPMailer {
 
   /**
   * Encode string to quoted-printable.
+  * Only uses standard PHP, slow, but will always work
   * @access public
   * @param string $string the text to encode
   * @param integer $line_max Number of chars allowed on a line before wrapping
   * @return string
   */
-  public function EncodeQP( $input = '', $line_max = 76, $space_conv = false ) {
+  public function EncodeQPphp( $input = '', $line_max = 76, $space_conv = false) {
     $hex = array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F');
     $lines = preg_split('/(?:\r\n|\r|\n)/', $input);
     $eol = "\r\n";
@@ -1452,13 +1453,46 @@ class PHPMailer {
   }
 
   /**
+  * Encode string to RFC2045 (6.7) quoted-printable format
+  * Uses a PHP5 stream filter to do the encoding about 64x faster than the old version
+  * Also results in same content as you started with after decoding
+  * Note that there is a quoted_printable_encode function due to appear, possibly in PHP 5.3.
+  * @access public
+  * @param string $string the text to encode
+  * @param integer $line_max Number of chars allowed on a line before wrapping
+  * @param boolean $space_conv Dummy param for compatibility with existing EncodeQP function
+  * @return string
+  * @author Marcus Bointon
+  */
+  public function EncodeQP($string, $line_max = 76, $space_conv = false) {
+    if (function_exists('quoted_printable_encode')) { //Use native function if it's available (>= PHP5.3)
+      return quoted_printable_encode($string);
+    }
+    $filters = stream_get_filters();
+    if (!in_array('convert.*', $filters)) { //Got convert stream filter?
+      return $this->EncodeQPphp($string, $line_max, $space_conv); //Fall back to old implementation
+    }
+    $fp = fopen('php://temp/', 'r+');
+    $string = preg_replace('/\r\n?/', $this->LE, $string); //Normalise line breaks
+    $params = array('line-length' => $line_max, 'line-break-chars' => $this->LE);
+    $s = stream_filter_append($fp, 'convert.quoted-printable-encode', STREAM_FILTER_READ, $params);
+    fputs($fp, $string);
+    rewind($fp);
+    $out = stream_get_contents($fp);
+    stream_filter_remove($s);
+    $out = preg_replace('/^\./m', '=2E', $out); //Encode . if it is first char on a line, workaround for bug in Exchange
+    fclose($fp);
+    return $out;
+  }
+
+  /**
    * Encode string to q encoding.
    * @access public
    * @return string
    */
   public function EncodeQ ($str, $position = 'text') {
     /* There should not be any EOL in the string */
-    $encoded = preg_replace("[\r\n]", '', $str);
+    $encoded = preg_replace("/[\r\n]*/", '', $str);
 
     switch (strtolower($position)) {
       case 'phrase':
