@@ -6,7 +6,7 @@
 
 $PHPMAILER_LANG = array();
 
-$PHPMAILER_LANG["provide_address"]      = 'Er moet tenmiste &eacute;&eacute;n ' .
+$PHPMAILER_LANG["provide_address"]      = 'Er moet tenmiste één ' .
                                           'ontvanger emailadres opgegeven worden.';
 $PHPMAILER_LANG["mailer_not_supported"] = ' mailer wordt niet ondersteund.';
 $PHPMAILER_LANG["execute"]              = 'Kon niet uitvoeren: ';

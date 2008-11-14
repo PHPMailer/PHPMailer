@@ -7,13 +7,13 @@
 
 $PHPMAILER_LANG = array();
 
-$PHPMAILER_LANG["provide_address"]      = 'Aseta v&auml;hint&auml;&auml;n yksi vastaanottajan ' .
-                                          's&auml;hk&ouml;postiosoite.';
-$PHPMAILER_LANG["mailer_not_supported"] = 'postiv&auml;litintyyppi&auml; ei tueta.';
-$PHPMAILER_LANG["execute"]              = 'Suoritus ep&auml;onnistui: ';
-$PHPMAILER_LANG["instantiate"]          = 'mail-funktion luonti ep&auml;onnistui.';
-$PHPMAILER_LANG["authenticate"]         = 'SMTP-virhe: k&auml;ytt&auml;j&auml;tunnistus ep&auml;onnistui.';
-$PHPMAILER_LANG["from_failed"]          = 'Seuraava l&auml;hett&auml;j&auml;n osoite on virheellinen: ';
+$PHPMAILER_LANG["provide_address"]      = 'Aseta vähintään yksi vastaanottajan ' .
+                                          'sähk&ouml;postiosoite.';
+$PHPMAILER_LANG["mailer_not_supported"] = 'postivälitintyyppiä ei tueta.';
+$PHPMAILER_LANG["execute"]              = 'Suoritus epäonnistui: ';
+$PHPMAILER_LANG["instantiate"]          = 'mail-funktion luonti epäonnistui.';
+$PHPMAILER_LANG["authenticate"]         = 'SMTP-virhe: käyttäjätunnistus epäonnistui.';
+$PHPMAILER_LANG["from_failed"]          = 'Seuraava lähettäjän osoite on virheellinen: ';
 $PHPMAILER_LANG["recipients_failed"]    = 'SMTP-virhe: seuraava vastaanottaja osoite on virheellinen.';
 $PHPMAILER_LANG["data_not_accepted"]    = 'SMTP-virhe: data on virheellinen.';
 $PHPMAILER_LANG["connect_host"]         = 'SMTP-virhe: yhteys palvelimeen ei onnistu.';
