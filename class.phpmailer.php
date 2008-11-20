@@ -265,6 +265,7 @@ class PHPMailer {
   private $cc              = array();
   private $bcc             = array();
   private $ReplyTo         = array();
+  private $all_recipients  = array();
   private $attachment      = array();
   private $CustomHeader    = array();
   private $message_type    = '';
@@ -333,12 +334,17 @@ class PHPMailer {
    * Adds a "To" address.
    * @param string $address
    * @param string $name
-   * @return void
+   * @return boolean true on success, false if addressed already used
+   * @author Marcus Bointon <coolbru at users.sourceforge.net>
+   * @author Carl Corliss <rabbitt at users.sourceforge.net>
    */
   public function AddAddress($address, $name = '') {
-    $cur = count($this->to);
-    $this->to[$cur][0] = trim($address);
-    $this->to[$cur][1] = $name;
+    if (!isset($this->all_recipients[strtolower(trim($address))])) {
+      $this->to[] = array(trim($address), $name);
+      $this->all_recipients[strtolower(trim($address))] = true;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -347,12 +353,15 @@ class PHPMailer {
    * mailer.
    * @param string $address
    * @param string $name
-   * @return void
+   * @return boolean true on success, false if addressed already used
    */
   public function AddCC($address, $name = '') {
-    $cur = count($this->cc);
-    $this->cc[$cur][0] = trim($address);
-    $this->cc[$cur][1] = $name;
+    if (!isset($this->all_recipients[strtolower(trim($address))])) {
+      $this->cc[] = array(trim($address), $name);
+      $this->all_recipients[strtolower(trim($address))] = true;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -361,12 +370,15 @@ class PHPMailer {
    * mailer.
    * @param string $address
    * @param string $name
-   * @return void
+   * @return boolean true on success, false if addressed already used
    */
   public function AddBCC($address, $name = '') {
-    $cur = count($this->bcc);
-    $this->bcc[$cur][0] = trim($address);
-    $this->bcc[$cur][1] = $name;
+    if (!isset($this->all_recipients[strtolower(trim($address))])) {
+      $this->bcc[] = array(trim($address), $name);
+      $this->all_recipients[strtolower(trim($address))] = true;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -376,9 +388,7 @@ class PHPMailer {
    * @return void
    */
   public function AddReplyTo($address, $name = '') {
-    $cur = count($this->ReplyTo);
-    $this->ReplyTo[$cur][0] = trim($address);
-    $this->ReplyTo[$cur][1] = $name;
+      $this->ReplyTo[] = array(trim($address), $name);
   }
 
   /////////////////////////////////////////////////
@@ -1169,6 +1179,15 @@ class PHPMailer {
     $this->attachment[$cur][7] = 0;
 
     return true;
+  }
+
+  /**
+   * Gets all current attachments.
+   * Needed for testability
+   * @return array
+   */
+  public function GetAttachments() {
+      return $this->attachment;
   }
 
   /**
