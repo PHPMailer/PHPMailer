@@ -141,15 +141,16 @@ class phpmailerTest extends TestCase
             $ReportBody .= "Host: " . $this->Mail->Host . $eol;
         
         // If attachments then create an attachment list
-        if(count($this->Mail->attachment) > 0)
+        $attachments = $this->Mail->GetAttachments();
+        if(count($attachments) > 0)
         {
             $ReportBody .= "Attachments:" . $eol;
             $ReportBody .= $bullet_start;
-            for($i = 0; $i < count($this->Mail->attachment); $i++)
+            for($i = 0; $i < count($attachments); $i++)
             {
-                $ReportBody .= $bullet . "Name: " . $this->Mail->attachment[$i][1] . ", ";
-                $ReportBody .= "Encoding: " . $this->Mail->attachment[$i][3] . ", ";
-                $ReportBody .= "Type: " . $this->Mail->attachment[$i][4] . $eol;
+                $ReportBody .= $bullet . "Name: " . $attachments[$i][1] . ", ";
+                $ReportBody .= "Encoding: " . $attachments[$i][3] . ", ";
+                $ReportBody .= "Type: " . $attachments[$i][4] . $eol;
             }
             $ReportBody .= $bullet_end . $eol;
         }
@@ -242,14 +243,11 @@ class phpmailerTest extends TestCase
         switch($sType)
         {
             case "to":
-                $this->Mail->AddAddress($sAddress, $sName);
-                break;
+                return $this->Mail->AddAddress($sAddress, $sName);
             case "cc":
-                $this->Mail->AddCC($sAddress, $sName);
-                break;
+                return $this->Mail->AddCC($sAddress, $sName);
             case "bcc":
-                $this->Mail->AddBCC($sAddress, $sName);
-                break;
+                return $this->Mail->AddBCC($sAddress, $sName);
         }
     }
 
@@ -465,10 +463,11 @@ class phpmailerTest extends TestCase
 
         $this->BuildBody();
         $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
-
-        $fp = fopen("message.txt", "w");
-        fwrite($fp, $this->Mail->CreateHeader() . $this->Mail->CreateBody());
-        fclose($fp);
+        if (is_writable('.')) {
+            file_put_contents('message.txt', $this->Mail->CreateHeader() . $this->Mail->CreateBody());
+        } else {
+            $this->assert(false, 'Could not write local file - check permissions');
+        }
     }    
 
     function test_MultipleSend() {
@@ -520,6 +519,17 @@ class phpmailerTest extends TestCase
                             'recipient email address.', $this->Mail->ErrorInfo);
         $this->Mail->AddAddress(get("mail_to"));
         $this->assert($this->Mail->Send(), "Send failed");
+    }
+    
+    function test_Addressing() {
+        $this->assert($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
+        $this->assert(!$this->Mail->AddAddress('a@example.com'), 'Duplicate addressing failed');
+        $this->assert($this->Mail->AddCC('b@example.com'), 'CC addressing failed');
+        $this->assert(!$this->Mail->AddCC('b@example.com'), 'CC duplicate Addressing failed');
+        $this->assert(!$this->Mail->AddCC('a@example.com'), 'CC duplicate Addressing failed (2)');
+        $this->assert($this->Mail->AddBCC('c@example.com'), 'BCC addressing failed');
+        $this->assert(!$this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
+        $this->assert(!$this->Mail->AddBCC('a@example.com'), 'BCC duplicate Addressing failed (2)');
     }
 }  
  

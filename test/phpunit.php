@@ -34,7 +34,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE |
 
 /*
 interface Test {
-  function run(&$aTestResult);
+  function run($aTestResult);
   function countTestCases();
 }
 */
@@ -103,7 +103,7 @@ class TestCase extends Assert /* implements Test */ {
     $this->fName = $name;
   }
 
-  function run($testResult=0) {
+  function run(&$testResult=0) {
     /* Run this single test, by calling the run() method of the
        TestResult object which will in turn call the runBare() method
        of this object.  That complication allows the TestResult object
@@ -114,7 +114,7 @@ class TestCase extends Assert /* implements Test */ {
     if (! $testResult)
       $testResult = $this->_createResult();
     $this->fResult = $testResult;
-    $testResult->run(&$this);
+    $testResult->run($this);
     $this->fResult = 0;
     return $testResult;
   }
@@ -149,7 +149,7 @@ class TestCase extends Assert /* implements Test */ {
     //printf("TestCase::fail(%s)<br>\n", ($message) ? $message : '');
     /* JUnit throws AssertionFailedError here.  We just record the
        failure and carry on */
-    $this->fExceptions[] = new Exception(&$message);
+    $this->fExceptions[] = new Exception($message);
   }
 
   function error($message) {
@@ -223,14 +223,14 @@ class TestSuite /* implements Test */ {
     $this->fTests[] = $test;
   }
 
-  function run(&$testResult) {
+  function run($testResult) {
     /* Run all TestCases and TestSuites comprising this TestSuite,
        accumulating results in the given TestResult object. */
     reset($this->fTests);
     while (list($na, $test) = each($this->fTests)) {
       if ($testResult->shouldStop())
   break;
-      $test->run(&$testResult);
+      $test->run($testResult);
     }
   }
 
@@ -294,7 +294,7 @@ class TestResult {
     /* this is where JUnit would catch AssertionFailedError */
     $exceptions = $test->getExceptions();
     if ($exceptions)
-      $this->fFailures[] = new TestFailure(&$test, &$exceptions);
+      $this->fFailures[] = new TestFailure($test, $exceptions);
     $this->_endTest($test);
   }
 
