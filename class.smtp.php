@@ -90,6 +90,17 @@ class SMTP {
     $this->do_debug = 0;
   }
 
+  /**
+   * Returns the last error emitted by the SMTP server. This 
+   * is reset to null on each new command call.
+   *
+   * @access public
+   * @return Array containing error message and code or NULL 
+   */
+  public function getLastError() {
+    return $this->error;
+  }
+
   /*************************************************************
    *                    CONNECTION FUNCTIONS                  *
    ***********************************************************/
@@ -181,7 +192,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"STARTTLS" . $this->CRLF);
+    $this->client_send("STARTTLS" . $extra . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -217,7 +228,7 @@ class SMTP {
    */
   public function Authenticate($username, $password) {
     // Start authentication
-    fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
+    $this->client_send("AUTH LOGIN" . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -235,7 +246,7 @@ class SMTP {
     }
 
     // Send encoded username
-    fputs($this->smtp_conn, base64_encode($username) . $this->CRLF);
+    $this->client_send(base64_encode($username) . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -253,7 +264,7 @@ class SMTP {
     }
 
     // Send encoded password
-    fputs($this->smtp_conn, base64_encode($password) . $this->CRLF);
+    $this->client_send(base64_encode($password) . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -345,7 +356,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"DATA" . $this->CRLF);
+    $this->client_send("DATA" . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -435,13 +446,13 @@ class SMTP {
             $line_out = "." . $line_out;
           }
         }
-        fputs($this->smtp_conn,$line_out . $this->CRLF);
+        $this->client_send($line_out . $this->CRLF);
       }
     }
 
     // ok all the message data has been sent so lets get this
     // over with aleady
-    fputs($this->smtp_conn, $this->CRLF . "." . $this->CRLF);
+    $this->client_send($this->CRLF . "." . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -489,7 +500,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"EXPN " . $name . $this->CRLF);
+    $this->client_send("EXPN " . $name . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -564,7 +575,7 @@ class SMTP {
    * @return bool
    */
   private function SendHello($hello, $host) {
-    fputs($this->smtp_conn, $hello . " " . $host . $this->CRLF);
+    $this->client_send($hello . " " . $host . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -619,7 +630,7 @@ class SMTP {
       $extra = " " . $keyword;
     }
 
-    fputs($this->smtp_conn,"HELP" . $extra . $this->CRLF);
+    $this->client_send("HELP" . $extra . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -667,7 +678,7 @@ class SMTP {
     }
 
     $useVerp = ($this->do_verp ? "XVERP" : "");
-    fputs($this->smtp_conn,"MAIL FROM:<" . $from . ">" . $useVerp . $this->CRLF);
+    $this->client_send("MAIL FROM:<" . $from . ">" . $useVerp . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -709,7 +720,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"NOOP" . $this->CRLF);
+    $this->client_send("NOOP" . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -753,7 +764,7 @@ class SMTP {
     }
 
     // send the quit command to the server
-    fputs($this->smtp_conn,"quit" . $this->CRLF);
+    $this->client_send("quit" . $this->CRLF);
 
     // get any good-bye messages
     $byemsg = $this->get_lines();
@@ -806,7 +817,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"RCPT TO:<" . $to . ">" . $this->CRLF);
+    $this->client_send("RCPT TO:<" . $to . ">" . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -850,7 +861,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"RSET" . $this->CRLF);
+    $this->client_send("RSET" . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -899,7 +910,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"SEND FROM:" . $from . $this->CRLF);
+    $this->client_send("SEND FROM:" . $from . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -947,7 +958,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"SAML FROM:" . $from . $this->CRLF);
+    $this->client_send("SAML FROM:" . $from . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -995,7 +1006,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"SOML FROM:" . $from . $this->CRLF);
+    $this->client_send("SOML FROM:" . $from . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -1062,7 +1073,7 @@ class SMTP {
       return false;
     }
 
-    fputs($this->smtp_conn,"VRFY " . $name . $this->CRLF);
+    $this->client_send("VRFY " . $name . $this->CRLF);
 
     $rply = $this->get_lines();
     $code = substr($rply,0,3);
@@ -1083,6 +1094,19 @@ class SMTP {
       return false;
     }
     return $rply;
+  }
+
+  /**
+   * Sends data to the server
+   *
+   * @access public
+   * @return Integer number of bytes sent to the server or FALSE on error
+   */
+  public function client_send($data) {
+    if ($this->do_debug >= 1) {
+      echo "CLIENT -> SMTP: $data";
+    }
+    return fputs($this->smtp_conn, $data);
   }
 
   /*******************************************************************

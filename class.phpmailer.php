@@ -527,6 +527,41 @@ class PHPMailer {
     return true;
   }
 
+   /**
+    * Sends out the list of recipients to the smtp server, checking 
+    * for a 45X failure while doing so.
+    *
+    * @param Array $recipients List of recipients to set up
+    * @param Array &$bad_recipients Reference to an array that will be filled with the list of recipients who failed during this run
+    * @param Bool &$was_throttled Reference to a boolean that will bet set based on whether or not the connection appeared to be throttled
+    * @param Integer &$throttle_total Reference to a total that will be set to the total recipients that were successfully added if throttling happened
+    * @access public
+    * @return Bool
+    * Carl Corliss <rabbitt at users.sourceforge.net>
+    */
+   function SmtpSend_AddRecipients($recipients, &$bad_recipients = array(), &$was_throttled = false, &$throttle_total = -1) {
+       
+     $total_recipients = count($recipients);
+     $return_value = true;
+ 
+     for ($i = 0; $i < $total_recipients; $i++) {
+       if (!$this->smtp->Recipient($recipients[$i])) {
+         $error = $this->smtp->getLastError();
+         if (isset($error['smtp_code']) && 
+           ($error['smtp_code'] == 451 || $error['smtp_code'] == 452)) {
+             $was_throttled = true;
+             $throttle_total = ($i - 1);
+             $return_value = false;
+             break;
+         } else {
+           $bad_recipients[] = $recipients[$i];
+           $return_value = false;
+         }
+       }
+     }
+     return $return_value;
+   }
+ 
   /**
    * Sends mail via SMTP using PhpSMTP
    * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
@@ -537,7 +572,6 @@ class PHPMailer {
    */
   public function SmtpSend($header, $body) {
     include_once($this->PluginDir . 'class.smtp.php');
-    $error = '';
     $bad_rcpt = array();
 
     if(!$this->SmtpConnect()) {
@@ -546,54 +580,85 @@ class PHPMailer {
 
     $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
     if(!$this->smtp->Mail($smtp_from)) {
-      $error = $this->Lang('from_failed') . $smtp_from;
-      $this->SetError($error);
+      $this->SetError($this->Lang('from_failed') . $smtp_from);
       $this->smtp->Reset();
       return false;
     }
 
-    /* Attempt to send attach all recipients */
-    for($i = 0; $i < count($this->to); $i++) {
-      if(!$this->smtp->Recipient($this->to[$i][0])) {
-        $bad_rcpt[] = $this->to[$i][0];
+    /* Build recipient list */
+    $all_recipients = array_map(
+      create_function('$a', 'return $a[0];'), 
+      array_merge($this->to, $this->cc, $this->bcc)
+    );
+
+    /* Attempt to add all recipients (to, cc, and bcc) */
+    $this->SmtpSend_AddRecipients($all_recipients, $bad_rcpt, $was_throttled, $throttle_total);
+
+    // If the attempt failed and it looked like a throttle, split the list into smaller 'buckets'
+    // and then send each bucket individually. We figure out the size of each bucket based on the 
+    // number of recipients that were accepted before we recieved the throttle 45X error.
+    if ($was_throttled && $this->smtp->Reset()) {
+      // Split recipients into roughly equal buckets
+      for ($i = 0; $i < count($all_recipients); $i++) {
+        $buckets[$i] = array_splice($all_recipients, 0, $throttle_total);
       }
-    }
-    for($i = 0; $i < count($this->cc); $i++) {
-      if(!$this->smtp->Recipient($this->cc[$i][0])) {
-        $bad_rcpt[] = $this->cc[$i][0];
-      }
-    }
-    for($i = 0; $i < count($this->bcc); $i++) {
-      if(!$this->smtp->Recipient($this->bcc[$i][0])) {
-        $bad_rcpt[] = $this->bcc[$i][0];
-      }
+
+      foreach ($buckets as $bucket) {
+        if (!$this->smtp->Mail($smtp_from)) {
+          $this->SetError($this->Lang('from_failed') . $smtp_from);
+          $this->smtp->Reset();
+          return false;
     }
 
-    if(count($bad_rcpt) > 0) { // Create error message
-      for($i = 0; $i < count($bad_rcpt); $i++) {
-        if($i != 0) {
-          $error .= ', ';
+        if (!$this->SmtpSend_AddRecipients($bucket, $bad_rcpt, $was_throttled)) {
+          if (!$was_throttled && !count($bad_rcpt)) {
+            $this->SetError($this->Lang('recipients_failed') . join(', ', $bucket));
+            $this->smtp->Reset();
+            return false;
+      }
+    }
+    
+        if (count($bad_rcpt) > 0) { // Create error message  
+          $this->SetError('Error Unknown: ' . $this->Lang('recipients_failed') . join(', ', $bad_rcpt));
+          $this->smtp->Reset();
+          return false;
+      }
+
+        if (!$this->smtp->Data($header . $body)) {
+          $this->SetError($this->Lang('data_not_accepted'));
+          $this->smtp->Reset();
+          return false;
+    }
+
+        $this->smtp->Reset();
         }
-        $error .= $bad_rcpt[$i];
+
+      if ($this->SMTPKeepAlive == true) {
+        $this->smtp->Reset();
+      } else {
+        $this->SmtpClose();
       }
-      $error = $this->Lang('recipients_failed') . $error;
-      $this->SetError($error);
+
+    } else { // No problems adding recipients - proceed normally
+      if (count($bad_rcpt) > 0) { // Create error message
+        $this->SetError('Unknown Error: ' . $this->Lang('recipients_failed') . join(', ', $bad_rcpt));
       $this->smtp->Reset();
       return false;
     }
 
-    if(!$this->smtp->Data($header . $body)) {
+      if (!$this->smtp->Data($header . $body)) {
       $this->SetError($this->Lang('data_not_accepted'));
       $this->smtp->Reset();
       return false;
     }
-    if($this->SMTPKeepAlive == true) {
+ 
+      if ($this->SMTPKeepAlive == true) {
       $this->smtp->Reset();
     } else {
       $this->SmtpClose();
     }
-
     return true;
+  }
   }
 
   /**
