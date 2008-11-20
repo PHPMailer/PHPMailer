@@ -531,8 +531,41 @@ class phpmailerTest extends TestCase
         $this->assert(!$this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
         $this->assert(!$this->Mail->AddBCC('a@example.com'), 'BCC duplicate Addressing failed (2)');
     }
-}  
- 
+    
+    // Check that we are not missing any translations in any langauges
+    function test_Translations() {
+        //Extend this array as new strings are added
+        $expectedtranslations = array(
+            'provide_address',
+            'mailer_not_supported',
+            'execute',
+            'instantiate',
+            'authenticate',
+            'from_failed',
+            'recipients_failed',
+            'data_not_accepted',
+            'connect_host',
+            'file_access',
+            'file_open',
+            'encoding',
+            'signing',
+            'smtp_error'
+        );
+        try {
+            foreach (new DirectoryIterator('../language') as $langfile) {
+                if (!preg_match('/^phpmailer\.lang-/', $langfile)) continue; //Skip non-language files
+                $PHPMAILER_LANG = array();
+                include '../language/'.$langfile;
+                foreach($expectedtranslations as $string) {
+                    $this->assert(isset($PHPMAILER_LANG[$string]), 'Translation missing; \''.$string.'\' in '.$langfile);
+                }
+            }
+        }
+        catch(Exception $e) {
+            $this->assert(false, 'No language files found!');
+        }
+    }
+}
 /**
  * Create and run test instance.
  */
