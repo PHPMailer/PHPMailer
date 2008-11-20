@@ -565,6 +565,12 @@ class phpmailerTest extends TestCase
             $this->assert(false, 'No language files found!');
         }
     }
+    
+    //Check that getFile works
+    function test_getFile() {
+        $a = $this->Mail->getFile('../class.phpmailer.php'); //Point at any non-empty file
+        $this->assert(($a !== false), 'GetFile failed to read a file.');
+    }
 }
 /**
  * Create and run test instance.

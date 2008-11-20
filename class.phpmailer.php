@@ -1935,18 +1935,10 @@ class PHPMailer {
    *
    * @access public
    * @param string $filename Parameter File Name
+   * @return string (or boolean false if it fails to read for any reason)
    */
   public function getFile($filename) {
-    $return = '';
-    if ($fp = fopen($filename, 'rb')) {
-      while (!feof($fp)) {
-        $return .= fread($fp, 1024);
-      }
-      fclose($fp);
-      return $return;
-    } else {
-      return false;
-    }
+      return @file_get_contents($filename);
   }
 
   /**
