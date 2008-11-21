@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * PHPMailer language file.  
  * Traditional Chinese Version
@@ -6,7 +6,6 @@
  */
 
 $PHPMAILER_LANG = array();
-
 $PHPMAILER_LANG['provide_address'] = '必須提供至少一個收件人地址。';
 $PHPMAILER_LANG['mailer_not_supported'] = '發信客戶端不被支持。';
 $PHPMAILER_LANG['execute'] = '無法執行：';

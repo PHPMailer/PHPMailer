@@ -1085,6 +1085,15 @@ class SMTP {
     return $rply;
   }
 
+  /**
+  * Get the current error
+  * @access public
+  * @return array
+  */
+  public function getError() {
+    return $this->error;
+  }
+
   /*******************************************************************
    *                       INTERNAL FUNCTIONS                       *
    ******************************************************************/

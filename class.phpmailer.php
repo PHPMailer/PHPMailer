@@ -1260,20 +1260,20 @@ class PHPMailer {
   public function EncodeFile ($path, $encoding = 'base64') {
     if(!@$fd = fopen($path, 'rb')) {
       $this->SetError($this->Lang('file_open') . $path);
+      fclose($fd);
       return '';
     }
     if (function_exists('get_magic_quotes')) {
         function get_magic_quotes() {
             return false;
         }
-}
+    }
     if (PHP_VERSION < 6) {
       $magic_quotes = get_magic_quotes_runtime();
       set_magic_quotes_runtime(0);
     }
     $file_buffer  = file_get_contents($path);
     $file_buffer  = $this->EncodeString($file_buffer, $encoding);
-    fclose($fd);
     if (PHP_VERSION < 6) { set_magic_quotes_runtime($magic_quotes); }
     return $file_buffer;
   }
@@ -1622,6 +1622,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearAddresses() {
+    foreach($this->to as $to) {
+      unset($this->all_recipients[strtolower($to[0])]);
+    }
     $this->to = array();
   }
 
@@ -1630,6 +1633,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearCCs() {
+    foreach($this->cc as $cc) {
+      unset($this->all_recipients[strtolower($cc[0])]);
+    }
     $this->cc = array();
   }
 
@@ -1638,6 +1644,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearBCCs() {
+    foreach($this->bcc as $bcc) {
+      unset($this->all_recipients[strtolower($bcc[0])]);
+    }
     $this->bcc = array();
   }
 
@@ -1658,6 +1667,7 @@ class PHPMailer {
     $this->to = array();
     $this->cc = array();
     $this->bcc = array();
+    $this->all_recipients = array();
   }
 
   /**
@@ -1690,8 +1700,11 @@ class PHPMailer {
    */
   private function SetError($msg) {
     $this->error_count++;
-    if ($this->Mailer == 'smtp' and !empty($this->smtp->error['smtp_msg'])) {
-      $msg .= '<p>' . $this->Lang('smtp_error') . $this->smtp->error['smtp_msg'] . "</p>\n";
+    if ($this->Mailer == 'smtp' and !is_null($this->smtp)) {
+      $lasterror = $this->smtp->getError();
+      if (!empty($lasterror) and array_key_exists('smtp_msg', $lasterror)) {
+        $msg .= '<p>' . $this->Lang('smtp_error') . $lasterror['smtp_msg'] . "</p>\n";
+      }
     }
     $this->ErrorInfo = $msg;
   }

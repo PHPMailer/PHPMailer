@@ -515,8 +515,8 @@ class phpmailerTest extends TestCase
         $this->assert($this->Mail->IsError() == false, "Error found");
         $this->assert($this->Mail->Send() == false, "Send succeeded");
         $this->assert($this->Mail->IsError(), "No error found");
-        $this->assertEquals('You must provide at least one ' .
-                            'recipient email address.', $this->Mail->ErrorInfo);
+        //Note that this is language dependent
+        $this->assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
         $this->Mail->AddAddress(get("mail_to"));
         $this->assert($this->Mail->Send(), "Send failed");
     }
@@ -530,6 +530,16 @@ class phpmailerTest extends TestCase
         $this->assert($this->Mail->AddBCC('c@example.com'), 'BCC addressing failed');
         $this->assert(!$this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
         $this->assert(!$this->Mail->AddBCC('a@example.com'), 'BCC duplicate Addressing failed (2)');
+        $this->Mail->ClearAddresses();
+        $this->assert($this->Mail->AddAddress('a@example.com'), 'Addressing after clear failed');
+        $this->Mail->ClearCCs();
+        $this->assert($this->Mail->AddAddress('b@example.com'), 'CC addressing after clear failed');
+        $this->Mail->ClearBCCs();
+        $this->assert($this->Mail->AddAddress('c@example.com'), 'BCC addressing after clear failed');
+        $this->Mail->AddAddress('a@example.com');
+        $this->Mail->AddCC('b@example.com');
+        $this->Mail->AddBCC('c@example.com');
+        $this->Mail->ClearAllRecipients(); //Not much of a test, but helps coverage
     }
     
     // Check that we are not missing any translations in any langauges
@@ -600,8 +610,13 @@ function get($sName) {
 }
 
 ?>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>PHPMailer Unit Tests</title>
+</head>
 <body>
 <h3>phpmailer Unit Test</h3>
 By entering a SMTP hostname it will automatically perform tests with SMTP.
