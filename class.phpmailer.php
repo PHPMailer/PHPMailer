@@ -539,29 +539,28 @@ class PHPMailer {
     * @return Bool
     * Carl Corliss <rabbitt at users.sourceforge.net>
     */
-   function SmtpSend_AddRecipients($recipients, &$bad_recipients = array(), &$was_throttled = false, &$throttle_total = -1) {
-       
-     $total_recipients = count($recipients);
-     $return_value = true;
- 
-     for ($i = 0; $i < $total_recipients; $i++) {
-       if (!$this->smtp->Recipient($recipients[$i])) {
-         $error = $this->smtp->getLastError();
-         if (isset($error['smtp_code']) && 
+  function SmtpSend_AddRecipients($recipients, &$bad_recipients = array(), &$was_throttled = false, &$throttle_total = -1) {
+    $total_recipients = count($recipients);
+    $return_value = true;
+
+    for ($i = 0; $i < $total_recipients; $i++) {
+      if (!$this->smtp->Recipient($recipients[$i])) {
+        $error = $this->smtp->getLastError();
+        if (isset($error['smtp_code']) &&
            ($error['smtp_code'] == 451 || $error['smtp_code'] == 452)) {
              $was_throttled = true;
-             $throttle_total = ($i - 1);
+             $throttle_total = $i;
              $return_value = false;
              break;
-         } else {
-           $bad_recipients[] = $recipients[$i];
-           $return_value = false;
-         }
-       }
-     }
-     return $return_value;
-   }
- 
+        } else {
+          $bad_recipients[] = $recipients[$i];
+          $return_value = false;
+        }
+      }
+    }
+    return $return_value;
+  }
+
   /**
    * Sends mail via SMTP using PhpSMTP
    * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
@@ -608,57 +607,57 @@ class PHPMailer {
           $this->SetError($this->Lang('from_failed') . $smtp_from);
           $this->smtp->Reset();
           return false;
-    }
+        }
 
         if (!$this->SmtpSend_AddRecipients($bucket, $bad_rcpt, $was_throttled)) {
           if (!$was_throttled && !count($bad_rcpt)) {
             $this->SetError($this->Lang('recipients_failed') . join(', ', $bucket));
             $this->smtp->Reset();
             return false;
-      }
-    }
+          }
+        }
     
         if (count($bad_rcpt) > 0) { // Create error message  
           $this->SetError('Error Unknown: ' . $this->Lang('recipients_failed') . join(', ', $bad_rcpt));
           $this->smtp->Reset();
           return false;
-      }
+        }
 
         if (!$this->smtp->Data($header . $body)) {
           $this->SetError($this->Lang('data_not_accepted'));
           $this->smtp->Reset();
           return false;
-    }
+        }
 
         $this->smtp->Reset();
-        }
+      }
 
       if ($this->SMTPKeepAlive == true) {
         $this->smtp->Reset();
       } else {
         $this->SmtpClose();
       }
-
     } else { // No problems adding recipients - proceed normally
       if (count($bad_rcpt) > 0) { // Create error message
         $this->SetError('Unknown Error: ' . $this->Lang('recipients_failed') . join(', ', $bad_rcpt));
-      $this->smtp->Reset();
-      return false;
-    }
+        $this->smtp->Reset();
+        return false;
+      }
 
       if (!$this->smtp->Data($header . $body)) {
-      $this->SetError($this->Lang('data_not_accepted'));
-      $this->smtp->Reset();
-      return false;
-    }
+        $this->SetError($this->Lang('data_not_accepted'));
+        $this->smtp->Reset();
+        return false;
+      }
  
       if ($this->SMTPKeepAlive == true) {
-      $this->smtp->Reset();
-    } else {
-      $this->SmtpClose();
+        $this->smtp->Reset();
+      } else {
+        $this->SmtpClose();
+      }
     }
+
     return true;
-  }
   }
 
   /**
@@ -752,19 +751,20 @@ class PHPMailer {
   function SetLanguage($lang_type = 'en', $lang_path = 'language/') {
     if( !(@include $lang_path.'phpmailer.lang-'.$lang_type.'.php') ) {
       $PHPMAILER_LANG = array();
-      $PHPMAILER_LANG["provide_address"]      = 'You must provide at least one ' .
-      $PHPMAILER_LANG["mailer_not_supported"] = ' mailer is not supported.';
-      $PHPMAILER_LANG["execute"]              = 'Could not execute: ';
-      $PHPMAILER_LANG["instantiate"]          = 'Could not instantiate mail function.';
-      $PHPMAILER_LANG["authenticate"]         = 'SMTP Error: Could not authenticate.';
-      $PHPMAILER_LANG["from_failed"]          = 'The following From address failed: ';
-      $PHPMAILER_LANG["recipients_failed"]    = 'SMTP Error: The following ' .
-      $PHPMAILER_LANG["data_not_accepted"]    = 'SMTP Error: Data not accepted.';
-      $PHPMAILER_LANG["connect_host"]         = 'SMTP Error: Could not connect to SMTP host.';
-      $PHPMAILER_LANG["file_access"]          = 'Could not access file: ';
-      $PHPMAILER_LANG["file_open"]            = 'File Error: Could not open file: ';
-      $PHPMAILER_LANG["encoding"]             = 'Unknown encoding: ';
-      $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
+      $PHPMAILER_LANG['provide_address']      = 'You must provide at least one recipient email address.';
+      $PHPMAILER_LANG['mailer_not_supported'] = ' mailer is not supported.';
+      $PHPMAILER_LANG['execute']              = 'Could not execute: ';
+      $PHPMAILER_LANG['instantiate']          = 'Could not instantiate mail function.';
+      $PHPMAILER_LANG['authenticate']         = 'SMTP Error: Could not authenticate.';
+      $PHPMAILER_LANG['from_failed']          = 'The following From address failed: ';
+      $PHPMAILER_LANG['recipients_failed']    = 'SMTP Error: The following ' .
+      $PHPMAILER_LANG['data_not_accepted']    = 'SMTP Error: Data not accepted.';
+      $PHPMAILER_LANG['connect_host']         = 'SMTP Error: Could not connect to SMTP host.';
+      $PHPMAILER_LANG['file_access']          = 'Could not access file: ';
+      $PHPMAILER_LANG['file_open']            = 'File Error: Could not open file: ';
+      $PHPMAILER_LANG['encoding']             = 'Unknown encoding: ';
+      $PHPMAILER_LANG['signing']              = 'Signing Error: ';
+      $PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
     }
     $this->language = $PHPMAILER_LANG;
     return true;
@@ -1324,20 +1324,20 @@ class PHPMailer {
   public function EncodeFile ($path, $encoding = 'base64') {
     if(!@$fd = fopen($path, 'rb')) {
       $this->SetError($this->Lang('file_open') . $path);
+      fclose($fd);
       return '';
     }
     if (function_exists('get_magic_quotes')) {
         function get_magic_quotes() {
             return false;
         }
-}
+    }
     if (PHP_VERSION < 6) {
       $magic_quotes = get_magic_quotes_runtime();
       set_magic_quotes_runtime(0);
     }
     $file_buffer  = file_get_contents($path);
     $file_buffer  = $this->EncodeString($file_buffer, $encoding);
-    fclose($fd);
     if (PHP_VERSION < 6) { set_magic_quotes_runtime($magic_quotes); }
     return $file_buffer;
   }
@@ -1686,6 +1686,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearAddresses() {
+    foreach($this->to as $to) {
+      unset($this->all_recipients[strtolower($to[0])]);
+    }
     $this->to = array();
   }
 
@@ -1694,6 +1697,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearCCs() {
+    foreach($this->cc as $cc) {
+      unset($this->all_recipients[strtolower($cc[0])]);
+    }
     $this->cc = array();
   }
 
@@ -1702,6 +1708,9 @@ class PHPMailer {
    * @return void
    */
   public function ClearBCCs() {
+    foreach($this->bcc as $bcc) {
+      unset($this->all_recipients[strtolower($bcc[0])]);
+    }
     $this->bcc = array();
   }
 
@@ -1722,6 +1731,7 @@ class PHPMailer {
     $this->to = array();
     $this->cc = array();
     $this->bcc = array();
+    $this->all_recipients = array();
   }
 
   /**
@@ -1747,12 +1757,19 @@ class PHPMailer {
 
   /**
    * Adds the error message to the error container.
+   * Also gets SMTP error if there is one
    * Returns void.
    * @access private
    * @return void
    */
   private function SetError($msg) {
     $this->error_count++;
+    if ($this->Mailer == 'smtp' and !is_null($this->smtp)) {
+      $lasterror = $this->smtp->getError();
+      if (!empty($lasterror) and array_key_exists('smtp_msg', $lasterror)) {
+        $msg .= '<p>' . $this->Lang('smtp_error') . $lasterror['smtp_msg'] . "</p>\n";
+      }
+    }
     $this->ErrorInfo = $msg;
   }
 
@@ -1995,18 +2012,10 @@ class PHPMailer {
    *
    * @access public
    * @param string $filename Parameter File Name
+   * @return string (or boolean false if it fails to read for any reason)
    */
   public function getFile($filename) {
-    $return = '';
-    if ($fp = fopen($filename, 'rb')) {
-      while (!feof($fp)) {
-        $return .= fread($fp, 1024);
-      }
-      fclose($fp);
-      return $return;
-    } else {
-      return false;
-    }
+      return @file_get_contents($filename);
   }
 
   /**

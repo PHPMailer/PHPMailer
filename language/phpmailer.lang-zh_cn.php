@@ -20,4 +20,5 @@ $PHPMAILER_LANG["file_access"] = '无法访问文件：';
 $PHPMAILER_LANG["file_open"] = '文件错误：无法打开文件：';
 $PHPMAILER_LANG["encoding"] = '未知编码: ';
 $PHPMAILER_LANG["signing"] = 'Signing Error: ';
+$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

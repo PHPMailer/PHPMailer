@@ -352,14 +352,14 @@ class TextTestResult extends TestResult {
   }
 
   function _startTest($test) {
-    printf("%s ", $test->name());
+    printf("%s: ", $test->name());
     flush();
   }
 
   function _endTest($test) {
     $outcome = $test->failed()
        ? "<font color=\"red\">FAIL</font>"
-       : "<font color=\"green\">ok</font>";
+       : "<font color=\"green\">Pass</font>";
     printf("$outcome<br>\n");
     flush();
   }

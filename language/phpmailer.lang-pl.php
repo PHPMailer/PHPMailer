@@ -1,25 +1,23 @@
 <?php
 /**
- * PHPMailer language file.
- * Polish Version, encoding: windows-1250
- * translated from english lang file ver. 1.72
+ * PHPMailer language file.  
+ * Polish Version
  */
 
 $PHPMAILER_LANG = array();
 
-$PHPMAILER_LANG["provide_address"]      = 'Nale¿y podaæ prawid³owy adres email Odbiorcy.';
-$PHPMAILER_LANG["mailer_not_supported"] = 'Wybrana metoda wysy³ki wiadomoœci nie jest obs³ugiwana.';
-$PHPMAILER_LANG["execute"]              = 'Nie mo¿na uruchomiæ: ';
-$PHPMAILER_LANG["instantiate"]          = 'Nie mo¿na wywo³aæ funkcji mail(). SprawdŸ konfiguracjê serwera.';
-$PHPMAILER_LANG["authenticate"]         = 'B³¹d SMTP: Nie mo¿na przeprowadziæ autentykacji.';
-$PHPMAILER_LANG["from_failed"]          = 'Nastêpuj¹cy adres Nadawcy jest jest nieprawid³owy: ';
-$PHPMAILER_LANG["recipients_failed"]    = 'B³¹d SMTP: Nastêpuj¹cy ' .
-                                          'odbiorcy s¹ nieprawid³owi: ';
-$PHPMAILER_LANG["data_not_accepted"]    = 'B³¹d SMTP: Dane nie zosta³y przyjête.';
-$PHPMAILER_LANG["connect_host"]         = 'B³¹d SMTP: Nie mo¿na po³¹czyæ siê z wybranym hostem.';
-$PHPMAILER_LANG["file_access"]          = 'Brak dostêpu do pliku: ';
-$PHPMAILER_LANG["file_open"]            = 'Nie mo¿na otworzyæ pliku: ';
-$PHPMAILER_LANG["encoding"]             = 'Nieznany sposób kodowania znaków: ';
-$PHPMAILER_LANG["signing"]              = 'Signing Error: ';
-
+$PHPMAILER_LANG["provide_address"] = 'Należy podać prawidłowy adres email Odbiorcy.';
+$PHPMAILER_LANG["mailer_not_supported"] = 'Wybrana metoda wysyłki wiadomości nie jest obsługiwana.';
+$PHPMAILER_LANG["execute"] = 'Nie można uruchomić: ';
+$PHPMAILER_LANG["instantiate"] = 'Nie można wywołać funkcji mail(). Sprawdź konfigurację serwera.';
+$PHPMAILER_LANG["authenticate"] = 'Błąd SMTP: Nie można przeprowadzić autentykacji.';
+$PHPMAILER_LANG["from_failed"] = 'Następujący adres Nadawcy jest jest nieprawidłowy: ';
+$PHPMAILER_LANG["recipients_failed"] = 'Błąd SMTP: Następujący odbiorcy są nieprawidłowi: ';
+$PHPMAILER_LANG["data_not_accepted"] = 'Błąd SMTP: Dane nie zostały przyjęte.';
+$PHPMAILER_LANG["connect_host"] = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';
+$PHPMAILER_LANG["file_access"] = 'Brak dostępu do pliku: ';
+$PHPMAILER_LANG["file_open"] = 'Nie można otworzyć pliku: ';
+$PHPMAILER_LANG["encoding"] = 'Nieznany sposób kodowania znaków: ';
+$PHPMAILER_LANG['signing'] = 'Signing Error: ';
+$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

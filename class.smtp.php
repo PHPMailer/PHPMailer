@@ -61,7 +61,7 @@ class SMTP {
    *  Sets whether debugging is turned on
    *  @var bool
    */
-  public $do_debug;       // the level of debug to perform
+  public $do_debug = false;       // the level of debug to perform
 
   /**
    *  Sets VERP use on/off (default is off)
@@ -1107,6 +1107,15 @@ class SMTP {
       echo "CLIENT -> SMTP: $data";
     }
     return fputs($this->smtp_conn, $data);
+  }
+
+  /**
+  * Get the current error
+  * @access public
+  * @return array
+  */
+  public function getError() {
+    return $this->error;
   }
 
   /*******************************************************************
