@@ -9,7 +9,9 @@
 | ------------------------------------------------------------------------- |
 |    Author: Andy Prevost (project admininistrator)                         |
 |    Author: Brent R. Matzelle (original founder)                           |
-| Copyright (c) 2004-2007, Andy Prevost. All Rights Reserved.               |
+|    Team  : Marcus Bointon (coolbru), coolbru@users.sourceforge.net        |
+|            Carl P. Corliss (rabbitt), rabbitt@users.sourceforge.net       |
+| Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
@@ -30,7 +32,7 @@
  * NOTE: Designed for use with PHP version 5 and up
  * @package PHPMailer
  * @author Andy Prevost
- * @copyright 2004 - 2008 Andy Prevost
+ * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
  * @version $Id$
  */
@@ -75,7 +77,7 @@ class PHPMailer {
    * Holds the most recent mailer error message.
    * @var string
    */
-  public $ErrorInfo         = '';
+  protected $ErrorInfo         = '';
 
   /**
    * Sets the From email address for the message.
@@ -148,7 +150,7 @@ class PHPMailer {
    * Holds PHPMailer version.
    * @var string
    */
-  public $Version           = "2.3";
+  protected $Version           = "2.3";
 
   /**
    * Sets the email address that a reading confirmation will be sent.
@@ -254,7 +256,7 @@ class PHPMailer {
    * Provides the ability to change the line ending
    * @var string
    */
-  public $LE              = "\r\n";
+  public $LE              = "\n";
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE
@@ -492,7 +494,7 @@ class PHPMailer {
       $to .= $this->AddrFormat($this->to[$i]);
     }
 
-    $toArr = split(',', $to);
+    $toArr = explode(',', $to);
 
     $params = sprintf("-oi -f %s", $this->Sender);
     if ($this->Sender != '' && strlen(ini_get('safe_mode'))< 1) {
@@ -1199,7 +1201,8 @@ class PHPMailer {
    */
   public function AttachAll() {
     /* Return text of body */
-    $mime = array();
+    $mime    = array();
+    $cidUniq = array();
 
     /* Add all attachments */
     for($i = 0; $i < count($this->attachment); $i++) {
@@ -1211,12 +1214,14 @@ class PHPMailer {
         $path = $this->attachment[$i][0];
       }
 
-      $filename    = $this->attachment[$i][1];
-      $name        = $this->attachment[$i][2];
-      $encoding    = $this->attachment[$i][3];
-      $type        = $this->attachment[$i][4];
-      $disposition = $this->attachment[$i][6];
-      $cid         = $this->attachment[$i][7];
+      $filename      = $this->attachment[$i][1];
+      $name          = $this->attachment[$i][2];
+      $encoding      = $this->attachment[$i][3];
+      $type          = $this->attachment[$i][4];
+      $disposition   = $this->attachment[$i][6];
+      $cid           = $this->attachment[$i][7];
+      if ( isset($cidUniq[$cid]) ) { continue; }
+      $cidUniq[$cid] = true;
 
       $mime[] = sprintf("--%s%s", $this->boundary[1], $this->LE);
       //$mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $name, $this->LE);
@@ -1803,9 +1808,10 @@ class PHPMailer {
           $directory = dirname($url);
           ($directory == '.')?$directory='':'';
           $cid = 'cid:' . md5($filename);
-          $fileParts = split("\.", $filename);
-          $ext = $fileParts[1];
-          $mimeType = $this->_mime_types($ext);
+          $fileParts = explode('.', $filename);
+          $fileParts = array_reverse($fileParts);
+          $ext       = $fileParts[0];
+          $mimeType  = $this->_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir,-1) != '/') { $basedir .= '/'; }
           if ( strlen($directory) > 1 && substr($directory,-1) != '/') { $directory .= '/'; }
           if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64',$mimeType) ) {
