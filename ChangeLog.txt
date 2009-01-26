@@ -2,6 +2,11 @@ ChangeLog
 
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6. IT WILL NOT WORK WITH PHP4.
 
+Version ??
+* replaced deprecated split() 
+* fixed image file extension checking to retrieve last part of explode() file name
+* added code to check for duplicate image filename to eliminate multiple same-name images
+
 Version 2.3 (November 06, 2008)
 
 * added Arabic language (many thanks to Bahjat Al Mostafa)
