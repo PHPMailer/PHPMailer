@@ -1,9 +1,8 @@
 <?php
 /**
- * PHPMailer language file.
- * Russian Version by Alexey Chumakov <alex@chumakov.ru> */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Russian Version by Alexey Chumakov <alex@chumakov.ru>
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Пожалуйста, введите хотя бы один адрес e-mail получателя.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' - почтовый сервер не поддерживается.';
@@ -18,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'Ошибка SMTP: не удаетс�
 $PHPMAILER_LANG['file_access']          = 'Нет доступа к файлу: ';
 $PHPMAILER_LANG['file_open']            = 'Файловая ошибка: не удается открыть файл: ';
 $PHPMAILER_LANG['encoding']             = 'Неизвестный вид кодировки: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

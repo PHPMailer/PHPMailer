@@ -1,14 +1,10 @@
 <?php
 /**
- * PHPMailer language file.
- * Arabic Version, UTF-8
- * by : bahjat al mostafa <bahjat983@hotmail.com>
- */
+* PHPMailer language file: refer to English translation for definitive list
+* Arabic Version, UTF-8
+* by : bahjat al mostafa <bahjat983@hotmail.com>
+*/
 
-$PHPMAILER_LANG = array();
-
-$PHPMAILER_LANG['provide_address'] = 'You must provide at least one ' .
-                                     'recipient email address.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer غير مدعوم.';
 $PHPMAILER_LANG['execute'] = 'لم أستطع تنفيذ : ';
 $PHPMAILER_LANG['instantiate'] = 'لم نستطع توفير خدمة البريد.';
@@ -22,5 +18,4 @@ $PHPMAILER_LANG['file_access'] = 'لم نستطع الوصول للملف: ';
 $PHPMAILER_LANG['file_open'] = 'File Error: لم نستطع فتح الملف: ';
 $PHPMAILER_LANG['encoding'] = 'ترميز غير معروف: ';
 $PHPMAILER_LANG['signing'] = 'خطأ في التوقيع: ';
-$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

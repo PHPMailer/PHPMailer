@@ -2,14 +2,14 @@
 /*~ class.smtp.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 2.3                                                            |
+|   Version: 5.0.0                                                          |
 |   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
 | ------------------------------------------------------------------------- |
 |    Author: Andy Prevost (project admininistrator)                         |
 |    Author: Brent R. Matzelle (original founder)                           |
-| Copyright (c) 2004-2007, Andy Prevost. All Rights Reserved.               |
+| Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
@@ -23,17 +23,6 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
-*/
-
-/**
- * PHPMailer - PHP SMTP email transport class
- * NOTE: Designed for use with PHP version 5 and up
- * @package PHPMailer
- * @author Andy Prevost
- * @copyright 2004 - 2008 Andy Prevost
- * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
- * @version $Id$
- */
 
 /**
  * SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
@@ -41,8 +30,15 @@
  * error. SMTP also provides some utility methods for sending mail
  * to an SMTP server.
  * @package PHPMailer
- * @author Chris Ryan
+ * @author Andy Prevost
  */
+
+class smtpException extends Exception {
+  public function errorMessage() {
+    $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />";
+    return $errorMsg;
+  }
+}
 
 class SMTP {
   /**
@@ -69,12 +65,19 @@ class SMTP {
    */
   public $do_verp = false;
 
+  /**
+   *  Sets error message to pass to PHPMailer
+   *  @var string
+   */
+  public $smtpErrorMessage = array();
+
   /**#@+
    * @access private
    */
   private $smtp_conn;      // the socket to the server
   private $error;          // error if any on the last call
   private $helo_rply;      // the reply the server sent to us for HELO
+  private $exceptions = false; //Whether to throw external exceptions
   /**#@-*/
 
   /**
@@ -82,12 +85,12 @@ class SMTP {
    * @access public
    * @return void
    */
-  public function __construct() {
-    $this->smtp_conn = 0;
-    $this->error = null;
-    $this->helo_rply = null;
-
-    $this->do_debug = 0;
+  public function __construct($exceptions = false) {
+	$this->exceptions = ($exceptions == true);
+	$this->smtp_conn = 0;
+    $this->error     = array();
+    $this->helo_rply = NULL;
+    $this->do_debug  = 0;
   }
 
   /*************************************************************
@@ -107,61 +110,78 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Connect($host, $port = 0, $tval = 30) {
-    /* set the error val to null so there is no confusion */
-    $this->error = null;
+  public function Connect($host,$port=0,$tval=30) {
+    $this->error = NULL;
 
-    /* make sure we are __not__ connected */
-    if($this->connected()) {
-      /* ok we are connected! what should we do?
-       * for now we will just give an error saying we
-       * are already connected
-       */
-      $this->error = array("error" => "Already connected to a server");
-      return false;
-    }
+    try {
+    /* make sure we are NOT connected */
+      if ($this->connected() ) {
+        /* already connected! - throw exception that we are already connected */
+        throw new smtpException("Already connected to a server");
+      }
 
-    if(empty($port)) {
+    if ( empty($port) ) {
       $port = $this->SMTP_PORT;
     }
 
     /* connect to the smtp server */
-    $this->smtp_conn = fsockopen($host,    // the host of the server
-                                 $port,    // the port to use
-                                 $errno,   // error number if any
-                                 $errstr,  // error message if any
-                                 $tval);   // give up after ? secs
-    /* verify we connected properly */
-    if(empty($this->smtp_conn)) {
-      $this->error = array("error" => "Failed to connect to server",
-                           "errno" => $errno,
-                           "errstr" => $errstr);
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": $errstr ($errno)" . $this->CRLF;
+      $this->smtp_conn = @fsockopen($host,    // the host of the server
+                                   $port,    // the port to use
+                                   $errno,   // error number if any
+                                   $errstr,  // error message if any
+                                   $tval);   // give up after ? secs - default is 30 seconds
+      /* verify we connected properly */
+      if ( $this->smtp_conn === false || $this->smtp_conn === 0 ) {
+        $displayErrorString = '';
+        if ( empty($errstr) ) {
+          $smtp_err_str = null;
+          switch($errno){
+            case -3:  $smtp_err_str = "Socket creation failed"; break;
+            case -4:  $smtp_err_str = "DNS lookup failure"; break;
+            case -5:  $smtp_err_str = "Connection refused or timed out"; break;
+            case 1:   $smtp_err_str = "Invalid host"; break;
+            case 111: $smtp_err_str = "Connection refused"; break;
+            case 113: $smtp_err_str = "No route to host"; break;
+            case 110: $smtp_err_str = "Connection timed out"; break;
+            case 104: $smtp_err_str = "Connection reset by client"; break;
+            default:  $smtp_err_str = "Unknown: connection failed"; break;
+          }
+          if ( !empty($smtp_err_str) ) {
+            $displayErrorString = ' (' . $smtp_err_str . ')';
+          }
+        } elseif ( !empty($errstr) ) {
+          $displayErrorString = ' (' . $errstr . ')';
+        }
+        $error = 'Failed to connect to server. Error: ' . $errno . $displayErrorString;
+        if($this->do_debug >= 1) {
+          echo "SMTP -> ERROR: " . $this->error . '<br />' . $this->CRLF;
+        }
+        throw new smtpException($error);
       }
-      return false;
-    }
-
-    /* sometimes the SMTP server takes a little longer to respond
+     /* sometimes the SMTP server takes a little longer to respond
      * so we will give it a longer timeout for the first read
-     * - Windows still does not have support for this timeout function
      */
-    if(substr(PHP_OS, 0, 3) != "WIN")
-     socket_set_timeout($this->smtp_conn, $tval, 0);
-
+      if ( !stream_set_timeout($this->smtp_conn, $tval) ) {
+        throw new smtpException('Extended time out failed.');
+      }
+ 
     /* get any announcement stuff */
     $announce = $this->get_lines();
-
-    /* set the timeout  of any socket functions at 1/10 of a second */
-    //if(function_exists("socket_set_timeout"))
-    //   socket_set_timeout($this->smtp_conn, 0, 100000);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $announce;
+    if ( $this->do_debug >= 2 ) {
+      echo "SMTP -> FROM SERVER:" . $this->CRLF . $announce . '<br />';
     }
 
     return true;
+   }
+    catch (smtpException $e) {
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+    }
+	return false;
   }
 
   /**
@@ -174,37 +194,38 @@ class SMTP {
    * @return bool success
    */
   public function StartTLS() {
-    $this->error = null; # to avoid confusion
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array("error" => "Called StartTLS() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"STARTTLS" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 220) {
-      $this->error =
-         array("error"     => "STARTTLS not accepted from server",
-               "smtp_code" => $code,
-               "smtp_msg"  => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] . ": " . $rply . $this->CRLF;
+    try {
+      if (!$this->connected()) {
+        throw new smtpException('Called StartTLS() without being connected.');
       }
-      return false;
-    }
-
+      fputs($this->smtp_conn,"STARTTLS" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . $this->CRLF . '<br />' . $rply . '<br />';
+      }
+      if ( $code != 220 ) {
+        throw new smtpException('STARTTLS not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
+      }
+ 
     //Begin encrypted connection
-    if(!stream_socket_enable_crypto($this->smtp_conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-      return false;
+    if (!stream_socket_enable_crypto($this->smtp_conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+		throw new smtpException('Failed to enable crypto on socket');
     }
+   } catch (smtpException $e) {
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		if ( $this->do_debug >= 1 ) {
+			echo "SMTP -> ERROR: " . $e->errorMessage() . '<br />' . $this->CRLF;
+		}
+		return false;
+	}
 
     return true;
   }
@@ -216,60 +237,45 @@ class SMTP {
    * @return bool
    */
   public function Authenticate($username, $password) {
+    $this->error = null;
+
     // Start authentication
-    fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($code != 334) {
-      $this->error =
-        array("error" => "AUTH not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+		//Send AUTH command
+      fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $code != 334 ) {
+        throw new smtpException('AUTH not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
       }
-      return false;
-    }
-
-    // Send encoded username
-    fputs($this->smtp_conn, base64_encode($username) . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($code != 334) {
-      $this->error =
-        array("error" => "Username not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+	  
+	  //Send username
+      fputs($this->smtp_conn, base64_encode($username) . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $code != 334 ) {
+        throw new smtpException('Username not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
       }
-      return false;
-    }
 
     // Send encoded password
-    fputs($this->smtp_conn, base64_encode($password) . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($code != 235) {
-      $this->error =
-        array("error" => "Password not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+      fputs($this->smtp_conn, base64_encode($password) . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $code != 235 ) {
+        throw new smtpException('Password not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
       }
-      return false;
-    }
-
+   } catch (smtpException $e) {
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		if ( $this->do_debug >= 1 ) {
+			echo "SMTP -> ERROR: " . $e->errorMessage() . '<br />' . $this->CRLF;
+		}
+		return false;
+	}
     return true;
   }
 
@@ -279,21 +285,33 @@ class SMTP {
    * @return bool
    */
   public function Connected() {
-    if(!empty($this->smtp_conn)) {
-      $sock_status = socket_get_status($this->smtp_conn);
-      if($sock_status["eof"]) {
-        // hmm this is an odd situation... the socket is
-        // valid but we are not connected anymore
-        if($this->do_debug >= 1) {
-            echo "SMTP -> NOTICE:" . $this->CRLF .
-                 "EOF caught while checking if connected";
+    $this->error = null;
+
+    try {
+      if ( $this->smtp_conn !== false && $this->smtp_conn != 0  ) {
+        $sock_status = socket_get_status($this->smtp_conn);
+        if ( $sock_status["eof"] ) {
+          // odd situation - socket is valid but not connected anymore
+          throw new smtpException('NOTICE: EOF caught while checking if connected');
         }
-        $this->Close();
+      } else {
         return false;
       }
-      return true; // everything looks good
-    }
-    return false;
+	  } catch (smtpException $e) {
+		$this->Close();
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		if ( $this->do_debug >= 1 ) {
+			echo "SMTP -> ERROR: " . $e->errorMessage() . '<br />' . $this->CRLF;
+		}
+		return false;
+	}
+    
+    return true; // everything looks good
   }
 
   /**
@@ -304,9 +322,10 @@ class SMTP {
    * @return void
    */
   public function Close() {
-    $this->error = null; // so there is no confusion
+    $this->error = null;
+
     $this->helo_rply = null;
-    if(!empty($this->smtp_conn)) {
+    if ( !empty($this->smtp_conn) ) {
       // close the connection and cleanup
       fclose($this->smtp_conn);
       $this->smtp_conn = 0;
@@ -337,34 +356,22 @@ class SMTP {
    * @return bool
    */
   public function Data($msg_data) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Data() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"DATA" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 354) {
-      $this->error =
-        array("error" => "DATA command not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if (!$this->connected()) {
+        throw new smtpException('ERROR: Called Data() without being connected');
       }
-      return false;
-    }
+   
+      fputs($this->smtp_conn,"DATA" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 354 ) {
+        throw new smtpException('DATA command not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
+      }
 
     /* the server is ready to accept data!
      * according to rfc 821 we should not send more than 1000
@@ -382,17 +389,17 @@ class SMTP {
     $msg_data = str_replace("\r","\n",$msg_data);
     $lines = explode("\n",$msg_data);
 
-    /* we need to find a good way to determine is headers are
+    /* we need to find a good way to determine if headers are
      * in the msg_data or if it is a straight msg body
-     * currently I am assuming rfc 822 definitions of msg headers
-     * and if the first field of the first line (':' sperated)
+     * currently assuming rfc 822 definitions of msg headers
+     * and if the first field of the first line (':' separated)
      * does not contain a space then it _should_ be a header
      * and we can process all lines before a blank "" line as
      * headers.
      */
     $field = substr($lines[0],0,strpos($lines[0],":"));
     $in_headers = false;
-    if(!empty($field) && !strstr($field," ")) {
+    if ( !empty($field) && !strstr($field," ") ) {
       $in_headers = true;
     }
 
@@ -400,7 +407,7 @@ class SMTP {
 
     while(list(,$line) = @each($lines)) {
       $lines_out = null;
-      if($line == "" && $in_headers) {
+      if ( $line == "" && $in_headers ) {
         $in_headers = false;
       }
       // ok we need to break this line up into several smaller lines
@@ -408,7 +415,7 @@ class SMTP {
         $pos = strrpos(substr($line,0,$max_line_length)," ");
 
         // Patch to fix DOS attack
-        if(!$pos) {
+        if ( !$pos ) {
           $pos = $max_line_length - 1;
           $lines_out[] = substr($line,0,$pos);
           $line = substr($line,$pos);
@@ -421,7 +428,7 @@ class SMTP {
          * add a LWSP-char to the front of the new line
          * rfc 822 on long msg headers
          */
-        if($in_headers) {
+        if ( $in_headers ) {
           $line = "\t" . $line;
         }
       }
@@ -429,9 +436,8 @@ class SMTP {
 
       // now send the lines to the server
       while(list(,$line_out) = @each($lines_out)) {
-        if(strlen($line_out) > 0)
-        {
-          if(substr($line_out, 0, 1) == ".") {
+        if ( strlen($line_out) > 0 ) {
+          if ( substr($line_out, 0, 1) == "." ) {
             $line_out = "." . $line_out;
           }
         }
@@ -439,28 +445,29 @@ class SMTP {
       }
     }
 
-    // ok all the message data has been sent so lets get this
-    // over with aleady
-    fputs($this->smtp_conn, $this->CRLF . "." . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "DATA not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+      // message data has been sent so lets end
+      fputs($this->smtp_conn, $this->CRLF . "." . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
       }
-      return false;
-    }
+      if ( $code != 250 ) {
+         throw new smtpException('DATA not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
+      }
+ 	  } catch (smtpException $e) {
+		$this->Close();
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		if ( $this->do_debug >= 1 ) {
+         echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+		}
+		return false;
+	}
     return true;
   }
 
@@ -481,34 +488,21 @@ class SMTP {
    * @return string array
    */
   public function Expand($name) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-            "error" => "Called Expand() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"EXPN " . $name . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "EXPN not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if (!$this->connected()) {
+        throw new smtpException('ERROR: Called Expand() without being connected');
       }
-      return false;
-    }
+      fputs($this->smtp_conn,"EXPN " . $name . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 ) {
+        throw new smtpException('EXPN not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
+      }
 
     // parse the reply and place in our array to return to user
     $entries = explode($this->CRLF,$rply);
@@ -517,6 +511,19 @@ class SMTP {
     }
 
     return $list;
+ 	  } catch (smtpException $e) {
+		$this->Close();
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		if ( $this->do_debug >= 1 ) {
+         echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+		}
+		return false;
+	}
   }
 
   /**
@@ -531,31 +538,36 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Hello($host = '') {
-    $this->error = null; // so no confusion is caused
+  public function Hello($host="") {
+    $this->error = NULL;
 
-    if(!$this->connected()) {
-      $this->error = array(
-            "error" => "Called Hello() without being connected");
-      return false;
-    }
-
-    // if a hostname for the HELO was not specified determine
-    //a suitable one to send
-    if(empty($host)) {
-      // we need to determine some sort of appopiate default
-      // to send to the server
+    try {
+      if ( !$this->connected() ) {
+        throw new smtpException('ERROR: Called Hello() without being connected');
+      }
+    // if hostname for HELO was not specified determine a suitable one to send
+    if ( empty($host) ) {
+      // default to send to the server
       $host = "localhost";
     }
-
-    // Send extended hello first (RFC 2821)
-    if(!$this->SendHello("EHLO", $host))
-    {
-      if(!$this->SendHello("HELO", $host))
-          return false;
-    }
+       // Send extended hello first (RFC 2821)
+      if ( !$this->SendHello("EHLO", $host) ) {
+        if ( !$this->SendHello("HELO", $host) ) {
+          throw new smtpException('ERROR: EHLO and/or HELO not accepted by server');
+        }
+      }
 
     return true;
+	  } catch (smtpException $e) {
+		$this->Close();
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+		return false;
+	}
   }
 
   /**
@@ -564,31 +576,35 @@ class SMTP {
    * @return bool
    */
   private function SendHello($hello, $host) {
-    fputs($this->smtp_conn, $hello . " " . $host . $this->CRLF);
+    $this->error = null;
 
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER: " . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => $hello . " not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      fputs($this->smtp_conn, $hello . " " . $host . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER: " . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
       }
-      return false;
-    }
-
+      if ( $code != 250 ) {
+        throw new smtpException($hello . ' not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')');
+      }
     $this->helo_rply = $rply;
 
     return true;
-  }
+  	  } catch (smtpException $e) {
+		$this->Close();
+		$this->error = $e->getMessage();
+		$this->smtpErrorMessage[] = $e->errorMessage();
+		if ($this->exceptions) {
+			throw $e;
+		}
+		echo $e->errorMessage();
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+		return false;
+	}
+}
 
   /**
    * Gets help information on the keyword specified. If the keyword
@@ -605,38 +621,42 @@ class SMTP {
    * @access public
    * @return string
    */
-  public function Help($keyword = '') {
-    $this->error = null; // to avoid confusion
+  public function Help($keyword="") {
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Help() without being connected");
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Help() without being connected';
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
     $extra = "";
-    if(!empty($keyword)) {
+    if ( !empty($keyword) ) {
       $extra = " " . $keyword;
     }
 
-    fputs($this->smtp_conn,"HELP" . $extra . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 211 && $code != 214) {
-      $this->error =
-        array("error" => "HELP not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      fputs($this->smtp_conn,"HELP" . $extra . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
       }
+      if ( $code != 211 && $code != 214 ) {
+        $this->error = 'HELP not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
@@ -658,33 +678,37 @@ class SMTP {
    * @return bool
    */
   public function Mail($from) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Mail() without being connected");
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Mail() without being connected';
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
-    $useVerp = ($this->do_verp ? "XVERP" : "");
-    fputs($this->smtp_conn,"MAIL FROM:<" . $from . ">" . $useVerp . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "MAIL not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      $useVerp = ($this->do_verp ? "XVERP" : "");
+      fputs($this->smtp_conn,"MAIL FROM:<" . $from . ">" . $useVerp . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
       }
+      if ( $code != 250 ) {
+        $this->error = 'MAIL not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
     return true;
@@ -701,34 +725,39 @@ class SMTP {
    * @return bool
    */
   public function Noop() {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Noop() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"NOOP" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "NOOP not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Noop() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
+
+    try {
+      fputs($this->smtp_conn,"NOOP" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 ) {
+        $this->error = 'NOOP not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . '<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
+    }
+
     return true;
   }
 
@@ -743,42 +772,51 @@ class SMTP {
    * @access public
    * @return bool
    */
-  public function Quit($close_on_error = true) {
-    $this->error = null; // so there is no confusion
+  public function Quit($close_on_error=true) {
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Quit() without being connected");
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Quit() without being connected';
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
-    // send the quit command to the server
-    fputs($this->smtp_conn,"quit" . $this->CRLF);
+    try {
+      // send the quit command to the server
+      fputs($this->smtp_conn,"quit" . $this->CRLF);
 
-    // get any good-bye messages
-    $byemsg = $this->get_lines();
+      // get any good-bye messages
+      $byemsg = $this->get_lines();
 
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $byemsg;
-    }
-
-    $rval = true;
-    $e = null;
-
-    $code = substr($byemsg,0,3);
-    if($code != 221) {
-      // use e as a tmp var cause Close will overwrite $this->error
-      $e = array("error" => "SMTP server rejected quit command",
-                 "smtp_code" => $code,
-                 "smtp_rply" => substr($byemsg,4));
-      $rval = false;
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $e["error"] . ": " .
-                 $byemsg . $this->CRLF;
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $byemsg . '<br />' . $this->CRLF;
       }
+
+      $rval = true;
+      $e = null;
+
+      $code = substr($byemsg,0,3);
+      if ( $code != 221 ) {
+        $rval = false;
+        $this->error = 'QUIT command not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        $e = $this->error;
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $e["error"] . " (" . $byemsg . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
     }
 
-    if(empty($e) || $close_on_error) {
+    if ( empty($e) || $close_on_error ) {
       $this->Close();
     }
 
@@ -798,34 +836,39 @@ class SMTP {
    * @return bool
    */
   public function Recipient($to) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Recipient() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"RCPT TO:<" . $to . ">" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250 && $code != 251) {
-      $this->error =
-        array("error" => "RCPT not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Recipient() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
+
+    try {
+      fputs($this->smtp_conn,"RCPT TO:<" . $to . ">" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 && $code != 251 ) {
+        $this->error = 'RCPT command not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
+    }
+
     return true;
   }
 
@@ -842,32 +885,36 @@ class SMTP {
    * @return bool
    */
   public function Reset() {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Reset() without being connected");
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Reset() without being connected';
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
-    fputs($this->smtp_conn,"RSET" . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "RSET failed",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      fputs($this->smtp_conn,"RSET" . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
       }
+      if ( $code != 250 ) {
+        $this->error = 'RSET failed. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
 
@@ -891,34 +938,39 @@ class SMTP {
    * @return bool
    */
   public function Send($from) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Send() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"SEND FROM:" . $from . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "SEND not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Send() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
+
+    try {
+      fputs($this->smtp_conn,"SEND FROM:" . $from . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 ) {
+        $this->error = 'SEND not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
+    }
+
     return true;
   }
 
@@ -939,34 +991,39 @@ class SMTP {
    * @return bool
    */
   public function SendAndMail($from) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-          "error" => "Called SendAndMail() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"SAML FROM:" . $from . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "SAML not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called SendAndMail() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
+
+    try {
+      fputs($this->smtp_conn,"SAML FROM:" . $from . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 ) {
+        $this->error = 'SAML not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
+    }
+
     return true;
   }
 
@@ -987,57 +1044,40 @@ class SMTP {
    * @return bool
    */
   public function SendOrMail($from) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-          "error" => "Called SendOrMail() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"SOML FROM:" . $from . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250) {
-      $this->error =
-        array("error" => "SOML not accepted from server",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called SendOrMail() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
-    return true;
-  }
 
-  /**
-   * This is an optional command for SMTP that this class does not
-   * support. This method is here to make the RFC821 Definition
-   * complete for this class and __may__ be implimented in the future
-   *
-   * Implements from rfc 821: TURN <CRLF>
-   *
-   * SMTP CODE SUCCESS: 250
-   * SMTP CODE FAILURE: 502
-   * SMTP CODE ERROR  : 500, 503
-   * @access public
-   * @return bool
-   */
-  public function Turn() {
-    $this->error = array("error" => "This method, TURN, of the SMTP ".
-                                    "is not implemented");
-    if($this->do_debug >= 1) {
-      echo "SMTP -> NOTICE: " . $this->error["error"] . $this->CRLF;
+    try {
+      fputs($this->smtp_conn,"SOML FROM:" . $from . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 ) {
+        $this->error = 'SOML not accepted. Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
     }
-    return false;
+
+    return true;
   }
 
   /**
@@ -1054,44 +1094,40 @@ class SMTP {
    * @return int
    */
   public function Verify($name) {
-    $this->error = null; // so no confusion is caused
+    $this->error = null;
 
-    if(!$this->connected()) {
-      $this->error = array(
-              "error" => "Called Verify() without being connected");
-      return false;
-    }
-
-    fputs($this->smtp_conn,"VRFY " . $name . $this->CRLF);
-
-    $rply = $this->get_lines();
-    $code = substr($rply,0,3);
-
-    if($this->do_debug >= 2) {
-      echo "SMTP -> FROM SERVER:" . $this->CRLF . $rply;
-    }
-
-    if($code != 250 && $code != 251) {
-      $this->error =
-        array("error" => "VRFY failed on name '$name'",
-              "smtp_code" => $code,
-              "smtp_msg" => substr($rply,4));
-      if($this->do_debug >= 1) {
-        echo "SMTP -> ERROR: " . $this->error["error"] .
-                 ": " . $rply . $this->CRLF;
+    try {
+      if ( !$this->connected() ) {
+        $this->error = 'ERROR: Called Verify() without being connected';
+        throw new smtpException($this->error);
       }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
       return false;
     }
-    return $rply;
-  }
 
-  /**
-  * Get the current error
-  * @access public
-  * @return array
-  */
-  public function getError() {
-    return $this->error;
+    try {
+      fputs($this->smtp_conn,"VRFY " . $name . $this->CRLF);
+      $rply = $this->get_lines();
+      $code = substr($rply,0,3);
+      if ( $this->do_debug >= 2 ) {
+        echo "SMTP -> FROM SERVER:" . '<br />' . $this->CRLF . $rply . '<br />' . $this->CRLF;
+      }
+      if ( $code != 250 && $code != 251 ) {
+        $this->error = "VRFY failed on name '$name' " . 'Server returned code: ' . $code . ' (' . trim(substr($rply,4)) . ')';
+        if ( $this->do_debug >= 1 ) {
+          echo "SMTP -> ERROR: " . $this->error . " (" . $rply . ')<br />' . $this->CRLF;
+        }
+        throw new smtpException($this->error);
+      }
+    } catch (smtpException $e) {
+      $this->smtpErrorMessage[] = $e->errorMessage();
+      echo $e->errorMessage();
+      return false;
+    }
+
+    return $rply;
   }
 
   /*******************************************************************
@@ -1110,19 +1146,19 @@ class SMTP {
   private function get_lines() {
     $data = "";
     while($str = @fgets($this->smtp_conn,515)) {
-      if($this->do_debug >= 4) {
-        echo "SMTP -> get_lines(): \$data was \"$data\"" .
-                 $this->CRLF;
-        echo "SMTP -> get_lines(): \$str is \"$str\"" .
-                 $this->CRLF;
+      if ( $this->do_debug >= 4 ) {
+        echo "SMTP -> get_lines(): \$data was \"$data\"" . '<br />' . $this->CRLF;
+        echo "SMTP -> get_lines(): \$str is \"$str\"" . '<br />' . $this->CRLF;
       }
       $data .= $str;
-      if($this->do_debug >= 4) {
-        echo "SMTP -> get_lines(): \$data is \"$data\"" . $this->CRLF;
+      if ( $this->do_debug >= 4 ) {
+        echo "SMTP -> get_lines(): \$data is \"$data\"" . '<br />' . $this->CRLF;
       }
       // if the 4th character is a space then we are done reading
       // so just break the loop
-      if(substr($str,3,1) == " ") { break; }
+      if ( substr($str,3,1) == " " ) {
+        break;
+      }
     }
     return $data;
   }

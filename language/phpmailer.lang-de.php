@@ -1,11 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * German Version
- * Thanks to Yann-Patrick Schlame for the latest update!
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* German Version
+* Thanks to Yann-Patrick Schlame for the latest update!
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Bitte geben Sie mindestens eine Empfänger Emailadresse an.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer wird nicht unterstützt.';
@@ -20,5 +18,4 @@ $PHPMAILER_LANG['file_access']          = 'Zugriff auf folgende Datei fehlgeschl
 $PHPMAILER_LANG['file_open']            = 'Datei Fehler: konnte folgende Datei nicht öffnen: ';
 $PHPMAILER_LANG['encoding']             = 'Unbekanntes Encoding-Format: ';
 $PHPMAILER_LANG['signing']              = 'Fehler beim Signieren: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

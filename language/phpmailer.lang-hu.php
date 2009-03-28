@@ -1,10 +1,8 @@
 <?php
 /**
- * PHPMailer language file.
- * Hungarian Version
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Hungarian Version
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Meg kell adnod legalább egy címzett email címet.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' levelezõ nem támogatott.';
@@ -18,6 +16,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP Hiba: Nem tudtam csatlakozni az 
 $PHPMAILER_LANG['file_access']          = 'Nem sikerült elérni a következõ fájlt: ';
 $PHPMAILER_LANG['file_open']            = 'Fájl Hiba: Nem sikerült megnyitni a következõ fájlt: ';
 $PHPMAILER_LANG['encoding']             = 'Ismeretlen kódolás: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

@@ -1,11 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * Finnish Version
- * By Jyry Kuukanen
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Finnish Version
+* By Jyry Kuukanen
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Aseta vähintään yksi vastaanottajan sähk&ouml;postiosoite.';
 $PHPMAILER_LANG['mailer_not_supported'] = 'postivälitintyyppiä ei tueta.';
@@ -19,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP-virhe: yhteys palvelimeen ei onn
 $PHPMAILER_LANG['file_access']          = 'Seuraavaan tiedostoon ei ole oikeuksia: ';
 $PHPMAILER_LANG['file_open']            = 'Tiedostovirhe: Ei voida avata tiedostoa: ';
 $PHPMAILER_LANG['encoding']             = 'Tuntematon koodaustyyppi: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

@@ -1,11 +1,9 @@
 <?php
 /**
- * PHPMailer language file.  
- * Chinese Version
- * By LiuXin: www.80x86.cn/blog/
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Chinese Version
+* By LiuXin: www.80x86.cn/blog/
+*/
 
 $PHPMAILER_LANG['provide_address'] = '您必须提供至少一个 收信人的email地址。';
 $PHPMAILER_LANG['mailer_not_supported'] = ' 您所选择的发送邮件的方法并不支持。';
@@ -19,6 +17,4 @@ $PHPMAILER_LANG['connect_host'] = 'SMTP 错误: 不能连接SMTP主机。';
 $PHPMAILER_LANG['file_access'] = '不能访问文件：';
 $PHPMAILER_LANG['file_open'] = '文件错误：不能打开文件：';
 $PHPMAILER_LANG['encoding'] = '未知编码：';
-$PHPMAILER_LANG['signing'] = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

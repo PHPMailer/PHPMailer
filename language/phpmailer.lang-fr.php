@@ -1,10 +1,8 @@
 <?php
 /**
- * PHPMailer language file.
- * French Version
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* French Version
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Vous devez fournir au moins une adresse de destinataire.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' client de messagerie non supporté.';
@@ -18,6 +16,4 @@ $PHPMAILER_LANG['connect_host']         = 'Erreur SMTP : Impossible de se connec
 $PHPMAILER_LANG['file_access']          = 'Impossible d\'accéder au fichier : ';
 $PHPMAILER_LANG['file_open']            = 'Erreur Fichier : ouverture impossible : ';
 $PHPMAILER_LANG['encoding']             = 'Encodage inconnu : ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

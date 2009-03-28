@@ -1,10 +1,8 @@
 <?php
 /**
- * PHPMailer language file.
- * Dutch Version
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Dutch Version
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Er moet tenmiste één ontvanger emailadres opgegeven worden.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer wordt niet ondersteund.';
@@ -18,6 +16,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP Fout: Kon niet verbinden met SMT
 $PHPMAILER_LANG['file_access']          = 'Kreeg geen toegang tot bestand: ';
 $PHPMAILER_LANG['file_open']            = 'Bestandsfout: Kon bestand niet openen: ';
 $PHPMAILER_LANG['encoding']             = 'Onbekende codering: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

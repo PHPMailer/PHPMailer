@@ -1,11 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * Estonian Version
- * By Indrek Päri
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Estonian Version
+* By Indrek Päri
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Te peate määrama vähemalt ühe saaja e-posti aadressi.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' maileri tugi puudub.';
@@ -19,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP Viga: Ei õnnestunud luua ühend
 $PHPMAILER_LANG['file_access']          = 'Pole piisavalt õiguseid järgneva faili avamiseks: ';
 $PHPMAILER_LANG['file_open']            = 'Faili Viga: Faili avamine ebaõnnestus: ';
 $PHPMAILER_LANG['encoding']             = 'Tundmatu Unknown kodeering: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

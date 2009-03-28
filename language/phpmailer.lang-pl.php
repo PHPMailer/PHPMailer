@@ -1,10 +1,8 @@
 <?php
 /**
- * PHPMailer language file.  
- * Polish Version
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Polish Version
+*/
 
 $PHPMAILER_LANG["provide_address"] = 'Należy podać prawidłowy adres email Odbiorcy.';
 $PHPMAILER_LANG["mailer_not_supported"] = 'Wybrana metoda wysyłki wiadomości nie jest obsługiwana.';
@@ -18,6 +16,4 @@ $PHPMAILER_LANG["connect_host"] = 'Błąd SMTP: Nie można połączyć się z wy
 $PHPMAILER_LANG["file_access"] = 'Brak dostępu do pliku: ';
 $PHPMAILER_LANG["file_open"] = 'Nie można otworzyć pliku: ';
 $PHPMAILER_LANG["encoding"] = 'Nieznany sposób kodowania znaków: ';
-$PHPMAILER_LANG['signing'] = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

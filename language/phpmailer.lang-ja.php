@@ -1,11 +1,9 @@
 <?php
 /**
- * PHPMailer language file.  
- * Japanese Version
- * By Mitsuhiro Yoshida - http://mitstek.com/
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Japanese Version
+* By Mitsuhiro Yoshida - http://mitstek.com/
+*/
 
 $PHPMAILER_LANG['provide_address'] = '少なくとも1つメールアドレスを 指定する必要があります。';
 $PHPMAILER_LANG['mailer_not_supported'] = ' メーラーがサポートされていません。';
@@ -19,6 +17,4 @@ $PHPMAILER_LANG['connect_host'] = 'SMTPエラー: SMTPホストに接続でき�
 $PHPMAILER_LANG['file_access'] = 'ファイルにアクセスできません: ';
 $PHPMAILER_LANG['file_open'] = 'ファイルエラー: ファイルを開けません: ';
 $PHPMAILER_LANG['encoding'] = '不明なエンコーディング: ';
-$PHPMAILER_LANG['signing'] = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error'] = 'SMTP server error: ';
 ?>

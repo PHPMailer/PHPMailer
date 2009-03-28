@@ -1,11 +1,10 @@
 <?php
 /**
- * PHPMailer language file.
- * Portuguese Version
- * By Paulo Henrique Garcia - paulo@controllerweb.com.br
- */
+* PHPMailer language file: refer to English translation for definitive list
+* Portuguese Version
+* By Paulo Henrique Garcia - paulo@controllerweb.com.br
+*/
 
-$PHPMAILER_LANG = array();
 $PHPMAILER_LANG['provide_address']      = 'Você deve fornecer pelo menos um endereço de destinatário de email.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer não suportado.';
 $PHPMAILER_LANG['execute']              = 'Não foi possível executar: ';
@@ -18,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'Erro de SMTP: Não foi possível cone
 $PHPMAILER_LANG['file_access']          = 'Não foi possível acessar o arquivo: ';
 $PHPMAILER_LANG['file_open']            = 'Erro de Arquivo: Não foi possível abrir o arquivo: ';
 $PHPMAILER_LANG['encoding']             = 'Codificação desconhecida: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

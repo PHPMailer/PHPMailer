@@ -34,7 +34,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE |
 
 /*
 interface Test {
-  function run($aTestResult);
+  function run(&$aTestResult);
   function countTestCases();
 }
 */
@@ -103,7 +103,7 @@ class TestCase extends Assert /* implements Test */ {
     $this->fName = $name;
   }
 
-  function run(&$testResult=0) {
+  function run($testResult=0) {
     /* Run this single test, by calling the run() method of the
        TestResult object which will in turn call the runBare() method
        of this object.  That complication allows the TestResult object
@@ -223,7 +223,7 @@ class TestSuite /* implements Test */ {
     $this->fTests[] = $test;
   }
 
-  function run($testResult) {
+  function run(&$testResult) {
     /* Run all TestCases and TestSuites comprising this TestSuite,
        accumulating results in the given TestResult object. */
     reset($this->fTests);
@@ -352,14 +352,14 @@ class TextTestResult extends TestResult {
   }
 
   function _startTest($test) {
-    printf("%s: ", $test->name());
+    printf("%s ", $test->name());
     flush();
   }
 
   function _endTest($test) {
     $outcome = $test->failed()
        ? "<font color=\"red\">FAIL</font>"
-       : "<font color=\"green\">Pass</font>";
+       : "<font color=\"green\">ok</font>";
     printf("$outcome<br>\n");
     flush();
   }

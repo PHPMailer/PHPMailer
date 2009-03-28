@@ -9,6 +9,13 @@ PHPMailer
 Full Featured Email Transfer Class for PHP
 ==========================================
 
+Version 5.0.0 (March xx, 2009)
+
+With the release of this version, we are initiating a new version numbering
+system to differentiate from the PHP4 version of PHPMailer.
+
+Most notable in this release is fully object oriented code.
+
 Version 2.3 (November 08, 2008)
 
 We have removed the /phpdoc from the downloads. All documentation is now on

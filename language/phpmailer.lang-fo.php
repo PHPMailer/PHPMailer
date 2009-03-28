@@ -1,12 +1,10 @@
 <?php
 /**
- * PHPMailer language file.
- * Faroese Version [language of the Faroe Islands, a Danish dominion]
- * This file created: 11-06-2004
- * Supplied by Dávur Sørensen [www.profo-webdesign.dk]
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Faroese Version [language of the Faroe Islands, a Danish dominion]
+* This file created: 11-06-2004
+* Supplied by Dávur Sørensen [www.profo-webdesign.dk]
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Tú skal uppgeva minst móttakara-emailadressu(r).';
 $PHPMAILER_LANG['mailer_not_supported'] = ' er ikki supporterað.';
@@ -20,6 +18,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP feilur: Kundi ikki knýta samban
 $PHPMAILER_LANG['file_access']          = 'Kundi ikki tilganga fílu: ';
 $PHPMAILER_LANG['file_open']            = 'Fílu feilur: Kundi ikki opna fílu: ';
 $PHPMAILER_LANG['encoding']             = 'Ókend encoding: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

@@ -1,11 +1,10 @@
 <?php
 /**
- * PHPMailer language file.
- * Romanian Version
- * @package PHPMailer
- * @author Catalin Constantin <catalin@dazoot.ro> */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Romanian Version
+* @package PHPMailer
+* @author Catalin Constantin <catalin@dazoot.ro>
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Trebuie sa adaugati cel putin un recipient (adresa de mail).';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer nu este suportat.';
@@ -19,6 +18,4 @@ $PHPMAILER_LANG['connect_host']         = 'Eroare SMTP: Nu m-am putut conecta la
 $PHPMAILER_LANG['file_access']          = 'Nu pot accesa fisierul: ';
 $PHPMAILER_LANG['file_open']            = 'Eroare de fisier: Nu pot deschide fisierul: ';
 $PHPMAILER_LANG['encoding']             = 'Encodare necunoscuta: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

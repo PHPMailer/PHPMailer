@@ -1,10 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * Swedish Version
- * Author: Johan Linnér <johan@linner.biz> */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Swedish Version
+* Author: Johan Linnér <johan@linner.biz>
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Du måste ange minst en mottagares e-postadress.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer stöds inte.';
@@ -18,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP fel: Kunde inte ansluta till SMT
 $PHPMAILER_LANG['file_access']          = 'Ingen åtkomst till fil: ';
 $PHPMAILER_LANG['file_open']            = 'Fil fel: Kunde inte öppna fil: ';
 $PHPMAILER_LANG['encoding']             = 'Okänt encode-format: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

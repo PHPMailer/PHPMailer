@@ -1,10 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * Versión en español
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Spanish version
+* Versión en español
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Debe proveer al menos una dirección de email como destinatario.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer no está soportado.';
@@ -19,5 +18,4 @@ $PHPMAILER_LANG['file_access']          = 'No puedo acceder al archivo: ';
 $PHPMAILER_LANG['file_open']            = 'Error de Archivo: No puede abrir el archivo: ';
 $PHPMAILER_LANG['encoding']             = 'Codificación desconocida: ';
 $PHPMAILER_LANG['signing']              = 'Error al firmar: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

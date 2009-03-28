@@ -1,10 +1,8 @@
 <?php
 /**
- * PHPMailer language file.
- * Norwegian Version
- */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Norwegian Version
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Du må ha med minst en mottager adresse.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer er ikke supportert.';
@@ -18,6 +16,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP Feil: Kunne ikke koble til SMTP 
 $PHPMAILER_LANG['file_access']          = 'Kunne ikke få tilgang til filen: ';
 $PHPMAILER_LANG['file_open']            = 'Fil feil: Kunne ikke åpne filen: ';
 $PHPMAILER_LANG['encoding']             = 'Ukjent encoding: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>

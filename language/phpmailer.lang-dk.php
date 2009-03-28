@@ -1,10 +1,9 @@
 <?php
 /**
- * PHPMailer language file.
- * Danish Version
- * Author: Mikael Stokkebro <info@stokkebro.dk> */
-
-$PHPMAILER_LANG = array();
+* PHPMailer language file: refer to English translation for definitive list
+* Danish Version
+* Author: Mikael Stokkebro <info@stokkebro.dk>
+*/
 
 $PHPMAILER_LANG['provide_address']      = 'Du skal indtaste mindst en modtagers emailadresse.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer understøttes ikke.';
@@ -18,6 +17,4 @@ $PHPMAILER_LANG['connect_host']         = 'SMTP fejl: Kunne ikke tilslutte SMTP 
 $PHPMAILER_LANG['file_access']          = 'Ingen adgang til fil: ';
 $PHPMAILER_LANG['file_open']            = 'Fil fejl: Kunne ikke åbne filen: ';
 $PHPMAILER_LANG['encoding']             = 'Ukendt encode-format: ';
-$PHPMAILER_LANG['signing']              = 'Signing Error: ';
-$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 ?>
