@@ -353,6 +353,12 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+
+	//Check that a quoted printable encode and decode results in the same as went in
+	$t = substr(file_get_contents(__FILE__), 0, 1024); //Just pick a chunk of this file as test content
+	$this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQP($t)), 'QP encoding round-trip failed');
+        //$this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQPphp($t)), 'Native PHP QP encoding round-trip failed'); //TODO the PHP qp encoder is quite broken
+
     }
 
     /**
@@ -410,6 +416,10 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+	//For code coverage
+	$this->Mail->AddEmbeddedImage('thisfiledoesntexist', 'xyz'); //Non-existent file
+	$this->Mail->AddEmbeddedImage(__FILE__, '123'); //Missing name
+
     }
 
     /**
@@ -493,6 +503,26 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
+    function test_SendmailSend() {
+        $this->Mail->Body = "Sending via sendmail";
+        $this->BuildBody();
+        $subject = $this->Mail->Subject;
+
+        $this->Mail->Subject = $subject . ": sendmail";
+	$this->Mail->IsSendmail();
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
+
+    function test_MailSend() {
+        $this->Mail->Body = "Sending via mail()";
+        $this->BuildBody();
+        $subject = $this->Mail->Subject;
+
+        $this->Mail->Subject = $subject . ": mail()";
+	$this->Mail->IsMail();
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
+
     function test_SmtpKeepAlive() {
         $this->Mail->Body = "This was done using the SMTP keep-alive.";
         $this->BuildBody();
@@ -532,15 +562,21 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	function test_Addressing() {
-		$this->assertTrue($this->Mail->AddAddress('a@example..com'), 'Invalid address accepted');
+		$this->assertFalse($this->Mail->AddAddress('a@example..com'), 'Invalid address accepted');
 		$this->assertTrue($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
 		$this->assertFalse($this->Mail->AddAddress('a@example.com'), 'Duplicate addressing failed');
 		$this->assertTrue($this->Mail->AddCC('b@example.com'), 'CC addressing failed');
-		$this->assertFalse($this->Mail->AddCC('b@example.com'), 'CC duplicate Addressing failed');
-		$this->assertFalse($this->Mail->AddCC('a@example.com'), 'CC duplicate Addressing failed (2)');
+		$this->assertFalse($this->Mail->AddCC('b@example.com'), 'CC duplicate addressing failed');
+		$this->assertFalse($this->Mail->AddCC('a@example.com'), 'CC duplicate addressing failed (2)');
 		$this->assertTrue($this->Mail->AddBCC('c@example.com'), 'BCC addressing failed');
 		$this->assertFalse($this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
-		$this->assertFalse($this->Mail->AddBCC('a@example.com'), 'BCC duplicate Addressing failed (2)');
+		$this->assertFalse($this->Mail->AddBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
+		$this->assertTrue($this->Mail->AddReplyTo('a@example.com'), 'Replyto Addressing failed');
+		$this->assertFalse($this->Mail->AddReplyTo('a@example..com'), 'Invalid Replyto address accepted');
+		$this->Mail->ClearAddresses();
+		$this->Mail->ClearCCs();
+		$this->Mail->ClearBCCs();
+		$this->Mail->ClearReplyTos();
 	}
 
 	/**
@@ -564,6 +600,44 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 				$this->assertTrue(empty($extra), "Extra translations in $lang: ". implode(', ', $extra));
 			}
 		}
+	}
+
+	/**
+	* Encoding tests
+	*/
+	function test_Encodings() {
+	    $this->Mail->Charset = 'iso-8859-1';
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'text'), 'Q Encoding (text) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'comment'), 'Q Encoding (comment) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'phrase'), 'Q Encoding (phrase) failed');
+	}
+	
+	/**
+	* Signing tests
+	*/
+	function test_Signing() {
+	    $this->Mail->Sign('certfile.txt', 'keyfile.txt', 'password'); //TODO this is not really testing signing, but at least helps coverage
+	}
+
+	/**
+	* Miscellaneous calls to improve test coverage and some small tests
+	*/
+	function test_Miscellaneous() {
+	    $this->assertEquals('application/pdf', PHPMailer::_mime_types('pdf') , 'MIME TYPE lookup failed');
+	    $this->Mail->AddCustomHeader('SomeHeader: Some Value');
+	    $this->Mail->ClearCustomHeaders();
+	    $this->Mail->ClearAttachments();
+	    $this->Mail->IsHTML(false);
+	    $this->Mail->IsSMTP();
+	    $this->Mail->IsMail();
+	    $this->Mail->IsSendMail();
+   	    $this->Mail->IsQmail();
+	    $this->Mail->SetLanguage('fr');
+	    $this->Mail->Sender = '';
+	    $this->Mail->CreateHeader();
+	    $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
+	    $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+	    $this->Mail->getFile(__FILE__);
 	}
 }  
  
