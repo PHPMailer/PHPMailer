@@ -1,0 +1,193 @@
+/**
+ * SyntaxHighlighter
+ * http://alexgorbatchev.com/
+ *
+ * SyntaxHighlighter is donationware. If you are using it, please donate.
+ * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
+ *
+ * @version
+ * 2.0.296 (March 01 2009)
+ * 
+ * @copyright
+ * Copyright (C) 2004-2009 Alex Gorbatchev.
+ *
+ * @license
+ * This file is part of SyntaxHighlighter.
+ * 
+ * SyntaxHighlighter is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * SyntaxHighlighter is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/**
+ * Fade to Grey SyntaxHighlighter theme based on theme by Brasten Sager
+ * http://www.ibrasten.com/
+ */
+
+/************************************
+ * Interface elements.
+ ************************************/
+
+.syntaxhighlighter
+{
+	background-color: #121212 !important;
+}
+
+/* Gutter line numbers */
+.syntaxhighlighter .line .number
+{
+	color: #C3C3C3 !important;
+}
+
+/* Add border to the lines */
+.syntaxhighlighter .line .content
+{
+	border-left: 3px solid #3185B9 !important;
+	color: #B9BDB6 !important;
+}
+
+.syntaxhighlighter.printing .line .content 
+{
+	border: 0 !important;
+}
+
+/* First line */
+.syntaxhighlighter .line.alt1 .content
+{
+}
+
+/* Second line */
+.syntaxhighlighter .line.alt2 .content
+{
+	background-color: #000000 !important;
+}
+
+.syntaxhighlighter .line .content .block
+{
+	background: url(wrapping.png) 0 1.1em no-repeat !important;
+}
+
+/* Highlighed line number */
+.syntaxhighlighter .line.highlighted .number
+{
+	background-color: #3A3A00 !important;
+	color: #fff !important;
+}
+
+/* Highlighed line */
+.syntaxhighlighter .line.highlighted.alt1 .content,
+.syntaxhighlighter .line.highlighted.alt2 .content
+{
+	background-color: #3A3A00 !important;
+}
+
+.syntaxhighlighter .ruler
+{
+	color: silver !important;
+	border-left: 3px solid #3185B9 !important;
+}
+
+.syntaxhighlighter.nogutter .ruler
+{
+	border: 0 !important;
+}
+
+.syntaxhighlighter .toolbar
+{
+	background-color: #000000 !important;
+	border: #000000 solid 1px !important;
+}
+
+.syntaxhighlighter .toolbar a
+{
+	color: #808080 !important;
+}
+
+.syntaxhighlighter .toolbar a:hover
+{
+	color: #96DAFF !important;
+}
+
+/************************************
+ * Actual syntax highlighter colors.
+ ************************************/
+.syntaxhighlighter .plain,
+.syntaxhighlighter .plain a
+{ 
+	color: #FFFFFF !important;
+}
+
+.syntaxhighlighter .comments,
+.syntaxhighlighter .comments a
+{ 
+	color: #696854 !important;
+}
+
+.syntaxhighlighter .string,
+.syntaxhighlighter .string a
+{
+	color: #E3E658 !important; 
+}
+
+.syntaxhighlighter .keyword
+{ 
+	color: #D01D33 !important; 
+}
+
+.syntaxhighlighter .preprocessor 
+{ 
+	color: #435A5F !important; 
+}
+
+.syntaxhighlighter .variable 
+{ 
+	color: #898989 !important; 
+}
+
+.syntaxhighlighter .value
+{ 
+	color: #090 !important; 
+}
+
+.syntaxhighlighter .functions
+{ 
+	color: #AAAAAA !important;
+	font-weight: bold !important;
+}
+
+.syntaxhighlighter .constants
+{ 
+	color: #96DAFF !important; 
+}
+
+.syntaxhighlighter .script
+{ 
+	background-color: #C3C3C3 !important;
+	color: #000 !important;
+}
+
+.syntaxhighlighter .color1,
+.syntaxhighlighter .color1 a
+{ 
+	color: #FFC074 !important; 
+}
+
+.syntaxhighlighter .color2,
+.syntaxhighlighter .color2 a
+{ 
+	color: #4A8CDB !important; 
+}
+
+.syntaxhighlighter .color3,
+.syntaxhighlighter .color3 a
+{ 
+	color: #96DAFF !important; 
+}
