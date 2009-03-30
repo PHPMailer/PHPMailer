@@ -1243,6 +1243,7 @@ class PHPMailer {
   private function AttachAll() {
     /* Return text of body */
     $mime = array();
+    $cidUniq = array();
 
     /* Add all attachments */
 	foreach ($this->attachment as $attachment) {
@@ -1260,6 +1261,8 @@ class PHPMailer {
       $type        = $attachment[4];
       $disposition = $attachment[6];
       $cid         = $attachment[7];
+      if ( isset($cidUniq[$cid]) ) { continue; }
+      $cidUniq[$cid] = true;
 
       $mime[] = sprintf("--%s%s", $this->boundary[1], $this->LE);
       $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $this->EncodeHeader($this->SecureHeader($name)), $this->LE);
