@@ -22,9 +22,8 @@
 | We offer a number of paid services (www.codeworxtech.com):                |
 | - Web Hosting on highly optimized fast and secure servers                 |
 | - Technology Consulting                                                   |
-| - Outsourcing (highly qualified programmers and graphic designers)        |
+| - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
-Development version - last update: March 29 2009, 12:22 pm
 */
 
 /**
@@ -316,6 +315,9 @@ class PHPMailer {
    * @return void
    */
   public function IsSendmail() {
+    if ( !stristr(ini_get('sendmail_path'),'sendmail') ) {
+      $this->Sendmail = '/var/qmail/bin/sendmail';
+    }
     $this->Mailer = 'sendmail';
   }
 
@@ -324,7 +326,9 @@ class PHPMailer {
    * @return void
    */
   public function IsQmail() {
-    $this->Sendmail = '/var/qmail/bin/sendmail';
+    if ( stristr(ini_get('sendmail_path'),'qmail') ) {
+      $this->Sendmail = '/var/qmail/bin/sendmail';
+    }
     $this->Mailer = 'sendmail';
   }
 
@@ -733,26 +737,27 @@ class PHPMailer {
    * @return bool
    */
   function SetLanguage($lang_type = 'en', $lang_path = 'language/') {
-    $PHPMAILER_LANG = array();
-    $PHPMAILER_LANG["authenticate"]         = 'SMTP Error: Could not authenticate.';
-    $PHPMAILER_LANG["connect_host"]         = 'SMTP Error: Could not connect to SMTP host.';
-    $PHPMAILER_LANG["data_not_accepted"]    = 'SMTP Error: Data not accepted.';
-    $PHPMAILER_LANG["empty_message"]        = 'Message body empty';
-    $PHPMAILER_LANG["encoding"]             = 'Unknown encoding: ';
-    $PHPMAILER_LANG["execute"]              = 'Could not execute: ';
-    $PHPMAILER_LANG["file_access"]          = 'Could not access file: ';
-    $PHPMAILER_LANG["file_open"]            = 'File Error: Could not open file: ';
-    $PHPMAILER_LANG["from_failed"]          = 'The following From address failed: ';
-    $PHPMAILER_LANG["instantiate"]          = 'Could not instantiate mail function.';
-    $PHPMAILER_LANG["invalid_email"]        = 'Not sending, email address is invalid: ';
-    $PHPMAILER_LANG["mailer_not_supported"] = ' mailer is not supported.';
-    $PHPMAILER_LANG["provide_address"]      = 'You must provide at least one recipient email address.';
-    $PHPMAILER_LANG["recipients_failed"]    = 'SMTP Error: The following recipients failed: ';
-    $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
-    $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-    $PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
-    $PHPMAILER_LANG["variable_set"]         = 'Cannot set or reset variable: ';
-    @include $lang_path.'phpmailer.lang-'.$lang_type.'.php');
+    if( !(@include $lang_path.'phpmailer.lang-'.$lang_type.'.php') ) {
+      $PHPMAILER_LANG = array();
+      $PHPMAILER_LANG["authenticate"]         = 'SMTP Error: Could not authenticate.';
+      $PHPMAILER_LANG["connect_host"]         = 'SMTP Error: Could not connect to SMTP host.';
+      $PHPMAILER_LANG["data_not_accepted"]    = 'SMTP Error: Data not accepted.';
+      $PHPMAILER_LANG["empty_message"]        = 'Message body empty';
+      $PHPMAILER_LANG["encoding"]             = 'Unknown encoding: ';
+      $PHPMAILER_LANG["execute"]              = 'Could not execute: ';
+      $PHPMAILER_LANG["file_access"]          = 'Could not access file: ';
+      $PHPMAILER_LANG["file_open"]            = 'File Error: Could not open file: ';
+      $PHPMAILER_LANG["from_failed"]          = 'The following From address failed: ';
+      $PHPMAILER_LANG["instantiate"]          = 'Could not instantiate mail function.';
+      $PHPMAILER_LANG["invalid_email"]        = 'Not sending, email address is invalid: ';
+      $PHPMAILER_LANG["mailer_not_supported"] = ' mailer is not supported.';
+      $PHPMAILER_LANG["provide_address"]      = 'You must provide at least one recipient email address.';
+      $PHPMAILER_LANG["recipients_failed"]    = 'SMTP Error: The following recipients failed: ';
+      $PHPMAILER_LANG["signing"]              = 'Signing Error: ';
+      $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
+      $PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
+      $PHPMAILER_LANG["variable_set"]         = 'Cannot set or reset variable: ';
+    }
     $this->language = $PHPMAILER_LANG;
     return true;
   }
