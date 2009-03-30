@@ -24,7 +24,6 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
-Development version - last update: March 29 2009, 12:22 pm
 */
 
 /**
@@ -32,7 +31,7 @@ Development version - last update: March 29 2009, 12:22 pm
  * NOTE: Designed for use with PHP version 5 and up
  * @package PHPMailer
  * @author Andy Prevost
- * @copyright 2004 - 2009 Andy Prevost
+ * @copyright 2004 - 2008 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
  * @version $Id$
  */
