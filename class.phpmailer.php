@@ -293,11 +293,11 @@ class PHPMailer {
 	
   /**
    * Sets message type to HTML.
-   * @param bool $bool
+   * @param bool $ishtml
    * @return void
    */
-  public function IsHTML($bool) {
-    if($bool == true) {
+  public function IsHTML($ishtml = true) {
+    if ($ishtml) {
       $this->ContentType = 'text/html';
     } else {
       $this->ContentType = 'text/plain';
@@ -436,7 +436,7 @@ class PHPMailer {
    * Adds a "Reply-to" address.
    * @param string $address
    * @param string $name
-   * @return void
+   * @return boolean
    */
   public function AddReplyTo($address, $name = '') {
 		if (!self::ValidateAddress($address)) {
@@ -445,6 +445,7 @@ class PHPMailer {
 			return false;
 		}
 		$this->ReplyTo[] = array(trim($address), $name);
+		return true;
   }
 
   /////////////////////////////////////////////////
@@ -1859,7 +1860,7 @@ class PHPMailer {
           ($directory == '.')?$directory='':'';
           $cid = 'cid:' . md5($filename);
           $ext = pathinfo($filename, PATHINFO_EXTENSION);
-          $mimeType  = $this->_mime_types($ext);
+          $mimeType  = self::_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir,-1) != '/') { $basedir .= '/'; }
           if ( strlen($directory) > 1 && substr($directory,-1) != '/') { $directory .= '/'; }
           if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64',$mimeType) ) {
@@ -1880,11 +1881,13 @@ class PHPMailer {
   }
 
   /**
-   * Gets the mime type of the embedded or inline image
+   * Gets the MIME type of the embedded or inline image
+   * @param string File extension
    * @access public
-   * @return mime type of ext
+   * @return string MIME type of ext
+   * @static
    */
-  public function _mime_types($ext = '') {
+  public static function _mime_types($ext = '') {
     $mimes = array(
       'hqx'   =>  'application/mac-binhex40',
       'cpt'   =>  'application/mac-compactpro',
@@ -1987,6 +1990,7 @@ class PHPMailer {
 	* @param string $name Parameter Name
 	* @param mixed $value Parameter Value
 	* NOTE: will not work with arrays, there are no arrays to set/reset
+	* @todo Should this not be using __set() magic function?
 	*/
 	public function set($name, $value = '') {
 		try {
@@ -2001,6 +2005,7 @@ class PHPMailer {
 				return false;
 			}
 		}
+		return true;
 	}
 	
   /**
