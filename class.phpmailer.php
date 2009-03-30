@@ -724,7 +724,10 @@ class PHPMailer {
 			'variable_set' => 'Cannot set or reset variable: '
 		);
 		//Overwrite language-specific strings. This way we'll never have missing translations - no more "language string failed to load"!
-		$l = @include $lang_path.'phpmailer.lang-'.$langcode.'.php';
+		$l = true;
+		if ($langcode != 'en') { //There is no English translation file
+		    $l = @include $lang_path.'phpmailer.lang-'.$langcode.'.php';
+		}
 		$this->language = $PHPMAILER_LANG;
 		return ($l == true); //Returns false if language not found
 	}
