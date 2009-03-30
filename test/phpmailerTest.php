@@ -13,10 +13,10 @@
 * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 */
 
-require_once 'PHPUnit/Framework.php';
+require 'PHPUnit/Framework.php';
 
 $INCLUDE_DIR = "../";
-//require 'phpunit.php';
+
 require $INCLUDE_DIR . 'class.phpmailer.php';
 error_reporting(E_ALL);
 
@@ -24,8 +24,7 @@ error_reporting(E_ALL);
 * PHPMailer - PHP email transport unit test class
 * Performs authentication tests
 */
-class phpmailerTest extends PHPUnit_Framework_TestCase
-{
+class phpmailerTest extends PHPUnit_Framework_TestCase {
     /**
      * Holds the default phpmailer instance.
      * @private
@@ -60,7 +59,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     function setUp() {
         global $INCLUDE_DIR;
 
-		@include './testbootstrap.php'; //Overrides go in here
+	@include './testbootstrap.php'; //Overrides go in here
 
         $this->Mail = new PHPMailer();
 
