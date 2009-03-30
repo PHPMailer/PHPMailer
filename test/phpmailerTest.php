@@ -315,7 +315,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
             return;
         }
 
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -382,7 +382,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Subject .= ": HTML + Attachment";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test_attach.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -430,7 +430,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
             return;
         }
 
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -467,7 +467,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Subject .= ": AltBody + Attachment";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test_attach.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -577,7 +577,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 <h3>phpmailer Unit Test</h3>
 By entering a SMTP hostname it will automatically perform tests with SMTP.
 
-<form name="phpmailer_unit" action="phpmailer_test.php" method="get">
+<form name="phpmailer_unit" action=__FILE__ method="get">
 <input type="hidden" name="submitted" value="1"/>
 From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
 <br/>
