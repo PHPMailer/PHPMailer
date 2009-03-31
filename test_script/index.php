@@ -28,7 +28,7 @@ $CFG['smtp_password']     = 'yourpassword';
 
 if ( $_POST['submit'] == "Submit" ) {
 
-  class phpmailerException extends Exception {
+  class phpmailerAppException extends Exception {
     public function errorMessage() {
       $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />";
       return $errorMsg;
@@ -38,9 +38,9 @@ if ( $_POST['submit'] == "Submit" ) {
   try {
     $to = $_POST['To_Email'];
     if(filter_var($to, FILTER_VALIDATE_EMAIL) === FALSE) {
-      throw new phpmailerException("Email address " . $to . " is invalid -- aborting!<br />");
+      throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!<br />");
     }
-  } catch (phpmailerException $e) {
+  } catch (phpmailerAppException $e) {
     echo $e->errorMessage();
     return false;
   }
@@ -72,12 +72,21 @@ if ( $_POST['submit'] == "Submit" ) {
     $mail->IsQmail();     // telling the class to use Qmail
   }
 
-  $mail->AddReplyTo($_POST['From_Email'],$_POST['From_Name']);
+  if ( $_POST['From_Name'] != '' ) {
+    $mail->AddReplyTo($_POST['From_Email'],$_POST['From_Name']);
+    $mail->From       = $_POST['From_Email'];
+    $mail->FromName   = $_POST['From_Name'];
+  } else {
+    $mail->AddReplyTo($_POST['From_Email']);
+    $mail->From       = $_POST['From_Email'];
+    $mail->FromName   = $_POST['From_Email'];
+  }
 
-  $mail->From       = $_POST['From_Email'];
-  $mail->FromName   = $_POST['From_Name'];
-
-  $mail->AddAddress($to);
+  if ( $_POST['To_Name'] != '' ) {
+    $mail->AddAddress($to,$_POST['To_Name']);
+  } else {
+    $mail->AddAddress($to);
+  }
 
   if ( $_POST['bcc_Email'] != '' ) {
     $indiBCC = explode(" ", $_POST['bcc_Email']);
@@ -111,12 +120,12 @@ if ( $_POST['submit'] == "Submit" ) {
   try {
     if ( !$mail->Send() ) {
       $error = "Unable to send to: " . $to . "<br />";
-      throw new phpmailerException($error);
+      throw new phpmailerAppException($error);
     } else {
       echo 'Message has been sent using ' . strtoupper($_POST['test_type']) . "<br /><br />";
     }
   }
-  catch (phpmailerException $e) {
+  catch (phpmailerAppException $e) {
     $errorMsg[] = $e->errorMessage();
   }
 
@@ -163,7 +172,7 @@ if ( $_POST['submit'] == "Submit" ) {
   <br />
   Script:<br />
 <pre class="brush: php;">
-class phpmailerException extends Exception {
+class phpmailerAppException extends Exception {
   public function errorMessage() {
     $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />";
     return $errorMsg;
@@ -173,9 +182,9 @@ class phpmailerException extends Exception {
 try {
   $to = <?php echo $_POST['To_Email']; ?>;
   if(filter_var($to, FILTER_VALIDATE_EMAIL) === FALSE) {
-    throw new phpmailerException("Email address " . $to . " is invalid -- aborting!<br />");
+    throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!<br />");
   }
-} catch (phpmailerException $e) {
+} catch (phpmailerAppException $e) {
   echo $e->errorMessage();
   return false;
 }
@@ -216,8 +225,16 @@ $mail->AddReplyTo('<?php echo $_POST['From_Email']; ?>','<?php echo $_POST['From
 $mail->From       = '<?php echo $_POST['From_Email']; ?>';
 $mail->FromName   = '<?php echo $_POST['From_Name']; ?>';
 
-$mail->AddAddress('<?php echo $to; ?>');
 <?php
+if ( $_POST['To_Name'] != '' ) {
+  ?>
+$mail->AddAddress('<?php echo $to; ?>','<?php echo $_POST['To_Name']; ?>');
+  <?php
+} else {
+  ?>
+$mail->AddAddress('<?php echo $to; ?>');
+  <?php
+}
 if ( $_POST['bcc_Email'] != '' ) {
   $indiBCC = explode(" ", $_POST['bcc_Email']);
   foreach ($indiBCC as $key => $value) {
@@ -248,11 +265,11 @@ $mail->AddAttachment("images/phpmailer.gif", "phpmailer.gif");  // optional name
 try {
   if ( !$mail->Send() ) {
     $error = "Unable to send to: " . $to . "<br />";
-    throw new phpmailerException($error);
+    throw new phpmailerAppException($error);
   } else {
     echo 'Message has been sent using <?php echo strtoupper($_POST['test_type']); ?><br /><br />';
   }
-} catch (phpmailerException $e) {
+} catch (phpmailerAppException $e) {
   $errorMsg[] = $e->errorMessage();
 }
 
