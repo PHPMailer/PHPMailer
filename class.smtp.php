@@ -7,9 +7,10 @@
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
 | ------------------------------------------------------------------------- |
-|    Author: Andy Prevost (project admininistrator)                         |
-|    Author: Brent R. Matzelle (original founder)                           |
-|    Team  : Marcus Bointon (coolbru), coolbru@users.sourceforge.net        |
+|     Admin: Andy Prevost (project admininistrator)                         |
+|   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
+|          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|   Founder: Brent R. Matzelle (original founder)                           |
 | Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
@@ -31,6 +32,7 @@
  * NOTE: Designed for use with PHP version 5 and up
  * @package PHPMailer
  * @author Andy Prevost
+ * @author Marcus Bointon
  * @copyright 2004 - 2008 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
  * @version $Id$
@@ -41,8 +43,7 @@
  * commands except TURN which will always return a not implemented
  * error. SMTP also provides some utility methods for sending mail
  * to an SMTP server.
- * @package PHPMailer
- * @author Chris Ryan
+ * original author: Chris Ryan
  */
 
 class SMTP {
@@ -70,13 +71,13 @@ class SMTP {
    */
   public $do_verp = false;
 
-  /**#@+
-   * @access private
-   */
-  private $smtp_conn;      // the socket to the server
-  private $error;          // error if any on the last call
-  private $helo_rply;      // the reply the server sent to us for HELO
-  /**#@-*/
+  /////////////////////////////////////////////////
+  // PROPERTIES, PRIVATE AND PROTECTED
+  /////////////////////////////////////////////////
+
+  private $smtp_conn; // the socket to the server
+  private $error;     // error if any on the last call
+  private $helo_rply; // the reply the server sent to us for HELO
 
   /**
    * Initialize the class so that the data is in a known state.
@@ -91,9 +92,9 @@ class SMTP {
     $this->do_debug = 0;
   }
 
-  /*************************************************************
-   *                    CONNECTION FUNCTIONS                  *
-   ***********************************************************/
+  /////////////////////////////////////////////////
+  // CONNECTION FUNCTIONS
+  /////////////////////////////////////////////////
 
   /**
    * Connect to the server specified on the port specified.
@@ -109,15 +110,12 @@ class SMTP {
    * @return bool
    */
   public function Connect($host, $port = 0, $tval = 30) {
-    /* set the error val to null so there is no confusion */
+    // set the error val to null so there is no confusion
     $this->error = null;
 
-    /* make sure we are __not__ connected */
+    // make sure we are __not__ connected
     if($this->connected()) {
-      /* ok we are connected! what should we do?
-       * for now we will just give an error saying we
-       * are already connected
-       */
+      // already connected, generate error
       $this->error = array("error" => "Already connected to a server");
       return false;
     }
@@ -126,13 +124,13 @@ class SMTP {
       $port = $this->SMTP_PORT;
     }
 
-    /* connect to the smtp server */
+    // connect to the smtp server
     $this->smtp_conn = @fsockopen($host,    // the host of the server
                                  $port,    // the port to use
                                  $errno,   // error number if any
                                  $errstr,  // error message if any
                                  $tval);   // give up after ? secs
-    /* verify we connected properly */
+    // verify we connected properly
     if(empty($this->smtp_conn)) {
       $this->error = array("error" => "Failed to connect to server",
                            "errno" => $errno,
@@ -143,19 +141,13 @@ class SMTP {
       return false;
     }
 
-    /* sometimes the SMTP server takes a little longer to respond
-     * so we will give it a longer timeout for the first read
-     * - Windows still does not have support for this timeout function
-     */
+    // SMTP server can take longer to respond, give longer timeout for first read
+    // Windows does not have support for this timeout function
     if(substr(PHP_OS, 0, 3) != "WIN")
      socket_set_timeout($this->smtp_conn, $tval, 0);
 
-    /* get any announcement stuff */
+    // get any announcement
     $announce = $this->get_lines();
-
-    /* set the timeout  of any socket functions at 1/10 of a second */
-    //if(function_exists("socket_set_timeout"))
-    //   socket_set_timeout($this->smtp_conn, 0, 100000);
 
     if($this->do_debug >= 2) {
       echo "SMTP -> FROM SERVER:" . $announce . $this->CRLF . '<br />';
@@ -201,7 +193,7 @@ class SMTP {
       return false;
     }
 
-    //Begin encrypted connection
+    // Begin encrypted connection
     if(!stream_socket_enable_crypto($this->smtp_conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
       return false;
     }
@@ -279,8 +271,7 @@ class SMTP {
     if(!empty($this->smtp_conn)) {
       $sock_status = socket_get_status($this->smtp_conn);
       if($sock_status["eof"]) {
-        // hmm this is an odd situation... the socket is
-        // valid but we are not connected anymore
+        // the socket is valid but we are not connected
         if($this->do_debug >= 1) {
             echo "SMTP -> NOTICE:" . $this->CRLF . "EOF caught while checking if connected";
         }
@@ -309,9 +300,9 @@ class SMTP {
     }
   }
 
-  /***************************************************************
-   *                        SMTP COMMANDS                       *
-   *************************************************************/
+  /////////////////////////////////////////////////
+  // SMTP COMMANDS
+  /////////////////////////////////////////////////
 
   /**
    * Issues a data command and sends the msg_data to the server
@@ -369,7 +360,7 @@ class SMTP {
      * each of those into smaller lines to fit within the limit.
      * in addition we will be looking for lines that start with
      * a period '.' and append and additional period '.' to that
-     * line. NOTE: this does not count towards are limit.
+     * line. NOTE: this does not count towards limit.
      */
 
     // normalize the line breaks so we know the explode works
@@ -385,6 +376,7 @@ class SMTP {
      * and we can process all lines before a blank "" line as
      * headers.
      */
+
     $field = substr($lines[0],0,strpos($lines[0],":"));
     $in_headers = false;
     if(!empty($field) && !strstr($field," ")) {
@@ -412,8 +404,7 @@ class SMTP {
           $line = substr($line,$pos + 1);
         }
 
-        /* if we are processing headers we need to
-         * add a LWSP-char to the front of the new line
+        /* if processing headers add a LWSP-char to the front of new line
          * rfc 822 on long msg headers
          */
         if($in_headers) {
@@ -422,7 +413,7 @@ class SMTP {
       }
       $lines_out[] = $line;
 
-      // now send the lines to the server
+      // send the lines to the server
       while(list(,$line_out) = @each($lines_out)) {
         if(strlen($line_out) > 0)
         {
@@ -434,8 +425,7 @@ class SMTP {
       }
     }
 
-    // ok all the message data has been sent so lets get this
-    // over with aleady
+    // message data has been sent
     fputs($this->smtp_conn, $this->CRLF . "." . $this->CRLF);
 
     $rply = $this->get_lines();
@@ -479,19 +469,17 @@ class SMTP {
       return false;
     }
 
-    // if a hostname for the HELO was not specified determine
-    //a suitable one to send
+    // if hostname for HELO was not specified send default
     if(empty($host)) {
-      // we need to determine some sort of appopiate default
-      // to send to the server
+      // determine appropriate default to send to server
       $host = "localhost";
     }
 
     // Send extended hello first (RFC 2821)
-    if(!$this->SendHello("EHLO", $host))
-    {
-      if(!$this->SendHello("HELO", $host))
-          return false;
+    if(!$this->SendHello("EHLO", $host)) {
+      if(!$this->SendHello("HELO", $host)) {
+        return false;
+      }
     }
 
     return true;
@@ -791,9 +779,9 @@ class SMTP {
     return $this->error;
   }
 
-  /*******************************************************************
-   *                       INTERNAL FUNCTIONS                       *
-   ******************************************************************/
+  /////////////////////////////////////////////////
+  // INTERNAL FUNCTIONS
+  /////////////////////////////////////////////////
 
   /**
    * Read in as many lines as possible
@@ -815,8 +803,7 @@ class SMTP {
       if($this->do_debug >= 4) {
         echo "SMTP -> get_lines(): \$data is \"$data\"" . $this->CRLF . '<br />';
       }
-      // if the 4th character is a space then we are done reading
-      // so just break the loop
+      // if 4th character is a space, we are done reading, break the loop
       if(substr($str,3,1) == " ") { break; }
     }
     return $data;
