@@ -1243,6 +1243,7 @@ class PHPMailer {
     // Return text of body
     $mime = array();
     $cidUniq = array();
+    $incl = array();
 
     // Add all attachments
     foreach ($this->attachment as $attachment) {
@@ -1254,12 +1255,14 @@ class PHPMailer {
         $path = $attachment[0];
       }
 
+      if (in_array($attachment[0], $incl)) { continue; }
       $filename    = $attachment[1];
       $name        = $attachment[2];
       $encoding    = $attachment[3];
       $type        = $attachment[4];
       $disposition = $attachment[6];
       $cid         = $attachment[7];
+      $incl[]      = $attachment[0];
       if ( isset($cidUniq[$cid]) ) { continue; }
       $cidUniq[$cid] = true;
 
