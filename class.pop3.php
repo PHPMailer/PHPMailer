@@ -7,9 +7,11 @@
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
 | ------------------------------------------------------------------------- |
-|    Author: Andy Prevost (project admininistrator)                         |
-|    Author: Brent R. Matzelle (original founder)                           |
-| Copyright (c) 2004-2007, Andy Prevost. All Rights Reserved.               |
+|     Admin: Andy Prevost (project admininistrator)                         |
+|   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
+|          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|   Founder: Brent R. Matzelle (original founder)                           |
+| Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
@@ -23,6 +25,18 @@
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
+*/
+
+/**
+ * PHPMailer - PHP POP Before SMTP Authentication Class
+ * NOTE: Designed for use with PHP version 5 and up
+ * @package PHPMailer
+ * @author Andy Prevost
+ * @author Marcus Bointon
+ * @copyright 2004 - 2009 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * @version $Id$
+ */
 
 /**
  * POP Before SMTP Authentication Class
@@ -33,10 +47,10 @@
  * License: LGPL, see PHPMailer License
  *
  * Specifically for PHPMailer to allow POP before SMTP authentication.
- * Does not yet work with APOP - if you have an APOP account, contact me
+ * Does not yet work with APOP - if you have an APOP account, contact Richard Davey
  * and we can test changes to this script.
  *
- * This class is based on the structure of the SMTP class by Chris Ryan
+ * This class is based on the structure of the SMTP class originally authored by Chris Ryan
  *
  * This class is rfc 1939 compliant and implements all the commands
  * required for POP3 connection, authentication and disconnection.
@@ -100,13 +114,13 @@ class POP3 {
    */
   public $password;
 
-  /**#@+
-   * @access private
-   */
+  /////////////////////////////////////////////////
+  // PROPERTIES, PRIVATE AND PROTECTED
+  /////////////////////////////////////////////////
+
   private $pop_conn;
   private $connected;
   private $error;     //  Error log array
-  /**#@-*/
 
   /**
    * Constructor, sets the initial values
