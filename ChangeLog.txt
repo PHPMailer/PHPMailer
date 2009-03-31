@@ -3,7 +3,7 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
-Version 5.0.0 (March xx, 2009)
+Version 5.0.0 (April xx, 2009)
 
 * With the release of this version, we are initiating a new version numbering
   system to differentiate from the PHP4 version of PHPMailer.
@@ -30,6 +30,12 @@ New /test_script
   is also the inline graphic so you can see that only one copy of the graphic
   is sent in the email). The test script will also display the functional
   script that you can copy/paste to your editor to duplicate the functionality.
+New examples
+* All new examples in both basic and advanced modes. Advanced examples show
+  Exception handling.
+class.phpmailer.php enhancements
+* enhanced code to check if an attachment source is the same as an embedded or
+  inline graphic source to eliminate duplicate attachments
 
 Version 2.3 (November 06, 2008)
 
