@@ -358,9 +358,8 @@ class PHPMailer {
   }
 
   /**
-   * Adds a "Cc" address. Note: this function works
-   * with the SMTP mailer on win32, not with the "mail"
-   * mailer.
+   * Adds a "Cc" address.
+   * Note: this function works with the SMTP mailer on win32, not with the "mail" mailer.
    * @param string $address
    * @param string $name
    * @return boolean true on success, false if address already used
@@ -370,9 +369,8 @@ class PHPMailer {
   }
 
   /**
-   * Adds a "Bcc" address. Note: this function works
-   * with the SMTP mailer on win32, not with the "mail"
-   * mailer.
+   * Adds a "Bcc" address.
+   * Note: this function works with the SMTP mailer on win32, not with the "mail" mailer.
    * @param string $address
    * @param string $name
    * @return boolean true on success, false if address already used
@@ -382,32 +380,74 @@ class PHPMailer {
   }
 
   /**
-   * Adds an address to one of the recipient arrays
-   * @param string $kind One of 'to', 'cc', 'bcc'
+   * Adds a "Reply-to" address.
    * @param string $address
+   * @param string $name
+   * @return boolean
+   */
+  public function AddReplyTo($address, $name = '') {
+    return $this->AddAnAddress('ReplyTo', $address, $name);
+  }
+
+  /**
+   * Adds an address to one of the recipient arrays
+   * Addresses that have been added already return false, but do not throw exceptions
+   * @param string $kind One of 'to', 'cc', 'bcc', 'ReplyTo'
+   * @param string $address The email address to send to
    * @param string $name
    * @return boolean true on success, false if address already used or invalid in some way
    * @access private
    */
   private function AddAnAddress($kind, $address, $name = '') {
-    $address = trim($address);
-    if (!preg_match('/^(to|cc|bcc)$/', $kind)) {
+    if (!preg_match('/^(to|cc|bcc|ReplyTo)$/', $kind)) {
       echo 'Invalid recipient array: ' . kind;
       return false;
     }
+    $address = trim($address);
+    $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
     if (!self::ValidateAddress($address)) {
+      $this->SetError($this->Lang('invalid_address').': '. $address);
       if ($this->exceptions) {
-        throw new phpmailerException('Invalid address: '.$address);
+        throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      echo 'Invalid address: '.$address;
+      echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
-    if (!isset($this->all_recipients[strtolower($address)])) {
-      array_push($this->$kind, array($address, $name));
-      $this->all_recipients[strtolower($address)] = true;
-      return true;
-    }
+	if ($kind != 'ReplyTo') {
+	  if (!isset($this->all_recipients[strtolower($address)])) {
+        array_push($this->$kind, array($address, $name));
+        $this->all_recipients[strtolower($address)] = true;
+		return true;
+      }
+	} else {
+	  if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
+        $this->ReplyTo[strtolower($address)] = array($address, $name);
+		return true;
+	  }
+	}
     return false;
+  }
+
+/**
+ * Set the From and FromName properties
+ * @param string $address
+ * @param string $name
+ * @return boolean
+ */
+  public function SetFrom($address, $name = '') {
+    $address = trim($address);
+    $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+    if (!self::ValidateAddress($address)) {
+      $this->SetError($this->Lang('invalid_address').': '. $address);
+      if ($this->exceptions) {
+        throw new phpmailerException($this->Lang('invalid_address').': '.$address);
+      }
+      echo $this->Lang('invalid_address').': '.$address;
+      return false;
+    }
+	$this->From = $address;
+	$this->FromName = $name;
+	return true;
   }
 
   /**
@@ -431,22 +471,6 @@ class PHPMailer {
     } else {
       return preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $address);
     }
-  }
-
-  /**
-   * Adds a "Reply-to" address.
-   * @param string $address
-   * @param string $name
-   * @return boolean
-   */
-  public function AddReplyTo($address, $name = '') {
-    if (!self::ValidateAddress($address)) {
-      //throw exception
-      echo 'Invalid address: '.$address;
-      return false;
-    }
-    $this->ReplyTo[] = array(trim($address), $name);
-    return true;
   }
 
   /////////////////////////////////////////////////
@@ -475,7 +499,7 @@ class PHPMailer {
       $header = $this->CreateHeader();
       $body = $this->CreateBody();
 
-      if (empty($body)) {
+      if (empty($this->Body)) {
         throw new phpmailerException($this->Lang('empty_message'), self::STOP_CRITICAL);
       }
 
@@ -490,7 +514,7 @@ class PHPMailer {
           return $this->MailSend($header, $body);
       }
 
-    } catch (Exception $e) {
+    } catch (phpmailerException $e) {
       $this->SetError($e->getMessage());
       if ($this->exceptions) {
         throw $e;
@@ -1873,10 +1897,10 @@ class PHPMailer {
     $this->IsHTML(true);
     $this->Body = $message;
     $textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$message)));
-    if ( !empty($textMsg) && empty($this->AltBody) ) {
+    if (!empty($textMsg) && empty($this->AltBody)) {
       $this->AltBody = html_entity_decode($textMsg);
     }
-    if (empty($this->AltBody) ) {
+    if (empty($this->AltBody)) {
       $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
     }
   }
@@ -2047,5 +2071,9 @@ class PHPMailer {
 }
 
 class phpmailerException extends Exception {
+  public function errorMessage() {
+    $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />\n";
+    return $errorMsg;
+  }
 }
 ?>
