@@ -21,11 +21,9 @@ try {
   $mail->AddAttachment('images/phpmailer_mini.gif'); // attachment
   $mail->Send();
   echo "Message Sent OK</p>\n";
-}
-catch (phpmailerException $e) {
+} catch (phpmailerException $e) {
   echo $e->errorMessage(); //Pretty error messages from PHPMailer
-}
-catch (Exception $e) {
+} catch (Exception $e) {
   echo $e->getMessage(); //Boring error messages from anything else!
 }
 ?>
