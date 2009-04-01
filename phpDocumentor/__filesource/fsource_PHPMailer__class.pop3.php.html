@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>File Source for class.pop3.php</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>Source for file class.pop3.php</h1>
+<p>Documentation is available at <a href="../PHPMailer/_branches_5.0-dev_class_pop3_php.html">class.pop3.php</a></p>
+<div class="src-code">
+<pre><ol><li><a name="a1"></a><span class="src-php">&lt;?php</span></li>
+<li><a name="a2"></a><span class="src-comm">/*~ class.pop3.php</span></li>
+<li><a name="a3"></a><span class="src-comm">.---------------------------------------------------------------------------.</span></li>
+<li><a name="a4"></a><span class="src-comm">|  Software: PHPMailer - PHP email class                                    |</span></li>
+<li><a name="a5"></a><span class="src-comm">|   Version: 5.0.0                                                          |</span></li>
+<li><a name="a6"></a><span class="src-comm">|   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |</span></li>
+<li><a name="a7"></a><span class="src-comm">|      Info: http://phpmailer.sourceforge.net                               |</span></li>
+<li><a name="a8"></a><span class="src-comm">|   Support: http://sourceforge.net/projects/phpmailer/                     |</span></li>
+<li><a name="a9"></a><span class="src-comm">| ------------------------------------------------------------------------- |</span></li>
+<li><a name="a10"></a><span class="src-comm">|     Admin: Andy Prevost (project admininistrator)                         |</span></li>
+<li><a name="a11"></a><span class="src-comm">|   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |</span></li>
+<li><a name="a12"></a><span class="src-comm">|          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |</span></li>
+<li><a name="a13"></a><span class="src-comm">|   Founder: Brent R. Matzelle (original founder)                           |</span></li>
+<li><a name="a14"></a><span class="src-comm">| Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |</span></li>
+<li><a name="a15"></a><span class="src-comm">| Copyright (c) 2001-2003, Brent R. Matzelle                                |</span></li>
+<li><a name="a16"></a><span class="src-comm">| ------------------------------------------------------------------------- |</span></li>
+<li><a name="a17"></a><span class="src-comm">|   License: Distributed under the Lesser General Public License (LGPL)     |</span></li>
+<li><a name="a18"></a><span class="src-comm">|            http://www.gnu.org/copyleft/lesser.html                        |</span></li>
+<li><a name="a19"></a><span class="src-comm">| This program is distributed in the hope that it will be useful - WITHOUT  |</span></li>
+<li><a name="a20"></a><span class="src-comm">| ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or     |</span></li>
+<li><a name="a21"></a><span class="src-comm">| FITNESS FOR A PARTICULAR PURPOSE.                                         |</span></li>
+<li><a name="a22"></a><span class="src-comm">| ------------------------------------------------------------------------- |</span></li>
+<li><a name="a23"></a><span class="src-comm">| We offer a number of paid services (www.codeworxtech.com):                |</span></li>
+<li><a name="a24"></a><span class="src-comm">| - Web Hosting on highly optimized fast and secure servers                 |</span></li>
+<li><a name="a25"></a><span class="src-comm">| - Technology Consulting                                                   |</span></li>
+<li><a name="a26"></a><span class="src-comm">| - Oursourcing (highly qualified programmers and graphic designers)        |</span></li>
+<li><a name="a27"></a><span class="src-comm">'---------------------------------------------------------------------------'</span></li>
+<li><a name="a28"></a><span class="src-comm">*/</span></li>
+<li><a name="a29"></a>&nbsp;</li>
+<li><a name="a30"></a><span class="src-doc">/**</span></li>
+<li><a name="a31"></a><span class="src-doc"> * PHPMailer - PHP POP Before SMTP Authentication Class</span></li>
+<li><a name="a32"></a><span class="src-doc"> * NOTE: Designed for use with PHP version 5 and up</span></li>
+<li><a name="a33"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPMailer</span></li>
+<li><a name="a34"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Andy Prevost</span></li>
+<li><a name="a35"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Marcus Bointon</span></li>
+<li><a name="a36"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@copyright</span><span class="src-doc"> 2004 - 2009 Andy Prevost</span></li>
+<li><a name="a37"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@license</span><span class="src-doc"> http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)</span></li>
+<li><a name="a38"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@version</span><span class="src-doc"> $Id: class.pop3.php 241 2009-03-31 04:44:24Z codeworxtech $</span></li>
+<li><a name="a39"></a><span class="src-doc"> */</span></li>
+<li><a name="a40"></a>&nbsp;</li>
+<li><a name="a41"></a><span class="src-doc">/**</span></li>
+<li><a name="a42"></a><span class="src-doc"> * POP Before SMTP Authentication Class</span></li>
+<li><a name="a43"></a><span class="src-doc"> * Version 5.0.0</span></li>
+<li><a name="a44"></a><span class="src-doc"> *</span></li>
+<li><a name="a45"></a><span class="src-doc"> * Author: Richard Davey (rich@corephp.co.uk)</span></li>
+<li><a name="a46"></a><span class="src-doc"> * Modifications: Andy Prevost</span></li>
+<li><a name="a47"></a><span class="src-doc"> * License: LGPL, see PHPMailer License</span></li>
+<li><a name="a48"></a><span class="src-doc"> *</span></li>
+<li><a name="a49"></a><span class="src-doc"> * Specifically for PHPMailer to allow POP before SMTP authentication.</span></li>
+<li><a name="a50"></a><span class="src-doc"> * Does not yet work with APOP - if you have an APOP account, contact Richard Davey</span></li>
+<li><a name="a51"></a><span class="src-doc"> * and we can test changes to this script.</span></li>
+<li><a name="a52"></a><span class="src-doc"> *</span></li>
+<li><a name="a53"></a><span class="src-doc"> * This class is based on the structure of the SMTP class originally authored by Chris Ryan</span></li>
+<li><a name="a54"></a><span class="src-doc"> *</span></li>
+<li><a name="a55"></a><span class="src-doc"> * This class is rfc 1939 compliant and implements all the commands</span></li>
+<li><a name="a56"></a><span class="src-doc"> * required for POP3 connection, authentication and disconnection.</span></li>
+<li><a name="a57"></a><span class="src-doc"> *</span></li>
+<li><a name="a58"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@package</span><span class="src-doc"> PHPMailer</span></li>
+<li><a name="a59"></a><span class="src-doc"> * </span><span class="src-doc-coretag">@author</span><span class="src-doc"> Richard Davey</span></li>
+<li><a name="a60"></a><span class="src-doc"> */</span></li>
+<li><a name="a61"></a>&nbsp;</li>
+<li><a name="a62"></a><span class="src-key">class </span><a href="../PHPMailer/POP3.html">POP3</a> <span class="src-sym">{</span></li>
+<li><a name="a63"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a64"></a><span class="src-doc">   * Default POP3 port</span></li>
+<li><a name="a65"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">int </span></li>
+<li><a name="a66"></a><span class="src-doc">   */</span></li>
+<li><a name="a67"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$POP3_PORT">$POP3_PORT</a> = <span class="src-num">110</span><span class="src-sym">;</span></li>
+<li><a name="a68"></a>&nbsp;</li>
+<li><a name="a69"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a70"></a><span class="src-doc">   * Default Timeout</span></li>
+<li><a name="a71"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">int </span></li>
+<li><a name="a72"></a><span class="src-doc">   */</span></li>
+<li><a name="a73"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$POP3_TIMEOUT">$POP3_TIMEOUT</a> = <span class="src-num">30</span><span class="src-sym">;</span></li>
+<li><a name="a74"></a>&nbsp;</li>
+<li><a name="a75"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a76"></a><span class="src-doc">   * POP3 Carriage Return + Line Feed</span></li>
+<li><a name="a77"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a78"></a><span class="src-doc">   */</span></li>
+<li><a name="a79"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$CRLF">$CRLF</a> = <span class="src-str">&quot;\r\n&quot;</span><span class="src-sym">;</span></li>
+<li><a name="a80"></a>&nbsp;</li>
+<li><a name="a81"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a82"></a><span class="src-doc">   * Displaying Debug warnings? (0 = now, 1+ = yes)</span></li>
+<li><a name="a83"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">int </span></li>
+<li><a name="a84"></a><span class="src-doc">   */</span></li>
+<li><a name="a85"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$do_debug">$do_debug</a> = <span class="src-num">2</span><span class="src-sym">;</span></li>
+<li><a name="a86"></a>&nbsp;</li>
+<li><a name="a87"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a88"></a><span class="src-doc">   * POP3 Mail Server</span></li>
+<li><a name="a89"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a90"></a><span class="src-doc">   */</span></li>
+<li><a name="a91"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$host">$host</a><span class="src-sym">;</span></li>
+<li><a name="a92"></a>&nbsp;</li>
+<li><a name="a93"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a94"></a><span class="src-doc">   * POP3 Port</span></li>
+<li><a name="a95"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">int </span></li>
+<li><a name="a96"></a><span class="src-doc">   */</span></li>
+<li><a name="a97"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$port">$port</a><span class="src-sym">;</span></li>
+<li><a name="a98"></a>&nbsp;</li>
+<li><a name="a99"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a100"></a><span class="src-doc">   * POP3 Timeout Value</span></li>
+<li><a name="a101"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">int </span></li>
+<li><a name="a102"></a><span class="src-doc">   */</span></li>
+<li><a name="a103"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$tval">$tval</a><span class="src-sym">;</span></li>
+<li><a name="a104"></a>&nbsp;</li>
+<li><a name="a105"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a106"></a><span class="src-doc">   * POP3 Username</span></li>
+<li><a name="a107"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a108"></a><span class="src-doc">   */</span></li>
+<li><a name="a109"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$username">$username</a><span class="src-sym">;</span></li>
+<li><a name="a110"></a>&nbsp;</li>
+<li><a name="a111"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a112"></a><span class="src-doc">   * POP3 Password</span></li>
+<li><a name="a113"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@var </span><span class="src-doc-type">string </span></li>
+<li><a name="a114"></a><span class="src-doc">   */</span></li>
+<li><a name="a115"></a>  <span class="src-key">public </span><a href="../PHPMailer/POP3.html#var$password">$password</a><span class="src-sym">;</span></li>
+<li><a name="a116"></a>&nbsp;</li>
+<li><a name="a117"></a>  <span class="src-comm">/////////////////////////////////////////////////</span></li>
+<li><a name="a118"></a>  <span class="src-comm">// PROPERTIES, PRIVATE AND PROTECTED</span></li>
+<li><a name="a119"></a>  <span class="src-comm">/////////////////////////////////////////////////</span></li>
+<li><a name="a120"></a>&nbsp;</li>
+<li><a name="a119"></a>  </li>
+<li><a name="a120"></a>&nbsp;</li>
+<li><a name="a121"></a>  <span class="src-key">private </span><span class="src-var">$pop_conn</span><span class="src-sym">;</span></li>
+<li><a name="a122"></a>  <span class="src-key">private </span><span class="src-var">$connected</span><span class="src-sym">;</span></li>
+<li><a name="a123"></a>  <span class="src-key">private </span><span class="src-var">$error</span><span class="src-sym">;     </span><span class="src-comm">//  Error log array</span></li>
+<li><a name="a124"></a>&nbsp;</li>
+<li><a name="a123"></a>  </li>
+<li><a name="a124"></a>&nbsp;</li>
+<li><a name="a125"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a126"></a><span class="src-doc">   * Constructor, sets the initial values</span></li>
+<li><a name="a127"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a128"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">POP3 </span></li>
+<li><a name="a129"></a><span class="src-doc">   */</span></li>
+<li><a name="a130"></a>  <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPMailer/POP3.html#method__construct">__construct</a><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a131"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn  </span>= <span class="src-num">0</span><span class="src-sym">;</span></li>
+<li><a name="a132"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">connected </span>= <span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a133"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error     </span>= <span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a134"></a>  <span class="src-sym">}</span></li>
+<li><a name="a135"></a>&nbsp;</li>
+<li><a name="a136"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a137"></a><span class="src-doc">   * Combination of public events - connect, login, disconnect</span></li>
+<li><a name="a138"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a139"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$host </span></li>
+<li><a name="a140"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$port </span></li>
+<li><a name="a141"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$tval </span></li>
+<li><a name="a142"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$username </span></li>
+<li><a name="a143"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$password </span></li>
+<li><a name="a144"></a><span class="src-doc">   */</span></li>
+<li><a name="a145"></a>  <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPMailer/POP3.html#methodAuthorise">Authorise</a> <span class="src-sym">(</span><span class="src-var">$host</span><span class="src-sym">, </span><span class="src-var">$port </span>= <span class="src-id">false</span><span class="src-sym">, </span><span class="src-var">$tval </span>= <span class="src-id">false</span><span class="src-sym">, </span><span class="src-var">$username</span><span class="src-sym">, </span><span class="src-var">$password</span><span class="src-sym">, </span><span class="src-var">$debug_level </span>= <span class="src-num">0</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a146"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$host">host</a> = <span class="src-var">$host</span><span class="src-sym">;</span></li>
+<li><a name="a147"></a>&nbsp;</li>
+<li><a name="a148"></a>    <span class="src-comm">//  If no port value is passed, retrieve it</span></li>
+<li><a name="a149"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$port </span>== <span class="src-id">false</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a150"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$port">port</a> = <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$POP3_PORT">POP3_PORT</a><span class="src-sym">;</span></li>
+<li><a name="a151"></a>    <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a152"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$port">port</a> = <span class="src-var">$port</span><span class="src-sym">;</span></li>
+<li><a name="a153"></a>    <span class="src-sym">}</span></li>
+<li><a name="a154"></a>&nbsp;</li>
+<li><a name="a155"></a>    <span class="src-comm">//  If no port value is passed, retrieve it</span></li>
+<li><a name="a156"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$tval </span>== <span class="src-id">false</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a157"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$tval">tval</a> = <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$POP3_TIMEOUT">POP3_TIMEOUT</a><span class="src-sym">;</span></li>
+<li><a name="a158"></a>    <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a159"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$tval">tval</a> = <span class="src-var">$tval</span><span class="src-sym">;</span></li>
+<li><a name="a160"></a>    <span class="src-sym">}</span></li>
+<li><a name="a161"></a>&nbsp;</li>
+<li><a name="a162"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$do_debug">do_debug</a> = <span class="src-var">$debug_level</span><span class="src-sym">;</span></li>
+<li><a name="a163"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$username">username</a> = <span class="src-var">$username</span><span class="src-sym">;</span></li>
+<li><a name="a164"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$password">password</a> = <span class="src-var">$password</span><span class="src-sym">;</span></li>
+<li><a name="a165"></a>&nbsp;</li>
+<li><a name="a166"></a>    <span class="src-comm">//  Refresh the error log</span></li>
+<li><a name="a167"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span>= <span class="src-id">null</span><span class="src-sym">;</span></li>
+<li><a name="a168"></a>&nbsp;</li>
+<li><a name="a169"></a>    <span class="src-comm">//  Connect</span></li>
+<li><a name="a170"></a>    <span class="src-var">$result </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#methodConnect">Connect</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$host">host</a><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$port">port</a><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$tval">tval</a><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a171"></a>&nbsp;</li>
+<li><a name="a172"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$result</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a173"></a>      <span class="src-var">$login_result </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#methodLogin">Login</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$username">username</a><span class="src-sym">, </span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$password">password</a><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a174"></a>&nbsp;</li>
+<li><a name="a175"></a>      <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$login_result</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a176"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#methodDisconnect">Disconnect</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a177"></a>&nbsp;</li>
+<li><a name="a178"></a>        <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a179"></a>      <span class="src-sym">}</span></li>
+<li><a name="a180"></a>&nbsp;</li>
+<li><a name="a181"></a>    <span class="src-sym">}</span></li>
+<li><a name="a182"></a>&nbsp;</li>
+<li><a name="a183"></a>    <span class="src-comm">//  We need to disconnect regardless if the login succeeded</span></li>
+<li><a name="a184"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#methodDisconnect">Disconnect</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a185"></a>&nbsp;</li>
+<li><a name="a186"></a>    <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a187"></a>  <span class="src-sym">}</span></li>
+<li><a name="a188"></a>&nbsp;</li>
+<li><a name="a189"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a190"></a><span class="src-doc">   * Connect to the POP3 server</span></li>
+<li><a name="a191"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a192"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$host </span></li>
+<li><a name="a193"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$port </span></li>
+<li><a name="a194"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$tval </span></li>
+<li><a name="a195"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a196"></a><span class="src-doc">   */</span></li>
+<li><a name="a197"></a>  <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPMailer/POP3.html#methodConnect">Connect</a> <span class="src-sym">(</span><span class="src-var">$host</span><span class="src-sym">, </span><span class="src-var">$port </span>= <span class="src-id">false</span><span class="src-sym">, </span><span class="src-var">$tval </span>= <span class="src-num">30</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a198"></a>    <span class="src-comm">//  Are we already connected?</span></li>
+<li><a name="a199"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">connected</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a200"></a>      <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a201"></a>    <span class="src-sym">}</span></li>
+<li><a name="a202"></a>&nbsp;</li>
+<li><a name="a203"></a>    <span class="src-comm">/*</span></li>
+<li><a name="a204"></a><span class="src-comm">    On Windows this will raise a PHP Warning error if the hostname doesn't exist.</span></li>
+<li><a name="a205"></a><span class="src-comm">    Rather than supress it with @fsockopen, let's capture it cleanly instead</span></li>
+<li><a name="a206"></a><span class="src-comm">    */</span></li>
+<li><a name="a207"></a>&nbsp;</li>
+<li><a name="a208"></a>    <a href="http://www.php.net/set_error_handler">set_error_handler</a><span class="src-sym">(</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">&amp;</span><span class="src-var">$this</span><span class="src-sym">, </span><span class="src-str">'catchWarning'</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a209"></a>&nbsp;</li>
+<li><a name="a210"></a>    <span class="src-comm">//  Connect to the POP3 server</span></li>
+<li><a name="a211"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn </span>= <a href="http://www.php.net/fsockopen">fsockopen</a><span class="src-sym">(</span><span class="src-var">$host</span><span class="src-sym">,    </span><span class="src-comm">//  POP3 Host</span></li>
+<li><a name="a212"></a>                  <span class="src-var">$port</span><span class="src-sym">,    </span><span class="src-comm">//  Port #</span></li>
+<li><a name="a213"></a>                  <span class="src-var">$errno</span><span class="src-sym">,   </span><span class="src-comm">//  Error Number</span></li>
+<li><a name="a214"></a>                  <span class="src-var">$errstr</span><span class="src-sym">,  </span><span class="src-comm">//  Error Message</span></li>
+<li><a name="a215"></a>                  <span class="src-var">$tval</span><span class="src-sym">)</span><span class="src-sym">;   </span><span class="src-comm">//  Timeout (seconds)</span></li>
+<li><a name="a216"></a>&nbsp;</li>
+<li><a name="a217"></a>    <span class="src-comm">//  Restore the error handler</span></li>
+<li><a name="a218"></a>    <a href="http://www.php.net/restore_error_handler">restore_error_handler</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a219"></a>&nbsp;</li>
+<li><a name="a220"></a>    <span class="src-comm">//  Does the Error Log now contain anything?</span></li>
+<li><a name="a221"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span>&amp;&amp; <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$do_debug">do_debug</a> &gt;= <span class="src-num">1</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a222"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">displayErrors</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a223"></a>    <span class="src-sym">}</span></li>
+<li><a name="a224"></a>&nbsp;</li>
+<li><a name="a225"></a>    <span class="src-comm">//  Did we connect?</span></li>
+<li><a name="a226"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn </span>== <span class="src-id">false</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a227"></a>      <span class="src-comm">//  It would appear not...</span></li>
+<li><a name="a228"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a229"></a>        <span class="src-str">'error' </span>=&gt; <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Failed</span> <span class="src-id">to</span> <span class="src-id">connect</span> <span class="src-id">to</span> <span class="src-id">server</span> <span class="src-var">$host</span> <span class="src-id">on</span> <span class="src-id">port</span> <span class="src-var">$port</span></span><span class="src-str">&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a230"></a>        <span class="src-str">'errno' </span>=&gt; <span class="src-var">$errno</span><span class="src-sym">,</span></li>
+<li><a name="a231"></a>        <span class="src-str">'errstr' </span>=&gt; <span class="src-var">$errstr</span></li>
+<li><a name="a232"></a>      <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a233"></a>&nbsp;</li>
+<li><a name="a234"></a>      <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$do_debug">do_debug</a> &gt;= <span class="src-num">1</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a235"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">displayErrors</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a236"></a>      <span class="src-sym">}</span></li>
+<li><a name="a237"></a>&nbsp;</li>
+<li><a name="a238"></a>      <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a239"></a>    <span class="src-sym">}</span></li>
+<li><a name="a240"></a>&nbsp;</li>
+<li><a name="a241"></a>    <span class="src-comm">//  Increase the stream time-out</span></li>
+<li><a name="a242"></a>&nbsp;</li>
+<li><a name="a243"></a>    <span class="src-comm">//  Check for PHP 4.3.0 or later</span></li>
+<li><a name="a244"></a>    <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/version_compare">version_compare</a><span class="src-sym">(</span><a href="http://www.php.net/phpversion">phpversion</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">, </span><span class="src-str">'5.0.0'</span><span class="src-sym">, </span><span class="src-str">'ge'</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a245"></a>      <a href="http://www.php.net/stream_set_timeout">stream_set_timeout</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn</span><span class="src-sym">, </span><span class="src-var">$tval</span><span class="src-sym">, </span><span class="src-num">0</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a246"></a>    <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a247"></a>      <span class="src-comm">//  Does not work on Windows</span></li>
+<li><a name="a248"></a>      <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/substr">substr</a><span class="src-sym">(</span><span class="src-id">PHP_OS</span><span class="src-sym">, </span><span class="src-num">0</span><span class="src-sym">, </span><span class="src-num">3</span><span class="src-sym">) </span>!== <span class="src-str">'WIN'</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a249"></a>        <a href="http://www.php.net/socket_set_timeout">socket_set_timeout</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn</span><span class="src-sym">, </span><span class="src-var">$tval</span><span class="src-sym">, </span><span class="src-num">0</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a250"></a>      <span class="src-sym">}</span></li>
+<li><a name="a251"></a>    <span class="src-sym">}</span></li>
+<li><a name="a252"></a>&nbsp;</li>
+<li><a name="a253"></a>    <span class="src-comm">//  Get the POP3 server response</span></li>
+<li><a name="a254"></a>    <span class="src-var">$pop3_response </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getResponse</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a255"></a>&nbsp;</li>
+<li><a name="a256"></a>    <span class="src-comm">//  Check for the +OK</span></li>
+<li><a name="a257"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">checkResponse</span><span class="src-sym">(</span><span class="src-var">$pop3_response</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a258"></a>    <span class="src-comm">//  The connection is established and the POP3 server is talking</span></li>
+<li><a name="a259"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">connected </span>= <span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a260"></a>      <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a261"></a>    <span class="src-sym">}</span></li>
+<li><a name="a262"></a>&nbsp;</li>
+<li><a name="a263"></a>  <span class="src-sym">}</span></li>
+<li><a name="a264"></a>&nbsp;</li>
+<li><a name="a265"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a266"></a><span class="src-doc">   * Login to the POP3 server (does not support APOP yet)</span></li>
+<li><a name="a267"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a268"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$username </span></li>
+<li><a name="a269"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$password </span></li>
+<li><a name="a270"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a271"></a><span class="src-doc">   */</span></li>
+<li><a name="a272"></a>  <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPMailer/POP3.html#methodLogin">Login</a> <span class="src-sym">(</span><span class="src-var">$username </span>= <span class="src-str">''</span><span class="src-sym">, </span><span class="src-var">$password </span>= <span class="src-str">''</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a273"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">connected </span>== <span class="src-id">false</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a274"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span>= <span class="src-str">'Not connected to POP3 server'</span><span class="src-sym">;</span></li>
+<li><a name="a275"></a>&nbsp;</li>
+<li><a name="a276"></a>      <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$do_debug">do_debug</a> &gt;= <span class="src-num">1</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a277"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">displayErrors</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a278"></a>      <span class="src-sym">}</span></li>
+<li><a name="a279"></a>    <span class="src-sym">}</span></li>
+<li><a name="a280"></a>&nbsp;</li>
+<li><a name="a281"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$username</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a282"></a>      <span class="src-var">$username </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$username">username</a><span class="src-sym">;</span></li>
+<li><a name="a283"></a>    <span class="src-sym">}</span></li>
+<li><a name="a284"></a>&nbsp;</li>
+<li><a name="a285"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-key">empty</span><span class="src-sym">(</span><span class="src-var">$password</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a286"></a>      <span class="src-var">$password </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$password">password</a><span class="src-sym">;</span></li>
+<li><a name="a287"></a>    <span class="src-sym">}</span></li>
+<li><a name="a288"></a>&nbsp;</li>
+<li><a name="a289"></a>    <span class="src-var">$pop_username </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">USER</span> <span class="src-var">$username</span></span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$CRLF">CRLF</a><span class="src-sym">;</span></li>
+<li><a name="a290"></a>    <span class="src-var">$pop_password </span>= <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">PASS</span> <span class="src-var">$password</span></span><span class="src-str">&quot; </span>. <span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$CRLF">CRLF</a><span class="src-sym">;</span></li>
+<li><a name="a291"></a>&nbsp;</li>
+<li><a name="a292"></a>    <span class="src-comm">//  Send the Username</span></li>
+<li><a name="a293"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">sendString</span><span class="src-sym">(</span><span class="src-var">$pop_username</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a294"></a>    <span class="src-var">$pop3_response </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getResponse</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a295"></a>&nbsp;</li>
+<li><a name="a296"></a>    <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">checkResponse</span><span class="src-sym">(</span><span class="src-var">$pop3_response</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a297"></a>      <span class="src-comm">//  Send the Password</span></li>
+<li><a name="a298"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">sendString</span><span class="src-sym">(</span><span class="src-var">$pop_password</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a299"></a>      <span class="src-var">$pop3_response </span>= <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">getResponse</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a300"></a>&nbsp;</li>
+<li><a name="a301"></a>      <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">checkResponse</span><span class="src-sym">(</span><span class="src-var">$pop3_response</span><span class="src-sym">)) </span><span class="src-sym">{</span></li>
+<li><a name="a302"></a>        <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a303"></a>      <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a304"></a>        <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a305"></a>      <span class="src-sym">}</span></li>
+<li><a name="a306"></a>    <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a307"></a>      <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a308"></a>    <span class="src-sym">}</span></li>
+<li><a name="a309"></a>  <span class="src-sym">}</span></li>
+<li><a name="a310"></a>&nbsp;</li>
+<li><a name="a311"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a312"></a><span class="src-doc">   * Disconnect from the POP3 server</span></li>
+<li><a name="a313"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> public</span></li>
+<li><a name="a314"></a><span class="src-doc">   */</span></li>
+<li><a name="a315"></a>  <span class="src-key">public </span><span class="src-key">function </span><a href="../PHPMailer/POP3.html#methodDisconnect">Disconnect</a> <span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a316"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">sendString</span><span class="src-sym">(</span><span class="src-str">'QUIT'</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a317"></a>&nbsp;</li>
+<li><a name="a318"></a>    <a href="http://www.php.net/fclose">fclose</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a319"></a>  <span class="src-sym">}</span></li>
+<li><a name="a320"></a>&nbsp;</li>
+<li><a name="a321"></a>  <span class="src-comm">/////////////////////////////////////////////////</span></li>
+<li><a name="a322"></a>  <span class="src-comm">//  Private Methods</span></li>
+<li><a name="a323"></a>  <span class="src-comm">/////////////////////////////////////////////////</span></li>
+<li><a name="a324"></a>&nbsp;</li>
+<li><a name="a323"></a>  </li>
+<li><a name="a324"></a>&nbsp;</li>
+<li><a name="a325"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a326"></a><span class="src-doc">   * Get the socket response back.</span></li>
+<li><a name="a327"></a><span class="src-doc">   * $size is the maximum number of bytes to retrieve</span></li>
+<li><a name="a328"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> private</span></li>
+<li><a name="a329"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$size </span></li>
+<li><a name="a330"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">string </span></li>
+<li><a name="a331"></a><span class="src-doc">   */</span></li>
+<li><a name="a332"></a>  <span class="src-key">private </span><span class="src-key">function </span><span class="src-id">getResponse </span><span class="src-sym">(</span><span class="src-var">$size </span>= <span class="src-num">128</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a333"></a>    <span class="src-var">$pop3_response </span>= <a href="http://www.php.net/fgets">fgets</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn</span><span class="src-sym">, </span><span class="src-var">$size</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a334"></a>&nbsp;</li>
+<li><a name="a335"></a>    <span class="src-key">return </span><span class="src-var">$pop3_response</span><span class="src-sym">;</span></li>
+<li><a name="a336"></a>  <span class="src-sym">}</span></li>
+<li><a name="a337"></a>&nbsp;</li>
+<li><a name="a338"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a339"></a><span class="src-doc">   * Send a string down the open socket connection to the POP3 server</span></li>
+<li><a name="a340"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> private</span></li>
+<li><a name="a341"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$string </span></li>
+<li><a name="a342"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">integer </span></li>
+<li><a name="a343"></a><span class="src-doc">   */</span></li>
+<li><a name="a344"></a>  <span class="src-key">private </span><span class="src-key">function </span><span class="src-id">sendString </span><span class="src-sym">(</span><span class="src-var">$string</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a345"></a>    <span class="src-var">$bytes_sent </span>= <a href="http://www.php.net/fwrite">fwrite</a><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">pop_conn</span><span class="src-sym">, </span><span class="src-var">$string</span><span class="src-sym">, </span><a href="http://www.php.net/strlen">strlen</a><span class="src-sym">(</span><span class="src-var">$string</span><span class="src-sym">))</span><span class="src-sym">;</span></li>
+<li><a name="a346"></a>&nbsp;</li>
+<li><a name="a347"></a>    <span class="src-key">return </span><span class="src-var">$bytes_sent</span><span class="src-sym">;</span></li>
+<li><a name="a348"></a>  <span class="src-sym">}</span></li>
+<li><a name="a349"></a>&nbsp;</li>
+<li><a name="a350"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a351"></a><span class="src-doc">   * Checks the POP3 server response for +OK or -ERR</span></li>
+<li><a name="a352"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> private</span></li>
+<li><a name="a353"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$string </span></li>
+<li><a name="a354"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@return </span><span class="src-doc-type">boolean </span></li>
+<li><a name="a355"></a><span class="src-doc">   */</span></li>
+<li><a name="a356"></a>  <span class="src-key">private </span><span class="src-key">function </span><span class="src-id">checkResponse </span><span class="src-sym">(</span><span class="src-var">$string</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a357"></a>    <span class="src-key">if </span><span class="src-sym">(</span><a href="http://www.php.net/substr">substr</a><span class="src-sym">(</span><span class="src-var">$string</span><span class="src-sym">, </span><span class="src-num">0</span><span class="src-sym">, </span><span class="src-num">3</span><span class="src-sym">) </span>!== <span class="src-str">'+OK'</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a358"></a>      <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a359"></a>        <span class="src-str">'error' </span>=&gt; <span class="src-str">&quot;</span><span class="src-str"><span class="src-id">Server</span> <span class="src-id">reported</span> <span class="src-id">an</span> <span class="src-id">error</span>: <span class="src-var">$string</span></span><span class="src-str">&quot;</span><span class="src-sym">,</span></li>
+<li><a name="a360"></a>        <span class="src-str">'errno' </span>=&gt; <span class="src-num">0</span><span class="src-sym">,</span></li>
+<li><a name="a361"></a>        <span class="src-str">'errstr' </span>=&gt; <span class="src-str">''</span></li>
+<li><a name="a362"></a>      <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a363"></a>&nbsp;</li>
+<li><a name="a364"></a>      <span class="src-key">if </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><a href="../PHPMailer/POP3.html#var$do_debug">do_debug</a> &gt;= <span class="src-num">1</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a365"></a>        <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-id">displayErrors</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a366"></a>      <span class="src-sym">}</span></li>
+<li><a name="a367"></a>&nbsp;</li>
+<li><a name="a368"></a>      <span class="src-key">return </span><span class="src-id">false</span><span class="src-sym">;</span></li>
+<li><a name="a369"></a>    <span class="src-sym">} </span><span class="src-key">else </span><span class="src-sym">{</span></li>
+<li><a name="a370"></a>      <span class="src-key">return </span><span class="src-id">true</span><span class="src-sym">;</span></li>
+<li><a name="a371"></a>    <span class="src-sym">}</span></li>
+<li><a name="a372"></a>&nbsp;</li>
+<li><a name="a373"></a>  <span class="src-sym">}</span></li>
+<li><a name="a374"></a>&nbsp;</li>
+<li><a name="a375"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a376"></a><span class="src-doc">   * If debug is enabled, display the error message array</span></li>
+<li><a name="a377"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> private</span></li>
+<li><a name="a378"></a><span class="src-doc">   */</span></li>
+<li><a name="a379"></a>  <span class="src-key">private </span><span class="src-key">function </span><span class="src-id">displayErrors </span><span class="src-sym">(</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a380"></a>    echo <span class="src-str">'&lt;pre&gt;'</span><span class="src-sym">;</span></li>
+<li><a name="a381"></a>&nbsp;</li>
+<li><a name="a382"></a>    <span class="src-key">foreach </span><span class="src-sym">(</span><span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error </span><span class="src-key">as </span><span class="src-var">$single_error</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a383"></a>      <a href="http://www.php.net/print_r">print_r</a><span class="src-sym">(</span><span class="src-var">$single_error</span><span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a384"></a>    <span class="src-sym">}</span></li>
+<li><a name="a385"></a>&nbsp;</li>
+<li><a name="a386"></a>    echo <span class="src-str">'&lt;/pre&gt;'</span><span class="src-sym">;</span></li>
+<li><a name="a387"></a>  <span class="src-sym">}</span></li>
+<li><a name="a388"></a>&nbsp;</li>
+<li><a name="a389"></a>  <span class="src-doc">/**</span></li>
+<li><a name="a390"></a><span class="src-doc">   * Takes over from PHP for the socket warning handler</span></li>
+<li><a name="a391"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@access</span><span class="src-doc"> private</span></li>
+<li><a name="a392"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$errno </span></li>
+<li><a name="a393"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$errstr </span></li>
+<li><a name="a394"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">string </span><span class="src-doc-var">$errfile </span></li>
+<li><a name="a395"></a><span class="src-doc">   * </span><span class="src-doc-coretag">@param </span><span class="src-doc-type">integer </span><span class="src-doc-var">$errline </span></li>
+<li><a name="a396"></a><span class="src-doc">   */</span></li>
+<li><a name="a397"></a>  <span class="src-key">private </span><span class="src-key">function </span><span class="src-id">catchWarning </span><span class="src-sym">(</span><span class="src-var">$errno</span><span class="src-sym">, </span><span class="src-var">$errstr</span><span class="src-sym">, </span><span class="src-var">$errfile</span><span class="src-sym">, </span><span class="src-var">$errline</span><span class="src-sym">) </span><span class="src-sym">{</span></li>
+<li><a name="a398"></a>    <span class="src-var">$this</span><span class="src-sym">-&gt;</span><span class="src-var">error</span><span class="src-sym">[</span><span class="src-sym">] </span>= <span class="src-key">array</span><span class="src-sym">(</span></li>
+<li><a name="a399"></a>      <span class="src-str">'error' </span>=&gt; <span class="src-str">&quot;Connecting to the POP3 server raised a PHP warning: &quot;</span><span class="src-sym">,</span></li>
+<li><a name="a400"></a>      <span class="src-str">'errno' </span>=&gt; <span class="src-var">$errno</span><span class="src-sym">,</span></li>
+<li><a name="a401"></a>      <span class="src-str">'errstr' </span>=&gt; <span class="src-var">$errstr</span></li>
+<li><a name="a402"></a>    <span class="src-sym">)</span><span class="src-sym">;</span></li>
+<li><a name="a403"></a>  <span class="src-sym">}</span></li>
+<li><a name="a404"></a>&nbsp;</li>
+<li><a name="a405"></a>  <span class="src-comm">//  End of class</span></li>
+<li><a name="a405"></a>&nbsp;</li>
+<li><a name="a406"></a><span class="src-sym">}</span></li>
+<li><a name="a407"></a><span class="src-php">?&gt;</span></li>
+</ol></pre>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Tue, 31 Mar 2009 18:05:12 -0400 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.3.0RC3</a>
+	</p>
+	</body>
+</html>
