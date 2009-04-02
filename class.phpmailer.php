@@ -413,18 +413,18 @@ class PHPMailer {
       echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
-	if ($kind != 'ReplyTo') {
-	  if (!isset($this->all_recipients[strtolower($address)])) {
+  if ($kind != 'ReplyTo') {
+    if (!isset($this->all_recipients[strtolower($address)])) {
         array_push($this->$kind, array($address, $name));
         $this->all_recipients[strtolower($address)] = true;
-		return true;
+    return true;
       }
-	} else {
-	  if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
+  } else {
+    if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
         $this->ReplyTo[strtolower($address)] = array($address, $name);
-		return true;
-	  }
-	}
+    return true;
+    }
+  }
     return false;
   }
 
@@ -445,9 +445,9 @@ class PHPMailer {
       echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
-	$this->From = $address;
-	$this->FromName = $name;
-	return true;
+  $this->From = $address;
+  $this->FromName = $name;
+  return true;
   }
 
   /**
@@ -2031,17 +2031,6 @@ class PHPMailer {
       }
     }
     return true;
-  }
-
-  /**
-   * Read a file from a supplied filename and return it.
-   * TODO this function is a pointless wrapper!
-   * @access public
-   * @param string $filename Parameter File Name
-   * @return mixed Either the text of the file or boolean false if it fails to read
-   */
-  public function getFile($filename) {
-    return @file_get_contents($filename);
   }
 
   /**
