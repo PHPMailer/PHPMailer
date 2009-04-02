@@ -16,7 +16,7 @@ require_once('../class.phpmailer.php');
 
 $mail             = new PHPMailer();
 
-$body             = $mail->getFile('contents.html');
+$body             = file_get_contents('contents.html');
 $body             = eregi_replace("[\]",'',$body);
 
 $mail->IsSMTP(); // telling the class to use SMTP
@@ -31,8 +31,8 @@ $mail->Port       = 465;                   // set the SMTP port for the GMAIL se
 $mail->Username   = "yourusername@gmail.com";  // GMAIL username
 $mail->Password   = "yourpassword";            // GMAIL password
 
-$mail->From       = "name@yourdomain.com";
-$mail->FromName   = "First Last";
+$mail->SetFrom('name@yourdomain.com', 'First Last');
+
 $mail->AddReplyTo("name@yourdomain.com","First Last");
 
 $mail->Subject    = "PHPMailer Test Subject via smtp (Gmail), basic";

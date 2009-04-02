@@ -15,8 +15,8 @@ $body             = eregi_replace("[\]",'',$body);
 
 $mail->AddReplyTo("name@yourdomain.com","First Last");
 
-$mail->From       = "name@yourdomain.com";
-$mail->FromName   = "First Last";
+$mail->SetFrom('name@yourdomain.com', 'First Last');
+
 $mail->AddReplyTo("name@yourdomain.com","First Last");
 
 $address = "whoto@otherdomain.com";

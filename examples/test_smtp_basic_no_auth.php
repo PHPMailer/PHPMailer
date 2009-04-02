@@ -16,7 +16,7 @@ require_once('../class.phpmailer.php');
 
 $mail             = new PHPMailer();
 
-$body             = $mail->getFile('contents.html');
+$body             = file_get_contents('contents.html');
 $body             = eregi_replace("[\]",'',$body);
 
 $mail->IsSMTP(); // telling the class to use SMTP
@@ -25,8 +25,8 @@ $mail->SMTPDebug  = 2;                     // enables SMTP debug information (fo
                                            // 1 = errors and messages
                                            // 2 = messages only
 
-$mail->From       = "name@yourdomain.com";
-$mail->FromName   = "First Last";
+$mail->SetFrom('name@yourdomain.com', 'First Last');
+
 $mail->AddReplyTo("name@yourdomain.com","First Last");
 
 $mail->Subject    = "PHPMailer Test Subject via smtp, basic with no authentication";

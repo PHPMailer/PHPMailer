@@ -20,8 +20,8 @@ $mail->IsSMTP();
 $mail->SMTPDebug = 2;
 $mail->Host     = 'pop3.yourdomain.com';
 
-$mail->From       = "name@yourdomain.com";
-$mail->FromName   = "First Last";
+$mail->SetFrom('name@yourdomain.com', 'First Last');
+
 $mail->AddReplyTo("name@yourdomain.com","First Last");
 
 $mail->Subject    = "PHPMailer Test Subject via POP before SMTP, basic";
