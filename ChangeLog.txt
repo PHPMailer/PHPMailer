@@ -3,14 +3,14 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
-Version 5.0.0 (April xx, 2009)
+Version 5.0.0 (April 02, 2009)
 
 * With the release of this version, we are initiating a new version numbering
   system to differentiate from the PHP4 version of PHPMailer.
 * Most notable in this release is fully object oriented code.
 class.smtp.php:
 * Refactored class.smtp.php to support new exception handling
-  code size reduced from 29.2 Kb to 24.7 Kb
+  code size reduced from 29.2 Kb to 25.6 Kb
 * Removed unnecessary functions from class.smtp.php:
   public function Expand($name) {
   public function Help($keyword="") {
@@ -22,6 +22,12 @@ class.phpmailer.php:
 * Refactored class.phpmailer.php with new exception handling
 * Changed processing functionality of Sendmail and Qmail so they cannot be
   inadvertently used
+* removed getFile() function, just became a simple wrapper for
+  file_get_contents()
+* added check for PHP version (will gracefully exit if not at least PHP 5.0)
+class.phpmailer.php enhancements
+* enhanced code to check if an attachment source is the same as an embedded or
+  inline graphic source to eliminate duplicate attachments
 New /test_script
 * We have written a test script you can use to test the script as part of your
   installation. Once you press submit, the test script will send a multi-mime
@@ -33,9 +39,11 @@ New /test_script
 New examples
 * All new examples in both basic and advanced modes. Advanced examples show
   Exception handling.
-class.phpmailer.php enhancements
-* enhanced code to check if an attachment source is the same as an embedded or
-  inline graphic source to eliminate duplicate attachments
+PHPDocumentator (phpdocs) documentation for PHPMailer version 5.0.0
+* all new documentation
+
+Please note: the website has been updated to reflect the changes in PHPMailer
+version 5.0.0. http://phpmailer.codeworxtech.com/
 
 Version 2.3 (November 06, 2008)
 
