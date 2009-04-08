@@ -3,6 +3,9 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
+Version 5.0.1 (April 08, 2009)
+* fixed duplicate attachments issue (inline graphic vs attachment)
+
 Version 5.0.0 (April 02, 2009)
 
 * With the release of this version, we are initiating a new version numbering
