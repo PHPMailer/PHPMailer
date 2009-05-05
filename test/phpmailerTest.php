@@ -1,20 +1,30 @@
 <?php
-/*******************
-  Unit Test
-  Type: phpmailer class
-********************/
+/**
+* PHPMailer - PHP email transport unit tests
+* Before running these tests you need to install PHPUnit 3.3 or later through pear, like this:
+*   pear install "channel://pear.phpunit.de/PHPUnit"
+* Then run the tests like this:
+*   phpunit phpmailerTest
+* @package PHPMailer
+* @author Andy Prevost
+* @author Marcus Bointon
+* @copyright 2004 - 2009 Andy Prevost
+* @version $Id$
+* @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+*/
+
+require 'PHPUnit/Framework.php';
 
 $INCLUDE_DIR = "../";
 
-require("phpunit.php");
-require($INCLUDE_DIR . "class.phpmailer.php");
+require $INCLUDE_DIR . 'class.phpmailer.php';
 error_reporting(E_ALL);
 
 /**
- * Performs authentication tests
- */
-class phpmailerTest extends TestCase
-{
+* PHPMailer - PHP email transport unit test class
+* Performs authentication tests
+*/
+class phpmailerTest extends PHPUnit_Framework_TestCase {
     /**
      * Holds the default phpmailer instance.
      * @private
@@ -44,33 +54,34 @@ class phpmailerTest extends TestCase
     var $NoteLog = array();   
 
     /**
-     * Class constuctor.
-     */
-    function phpmailerTest($name) {
-        /* must define this constructor */
-        $this->TestCase( $name );
-    }
-    
-    /**
      * Run before each test is started.
      */
     function setUp() {
-        global $global_vars;
         global $INCLUDE_DIR;
+
+	@include './testbootstrap.php'; //Overrides go in here
 
         $this->Mail = new PHPMailer();
 
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = "8bit";
         $this->Mail->CharSet = "iso-8859-1";
-        $this->Mail->From = "unit_test@phpmailer.sf.net";
+        if (array_key_exists('mail_from', $_REQUEST)) {
+	        $this->Mail->From = $_REQUEST['mail_from'];
+	    } else {
+	        $this->Mail->From = 'unit_test@phpmailer.sf.net';
+	    }
         $this->Mail->FromName = "Unit Tester";
         $this->Mail->Sender = "";
         $this->Mail->Subject = "Unit Test";
         $this->Mail->Body = "";
         $this->Mail->AltBody = "";
         $this->Mail->WordWrap = 0;
-        $this->Mail->Host = $global_vars["mail_host"];
+        if (array_key_exists('mail_host', $_REQUEST)) {
+	        $this->Mail->Host = $_REQUEST['mail_host'];
+	    } else {
+	        $this->Mail->Host = 'mail.example.com';
+	    }
         $this->Mail->Port = 25;
         $this->Mail->Helo = "localhost.localdomain";
         $this->Mail->SMTPAuth = false;
@@ -80,18 +91,19 @@ class phpmailerTest extends TestCase
 		$this->Mail->AddReplyTo("no_reply@phpmailer.sf.net", "Reply Guy");
         $this->Mail->Sender = "unit_test@phpmailer.sf.net";
 
-        if(strlen($this->Mail->Host) > 0)
+        if(strlen($this->Mail->Host) > 0) {
             $this->Mail->Mailer = "smtp";
-        else
-        {
+        } else {
             $this->Mail->Mailer = "mail";
             $this->Sender = "unit_test@phpmailer.sf.net";
         }
         
-        global $global_vars;
-        $this->SetAddress($global_vars["mail_to"], "Test User");
-        if(strlen($global_vars["mail_cc"]) > 0)
-            $this->SetAddress($global_vars["mail_cc"], "Carbon User", "cc");
+        if (array_key_exists('mail_to', $_REQUEST)) {
+	        $this->SetAddress($_REQUEST['mail_to'], 'Test User', 'to');
+	    }
+        if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
+	        $this->SetAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
+	    }
     }     
 
     /**
@@ -134,7 +146,7 @@ class phpmailerTest extends TestCase
         $ReportBody .= "---------------------" . $eol;
         $ReportBody .= "Unit Test Information" . $eol;
         $ReportBody .= "---------------------" . $eol;
-        $ReportBody .= "phpmailer version: " . $this->Mail->Version . $eol;
+        $ReportBody .= "phpmailer version: " . PHPMailer::VERSION . $eol;
         $ReportBody .= "Content Type: " . $this->Mail->ContentType . $eol;
         
         if(strlen($this->Mail->Host) > 0)
@@ -146,11 +158,10 @@ class phpmailerTest extends TestCase
         {
             $ReportBody .= "Attachments:" . $eol;
             $ReportBody .= $bullet_start;
-            for($i = 0; $i < count($attachments); $i++)
-            {
-                $ReportBody .= $bullet . "Name: " . $attachments[$i][1] . ", ";
-                $ReportBody .= "Encoding: " . $attachments[$i][3] . ", ";
-                $ReportBody .= "Type: " . $attachments[$i][4] . $eol;
+            foreach($attachments as $attachment) {
+                $ReportBody .= $bullet . "Name: " . $attachment[1] . ", ";
+                $ReportBody .= "Encoding: " . $attachment[3] . ", ";
+                $ReportBody .= "Type: " . $attachment[4] . $eol;
             }
             $ReportBody .= $bullet_end . $eol;
         }
@@ -271,7 +282,7 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": Wordwrap";
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -286,7 +297,7 @@ class phpmailerTest extends TestCase
         $this->Mail->AddReplyTo("nobody@nobody.com", "Nobody (Unit Test)");
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -299,18 +310,18 @@ class phpmailerTest extends TestCase
 
         if(!$this->Mail->AddAttachment("test.png"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test.txt"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -328,7 +339,7 @@ class phpmailerTest extends TestCase
         $this->Mail->AddStringAttachment($sAttachment, "string_attach.txt");
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -341,7 +352,13 @@ class phpmailerTest extends TestCase
         $this->Mail->Encoding = "quoted-printable";
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+
+	//Check that a quoted printable encode and decode results in the same as went in
+	$t = substr(file_get_contents(__FILE__), 0, 1024); //Just pick a chunk of this file as test content
+	$this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQP($t)), 'QP encoding round-trip failed');
+        //$this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQPphp($t)), 'Native PHP QP encoding round-trip failed'); //TODO the PHP qp encoder is quite broken
+
     }
 
     /**
@@ -358,7 +375,7 @@ class phpmailerTest extends TestCase
                             "phpmailer.  <p/> Thank you!";
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -370,14 +387,14 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": HTML + Attachment";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test_attach.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -393,12 +410,16 @@ class phpmailerTest extends TestCase
         if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+	//For code coverage
+	$this->Mail->AddEmbeddedImage('thisfiledoesntexist', 'xyz'); //Non-existent file
+	$this->Mail->AddEmbeddedImage(__FILE__, '123'); //Missing name
+
     }
 
     /**
@@ -414,18 +435,18 @@ class phpmailerTest extends TestCase
         if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test.txt"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
         
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -442,7 +463,7 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": AltBody + Word Wrap";
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -455,18 +476,18 @@ class phpmailerTest extends TestCase
         $this->Mail->Subject .= ": AltBody + Attachment";
         $this->Mail->IsHTML(true);
         
-        if(!$this->Mail->AddAttachment("phpmailer_test.php", "test_attach.txt"))
+        if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
-            $this->assert(false, $this->Mail->ErrorInfo);
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
         $this->BuildBody();
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         if (is_writable('.')) {
             file_put_contents('message.txt', $this->Mail->CreateHeader() . $this->Mail->CreateBody());
         } else {
-            $this->assert(false, 'Could not write local file - check permissions');
+            $this->assertTrue(false, 'Could not write local file - check permissions');
         }
     }    
 
@@ -476,10 +497,30 @@ class phpmailerTest extends TestCase
         $subject = $this->Mail->Subject;
 
         $this->Mail->Subject = $subject . ": SMTP 1";
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         
         $this->Mail->Subject = $subject . ": SMTP 2";
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
+
+    function test_SendmailSend() {
+        $this->Mail->Body = "Sending via sendmail";
+        $this->BuildBody();
+        $subject = $this->Mail->Subject;
+
+        $this->Mail->Subject = $subject . ": sendmail";
+	$this->Mail->IsSendmail();
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
+
+    function test_MailSend() {
+        $this->Mail->Body = "Sending via mail()";
+        $this->BuildBody();
+        $subject = $this->Mail->Subject;
+
+        $this->Mail->Subject = $subject . ": mail()";
+	$this->Mail->IsMail();
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     function test_SmtpKeepAlive() {
@@ -489,10 +530,10 @@ class phpmailerTest extends TestCase
 
         $this->Mail->SMTPKeepAlive = true;
         $this->Mail->Subject = $subject . ": SMTP keep-alive 1";
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         
         $this->Mail->Subject = $subject . ": SMTP keep-alive 2";
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         $this->Mail->SmtpClose();
     }
     
@@ -505,124 +546,114 @@ class phpmailerTest extends TestCase
         $this->BuildBody();
        
         $this->Mail->Subject = str_repeat("A", 998);
-        $this->assert($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
     
-    function test_Error() {
-        $this->Mail->Subject .= ": This should be sent"; 
-        $this->BuildBody();
-        $this->Mail->ClearAllRecipients(); // no addresses should cause an error
-        $this->assert($this->Mail->IsError() == false, "Error found");
-        $this->assert($this->Mail->Send() == false, "Send succeeded");
-        $this->assert($this->Mail->IsError(), "No error found");
-        //Note that this is language dependent
-        $this->assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
-        $this->Mail->AddAddress(get("mail_to"));
-        $this->assert($this->Mail->Send(), "Send failed");
-    }
-    
-    function test_Addressing() {
-        $this->assert($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
-        $this->assert(!$this->Mail->AddAddress('a@example.com'), 'Duplicate addressing failed');
-        $this->assert($this->Mail->AddCC('b@example.com'), 'CC addressing failed');
-        $this->assert(!$this->Mail->AddCC('b@example.com'), 'CC duplicate Addressing failed');
-        $this->assert(!$this->Mail->AddCC('a@example.com'), 'CC duplicate Addressing failed (2)');
-        $this->assert($this->Mail->AddBCC('c@example.com'), 'BCC addressing failed');
-        $this->assert(!$this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
-        $this->assert(!$this->Mail->AddBCC('a@example.com'), 'BCC duplicate Addressing failed (2)');
-        $this->Mail->ClearAddresses();
-        $this->assert($this->Mail->AddAddress('a@example.com'), 'Addressing after clear failed');
-        $this->Mail->ClearCCs();
-        $this->assert($this->Mail->AddAddress('b@example.com'), 'CC addressing after clear failed');
-        $this->Mail->ClearBCCs();
-        $this->assert($this->Mail->AddAddress('c@example.com'), 'BCC addressing after clear failed');
-        $this->Mail->AddAddress('a@example.com');
-        $this->Mail->AddCC('b@example.com');
-        $this->Mail->AddBCC('c@example.com');
-        $this->Mail->ClearAllRecipients(); //Not much of a test, but helps coverage
-    }
-    
-    // Check that we are not missing any translations in any langauges
-    function test_Translations() {
-        //Extend this array as new strings are added
-        $expectedtranslations = array(
-            'provide_address',
-            'mailer_not_supported',
-            'execute',
-            'instantiate',
-            'authenticate',
-            'from_failed',
-            'recipients_failed',
-            'data_not_accepted',
-            'connect_host',
-            'file_access',
-            'file_open',
-            'encoding',
-            'signing',
-            'smtp_error'
-        );
-        try {
-            foreach (new DirectoryIterator('../language') as $langfile) {
-                if (!preg_match('/^phpmailer\.lang-/', $langfile)) continue; //Skip non-language files
-                $PHPMAILER_LANG = array();
-                include '../language/'.$langfile;
-                foreach($expectedtranslations as $string) {
-                    $this->assert(isset($PHPMAILER_LANG[$string]), 'Translation missing; \''.$string.'\' in '.$langfile);
-                }
-            }
-        }
-        catch(Exception $e) {
-            $this->assert(false, 'No language files found!');
-        }
-    }
-    
-    //Check that getFile works
-    function test_getFile() {
-        $a = $this->Mail->getFile('../class.phpmailer.php'); //Point at any non-empty file
-        $this->assert(($a !== false), 'GetFile failed to read a file.');
-    }
-}
-/**
- * Create and run test instance.
- */
+	function test_Error() {
+		$this->Mail->Subject .= ": This should be sent"; 
+		$this->BuildBody();
+		$this->Mail->ClearAllRecipients(); // no addresses should cause an error
+		$this->assertTrue($this->Mail->IsError() == false, "Error found");
+		$this->assertTrue($this->Mail->Send() == false, "Send succeeded");
+		$this->assertTrue($this->Mail->IsError(), "No error found");
+		$this->assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
+		$this->Mail->AddAddress($_REQUEST['mail_to']);
+		$this->assertTrue($this->Mail->Send(), "Send failed");
+	}
+	
+	function test_Addressing() {
+		$this->assertFalse($this->Mail->AddAddress('a@example..com'), 'Invalid address accepted');
+		$this->assertTrue($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
+		$this->assertFalse($this->Mail->AddAddress('a@example.com'), 'Duplicate addressing failed');
+		$this->assertTrue($this->Mail->AddCC('b@example.com'), 'CC addressing failed');
+		$this->assertFalse($this->Mail->AddCC('b@example.com'), 'CC duplicate addressing failed');
+		$this->assertFalse($this->Mail->AddCC('a@example.com'), 'CC duplicate addressing failed (2)');
+		$this->assertTrue($this->Mail->AddBCC('c@example.com'), 'BCC addressing failed');
+		$this->assertFalse($this->Mail->AddBCC('c@example.com'), 'BCC duplicate addressing failed');
+		$this->assertFalse($this->Mail->AddBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
+		$this->assertTrue($this->Mail->AddReplyTo('a@example.com'), 'Replyto Addressing failed');
+		$this->assertFalse($this->Mail->AddReplyTo('a@example..com'), 'Invalid Replyto address accepted');
+		$this->Mail->ClearAddresses();
+		$this->Mail->ClearCCs();
+		$this->Mail->ClearBCCs();
+		$this->Mail->ClearReplyTos();
+	}
+
+	/**
+	* Test language files for missing and excess translations
+	* All languages are compared with English
+	*/
+	function test_Translations() {
+		$this->Mail->SetLanguage('en');
+		$definedStrings = $this->Mail->GetTranslations();
+		foreach (new DirectoryIterator('../language') as $fileInfo) {
+			if($fileInfo->isDot()) continue;
+			$matches = array();
+			//Only look at language files, ignore anything else in there
+			if (preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
+				$lang = $matches[1]; //Extract language code
+				$PHPMAILER_LANG = array(); //Language strings get put in here
+				include $fileInfo->getPathname(); //Get language strings
+				$missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
+				$extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
+				$this->assertTrue(empty($missing), "Missing translations in $lang: ". implode(', ', $missing));
+				$this->assertTrue(empty($extra), "Extra translations in $lang: ". implode(', ', $extra));
+			}
+		}
+	}
+
+	/**
+	* Encoding tests
+	*/
+	function test_Encodings() {
+	    $this->Mail->Charset = 'iso-8859-1';
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'text'), 'Q Encoding (text) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'comment'), 'Q Encoding (comment) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'phrase'), 'Q Encoding (phrase) failed');
+	}
+	
+	/**
+	* Signing tests
+	*/
+	function test_Signing() {
+	    $this->Mail->Sign('certfile.txt', 'keyfile.txt', 'password'); //TODO this is not really testing signing, but at least helps coverage
+	}
+
+	/**
+	* Miscellaneous calls to improve test coverage and some small tests
+	*/
+	function test_Miscellaneous() {
+	    $this->assertEquals('application/pdf', PHPMailer::_mime_types('pdf') , 'MIME TYPE lookup failed');
+	    $this->Mail->AddCustomHeader('SomeHeader: Some Value');
+	    $this->Mail->ClearCustomHeaders();
+	    $this->Mail->ClearAttachments();
+	    $this->Mail->IsHTML(false);
+	    $this->Mail->IsSMTP();
+	    $this->Mail->IsMail();
+	    $this->Mail->IsSendMail();
+   	    $this->Mail->IsQmail();
+	    $this->Mail->SetLanguage('fr');
+	    $this->Mail->Sender = '';
+	    $this->Mail->CreateHeader();
+	    $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
+	    $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+	    $this->Mail->getFile(__FILE__);
+	}
+}  
  
-if(isset($HTTP_GET_VARS))
-    $global_vars = $HTTP_GET_VARS;
-else
-    $global_vars = $_REQUEST;
-
-if(isset($global_vars["submitted"]))
-{
-    echo "Test results:<br>";
-    $suite = new TestSuite( "phpmailerTest" );
-    
-    $testRunner = new TestRunner;
-    $testRunner->run($suite);
-    echo "<hr noshade/>";
-}
-
-function get($sName) {
-    global $global_vars;
-    if(isset($global_vars[$sName]))
-        return $global_vars[$sName];
-    else
-        return "";
-}
-
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+/**
+* This is a sample form for setting appropriate test values through a browser
+* These values can also be set using a file called testbootstrap.php (not in svn) in the same folder as this script
+* which is probably more useful if you run these tests a lot
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>PHPMailer Unit Tests</title>
-</head>
 <body>
 <h3>phpmailer Unit Test</h3>
 By entering a SMTP hostname it will automatically perform tests with SMTP.
 
-<form name="phpmailer_unit" action="phpmailer_test.php" method="get">
+<form name="phpmailer_unit" action=__FILE__ method="get">
 <input type="hidden" name="submitted" value="1"/>
+From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
+<br/>
 To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
 <br/>
 Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
@@ -634,3 +665,6 @@ SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo g
 </form>
 </body>
 </html>
+ */
+
+?>

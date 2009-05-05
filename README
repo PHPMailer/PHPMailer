@@ -9,6 +9,31 @@ PHPMailer
 Full Featured Email Transfer Class for PHP
 ==========================================
 
+Version 5.0.0 (April 02, 2009)
+
+With the release of this version, we are initiating a new version numbering
+system to differentiate from the PHP4 version of PHPMailer.
+
+Most notable in this release is fully object oriented code.
+
+We now have available the PHPDocumentor (phpdocs) documentation. This is
+separate from the regular download to keep file sizes down. Please see the
+download area of http://phpmailer.codeworxtech.com.
+
+We also have created a new test script (see /test_script) that you can use
+right out of the box. Copy the /test_script folder directly to your server (in
+the same structure ... with class.phpmailer.php and class.smtp.php in the
+folder above it. Then launch the test script with:
+http://www.yourdomain.com/phpmailer/test_script/index.php
+from this one script, you can test your server settings for mail(), sendmail (or
+qmail), and SMTP. This will email you a sample email (using contents.html for
+the email body) and two attachments. One of the attachments is used as an inline
+image to demonstrate how PHPMailer will automatically detect if attachments are
+the same source as inline graphics and only include one version. Once you click
+the Submit button, the results will be displayed including any SMTP debug
+information and send status. We will also display a version of the script that
+you can cut and paste to include in your projects. Enjoy!
+
 Version 2.3 (November 08, 2008)
 
 We have removed the /phpdoc from the downloads. All documentation is now on
@@ -119,7 +144,7 @@ easy to use classes: AspEmail(tm) and AspMail.  Both of these
 programs are COM components only available on Windows.  They are also a
 little pricey for smaller projects.
 
-Since I do Linux development I’ve missed these tools for my PHP coding.
+Since I do Linux development Iï¿½ve missed these tools for my PHP coding.
 So I built a version myself that implements the same methods (object
 calls) that the Windows-based components do. It is open source and the
 LGPL license allows you to place the class in your proprietary PHP

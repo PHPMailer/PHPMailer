@@ -1,73 +1,49 @@
-<p>The example file &quot;test_mail.php&quot; contents include:</p>
-<div style="width: 600px; background-color: #CCCCCC;">
-<code>
-&lt;?php<br>
-<br>
-include_once('../class.phpmailer.php');<br>
-<br>
-$mail    = new PHPMailer();<br>
-<br>
-$body    = $mail->getFile('contents.html');<br>
-<br>
-$body    = eregi_replace("[\]",'',$body);<br>
-$subject = eregi_replace("[\]",'',$subject);<br>
-<br>
-$mail->From     = "name@yourdomain.com";<br>
-$mail->FromName = "First Last";<br>
-<br>
-$mail->Subject = "PHPMailer Test Subject";<br>
-<br>
-$mail->AltBody = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test<br>
-<br>
-$mail->MsgHTML($body);<br>
-<br>
-$mail->AddAddress("whoto@otherdomain.com", "John Doe");<br>
-<br>
-if(!$mail->Send()) {<br>
-  echo 'Failed to send mail';<br>
-} else {<br>
-  echo 'Mail sent';<br>
-}<br>
-<br>
-?&gt;
-</code>
-</div>
-<br>
-Although you could use full compabitility with PHPMailer 1.7.3, this example
-shows how to use the new features. If you view 'contents.html', you will note
-that there is a background image used in the &lt;body tag as well as an image used
-with a regular &lt;img tag. Here&#39;s what the HTML file looks like:<br>
-<br>
-<div style="width: 600px; background-color: #CCCCCC;">
-<code>
-&lt;body background="images/bkgrnd.gif" style="margin: 0px;"&gt;<br>
-&lt;div style="width: 640px; font-family: Arial, Helvetica, sans-serif; font-size: 11px;"&gt;<br>
-&lt;div align="center"&gt;&lt;img src="images/phpmailer.gif" style="height: 90px; width: 340px"&gt;&lt;/div&gt;&lt;br&gt;<br>
-&lt;br&gt;<br>
-&nbsp;This is a test of PHPMailer v2.0.0 rc1.&lt;br&gt;<br>
-&lt;br&gt;<br>
-This particular example uses &lt;strong&gt;HTML&lt;/strong&gt;, with a &lt;div&gt; tag and inline&lt;br&gt;<br>
-styles.&lt;br&gt;<br>
-&lt;br&gt;<br>
-Also note the use of the PHPMailer at the top with no specific code to handle<br>
-including it in the body of the email.&lt;/div&gt;<br>
-&lt;/body&gt;<br>
-</code>
-</div>
-<br>
-A few things to notice in the PHP script that generates the email:
+This release of PHPMailer (v5.0.0) sets a new milestone in the development
+cycle of PHPMailer. First, class.phpmailer.php has a small footprint (65.7 Kb),
+while class.smtp.php is even smaller than before (at only 25.0 Kb).<br />
+<br />
+We have maintained all functionality and added Exception handling unique to
+PHP 5/6.<br />
+<br />
+There is only one function that has been removed: that is getFile(). The reason
+for this is that getFile() became a wrapper for the PHP function 'file_get_contents()'
+and nothing more. Rather than burden the class with a function already available
+in PHP, we decided to remove it.<br />
+<br />
+Our new Exception handling provides your own scripts far more power than ever.<br />
+<br />
+We have also enhanced the "packaging" of PHPMailer with an entirely new set of 
+examples. Included are both basic and advanced examples showing how you can take
+advantage of PHP Exception handling to improve your own scripts.<br />
+<br />
+A few things to note about PHPMailer:
 <ul>
   <li>the use of $mail-&gt;AltBody is completely optional. If not used, PHPMailer
-  will use the HTML text with htmlentities().</li>
-  <li>the background= and &lt;img src= images were processed without any directives
-  or methods from the PHP script</li>
-  <li>there is no specific code to define the image type ... that is handled
+  will use the HTML text with htmlentities().<br />
+  We also highly recommend using HTML2Text authored by Jon Abernathy. The class description
+  and download can be viewed at: http://www.chuggnutt.com/html2text.php.
+  </li>
+  <li>there is no specific code to define image or attachment types ... that is handled
   automatically by PHPMailer when it parses the images</li>
-  <li>we are using a new class method '$mail->MsgHTML($body)' ... that is what will handle the parsing of the images and creating the AltBody text</li>
 </ul>
-<p>Of course, you can still use PHPMailer the same way you have in the past.
-That provides full compatibility with all existing scripts, while new scripts
-can take advantage of the new features.</p>
-<p>Modify test_mail.php now with your own email address and try it out.</p>
-To see what the email SHOULD look like in your HTML compatible email viewer: <a href="contents.html">click here</a><br>
-
+A note to users that want to use SMTP with PHPMailer. The most common problems are:
+<ul>
+  <li>wrong port ... most ISP (Internet Service Providers) will not allow relaying through
+    their servers. If that's the case with your ISP, try using port 26.
+  </li>
+  <li>wrong authentication information (username and/or password) ... don't forget that
+    many servers require the account name to be in the format of the full email address.
+  </li>
+  <li>... if these tips do not get your SMTP settings working, we have a debug mode
+    for helping you determine the problem. Insert this after $mail->IsSMTP();<br />
+    $mail->SMTPDebug  = 2;  // enables SMTP debug information (for testing)<br />
+    note that a setting of 2 will display all errors and messages generated by the SMTP
+    server<br />
+  </li>
+</ul>
+Our examples all use an HTML file in the /examples folder. To see what the email SHOULD
+look like in your HTML compatible email viewer: <a href="contents.html">click here</a><br>
+<br />
+From the PHPMailer team:<br />
+Author: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net (and Project Administrator)<br />
+Author: Marcus Bointon (coolbru) coolbru@users.sourceforge.net<br />

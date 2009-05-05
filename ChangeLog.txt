@@ -1,11 +1,52 @@
 ChangeLog
 
-NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6. IT WILL NOT WORK WITH PHP4.
+NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
+      IT WILL NOT WORK WITH PHP4.
 
-Version ??
-* replaced deprecated split() 
-* fixed image file extension checking to retrieve last part of explode() file name
-* added code to check for duplicate image filename to eliminate multiple same-name images
+Version 5.0.1 (April 08, 2009)
+* fixed duplicate attachments issue (inline graphic vs attachment)
+
+Version 5.0.0 (April 02, 2009)
+
+* With the release of this version, we are initiating a new version numbering
+  system to differentiate from the PHP4 version of PHPMailer.
+* Most notable in this release is fully object oriented code.
+class.smtp.php:
+* Refactored class.smtp.php to support new exception handling
+  code size reduced from 29.2 Kb to 25.6 Kb
+* Removed unnecessary functions from class.smtp.php:
+  public function Expand($name) {
+  public function Help($keyword="") {
+  public function Noop() {
+  public function Send($from) {
+  public function SendOrMail($from) {
+  public function Verify($name) {
+class.phpmailer.php:
+* Refactored class.phpmailer.php with new exception handling
+* Changed processing functionality of Sendmail and Qmail so they cannot be
+  inadvertently used
+* removed getFile() function, just became a simple wrapper for
+  file_get_contents()
+* added check for PHP version (will gracefully exit if not at least PHP 5.0)
+class.phpmailer.php enhancements
+* enhanced code to check if an attachment source is the same as an embedded or
+  inline graphic source to eliminate duplicate attachments
+New /test_script
+* We have written a test script you can use to test the script as part of your
+  installation. Once you press submit, the test script will send a multi-mime
+  email with either the message you type in or an HTML email with an inline
+  graphic. Two attachments are included in the email (one of the attachments
+  is also the inline graphic so you can see that only one copy of the graphic
+  is sent in the email). The test script will also display the functional
+  script that you can copy/paste to your editor to duplicate the functionality.
+New examples
+* All new examples in both basic and advanced modes. Advanced examples show
+  Exception handling.
+PHPDocumentator (phpdocs) documentation for PHPMailer version 5.0.0
+* all new documentation
+
+Please note: the website has been updated to reflect the changes in PHPMailer
+version 5.0.0. http://phpmailer.codeworxtech.com/
 
 Version 2.3 (November 06, 2008)
 
