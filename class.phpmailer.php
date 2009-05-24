@@ -2,7 +2,7 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.0.1                                                          |
+|   Version: 5.0.0                                                          |
 |   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
@@ -1287,7 +1287,7 @@ class PHPMailer {
       $disposition = $attachment[6];
       $cid         = $attachment[7];
       $incl[]      = $attachment[0];
-      if ( $disposition == 'inline' && isset($cidUniq[$cid]) ) { continue; }
+      if ( isset($cidUniq[$cid]) ) { continue; }
       $cidUniq[$cid] = true;
 
       $mime[] = sprintf("--%s%s", $this->boundary[1], $this->LE);

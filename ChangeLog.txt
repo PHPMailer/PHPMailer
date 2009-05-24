@@ -3,8 +3,15 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
-Version 5.0.1 (April 08, 2009)
-* fixed duplicate attachments issue (inline graphic vs attachment)
+Version 5.0.2 (May 24, 2009)
+* Fix for missing attachments when inline graphics are present
+* Fix for missing Cc in header when using SMTP (mail was sent,
+  but not displayed in header -- Cc receiver only saw email To: 
+  line and no Cc line, but did get the email (To receiver
+  saw same)
+
+Version 5.0.1 (April 05, 2009)
+* Temporary fix for missing attachments
 
 Version 5.0.0 (April 02, 2009)
 
