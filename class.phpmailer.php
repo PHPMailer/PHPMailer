@@ -2,7 +2,7 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.0.1                                                          |
+|   Version: 5.0.2                                                          |
 |   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
@@ -250,6 +250,12 @@ class PHPMailer {
    */
   public $LE              = "\n";
 
+  /**
+   * Sets the PHPMailer Version number
+   * @var string
+   */
+  public $Version         = '5.0.2';
+
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
   /////////////////////////////////////////////////
@@ -275,7 +281,6 @@ class PHPMailer {
   // CONSTANTS
   /////////////////////////////////////////////////
 
-  const VERSION = '5.0.0';
   const STOP_MESSAGE = 0; // message only, continue processing
   const STOP_CONTINUE = 1; // message?, likely ok to continue processing
   const STOP_CRITICAL = 2; // message, plus full stop, critical error reached
@@ -980,7 +985,7 @@ class PHPMailer {
     $result .= $this->AddrAppend('From', $from);
 
     // sendmail and mail() extract Cc from the header before sending
-    if((($this->Mailer == 'sendmail') || ($this->Mailer == 'mail')) && (count($this->cc) > 0)) {
+    if(count($this->cc) > 0) {
       $result .= $this->AddrAppend('Cc', $this->cc);
     }
 
@@ -1004,7 +1009,7 @@ class PHPMailer {
       $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
     }
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
-    $result .= $this->HeaderLine('X-Mailer', 'PHPMailer ' . self::VERSION . ' (phpmailer.codeworxtech.com)');
+    $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (phpmailer.codeworxtech.com)');
 
     if($this->ConfirmReadingTo != '') {
       $result .= $this->HeaderLine('Disposition-Notification-To', '<' . trim($this->ConfirmReadingTo) . '>');
