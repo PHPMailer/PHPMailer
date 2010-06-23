@@ -2,8 +2,8 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.0.2                                                          |
-|   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
+|   Version: 5.1                                                            |
+|   Contact: via sourceforge.net support pages (also www.worxware.com)      |
 |      Info: http://phpmailer.sourceforge.net                               |
 |   Support: http://sourceforge.net/projects/phpmailer/                     |
 | ------------------------------------------------------------------------- |
@@ -20,7 +20,7 @@
 | ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or     |
 | FITNESS FOR A PARTICULAR PURPOSE.                                         |
 | ------------------------------------------------------------------------- |
-| We offer a number of paid services (www.codeworxtech.com):                |
+| We offer a number of paid services (www.worxware.com):                    |
 | - Web Hosting on highly optimized fast and secure servers                 |
 | - Technology Consulting                                                   |
 | - Oursourcing (highly qualified programmers and graphic designers)        |
@@ -244,17 +244,63 @@ class PHPMailer {
    */
   public $SingleTo      = false;
 
-  /**
+   /**
+   * If SingleTo is true, this provides the array to hold the email addresses
+   * @var bool
+   */
+  public $SingleToArray = array();
+
+ /**
    * Provides the ability to change the line ending
    * @var string
    */
   public $LE              = "\n";
 
   /**
+   * Used with DKIM DNS Resource Record
+   * @var string
+   */
+  public $DKIM_selector   = 'phpmailer';
+
+  /**
+   * Used with DKIM DNS Resource Record
+   * optional, in format of email address 'you@yourdomain.com'
+   * @var string
+   */
+  public $DKIM_identity   = '';
+
+  /**
+   * Used with DKIM DNS Resource Record
+   * optional, in format of email address 'you@yourdomain.com'
+   * @var string
+   */
+  public $DKIM_domain     = '';
+
+  /**
+   * Used with DKIM DNS Resource Record
+   * optional, in format of email address 'you@yourdomain.com'
+   * @var string
+   */
+  public $DKIM_private    = '';
+
+  /**
+   * Callback Action function name
+   * the function that handles the result of the send email action. Parameters:
+   *   bool    $result        result of the send action
+   *   string  $to            email address of the recipient
+   *   string  $cc            cc email addresses
+   *   string  $bcc           bcc email addresses
+   *   string  $subject       the subject
+   *   string  $body          the email body
+   * @var string
+   */
+  public $action_function = ''; //'callbackAction';
+
+  /**
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.0.2';
+  public $Version         = '5.1';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
@@ -281,7 +327,7 @@ class PHPMailer {
   // CONSTANTS
   /////////////////////////////////////////////////
 
-  const STOP_MESSAGE = 0; // message only, continue processing
+  const STOP_MESSAGE  = 0; // message only, continue processing
   const STOP_CONTINUE = 1; // message?, likely ok to continue processing
   const STOP_CRITICAL = 2; // message, plus full stop, critical error reached
 
@@ -418,20 +464,20 @@ class PHPMailer {
       echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
-  if ($kind != 'ReplyTo') {
-    if (!isset($this->all_recipients[strtolower($address)])) {
+    if ($kind != 'ReplyTo') {
+      if (!isset($this->all_recipients[strtolower($address)])) {
         array_push($this->$kind, array($address, $name));
         $this->all_recipients[strtolower($address)] = true;
-    return true;
+        return true;
       }
-  } else {
-    if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
+    } else {
+      if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
         $this->ReplyTo[strtolower($address)] = array($address, $name);
-    return true;
+      return true;
     }
   }
-    return false;
-  }
+  return false;
+}
 
 /**
  * Set the From and FromName properties
@@ -439,7 +485,7 @@ class PHPMailer {
  * @param string $name
  * @return boolean
  */
-  public function SetFrom($address, $name = '') {
+  public function SetFrom($address, $name = '',$auto=1) {
     $address = trim($address);
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
     if (!self::ValidateAddress($address)) {
@@ -450,9 +496,17 @@ class PHPMailer {
       echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
-  $this->From = $address;
-  $this->FromName = $name;
-  return true;
+    $this->From = $address;
+    $this->FromName = $name;
+    if ($auto) {
+      if (empty($this->ReplyTo)) {
+        $this->AddAnAddress('ReplyTo', $address, $name);
+      }
+      if (empty($this->Sender)) {
+        $this->Sender = $address;
+      }
+    }
+    return true;
   }
 
   /**
@@ -508,13 +562,18 @@ class PHPMailer {
         throw new phpmailerException($this->Lang('empty_message'), self::STOP_CRITICAL);
       }
 
+      // digitally sign with DKIM if enabled
+      if ($this->DKIM_domain && $this->DKIM_private) {
+        $header_dkim = $this->DKIM_Add($header,$this->Subject,$body);
+        $header = str_replace("\r\n","\n",$header_dkim) . $header;
+      }
+
       // Choose the mailer and send through it
       switch($this->Mailer) {
         case 'sendmail':
           return $this->SendmailSend($header, $body);
         case 'smtp':
           return $this->SmtpSend($header, $body);
-        case 'mail':
         default:
           return $this->MailSend($header, $body);
       }
@@ -542,14 +601,35 @@ class PHPMailer {
     } else {
       $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
     }
-    if(!@$mail = popen($sendmail, 'w')) {
-      throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
-    }
-    fputs($mail, $header);
-    fputs($mail, $body);
-    $result = pclose($mail);
-    if($result != 0) {
-      throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+    if ($this->SingleTo === true) {
+      foreach ($this->SingleToArray as $key => $val) {
+        if(!@$mail = popen($sendmail, 'w')) {
+          throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+        }
+        fputs($mail, "To: " . $val . "\n");
+        fputs($mail, $header);
+        fputs($mail, $body);
+        $result = pclose($mail);
+        // implement call back function if it exists
+        $isSent = ($result == 0) ? 1 : 0;
+        $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
+        if($result != 0) {
+          throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+        }
+      }
+    } else {
+      if(!@$mail = popen($sendmail, 'w')) {
+        throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+      }
+      fputs($mail, $header);
+      fputs($mail, $body);
+      $result = pclose($mail);
+      // implement call back function if it exists
+      $isSent = ($result == 0) ? 1 : 0;
+      $this->doCallback($isSent,$this->to,$this->cc,$this->bcc,$this->Subject,$body);
+      if($result != 0) {
+        throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+      }
     }
     return true;
   }
@@ -575,17 +655,29 @@ class PHPMailer {
       if ($this->SingleTo === true && count($toArr) > 1) {
         foreach ($toArr as $key => $val) {
           $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+          // implement call back function if it exists
+          $isSent = ($rt == 1) ? 1 : 0;
+          $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
         }
       } else {
         $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+        // implement call back function if it exists
+        $isSent = ($rt == 1) ? 1 : 0;
+        $this->doCallback($isSent,$to,$this->cc,$this->bcc,$this->Subject,$body);
       }
     } else {
       if ($this->SingleTo === true && count($toArr) > 1) {
         foreach ($toArr as $key => $val) {
           $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+          // implement call back function if it exists
+          $isSent = ($rt == 1) ? 1 : 0;
+          $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
         }
       } else {
         $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header);
+        // implement call back function if it exists
+        $isSent = ($rt == 1) ? 1 : 0;
+        $this->doCallback($isSent,$to,$this->cc,$this->bcc,$this->Subject,$body);
       }
     }
     if (isset($old_from)) {
@@ -622,18 +714,41 @@ class PHPMailer {
     foreach($this->to as $to) {
       if (!$this->smtp->Recipient($to[0])) {
         $bad_rcpt[] = $to[0];
+        // implement call back function if it exists
+        $isSent = 0;
+        $this->doCallback($isSent,$to[0],'','',$this->Subject,$body);
+      } else {
+        // implement call back function if it exists
+        $isSent = 1;
+        $this->doCallback($isSent,$to[0],'','',$this->Subject,$body);
       }
     }
     foreach($this->cc as $cc) {
       if (!$this->smtp->Recipient($cc[0])) {
         $bad_rcpt[] = $cc[0];
+        // implement call back function if it exists
+        $isSent = 0;
+        $this->doCallback($isSent,'',$cc[0],'',$this->Subject,$body);
+      } else {
+        // implement call back function if it exists
+        $isSent = 1;
+        $this->doCallback($isSent,'',$cc[0],'',$this->Subject,$body);
       }
     }
     foreach($this->bcc as $bcc) {
       if (!$this->smtp->Recipient($bcc[0])) {
         $bad_rcpt[] = $bcc[0];
+        // implement call back function if it exists
+        $isSent = 0;
+        $this->doCallback($isSent,'','',$bcc[0],$this->Subject,$body);
+      } else {
+        // implement call back function if it exists
+        $isSent = 1;
+        $this->doCallback($isSent,'','',$bcc[0],$this->Subject,$body);
       }
     }
+
+
     if (count($bad_rcpt) > 0 ) { //Create error message for any bad addresses
       $badaddresses = implode(', ', $bad_rcpt);
       throw new phpmailerException($this->Lang('recipients_failed') . $badaddresses);
@@ -972,10 +1087,16 @@ class PHPMailer {
 
     // To be created automatically by mail()
     if($this->Mailer != 'mail') {
-      if(count($this->to) > 0) {
-        $result .= $this->AddrAppend('To', $this->to);
-      } elseif (count($this->cc) == 0) {
-        $result .= $this->HeaderLine('To', 'undisclosed-recipients:;');
+      if ($this->SingleTo === true) {
+        foreach($this->to as $t) {
+          $this->SingleToArray[] = $this->AddrFormat($t);
+        }
+      } else {
+        if(count($this->to) > 0) {
+          $result .= $this->AddrAppend('To', $this->to);
+        } elseif (count($this->cc) == 0) {
+          $result .= $this->HeaderLine('To', 'undisclosed-recipients:;');
+        }
       }
     }
 
@@ -1009,7 +1130,7 @@ class PHPMailer {
       $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
     }
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
-    $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (phpmailer.codeworxtech.com)');
+    $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (phpmailer.sourceforge.net)');
 
     if($this->ConfirmReadingTo != '') {
       $result .= $this->HeaderLine('Disposition-Notification-To', '<' . trim($this->ConfirmReadingTo) . '>');
@@ -1637,7 +1758,7 @@ class PHPMailer {
     $this->attachment[] = array(
       0 => $string,
       1 => $filename,
-      2 => $filename,
+      2 => basename($filename),
       3 => $encoding,
       4 => $type,
       5 => true,  // isStringAttachment
@@ -2061,6 +2182,132 @@ class PHPMailer {
     $this->sign_cert_file = $cert_filename;
     $this->sign_key_file = $key_filename;
     $this->sign_key_pass = $key_pass;
+  }
+
+  /**
+   * Set the private key file and password to sign the message.
+   *
+   * @access public
+   * @param string $key_filename Parameter File Name
+   * @param string $key_pass Password for private key
+   */
+  public function DKIM_QP($txt) {
+    $tmp="";
+    $line="";
+    for ($i=0;$i<strlen($txt);$i++) {
+      $ord=ord($txt[$i]);
+      if ( ((0x21 <= $ord) && ($ord <= 0x3A)) || $ord == 0x3C || ((0x3E <= $ord) && ($ord <= 0x7E)) ) {
+        $line.=$txt[$i];
+      } else {
+        $line.="=".sprintf("%02X",$ord);
+      }
+    }
+    return $line;
+  }
+
+  /**
+   * Generate DKIM signature
+   *
+   * @access public
+   * @param string $s Header
+   */
+  public function DKIM_Sign($s) {
+    $privKeyStr = file_get_contents($this->DKIM_private);
+    if ($this->DKIM_passphrase!='') {
+      $privKey = openssl_pkey_get_private($privKeyStr,$this->DKIM_passphrase);
+    } else {
+      $privKey = $privKeyStr;
+    }
+    if (openssl_sign($s, $signature, $privKey)) {
+      return base64_encode($signature);
+    }
+  }
+
+  /**
+   * Generate DKIM Canonicalization Header
+   *
+   * @access public
+   * @param string $s Header
+   */
+  public function DKIM_HeaderC($s) {
+    $s=preg_replace("/\r\n\s+/"," ",$s);
+    $lines=explode("\r\n",$s);
+    foreach ($lines as $key=>$line) {
+      list($heading,$value)=explode(":",$line,2);
+      $heading=strtolower($heading);
+      $value=preg_replace("/\s+/"," ",$value) ; // Compress useless spaces
+      $lines[$key]=$heading.":".trim($value) ; // Don't forget to remove WSP around the value
+    }
+    $s=implode("\r\n",$lines);
+    return $s;
+  }
+
+  /**
+   * Generate DKIM Canonicalization Body
+   *
+   * @access public
+   * @param string $body Message Body
+   */
+  public function DKIM_BodyC($body) {
+    if ($body == '') return "\r\n";
+    // stabilize line endings
+    $body=str_replace("\r\n","\n",$body);
+    $body=str_replace("\n","\r\n",$body);
+    // END stabilize line endings
+    while (substr($body,strlen($body)-4,4) == "\r\n\r\n") {
+      $body=substr($body,0,strlen($body)-2);
+    }
+    return $body;
+  }
+
+  /**
+   * Create the DKIM header, body, as new header
+   *
+   * @access public
+   * @param string $headers_line Header lines
+   * @param string $subject Subject
+   * @param string $body Body
+   */
+  public function DKIM_Add($headers_line,$subject,$body) {
+    $DKIMsignatureType    = 'rsa-sha1'; // Signature & hash algorithms
+    $DKIMcanonicalization = 'relaxed/simple'; // Canonicalization of header/body
+    $DKIMquery            = 'dns/txt'; // Query method
+    $DKIMtime             = time() ; // Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
+    $subject_header       = "Subject: $subject";
+    $headers              = explode("\r\n",$headers_line);
+    foreach($headers as $header) {
+      if (strpos($header,'From:') === 0) {
+        $from_header=$header;
+      } elseif (strpos($header,'To:') === 0) {
+        $to_header=$header;
+      }
+    }
+    $from     = str_replace('|','=7C',$this->DKIM_QP($from_header));
+    $to       = str_replace('|','=7C',$this->DKIM_QP($to_header));
+    $subject  = str_replace('|','=7C',$this->DKIM_QP($subject_header)) ; // Copied header fields (dkim-quoted-printable
+    $body     = $this->DKIM_BodyC($body);
+    $DKIMlen  = strlen($body) ; // Length of body
+    $DKIMb64  = base64_encode(pack("H*", sha1($body))) ; // Base64 of packed binary SHA-1 hash of body
+    $ident    = ($this->DKIM_identity == '')? '' : " i=" . $this->DKIM_identity . ";";
+    $dkimhdrs = "DKIM-Signature: v=1; a=" . $DKIMsignatureType . "; q=" . $DKIMquery . "; l=" . $DKIMlen . "; s=" . $this->DKIM_selector . ";\r\n".
+                "\tt=" . $DKIMtime . "; c=" . $DKIMcanonicalization . ";\r\n".
+                "\th=From:To:Subject;\r\n".
+                "\td=" . $this->DKIM_domain . ";" . $ident . "\r\n".
+                "\tz=$from\r\n".
+                "\t|$to\r\n".
+                "\t|$subject;\r\n".
+                "\tbh=" . $DKIMb64 . ";\r\n".
+                "\tb=";
+    $toSign   = $this->DKIM_HeaderC($from_header . "\r\n" . $to_header . "\r\n" . $subject_header . "\r\n" . $dkimhdrs);
+    $signed   = $this->DKIM_Sign($toSign);
+    return "X-PHPMAILER-DKIM: phpmailer.worxware.com\r\n".$dkimhdrs.$signed."\r\n";
+  }
+
+  protected function doCallback($isSent,$to,$cc,$bcc,$subject,$body) {
+    if (!empty($this->action_function) && function_exists($this->action_function)) {
+      $params = array($isSent,$to,$cc,$bcc,$subject,$body);
+      call_user_func_array($this->action_function,$params);
+    }
   }
 }
 
