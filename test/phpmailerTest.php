@@ -5,6 +5,7 @@
 *   pear install "channel://pear.phpunit.de/PHPUnit"
 * Then run the tests like this:
 *   phpunit phpmailerTest
+* Highly recommended: use the DevNullSmtp dummy mail server for testing with: http://www.aboutmyip.com/AboutMyXApp/DevNullSmtp.jsp
 * @package PHPMailer
 * @author Andy Prevost
 * @author Marcus Bointon
@@ -13,12 +14,13 @@
 * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
 */
 
+error_reporting(E_ALL|E_STRICT);
+
 require 'PHPUnit/Framework.php';
 
 $INCLUDE_DIR = "../";
 
 require $INCLUDE_DIR . 'class.phpmailer.php';
-error_reporting(E_ALL);
 
 /**
 * PHPMailer - PHP email transport unit test class
@@ -80,9 +82,13 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         if (array_key_exists('mail_host', $_REQUEST)) {
 	        $this->Mail->Host = $_REQUEST['mail_host'];
 	    } else {
-	        $this->Mail->Host = 'mail.example.com';
+	        $this->Mail->Host = 'localhost.localdomain';
 	    }
-        $this->Mail->Port = 25;
+        if (array_key_exists('mail_port', $_REQUEST)) {
+	        $this->Mail->Port = (integer)$_REQUEST['mail_port'];
+	    } else {
+	        $this->Mail->Port= 25;
+	    }
         $this->Mail->Helo = "localhost.localdomain";
         $this->Mail->SMTPAuth = false;
         $this->Mail->Username = "";
@@ -146,7 +152,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $ReportBody .= "---------------------" . $eol;
         $ReportBody .= "Unit Test Information" . $eol;
         $ReportBody .= "---------------------" . $eol;
-        $ReportBody .= "phpmailer version: " . PHPMailer::VERSION . $eol;
+        $ReportBody .= "phpmailer version: " . $this->Mail->Version . $eol;
         $ReportBody .= "Content Type: " . $this->Mail->ContentType . $eol;
         
         if(strlen($this->Mail->Host) > 0)
@@ -631,13 +637,12 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 	    $this->Mail->IsSMTP();
 	    $this->Mail->IsMail();
 	    $this->Mail->IsSendMail();
-   	    $this->Mail->IsQmail();
+   	  $this->Mail->IsQmail();
 	    $this->Mail->SetLanguage('fr');
 	    $this->Mail->Sender = '';
 	    $this->Mail->CreateHeader();
 	    $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
 	    $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
-	    $this->Mail->getFile(__FILE__);
 	}
 }  
  
@@ -650,7 +655,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 <h3>phpmailer Unit Test</h3>
 By entering a SMTP hostname it will automatically perform tests with SMTP.
 
-<form name="phpmailer_unit" action=__FILE__ method="get">
+<form name="phpmailer_unit" action="__FILE__" method="get">
 <input type="hidden" name="submitted" value="1"/>
 From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
 <br/>
