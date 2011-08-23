@@ -3,6 +3,13 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
+Version 5.2 (July 19, 2011)
+* protected MIME body and header
+* better DKIM DNS Resource Record support
+* better aly handling
+* htmlfilter class added to extras
+* moved to Apache Extras
+
 Version 5.1 (October 20, 2009)
 * fixed filename issue with AddStringAttachment (thanks to Tony)
 * fixed "SingleTo" property, now works with Senmail, Qmail, and SMTP in
