@@ -1223,7 +1223,7 @@ class PHPMailer {
     switch($this->message_type) {
       case 'plain':
         $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
-        $result .= $this->TextLine('Content-Type: '.$this->ContentType.'; charset="'.$this->CharSet.'"');
+        $result .= $this->TextLine('Content-Type: '.$this->ContentType.'; charset='.$this->CharSet);
         break;
       case 'inline':
         $result .= $this->HeaderLine('Content-Type', 'multipart/related;');
@@ -1398,7 +1398,7 @@ class PHPMailer {
       $encoding = $this->Encoding;
     }
     $result .= $this->TextLine('--' . $boundary);
-    $result .= sprintf("Content-Type: %s; charset=\"%s\"", $contentType, $charSet);
+    $result .= sprintf("Content-Type: %s; charset=%s", $contentType, $charSet);
     $result .= $this->LE;
     $result .= $this->HeaderLine('Content-Transfer-Encoding', $encoding);
     $result .= $this->LE;
