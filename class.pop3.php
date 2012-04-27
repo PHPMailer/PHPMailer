@@ -2,7 +2,7 @@
 /*~ class.pop3.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2                                                            |
+|   Version: 5.2.1                                                          |
 |      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
 |     Admin: Jim Jagielski (project admininistrator)                        |
@@ -10,7 +10,7 @@
 |          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
 |          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
 |   Founder: Brent R. Matzelle (original founder)                           |
-| Copyright (c) 2010-2011, Jim Jagielski. All Rights Reserved.               |
+| Copyright (c) 2010-2012, Jim Jagielski. All Rights Reserved.              |
 | Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
@@ -29,7 +29,7 @@
  * @author Andy Prevost
  * @author Marcus Bointon
  * @author Jim Jagielski
- * @copyright 2010 - 2011 Jim Jagielski
+ * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
  * @version $Id: class.pop3.php 450 2010-06-23 16:46:33Z coolbru $
@@ -37,7 +37,7 @@
 
 /**
  * POP Before SMTP Authentication Class
- * Version 5.2.0
+ * Version 5.2.1
  *
  * Author: Richard Davey (rich@corephp.co.uk)
  * Modifications: Andy Prevost
@@ -115,7 +115,7 @@ class POP3 {
    * Sets the POP3 PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2';
+  public $Version         = '5.2.1';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED

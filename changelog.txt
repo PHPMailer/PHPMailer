@@ -3,6 +3,12 @@ ChangeLog
 NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
       IT WILL NOT WORK WITH PHP4.
 
+Version 5.2.1 (January 16, 2012)
+* Closed several bugs
+* Performance improvements
+* MsgHTML() now returns the message as required.
+* New method: GetSentMIMEMessage() (returns full copy of sent message)
+
 Version 5.2 (July 19, 2011)
 * protected MIME body and header
 * better DKIM DNS Resource Record support
