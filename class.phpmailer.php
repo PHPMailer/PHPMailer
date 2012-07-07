@@ -864,6 +864,7 @@ class PHPMailer {
   public function SmtpConnect() {
     if(is_null($this->smtp)) {
       $this->smtp = new SMTP();
+      $this->smtp->timeout = $this->Timeout;
     }
 
     $this->smtp->do_debug = $this->SMTPDebug;

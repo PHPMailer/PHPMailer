@@ -73,6 +73,7 @@ class SMTP {
    * @var string
    */
   public $Version         = '5.2.1';
+  public $timeout = 3;
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
@@ -84,6 +85,7 @@ class SMTP {
 
   /**
    * Initialize the class so that the data is in a known state.
+   *
    * @access public
    * @return void
    */
@@ -797,6 +799,8 @@ class SMTP {
    */
   private function get_lines() {
     $data = "";
+    $now = microtime(true);
+    $this->timeout = isset($this->timeout) ? $this->timeout : 3;
     while(!feof($this->smtp_conn)) {
       $str = @fgets($this->smtp_conn,515);
       if($this->do_debug >= 4) {
@@ -808,7 +812,7 @@ class SMTP {
         echo "SMTP -> get_lines(): \$data is \"$data\"" . $this->CRLF . '<br />';
       }
       // if 4th character is a space, we are done reading, break the loop
-      if(substr($str,3,1) == " ") { break; }
+      if(substr($str,3,1) == " " || ((microtime(true) - $now) > $this->timeout)) { break; }
     }
     return $data;
   }
