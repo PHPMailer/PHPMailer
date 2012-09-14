@@ -73,6 +73,8 @@ $mail->FromName = "Mailer";
 $mail->AddAddress("josh@example.net", "Josh Adams");
 $mail->AddAddress("ellen@example.com");                  // name is optional
 $mail->AddReplyTo("info@example.com", "Information");
+$mail->AddCC('cc@example.com');
+$mail->AddBCC('bcc@example.com');
 
 $mail->WordWrap = 50;                                 // set word wrap to 50 characters
 $mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
@@ -92,6 +94,14 @@ if(!$mail->Send())
 
 echo "Message has been sent";
 ?>
+```
+
+## Additional Options
+
+```php
+// Encrypt the connection to the email server
+$mail->SMTPSecure = 'tls'; // 'ssl' also accepted
+
 ```
 
 ## CHANGELOG
