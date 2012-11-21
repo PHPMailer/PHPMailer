@@ -1,12 +1,9 @@
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
-## License 
+## Class Features
 
-This software is licenced under the [LGPL](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
-software availability and distribution.
-
-## Class Features:
-
+- Probably the world's most popular code for sending email from PHP!
+- Used by many open-source projects: Drupal, SugarCRM, Yii, Joomla! and many more
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Redundant SMTP servers
 - Multipart/alternative emails for mail clients that do not read HTML email
@@ -18,7 +15,7 @@ software availability and distribution.
 - Compatible with PHP 5.0 and later
 - Much more!
 
-## Why you might need it:
+## Why you might need it
 
 Many PHP developers utilize email in their code. The only PHP function that supports this is the mail() function. However, it does not provide any assistance for making use of popular features such as HTML-based emails and attachments.
 
@@ -27,17 +24,14 @@ Formatting email correctly is surprisingly difficult. There are myriad overlappi
 
 The PHP mail() function usually sends via a local mail server, typically fronted by a `sendmail` binary on Linux, BSD and OS X platforms, however, Windows usually doesn't include a local mail server; PHPMailer's integrated SMTP implementation allows email sending on Windows platforms without a local mail server.
 
-## Installation:
+## License
+
+This software is licenced under the [LGPL](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
+software availability and distribution.
+
+## Installation
 
 Copy the contents of the PHPMailer folder into somewhere that's in your PHP include_path setting.
-
-## Localization
-PHPMailer defaults to English, but in the `languages` folder you'll find numerous translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
-
-```php
-// To load the French version
-$mail->SetLanguage('fr', '/optional/path/to/language/directory/');
-```
 
 ## A Simple Example
 
@@ -84,6 +78,14 @@ You'll find plenty more to play with in the `examples` folder.
 
 That's it. You should now be ready to use PHPMailer!
 
+## Localization
+PHPMailer defaults to English, but in the `languages` folder you'll find numerous translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+
+```php
+// To load the French version
+$mail->SetLanguage('fr', '/optional/path/to/language/directory/');
+```
+
 ## Documentation
 
 You'll find some basic user-level docs in the docs folder, and you can generate complete API-level documentation using the `generatedocs.sh` shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first.
@@ -96,7 +98,7 @@ You'll find a PHPUnit test script in the `test` folder.
 
 Please submit bug reports, suggestions and pull requests to the [Google Code tracker](https://code.google.com/a/apache-extras.org/p/phpmailer/issues/list) or the [GitHub issue tracker](https://github.com/Synchro/PHPMailer/issues).
 
-We're particularly interested in fixes for edge-cases, expanding test coverage and updating translations.
+We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
 
 Please *don't* use the sourceforge project any more.
 
@@ -105,7 +107,7 @@ Please *don't* use the sourceforge project any more.
 See changelog.txt
 
 ## History
-PHPMailer was originally written in 2001 by Brent R. Matzelle as a [sourceforge project](http://sourceforge.net/projects/phpmailer/).
-Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
-The project became an [Apache incubator project on Google Code](https://code.google.com/a/apache-extras.org/p/phpmailer/) in 2010, managed by Jim Jagielski
-Marcus maintains a [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
+- PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
+- Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
+- The project became an [Apache incubator project on Google Code](https://code.google.com/a/apache-extras.org/p/phpmailer/) in 2010, managed by Jim Jagielski
+- Marcus maintains a [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
