@@ -13,9 +13,7 @@ $mail             = new PHPMailer(); // defaults to using php "mail()"
 $mail->IsSendmail(); // telling the class to use SendMail transport
 
 $body             = file_get_contents('contents.html');
-$body             = eregi_replace("[\]",'',$body);
-
-$mail->AddReplyTo("name@yourdomain.com","First Last");
+$body             = preg_replace('/[\]/','',$body);
 
 $mail->SetFrom('name@yourdomain.com', 'First Last');
 

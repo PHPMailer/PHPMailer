@@ -16,7 +16,7 @@ $PHPMAILER_LANG['file_access']          = 'Nu pot accesa fisierul: ';
 $PHPMAILER_LANG['file_open']            = 'Eroare de fisier: Nu pot deschide fisierul: ';
 $PHPMAILER_LANG['from_failed']          = 'Urmatoarele adrese From au dat eroare: ';
 $PHPMAILER_LANG['instantiate']          = 'Nu am putut instantia functia mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer nu este suportat.';
 $PHPMAILER_LANG['provide_address']      = 'Trebuie sa adaugati cel putin un recipient (adresa de mail).';
 $PHPMAILER_LANG['recipients_failed']    = 'Eroare SMTP: Urmatoarele adrese de mail au dat eroare: ';
@@ -24,4 +24,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'Eroare SMTP: Urmatoarele adrese de ma
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

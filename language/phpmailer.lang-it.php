@@ -16,7 +16,7 @@ $PHPMAILER_LANG['file_access']          = 'Impossibile accedere al file: ';
 $PHPMAILER_LANG['file_open']            = 'File Error: Impossibile aprire il file: ';
 $PHPMAILER_LANG['from_failed']          = 'I seguenti indirizzi mittenti hanno generato errore: ';
 $PHPMAILER_LANG['instantiate']          = 'Impossibile istanziare la funzione mail';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['provide_address']      = 'Deve essere fornito almeno un indirizzo ricevente';
 $PHPMAILER_LANG['mailer_not_supported'] = 'Mailer non supportato';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Error: I seguenti indirizzi destinatari hanno generato errore: ';
@@ -24,4 +24,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'SMTP Error: I seguenti indirizzi dest
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

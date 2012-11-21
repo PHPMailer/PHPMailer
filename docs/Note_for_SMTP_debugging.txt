@@ -1,0 +1,23 @@
+If you are having problems connecting or sending emails through your SMTP server, please note:
+
+1. The new rewrite of class.smtp.php provides more information about the processing/errors taking place
+2. Use the debug functionality of class.smtp.php. To do that, in your own script add the debug level you wish to use. An example of that is:
+
+$mail->SMTPDebug = 1;
+$mail->IsSMTP();  // telling the class to use SMTP
+$mail->SMTPAuth   = true;                // enable SMTP authentication
+$mail->Port       = 26;                  // set the SMTP port
+$mail->Host       = "mail.yourhost.com"; // SMTP server
+$mail->Username   = "name@yourhost.com"; // SMTP account username
+$mail->Password   = "your password";     // SMTP account password
+
+Notes on this:
+$mail->SMTPDebug = 0; ... will disable debugging (you can also leave this out completely, 0 is the default
+$mail->SMTPDebug = 1; ... will echo errors and messages
+$mail->SMTPDebug = 2; ... will echo messages only
+... and finally, the options are 0, 1, and 2 ... any number greater than 2 will be interpreted as 2
+
+And finally, don't forget to disable debugging before going into production.
+
+Enjoy!
+Andy

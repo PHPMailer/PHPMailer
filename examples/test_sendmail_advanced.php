@@ -12,7 +12,6 @@ $mail = new PHPMailer(true); // the true param means it will throw exceptions on
 $mail->IsSendmail(); // telling the class to use SendMail transport
 
 try {
-  $mail->AddReplyTo('name@yourdomain.com', 'First Last');
   $mail->AddAddress('whoto@otherdomain.com', 'John Doe');
   $mail->SetFrom('name@yourdomain.com', 'First Last');
   $mail->AddReplyTo('name@yourdomain.com', 'First Last');

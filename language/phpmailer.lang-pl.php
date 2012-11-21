@@ -14,7 +14,7 @@ $PHPMAILER_LANG['file_access'] = 'Brak dostępu do pliku: ';
 $PHPMAILER_LANG['file_open'] = 'Nie można otworzyć pliku: ';
 $PHPMAILER_LANG['from_failed'] = 'Następujący adres Nadawcy jest jest nieprawidłowy: ';
 $PHPMAILER_LANG['instantiate'] = 'Nie można wywołać funkcji mail(). Sprawdź konfigurację serwera.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['provide_address'] = 'Należy podać prawidłowy adres email Odbiorcy.';
 $PHPMAILER_LANG['mailer_not_supported'] = 'Wybrana metoda wysyłki wiadomości nie jest obsługiwana.';
 $PHPMAILER_LANG['recipients_failed'] = 'Błąd SMTP: Następujący odbiorcy są nieprawidłowi: ';
@@ -22,4 +22,3 @@ $PHPMAILER_LANG['recipients_failed'] = 'Błąd SMTP: Następujący odbiorcy są 
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

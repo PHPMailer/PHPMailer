@@ -50,8 +50,7 @@ if ( $_POST['submit'] == "Submit" ) {
   $mail = new PHPMailer();
 
   if ( $_POST['Message'] == '' ) {
-    $body             = $mail->getFile('contents.html');
-    $body             = eregi_replace("[\]",'',$body);
+    $body             = file_get_contents('contents.html');
   } else {
     $body = $_POST['Message'];
   }
@@ -104,7 +103,9 @@ if ( $_POST['submit'] == "Submit" ) {
 
   $mail->Subject  = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
 
-  require_once('../class.html2text.inc.php');
+  // below can be found at http://www.chuggnutt.com/html2text
+  //  bundled in ./extras/
+  require_once('../class.html2text.inc');
   $h2t =& new html2text($body);
   $mail->AltBody = $h2t->get_text();
   //$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
@@ -195,8 +196,7 @@ $mail = new PHPMailer();
 
 <?php
 if ( $_POST['Message'] == '' ) {
-  echo '$body             = $mail->getFile(\'contents.html\');' . "\n";
-  echo '$body             = eregi_replace("[\]",\'\',$body);' . "\n";
+  echo '$body             = file_get_contents(\'contents.html\');' . "\n";
 } else {
   echo '$body = ' . $_POST['Message'] . "\n";
 }
@@ -252,7 +252,7 @@ echo '$mail->AddCC(\'' . $value . '\');<br />';
 
 $mail->Subject  = <?php echo $_POST['Subject']; ?> (PHPMailer test using <?php echo strtoupper($_POST['test_type']); ?>)
 
-require_once('../class.html2text.inc.php');
+require_once('../class.html2text.inc');
 $h2t =& new html2text($body);
 $mail->AltBody = $h2t->get_text();
 $mail->WordWrap   = 80; // set word wrap

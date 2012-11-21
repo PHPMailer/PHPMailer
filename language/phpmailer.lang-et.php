@@ -15,7 +15,7 @@ $PHPMAILER_LANG['file_access']          = 'Pole piisavalt õiguseid järgneva fa
 $PHPMAILER_LANG['file_open']            = 'Faili Viga: Faili avamine ebaõnnestus: ';
 $PHPMAILER_LANG['from_failed']          = 'Järgnev saatja e-posti aadress on vigane: ';
 $PHPMAILER_LANG['instantiate']          = 'mail funktiooni käivitamine ebaõnnestus.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['provide_address']      = 'Te peate määrama vähemalt ühe saaja e-posti aadressi.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' maileri tugi puudub.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Viga: Järgnevate saajate e-posti aadressid on vigased: ';
@@ -23,4 +23,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'SMTP Viga: Järgnevate saajate e-post
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

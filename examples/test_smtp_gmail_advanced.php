@@ -21,7 +21,6 @@ try {
   $mail->Port       = 465;                   // set the SMTP port for the GMAIL server
   $mail->Username   = "yourusername@gmail.com";  // GMAIL username
   $mail->Password   = "yourpassword";            // GMAIL password
-  $mail->AddReplyTo('name@yourdomain.com', 'First Last');
   $mail->AddAddress('whoto@otherdomain.com', 'John Doe');
   $mail->SetFrom('name@yourdomain.com', 'First Last');
   $mail->AddReplyTo('name@yourdomain.com', 'First Last');

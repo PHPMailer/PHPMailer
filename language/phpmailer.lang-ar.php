@@ -15,7 +15,7 @@ $PHPMAILER_LANG['file_access']          = 'لم نستطع الوصول للمل
 $PHPMAILER_LANG['file_open']            = 'File Error: لم نستطع فتح الملف: ';
 $PHPMAILER_LANG['from_failed']          = 'البريد التالي لم نستطع ارسال البريد له : ';
 $PHPMAILER_LANG['instantiate']          = 'لم نستطع توفير خدمة البريد.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer غير مدعوم.';
 //$PHPMAILER_LANG['provide_address']      = 'You must provide at least one recipient email address.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Error: الأخطاء التالية ' .
@@ -24,4 +24,3 @@ $PHPMAILER_LANG['signing']              = 'خطأ في التوقيع: ';
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

@@ -15,7 +15,7 @@ $PHPMAILER_LANG['file_access'] = '无法访问文件：';
 $PHPMAILER_LANG['file_open'] = '文件错误：无法打开文件：';
 $PHPMAILER_LANG['from_failed'] = '发送地址错误：';
 $PHPMAILER_LANG['instantiate'] = '未知函数调用。';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['mailer_not_supported'] = '发信客户端不被支持。';
 $PHPMAILER_LANG['provide_address'] = '必须提供至少一个收件人地址。';
 $PHPMAILER_LANG['recipients_failed'] = 'SMTP 错误：收件人地址错误：';
@@ -23,4 +23,3 @@ $PHPMAILER_LANG['recipients_failed'] = 'SMTP 错误：收件人地址错误：';
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

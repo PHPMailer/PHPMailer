@@ -17,7 +17,7 @@ require_once('../class.phpmailer.php');
 $mail                = new PHPMailer();
 
 $body                = file_get_contents('contents.html');
-$body                = eregi_replace("[\]",'',$body);
+$body                = preg_replace('/[\]/','',$body);
 
 $mail->IsSMTP(); // telling the class to use SMTP
 $mail->Host          = "smtp1.site.com;smtp2.site.com";

@@ -15,7 +15,7 @@ $PHPMAILER_LANG['file_access']          = 'No es pot accedir a l\'arxiu: ';
 $PHPMAILER_LANG['file_open']            = 'Error d\'Arxiu: No es pot obrir l\'arxiu: ';
 $PHPMAILER_LANG['from_failed']          = 'La(s) següent(s) adreces de remitent han fallat: ';
 $PHPMAILER_LANG['instantiate']          = 'No s\'ha pogut crear una instància de la funció Mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer no està suportat';
 $PHPMAILER_LANG['provide_address']      = 'S\'ha de proveir almenys una adreça d\'email com a destinatari.';
 $PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Els següents destinataris han fallat: ';
@@ -23,4 +23,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Els següents destinatari
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

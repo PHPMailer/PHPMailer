@@ -14,7 +14,7 @@ $PHPMAILER_LANG['file_access']          = 'Нет доступа к файлу: 
 $PHPMAILER_LANG['file_open']            = 'Файловая ошибка: не удается открыть файл: ';
 $PHPMAILER_LANG['from_failed']          = 'Неверный адрес отправителя: ';
 $PHPMAILER_LANG['instantiate']          = 'Невозможно запустить функцию mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['provide_address']      = 'Пожалуйста, введите хотя бы один адрес e-mail получателя.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' - почтовый сервер не поддерживается.';
 $PHPMAILER_LANG['recipients_failed']    = 'Ошибка SMTP: отправка по следующим адресам получателей не удалась: ';
@@ -22,4 +22,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'Ошибка SMTP: отправка �
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>

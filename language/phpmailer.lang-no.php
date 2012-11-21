@@ -14,7 +14,7 @@ $PHPMAILER_LANG['file_access']          = 'Kunne ikke få tilgang til filen: ';
 $PHPMAILER_LANG['file_open']            = 'Fil feil: Kunne ikke åpne filen: ';
 $PHPMAILER_LANG['from_failed']          = 'Følgende Fra feilet: ';
 $PHPMAILER_LANG['instantiate']          = 'Kunne ikke instantiate mail funksjonen.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+//$PHPMAILER_LANG['invalid_address']        = 'Not sending, email address is invalid: ';
 $PHPMAILER_LANG['provide_address']      = 'Du må ha med minst en mottager adresse.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer er ikke supportert.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Feil: Følgende mottagere feilet: ';
@@ -22,4 +22,3 @@ $PHPMAILER_LANG['recipients_failed']    = 'SMTP Feil: Følgende mottagere feilet
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>
