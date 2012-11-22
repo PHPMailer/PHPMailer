@@ -1599,7 +1599,7 @@ class PHPMailer {
         $file = tempnam('', 'mail');
         file_put_contents($file, $body); //TODO check this worked
         $signed = tempnam("", "signed");
-        if (@openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), NULL)) {
+        if (@openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), null)) {
           @unlink($file);
           $body = file_get_contents($signed);
           @unlink($signed);
@@ -2017,56 +2017,20 @@ class PHPMailer {
     return $encoded;
   }
 
-  /**
-   * Encode string to quoted-printable.
-   * Only uses standard PHP, slow, but will always work
-   * @access public
-   * @param string $input
-   * @param integer $line_max Number of chars allowed on a line before wrapping
-   * @param bool $space_conv
-   * @internal param string $string the text to encode
-   * @return string
-   */
-  public function EncodeQPphp( $input = '', $line_max = 76, $space_conv = false) {
-    $hex = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F');
-    $lines = preg_split('/(?:\r\n|\r|\n)/', $input);
-    $eol = "\r\n";
-    $escape = '=';
-    $output = '';
-    while( list(, $line) = each($lines) ) {
-      $linlen = strlen($line);
-      $newline = '';
-      for($i = 0; $i < $linlen; $i++) {
-        $c = substr( $line, $i, 1 );
-        $dec = ord( $c );
-        if ( ( $i == 0 ) && ( $dec == 46 ) ) { // convert first point in the line into =2E
-          $c = '=2E';
-        }
-        if ( $dec == 32 ) {
-          if ( $i == ( $linlen - 1 ) ) { // convert space at eol only
-            $c = '=20';
-          } else if ( $space_conv ) {
-            $c = '=20';
-          }
-        } elseif ( ($dec == 61) || ($dec < 32 ) || ($dec > 126) ) { // always encode "\t", which is *not* required
-          $h2 = (integer)floor($dec/16);
-          $h1 = (integer)floor($dec%16);
-          $c = $escape.$hex[$h2].$hex[$h1];
-        }
-        if ( (strlen($newline) + strlen($c)) >= $line_max ) { // CRLF is not counted
-          $output .= $newline.$escape.$eol; //  soft line break; " =\r\n" is okay
-          $newline = '';
-          // check if newline first character will be point or not
-          if ( $dec == 46 ) {
-            $c = '=2E';
-          }
-        }
-        $newline .= $c;
-      } // end of for
-      $output .= $newline.$eol;
-    } // end of while
-    return $output;
-  }
+    /**
+     * Encode string to quoted-printable.
+     * Only uses standard PHP, slow, but will always work
+     * @access public
+     * @param string $string
+     * @param integer $line_max Number of chars allowed on a line before wrapping
+     * @return string
+     * @link Adapted from http://fr2.php.net/manual/en/function.quoted-printable-decode.php#89417
+     */
+    function EncodeQPphp($string, $line_max = 76) {
+        $string = str_replace(array('%20', '%0D%0A.', '%0D%0A', '%'), array(' ', "\r\n=2E", "\r\n", '='), rawurlencode($string));
+        $string = preg_replace('/[^\r\n]{'.($line_max - 3).'}[^=\r\n]{2}/', "$0=\r\n", $string);
+        return $string;
+    }
 
   /**
   * Encode string to RFC2045 (6.7) quoted-printable format
@@ -2076,29 +2040,14 @@ class PHPMailer {
   * @access public
   * @param string $string the text to encode
   * @param integer $line_max Number of chars allowed on a line before wrapping
-  * @param boolean $space_conv Dummy param for compatibility with existing EncodeQP function
   * @return string
   * @author Marcus Bointon
   */
-  public function EncodeQP($string, $line_max = 76, $space_conv = false) {
+  public function EncodeQP($string, $line_max = 76) {
     if (function_exists('quoted_printable_encode')) { //Use native function if it's available (>= PHP5.3)
       return quoted_printable_encode($string);
     }
-    $filters = stream_get_filters();
-    if (!in_array('convert.*', $filters)) { //Got convert stream filter?
-      return $this->EncodeQPphp($string, $line_max, $space_conv); //Fall back to old implementation
-    }
-    $fp = fopen('php://temp/', 'r+');
-    $string = preg_replace('/\r\n?/', $this->LE, $string); //Normalise line breaks
-    $params = array('line-length' => $line_max, 'line-break-chars' => $this->LE);
-    $s = stream_filter_append($fp, 'convert.quoted-printable-encode', STREAM_FILTER_READ, $params);
-    fputs($fp, $string);
-    rewind($fp);
-    $out = stream_get_contents($fp);
-    stream_filter_remove($s);
-    $out = preg_replace('/^\./m', '=2E', $out); //Encode . if it is first char on a line, workaround for bug in Exchange
-    fclose($fp);
-    return $out;
+    return $this->EncodeQPphp($string, $line_max); //Fall back to php implementation
   }
 
   /**
