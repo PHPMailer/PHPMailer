@@ -7,7 +7,7 @@
 | ------------------------------------------------------------------------- |
 |     Admin: Jim Jagielski (project admininistrator)                        |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
-|          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|          : Marcus Bointon (coolbru) phpmailer@synchromedia.co.uk          |
 |          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
 |   Founder: Brent R. Matzelle (original founder)                           |
 | Copyright (c) 2010-2012, Jim Jagielski. All Rights Reserved.              |
