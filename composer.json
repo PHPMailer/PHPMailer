@@ -27,5 +27,6 @@
     },
     "autoload": {
         "classmap": ["class.phpmailer.php", "class.pop3.php", "class.smtp.php"]
-    }
+    },
+    "license": "LGPL-2.1"
 }
