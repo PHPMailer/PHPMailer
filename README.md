@@ -103,7 +103,7 @@ Please *don't* use the sourceforge project any more.
 
 ## Changelog
 
-See changelog.txt
+See changelog.md
 
 ## History
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
