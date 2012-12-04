@@ -260,7 +260,7 @@ class PHPMailer {
   public $Password      = '';
 
   /**
-   *  Sets SMTP auth type. Options are LOGIN | PLAIN | NTLM  (default LOGIN)
+   *  Sets SMTP auth type. Options are LOGIN | PLAIN | NTLM | CRAM-MD5 (default LOGIN)
    *  @var string
    */
   public $AuthType      = '';
@@ -2069,8 +2069,8 @@ class PHPMailer {
 
       case 'comment':
         $pattern = '\(\)"';
-        //note that we dont break here!
-        //for this reason we build the $pattern withoud including delimiters and []
+        //note that we don't break here!
+        //for this reason we build the $pattern without including delimiters and []
 
       case 'text':
       default:

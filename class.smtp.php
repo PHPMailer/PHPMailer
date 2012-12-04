@@ -58,10 +58,10 @@ class SMTP {
   public $CRLF = "\r\n";
 
   /**
-   *  Sets whether debugging is turned on
-   *  @var bool
+   *  Sets debug output level; 0 for no output
+   *  @var int
    */
-  public $do_debug;       // the level of debug to perform
+  public $do_debug = 0;
 
   /**
    * Sets the function/method to use for debugging output.
@@ -432,11 +432,11 @@ class SMTP {
           return false;
         }
 
-		// Get the challenge
-		$challenge = base64_decode(substr($rply,4));
+        // Get the challenge
+        $challenge = base64_decode(substr($rply,4));
 
-		// Build the response
-		$response = $username . ' ' . $this->hmac($challenge, $password);
+        // Build the response
+        $response = $username . ' ' . $this->hmac($challenge, $password);
 
         // Send encoded credentials
         fputs($this->smtp_conn, base64_encode($response) . $this->CRLF);
@@ -462,31 +462,33 @@ class SMTP {
   /**
    * Works like hash_hmac('md5', $data, $key) in case that function is not available
    * @access private
+   * @param string $data
+   * @param string $key
    * @return string
    */
   private function hmac($data, $key) {
-	  if (function_exists('hash_hmac')) {
-		  return hash_hmac('md5', $data, $key);
-	  }
+      if (function_exists('hash_hmac')) {
+          return hash_hmac('md5', $data, $key);
+      }
 
-	  // The following borrowed from http://php.net/manual/en/function.mhash.php#27225
+      // The following borrowed from http://php.net/manual/en/function.mhash.php#27225
 
-	  // RFC 2104 HMAC implementation for php.
-	  // Creates an md5 HMAC.
-	  // Eliminates the need to install mhash to compute a HMAC
-	  // Hacked by Lance Rushing
+      // RFC 2104 HMAC implementation for php.
+      // Creates an md5 HMAC.
+      // Eliminates the need to install mhash to compute a HMAC
+      // Hacked by Lance Rushing
 
-	  $b = 64; // byte length for md5
-	  if (strlen($key) > $b) {
-  		$key = pack("H*",md5($key));
-	  }
-	  $key  = str_pad($key, $b, chr(0x00));
-	  $ipad = str_pad('', $b, chr(0x36));
-	  $opad = str_pad('', $b, chr(0x5c));
-	  $k_ipad = $key ^ $ipad ;
-	  $k_opad = $key ^ $opad;
+      $b = 64; // byte length for md5
+      if (strlen($key) > $b) {
+          $key = pack("H*",md5($key));
+      }
+      $key  = str_pad($key, $b, chr(0x00));
+      $ipad = str_pad('', $b, chr(0x36));
+      $opad = str_pad('', $b, chr(0x5c));
+      $k_ipad = $key ^ $ipad ;
+      $k_opad = $key ^ $opad;
 
-	  return md5($k_opad  . pack("H*",md5($k_ipad . $data)));
+      return md5($k_opad  . pack("H*",md5($k_ipad . $data)));
   }
 
   /**

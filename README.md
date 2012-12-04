@@ -9,7 +9,7 @@
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for 8bit, base64, binary, and quoted-printable encoding
 - Uses the same methods as the very popular AspEmail active server (COM) component
-- SMTP authentication
+- SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
 - Native language support
 - Word wrap
 - Compatible with PHP 5.0 and later
@@ -26,7 +26,7 @@ The PHP mail() function usually sends via a local mail server, typically fronted
 
 ## License
 
-This software is licenced under the [LGPL](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
+This software is licenced under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
 software availability and distribution.
 
 ## Installation

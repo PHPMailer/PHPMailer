@@ -9,7 +9,6 @@
  * @author Andy Prevost
  * @author Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @version $Id: phpmailerTest.php 444 2009-05-05 11:22:26Z coolbru $
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
@@ -284,6 +283,28 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     /////////////////////////////////////////////////
     // UNIT TESTS
     /////////////////////////////////////////////////
+
+	/**
+	 * Test CRAM-MD5 authentication
+	 * Needs a connection to a server that supports this auth mechanism, so commented out by default
+	 */
+	function testAuthCRAMMD5()
+	{
+		$this->Mail->Host = 'hostname';
+		$this->Mail->Port = 587;
+		$this->Mail->SMTPAuth = true;
+		$this->Mail->SMTPSecure = 'tls';
+		$this->Mail->AuthType = 'CRAM-MD5';
+		$this->Mail->Username = 'username';
+		$this->Mail->Password = 'password';
+		$this->Mail->Body = 'Test body';
+		$this->Mail->Subject .= ": Auth CRAM-MD5";
+		$this->Mail->From = 'from@example.com';
+		$this->Mail->Sender = 'from@example.com';
+		$this->Mail->ClearAllRecipients();
+		$this->Mail->AddAddress('user@example.com');
+		//$this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+	}
 
 	/**
 	 * Test email address validation
@@ -575,14 +596,14 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 		}
 		$err = '';
 		if (count($goodfails) > 0) {
-			$err = "Good addreses that failed validation:\n";
+			$err .= "Good addreses that failed validation:\n";
 			$err .= implode("\n", $goodfails);
 		}
 		if (count($badpasses) > 0) {
 			if (!empty($err)) {
 				$err .="\n\n";
 			}
-			$err = "Bad addreses that passed validation:\n";
+			$err .= "Bad addreses that passed validation:\n";
 			$err .= implode("\n", $badpasses);
 		}
 		$this->assertEmpty($err, $err);
@@ -951,7 +972,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     {
         $this->Mail->SetLanguage('en');
         $definedStrings = $this->Mail->GetTranslations();
-	    $err = '';
+        $err = '';
         foreach (new DirectoryIterator('../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
@@ -965,14 +986,14 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
                 $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
                 $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
                 if (!empty($missing)) {
-	                $err .= "Missing translations in $lang: " . implode(', ', $missing)."\n";
+                    $err .= "Missing translations in $lang: " . implode(', ', $missing)."\n";
                 }
-	            if (!empty($extra)) {
-		            $err .= "Extra translations in $lang: " . implode(', ', $extra)."\n";
-	            }
+                if (!empty($extra)) {
+                    $err .= "Extra translations in $lang: " . implode(', ', $extra)."\n";
+                }
             }
         }
-	    $this->assertEmpty($err, $err);
+        $this->assertEmpty($err, $err);
     }
 
     /**
