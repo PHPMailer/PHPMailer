@@ -4,14 +4,12 @@
 
 - Probably the world's most popular code for sending email from PHP!
 - Used by many open-source projects: Drupal, SugarCRM, Yii, Joomla! and many more
+- Integrated SMTP support - send without a local mail server
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
-- Redundant SMTP servers
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for 8bit, base64, binary, and quoted-printable encoding
-- Uses the same methods as the very popular AspEmail active server (COM) component
 - SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
 - Native language support
-- Word wrap
 - Compatible with PHP 5.0 and later
 - Much more!
 
@@ -31,7 +29,8 @@ software availability and distribution.
 
 ## Installation
 
-Copy the contents of the PHPMailer folder into somewhere that's in your PHP include_path setting.
+PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer). Alternatively, just copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting.
+
 
 ## A Simple Example
 
