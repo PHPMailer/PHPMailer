@@ -2,12 +2,12 @@
 /*~ class.smtp.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.1                                                          |
+|   Version: 5.2.2                                                          |
 |      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
 |     Admin: Jim Jagielski (project admininistrator)                        |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
-|          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|          : Marcus Bointon (coolbru) phpmailer@synchromedia.co.uk         |
 |          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
 |   Founder: Brent R. Matzelle (original founder)                           |
 | Copyright (c) 2010-2012, Jim Jagielski. All Rights Reserved.              |
@@ -32,7 +32,6 @@
  * @author Jim Jagielski
  * @copyright 2010 - 2012 Jim Jagielski
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
- * @version $Id: class.smtp.php 450 2010-06-23 16:46:33Z coolbru $
  */
 
 /**
@@ -58,7 +57,7 @@ class SMTP {
   public $CRLF = "\r\n";
 
   /**
-   *  Sets debug output level; 0 for no output
+   *  Debug output level; 0 for no output
    *  @var int
    */
   public $do_debug = 0;
@@ -92,7 +91,7 @@ class SMTP {
    * Sets the SMTP PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2-rc2';
+  public $Version         = '5.2.2';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
@@ -364,7 +363,7 @@ class SMTP {
          ** How to telnet in windows: http://technet.microsoft.com/en-us/library/aa995718%28EXCHG.65%29.aspx
          ** PROTOCOL Documentation http://curl.haxx.se/rfc/ntlm.html#ntlmSmtpAuthentication
          */
-        require_once('ntlm_sasl_client.php');
+        require_once 'ntlm_sasl_client.php';
         $temp = new stdClass();
         $ntlm_client = new ntlm_sasl_client_class;
         if(! $ntlm_client->Initialize($temp)){//let's test if every function its available
@@ -393,9 +392,9 @@ class SMTP {
             return false;
         }
 
-        $challange = substr($rply,3);//though 0 based, there is a white space after the 3 digit number....//msg2
-        $challange = base64_decode($challange);
-        $ntlm_res = $ntlm_client->NTLMResponse(substr($challange,24,8),$password);
+        $challenge = substr($rply,3);//though 0 based, there is a white space after the 3 digit number....//msg2
+        $challenge = base64_decode($challenge);
+        $ntlm_res = $ntlm_client->NTLMResponse(substr($challenge,24,8),$password);
         $msg3 = $ntlm_client->TypeMsg3($ntlm_res,$username,$realm,$workstation);//msg3
         // Send encoded username
         fputs($this->smtp_conn, base64_encode($msg3) . $this->CRLF);

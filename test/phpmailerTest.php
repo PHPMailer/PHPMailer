@@ -179,7 +179,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
             $ReportBody .= $bullet_start;
             for ($i = 0; $i < count($this->ChangeLog); $i++) {
                 $ReportBody .= $bullet . $this->ChangeLog[$i][0] . " was changed to [" .
-                  $this->ChangeLog[$i][1] . "]" . $eol;
+                    $this->ChangeLog[$i][1] . "]" . $eol;
             }
             $ReportBody .= $bullet_end . $eol . $eol;
         }
@@ -284,332 +284,333 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     // UNIT TESTS
     /////////////////////////////////////////////////
 
-	/**
-	 * Test CRAM-MD5 authentication
-	 * Needs a connection to a server that supports this auth mechanism, so commented out by default
-	 */
-	function testAuthCRAMMD5()
-	{
-		$this->Mail->Host = 'hostname';
-		$this->Mail->Port = 587;
-		$this->Mail->SMTPAuth = true;
-		$this->Mail->SMTPSecure = 'tls';
-		$this->Mail->AuthType = 'CRAM-MD5';
-		$this->Mail->Username = 'username';
-		$this->Mail->Password = 'password';
-		$this->Mail->Body = 'Test body';
-		$this->Mail->Subject .= ": Auth CRAM-MD5";
-		$this->Mail->From = 'from@example.com';
-		$this->Mail->Sender = 'from@example.com';
-		$this->Mail->ClearAllRecipients();
-		$this->Mail->AddAddress('user@example.com');
-		//$this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
-	}
+    /**
+     * Test CRAM-MD5 authentication
+     * Needs a connection to a server that supports this auth mechanism, so commented out by default
+     */
+    function testAuthCRAMMD5()
+    {
+        $this->Mail->Host = 'hostname';
+        $this->Mail->Port = 587;
+        $this->Mail->SMTPAuth = true;
+        $this->Mail->SMTPSecure = 'tls';
+        $this->Mail->AuthType = 'CRAM-MD5';
+        $this->Mail->Username = 'username';
+        $this->Mail->Password = 'password';
+        $this->Mail->Body = 'Test body';
+        $this->Mail->Subject .= ": Auth CRAM-MD5";
+        $this->Mail->From = 'from@example.com';
+        $this->Mail->Sender = 'from@example.com';
+        $this->Mail->ClearAllRecipients();
+        $this->Mail->AddAddress('user@example.com');
+        //$this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
 
-	/**
-	 * Test email address validation
-	 * Test addresses obtained from http://isemail.info
-	 * Some failing cases commented out, mostly not significant though
-	 */
-	function testValidate()
-	{
-		$validaddresses = array(
-			'first@iana.org',
-			'first.last@iana.org',
-			'1234567890123456789012345678901234567890123456789012345678901234@iana.org',
-			'"first\"last"@iana.org',
-			'"first@last"@iana.org',
-			'"first\last"@iana.org',
-			'first.last@[12.34.56.78]',
-			'first.last@[IPv6:::12.34.56.78]',
-//			'first.last@[IPv6:1111:2222:3333::4444:12.34.56.78]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78]',
-			'first.last@[IPv6:::1111:2222:3333:4444:5555:6666]',
-			'first.last@[IPv6:1111:2222:3333::4444:5555:6666]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666::]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888]',
-			'first.last@x23456789012345678901234567890123456789012345678901234567890123.iana.org',
-			'first.last@3com.com',
-			'first.last@123.iana.org',
-			'"first\last"@iana.org',
-//			'first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78]',
-//			'first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777]',
-			'first.last@example.123',
-			'first.last@com',
-			'"Abc\@def"@iana.org',
-			'"Fred\ Bloggs"@iana.org',
-			'"Joe.\Blow"@iana.org',
-			'"Abc@def"@iana.org',
-			'"Fred Bloggs"@iana.org',
-			'user+mailbox@iana.org',
-			'customer/department=shipping@iana.org',
-			'$A12345@iana.org',
-			'!def!xyz%abc@iana.org',
-			'_somename@iana.org',
-			'dclo@us.ibm.com',
-			'peter.piper@iana.org',
-			'"Doug \"Ace\" L."@iana.org',
-			'test@iana.org',
-			'TEST@iana.org',
-			'1234567890@iana.org',
-			'test+test@iana.org',
-			'test-test@iana.org',
-			't*est@iana.org',
-			'+1~1+@iana.org',
-			'{_test_}@iana.org',
-			'"[[ test ]]"@iana.org',
-			'test.test@iana.org',
-			'"test.test"@iana.org',
-			'test."test"@iana.org',
-			'"test@test"@iana.org',
-			'test@123.123.123.x123',
-			'test@123.123.123.123',
-			'test@[123.123.123.123]',
-			'test@example.iana.org',
-			'test@example.example.iana.org',
-			'"test\test"@iana.org',
-			'test@example',
-			'"test\blah"@iana.org',
-			'"test\blah"@iana.org',
-			'"test\"blah"@iana.org',
-			'customer/department@iana.org',
-			'_Yosemite.Sam@iana.org',
-			'~@iana.org',
-			'"Austin@Powers"@iana.org',
-			'Ima.Fool@iana.org',
-			'"Ima.Fool"@iana.org',
-			'"Ima Fool"@iana.org',
-			'"first"."last"@iana.org',
-			'"first".middle."last"@iana.org',
-			'"first".last@iana.org',
-			'first."last"@iana.org',
-			'"first"."middle"."last"@iana.org',
-			'"first.middle"."last"@iana.org',
-			'"first.middle.last"@iana.org',
-			'"first..last"@iana.org',
-//			'"first\\\"last"@iana.org',
-			'first."mid\dle"."last"@iana.org',
-			'"test blah"@iana.org',
-//			'(foo)cal(bar)@(baz)iamcal.com(quux)',
-//			'cal@iamcal(woo).(yay)com',
-//			'cal(woo(yay)hoopla)@iamcal.com',
-//			'cal(foo\@bar)@iamcal.com',
-//			'cal(foo\)bar)@iamcal.com',
-//			'first().last@iana.org',
-//			'pete(his account)@silly.test(his host)',
-//			'c@(Chris\'s host.)public.example',
-//			'jdoe@machine(comment). example',
-//			'1234 @ local(blah) .machine .example',
-			'first(abc.def).last@iana.org',
-			'first(a"bc.def).last@iana.org',
-			'first.(")middle.last(")@iana.org',
-			'first(abc\(def)@iana.org',
-			'first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com',
-			'a(a(b(c)d(e(f))g)h(i)j)@iana.org',
-			'name.lastname@domain.com',
-			'a@b',
-			'a@bar.com',
-			'aaa@[123.123.123.123]',
-			'a@bar',
-			'a-b@bar.com',
-			'+@b.c',
-			'+@b.com',
-			'a@b.co-foo.uk',
-			'"hello my name is"@stutter.com',
-			'"Test \"Fail\" Ing"@iana.org',
-			'valid@about.museum',
-			'shaitan@my-domain.thisisminekthx',
-			'foobar@192.168.0.1',
-			'"Joe\Blow"@iana.org',
-			'HM2Kinsists@(that comments are allowed)this.is.ok',
-			'user%uucp!path@berkeley.edu',
-			'first.last @iana.org',
-			'cdburgess+!#$%&\'*-/=?+_{}|~test@gmail.com',
-//			'first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4]',
-//			'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::]',
-			'first.last@[IPv6:::]',
-			'first.last@[IPv6:::b4]',
-			'first.last@[IPv6:::b3:b4]',
-			'first.last@[IPv6:a1::b4]',
-			'first.last@[IPv6:a1::]',
-			'first.last@[IPv6:a1:a2::]',
-			'first.last@[IPv6:0123:4567:89ab:cdef::]',
-			'first.last@[IPv6:0123:4567:89ab:CDEF::]',
-			'first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44]',
-//			'first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44]',
-			'first.last@[IPv6:a1:a2:a3:a4::11.22.33.44]',
-//			'first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44]',
-			'first.last@[IPv6:a1::11.22.33.44]',
-			'first.last@[IPv6:a1:a2::11.22.33.44]',
-			'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44]',
-			'first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44]',
-			'first.last@[IPv6:a1::b2:11.22.33.44]',
-			'test@test.com',
-			'test@xn--example.com',
-			'test@example.com');
-		$invalidaddresses = array(
-			'first.last@sub.do,com',
-			'first\@last@iana.org',
-			'123456789012345678901234567890123456789012345678901234567890@12345678901234567890123456789012345678901234 [...]',
-			'first.last',
-			'12345678901234567890123456789012345678901234567890123456789012345@iana.org',
-			'.first.last@iana.org',
-			'first.last.@iana.org',
-			'first..last@iana.org',
-			'"first"last"@iana.org',
-//			'"""@iana.org',
-			'"\"@iana.org',
-//			'""@iana.org',
-			'first\@last@iana.org',
-			'first.last@',
-			'x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23 [...]',
-			'first.last@[.12.34.56.78]',
-			'first.last@[12.34.56.789]',
-			'first.last@[::12.34.56.78]',
-			'first.last@[IPv5:::12.34.56.78]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777]',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999]',
-			'first.last@[IPv6:1111:2222::3333::4444:5555:6666]',
-			'first.last@[IPv6:1111:2222:333x::4444:5555]',
-			'first.last@[IPv6:1111:2222:33333::4444:5555]',
-			'first.last@-xample.com',
-			'first.last@exampl-.com',
-			'first.last@x234567890123456789012345678901234567890123456789012345678901234.iana.org',
-			'abc\@def@iana.org',
-			'abc\@iana.org',
-			'Doug\ \"Ace\"\ Lovell@iana.org',
-			'abc@def@iana.org',
-			'abc\@def@iana.org',
-			'abc\@iana.org',
-			'@iana.org',
-			'doug@',
-			'"qu@iana.org',
-			'ote"@iana.org',
-			'.dot@iana.org',
-			'dot.@iana.org',
-			'two..dot@iana.org',
-			'"Doug "Ace" L."@iana.org',
-			'Doug\ \"Ace\"\ L\.@iana.org',
-			'hello world@iana.org',
-			'gatsby@f.sc.ot.t.f.i.tzg.era.l.d.',
-			'test.iana.org',
-			'test.@iana.org',
-			'test..test@iana.org',
-			'.test@iana.org',
-			'test@test@iana.org',
-			'test@@iana.org',
-			'-- test --@iana.org',
-			'[test]@iana.org',
-			'"test"test"@iana.org',
-			'()[]\;:,><@iana.org',
-			'test@.',
-			'test@example.',
-			'test@.org',
-			'test@1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890 [...]',
-			'test@[123.123.123.123',
-			'test@123.123.123.123]',
-			'NotAnEmail',
-			'@NotAnEmail',
-			'"test"blah"@iana.org',
-			'.wooly@iana.org',
-			'wo..oly@iana.org',
-			'pootietang.@iana.org',
-			'.@iana.org',
-			'Ima Fool@iana.org',
-			'phil.h\@\@ck@haacked.com',
-			'foo@[\1.2.3.4]',
-//			'first."".last@iana.org',
-			'first\last@iana.org',
-			'Abc\@def@iana.org',
-			'Fred\ Bloggs@iana.org',
-			'Joe.\Blow@iana.org',
-			'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89]',
-			'{^c\@**Dog^}@cartoon.com',
-//			'"foo"(yay)@(hoopla)[1.2.3.4]',
-			'cal(foo(bar)@iamcal.com',
-			'cal(foo)bar)@iamcal.com',
-			'cal(foo\)@iamcal.com',
-			'first(12345678901234567890123456789012345678901234567890)last@(123456789012345678901234567890123456789012 [...]',
-			'first(middle)last@iana.org',
-			'first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno). [...]',
-			'a(a(b(c)d(e(f))g)(h(i)j)@iana.org',
-			'.@',
-			'@bar.com',
-			'@@bar.com',
-			'aaa.com',
-			'aaa@.com',
-			'aaa@.123',
-			'aaa@[123.123.123.123]a',
-			'aaa@[123.123.123.333]',
-			'a@bar.com.',
-			'a@-b.com',
-			'a@b-.com',
-			'-@..com',
-			'-@a..com',
-			'invalid@about.museum-',
-			'test@...........com',
-//			'"Unicode NULL "@char.com',
-			'Unicode NULL @char.com',
-			'first.last@[IPv6::]',
-			'first.last@[IPv6::::]',
-			'first.last@[IPv6::b4]',
-			'first.last@[IPv6::::b4]',
-			'first.last@[IPv6::b3:b4]',
-			'first.last@[IPv6::::b3:b4]',
-			'first.last@[IPv6:a1:::b4]',
-			'first.last@[IPv6:a1:]',
-			'first.last@[IPv6:a1:::]',
-			'first.last@[IPv6:a1:a2:]',
-			'first.last@[IPv6:a1:a2:::]',
-			'first.last@[IPv6::11.22.33.44]',
-			'first.last@[IPv6::::11.22.33.44]',
-			'first.last@[IPv6:a1:11.22.33.44]',
-			'first.last@[IPv6:a1:::11.22.33.44]',
-			'first.last@[IPv6:a1:a2:::11.22.33.44]',
-			'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx]',
-			'first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44]',
-			'first.last@[IPv6:a1::a4:b1::b4:11.22.33.44]',
-			'first.last@[IPv6:a1::11.22.33]',
-			'first.last@[IPv6:a1::11.22.33.44.55]',
-			'first.last@[IPv6:a1::b211.22.33.44]',
-			'first.last@[IPv6:a1::b2::11.22.33.44]',
-			'first.last@[IPv6:a1::b3:]',
-			'first.last@[IPv6::a2::b4]',
-			'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
-			'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
-			'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]'
-		);
-		$goodfails = array();
-		foreach ($validaddresses as $address) {
-			if (!PHPMailer::ValidateAddress($address)) {
-				$goodfails[] = $address;
-				//"Valid address <$address> failed validation"
-			}
-		}
-		$badpasses = array();
-		foreach ($invalidaddresses as $address) {
-			if (PHPMailer::ValidateAddress($address)) {
-				$badpasses[] = $address;
-			}
-		}
-		$err = '';
-		if (count($goodfails) > 0) {
-			$err .= "Good addreses that failed validation:\n";
-			$err .= implode("\n", $goodfails);
-		}
-		if (count($badpasses) > 0) {
-			if (!empty($err)) {
-				$err .="\n\n";
-			}
-			$err .= "Bad addreses that passed validation:\n";
-			$err .= implode("\n", $badpasses);
-		}
-		$this->assertEmpty($err, $err);
-	}
+    /**
+     * Test email address validation
+     * Test addresses obtained from http://isemail.info
+     * Some failing cases commented out, mostly not significant though
+     */
+    function testValidate()
+    {
+        $validaddresses = array(
+            'first@iana.org',
+            'first.last@iana.org',
+            '1234567890123456789012345678901234567890123456789012345678901234@iana.org',
+            '"first\"last"@iana.org',
+            '"first@last"@iana.org',
+            '"first\last"@iana.org',
+            'first.last@[12.34.56.78]',
+            'first.last@[IPv6:::12.34.56.78]',
+//            'first.last@[IPv6:1111:2222:3333::4444:12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78]',
+            'first.last@[IPv6:::1111:2222:3333:4444:5555:6666]',
+            'first.last@[IPv6:1111:2222:3333::4444:5555:6666]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666::]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888]',
+            'first.last@x23456789012345678901234567890123456789012345678901234567890123.iana.org',
+            'first.last@3com.com',
+            'first.last@123.iana.org',
+            '"first\last"@iana.org',
+//            'first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78]',
+//            'first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777]',
+            'first.last@example.123',
+            'first.last@com',
+            '"Abc\@def"@iana.org',
+            '"Fred\ Bloggs"@iana.org',
+            '"Joe.\Blow"@iana.org',
+            '"Abc@def"@iana.org',
+            '"Fred Bloggs"@iana.org',
+            'user+mailbox@iana.org',
+            'customer/department=shipping@iana.org',
+            '$A12345@iana.org',
+            '!def!xyz%abc@iana.org',
+            '_somename@iana.org',
+            'dclo@us.ibm.com',
+            'peter.piper@iana.org',
+            '"Doug \"Ace\" L."@iana.org',
+            'test@iana.org',
+            'TEST@iana.org',
+            '1234567890@iana.org',
+            'test+test@iana.org',
+            'test-test@iana.org',
+            't*est@iana.org',
+            '+1~1+@iana.org',
+            '{_test_}@iana.org',
+            '"[[ test ]]"@iana.org',
+            'test.test@iana.org',
+            '"test.test"@iana.org',
+            'test."test"@iana.org',
+            '"test@test"@iana.org',
+            'test@123.123.123.x123',
+            'test@123.123.123.123',
+            'test@[123.123.123.123]',
+            'test@example.iana.org',
+            'test@example.example.iana.org',
+            '"test\test"@iana.org',
+            'test@example',
+            '"test\blah"@iana.org',
+            '"test\blah"@iana.org',
+            '"test\"blah"@iana.org',
+            'customer/department@iana.org',
+            '_Yosemite.Sam@iana.org',
+            '~@iana.org',
+            '"Austin@Powers"@iana.org',
+            'Ima.Fool@iana.org',
+            '"Ima.Fool"@iana.org',
+            '"Ima Fool"@iana.org',
+            '"first"."last"@iana.org',
+            '"first".middle."last"@iana.org',
+            '"first".last@iana.org',
+            'first."last"@iana.org',
+            '"first"."middle"."last"@iana.org',
+            '"first.middle"."last"@iana.org',
+            '"first.middle.last"@iana.org',
+            '"first..last"@iana.org',
+//            '"first\\\"last"@iana.org',
+            'first."mid\dle"."last"@iana.org',
+            '"test blah"@iana.org',
+//            '(foo)cal(bar)@(baz)iamcal.com(quux)',
+//            'cal@iamcal(woo).(yay)com',
+//            'cal(woo(yay)hoopla)@iamcal.com',
+//            'cal(foo\@bar)@iamcal.com',
+//            'cal(foo\)bar)@iamcal.com',
+//            'first().last@iana.org',
+//            'pete(his account)@silly.test(his host)',
+//            'c@(Chris\'s host.)public.example',
+//            'jdoe@machine(comment). example',
+//            '1234 @ local(blah) .machine .example',
+            'first(abc.def).last@iana.org',
+            'first(a"bc.def).last@iana.org',
+            'first.(")middle.last(")@iana.org',
+            'first(abc\(def)@iana.org',
+            'first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com',
+            'a(a(b(c)d(e(f))g)h(i)j)@iana.org',
+            'name.lastname@domain.com',
+            'a@b',
+            'a@bar.com',
+            'aaa@[123.123.123.123]',
+            'a@bar',
+            'a-b@bar.com',
+            '+@b.c',
+            '+@b.com',
+            'a@b.co-foo.uk',
+            '"hello my name is"@stutter.com',
+            '"Test \"Fail\" Ing"@iana.org',
+            'valid@about.museum',
+            'shaitan@my-domain.thisisminekthx',
+            'foobar@192.168.0.1',
+            '"Joe\Blow"@iana.org',
+            'HM2Kinsists@(that comments are allowed)this.is.ok',
+            'user%uucp!path@berkeley.edu',
+            'first.last @iana.org',
+            'cdburgess+!#$%&\'*-/=?+_{}|~test@gmail.com',
+//            'first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4]',
+//            'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::]',
+            'first.last@[IPv6:::]',
+            'first.last@[IPv6:::b4]',
+            'first.last@[IPv6:::b3:b4]',
+            'first.last@[IPv6:a1::b4]',
+            'first.last@[IPv6:a1::]',
+            'first.last@[IPv6:a1:a2::]',
+            'first.last@[IPv6:0123:4567:89ab:cdef::]',
+            'first.last@[IPv6:0123:4567:89ab:CDEF::]',
+            'first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44]',
+//            'first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44]',
+            'first.last@[IPv6:a1:a2:a3:a4::11.22.33.44]',
+//            'first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44]',
+            'first.last@[IPv6:a1::11.22.33.44]',
+            'first.last@[IPv6:a1:a2::11.22.33.44]',
+            'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44]',
+            'first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44]',
+            'first.last@[IPv6:a1::b2:11.22.33.44]',
+            'test@test.com',
+            'test@xn--example.com',
+            'test@example.com'
+        );
+        $invalidaddresses = array(
+            'first.last@sub.do,com',
+            'first\@last@iana.org',
+            '123456789012345678901234567890123456789012345678901234567890@12345678901234567890123456789012345678901234 [...]',
+            'first.last',
+            '12345678901234567890123456789012345678901234567890123456789012345@iana.org',
+            '.first.last@iana.org',
+            'first.last.@iana.org',
+            'first..last@iana.org',
+            '"first"last"@iana.org',
+//            '"""@iana.org',
+            '"\"@iana.org',
+//            '""@iana.org',
+            'first\@last@iana.org',
+            'first.last@',
+            'x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23 [...]',
+            'first.last@[.12.34.56.78]',
+            'first.last@[12.34.56.789]',
+            'first.last@[::12.34.56.78]',
+            'first.last@[IPv5:::12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999]',
+            'first.last@[IPv6:1111:2222::3333::4444:5555:6666]',
+            'first.last@[IPv6:1111:2222:333x::4444:5555]',
+            'first.last@[IPv6:1111:2222:33333::4444:5555]',
+            'first.last@-xample.com',
+            'first.last@exampl-.com',
+            'first.last@x234567890123456789012345678901234567890123456789012345678901234.iana.org',
+            'abc\@def@iana.org',
+            'abc\@iana.org',
+            'Doug\ \"Ace\"\ Lovell@iana.org',
+            'abc@def@iana.org',
+            'abc\@def@iana.org',
+            'abc\@iana.org',
+            '@iana.org',
+            'doug@',
+            '"qu@iana.org',
+            'ote"@iana.org',
+            '.dot@iana.org',
+            'dot.@iana.org',
+            'two..dot@iana.org',
+            '"Doug "Ace" L."@iana.org',
+            'Doug\ \"Ace\"\ L\.@iana.org',
+            'hello world@iana.org',
+            'gatsby@f.sc.ot.t.f.i.tzg.era.l.d.',
+            'test.iana.org',
+            'test.@iana.org',
+            'test..test@iana.org',
+            '.test@iana.org',
+            'test@test@iana.org',
+            'test@@iana.org',
+            '-- test --@iana.org',
+            '[test]@iana.org',
+            '"test"test"@iana.org',
+            '()[]\;:,><@iana.org',
+            'test@.',
+            'test@example.',
+            'test@.org',
+            'test@1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890 [...]',
+            'test@[123.123.123.123',
+            'test@123.123.123.123]',
+            'NotAnEmail',
+            '@NotAnEmail',
+            '"test"blah"@iana.org',
+            '.wooly@iana.org',
+            'wo..oly@iana.org',
+            'pootietang.@iana.org',
+            '.@iana.org',
+            'Ima Fool@iana.org',
+            'phil.h\@\@ck@haacked.com',
+            'foo@[\1.2.3.4]',
+//            'first."".last@iana.org',
+            'first\last@iana.org',
+            'Abc\@def@iana.org',
+            'Fred\ Bloggs@iana.org',
+            'Joe.\Blow@iana.org',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89]',
+            '{^c\@**Dog^}@cartoon.com',
+//            '"foo"(yay)@(hoopla)[1.2.3.4]',
+            'cal(foo(bar)@iamcal.com',
+            'cal(foo)bar)@iamcal.com',
+            'cal(foo\)@iamcal.com',
+            'first(12345678901234567890123456789012345678901234567890)last@(123456789012345678901234567890123456789012 [...]',
+            'first(middle)last@iana.org',
+            'first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno). [...]',
+            'a(a(b(c)d(e(f))g)(h(i)j)@iana.org',
+            '.@',
+            '@bar.com',
+            '@@bar.com',
+            'aaa.com',
+            'aaa@.com',
+            'aaa@.123',
+            'aaa@[123.123.123.123]a',
+            'aaa@[123.123.123.333]',
+            'a@bar.com.',
+            'a@-b.com',
+            'a@b-.com',
+            '-@..com',
+            '-@a..com',
+            'invalid@about.museum-',
+            'test@...........com',
+//            '"Unicode NULL "@char.com',
+            'Unicode NULL @char.com',
+            'first.last@[IPv6::]',
+            'first.last@[IPv6::::]',
+            'first.last@[IPv6::b4]',
+            'first.last@[IPv6::::b4]',
+            'first.last@[IPv6::b3:b4]',
+            'first.last@[IPv6::::b3:b4]',
+            'first.last@[IPv6:a1:::b4]',
+            'first.last@[IPv6:a1:]',
+            'first.last@[IPv6:a1:::]',
+            'first.last@[IPv6:a1:a2:]',
+            'first.last@[IPv6:a1:a2:::]',
+            'first.last@[IPv6::11.22.33.44]',
+            'first.last@[IPv6::::11.22.33.44]',
+            'first.last@[IPv6:a1:11.22.33.44]',
+            'first.last@[IPv6:a1:::11.22.33.44]',
+            'first.last@[IPv6:a1:a2:::11.22.33.44]',
+            'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx]',
+            'first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44]',
+            'first.last@[IPv6:a1::a4:b1::b4:11.22.33.44]',
+            'first.last@[IPv6:a1::11.22.33]',
+            'first.last@[IPv6:a1::11.22.33.44.55]',
+            'first.last@[IPv6:a1::b211.22.33.44]',
+            'first.last@[IPv6:a1::b2::11.22.33.44]',
+            'first.last@[IPv6:a1::b3:]',
+            'first.last@[IPv6::a2::b4]',
+            'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
+            'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
+            'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]'
+        );
+        $goodfails = array();
+        foreach ($validaddresses as $address) {
+            if (!PHPMailer::ValidateAddress($address)) {
+                $goodfails[] = $address;
+                //"Valid address <$address> failed validation"
+            }
+        }
+        $badpasses = array();
+        foreach ($invalidaddresses as $address) {
+            if (PHPMailer::ValidateAddress($address)) {
+                $badpasses[] = $address;
+            }
+        }
+        $err = '';
+        if (count($goodfails) > 0) {
+            $err .= "Good addreses that failed validation:\n";
+            $err .= implode("\n", $goodfails);
+        }
+        if (count($badpasses) > 0) {
+            if (!empty($err)) {
+                $err .= "\n\n";
+            }
+            $err .= "Bad addreses that passed validation:\n";
+            $err .= implode("\n", $badpasses);
+        }
+        $this->assertEmpty($err, $err);
+    }
 
-	/**
+    /**
      * Try a plain message.
      */
     function test_WordWrap()
@@ -617,8 +618,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 
         $this->Mail->WordWrap = 40;
         $my_body = "Here is the main body of this message.  It should " .
-          "be quite a few lines.  It should be wrapped at the " .
-          "40 characters.  Make sure that it is.";
+            "be quite a few lines.  It should be wrapped at the " .
+            "40 characters.  Make sure that it is.";
         $nBodyLen = strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
@@ -637,7 +638,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 
         $this->Mail->Priority = 5;
         $this->Mail->Body = "Here is the main body.  There should be " .
-          "a reply to address in this message.";
+            "a reply to address in this message.";
         $this->Mail->Subject .= ": Low Priority";
         $this->Mail->AddReplyTo("nobody@nobody.com", "Nobody (Unit Test)");
 
@@ -678,8 +679,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Subject .= ": Plain + StringAttachment";
 
         $sAttachment = "These characters are the content of the " .
-          "string attachment.\nThis might be taken from a " .
-          "database or some other such thing. ";
+            "string attachment.\nThis might be taken from a " .
+            "database or some other such thing. ";
 
         $this->Mail->AddStringAttachment($sAttachment, "string_attach.txt");
 
@@ -701,10 +702,13 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
 
         //Check that a quoted printable encode and decode results in the same as went in
-        $t = substr(file_get_contents(__FILE__), 0, 1024); //Just pick a chunk of this file as test content
-        $this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQP($t)), 'QP encoding round-trip failed');
-        //$this->assertEquals($t, quoted_printable_decode($this->Mail->EncodeQPphp($t)), 'Native PHP QP encoding round-trip failed'); //TODO the PHP qp encoder is quite broken
-
+        $t = file_get_contents(__FILE__); //Use this file as test content
+        $this->assertEquals(
+            $t,
+            quoted_printable_decode($this->Mail->EncodeQP($t)),
+            'Quoted-Printable encoding round-trip failed'
+        );
+        $this->assertEquals($this->Mail->EncodeQP($t), $this->Mail->EncodeQPphp($t), 'Quoted-Printable BC wrapper failed');
     }
 
     /**
@@ -717,9 +721,9 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Subject .= ": HTML only";
 
         $this->Mail->Body = "This is a <b>test message</b> written in HTML. </br>" .
-          "Go to <a href=\"http://phpmailer.sourceforge.net/\">" .
-          "http://phpmailer.sourceforge.net/</a> for new versions of " .
-          "phpmailer.  <p/> Thank you!";
+            "Go to <a href=\"http://phpmailer.sourceforge.net/\">" .
+            "http://phpmailer.sourceforge.net/</a> for new versions of " .
+            "phpmailer.  <p/> Thank you!";
 
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
@@ -751,7 +755,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     {
 
         $this->Mail->Body = "Embedded Image: <img alt=\"phpmailer\" src=\"cid:my-attach\">" .
-          "Here is an image!</a>";
+            "Here is an image!</a>";
         $this->Mail->Subject .= ": Embedded Image";
         $this->Mail->IsHTML(true);
 
@@ -782,7 +786,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     {
 
         $this->Mail->Body = "Embedded Image: <img alt=\"phpmailer\" src=\"cid:my-attach\">" .
-          "Here is an image!</a>";
+            "Here is an image!</a>";
         $this->Mail->Subject .= ": Embedded Image + Attachment";
         $this->Mail->IsHTML(true);
 
@@ -815,8 +819,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 
         $this->Mail->Body = "This is the <strong>HTML</strong> part of the email.";
         $this->Mail->AltBody = "Here is the text body of this message.  " .
-          "It should be quite a few lines.  It should be wrapped at the " .
-          "40 characters.  Make sure that it is.";
+            "It should be quite a few lines.  It should be wrapped at the " .
+            "40 characters.  Make sure that it is.";
         $this->Mail->WordWrap = 40;
         $this->AddNote("This is a mulipart alternative email");
         $this->Mail->Subject .= ": AltBody + Word Wrap";
@@ -986,10 +990,10 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
                 $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
                 $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
                 if (!empty($missing)) {
-                    $err .= "Missing translations in $lang: " . implode(', ', $missing)."\n";
+                    $err .= "Missing translations in $lang: " . implode(', ', $missing) . "\n";
                 }
                 if (!empty($extra)) {
-                    $err .= "Extra translations in $lang: " . implode(', ', $extra)."\n";
+                    $err .= "Extra translations in $lang: " . implode(', ', $extra) . "\n";
                 }
             }
         }

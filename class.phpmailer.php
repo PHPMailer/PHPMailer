@@ -390,7 +390,7 @@ class PHPMailer {
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2-rc2';
+  public $Version         = '5.2.2';
 
   /**
    * What to use in the X-Mailer header
@@ -1073,8 +1073,7 @@ class PHPMailer {
 
           $connection = true;
           if ($this->SMTPAuth) {
-            if (!$this->smtp->Authenticate($this->Username, $this->Password, $this->AuthType,
-	            $this->Realm, $this->Workstation)) {
+            if (!$this->smtp->Authenticate($this->Username, $this->Password, $this->AuthType, $this->Realm, $this->Workstation)) {
               throw new phpmailerException($this->Lang('authenticate'));
             }
           }
@@ -1086,7 +1085,7 @@ class PHPMailer {
       }
     } catch (phpmailerException $e) {
       $this->smtp->Reset();
-	  if ($this->exceptions) {
+      if ($this->exceptions) {
         throw $e;
       }
     }
@@ -2017,37 +2016,35 @@ class PHPMailer {
     return $encoded;
   }
 
-    /**
-     * Encode string to quoted-printable.
-     * Only uses standard PHP, slow, but will always work
-     * @access public
-     * @param string $string
-     * @param integer $line_max Number of chars allowed on a line before wrapping
-     * @return string
-     * @link Adapted from http://fr2.php.net/manual/en/function.quoted-printable-decode.php#89417
-     */
-    function EncodeQPphp($string, $line_max = 76) {
-        $string = str_replace(array('%20', '%0D%0A.', '%0D%0A', '%'), array(' ', "\r\n=2E", "\r\n", '='), rawurlencode($string));
-        $string = preg_replace('/[^\r\n]{'.($line_max - 3).'}[^=\r\n]{2}/', "$0=\r\n", $string);
-        return $string;
-    }
-
   /**
   * Encode string to RFC2045 (6.7) quoted-printable format
-  * Uses a PHP5 stream filter to do the encoding about 64x faster than the old version
-  * Also results in same content as you started with after decoding
-  * @see EncodeQPphp()
   * @access public
-  * @param string $string the text to encode
+  * @param string $string The text to encode
   * @param integer $line_max Number of chars allowed on a line before wrapping
   * @return string
-  * @author Marcus Bointon
+  * @link PHP version adapted from http://www.php.net/manual/en/function.quoted-printable-decode.php#89417
   */
   public function EncodeQP($string, $line_max = 76) {
     if (function_exists('quoted_printable_encode')) { //Use native function if it's available (>= PHP5.3)
       return quoted_printable_encode($string);
     }
-    return $this->EncodeQPphp($string, $line_max); //Fall back to php implementation
+    //Fall back to a pure PHP implementation
+    $string = str_replace(array('%20', '%0D%0A.', '%0D%0A', '%'), array(' ', "\r\n=2E", "\r\n", '='), rawurlencode($string));
+    $string = preg_replace('/[^\r\n]{'.($line_max - 3).'}[^=\r\n]{2}/', "$0=\r\n", $string);
+    return $string;
+  }
+
+    /**
+     * Wrapper to preserve BC for old QP encoding function that was removed
+     * @see EncodeQP()
+     * @access public
+     * @param string $string
+     * @param integer $line_max
+     * @param bool $space_conv
+     * @return string
+     */
+  public function EncodeQPphp($string, $line_max = 76, $space_conv = false) {
+    return $this->EncodeQP($string, $line_max);
   }
 
   /**
@@ -2116,17 +2113,17 @@ class PHPMailer {
   }
 
   /**
-   * Adds an embedded attachment.  This can include images, sounds, and
-   * just about any other document.  Make sure to set the $type to an
-   * image type.  For JPEG images use "image/jpeg" and for GIF images
-   * use "image/gif".
+   * Add an embedded attachment from a file.
+   * This can include images, sounds, and just about any other document type.
+   * Be sure to set the $type to an image type for images:
+   * JPEG images use 'image/jpeg', GIF uses 'image/gif', PNG uses 'image/png'.
    * @param string $path Path to the attachment.
-   * @param string $cid Content ID of the attachment.  Use this to identify
-   *        the Id for accessing the image in an HTML form.
+   * @param string $cid Content ID of the attachment; Use this to reference
+   *        the content when using an embedded image in HTML.
    * @param string $name Overrides the attachment name.
    * @param string $encoding File encoding (see $Encoding).
-   * @param string $type File extension (MIME) type.
-   * @return bool
+   * @param string $type File MIME type.
+   * @return bool True on successfully adding an attachment
    */
   public function AddEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
 
@@ -2151,17 +2148,22 @@ class PHPMailer {
       6 => 'inline',
       7 => $cid
     );
-
     return true;
   }
 
+
   /**
-   * Add an embedded image from a binary string, e.g. one loaded with file_get_contents or generated with gd
-   * @param string $string Binary image data
-   * @param string $cid Content identifier
-   * @param string $filename
-   * @param string $encoding
-   * @param string $type
+   * Add an embedded stringified attachment.
+   * This can include images, sounds, and just about any other document type.
+   * Be sure to set the $type to an image type for images:
+   * JPEG images use 'image/jpeg', GIF uses 'image/gif', PNG uses 'image/png'.
+   * @param string $string The attachment binary data.
+   * @param string $cid Content ID of the attachment; Use this to reference
+   *        the content when using an embedded image in HTML.
+   * @param string $filename A name for the attachment
+   * @param string $encoding File encoding (see $Encoding).
+   * @param string $type MIME type.
+   * @return bool True on successfully adding an attachment
    */
   public function AddStringEmbeddedImage($string, $cid, $filename = '', $encoding = 'base64', $type = 'application/octet-stream') {
     // Append to $attachment array
@@ -2175,6 +2177,7 @@ class PHPMailer {
       6 => 'inline',
       7 => $cid
     );
+    return true;
   }
 
   /**

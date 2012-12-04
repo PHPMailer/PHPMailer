@@ -1,16 +1,24 @@
-ChangeLog
+# ChangeLog
   
-NOTE: THIS VERSION OF PHPMAILER IS DESIGNED FOR PHP5/PHP6.
-      IT WILL NOT WORK WITH PHP4.
-  
-Version 5.2.2-rc2 (November 6, 2012)
+  * Add CRAM-MD5 authentication, thanks to Elijah madden, https://github.com/okonomiyaki3000
+  * Replacement of obsolete Quoted-Printable encoder with a much better implementation
+  * Composer package definition
+
+## Version 5.2.2 (December 3, 2012)
+
+  * Some fixes and syncs from https://github.com/Synchro/PHPMailer
+  * Add Slovak translation, thanks to Michal Tinka
+
+## Version 5.2.2-rc2 (November 6, 2012)
+
   * Fix SMTP server rotation (Bugz: 118)
   * Allow override of autogen'ed 'Date' header (for Drupal's
     og_mailinglist module)
   * No whitespace after '-f' option (Bugz: 116)
   * Work around potential warning (Bugz: 114)
 
-Version 5.2.2-rc1 (September 28, 2012)
+## Version 5.2.2-rc1 (September 28, 2012)
+
   * Header encoding works with long lines (Bugz: 93)
   * Turkish language update (Bugz: 94)
   * undefined $pattern in EncodeQ bug squashed (Bugz: 98)
@@ -20,7 +28,8 @@ Version 5.2.2-rc1 (September 28, 2012)
   * ValidateAddress() no longer uses broken FILTER_VALIDATE_EMAIL
   * Added in AUTH PLAIN SMTP authentication
 
-Version 5.2.2-beta2 (August 17, 2012)
+## Version 5.2.2-beta2 (August 17, 2012)
+
   * Fixed Postfix VERP support (Bugz: 92)
   * Allow action_function callbacks to pass/use
     the From address (passed as final param)
@@ -30,7 +39,8 @@ Version 5.2.2-beta2 (August 17, 2012)
     compatible. (Bugz: 75)
   * default setting for LE returned to "\n" due to popular demand.
 
-Version 5.2.2-beta1 (July 13, 2012)
+## Version 5.2.2-beta1 (July 13, 2012)
+
   * Expose PreSend() and PostSend() as public methods to allow
     for more control if serializing message sending.
   * GetSentMIMEMessage() only constructs the message copy when
@@ -54,25 +64,27 @@ Version 5.2.2-beta1 (July 13, 2012)
   * Bugz closed: #68, #60, #42, #43, #59, #55, #66, #48, #49,
                  #52, #31, #41, #5. #70, #69
   
-Version 5.2.1 (January 16, 2012)
+## Version 5.2.1 (January 16, 2012)
+
   * Closed several bugs#5
   * Performance improvements
   * MsgHTML() now returns the message as required.
   * New method: GetSentMIMEMessage() (returns full copy of sent message)
   
-Version 5.2 (July 19, 2011)
+## Version 5.2 (July 19, 2011)
+
   * protected MIME body and header
   * better DKIM DNS Resource Record support
   * better aly handling
   * htmlfilter class added to extras
   * moved to Apache Extras
   
-Version 5.1 (October 20, 2009)
+## Version 5.1 (October 20, 2009)
+
   * fixed filename issue with AddStringAttachment (thanks to Tony)
   * fixed "SingleTo" property, now works with Senmail, Qmail, and SMTP in
     addition to PHP mail()
-  * added DKIM digital signing functionality
-    New properties:
+  * added DKIM digital signing functionality, new properties:
     - DKIM_domain (sets the domain name)
     - DKIM_private (holds DKIM private key)
     - DKIM_passphrase (holds your DKIM passphrase)
@@ -89,62 +101,70 @@ Version 5.1 (October 20, 2009)
     - can be disabled:
       - $mail->SetFrom('yourname@yourdomain.com','First Last',false);
       - or by adding the $mail->Sender and/or $mail->ReplyTo properties
-    Note: "auto" identity added to help with emails ending up in spam
-    or junk boxes because of missing headers
+
+Note: "auto" identity added to help with emails ending up in spam or junk boxes because of missing headers
   
-Version 5.0.2 (May 24, 2009)
+## Version 5.0.2 (May 24, 2009)
+
   * Fix for missing attachments when inline graphics are present
   * Fix for missing Cc in header when using SMTP (mail was sent,
     but not displayed in header -- Cc receiver only saw email To: 
     line and no Cc line, but did get the email (To receiver
     saw same)
   
-Version 5.0.1 (April 05, 2009)
+## Version 5.0.1 (April 05, 2009)
+
   * Temporary fix for missing attachments
   
-Version 5.0.0 (April 02, 2009)
+## Version 5.0.0 (April 02, 2009)
   
   * With the release of this version, we are initiating a new version numbering
     system to differentiate from the PHP4 version of PHPMailer.
   * Most notable in this release is fully object oriented code.
-  class.smtp.php:
+
+### class.smtp.php:
+
   * Refactored class.smtp.php to support new exception handling
-    code size reduced from 29.2 Kb to 25.6 Kb
+  * code size reduced from 29.2 Kb to 25.6 Kb
   * Removed unnecessary functions from class.smtp.php:
-    public function Expand($name) {
-    public function Help($keyword="") {
-    public function Noop() {
-    public function Send($from) {
-    public function SendOrMail($from) {
-    public function Verify($name) {
-  class.phpmailer.php:
+    - public function Expand($name) {
+    - public function Help($keyword="") {
+    - public function Noop() {
+    - public function Send($from) {
+    - public function SendOrMail($from) {
+    - public function Verify($name) {
+
+###  class.phpmailer.php:
+
   * Refactored class.phpmailer.php with new exception handling
   * Changed processing functionality of Sendmail and Qmail so they cannot be
     inadvertently used
   * removed getFile() function, just became a simple wrapper for
     file_get_contents()
   * added check for PHP version (will gracefully exit if not at least PHP 5.0)
-  class.phpmailer.php enhancements
   * enhanced code to check if an attachment source is the same as an embedded or
     inline graphic source to eliminate duplicate attachments
-  New /test_script
-  * We have written a test script you can use to test the script as part of your
-    installation. Once you press submit, the test script will send a multi-mime
-    email with either the message you type in or an HTML email with an inline
-    graphic. Two attachments are included in the email (one of the attachments
-    is also the inline graphic so you can see that only one copy of the graphic
-    is sent in the email). The test script will also display the functional
-    script that you can copy/paste to your editor to duplicate the functionality.
-  New examples
+
+### New /test_script
+
+We have written a test script you can use to test the script as part of your
+installation. Once you press submit, the test script will send a multi-mime
+email with either the message you type in or an HTML email with an inline
+graphic. Two attachments are included in the email (one of the attachments
+is also the inline graphic so you can see that only one copy of the graphic
+is sent in the email). The test script will also display the functional
+script that you can copy/paste to your editor to duplicate the functionality.
+
+### New examples
+
   * All new examples in both basic and advanced modes. Advanced examples show
     Exception handling.
-  PHPDocumentator (phpdocs) documentation for PHPMailer version 5.0.0
+
+### PHPDocumentator (phpdocs) documentation for PHPMailer version 5.0.0
+
   * all new documentation
   
-  Please note: the website has been updated to reflect the changes in PHPMailer
-Version 5.0.0. http://phpmailer.codeworxtech.com/
-  
-Version 2.3 (November 06, 2008)
+## Version 2.3 (November 06, 2008)
   
   * added Arabic language (many thanks to Bahjat Al Mostafa)
   * removed English language from language files and made it a default within
@@ -163,22 +183,20 @@ Version 2.3 (November 06, 2008)
   * We have removed the /phpdoc from the downloads. All documentation is now on
     the http://phpmailer.codeworxtech.com website.
   
-Version 2.2.1 () July 19 2008
+## Version 2.2.1 () July 19 2008
   
   * fixed line 1092 in class.smtp.php (my apologies, error on my part)
   
-Version 2.2 () July 15 2008
+## Version 2.2 () July 15 2008
   
   * Fixed redirect issue (display of UTF-8 in thank you redirect)
   * fixed error in getResponse function declaration (class.pop3.php)
   * PHPMailer now PHP6 compliant
   * fixed line 1092 in class.smtp.php (endless loop from missing = sign)
   
-Version 2.1 (Wed, June 04 2008)
+## Version 2.1 (Wed, June 04 2008)
   
-  ** NOTE: WE HAVE A NEW LANGUAGE VARIABLE FOR DIGITALLY SIGNED S/MIME EMAILS.
-     IF YOU CAN HELP WITH LANGUAGES OTHER THAN ENGLISH AND SPANISH, IT WOULD BE
-     APPRECIATED.
+NOTE: WE HAVE A NEW LANGUAGE VARIABLE FOR DIGITALLY SIGNED S/MIME EMAILS. IF YOU CAN HELP WITH LANGUAGES OTHER THAN ENGLISH AND SPANISH, IT WOULD BE APPRECIATED.
   
   * added S/MIME functionality (ability to digitally sign emails)
     BIG THANKS TO "sergiocambra" for posting this patch back in November 2007.
@@ -195,15 +213,15 @@ Version 2.1 (Wed, June 04 2008)
       directive, to your own server timezone
     - If you do get this error, and are unable to access your php.ini file:
       In your PHP script, add
-      date_default_timezone_set('America/Toronto');
-      - do not try to use
-      $myVar = date_default_timezone_get();
+      `date_default_timezone_set('America/Toronto');`
+    - do not try to use
+      `$myVar = date_default_timezone_get();`
       as a test, it will throw an error.
   * added ability to define path (mainly for embedded images)
-    function MsgHTML($message,$basedir='') ... where:
-    $basedir is the fully qualified path
-  * fixed MsgHTML() function:
-    - Embedded Images where images are specified by <protocol>:// will not be altered or embedded
+    function `MsgHTML($message,$basedir='')` ... where:
+    `$basedir` is the fully qualified path
+  * fixed `MsgHTML()` function:
+    - Embedded Images where images are specified by `<protocol>://` will not be altered or embedded
   * fixed the return value of SMTP exit code ( pclose )
   * addressed issue of multibyte characters in subject line and truncating
   * added ability to have user specified Message ID
@@ -213,21 +231,22 @@ Version 2.1 (Wed, June 04 2008)
   * added check for added attachments
   * enhanced conversion of HTML to text in MsgHTML (thanks to "brunny")
   
-Version 2.1.0beta2 (Sun, Dec 02 2007)
+## Version 2.1.0beta2 (Sun, Dec 02 2007)
+
   * implemented updated EncodeQP (thanks to coolbru, aka Marcus Bointon)
   * finished all testing, all known bugs corrected, enhancements tested
   - note: will NOT work with PHP4.
   
-  please note, this is BETA software
-  ** DO NOT USE THIS IN PRODUCTION OR LIVE PROJECTS
+  please note, this is BETA software **DO NOT USE THIS IN PRODUCTION OR LIVE PROJECTS; INTENDED STRICTLY FOR TESTING**
+  
+## Version 2.1.0beta1
+
+please note, this is BETA software
+** DO NOT USE THIS IN PRODUCTION OR LIVE PROJECTS
   INTENDED STRICTLY FOR TESTING
   
-Version 2.1.0beta1
-  please note, this is BETA software
-  ** DO NOT USE THIS IN PRODUCTION OR LIVE PROJECTS
-  INTENDED STRICTLY FOR TESTING
-  
-Version 2.0.0 rc2 (Fri, Nov 16 2007), interim release
+## Version 2.0.0 rc2 (Fri, Nov 16 2007), interim release
+
   * implements new property to control VERP in class.smtp.php
     example (requires instantiating class.smtp.php):
     $mail->do_verp = true;
@@ -259,7 +278,8 @@ Version 2.0.0 rc2 (Fri, Nov 16 2007), interim release
   less than your limit, and put a pause in your script.
   *******************
   
-Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
+## Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
+
   * dramatically simplified using inline graphics ... it's fully automated and requires no user input
   * added automatic document type detection for attachments and pictures
   * added MsgHTML() function to replace Body tag for HTML emails
@@ -271,12 +291,18 @@ Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
   * added Estonian language file by Indrek P&auml;ri
   * added header injection patch
   * added "set" method to permit users to create their own pseudo-properties like 'X-Headers', etc.
+
+```
     example of use:
     $mail->set('X-Priority', '3');
     $mail->set('X-MSMail-Priority', 'Normal');
+```
+
   * fixed warning message in SMTP get_lines method
   * added TLS/SSL SMTP support
     example of use:
+
+```
     $mail = new PHPMailer();
     $mail->Mailer = "smtp";
     $mail->Host = "smtp.example.com";
@@ -284,16 +310,20 @@ Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
     //$mail->SMTPSecure   = "ssl";  // option
     ...
     $mail->Send();
+```
+
   * PHPMailer has been tested with PHP4 (4.4.7) and PHP5 (5.2.7)
   * Works with PHP installed as a module or as CGI-PHP
     - NOTE: will NOT work with PHP5 in E_STRICT error mode
   
-Version 1.73 (Sun, Jun 10 2005)
+## Version 1.73 (Sun, Jun 10 2005)
+
   * Fixed denial of service bug: http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
   * Now has a total of 20 translations
   * Fixed alt attachments bug: http://tinyurl.com/98u9k
   
-Version 1.72 (Wed, May 25 2004)
+## Version 1.72 (Wed, May 25 2004)
+
   * Added Dutch, Swedish, Czech, Norwegian, and Turkish translations.
   * Received: Removed this method because spam filter programs like
   SpamAssassin reject this header.
@@ -301,7 +331,8 @@ Version 1.72 (Wed, May 25 2004)
   * SetLanguage default is now "language/".
   * Fixed magic_quotes_runtime bug.
   
-Version 1.71 (Tue, Jul 28 2003)
+## Version 1.71 (Tue, Jul 28 2003)
+
   * Made several speed enhancements
   * Added German and Italian translation files
   * Fixed HELO/AUTH bugs on keep-alive connects
@@ -310,7 +341,8 @@ Version 1.71 (Tue, Jul 28 2003)
   * Updated some unclear documentation
   * Added additional tests and improved others
   
-Version 1.70 (Mon, Jun 20 2003)
+## Version 1.70 (Mon, Jun 20 2003)
+
   * Added SMTP keep-alive support
   * Added IsError method for error detection
   * Added error message translation support (SetLanguage)
@@ -330,20 +362,23 @@ Version 1.70 (Mon, Jun 20 2003)
   * Adds "To: undisclosed-recipients:;" when all recipients are hidden (BCC)
   * Multiple bug fixes
   
-Version 1.65 (Fri, Aug 09 2002)
+## Version 1.65 (Fri, Aug 09 2002)
+
   * Fixed non-visible attachment bug (#585097) for Outlook
   * SMTP connections are now closed after each transaction
   * Fixed SMTP::Expand return value
   * Converted SMTP class documentation to phpDocumentor format
   
-Version 1.62 (Wed, Jun 26 2002)
+## Version 1.62 (Wed, Jun 26 2002)
+
   * Fixed multi-attach bug
   * Set proper word wrapping
   * Reduced memory use with attachments
   * Added more debugging
   * Changed documentation to phpDocumentor format
   
-Version 1.60 (Sat, Mar 30 2002)
+## Version 1.60 (Sat, Mar 30 2002)
+
   * Sendmail pipe and address patch (Christian Holtje)
   * Added embedded image and read confirmation support (A. Ognio)
   * Added unit tests
@@ -354,21 +389,25 @@ Version 1.60 (Sat, Mar 30 2002)
   * Eliminated SMTP class warnings
   * Added SendToQueue method for future queuing support
   
-Version 1.54 (Wed, Dec 19 2001)
+## Version 1.54 (Wed, Dec 19 2001)
+
   * Add some queuing support code
   * Fixed a pesky multi/alt bug
   * Messages are no longer forced to have "To" addresses
   
-Version 1.50 (Thu, Nov 08 2001)
+## Version 1.50 (Thu, Nov 08 2001)
+
   * Fix extra lines when not using SMTP mailer
   * Set WordWrap variable to int with a zero default
   
-Version 1.47 (Tue, Oct 16 2001)
+## Version 1.47 (Tue, Oct 16 2001)
+
   * Fixed Received header code format
   * Fixed AltBody order error
   * Fixed alternate port warning
   
-Version 1.45 (Tue, Sep 25 2001)
+## Version 1.45 (Tue, Sep 25 2001)
+
   * Added enhanced SMTP debug support
   * Added support for multiple ports on SMTP
   * Added Received header for tracing
@@ -377,42 +416,51 @@ Version 1.45 (Tue, Sep 25 2001)
   * Fixed wordwrap() trim bug
   * Couple other small bug fixes
   
-Version 1.41 (Wed, Aug 22 2001)
+## Version 1.41 (Wed, Aug 22 2001)
+
   * Fixed AltBody bug w/o attachments
   * Fixed rfc_date() for certain mail servers
   
-Version 1.40 (Sun, Aug 12 2001)
+## Version 1.40 (Sun, Aug 12 2001)
+
   * Added multipart/alternative support (AltBody)
   * Documentation update
   * Fixed bug in Mercury MTA
   
-Version 1.29 (Fri, Aug 03 2001)
+## Version 1.29 (Fri, Aug 03 2001)
+
   * Added AddStringAttachment() method
   * Added SMTP authentication support
   
-Version 1.28 (Mon, Jul 30 2001)
+## Version 1.28 (Mon, Jul 30 2001)
+
   * Fixed a typo in SMTP class
   * Fixed header issue with Imail (win32) SMTP server
   * Made fopen() calls for attachments use "rb" to fix win32 error
   
-Version 1.25 (Mon, Jul 02 2001)
+## Version 1.25 (Mon, Jul 02 2001)
+
   * Added RFC 822 date fix (Patrice)
   * Added improved error handling by adding a $ErrorInfo variable
   * Removed MailerDebug variable (obsolete with new error handler)
   
-Version 1.20 (Mon, Jun 25 2001)
+## Version 1.20 (Mon, Jun 25 2001)
+
   * Added quoted-printable encoding (Patrice)
   * Set Version as public and removed PrintVersion()
   * Changed phpdoc to only display public variables and methods
   
-Version 1.19 (Thu, Jun 21 2001)
+## Version 1.19 (Thu, Jun 21 2001)
+
   * Fixed MS Mail header bug
   * Added fix for Bcc problem with mail(). *Does not work on Win32*
     (See PHP bug report: http://www.php.net/bugs.php?id=11616)
   * mail() no longer passes a fifth parameter when not needed
   
-Version 1.15 (Fri, Jun 15 2001)
-  [Note: these changes contributed by Patrice Fournier]
+## Version 1.15 (Fri, Jun 15 2001)
+
+  Note: these changes contributed by Patrice Fournier
+
   * Changed all remaining \n to \r\n
   * Bcc: header no longer writen to message except
   when sent directly to sendmail
@@ -427,34 +475,42 @@ Version 1.15 (Fri, Jun 15 2001)
   * Can set Encoding to base64 to send 8 bits body
   through 7 bits servers
   
-Version 1.10 (Tue, Jun 12 2001)
+## Version 1.10 (Tue, Jun 12 2001)
+
   * Fixed win32 mail header bug (printed out headers in message body)
   
-Version 1.09 (Fri, Jun 08 2001)
+## Version 1.09 (Fri, Jun 08 2001)
+
   * Changed date header to work with Netscape mail programs
   * Altered phpdoc documentation
   
-Version 1.08 (Tue, Jun 05 2001)
+## Version 1.08 (Tue, Jun 05 2001)
+
   * Added enhanced error-checking
   * Added phpdoc documentation to source
   
-Version 1.06 (Fri, Jun 01 2001)
+## Version 1.06 (Fri, Jun 01 2001)
+
   * Added optional name for file attachments
   
-Version 1.05 (Tue, May 29 2001)
+## Version 1.05 (Tue, May 29 2001)
+
   * Code cleanup
   * Eliminated sendmail header warning message
   * Fixed possible SMTP error
   
-Version 1.03 (Thu, May 24 2001)
+## Version 1.03 (Thu, May 24 2001)
+
   * Fixed problem where qmail sends out duplicate messages
   
-Version 1.02 (Wed, May 23 2001)
+## Version 1.02 (Wed, May 23 2001)
+
   * Added multiple recipient and attachment Clear* methods
   * Added Sendmail public variable
   * Fixed problem with loading SMTP library multiple times
   
-Version 0.98 (Tue, May 22 2001)
+## Version 0.98 (Tue, May 22 2001)
+
   * Fixed problem with redundant mail hosts sending out multiple messages
   * Added additional error handler code
   * Added AddCustomHeader() function
@@ -462,11 +518,13 @@ Version 0.98 (Tue, May 22 2001)
   * Fixed small bug with Mailer variable
   * Added PrintVersion() function
   
-Version 0.92 (Tue, May 15 2001)
+## Version 0.92 (Tue, May 15 2001)
+
   * Changed file names to class.phpmailer.php and class.smtp.php to match
     current PHP class trend.
   * Fixed problem where body not being printed when a message is attached
   * Several small bug fixes
   
-Version 0.90 (Tue, April 17 2001)
-  * Intial public release
+## Version 0.90 (Tue, April 17 2001)
+
+  * Initial public release
