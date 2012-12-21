@@ -2421,7 +2421,7 @@ class PHPMailer {
           if ($directory == '.') {
             $directory = '';
           }
-          $cid = 'cid:' . md5($filename);
+          $cid = 'cid:' . md5($url);
           $ext = pathinfo($filename, PATHINFO_EXTENSION);
           $mimeType  = self::_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
