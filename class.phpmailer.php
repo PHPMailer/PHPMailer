@@ -965,7 +965,8 @@ class PHPMailer {
     }
     $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
     if(!$this->smtp->Mail($smtp_from)) {
-      throw new phpmailerException($this->Lang('from_failed') . $smtp_from, self::STOP_CRITICAL);
+	  $this->SetError($this->Lang('from_failed') .$smtp_from . "<br />" .implode("<br />",$this->smtp->getError())) ;
+      throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
     }
 
     // Attempt to send attach all recipients
