@@ -1064,7 +1064,7 @@ class PHPMailer {
 
           if ($tls) {
             if (!$this->smtp->StartTLS()) {
-              throw new phpmailerException($this->Lang('tls'));
+              throw new phpmailerException($this->Lang('connect_host'));
             }
 
             //We must resend HELO after tls negotiation
