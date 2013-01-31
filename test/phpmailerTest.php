@@ -1028,17 +1028,17 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Signing()
     {
-        $this->Mail->Body = "This was done using the SMTP keep-alive.";
+        $this->Mail->Body = 'This message is S/MIME signed.';
         $this->BuildBody();
 
         $dn = array(
-            "countryName" => "UK",
-            "stateOrProvinceName" => "Here",
-            "localityName" => "There",
-            "organizationName" => "PHP",
-            "organizationalUnitName" => "PHPMailer",
-            "commonName" => "PHPMailer Test",
-            "emailAddress" => "phpmailer@example.com"
+            'countryName' => 'UK',
+            'stateOrProvinceName' => 'Here',
+            'localityName' => 'There',
+            'organizationName' => 'PHP',
+            'organizationalUnitName' => 'PHPMailer',
+            'commonName' => 'PHPMailer Test',
+            'emailAddress' => 'phpmailer@example.com'
         );
         $password = 'password';
         $certfile = 'certfile.txt';
@@ -1062,7 +1062,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
             $keyfile,
             $password
         );
-        //$this->Mail->Send();
         $this->assertTrue($this->Mail->Send(), 'S/MIME signing failed');
         unlink($certfile);
         unlink($keyfile);
