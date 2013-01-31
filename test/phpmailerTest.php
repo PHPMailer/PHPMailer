@@ -1028,11 +1028,44 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Signing()
     {
+        $this->Mail->Body = "This was done using the SMTP keep-alive.";
+        $this->BuildBody();
+
+        $dn = array(
+            "countryName" => "UK",
+            "stateOrProvinceName" => "Here",
+            "localityName" => "There",
+            "organizationName" => "PHP",
+            "organizationalUnitName" => "PHPMailer",
+            "commonName" => "PHPMailer Test",
+            "emailAddress" => "phpmailer@example.com"
+        );
+        $password = 'password';
+        $certfile = 'certfile.txt';
+        $keyfile = 'keyfile.txt';
+
+        //Make a new key pair
+        $pk = openssl_pkey_new();
+        //Create a certificate signing request
+        $csr = openssl_csr_new($dn, $pk);
+        //Create a self-signed cert
+        $cert = openssl_csr_sign($csr, null, $pk, 1);
+        //Save the cert
+        openssl_x509_export($cert, $certout);
+        file_put_contents($certfile, $certout);
+        //Save the key
+        openssl_pkey_export($pk, $pkeyout, $password);
+        file_put_contents($keyfile, $pkeyout);
+
         $this->Mail->Sign(
-            'certfile.txt',
-            'keyfile.txt',
-            'password'
-        ); //TODO this is not really testing signing, but at least helps coverage
+            $certfile,
+            $keyfile,
+            $password
+        );
+        //$this->Mail->Send();
+        $this->assertTrue($this->Mail->Send(), 'S/MIME signing failed');
+        unlink($certfile);
+        unlink($keyfile);
     }
 
     /**

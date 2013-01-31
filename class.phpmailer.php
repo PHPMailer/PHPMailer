@@ -1517,25 +1517,25 @@ class PHPMailer {
         $body .= $this->GetBoundary($this->boundary[1], '', '', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->AttachAll("inline", $this->boundary[1]);
+        $body .= $this->AttachAll('inline', $this->boundary[1]);
         break;
       case 'attach':
         $body .= $this->GetBoundary($this->boundary[1], '', '', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        $body .= $this->AttachAll('attachment', $this->boundary[1]);
         break;
       case 'inline_attach':
-        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
         $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', '', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->AttachAll("inline", $this->boundary[2]);
+        $body .= $this->AttachAll('inline', $this->boundary[2]);
         $body .= $this->LE;
-        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        $body .= $this->AttachAll('attachment', $this->boundary[1]);
         break;
       case 'alt':
         $body .= $this->GetBoundary($this->boundary[1], '', 'text/plain', '');
@@ -1550,19 +1550,19 @@ class PHPMailer {
         $body .= $this->GetBoundary($this->boundary[1], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
         $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->AttachAll("inline", $this->boundary[2]);
+        $body .= $this->AttachAll('inline', $this->boundary[2]);
         $body .= $this->LE;
         $body .= $this->EndBoundary($this->boundary[1]);
         break;
       case 'alt_attach':
-        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
         $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
         $body .= $this->LE;
@@ -1574,28 +1574,28 @@ class PHPMailer {
         $body .= $this->LE.$this->LE;
         $body .= $this->EndBoundary($this->boundary[2]);
         $body .= $this->LE;
-        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        $body .= $this->AttachAll('attachment', $this->boundary[1]);
         break;
       case 'alt_inline_attach':
-        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
         $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->TextLine("--" . $this->boundary[2]);
+        $body .= $this->TextLine('--' . $this->boundary[2]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
         $body .= $this->TextLine("\tboundary=\"" . $this->boundary[3] . '"');
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[3], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->AttachAll("inline", $this->boundary[3]);
+        $body .= $this->AttachAll('inline', $this->boundary[3]);
         $body .= $this->LE;
         $body .= $this->EndBoundary($this->boundary[2]);
         $body .= $this->LE;
-        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        $body .= $this->AttachAll('attachment', $this->boundary[1]);
         break;
       default:
         // catch case 'plain' and case ''
@@ -1607,17 +1607,20 @@ class PHPMailer {
       $body = '';
     } elseif ($this->sign_key_file) {
       try {
-        $file = tempnam('', 'mail');
+        if (!defined('PKCS7_TEXT')) {
+            throw new phpmailerException($this->Lang('signing').' OpenSSL extension missing.');
+        }
+        $file = tempnam(sys_get_temp_dir(), 'mail');
         file_put_contents($file, $body); //TODO check this worked
-        $signed = tempnam("", "signed");
-        if (@openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), null)) {
+        $signed = tempnam(sys_get_temp_dir(), 'signed');
+        if (@openssl_pkcs7_sign($file, $signed, 'file://'.realpath($this->sign_cert_file), array('file://'.realpath($this->sign_key_file), $this->sign_key_pass), null)) {
           @unlink($file);
           $body = file_get_contents($signed);
           @unlink($signed);
         } else {
           @unlink($file);
           @unlink($signed);
-          throw new phpmailerException($this->Lang("signing").openssl_error_string());
+          throw new phpmailerException($this->Lang('signing').openssl_error_string());
         }
       } catch (phpmailerException $e) {
         $body = '';
@@ -1626,7 +1629,6 @@ class PHPMailer {
         }
       }
     }
-
     return $body;
   }
 
@@ -2636,9 +2638,16 @@ class PHPMailer {
    *
    * @access public
    * @param string $s Header
+   * @throws phpmailerException
    * @return string
    */
   public function DKIM_Sign($s) {
+    if (!defined('PKCS7_TEXT')) {
+        if ($this->exceptions) {
+            throw new phpmailerException($this->Lang("signing").' OpenSSL extension missing.');
+        }
+        return '';
+    }
     $privKeyStr = file_get_contents($this->DKIM_private);
     if ($this->DKIM_passphrase != '') {
       $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
