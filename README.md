@@ -1,5 +1,7 @@
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
+Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](https://travis-ci.org/Synchro/PHPMailer)
+
 ## Class Features
 
 - Probably the world's most popular code for sending email from PHP!
@@ -93,6 +95,10 @@ You'll find some basic user-level docs in the docs folder, and you can generate 
 
 You'll find a PHPUnit test script in the `test` folder.
 
+Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](https://travis-ci.org/Synchro/PHPMailer)
+
+If this isn't passing, is there something you can do to help?
+
 ## Contributing
 
 Please submit bug reports, suggestions and pull requests to the [Google Code tracker](https://code.google.com/a/apache-extras.org/p/phpmailer/issues/list) or the [GitHub issue tracker](https://github.com/Synchro/PHPMailer/issues).
@@ -109,4 +115,4 @@ See changelog.md
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
 - Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
 - The project became an [Apache incubator project on Google Code](https://code.google.com/a/apache-extras.org/p/phpmailer/) in 2010, managed by Jim Jagielski
-- Marcus maintains a [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
+- Marcus maintains this [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
