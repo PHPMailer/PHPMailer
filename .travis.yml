@@ -11,8 +11,9 @@ before_script:
   - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
   - cd test
   - cp testbootstrap-dist.php testbootstrap.php
-  - mkdir -p /var/qmail/bin
-  - cp fakemail.sh /var/qmail/bin/sendmail
-  - cp fakemail.sh /usr/sbin/sendmail
+  - chmod +x fakemail.sh
+  - sudo mkdir -p /var/qmail/bin
+  - sudo cp fakemail.sh /var/qmail/bin/sendmail
+  - sudo cp fakemail.sh /usr/sbin/sendmail
 script:
   - phpunit phpmailerTest
