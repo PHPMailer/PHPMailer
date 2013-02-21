@@ -3,6 +3,7 @@
 * PHPMailer language file: refer to English translation for definitive list
 * Spanish version
 * Versión en español
+* Edited by Matt Sturdy - matt.sturdy@gmail.com
 */
 
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: No se pudo autentificar.';
@@ -15,8 +16,8 @@ $PHPMAILER_LANG['file_access']          = 'No se pudo acceder al archivo: ';
 $PHPMAILER_LANG['file_open']            = 'Error de Archivo: No se pudo abrir el archivo: ';
 $PHPMAILER_LANG['from_failed']          = 'La(s) siguiente(s) direcciones de remitente fallaron: ';
 $PHPMAILER_LANG['instantiate']          = 'No se pudo crear una instancia de la función Mail.';
-$PHPMAILER_LANG['invalid_address']      = 'No se pudo enviar, dirección de email inválido: ';
-$PHPMAILER_LANG['mailer_not_supported'] = 'mailer no está soportado.';
+$PHPMAILER_LANG['invalid_address']      = 'No se pudo enviar: dirección de email inválido: ';
+$PHPMAILER_LANG['mailer_not_supported'] = ' mailer no está soportado.';
 $PHPMAILER_LANG['provide_address']      = 'Debe proveer al menos una dirección de email como destinatário.';
 $PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Los siguientes destinatarios fallaron: ';
 $PHPMAILER_LANG['signing']              = 'Error al firmar: ';
