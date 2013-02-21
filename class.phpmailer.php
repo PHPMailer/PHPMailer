@@ -2,7 +2,7 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.2                                                          |
+|   Version: 5.2.4                                                          |
 |      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
 |     Admin: Jim Jagielski (project admininistrator)                        |
@@ -103,7 +103,7 @@ class PHPMailer {
    */
   public $ReturnPath        = '';
 
-    /**
+  /**
    * Sets the Subject of the message.
    * @var string
    */
@@ -390,7 +390,7 @@ class PHPMailer {
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2';
+  public $Version         = '5.2.4';
 
   /**
    * What to use in the X-Mailer header
@@ -554,7 +554,6 @@ class PHPMailer {
   /**
    * Sets Mailer to send message using SMTP.
    * @return void
-   * @deprecated
    */
   public function IsSMTP() {
     $this->Mailer = 'smtp';
@@ -563,7 +562,6 @@ class PHPMailer {
   /**
    * Sets Mailer to send message using PHP mail() function.
    * @return void
-   * @deprecated
    */
   public function IsMail() {
     $this->Mailer = 'mail';
@@ -572,7 +570,6 @@ class PHPMailer {
   /**
    * Sets Mailer to send message using the $Sendmail program.
    * @return void
-   * @deprecated
    */
   public function IsSendmail() {
     if (!stristr(ini_get('sendmail_path'), 'sendmail')) {
@@ -584,7 +581,6 @@ class PHPMailer {
   /**
    * Sets Mailer to send message using the qmail MTA.
    * @return void
-   * @deprecated
    */
   public function IsQmail() {
     if (stristr(ini_get('sendmail_path'), 'qmail')) {
@@ -736,7 +732,7 @@ class PHPMailer {
    */
   public static function ValidateAddress($address) {
       if (defined('PCRE_VERSION')) { //Check this instead of extension_loaded so it works when that function is disabled
-          if (PCRE_VERSION >= 8.0) {
+          if (version_compare(PCRE_VERSION, '8.0') >= 0) {
               return (boolean)preg_match('/^(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){255,})(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){65,}@)((?>(?>(?>((?>(?>(?>\x0D\x0A)?[\t ])+|(?>[\t ]*\x0D\x0A)?[\t ]+)?)(\((?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-\'*-\[\]-\x7F]|\\\[\x00-\x7F]|(?3)))*(?2)\)))+(?2))|(?2))?)([!#-\'*+\/-9=?^-~-]+|"(?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\x7F]))*(?2)")(?>(?1)\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>(?1)\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}|(?!(?:.*[a-f0-9][:\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD', $address);
           } else {
               //Fall back to an older regex that doesn't need a recent PCRE
@@ -910,14 +906,14 @@ class PHPMailer {
     return true;
   }
 
-    /**
-     * Sends mail using the PHP mail() function.
-     * @param string $header The message headers
-     * @param string $body The message body
-     * @throws phpmailerException
-     * @access protected
-     * @return bool
-     */
+  /**
+   * Sends mail using the PHP mail() function.
+   * @param string $header The message headers
+   * @param string $body The message body
+   * @throws phpmailerException
+   * @access protected
+   * @return bool
+   */
   protected function MailSend($header, $body) {
     $toArr = array();
     foreach($this->to as $t) {
@@ -2031,13 +2027,13 @@ class PHPMailer {
   }
 
   /**
-  * Encode string to RFC2045 (6.7) quoted-printable format
-  * @access public
-  * @param string $string The text to encode
-  * @param integer $line_max Number of chars allowed on a line before wrapping
-  * @return string
-  * @link PHP version adapted from http://www.php.net/manual/en/function.quoted-printable-decode.php#89417
-  */
+   * Encode string to RFC2045 (6.7) quoted-printable format
+   * @access public
+   * @param string $string The text to encode
+   * @param integer $line_max Number of chars allowed on a line before wrapping
+   * @return string
+   * @link PHP version adapted from http://www.php.net/manual/en/function.quoted-printable-decode.php#89417
+   */
   public function EncodeQP($string, $line_max = 76) {
     if (function_exists('quoted_printable_encode')) { //Use native function if it's available (>= PHP5.3)
       return quoted_printable_encode($string);
@@ -2048,15 +2044,15 @@ class PHPMailer {
     return $string;
   }
 
-    /**
-     * Wrapper to preserve BC for old QP encoding function that was removed
-     * @see EncodeQP()
-     * @access public
-     * @param string $string
-     * @param integer $line_max
-     * @param bool $space_conv
-     * @return string
-     */
+  /**
+   * Wrapper to preserve BC for old QP encoding function that was removed
+   * @see EncodeQP()
+   * @access public
+   * @param string $string
+   * @param integer $line_max
+   * @param bool $space_conv
+   * @return string
+   */
   public function EncodeQPphp($string, $line_max = 76, $space_conv = false) {
     return $this->EncodeQP($string, $line_max);
   }
@@ -2179,12 +2175,12 @@ class PHPMailer {
    * @param string $type MIME type.
    * @return bool True on successfully adding an attachment
    */
-  public function AddStringEmbeddedImage($string, $cid, $filename = '', $encoding = 'base64', $type = 'application/octet-stream') {
+  public function AddStringEmbeddedImage($string, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
     // Append to $attachment array
     $this->attachment[] = array(
       0 => $string,
-      1 => $filename,
-      2 => basename($filename),
+      1 => $name,
+      2 => $name,
       3 => $encoding,
       4 => $type,
       5 => true,  // isStringAttachment

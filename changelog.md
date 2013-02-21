@@ -1,8 +1,23 @@
 # ChangeLog
-  
-  * Add CRAM-MD5 authentication, thanks to Elijah madden, https://github.com/okonomiyaki3000
-  * Replacement of obsolete Quoted-Printable encoder with a much better implementation
-  * Composer package definition
+
+ * Merge in changes from Google code 5.2.4 release
+ * Minor coding standards cleanup in SMTP class
+ * Improved unit tests, now tests S/MIME signing
+ * Travis-CI support on GitHub, runs tests with fake SMTP server
+
+## Version 5.2.4 (February 19, 2013)
+  * Fix tag and version bug.
+  * un-deprecate isSMTP(), isMail(), IsSendmail() and
+    isQmail().
+  * Numerous translation updates
+
+## Version 5.2.3 (February 8, 2013)
+  * Fix issue with older PCREs and ValidateAddress() (Bugz: 124)
+
+ * Add CRAM-MD5 authentication, thanks to Elijah madden, https://github.com/okonomiyaki3000
+ * Replacement of obsolete Quoted-Printable encoder with a much better implementation
+ * Composer package definition
+ * New language added: Hebrew
 
 ## Version 5.2.2 (December 3, 2012)
 

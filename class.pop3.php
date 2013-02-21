@@ -2,7 +2,7 @@
 /*~ class.pop3.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.2                                                          |
+|   Version: 5.2.4                                                          |
 |      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
 |     Admin: Jim Jagielski (project admininistrator)                        |
@@ -37,7 +37,7 @@
 /**
  * PHP POP-Before-SMTP Authentication Class
  *
- * Version 5.2.2
+ * Version 5.2.4
  *
  * @license: LGPL, see PHPMailer License
  *
@@ -115,7 +115,7 @@ class POP3 {
    * Sets the POP3 PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2';
+  public $Version         = '5.2.4';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED

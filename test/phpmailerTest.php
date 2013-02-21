@@ -721,8 +721,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Subject .= ": HTML only";
 
         $this->Mail->Body = "This is a <b>test message</b> written in HTML. </br>" .
-            "Go to <a href=\"http://phpmailer.sourceforge.net/\">" .
-            "http://phpmailer.sourceforge.net/</a> for new versions of " .
+            "Go to <a href=\"http://code.google.com/a/apache-extras.org/p/phpmailer/\">" .
+            "http://code.google.com/a/apache-extras.org/p/phpmailer/</a> for new versions of " .
             "phpmailer.  <p/> Thank you!";
 
         $this->BuildBody();
