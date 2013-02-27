@@ -20,8 +20,8 @@
       $mail->Port       = 587;                   // set the SMTP port for the GMAIL server
       $mail->Username   = "username@gmail.com";  // GMAIL username
       $mail->Password   = "password";            // GMAIL password
-      $mail->AddAddress('john.doe@example.com', 'John Doe');
-      $mail->SetFrom('first.last@example.com', 'First Last');
+      $mail->AddAddress('Recipient@example.com', 'Recipient Name');
+      $mail->SetFrom('Sender@example.com', 'Sender Name');
       //$mail->AddReplyTo('name@yourdomain.com', 'First Last');
         $mail->Subject = 'PHPMailer Test Subject via mail(), advanced';
       $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
