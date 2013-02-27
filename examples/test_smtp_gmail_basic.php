@@ -30,9 +30,9 @@
     $mail->Username   = "yourusername@gmail.com";  // GMAIL username
     $mail->Password   = "yourpassword";            // GMAIL password
 
-    $mail->SetFrom('name@yourdomain.com', 'First Last');
+    $mail->SetFrom('sender@example.com', 'First Last');
 
-    $mail->AddReplyTo("name@yourdomain.com","First Last");
+    $mail->AddReplyTo("reply-to@example.com","First Last");
 
     $mail->Subject    = "PHPMailer Test Subject via smtp (Gmail), basic";
 
@@ -40,8 +40,8 @@
 
     $mail->MsgHTML($body);
 
-    $address = "whoto@otherdomain.com";
-    $mail->AddAddress($address, "John Doe");
+    $address = "recipient@example.com";
+    $mail->AddAddress($address, "Recipient Name");
 
     $mail->AddAttachment("images/phpmailer.gif");      // attachment
     $mail->AddAttachment("images/phpmailer_mini.gif"); // attachment
