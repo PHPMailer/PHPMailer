@@ -3,7 +3,6 @@
     <title>PHPMailer - SMTP (Gmail) advanced test</title>
   </head>
   <body>
-
     <?php
     require_once('../class.phpmailer.php');
     //include("class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
@@ -21,8 +20,8 @@
       $mail->Port       = 587;                   // set the SMTP port for the GMAIL server
       $mail->Username   = "username@gmail.com";  // GMAIL username
       $mail->Password   = "password";            // GMAIL password
-      $mail->AddAddress('matt.sturdy@gmail.com', 'John Doe');
-      $mail->SetFrom('matt.sturdy@gmail.com', 'First Last');
+      $mail->AddAddress('john.doe@example.com', 'John Doe');
+      $mail->SetFrom('first.last@example.com', 'First Last');
       //$mail->AddReplyTo('name@yourdomain.com', 'First Last');
         $mail->Subject = 'PHPMailer Test Subject via mail(), advanced';
       $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
@@ -37,6 +36,5 @@
       echo $e->getMessage(); //Boring error messages from anything else!
     }
     ?>
-
   </body>
 </html>
