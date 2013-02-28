@@ -716,19 +716,60 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Html()
     {
-
         $this->Mail->IsHTML(true);
         $this->Mail->Subject .= ": HTML only";
 
-        $this->Mail->Body = "This is a <b>test message</b> written in HTML. </br>" .
-            "Go to <a href=\"http://code.google.com/a/apache-extras.org/p/phpmailer/\">" .
-            "http://code.google.com/a/apache-extras.org/p/phpmailer/</a> for new versions of " .
-            "phpmailer.  <p/> Thank you!";
-
+        $this->Mail->Body = <<<EOT
+<html>
+    <head>
+        <title>HTML email test</title>
+    </head>
+    <body>
+        <h1>PHPMailer does HTML!</h1>
+        <p>This is a <strong>test message</strong> written in HTML.<br>
+        Go to <a href="http://code.google.com/a/apache-extras.org/p/phpmailer/">http://code.google.com/a/apache-extras.org/p/phpmailer/</a>
+        for new versions of PHPMailer.</p>
+        <p>Thank you!</p>
+    </body>
+</html>
+EOT;
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
+    function test_MsgHTML() {
+        $message = <<<EOT
+<html>
+    <head>
+        <title>HTML email test</title>
+    </head>
+    <body>
+        <h1>PHPMailer does HTML!</h1>
+        <p>This is a <strong>test message</strong> written in HTML.<br>
+        Go to <a href="http://code.google.com/a/apache-extras.org/p/phpmailer/">http://code.google.com/a/apache-extras.org/p/phpmailer/</a>
+        for new versions of PHPMailer.</p>
+        <p>Thank you!</p>
+    </body>
+</html>
+EOT;
+        $this->Mail->MsgHTML($message);
+        $plainmessage = <<<EOT
+PHPMailer does HTML!
+        This is a test message written in HTML.
+        Go to http://code.google.com/a/apache-extras.org/p/phpmailer/
+        for new versions of PHPMailer.
+        Thank you!
+EOT;
+
+        $this->assertEquals($this->Mail->Body, $message, "Body not set by MsgHTML");
+        $this->assertEquals($this->Mail->AltBody, $plainmessage, "AltBody not set by MsgHTML");
+        //Make sure that changes to the original message are reflected when called again
+        $message = str_replace('PHPMailer', 'bananas', $message);
+        $plainmessage = str_replace('PHPMailer', 'bananas', $plainmessage);
+        $this->Mail->MsgHTML($message);
+        $this->assertEquals($this->Mail->Body, $message, "Body not updated by MsgHTML");
+        $this->assertEquals($this->Mail->AltBody, $plainmessage, "AltBody not updated by MsgHTML");
+    }
     /**
      * Simple HTML and attachment test
      */
@@ -990,10 +1031,10 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
                 $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
                 $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
                 if (!empty($missing)) {
-                    $err .= "Missing translations in $lang: " . implode(', ', $missing) . "\n";
+                    $err .= "\nMissing translations in $lang: " . implode(', ', $missing);
                 }
                 if (!empty($extra)) {
-                    $err .= "Extra translations in $lang: " . implode(', ', $extra) . "\n";
+                    $err .= "\nExtra translations in $lang: " . implode(', ', $extra);
                 }
             }
         }
@@ -1008,18 +1049,24 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->CharSet = 'iso-8859-1';
         $this->assertEquals(
             '=A1Hola!_Se=F1or!',
-            $this->Mail->EncodeQ('¡Hola! Señor!', 'text'),
+            $this->Mail->EncodeQ("\xa1Hola! Se\xf1or!", 'text'),
             'Q Encoding (text) failed'
         );
         $this->assertEquals(
             '=A1Hola!_Se=F1or!',
-            $this->Mail->EncodeQ('¡Hola! Señor!', 'comment'),
+            $this->Mail->EncodeQ("\xa1Hola! Se\xf1or!", 'comment'),
             'Q Encoding (comment) failed'
         );
         $this->assertEquals(
             '=A1Hola!_Se=F1or!',
-            $this->Mail->EncodeQ('¡Hola! Señor!', 'phrase'),
+            $this->Mail->EncodeQ("\xa1Hola! Se\xf1or!", 'phrase'),
             'Q Encoding (phrase) failed'
+        );
+        $this->Mail->CharSet = 'UTF-8';
+        $this->assertEquals(
+            '=C2=A1Hola!_Se=C3=B1or!',
+            $this->Mail->EncodeQ("\xc2\xa1Hola! Se\xc3\xb1or!", 'text'),
+            'Q Encoding (text) failed'
         );
     }
 

@@ -2415,6 +2415,7 @@ class PHPMailer {
 
   /**
    * Evaluates the message and returns modifications for inline images and backgrounds
+   * Overwrites any existing values in $this->Body and $this->AltBody
    * @access public
    * @param string $message Text to be HTML modified
    * @param string $basedir baseline directory for path
@@ -2444,16 +2445,20 @@ class PHPMailer {
     }
     $this->IsHTML(true);
     $this->Body = $message;
-    if (empty($this->AltBody)) {
-        $textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $message)));
-        if (!empty($textMsg)) {
-            $this->AltBody = html_entity_decode($textMsg, ENT_QUOTES, $this->CharSet);
-        }
-    }
+    $this->AltBody = $this->html2text($message);
     if (empty($this->AltBody)) {
       $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
     }
     return $message;
+  }
+
+  /**
+  * Convert an HTML string into a plain text version
+  * @param string $html The HTML text to convert
+  * @return string
+  */
+  public function html2text($html) {
+    return html_entity_decode(trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html))), ENT_QUOTES, $this->CharSet);
   }
 
   /**
