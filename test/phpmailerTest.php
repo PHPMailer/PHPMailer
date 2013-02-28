@@ -931,15 +931,15 @@ EOT;
      */
     function test_MailSend()
     {
-        if (function_exists('mail')) { //Mail is disabled in Travis-CI, so check before trying to use it
-            $this->Mail->Body = "Sending via mail()";
-            $this->BuildBody();
-            $subject = $this->Mail->Subject;
+        echo "sendmail path = '".ini_get('sendmail_path')."'";
+        ini_set('sendmail_path', '/bin/true');
+        $this->Mail->Body = "Sending via mail()";
+        $this->BuildBody();
+        $subject = $this->Mail->Subject;
 
-            $this->Mail->Subject = $subject . ": mail()";
-            $this->Mail->IsMail();
-            $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
-        }
+        $this->Mail->Subject = $subject . ": mail()";
+        $this->Mail->IsMail();
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
