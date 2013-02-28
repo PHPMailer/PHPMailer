@@ -1010,38 +1010,6 @@ EOT;
     }
 
     /**
-     * Test language files for missing and excess translations
-     * All languages are compared with English
-     */
-    function test_Translations()
-    {
-        $this->Mail->SetLanguage('en');
-        $definedStrings = $this->Mail->GetTranslations();
-        $err = '';
-        foreach (new DirectoryIterator('../language') as $fileInfo) {
-            if ($fileInfo->isDot()) {
-                continue;
-            }
-            $matches = array();
-            //Only look at language files, ignore anything else in there
-            if (preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
-                $lang = $matches[1]; //Extract language code
-                $PHPMAILER_LANG = array(); //Language strings get put in here
-                include $fileInfo->getPathname(); //Get language strings
-                $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
-                $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
-                if (!empty($missing)) {
-                    $err .= "\nMissing translations in $lang: " . implode(', ', $missing);
-                }
-                if (!empty($extra)) {
-                    $err .= "\nExtra translations in $lang: " . implode(', ', $extra);
-                }
-            }
-        }
-        $this->assertEmpty($err, $err);
-    }
-
-    /**
      * Encoding tests
      */
     function test_Encodings()
