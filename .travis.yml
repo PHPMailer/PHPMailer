@@ -15,9 +15,7 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
-  - ls /etc
-  - ls /etc/php
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee -a /etc/php/php.ini
   - php -i
+  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee -a /etc/php/php.ini
 script:
   - phpunit phpmailerTest
