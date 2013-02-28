@@ -15,5 +15,6 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
+  - sudo cp fakesendmail.sh /usr/bin/sendmail
 script:
   - phpunit phpmailerTest
