@@ -931,8 +931,10 @@ EOT;
      */
     function test_MailSend()
     {
-        echo "sendmail path = '".ini_get('sendmail_path')."'";
-        ini_set('sendmail_path', '/bin/true');
+        $sendmail = ini_get('sendmail_path');
+        if (strpos($sendmail, '/') === false) { //No path in sendmail_path
+            ini_set('sendmail_path', '/usr/sbin/sendmail -t -i ');
+        }
         $this->Mail->Body = "Sending via mail()";
         $this->BuildBody();
         $subject = $this->Mail->Subject;
