@@ -806,9 +806,6 @@ class PHPMailer {
           $this->mailHeader .= $this->HeaderLine("To", "undisclosed-recipients:;");
         }
         $this->mailHeader .= $this->HeaderLine('Subject', $this->EncodeHeader($this->SecureHeader(trim($this->Subject))));
-        // if(count($this->cc) > 0) {
-            // $this->mailHeader .= $this->AddrAppend("Cc", $this->cc);
-        // }
       }
 
       // digitally sign with DKIM if enabled

@@ -970,7 +970,7 @@ EOT;
         $this->Mail->Body = 'This should no longer cause a denial of service.';
         $this->BuildBody();
 
-        $this->Mail->Subject = str_repeat('A', 998);
+        $this->Mail->Subject = substr(str_repeat('0123456789', 100), 0, 998);
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
