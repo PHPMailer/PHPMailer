@@ -1249,6 +1249,9 @@ class PHPMailer {
             $buf = '';
           }
           while (strlen($word) > 0) {
+            if ($length <= 0) {
+                break;
+            }
             $len = $length;
             if ($is_utf8) {
               $len = $this->UTF8CharBoundary($word, $len);
@@ -2716,8 +2719,8 @@ class PHPMailer {
     $DKIMtime             = time() ; // Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
     $subject_header       = "Subject: $subject";
     $headers              = explode($this->LE, $headers_line);
-	$from_header          = "";
-	$to_header            = "";
+    $from_header          = "";
+    $to_header            = "";
     foreach($headers as $header) {
       if (strpos($header, 'From:') === 0) {
         $from_header = $header;
