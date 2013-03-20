@@ -2716,13 +2716,22 @@ class PHPMailer {
     $DKIMtime             = time() ; // Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
     $subject_header       = "Subject: $subject";
     $headers              = explode($this->LE, $headers_line);
-    $from_header          = "";
-    $to_header            = "";
+    $from_header          = '';
+    $to_header            = '';
+    $current = '';
     foreach($headers as $header) {
       if (strpos($header, 'From:') === 0) {
         $from_header = $header;
+        $current = 'from_header';
       } elseif (strpos($header, 'To:') === 0) {
         $to_header = $header;
+        $current = 'to_header';
+      } else {
+        if($current && strpos($header, ' =?') === 0){
+          $$current .= $header;
+        } else {
+          $current = '';
+        }
       }
     }
     $from     = str_replace('|', '=7C', $this->DKIM_QP($from_header));
@@ -2743,7 +2752,7 @@ class PHPMailer {
                 "\tb=";
     $toSign   = $this->DKIM_HeaderC($from_header . "\r\n" . $to_header . "\r\n" . $subject_header . "\r\n" . $dkimhdrs);
     $signed   = $this->DKIM_Sign($toSign);
-    return "X-PHPMAILER-DKIM: code.google.com/a/apache-extras.org/p/phpmailer/\r\n".$dkimhdrs.$signed."\r\n";
+    return $dkimhdrs.$signed."\r\n";
   }
 
   /**
