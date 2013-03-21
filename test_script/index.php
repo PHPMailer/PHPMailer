@@ -2,13 +2,11 @@
   /*
   * revised, updated and corrected 27/02/2013
   * by matt.sturdy@gmail.com
-  *
   */
   require_once("../class.phpmailer.php");
   
-  //  below can be found at http://www.chuggnutt.com/html2text
-  //  bundled in ./extras/
-  require_once('../extras/class.html2text.inc');
+  //This class from http://www.chuggnutt.com/html2text
+  require_once('../extras/class.html2text.php');
 
   $CFG['smtp_debug']        = 1;
   $CFG['smtp_server']       = 'mail.yourserver.com';
@@ -42,7 +40,7 @@
   // $example_code represents the "final code" that we're using, and will 
   // be shown to the user at the end.
   $example_code  = "\nrequire_once(\"../class.phpmailer.php\");";
-  $example_code .= "\nrequire_once(\"../extras/class.html2text.inc\");";
+  $example_code .= "\nrequire_once(\"../extras/class.html2text.php\");";
   $example_code .= "\n\n\$results_messages = new array();";
 
   class phpmailerAppException extends Exception {
@@ -251,7 +249,7 @@
     <link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css"/>
     <style>
       body {
-        font-family: Arial, Helvetica, Sans-Serif;
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 1em;
         padding: 1em;
       }
@@ -337,7 +335,7 @@
           "smtp_authenticate":     "<?php echo $smtp_authenticate; ?>",
           "authenticate_username": "<?php echo $authenticate_username; ?>",
           "authenticate_password": "<?php echo $authenticate_password; ?>"
-        }
+        };
 
         var resetForm = document.createElement("form");
         resetForm.setAttribute("method", "POST");

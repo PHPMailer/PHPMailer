@@ -2422,14 +2422,16 @@ class PHPMailer {
   }
 
   /**
-   * Evaluates the message and returns modifications for inline images and backgrounds
+   * Creates a message from an HTML string, making modifications for inline images and backgrounds
+   * and creates a plain-text version by converting the HTML
    * Overwrites any existing values in $this->Body and $this->AltBody
    * @access public
-   * @param string $message Text to be HTML modified
+   * @param string $message HTML message string
    * @param string $basedir baseline directory for path
+   * @param bool $advanced Whether to use the advanced HTML to text converter
    * @return string $message
    */
-  public function MsgHTML($message, $basedir = '') {
+  public function MsgHTML($message, $basedir = '', $advanced = false) {
     preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", $message, $images);
     if(isset($images[2])) {
       foreach($images[2] as $i => $url) {
@@ -2453,19 +2455,25 @@ class PHPMailer {
     }
     $this->IsHTML(true);
     $this->Body = $message;
-    $this->AltBody = $this->html2text($message);
+    $this->AltBody = $this->html2text($message, $advanced);
     if (empty($this->AltBody)) {
       $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
     }
     return $message;
   }
 
-  /**
-  * Convert an HTML string into a plain text version
-  * @param string $html The HTML text to convert
-  * @return string
-  */
-  public function html2text($html) {
+    /**
+     * Convert an HTML string into a plain text version
+     * @param string $html The HTML text to convert
+     * @param bool $advanced Should this use the more complex html2text converter or just a simple one?
+     * @return string
+     */
+  public function html2text($html, $advanced = false) {
+    if ($advanced) {
+      require_once 'extras/class.html2text.php';
+      $h = new html2text($html);
+      return $h->get_text();
+    }
     return html_entity_decode(trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html))), ENT_QUOTES, $this->CharSet);
   }
 

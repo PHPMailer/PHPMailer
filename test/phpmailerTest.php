@@ -58,7 +58,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function setUp()
     {
-
         if (file_exists('./testbootstrap.php')) {
             include './testbootstrap.php'; //Overrides go in here
         }
@@ -614,7 +613,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_WordWrap()
     {
-
         $this->Mail->WordWrap = 40;
         $my_body = 'Here is the main body of this message.  It should ' .
             'be quite a few lines.  It should be wrapped at the ' .
@@ -634,7 +632,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Low_Priority()
     {
-
         $this->Mail->Priority = 5;
         $this->Mail->Body = 'Here is the main body.  There should be ' .
             'a reply to address in this message.';
@@ -650,7 +647,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Multiple_Plain_FileAttachment()
     {
-
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
@@ -673,7 +669,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Plain_StringAttachment()
     {
-
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + StringAttachment';
 
@@ -692,7 +687,6 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
      */
     function test_Quoted_Printable()
     {
-
         $this->Mail->Body = 'Here is the main body';
         $this->Mail->Subject .= ': Plain + Quoted-printable';
         $this->Mail->Encoding = 'quoted-printable';
@@ -718,7 +712,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->IsHTML(true);
         $this->Mail->Subject .= ": HTML only";
 
-        $this->Mail->Body = <<<EOT
+        $this->Mail->Body = <<<'EOT'
 <html>
     <head>
         <title>HTML email test</title>
@@ -737,7 +731,7 @@ EOT;
     }
 
     function test_MsgHTML() {
-        $message = <<<EOT
+        $message = <<<'EOT'
 <html>
     <head>
         <title>HTML email test</title>
@@ -752,7 +746,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->MsgHTML($message);
-        $plainmessage = <<<EOT
+        $plainmessage = <<<'EOT'
 PHPMailer does HTML!
         This is a test message written in HTML.
         Go to http://code.google.com/a/apache-extras.org/p/phpmailer/
@@ -762,19 +756,25 @@ EOT;
 
         $this->assertEquals($this->Mail->Body, $message, 'Body not set by MsgHTML');
         $this->assertEquals($this->Mail->AltBody, $plainmessage, 'AltBody not set by MsgHTML');
+
+        //Again, using the advanced HTML to text converter
+        $this->Mail->AltBody = '';
+        $this->Mail->MsgHTML($message, '', true);
+        $this->assertNotEmpty($this->Mail->AltBody, 'Advanced AltBody not set by MsgHTML');
+
         //Make sure that changes to the original message are reflected when called again
         $message = str_replace('PHPMailer', 'bananas', $message);
         $plainmessage = str_replace('PHPMailer', 'bananas', $plainmessage);
         $this->Mail->MsgHTML($message);
         $this->assertEquals($this->Mail->Body, $message, 'Body not updated by MsgHTML');
         $this->assertEquals($this->Mail->AltBody, $plainmessage, 'AltBody not updated by MsgHTML');
+
     }
     /**
      * Simple HTML and attachment test
      */
     function test_HTML_Attachment()
     {
-
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->Subject .= ': HTML + Attachment';
         $this->Mail->IsHTML(true);
@@ -793,7 +793,6 @@ EOT;
      */
     function test_Embedded_Image()
     {
-
         $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image';
@@ -816,7 +815,6 @@ EOT;
         //For code coverage
         $this->Mail->AddEmbeddedImage('thisfiledoesntexist', 'xyz'); //Non-existent file
         $this->Mail->AddEmbeddedImage(__FILE__, '123'); //Missing name
-
     }
 
     /**
@@ -824,7 +822,6 @@ EOT;
      */
     function test_Multi_Embedded_Image()
     {
-
         $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image + Attachment';
@@ -856,7 +853,6 @@ EOT;
      */
     function test_AltBody()
     {
-
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->AltBody = 'Here is the text body of this message.  ' .
             'It should be quite a few lines.  It should be wrapped at the ' .
@@ -874,7 +870,6 @@ EOT;
      */
     function test_AltBody_Attachment()
     {
-
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->AltBody = 'This is the text part of the email.';
         $this->Mail->Subject .= ': AltBody + Attachment';

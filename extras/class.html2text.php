@@ -2,7 +2,7 @@
 
 /*************************************************************************
  *                                                                       *
- * class.html2text.inc                                                   *
+ * class.html2text.php                                                   *
  *                                                                       *
  *************************************************************************
  *                                                                       *
@@ -232,8 +232,8 @@ class html2text
         '--',
         '-',
         '*',
-        '£',
-        'EUR',                                  // Euro sign. € ?
+        'ï¿½',
+        'EUR',                                  // Euro sign. ï¿½ ?
         '',                                     // Unknown/unhandled entities
         ' '                                     // Runs of spaces, post-handling
     );
