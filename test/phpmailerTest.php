@@ -1017,6 +1017,8 @@ EOT;
      */
     function test_Addressing()
     {
+        $this->assertFalse($this->Mail->AddAddress(''), 'Empty address accepted');
+        $this->assertFalse($this->Mail->AddAddress('', 'Nobody'), 'Empty address with name accepted');
         $this->assertFalse($this->Mail->AddAddress('a@example..com'), 'Invalid address accepted');
         $this->assertTrue($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
         $this->assertFalse($this->Mail->AddAddress('a@example.com'), 'Duplicate addressing failed');
