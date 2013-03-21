@@ -1026,6 +1026,21 @@ EOT;
     }
 
     /**
+     * Test address escaping
+     */
+    function test_AddressEscaping()
+    {
+        $this->Mail->Subject .= ': Address escaping';
+        $this->Mail->ClearAddresses();
+        $this->Mail->AddAddress('foo@example.com', 'Tim "The Book" O\'Reilly');
+        $this->Mail->Body = 'Test correct escaping of quotes in addresses.';
+        $this->BuildBody();
+        $this->Mail->PreSend();
+        $b = $this->Mail->GetSentMIMEMessage();
+        $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !==false));
+    }
+
+    /**
      * Test BCC-only addressing
      */
     function test_BCCAddressing()

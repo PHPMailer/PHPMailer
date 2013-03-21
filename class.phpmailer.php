@@ -2567,8 +2567,8 @@ class PHPMailer {
    * $page->set('X-Priority', '3');
    *
    * @access public
-   * @param string $name Parameter Name
-   * @param mixed $value Parameter Value
+   * @param string $name
+   * @param mixed $value
    * NOTE: will not work with arrays, there are no arrays to set/reset
    * @throws phpmailerException
    * @return bool
@@ -2593,7 +2593,7 @@ class PHPMailer {
   /**
    * Strips newlines to prevent header injection.
    * @access public
-   * @param string $str String
+   * @param string $str
    * @return string
    */
   public function SecureHeader($str) {
@@ -2604,8 +2604,8 @@ class PHPMailer {
    * Set the private key file and password to sign the message.
    *
    * @access public
-   * @param $cert_filename
-   * @param string $key_filename Parameter File Name
+   * @param string $cert_filename
+   * @param string $key_filename
    * @param string $key_pass Password for private key
    */
   public function Sign($cert_filename, $key_filename, $key_pass) {
