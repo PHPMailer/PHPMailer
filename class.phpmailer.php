@@ -318,7 +318,13 @@ class PHPMailer {
    */
   public $SingleToArray = array();
 
- /**
+  /**
+   * Should we allow sending messages with empty body?
+   * @var bool
+   */
+  public $AllowEmpty = false;
+
+    /**
    * Provides the ability to change the generic line ending
    * NOTE: The default remains '\n'. We force CRLF where we KNOW
    *        it must be used via self::CRLF
@@ -789,8 +795,8 @@ class PHPMailer {
 
       $this->error_count = 0; // reset errors
       $this->SetMessageType();
-      //Refuse to send an empty message
-      if (empty($this->Body)) {
+      //Refuse to send an empty message unless we are specifically allowing it
+      if (!$this->AllowEmpty and empty($this->Body)) {
         throw new phpmailerException($this->Lang('empty_message'), self::STOP_CRITICAL);
       }
 

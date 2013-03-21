@@ -936,11 +936,25 @@ EOT;
         }
         $this->Mail->Body = 'Sending via mail()';
         $this->BuildBody();
-        $subject = $this->Mail->Subject;
 
-        $this->Mail->Subject = $subject . ': mail()';
+        $this->Mail->Subject = $this->Mail->Subject . ': mail()';
         $this->Mail->IsMail();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
+     * Test sending an empty body
+     */
+    function test_Empty_Body()
+    {
+        $this->BuildBody();
+        $this->Mail->Body = '';
+        $this->Mail->Subject = $this->Mail->Subject . ': Empty Body';
+        $this->Mail->IsMail();
+        $this->Mail->AllowEmpty = true;
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+        $this->Mail->AllowEmpty = false;
+        $this->assertFalse($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
     /**
