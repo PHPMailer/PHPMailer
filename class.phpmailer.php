@@ -2333,12 +2333,14 @@ class PHPMailer {
    * @static
    */
   public static function RFCDate() {
+    //Set the time zone to whatever the default is to avoid 500 errors
+    //Will default to UTC if it's not set properly in php.ini
+    date_default_timezone_set(@date_default_timezone_get());
     $tz = date('Z');
     $tzs = ($tz < 0) ? '-' : '+';
     $tz = abs($tz);
     $tz = (int)($tz/3600)*100 + ($tz%3600)/60;
-    $result = sprintf("%s %s%04d", date('D, j M Y H:i:s'), $tzs, $tz);
-
+    $result = sprintf("%s %s%04d", date('D, j M Y H:i:s O'), $tzs, $tz);
     return $result;
   }
 
