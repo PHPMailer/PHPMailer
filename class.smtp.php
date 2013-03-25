@@ -5,7 +5,8 @@
 |   Version: 5.2.4                                                          |
 |      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
-|     Admin: Jim Jagielski (project admininistrator)                        |
+|    Admins: Marcus Bointon                        |
+|    Admins: Jim Jagielski                        |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
 |          : Marcus Bointon (coolbru) phpmailer@synchromedia.co.uk         |
 |          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
