@@ -116,13 +116,10 @@ See changelog.md
 - Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
 - The project became an [Apache incubator project on Google Code](https://code.google.com/a/apache-extras.org/p/phpmailer/) in 2010, managed by Jim Jagielski
 - Marcus maintains this [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
-
-## Differences between Google Code and GitHub versions
-### Google code
-- Official successor to the Sourceforge project
-- Occasional monolithic releases
+- Jim and Marcus decide to join efforts and use Github and this project as the canonical and official repo.
 
 ### GitHub
+- Official successor to the Sourceforge project
 - Test suite
 - Continuous integration with Travis-CI
 - Composer support
