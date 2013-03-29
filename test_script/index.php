@@ -36,6 +36,7 @@
 
   // storing all status output from the script to be shown to the user later
   $results_messages = array();
+  $errorMsg = array();
 
   // $example_code represents the "final code" that we're using, and will 
   // be shown to the user at the end.
@@ -187,7 +188,7 @@
     $example_code .= "\n\$mail->Body = \"$body\";";
 
     // for non-HTML mail clients
-    $h2t =& new html2text($body);
+    $h2t = new html2text($body);
     $mail->AltBody = $h2t->get_text();
     $example_code .= "\n\$h2t =& new html2text(\$body);";
     $example_code .= "\n\$mail->AltBody = \$h2t->get_text();";
@@ -354,7 +355,7 @@
       }
 
       function showHideDiv(test, element_id) {
-        var ops = {"smtp-options-table" : "smtp"}
+        var ops = {"smtp-options-table" : "smtp"};
 
         if (test == ops[element_id]) {
           document.getElementById(element_id).style.display="block";
