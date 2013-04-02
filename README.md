@@ -115,11 +115,11 @@ See changelog.md
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
 - Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
 - Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski
-- Marcus started this fork on [GitHub repository](https://github.com/Synchro/PHPMailer)
-- Jim and Marcus decide to join efforts and use Github and this project as the canonical and official repo.
+- Marcus started this fork on [GitHub](https://github.com/Synchro/PHPMailer)
+- Jim and Marcus decide to join forces and use GitHub as the canonical and official repo for PHPMailer.
 
 ### What's changed since moving from SourceForge?
-- Official successor to the SourceForge and Googel Code projects
+- Official successor to the SourceForge and Google Code projects
 - Test suite
 - Continuous integration with Travis-CI
 - Composer support
