@@ -720,7 +720,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     <body>
         <h1>PHPMailer does HTML!</h1>
         <p>This is a <strong>test message</strong> written in HTML.<br>
-        Go to <a href="http://code.google.com/a/apache-extras.org/p/phpmailer/">http://code.google.com/a/apache-extras.org/p/phpmailer/</a>
+        Go to <a href="https://github.com/Synchro/PHPMailer/">https://github.com/Synchro/PHPMailer/</a>
         for new versions of PHPMailer.</p>
         <p>Thank you!</p>
     </body>
@@ -739,7 +739,7 @@ EOT;
     <body>
         <h1>PHPMailer does HTML!</h1>
         <p>This is a <strong>test message</strong> written in HTML.<br>
-        Go to <a href="http://code.google.com/a/apache-extras.org/p/phpmailer/">http://code.google.com/a/apache-extras.org/p/phpmailer/</a>
+        Go to <a href="https://github.com/Synchro/PHPMailer/">https://github.com/Synchro/PHPMailer/</a>
         for new versions of PHPMailer.</p>
         <p>Thank you!</p>
     </body>
@@ -749,7 +749,7 @@ EOT;
         $plainmessage = <<<'EOT'
 PHPMailer does HTML!
         This is a test message written in HTML.
-        Go to http://code.google.com/a/apache-extras.org/p/phpmailer/
+        Go to https://github.com/Synchro/PHPMailer/
         for new versions of PHPMailer.
         Thank you!
 EOT;

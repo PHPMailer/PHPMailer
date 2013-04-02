@@ -3,10 +3,10 @@
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
 |   Version: 5.2.4                                                          |
-|      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
+|      Site: https://github.com/Synchro/PHPMailer/                          |
 | ------------------------------------------------------------------------- |
-|    Admins: Marcus Bointon                        |
-|    Admins: Jim Jagielski                        |
+|    Admins: Marcus Bointon                                                 |
+|    Admins: Jim Jagielski                                                  |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
 |          : Marcus Bointon (coolbru) phpmailer@synchromedia.co.uk          |
 |          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
@@ -1428,7 +1428,7 @@ class PHPMailer {
     }
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
     if ($this->XMailer == '') {
-        $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (http://code.google.com/a/apache-extras.org/p/phpmailer/)');
+        $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (https://github.com/Synchro/PHPMailer/)');
     } else {
       $myXmailer = trim($this->XMailer);
       if ($myXmailer) {

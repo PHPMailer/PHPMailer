@@ -101,11 +101,11 @@ If this isn't passing, is there something you can do to help?
 
 ## Contributing
 
-Please submit bug reports, suggestions and pull requests to the [Google Code tracker](https://code.google.com/a/apache-extras.org/p/phpmailer/issues/list) or the [GitHub issue tracker](https://github.com/Synchro/PHPMailer/issues).
+Please submit bug reports, suggestions and pull requests to the [GitHub issue tracker](https://github.com/Synchro/PHPMailer/issues).
 
 We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
 
-Please *don't* use the sourceforge project any more.
+Please *don't* use the SourceForge project any more.
 
 ## Changelog
 
@@ -114,12 +114,12 @@ See changelog.md
 ## History
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
 - Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
-- The project became an [Apache incubator project on Google Code](https://code.google.com/a/apache-extras.org/p/phpmailer/) in 2010, managed by Jim Jagielski
-- Marcus maintains this [GitHub repository](https://github.com/Synchro/PHPMailer) that's kept in sync with the Google Code project as far as is practical.
+- Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski
+- Marcus started this fork on [GitHub repository](https://github.com/Synchro/PHPMailer)
 - Jim and Marcus decide to join efforts and use Github and this project as the canonical and official repo.
 
-### GitHub
-- Official successor to the Sourceforge project
+### What's changed since moving from SourceForge?
+- Official successor to the SourceForge and Googel Code projects
 - Test suite
 - Continuous integration with Travis-CI
 - Composer support
