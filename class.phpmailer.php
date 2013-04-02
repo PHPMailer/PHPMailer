@@ -546,6 +546,15 @@ class PHPMailer {
   }
 
   /**
+   * Destructor
+   */
+  public function __destruct() {
+      if ($this->Mailer == 'smtp') { //Close any open SMTP connection nicely
+          $this->SmtpClose();
+      }
+  }
+
+  /**
    * Sets message type to HTML.
    * @param bool $ishtml
    * @return void
