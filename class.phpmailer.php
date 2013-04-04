@@ -1384,11 +1384,11 @@ class PHPMailer {
     }
 
     if ($this->ReturnPath) {
-      $result .= $this->HeaderLine('Return-Path', trim($this->ReturnPath));
+      $result .= $this->HeaderLine('Return-Path', '<'.trim($this->ReturnPath).'>');
     } elseif ($this->Sender == '') {
-      $result .= $this->HeaderLine('Return-Path', trim($this->From));
+      $result .= $this->HeaderLine('Return-Path', '<'.trim($this->From).'>');
     } else {
-      $result .= $this->HeaderLine('Return-Path', trim($this->Sender));
+      $result .= $this->HeaderLine('Return-Path', '<'.trim($this->Sender).'>');
     }
 
     // To be created automatically by mail()
