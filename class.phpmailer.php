@@ -946,9 +946,9 @@ class PHPMailer {
     $to = implode(', ', $toArr);
 
     if (empty($this->Sender)) {
-      $params = "-oi ";
+      $params = ' ';
     } else {
-      $params = sprintf("-oi -f%s", $this->Sender);
+      $params = sprintf("-f%s", $this->Sender);
     }
     if ($this->Sender != '' and !ini_get('safe_mode')) {
       $old_from = ini_get('sendmail_from');
