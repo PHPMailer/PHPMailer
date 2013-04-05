@@ -161,17 +161,17 @@ class PHPMailer {
   public $Mailer            = 'mail';
 
   /**
-   * Sets the path of the sendmail program.
+   * Sets the path to the sendmail program.
    * @var string
    */
   public $Sendmail          = '/usr/sbin/sendmail';
 
   /**
-   * Determine if mail() uses a fully sendmail compatible MTA that
+   * Determine if mail() uses a fully sendmail-compatible MTA that
    * supports sendmail's "-oi -f" options
    * @var boolean
    */
-  public $UseSendmailOptions	= true;
+  public $UseSendmailOptions = true;
 
   /**
    * Path to PHPMailer plugins.  Useful if the SMTP class
@@ -513,10 +513,10 @@ class PHPMailer {
    * @param string $body Message Body
    * @param string $header Additional Header(s)
    * @param string $params Params
-   * @access private
+   * @access protected
    * @return bool
    */
-  private function mail_passthru($to, $subject, $body, $header, $params) {
+  protected function mail_passthru($to, $subject, $body, $header, $params) {
     if ( ini_get('safe_mode') || !($this->UseSendmailOptions) ) {
         $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($subject)), $body, $header);
     } else {
@@ -528,8 +528,9 @@ class PHPMailer {
   /**
    * Outputs debugging info via user-defined method
    * @param string $str
+   * @access protected
    */
-  private function edebug($str) {
+  protected function edebug($str) {
     if ($this->Debugoutput == "error_log") {
         error_log($str);
     } else {
@@ -589,7 +590,7 @@ class PHPMailer {
    */
   public function IsSendmail() {
     if (!stristr(ini_get('sendmail_path'), 'sendmail')) {
-      $this->Sendmail = '/var/qmail/bin/sendmail';
+      $this->Sendmail = '/usr/sbin/sendmail';
     }
     $this->Mailer = 'sendmail';
   }
@@ -599,10 +600,10 @@ class PHPMailer {
    * @return void
    */
   public function IsQmail() {
-    if (stristr(ini_get('sendmail_path'), 'qmail')) {
-      $this->Sendmail = '/var/qmail/bin/sendmail';
+    if (!stristr(ini_get('sendmail_path'), 'qmail')) {
+      $this->Sendmail = '/var/qmail/bin/qmail-inject';
     }
-    $this->Mailer = 'sendmail';
+    $this->Mailer = 'qmail';
   }
 
   /////////////////////////////////////////////////
@@ -852,6 +853,7 @@ class PHPMailer {
       // Choose the mailer and send through it
       switch($this->Mailer) {
         case 'sendmail':
+        case 'qmail':
           return $this->SendmailSend($this->MIMEHeader, $this->MIMEBody);
         case 'smtp':
           return $this->SmtpSend($this->MIMEHeader, $this->MIMEBody);
@@ -882,9 +884,18 @@ class PHPMailer {
    */
   protected function SendmailSend($header, $body) {
     if ($this->Sender != '') {
-      $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+      if ($this->Mailer == 'qmail') {
+        $sendmail = sprintf("%s -f%s", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+      } else {
+        $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+      }
     } else {
-      $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
+      if ($this->Mailer == 'qmail') {
+        $sendmail = sprintf("%s", escapeshellcmd($this->Sendmail));
+      } else {
+        $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
+      }
+
     }
     if ($this->SingleTo === true) {
       foreach ($this->SingleToArray as $val) {
@@ -1417,7 +1428,7 @@ class PHPMailer {
     }
 
     // sendmail and mail() extract Bcc from the header before sending
-    if((($this->Mailer == 'sendmail') || ($this->Mailer == 'mail')) && (count($this->bcc) > 0)) {
+    if((($this->Mailer == 'sendmail') || ($this->Mailer == 'qmail') || ($this->Mailer == 'mail')) && (count($this->bcc) > 0)) {
       $result .= $this->AddrAppend('Bcc', $this->bcc);
     }
 
