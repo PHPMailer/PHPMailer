@@ -2,7 +2,7 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.4                                                          |
+|   Version: 5.2.5                                                          |
 |      Site: https://github.com/Synchro/PHPMailer/                          |
 | ------------------------------------------------------------------------- |
 |    Admins: Marcus Bointon                                                 |
@@ -397,7 +397,7 @@ class PHPMailer {
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.4';
+  public $Version         = '5.2.5';
 
   /**
    * What to use in the X-Mailer header
@@ -935,9 +935,9 @@ class PHPMailer {
     $to = implode(', ', $toArr);
 
     if (empty($this->Sender)) {
-      $params = "-oi ";
+      $params = " ";
     } else {
-      $params = sprintf("-oi -f%s", $this->Sender);
+      $params = sprintf("-f%s", $this->Sender);
     }
     if ($this->Sender != '' and !ini_get('safe_mode')) {
       $old_from = ini_get('sendmail_from');
