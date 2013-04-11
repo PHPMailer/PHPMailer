@@ -2186,7 +2186,7 @@ class PHPMailer {
    * @param string $string The attachment binary data.
    * @param string $cid Content ID of the attachment; Use this to reference
    *        the content when using an embedded image in HTML.
-   * @param string $filename A name for the attachment
+   * @param string $name
    * @param string $encoding File encoding (see $Encoding).
    * @param string $type MIME type.
    * @return bool True on successfully adding an attachment
