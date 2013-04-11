@@ -2,8 +2,8 @@
 /*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.5                                                          |
-|      Site: https://github.com/Synchro/PHPMailer/                          |
+|   Version: 5.2.6                                                          |
+|      Site: https://github.com/PHPMailer/PHPMailer/                        |
 | ------------------------------------------------------------------------- |
 |    Admins: Marcus Bointon                                                 |
 |    Admins: Jim Jagielski                                                  |
@@ -397,7 +397,7 @@ class PHPMailer {
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.5';
+  public $Version         = '5.2.6';
 
   /**
    * What to use in the X-Mailer header
@@ -1437,7 +1437,7 @@ class PHPMailer {
     }
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
     if ($this->XMailer == '') {
-        $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (https://github.com/Synchro/PHPMailer/)');
+        $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (https://github.com/PHPMailer/PHPMailer/)');
     } else {
       $myXmailer = trim($this->XMailer);
       if ($myXmailer) {

@@ -2,8 +2,8 @@
 /*~ class.smtp.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.2.4                                                          |
-|      Site: https://github.com/Synchro/PHPMailer/                          |
+|   Version: 5.2.6                                                          |
+|      Site: https://github.com/PHPMailer/PHPMailer/                        |
 | ------------------------------------------------------------------------- |
 |    Admins: Marcus Bointon                                                 |
 |    Admins: Jim Jagielski                                                  |
@@ -92,7 +92,7 @@ class SMTP {
    * Sets the SMTP PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.4';
+  public $Version         = '5.2.6';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED

@@ -95,17 +95,21 @@ You'll find some basic user-level docs in the docs folder, and you can generate 
 
 You'll find a PHPUnit test script in the `test` folder.
 
-Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](https://travis-ci.org/Synchro/PHPMailer)
+Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
 
 If this isn't passing, is there something you can do to help?
 
 ## Contributing
 
-Please submit bug reports, suggestions and pull requests to the [GitHub issue tracker](https://github.com/Synchro/PHPMailer/issues).
+Please submit bug reports, suggestions and pull requests to the [GitHub issue tracker](https://github.com/PHPMailer/PHPMailer/issues).
 
 We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
 
-Please *don't* use the SourceForge project any more.
+With the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
+
+git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
+
+Please *don't* use the SourceForge or Google Code projects any more.
 
 ## Changelog
 
@@ -114,16 +118,17 @@ See changelog.md
 ## History
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
 - Marcus Bointon (coolbru on SF) and Andy Prevost (codeworxtech) took over the project in 2004.
-- Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski
-- Marcus started this fork on [GitHub](https://github.com/Synchro/PHPMailer)
+- Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski.
+- Marcus created his fork on [GitHub](https://github.com/Synchro/PHPMailer).
 - Jim and Marcus decide to join forces and use GitHub as the canonical and official repo for PHPMailer.
+- PHPMailer moves to the [PHPMailer organisation](https://github.com/PHPMailer) on GitHub.
 
 ### What's changed since moving from SourceForge?
-- Official successor to the SourceForge and Google Code projects
-- Test suite
-- Continuous integration with Travis-CI
-- Composer support
-- Rolling releases
-- Additional languages and language strings
-- CRAM-MD5 authentication support
-- Preserves full repo history of authors, commits and branches from the original SourceForge project
+- Official successor to the SourceForge and Google Code projects.
+- Test suite.
+- Continuous integration with Travis-CI.
+- Composer support.
+- Rolling releases.
+- Additional languages and language strings.
+- CRAM-MD5 authentication support.
+- Preserves full repo history of authors, commits and branches from the original SourceForge project.

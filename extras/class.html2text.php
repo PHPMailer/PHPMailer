@@ -4,6 +4,7 @@
  * Converts HTML to formatted plain text                                 *
  *                                                                       *
  * Portions Copyright (c) 2005-2007 Jon Abernathy <jon@chuggnutt.com>    *
+ * This version from https://github.com/mtibben/html2text                *
  *                                                                       *
  * This script is free software; you can redistribute it and/or modify   *
  * it under the terms of the GNU General Public License as published by  *
