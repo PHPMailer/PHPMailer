@@ -313,7 +313,14 @@ class PHPMailer {
    */
   public $SingleTo      = false;
 
-   /**
+  /**
+   * Should we generate VERP addresses when sending via SMTP?
+   * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
+   * @var bool
+   */
+  public $do_verp      = false;
+
+  /**
    * If SingleTo is true, this provides the array to hold the email addresses
    * @var bool
    */
@@ -1059,6 +1066,7 @@ class PHPMailer {
 
     $this->smtp->Timeout = $this->Timeout;
     $this->smtp->do_debug = $this->SMTPDebug;
+    $this->smtp->do_verp = $this->do_verp;
     $hosts = explode(';', $this->Host);
     $index = 0;
     $connection = $this->smtp->Connected();
