@@ -2,6 +2,7 @@
 
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
+* Fix bug in CRAM-MD5 AUTH
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer

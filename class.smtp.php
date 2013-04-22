@@ -381,7 +381,6 @@ class SMTP {
         $rply = $this->get_lines();
         $code = substr($rply, 0, 3);
 
-
         if($code != 334) {
             $this->error =
                 array('error' => 'AUTH not accepted from server',
@@ -444,7 +443,7 @@ class SMTP {
         $rply = $this->get_lines();
         $code = substr($rply, 0, 3);
 
-        if($code != 334) {
+        if($code != 235) {
           $this->error =
             array('error' => 'Credentials not accepted from server',
                   'smtp_code' => $code,
