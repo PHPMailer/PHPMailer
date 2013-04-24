@@ -1066,6 +1066,7 @@ class PHPMailer {
 
     $this->smtp->Timeout = $this->Timeout;
     $this->smtp->do_debug = $this->SMTPDebug;
+    $this->smtp->Debugoutput = $this->Debugoutput;
     $this->smtp->do_verp = $this->do_verp;
     $hosts = explode(';', $this->Host);
     $index = 0;
