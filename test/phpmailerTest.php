@@ -1155,6 +1155,21 @@ EOT;
         $this->Mail->CreateHeader();
         $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
         $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+        //Test pathinfo
+        $a = '/mnt/files/飛兒樂 團光茫.mp3';
+        $q = PHPMailer::mb_pathinfo($a);
+        $this->assertEquals($q['dirname'], '/mnt/files', 'UNIX dirname not matched');
+        $this->assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'UNIX basename not matched');
+        $this->assertEquals($q['extension'], 'mp3', 'UNIX extension not matched');
+        $this->assertEquals($q['filename'], '飛兒樂 團光茫', 'UNIX filename not matched');
+        $this->assertEquals(PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME), '/mnt/files', 'Dirname path element not matched');
+        $this->assertEquals(PHPMailer::mb_pathinfo($a, 'filename'), '飛兒樂 團光茫', 'Filename path element not matched');
+        $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
+        $q = PHPMailer::mb_pathinfo($a);
+        $this->assertEquals($q['dirname'], 'c:\mnt\files', 'Windows dirname not matched');
+        $this->assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'Windows basename not matched');
+        $this->assertEquals($q['extension'], 'mp3', 'Windows extension not matched');
+        $this->assertEquals($q['filename'], '飛兒樂 團光茫', 'Windows filename not matched');
     }
 }
 

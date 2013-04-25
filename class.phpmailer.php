@@ -1742,11 +1742,17 @@ class PHPMailer {
    * @throws phpmailerException
    * @return bool
    */
-  public function AddAttachment($path, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
+  public function AddAttachment($path, $name = '', $encoding = 'base64', $type = '') {
     try {
       if ( !@is_file($path) ) {
         throw new phpmailerException($this->Lang('file_access') . $path, self::STOP_CONTINUE);
       }
+
+      //If a MIME type is not specified, try to work it out from the file name
+      if ($type == '') {
+        $type = self::filenameToType($path);
+      }
+
       $filename = basename($path);
       if ( $name == '' ) {
         $name = $filename;
@@ -2092,7 +2098,7 @@ class PHPMailer {
    */
   public function EncodeQ($str, $position = 'text') {
     //There should not be any EOL in the string
-	$pattern="";
+    $pattern = '';
     $encoded = str_replace(array("\r", "\n"), '', $str);
     switch (strtolower($position)) {
       case 'phrase':
@@ -2133,7 +2139,11 @@ class PHPMailer {
    * @param string $type File extension (MIME) type.
    * @return void
    */
-  public function AddStringAttachment($string, $filename, $encoding = 'base64', $type = 'application/octet-stream') {
+  public function AddStringAttachment($string, $filename, $encoding = 'base64', $type = '') {
+    //If a MIME type is not specified, try to work it out from the file name
+    if ($type == '') {
+      $type = self::filenameToType($filename);
+    }
     // Append to $attachment array
     $this->attachment[] = array(
       0 => $string,
@@ -2150,8 +2160,6 @@ class PHPMailer {
   /**
    * Add an embedded attachment from a file.
    * This can include images, sounds, and just about any other document type.
-   * Be sure to set the $type to an image type for images:
-   * JPEG images use 'image/jpeg', GIF uses 'image/gif', PNG uses 'image/png'.
    * @param string $path Path to the attachment.
    * @param string $cid Content ID of the attachment; Use this to reference
    *        the content when using an embedded image in HTML.
@@ -2160,11 +2168,15 @@ class PHPMailer {
    * @param string $type File MIME type.
    * @return bool True on successfully adding an attachment
    */
-  public function AddEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
-
+  public function AddEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '') {
     if ( !@is_file($path) ) {
       $this->SetError($this->Lang('file_access') . $path);
       return false;
+    }
+
+    //If a MIME type is not specified, try to work it out from the file name
+    if ($type == '') {
+      $type = self::filenameToType($path);
     }
 
     $filename = basename($path);
@@ -2200,7 +2212,12 @@ class PHPMailer {
    * @param string $type MIME type.
    * @return bool True on successfully adding an attachment
    */
-  public function AddStringEmbeddedImage($string, $cid, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
+  public function AddStringEmbeddedImage($string, $cid, $name = '', $encoding = 'base64', $type = '') {
+    //If a MIME type is not specified, try to work it out from the name
+    if ($type == '') {
+      $type = self::filenameToType($name);
+    }
+
     // Append to $attachment array
     $this->attachment[] = array(
       0 => $string,
@@ -2457,7 +2474,7 @@ class PHPMailer {
             $directory = '';
           }
           $cid = 'cid:' . md5($url);
-          $ext = pathinfo($filename, PATHINFO_EXTENSION);
+          $ext = self::mb_pathinfo($filename, PATHINFO_EXTENSION);
           $mimeType  = self::_mime_types($ext);
           if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
           if ( strlen($directory) > 1 && substr($directory, -1) != '/') { $directory .= '/'; }
@@ -2588,6 +2605,69 @@ class PHPMailer {
       'movie' =>  'video/x-sgi-movie'
     );
     return (!isset($mimes[strtolower($ext)])) ? 'application/octet-stream' : $mimes[strtolower($ext)];
+  }
+
+  /**
+   * Try to map a file name to a MIME type, default to application/octet-stream
+   * @param string $filename A file name or full path, does not need to exist as a file
+   * @return string
+   * @static
+   */
+  public static function filenameToType($filename) {
+    //In case the path is a URL, strip any query string before getting extension
+    $qpos = strpos($filename, '?');
+    if ($qpos !== false) {
+      $filename = substr($filename, 0, $qpos);
+    }
+    $pathinfo = self::mb_pathinfo($filename);
+    return self::_mime_types($pathinfo['extension']);
+  }
+
+  /**
+   * Drop-in replacement for pathinfo(), but multibyte-safe, cross-platform-safe, old-version-safe.
+   * Works similarly to the one in PHP >= 5.2.0
+   * @link http://www.php.net/manual/en/function.pathinfo.php#107461
+   * @param string $path A filename or path, does not need to exist as a file
+   * @param integer|string $options Either a PATHINFO_* constant, or a string name to return only the specified piece, allows 'filename' to work on PHP < 5.2
+   * @return string|array
+   * @static
+   */
+  public static function mb_pathinfo($path, $options = null) {
+    $ret = array('dirname' => '', 'basename' => '', 'extension' => '', 'filename' => '');
+    $m = array();
+    preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im', $path, $m);
+    if(array_key_exists(1, $m)) {
+      $ret['dirname'] = $m[1];
+    }
+    if(array_key_exists(2, $m)) {
+      $ret['basename'] = $m[2];
+    }
+    if(array_key_exists(5, $m)) {
+      $ret['extension'] = $m[5];
+    }
+    if(array_key_exists(3, $m)) {
+      $ret['filename'] = $m[3];
+    }
+    switch($options) {
+      case PATHINFO_DIRNAME:
+      case 'dirname':
+        return $ret['dirname'];
+        break;
+      case PATHINFO_BASENAME:
+      case 'basename':
+        return $ret['basename'];
+        break;
+      case PATHINFO_EXTENSION:
+      case 'extension':
+        return $ret['extension'];
+        break;
+      case PATHINFO_FILENAME:
+      case 'filename':
+        return $ret['filename'];
+        break;
+      default:
+        return $ret;
+    }
   }
 
   /**
