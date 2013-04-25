@@ -536,10 +536,18 @@ class PHPMailer {
    * Outputs debugging info via user-defined method
    * @param string $str
    */
-  private function edebug($str) {
-    if ($this->Debugoutput == "error_log") {
+  protected function edebug($str) {
+    switch ($this->Debugoutput) {
+      case 'error_log':
         error_log($str);
-    } else {
+        break;
+      case 'html':
+        //Cleans up output a bit for a better looking display that's HTML-safe
+        echo htmlentities(preg_replace('/[\r\n]+/', '', $str), ENT_QUOTES, $this->CharSet)."<br>\n";
+        break;
+      case 'echo':
+      default:
+        //Just echoes exactly what was received
         echo $str;
     }
   }
@@ -1480,19 +1488,19 @@ class PHPMailer {
     switch($this->message_type) {
       case 'inline':
         $result .= $this->HeaderLine('Content-Type', 'multipart/related;');
-        $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
+        $result .= $this->TextLine("\tboundary=" . $this->boundary[1]);
         break;
       case 'attach':
       case 'inline_attach':
       case 'alt_attach':
       case 'alt_inline_attach':
         $result .= $this->HeaderLine('Content-Type', 'multipart/mixed;');
-        $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
+        $result .= $this->TextLine("\tboundary=" . $this->boundary[1]);
         break;
       case 'alt':
       case 'alt_inline':
         $result .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
-        $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
+        $result .= $this->TextLine("\tboundary=" . $this->boundary[1]);
         break;
       default:
         // Catches case 'plain': and case '':
@@ -1549,7 +1557,7 @@ class PHPMailer {
       case 'inline_attach':
         $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
-        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->TextLine("\tboundary=" . $this->boundary[2]);
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', '', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
@@ -1573,7 +1581,7 @@ class PHPMailer {
         $body .= $this->LE.$this->LE;
         $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
-        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->TextLine("\tboundary=" . $this->boundary[2]);
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
@@ -1585,7 +1593,7 @@ class PHPMailer {
       case 'alt_attach':
         $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
-        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->TextLine("\tboundary=" . $this->boundary[2]);
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
@@ -1600,14 +1608,14 @@ class PHPMailer {
       case 'alt_inline_attach':
         $body .= $this->TextLine('--' . $this->boundary[1]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
-        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->TextLine("\tboundary=" . $this->boundary[2]);
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
         $body .= $this->TextLine('--' . $this->boundary[2]);
         $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
-        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[3] . '"');
+        $body .= $this->TextLine("\tboundary=" . $this->boundary[3]);
         $body .= $this->LE;
         $body .= $this->GetBoundary($this->boundary[3], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
@@ -1837,10 +1845,16 @@ class PHPMailer {
         $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
 
         if($disposition == 'inline') {
-          $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
+          $mime[] = sprintf("Content-ID: <%s@phpmailer.0>%s", $cid, $this->LE); //RFC2392 S 2
         }
 
-        $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s", $disposition, $this->EncodeHeader($this->SecureHeader($name)), $this->LE.$this->LE);
+        //If a filename contains any of these chars, it should be quoted, but not otherwise: RFC2183 & RFC2045 5.1
+        //Fixes a warning in IETF's msglint MIME checker
+        if (preg_match('/[ \(\)<>@,;:\\"\/\[\]\?=]/', $name)) {
+          $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s", $disposition, $this->EncodeHeader($this->SecureHeader($name)), $this->LE.$this->LE);
+        } else {
+          $mime[] = sprintf("Content-Disposition: %s; filename=%s%s", $disposition, $this->EncodeHeader($this->SecureHeader($name)), $this->LE.$this->LE);
+        }
 
         // Encode as string attachment
         if($bString) {
@@ -2473,12 +2487,10 @@ class PHPMailer {
           if ($directory == '.') {
             $directory = '';
           }
-          $cid = 'cid:' . md5($url);
-          $ext = self::mb_pathinfo($filename, PATHINFO_EXTENSION);
-          $mimeType  = self::_mime_types($ext);
+          $cid = 'cid:' . md5($url).'@phpmailer.0'; //RFC2392 S 2
           if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
           if ( strlen($directory) > 1 && substr($directory, -1) != '/') { $directory .= '/'; }
-          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($url), $filename, 'base64', $mimeType) ) {
+          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($url), $filename, 'base64', self::_mime_types(self::mb_pathinfo($filename, PATHINFO_EXTENSION)))) {
             $message = preg_replace("/".$images[1][$i]."=[\"']".preg_quote($url, '/')."[\"']/Ui", $images[1][$i]."=\"".$cid."\"", $message);
           }
         }
