@@ -3,13 +3,17 @@
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
-* Propagate debug output option to SMTP class (@Reblutus)
+* Propagate Debugoutput option to SMTP class (@Reblutus)
 * Determine MIME type of attachments automatically
 * Add cross-platform, multibyte-safe pathinfo replacement (with tests) and use it
 * Add a new 'html' Debugoutput type
-* Clean up SMTP debug output, remove unnecessary repeated code
+* Clean up SMTP debug output, remove embedded HTML
 * Some small changes in header formatting to improve IETF msglint test results
-* Update test script to use some recently changed features
+* Update test_script to use some recently changed features, rename to code_generator
+* Generated code actually works!
+* Update SyntaxHighlighter
+* Major overhaul and cleanup of example code
+* New PHPMailer graphic
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
@@ -27,8 +31,7 @@
 
 ## Version 5.2.4 (February 19, 2013)
 * Fix tag and version bug.
-* un-deprecate isSMTP(), isMail(), IsSendmail() and
-  isQmail().
+* un-deprecate isSMTP(), isMail(), IsSendmail() and isQmail().
 * Numerous translation updates
 
 ## Version 5.2.3 (February 8, 2013)
