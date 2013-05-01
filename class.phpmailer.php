@@ -718,11 +718,11 @@ class PHPMailer {
    * Set the From and FromName properties
    * @param string $address
    * @param string $name
-   * @param int $auto Also set Reply-To and Sender
+   * @param boolean $auto Whether to also set the Sender address, defaults to true
    * @throws phpmailerException
    * @return boolean
    */
-  public function SetFrom($address, $name = '', $auto = 1) {
+  public function SetFrom($address, $name = '', $auto = true) {
     $address = trim($address);
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
     if (!$this->ValidateAddress($address)) {
