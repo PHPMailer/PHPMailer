@@ -738,9 +738,6 @@ class PHPMailer {
     $this->From = $address;
     $this->FromName = $name;
     if ($auto) {
-      if (empty($this->ReplyTo)) {
-        $this->AddAnAddress('Reply-To', $address, $name);
-      }
       if (empty($this->Sender)) {
         $this->Sender = $address;
       }
