@@ -650,7 +650,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->AddAttachment('test.png')) {
+        if (!$this->Mail->AddAttachment('../examples/images/phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -730,46 +730,30 @@ EOT;
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
 
+    /**
+     * Test simple message builder and html2text converters
+     */
     function test_MsgHTML() {
-        $message = <<<'EOT'
-<html>
-    <head>
-        <title>HTML email test</title>
-    </head>
-    <body>
-        <h1>PHPMailer does HTML!</h1>
-        <p>This is a <strong>test message</strong> written in HTML.<br>
-        Go to <a href="https://github.com/PHPMailer/PHPMailer/">https://github.com/PHPMailer/PHPMailer/</a>
-        for new versions of PHPMailer.</p>
-        <p>Thank you!</p>
-    </body>
-</html>
-EOT;
-        $this->Mail->MsgHTML($message);
-        $plainmessage = <<<'EOT'
-PHPMailer does HTML!
-        This is a test message written in HTML.
-        Go to https://github.com/PHPMailer/PHPMailer/
-        for new versions of PHPMailer.
-        Thank you!
-EOT;
+        $message = file_get_contents('../examples/contents.html');
+        $this->Mail->CharSet = 'utf-8';
+        $this->Mail->Body = '';
+        $this->Mail->AltBody = '';
+        $this->Mail->MsgHTML($message, '..');
+        $this->Mail->Subject .= ': MsgHTML';
 
-        $this->assertEquals($this->Mail->Body, $message, 'Body not set by MsgHTML');
-        $this->assertEquals($this->Mail->AltBody, $plainmessage, 'AltBody not set by MsgHTML');
+        $this->assertNotEmpty($this->Mail->Body, 'Body not set by MsgHTML');
+        $this->assertNotEmpty($this->Mail->AltBody, 'AltBody not set by MsgHTML');
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
 
         //Again, using the advanced HTML to text converter
         $this->Mail->AltBody = '';
-        $this->Mail->MsgHTML($message, '', true);
+        $this->Mail->MsgHTML($message, '..', true);
+        $this->Mail->Subject .= ' + html2text advanced';
         $this->assertNotEmpty($this->Mail->AltBody, 'Advanced AltBody not set by MsgHTML');
 
-        //Make sure that changes to the original message are reflected when called again
-        $message = str_replace('PHPMailer', 'bananas', $message);
-        $plainmessage = str_replace('PHPMailer', 'bananas', $plainmessage);
-        $this->Mail->MsgHTML($message);
-        $this->assertEquals($this->Mail->Body, $message, 'Body not updated by MsgHTML');
-        $this->assertEquals($this->Mail->AltBody, $plainmessage, 'AltBody not updated by MsgHTML');
-
+        $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
+
     /**
      * Simple HTML and attachment test
      */
@@ -799,9 +783,9 @@ EOT;
         $this->Mail->IsHTML(true);
 
         if (!$this->Mail->AddEmbeddedImage(
-            'test.png',
+            '../examples/images/phpmailer.png',
             'my-attach',
-            'test.png',
+            'phpmailer.png',
             'base64',
             'image/png'
         )
@@ -828,9 +812,9 @@ EOT;
         $this->Mail->IsHTML(true);
 
         if (!$this->Mail->AddEmbeddedImage(
-            'test.png',
+            '../examples/images/phpmailer.png',
             'my-attach',
-            'test.png',
+            'phpmailer.png',
             'base64',
             'image/png'
         )
@@ -1136,6 +1120,21 @@ EOT;
         unlink($keyfile);
     }
 
+  /**
+   * Test line break reformatting
+   */
+  function test_LineBreaks()
+  {
+    $unixsrc    = "Hello\nWorld\nAgain\n";
+    $macsrc     = "Hello\rWorld\rAgain\r";
+    $windowssrc = "Hello\r\nWorld\r\nAgain\r\n";
+    $mixedsrc   = "Hello\nWorld\rAgain\r\n";
+    $target     = "Hello\r\nWorld\r\nAgain\r\n";
+    $this->assertEquals($target, PHPMailer::NormalizeBreaks($unixsrc), 'UNIX break reformatting failed');
+    $this->assertEquals($target, PHPMailer::NormalizeBreaks($macsrc), 'Mac break reformatting failed');
+    $this->assertEquals($target, PHPMailer::NormalizeBreaks($windowssrc), 'Windows break reformatting failed');
+    $this->assertEquals($target, PHPMailer::NormalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+  }
     /**
      * Miscellaneous calls to improve test coverage and some small tests
      */

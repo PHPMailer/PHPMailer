@@ -30,25 +30,18 @@ function callbackAction ($result, $to, $cc, $bcc, $subject, $body) {
   return true;
 }
 
-$testLite = false;
-
-if ($testLite) {
-  require_once '../class.phpmailer-lite.php';
-  $mail = new PHPMailerLite();
-} else {
-  require_once '../class.phpmailer.php';
-  $mail = new PHPMailer();
-}
+require_once '../class.phpmailer.php';
+$mail = new PHPMailer();
 
 try {
-  $mail->IsMail(); // telling the class to use SMTP
-  $mail->SetFrom('you@yourdomain.com', 'Your Name');
-  $mail->AddAddress('another@yourdomain.com', 'John Doe');
+  $mail->IsMail();
+  $mail->SetFrom('you@example.com', 'Your Name');
+  $mail->AddAddress('another@example.com', 'John Doe');
   $mail->Subject = 'PHPMailer Lite Test Subject via Mail()';
   $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
-  $mail->MsgHTML(file_get_contents('contents.html'));
-  $mail->AddAttachment('images/phpmailer.png');      // attachment
-  $mail->AddAttachment('images/phpmailer_mini.gif'); // attachment
+  $mail->MsgHTML(file_get_contents('../examples/contents.html'));
+  $mail->AddAttachment('../examples/images/phpmailer.png');      // attachment
+  $mail->AddAttachment('../examples/images/phpmailer_mini.gif'); // attachment
   $mail->action_function = 'callbackAction';
   $mail->Send();
   echo "Message Sent OK</p>\n";

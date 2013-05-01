@@ -1845,7 +1845,7 @@ class PHPMailer {
         $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
 
         if($disposition == 'inline') {
-          $mime[] = sprintf("Content-ID: <%s@phpmailer.0>%s", $cid, $this->LE); //RFC2392 S 2
+          $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
         }
 
         //If a filename contains any of these chars, it should be quoted, but not otherwise: RFC2183 & RFC2045 5.1
@@ -2497,12 +2497,13 @@ class PHPMailer {
       }
     }
     $this->IsHTML(true);
-    $this->Body = $message;
-    $this->AltBody = $this->html2text($message, $advanced);
     if (empty($this->AltBody)) {
       $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
     }
-    return $message;
+    //Convert all message body line breaks to CRLF, makes quoted-printable encoding work much better
+    $this->Body = $this->NormalizeBreaks($message);
+    $this->AltBody = $this->NormalizeBreaks($this->html2text($message, $advanced));
+    return $this->Body;
   }
 
     /**
@@ -2723,6 +2724,20 @@ class PHPMailer {
   }
 
   /**
+   * Normalize UNIX LF, Mac CR and Windows CRLF line breaks into a single line break format
+   * Defaults to CRLF (for message bodies) and preserves consecutive breaks
+   * @param string $text
+   * @param string $breaktype What kind of line break to use, defaults to CRLF
+   * @return string
+   * @access public
+   * @static
+   */
+  public static function NormalizeBreaks($text, $breaktype = "\r\n") {
+    return preg_replace('/(\r\n|\r|\n)/ms', $breaktype, $text);
+  }
+
+
+	/**
    * Set the private key file and password to sign the message.
    *
    * @access public
