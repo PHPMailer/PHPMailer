@@ -14,6 +14,9 @@
 * Update SyntaxHighlighter
 * Major overhaul and cleanup of example code
 * New PHPMailer graphic
+* MsgHTML now uses RFC2392-compliant content ids
+* Add line break normalization function and use it in MsgHTML
+* Don't set unnecessary reply-to addresses
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
