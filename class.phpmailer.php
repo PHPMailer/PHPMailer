@@ -1504,7 +1504,10 @@ class PHPMailer {
         $result .= $this->TextLine('Content-Type: '.$this->ContentType.'; charset='.$this->CharSet);
         break;
     }
-    $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
+    //RFC1341 part 5 says 7bit is assumed if not specified
+    if ($this->Encoding != '7bit') {
+      $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
+    }
 
     if($this->Mailer != 'mail') {
       $result .= $this->LE;
