@@ -1501,10 +1501,10 @@ class PHPMailer {
         break;
       default:
         // Catches case 'plain': and case '':
-        $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
         $result .= $this->TextLine('Content-Type: '.$this->ContentType.'; charset='.$this->CharSet);
         break;
     }
+    $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
 
     if($this->Mailer != 'mail') {
       $result .= $this->LE;
