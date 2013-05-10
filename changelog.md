@@ -17,6 +17,8 @@
 * MsgHTML now uses RFC2392-compliant content ids
 * Add line break normalization function and use it in MsgHTML
 * Don't set unnecessary reply-to addresses
+* Make fakesendmail.sh a bit cleaner and safer
+* Set a content-transfer-encoding on multiparts (fixes msglint error)
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
