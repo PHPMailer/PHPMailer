@@ -1074,18 +1074,15 @@ class PHPMailer {
     $this->smtp->Debugoutput = $this->Debugoutput;
     $this->smtp->do_verp = $this->do_verp;
     $hosts = explode(';', $this->Host);
-    $index = 0;
-    $connection = $this->smtp->Connected();
 
     // Retry while there is no connection
-    try {
-      while($index < count($hosts) && !$connection) {
-        $hostinfo = array();
-        if (preg_match('/^(.+):([0-9]+)$/', $hosts[$index], $hostinfo)) {
+    for ($i=0,$c=count($hosts); $i<$c; ++$i) {
+      try {
+        if (preg_match('/^(.+):([0-9]+)$/', $hosts[$i], $hostinfo)) {
           $host = $hostinfo[1];
           $port = $hostinfo[2];
         } else {
-          $host = $hosts[$index];
+          $host = $hosts[$i];
           $port = $this->Port;
         }
 
@@ -1106,25 +1103,23 @@ class PHPMailer {
             $this->smtp->Hello($hello);
           }
 
-          $connection = true;
           if ($this->SMTPAuth) {
             if (!$this->smtp->Authenticate($this->Username, $this->Password, $this->AuthType, $this->Realm, $this->Workstation)) {
               throw new phpmailerException($this->Lang('authenticate'));
             }
           }
-        }
-        $index++;
-        if (!$connection) {
+        } else {
           throw new phpmailerException($this->Lang('connect_host'));
         }
-      }
-    } catch (phpmailerException $e) {
-      $this->smtp->Reset();
-      if ($this->exceptions) {
-        throw $e;
+        return true;
+      } catch (phpmailerException $e) {
+        $this->smtp->Reset();
+        if ($i==$c-1 && $this->exceptions) {
+         throw $e;
+        }
       }
     }
-    return true;
+    return false;
   }
 
   /**
