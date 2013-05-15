@@ -1069,62 +1069,65 @@ class PHPMailer {
       $this->smtp = new SMTP;
     }
 
+    //Already connected?
+    if ($this->smtp->Connected()) {
+      return true;
+    }
+
     $this->smtp->Timeout = $this->Timeout;
     $this->smtp->do_debug = $this->SMTPDebug;
     $this->smtp->Debugoutput = $this->Debugoutput;
     $this->smtp->do_verp = $this->do_verp;
-    $hosts = explode(';', $this->Host);
     $index = 0;
-    $connection = $this->smtp->Connected();
+    $tls = ($this->SMTPSecure == 'tls');
+    $ssl = ($this->SMTPSecure == 'ssl');
+    $hosts = explode(';', $this->Host);
+    $lastexception = null;
 
-    // Retry while there is no connection
-    try {
-      while($index < count($hosts) && !$connection) {
-        $hostinfo = array();
-        if (preg_match('/^(.+):([0-9]+)$/', $hosts[$index], $hostinfo)) {
-          $host = $hostinfo[1];
-          $port = $hostinfo[2];
-        } else {
-          $host = $hosts[$index];
-          $port = $this->Port;
-        }
-
-        $tls = ($this->SMTPSecure == 'tls');
-        $ssl = ($this->SMTPSecure == 'ssl');
-
-        if ($this->smtp->Connect(($ssl ? 'ssl://':'').$host, $port, $this->Timeout)) {
-
-          $hello = ($this->Helo != '' ? $this->Helo : $this->ServerHostname());
+    foreach ($hosts as $hostentry) {
+      $hostinfo = array();
+      $host = $hostentry;
+      $port = $this->Port;
+      if (preg_match('/^(.+):([0-9]+)$/', $hostentry, $hostinfo)) { //If $hostentry contains 'address:port', override default
+        $host = $hostinfo[1];
+        $port = $hostinfo[2];
+      }
+      if ($this->smtp->Connect(($ssl ? 'ssl://':'').$host, $port, $this->Timeout)) {
+        try {
+          if ($this->Helo) {
+            $hello = $this->Helo;
+          } else {
+            $hello = $this->ServerHostname();
+          }
           $this->smtp->Hello($hello);
 
           if ($tls) {
             if (!$this->smtp->StartTLS()) {
               throw new phpmailerException($this->Lang('connect_host'));
             }
-
             //We must resend HELO after tls negotiation
             $this->smtp->Hello($hello);
           }
-
-          $connection = true;
           if ($this->SMTPAuth) {
             if (!$this->smtp->Authenticate($this->Username, $this->Password, $this->AuthType, $this->Realm, $this->Workstation)) {
               throw new phpmailerException($this->Lang('authenticate'));
             }
           }
+          return true;
+        } catch (phpmailerException $e) {
+          $lastexception = $e;
+          //We must have connected, but then failed TLS or Auth, so close connection nicely
+          $this->smtp->Quit();
         }
-        $index++;
-        if (!$connection) {
-          throw new phpmailerException($this->Lang('connect_host'));
-        }
-      }
-    } catch (phpmailerException $e) {
-      $this->smtp->Reset();
-      if ($this->exceptions) {
-        throw $e;
       }
     }
-    return true;
+    //If we get here, all connection attempts have failed, so close connection hard
+    $this->smtp->Close();
+    //As we've caught all exceptions, just report whatever the last one was
+    if ($this->exceptions and !is_null($lastexception)) {
+      throw $lastexception;
+    }
+    return false;
   }
 
   /**
@@ -2478,8 +2481,8 @@ class PHPMailer {
    */
   public function MsgHTML($message, $basedir = '', $advanced = false) {
     preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", $message, $images);
-    if(isset($images[2])) {
-      foreach($images[2] as $i => $url) {
+    if (isset($images[2])) {
+      foreach ($images[2] as $i => $url) {
         // do not change urls for absolute images (thanks to corvuscorax)
         if (!preg_match('#^[A-z]+://#', $url)) {
           $filename = basename($url);
@@ -2487,11 +2490,15 @@ class PHPMailer {
           if ($directory == '.') {
             $directory = '';
           }
-          $cid = 'cid:' . md5($url).'@phpmailer.0'; //RFC2392 S 2
-          if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
-          if ( strlen($directory) > 1 && substr($directory, -1) != '/') { $directory .= '/'; }
-          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, $cid, $filename, 'base64', self::_mime_types(self::mb_pathinfo($filename, PATHINFO_EXTENSION)))) {
-            $message = preg_replace("/".$images[1][$i]."=[\"']".preg_quote($url, '/')."[\"']/Ui", $images[1][$i]."=\"".$cid."\"", $message);
+          $cid = md5($url).'@phpmailer.0'; //RFC2392 S 2
+          if (strlen($basedir) > 1 && substr($basedir, -1) != '/') {
+            $basedir .= '/';
+          }
+          if (strlen($directory) > 1 && substr($directory, -1) != '/') {
+            $directory .= '/';
+          }
+          if ($this->AddEmbeddedImage($basedir.$directory.$filename, $cid, $filename, 'base64', self::_mime_types(self::mb_pathinfo($filename, PATHINFO_EXTENSION)))) {
+            $message = preg_replace("/".$images[1][$i]."=[\"']".preg_quote($url, '/')."[\"']/Ui", $images[1][$i]."=\"cid:".$cid."\"", $message);
           }
         }
       }

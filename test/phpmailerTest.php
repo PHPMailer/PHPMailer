@@ -738,7 +738,7 @@ EOT;
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
-        $this->Mail->MsgHTML($message, '..');
+        $this->Mail->MsgHTML($message, '../examples');
         $this->Mail->Subject .= ': MsgHTML';
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by MsgHTML');
@@ -747,7 +747,7 @@ EOT;
 
         //Again, using the advanced HTML to text converter
         $this->Mail->AltBody = '';
-        $this->Mail->MsgHTML($message, '..', true);
+        $this->Mail->MsgHTML($message, '../examples', true);
         $this->Mail->Subject .= ' + html2text advanced';
         $this->assertNotEmpty($this->Mail->AltBody, 'Advanced AltBody not set by MsgHTML');
 
@@ -954,7 +954,21 @@ EOT;
         $this->Mail->SmtpClose();
     }
 
-    /**
+  /**
+   * Test SMTP host connections
+   */
+  function test_SmtpConnect()
+  {
+    $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP single connect failed');
+    $this->Mail->SmtpClose();
+    $this->Mail->Host = "localhost:12345;10.10.10.10:54321";
+    $this->assertFalse($this->Mail->SmtpConnect(), 'SMTP bad multi-connect succeeded');
+    $this->Mail->SmtpClose();
+    $this->Mail->Host = "localhost:12345;10.10.10.10:54321;".$_REQUEST['mail_host'];
+    $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP multi-connect failed');
+  }
+
+  /**
      * Tests this denial of service attack:
      *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */

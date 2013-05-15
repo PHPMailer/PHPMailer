@@ -19,6 +19,8 @@
 * Don't set unnecessary reply-to addresses
 * Make fakesendmail.sh a bit cleaner and safer
 * Set a content-transfer-encoding on multiparts (fixes msglint error)
+* Fix cid generation in MsgHTML (Thanks to @digitalthought)
+* Fix handling of multiple SMTP servers (Thanks to @NanoCaiordo)
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
