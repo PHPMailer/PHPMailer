@@ -149,28 +149,24 @@ class SMTP {
   /////////////////////////////////////////////////
 
   /**
-   * Connect to the server specified on the port specified.
-   * If the port is not specified use the default SMTP_PORT.
-   * If tval is specified then a connection will try and be
-   * established with the server for that number of seconds.
-   * If tval is not specified the default is 30 seconds to
-   * try on the connection.
+   * Connect to an SMTP server
    *
    * SMTP CODE SUCCESS: 220
    * SMTP CODE FAILURE: 421
    * @access public
-   * @param string $host
-   * @param int $port
-   * @param int $tval
+   * @param string $host SMTP server IP or host name
+   * @param int $port The port number to connect to, or use the default port if not specified
+   * @param int $timeout How long to wait for the connection to open
+   * @param array $options An array of options compatible with stream_context_create()
    * @return bool
    */
-  public function Connect($host, $port = 0, $tval = 30) {
-    // set the error val to null so there is no confusion
+  public function Connect($host, $port = 0, $timeout = 30, $options = array()) {
+    // Clear errors to avoid confusion
     $this->error = null;
 
-    // make sure we are __not__ connected
+    // Make sure we are __not__ connected
     if($this->connected()) {
-      // already connected, generate error
+      // Already connected, generate error
       $this->error = array('error' => 'Already connected to a server');
       return false;
     }
@@ -179,13 +175,14 @@ class SMTP {
       $port = $this->SMTP_PORT;
     }
 
-    // connect to the smtp server
-    $this->smtp_conn = @fsockopen($host,    // the host of the server
-                                 $port,    // the port to use
-                                 $errno,   // error number if any
-                                 $errstr,  // error message if any
-                                 $tval);   // give up after ? secs
-    // verify we connected properly
+    // Connect to the SMTP server
+    $errno = 0;
+    $errstr = '';
+    $socket_context = stream_context_create($options);
+    //Need to suppress errors here as connection failures can be handled at a higher level
+    $this->smtp_conn = @stream_socket_client($host.":".$port, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $socket_context);
+
+    // Verify we connected properly
     if(empty($this->smtp_conn)) {
       $this->error = array('error' => 'Failed to connect to server',
                            'errno' => $errno,
@@ -199,11 +196,11 @@ class SMTP {
     // SMTP server can take longer to respond, give longer timeout for first read
     // Windows does not have support for this timeout function
     if(substr(PHP_OS, 0, 3) != 'WIN') {
-     $max = ini_get('max_execution_time');
-     if ($max != 0 && $tval > $max) { // don't bother if unlimited
-      @set_time_limit($tval);
-     }
-     stream_set_timeout($this->smtp_conn, $tval, 0);
+      $max = ini_get('max_execution_time');
+      if ($max != 0 && $timeout > $max) { // Don't bother if unlimited
+        @set_time_limit($timeout);
+      }
+      stream_set_timeout($this->smtp_conn, $timeout, 0);
     }
 
     // get any announcement
