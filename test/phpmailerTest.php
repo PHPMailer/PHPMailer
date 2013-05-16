@@ -955,24 +955,25 @@ EOT;
         $this->Mail->SmtpClose();
     }
 
-  /**
-   * Test SMTP host connections
-   */
-  function test_SmtpConnect()
-  {
-    $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP single connect failed');
-    $this->Mail->SmtpClose();
-    $this->Mail->Host = "localhost:12345;10.10.10.10:54321";
-    $this->assertFalse($this->Mail->SmtpConnect(), 'SMTP bad multi-connect succeeded');
-    $this->Mail->SmtpClose();
-    $this->Mail->Host = "localhost:12345;10.10.10.10:54321;".$_REQUEST['mail_host'];
-    $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP multi-connect failed');
-    $this->Mail->SmtpClose();
-    $this->Mail->Host = $_REQUEST['mail_host'];
-    $this->assertTrue($this->Mail->SmtpConnect(array('ssl' => array('verify_depth' => 10))), 'SMTP connect with options failed');
-  }
+    /**
+     * Test SMTP host connections
+     */
+    function test_SmtpConnect()
+    {
+      $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP single connect failed');
+      $this->Mail->SmtpClose();
+      $this->Mail->Host = "localhost:12345;10.10.10.10:54321";
+      $this->assertFalse($this->Mail->SmtpConnect(), 'SMTP bad multi-connect succeeded');
+      $this->Mail->SmtpClose();
+      $this->Mail->Host = "localhost:12345;10.10.10.10:54321;".$_REQUEST['mail_host'];
+      $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP multi-connect failed');
+      $this->Mail->SmtpClose();
+      $this->Mail->Host = $_REQUEST['mail_host'];
+      //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
+      $this->assertTrue($this->Mail->SmtpConnect(array('ssl' => array('verify_depth' => 10))), 'SMTP connect with options failed');
+    }
 
-  /**
+    /**
      * Tests this denial of service attack:
      *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */
