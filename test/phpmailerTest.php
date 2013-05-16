@@ -969,7 +969,7 @@ EOT;
     $this->assertTrue($this->Mail->SmtpConnect(), 'SMTP multi-connect failed');
     $this->Mail->SmtpClose();
     $this->Mail->Host = $_REQUEST['mail_host'];
-    $this->assertTrue($this->Mail->SmtpConnect(array('socket' => array('bindto' => '0:7000'))), 'SMTP connect with options failed');
+    $this->assertTrue($this->Mail->SmtpConnect(array('ssl' => array('verify_depth' => 10))), 'SMTP connect with options failed');
   }
 
   /**
