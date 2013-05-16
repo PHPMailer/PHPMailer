@@ -1059,12 +1059,13 @@ class PHPMailer {
   /**
    * Initiates a connection to an SMTP server.
    * Returns false if the operation failed.
+   * @param array $options An array of options compatible with stream_context_create()
    * @uses SMTP
    * @access public
    * @throws phpmailerException
    * @return bool
    */
-  public function SmtpConnect() {
+  public function SmtpConnect($options = array()) {
     if(is_null($this->smtp)) {
       $this->smtp = new SMTP;
     }
@@ -1092,7 +1093,7 @@ class PHPMailer {
         $host = $hostinfo[1];
         $port = $hostinfo[2];
       }
-      if ($this->smtp->Connect(($ssl ? 'ssl://':'').$host, $port, $this->Timeout)) {
+      if ($this->smtp->Connect(($ssl ? 'ssl://':'').$host, $port, $this->Timeout, $options)) {
         try {
           if ($this->Helo) {
             $hello = $this->Helo;
