@@ -874,7 +874,44 @@ EOT;
         }
     }
 
-    /**
+  /**
+   * iCal event test
+   */
+  function test_Ical()
+  {
+    $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
+    $this->Mail->AltBody = 'This is the text part of the email.';
+    $this->Mail->Subject .= ': iCal';
+    $this->Mail->IsHTML(true);
+    $this->BuildBody();
+    require_once '../extras/EasyPeasyICS.php';
+    $ICS = new EasyPeasyICS("PHPMailer test calendar");
+    $ICS->addEvent(
+      strtotime('tomorrow 10:00 Europe/Paris'),
+      strtotime('tomorrow 11:00 Europe/Paris'),
+      'PHPMailer iCal test',
+      'A test of PHPMailer iCal support',
+      'https://github.com/PHPMailer/PHPMailer'
+    );
+    $this->Mail->Ical = $ICS->render(false);
+    $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+    $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+      'Here is an image!</a>.';
+    $this->Mail->AltBody = 'This is the text part of the email.';
+    $this->Mail->Subject .= ': iCal + inline';
+    $this->Mail->IsHTML(true);
+    $this->Mail->AddEmbeddedImage(
+      '../examples/images/phpmailer.png',
+      'my-attach',
+      'phpmailer.png',
+      'base64',
+      'image/png'
+    );
+    $this->BuildBody();
+    $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+  }
+
+  /**
      * Test sending multiple messages with separate connections
      */
     function test_MultipleSend()
@@ -1139,21 +1176,22 @@ EOT;
         unlink($keyfile);
     }
 
-  /**
-   * Test line break reformatting
-   */
-  function test_LineBreaks()
-  {
-    $unixsrc    = "Hello\nWorld\nAgain\n";
-    $macsrc     = "Hello\rWorld\rAgain\r";
-    $windowssrc = "Hello\r\nWorld\r\nAgain\r\n";
-    $mixedsrc   = "Hello\nWorld\rAgain\r\n";
-    $target     = "Hello\r\nWorld\r\nAgain\r\n";
-    $this->assertEquals($target, PHPMailer::NormalizeBreaks($unixsrc), 'UNIX break reformatting failed');
-    $this->assertEquals($target, PHPMailer::NormalizeBreaks($macsrc), 'Mac break reformatting failed');
-    $this->assertEquals($target, PHPMailer::NormalizeBreaks($windowssrc), 'Windows break reformatting failed');
-    $this->assertEquals($target, PHPMailer::NormalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
-  }
+    /**
+     * Test line break reformatting
+     */
+    function test_LineBreaks()
+    {
+      $unixsrc    = "Hello\nWorld\nAgain\n";
+      $macsrc     = "Hello\rWorld\rAgain\r";
+      $windowssrc = "Hello\r\nWorld\r\nAgain\r\n";
+      $mixedsrc   = "Hello\nWorld\rAgain\r\n";
+      $target     = "Hello\r\nWorld\r\nAgain\r\n";
+      $this->assertEquals($target, PHPMailer::NormalizeBreaks($unixsrc), 'UNIX break reformatting failed');
+      $this->assertEquals($target, PHPMailer::NormalizeBreaks($macsrc), 'Mac break reformatting failed');
+      $this->assertEquals($target, PHPMailer::NormalizeBreaks($windowssrc), 'Windows break reformatting failed');
+      $this->assertEquals($target, PHPMailer::NormalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+    }
+
     /**
      * Miscellaneous calls to improve test coverage and some small tests
      */

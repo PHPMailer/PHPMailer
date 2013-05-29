@@ -22,6 +22,7 @@
 * Fix cid generation in MsgHTML (Thanks to @digitalthought)
 * Fix handling of multiple SMTP servers (Thanks to @NanoCaiordo)
 * SMTP->Connect() now supports stream context options (Thanks to @stanislavdavid)
+* Add support for iCal event alternatives (Thanks to @reblutus)
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer

@@ -35,7 +35,9 @@
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-if (version_compare(PHP_VERSION, '5.0.0', '<') ) exit("Sorry, this version of PHPMailer will only run on PHP version 5 or greater!\n");
+if (version_compare(PHP_VERSION, '5.0.0', '<') ) {
+  exit("Sorry, PHPMailer will only run on PHP version 5 or greater!\n");
+}
 
 /**
  * PHP email creation and transport class
@@ -91,8 +93,8 @@ class PHPMailer {
   public $FromName          = 'Root User';
 
   /**
-   * Sets the Sender email (Return-Path) of the message.  If not empty,
-   * will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
+   * Sets the Sender email (Return-Path) of the message.
+   * If not empty, will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
    * @var string
    */
   public $Sender            = '';
@@ -111,20 +113,30 @@ class PHPMailer {
   public $Subject           = '';
 
   /**
-   * Sets the Body of the message.  This can be either an HTML or text body.
-   * If HTML then run IsHTML(true).
+   * An HTML or plain text message body.
+   * If HTML then call IsHTML(true).
    * @var string
    */
   public $Body              = '';
 
   /**
-   * Sets the text-only body of the message.  This automatically sets the
-   * email to multipart/alternative.  This body can be read by mail
-   * clients that do not have HTML email capability such as mutt. Clients
-   * that can read HTML will view the normal Body.
+   * The plain-text message body.
+   * This body can be read by mail clients that do not have HTML email
+   * capability such as mutt & Eudora.
+   * Clients that can read HTML will view the normal Body.
    * @var string
    */
   public $AltBody           = '';
+
+  /**
+   * An iCal message part body
+   * Only supported in simple alt or alt_inline message types
+   * To generate iCal events, use the bundled extras/EasyPeasyICS.php class or iCalcreator
+   * @link http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php/
+   * @link http://kigkonsult.se/iCalcreator/
+   * @var string
+   */
+  public $Ical              = '';
 
   /**
    * Stores the complete compiled MIME message body.
@@ -1577,6 +1589,11 @@ class PHPMailer {
         $body .= $this->GetBoundary($this->boundary[1], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
+        if(!empty($this->Ical)) {
+          $body .= $this->GetBoundary($this->boundary[1], '', 'text/calendar; method=REQUEST', '');
+          $body .= $this->EncodeString($this->Ical, $this->Encoding);
+          $body .= $this->LE.$this->LE;
+        }
         $body .= $this->EndBoundary($this->boundary[1]);
         break;
       case 'alt_inline':
