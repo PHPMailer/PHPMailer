@@ -24,6 +24,7 @@
 * SMTP->Connect() now supports stream context options (Thanks to @stanislavdavid)
 * Add support for iCal event alternatives (Thanks to @reblutus)
 * Update to Polish language file (Thanks to Krzysztof Kowalewski)
+* Update to Norwegian language file (Thanks to @datagutten)
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
