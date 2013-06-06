@@ -169,9 +169,9 @@ try {
     $example_code .= "\n\$mail->WordWrap = 80;";
     $example_code .= "\n\$mail->MsgHTML(\$body, dirname(__FILE__), true); //Create message bodies and embed images";
 
-    $mail->AddAttachment('images/phpmailer-mini.gif', 'phpmailer-mini.gif');  // optional name
+    $mail->AddAttachment('images/phpmailer_mini.gif', 'phpmailer_mini.gif');  // optional name
     $mail->AddAttachment('images/phpmailer.png', 'phpmailer.png');  // optional name
-    $example_code .= "\n\$mail->AddAttachment('images/phpmailer-mini.gif', 'phpmailer-mini.gif');  // optional name";
+    $example_code .= "\n\$mail->AddAttachment('images/phpmailer_mini.gif', 'phpmailer_mini.gif');  // optional name";
     $example_code .= "\n\$mail->AddAttachment('images/phpmailer.png', 'phpmailer.png');  // optional name";
 
     try {

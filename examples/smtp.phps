@@ -47,7 +47,7 @@ $mail->MsgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 //Replace the plain text body with one created manually
 $mail->AltBody = 'This is a plain-text message body';
 //Attach an image file
-$mail->AddAttachment('images/phpmailer-mini.gif');
+$mail->AddAttachment('images/phpmailer_mini.gif');
 
 //Send the message, check for errors
 if(!$mail->Send()) {

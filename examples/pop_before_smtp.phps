@@ -48,7 +48,7 @@ try {
   //Replace the plain text body with one created manually
   $mail->AltBody = 'This is a plain-text message body';
   //Attach an image file
-  $mail->AddAttachment('images/phpmailer-mini.gif');
+  $mail->AddAttachment('images/phpmailer_mini.gif');
   //Send the message
   //Note that we don't need check the response from this because it will throw an exception if it has trouble
   $mail->Send();
