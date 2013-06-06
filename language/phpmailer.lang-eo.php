@@ -15,6 +15,7 @@ $PHPMAILER_LANG['file_open']            = 'Eraro de dosiero: malfermo neeblas: '
 $PHPMAILER_LANG['from_failed']          = 'Jena adreso de sendinto malsukcesis: ';
 $PHPMAILER_LANG['instantiate']          = 'Genero de retmesaĝa funkcio neeblis.';
 $PHPMAILER_LANG['invalid_address']      = 'Retadreso ne validas: ';
+//$PHPMAILER_LANG['mailer_not_supported'] = ' mailer is not supported.';
 $PHPMAILER_LANG['provide_address']      = 'Vi devas tajpi almenaŭ unu recevontan retadreson.';
 $PHPMAILER_LANG['recipients_failed']    = 'Eraro de servilo SMTP : la jenaj poŝtrecivuloj kaŭzis eraron: ';
 $PHPMAILER_LANG['signing']              = 'Eraro de subskribo: ';
