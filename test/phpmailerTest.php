@@ -125,8 +125,9 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Build the body of the message in the appropriate format.
+     *
      * @private
-     * @returns void
+     * @return void
      */
     function BuildBody()
     {
@@ -202,7 +203,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase
     /**
      * Check which default settings have been changed for the report.
      * @private
-     * @returns void
+     * @return void
      */
     function CheckChanges()
     {
@@ -768,6 +769,9 @@ EOT;
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
+
+        //Make sure that trying to attach a nonexistent file fails
+        $this->assertFalse($this->Mail->AddAttachment(__FILE__.md5(microtime()), 'nonexistent_file.txt'));
 
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);

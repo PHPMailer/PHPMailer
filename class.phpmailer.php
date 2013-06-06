@@ -1806,9 +1806,7 @@ class PHPMailer {
       if ($this->SMTPDebug) {
         $this->edebug($e->getMessage()."\n");
       }
-      if ( $e->getCode() == self::STOP_CRITICAL ) {
-        return false;
-      }
+      return false;
     }
     return true;
   }
