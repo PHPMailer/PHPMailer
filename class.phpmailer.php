@@ -2888,7 +2888,7 @@ class PHPMailer {
         $current = 'to_header';
       } else {
         if($current && strpos($header, ' =?') === 0){
-          $$current .= $header;
+          $current .= $header;
         } else {
           $current = '';
         }
