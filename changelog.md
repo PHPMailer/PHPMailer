@@ -26,6 +26,7 @@
 * Update to Polish language file (Thanks to Krzysztof Kowalewski)
 * Update to Norwegian language file (Thanks to @datagutten)
 * Update to Hungarian language file (Thanks to @dominicus-75)
+* Add Persian/Farsi translation from @jaii
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
