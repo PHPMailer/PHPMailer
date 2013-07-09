@@ -1,20 +1,33 @@
 This is built for PHP Mailer 1.72 and was not tested with any previous version. It was developed under PHP 4.3.11 (E_ALL). It works under PHP 5 and 5.1 with E_ALL, but not in Strict mode due to var deprecation (but then neither does PHP Mailer either!). It follows the RFC 1939 standard explicitly and is fully commented.
 
 With that noted, here is how to implement it:
-Install the class file
 
-I didn't want to modify the PHP Mailer classes at all, so you will have to include/require this class along with the base one. It can sit quite happily in the phpmailer-1.72 directory:
-[geshi lang=php] require 'phpmailer-1.72/class.phpmailer.php'; require 'phpmailer-1.72/class.pop3.php'; [/geshi]
+I didn't want to modify the PHP Mailer classes at all, so you will have to include/require this class along with the base one. It can sit quite happily in the phpmailer directory.
+
 When you need it, create your POP3 object
 
 Right before I invoke PHP Mailer I activate the POP3 authorisation. POP3 before SMTP is a process whereby you login to your web hosts POP3 mail server BEFORE sending out any emails via SMTP. The POP3 logon 'verifies' your ability to send email by SMTP, which typically otherwise blocks you. On my web host (Pair Networks) a single POP3 logon is enough to 'verify' you for 90 minutes. Here is some sample PHP code that activates the POP3 logon and then sends an email via PHP Mailer:
-[geshi lang=php] Authorise('pop3.example.com', 110, 30, 'mailer', 'password', 1); $mail = new PHPMailer(); $mail->SMTPDebug = 2; $mail->IsSMTP(); $mail->IsHTML(false); $mail->Host = 'relay.example.com'; $mail->From = 'mailer@example.com'; $mail->FromName = 'Example Mailer'; $mail->Subject = 'My subject'; $mail->Body = 'Hello world'; $mail->AddAddress('rich@corephp.co.uk', 'Richard Davey'); if (!$mail->Send()) { echo $mail->ErrorInfo; } ?> [/geshi]
 
-The PHP Mailer parts of this code should be obvious to anyone who has used PHP Mailer before. One thing to note - you almost certainly will not need to use SMTP Authentication *and* POP3 before SMTP together. The Authorisation method is a proxy method to all of the others within that class. There are Connect, Logon and Disconnect methods available, but I wrapped them in the single Authorisation one to make things easier.
+<?php
+$pop->authorise('pop3.example.com', 110, 30, 'mailer', 'password', 1);
+$mail = new PHPMailer(); $mail->SMTPDebug = 2; $mail->isSMTP();
+$mail->isHTML(false); $mail->Host = 'relay.example.com';
+$mail->From = 'mailer@example.com';
+$mail->FromName = 'Example Mailer';
+$mail->Subject = 'My subject';
+$mail->Body = 'Hello world';
+$mail->addAddress('rich@corephp.co.uk', 'Richard Davey');
+if (!$mail->send()) {
+    echo $mail->ErrorInfo;
+}
+?>
+
+The PHP Mailer parts of this code should be obvious to anyone who has used PHP Mailer before. One thing to note - you almost certainly will not need to use SMTP Authentication *and* POP3 before SMTP together. The Authorisation method is a proxy method to all of the others within that class. There are connect, Logon and disconnect methods available, but I wrapped them in the single Authorisation one to make things easier.
 The Parameters
 
-The Authorise parameters are as follows:
-[geshi lang=php]$pop->Authorise('pop3.example.com', 110, 30, 'mailer', 'password', 1);[/geshi]
+The authorise parameters are as follows:
+
+$pop->authorise('pop3.example.com', 110, 30, 'mailer', 'password', 1);
 
    1. pop3.example.com - The POP3 Mail Server Name (hostname or IP address)
    2. 110 - The POP3 Port on which to connect (default is usually 110, but check with your host)
@@ -33,7 +46,5 @@ Final Comments + the Download
 
 4) There are lots of other POP3 classes for PHP available. However most of them implement the full POP3 command set, where-as this one is purely for authentication, and much lighter as a result. However using any of the other POP3 classes to just logon to your server would have the same net result. At the end of the day, use whatever method you feel most comfortable with.
 Download
-
-Here is the full class file plus my test script: POP_before_SMTP_PHPMailer.zip (4 KB) - Please note that it does not include PHPMailer itself.
 
 My thanks to Chris Ryan for the inspiration (even if indirectly, via his SMTP class)
