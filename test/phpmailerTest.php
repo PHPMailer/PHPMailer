@@ -1006,6 +1006,7 @@ EOT;
         $this->Mail->Body = 'This was done using the SMTP keep-alive.';
         $this->buildBody();
         $subject = $this->Mail->Subject;
+        $this->Mail->SMTPDebug = 2;
 
         $this->Mail->SMTPKeepAlive = true;
         $this->Mail->Subject = $subject . ': SMTP keep-alive 1';
