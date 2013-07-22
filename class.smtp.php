@@ -142,7 +142,7 @@ class SMTP
     }
 
     /**
-     * connect to an SMTP server
+     * Connect to an SMTP server
      * @param string $host    SMTP server IP or host name
      * @param int $port    The port number to connect to
      * @param int $timeout How long to wait for the connection to open
@@ -362,10 +362,8 @@ class SMTP
     /**
      * Works like hash_hmac('md5', $data, $key)
      * in case that function is not available
-     *
      * @param string $data The data to hash
      * @param string $key  The key to hash with
-     *
      * @access protected
      * @return string
      */
@@ -398,7 +396,6 @@ class SMTP
 
     /**
      * Returns true if connected to a server otherwise false
-     *
      * @access public
      * @return bool
      */
@@ -425,7 +422,6 @@ class SMTP
      * Closes the socket and cleans up the state of the class.
      * It is not considered good to use this function without
      * first trying to use QUIT.
-     *
      * @access public
      * @return void
      */
@@ -446,16 +442,8 @@ class SMTP
      * that is to be send with the headers. Each header needs to be
      * on a single line followed by a <CRLF> with the message headers
      * and the message body being separated by and additional <CRLF>.
-     *
      * Implements rfc 821: DATA <CRLF>
-     *
-     * SMTP CODE INTERMEDIATE: 354
-     *     [data]
-     *     <CRLF>.<CRLF>
-     *     SMTP CODE SUCCESS: 250
-     *
      * @param string $msg_data Message data to send
-     *
      * @access public
      * @return bool
      */
@@ -538,22 +526,16 @@ class SMTP
             }
         }
 
-        // message data has been sent, complete the command
-        return $this->sendCommand('DATA END', self::CRLF . '.' . self::CRLF, 250);
+        // Message data has been sent, complete the command
+        return $this->sendCommand('DATA END', self::CRLF . '.', 250);
     }
 
     /**
      * Sends the HELO command to the smtp server.
      * This makes sure that we and the server are in
      * the same known state.
-     *
      * Implements from rfc 821: HELO <SP> <domain> <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250
-     * SMTP CODE ERROR  : 500, 501, 504, 421
-     *
      * @param string $host The host name or IP to connect to
-     *
      * @access public
      * @return bool
      */
@@ -571,10 +553,8 @@ class SMTP
 
     /**
      * Sends a HELO/EHLO command.
-     *
      * @param string $hello The HELO string
      * @param string $host  The hostname to say we are
-     *
      * @access protected
      * @return bool
      */
@@ -590,15 +570,8 @@ class SMTP
      * $from. Returns true if successful or false otherwise. If True
      * the mail transaction is started and then one or more recipient
      * commands may be called followed by a data command.
-     *
      * Implements rfc 821: MAIL <SP> FROM:<reverse-path> <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250
-     * SMTP CODE SUCCESS: 552, 451, 452
-     * SMTP CODE SUCCESS: 500, 501, 421
-     *
      * @param string $from Source address of this message
-     *
      * @access public
      * @return bool
      */
@@ -615,14 +588,8 @@ class SMTP
     /**
      * Sends the quit command to the server and then closes the socket
      * if there is no error or the $close_on_error argument is true.
-     *
      * Implements from rfc 821: QUIT <CRLF>
-     *
-     * SMTP CODE SUCCESS: 221
-     * SMTP CODE ERROR  : 500
-     *
      * @param bool $close_on_error Should the connection close if an error occurs?
-     *
      * @access public
      * @return bool
      */
@@ -640,15 +607,8 @@ class SMTP
     /**
      * Sends the command RCPT to the SMTP server with the TO: argument of $to.
      * Returns true if the recipient was accepted false if it was rejected.
-     *
      * Implements from rfc 821: RCPT <SP> TO:<forward-path> <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250, 251
-     * SMTP CODE FAILURE: 550, 551, 552, 553, 450, 451, 452
-     * SMTP CODE ERROR  : 500, 501, 503, 421
-     *
      * @param string $to The address the message is being sent to
-     *
      * @access public
      * @return bool
      */
@@ -665,12 +625,7 @@ class SMTP
      * Sends the RSET command to abort and transaction that is
      * currently in progress. Returns true if successful false
      * otherwise.
-     *
      * Implements rfc 821: RSET <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250
-     * SMTP CODE ERROR  : 500, 501, 504, 421
-     *
      * @access public
      * @return bool
      */
@@ -680,12 +635,10 @@ class SMTP
     }
 
     /**
-     * send a command to an SMTP server and check its return code
-     *
+     * Send a command to an SMTP server and check its return code
      * @param string $command       The command name - not sent to the server
      * @param string $commandstring The actual command to send
      * @param int|array $expect        One or more expected integer success codes
-     *
      * @access protected
      * @return bool
      */
@@ -733,13 +686,8 @@ class SMTP
      * commands may be called followed by a data command. This command
      * will send the message to the users terminal if they are logged
      * in and send them an email.
-     *
      * Implements rfc 821: SAML <SP> FROM:<reverse-path> <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250
-     *
      * @param string $from The address the message is from
-     *
      * @access public
      * @return bool
      */
@@ -764,7 +712,6 @@ class SMTP
     /**
      * Issue a No-op command
      * Used to keep keep-alives alive, doesn't actually do anything
-     *
      * @access public
      * @return bool
      */
@@ -777,21 +724,14 @@ class SMTP
      * This is an optional command for SMTP that this class does not
      * support. This method is here to make the RFC821 Definition
      * complete for this class and __may__ be implimented in the future
-     *
      * Implements from rfc 821: TURN <CRLF>
-     *
-     * SMTP CODE SUCCESS: 250
-     * SMTP CODE FAILURE: 502
-     * SMTP CODE ERROR  : 500, 503
-     *
      * @access public
      * @return bool
      */
     public function turn()
     {
         $this->error = array(
-            'error' => 'This method, TURN, of the SMTP ' .
-            'is not implemented'
+            'error' => 'The SMTP TURN command is not implemented'
         );
         if ($this->do_debug >= 1) {
             $this->edebug('SMTP -> NOTICE: ' . $this->error['error']);
@@ -801,9 +741,7 @@ class SMTP
 
     /**
      * Sends data to the server
-     *
      * @param string $data The data to send
-     *
      * @access public
      * @return Integer number of bytes sent to the server or FALSE on error
      */
@@ -816,8 +754,7 @@ class SMTP
     }
 
     /**
-     * Get the current error
-     *
+     * Get the latest error
      * @access public
      * @return array
      */
@@ -828,7 +765,6 @@ class SMTP
 
     /**
      * Get the last reply from the server
-     *
      * @access public
      * @return string
      */
@@ -843,7 +779,6 @@ class SMTP
      * With SMTP we can tell if we have more lines to read if the
      * 4th character is '-' symbol. If it is a space then we don't
      * need to read anything else.
-     *
      * @access protected
      * @return string
      */
