@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>PHPMailer Lite - DKIM and Callback Function test</title>
+    <title>PHPMailer Lite - DKIM and Callback Function test</title>
 </head>
 <body>
 
@@ -18,58 +18,63 @@
  *   string  $body          the email body
  * @return boolean
  */
-function callbackAction ($result, $to, $cc, $bcc, $subject, $body) {
-  /*
-  this callback example echos the results to the screen - implement to
-  post to databases, build CSV log files, etc., with minor changes
-  */
-  $to  = cleanEmails($to,'to');
-  $cc  = cleanEmails($cc[0],'cc');
-  $bcc = cleanEmails($bcc[0],'cc');
-  echo $result . "\tTo: "  . $to['Name'] . "\tTo: "  . $to['Email'] . "\tCc: "  . $cc['Name'] . "\tCc: "  . $cc['Email'] . "\tBcc: "  . $bcc['Name'] . "\tBcc: "  . $bcc['Email'] . "\t"  . $subject . "<br />\n";
-  return true;
+function callbackAction($result, $to, $cc, $bcc, $subject, $body)
+{
+    /*
+    this callback example echos the results to the screen - implement to
+    post to databases, build CSV log files, etc., with minor changes
+    */
+    $to = cleanEmails($to, 'to');
+    $cc = cleanEmails($cc[0], 'cc');
+    $bcc = cleanEmails($bcc[0], 'cc');
+    echo $result . "\tTo: " . $to['Name'] . "\tTo: " . $to['Email'] . "\tCc: " . $cc['Name'] .
+        "\tCc: " . $cc['Email'] . "\tBcc: " . $bcc['Name'] . "\tBcc: " . $bcc['Email'] .
+        "\t" . $subject . "\n\n". $body . "\n";
+    return true;
 }
 
 require_once '../class.phpmailer.php';
 $mail = new PHPMailer();
 
 try {
-  $mail->IsMail();
-  $mail->SetFrom('you@example.com', 'Your Name');
-  $mail->AddAddress('another@example.com', 'John Doe');
-  $mail->Subject = 'PHPMailer Lite Test Subject via Mail()';
-  $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!'; // optional - MsgHTML will create an alternate automatically
-  $mail->MsgHTML(file_get_contents('../examples/contents.html'));
-  $mail->AddAttachment('../examples/images/phpmailer.png');      // attachment
-  $mail->AddAttachment('../examples/images/phpmailer_mini.gif'); // attachment
-  $mail->action_function = 'callbackAction';
-  $mail->Send();
-  echo "Message Sent OK</p>\n";
+    $mail->isMail();
+    $mail->setFrom('you@example.com', 'Your Name');
+    $mail->addAddress('another@example.com', 'John Doe');
+    $mail->Subject = 'PHPMailer Lite Test Subject via mail()';
+    // optional - msgHTML will create an alternate automatically
+    $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!';
+    $mail->msgHTML(file_get_contents('../examples/contents.html'));
+    $mail->addAttachment('../examples/images/phpmailer.png'); // attachment
+    $mail->addAttachment('../examples/images/phpmailer_mini.gif'); // attachment
+    $mail->action_function = 'callbackAction';
+    $mail->send();
+    echo "Message Sent OK</p>\n";
 } catch (phpmailerException $e) {
-  echo $e->errorMessage(); //Pretty error messages from PHPMailer
+    echo $e->errorMessage(); //Pretty error messages from PHPMailer
 } catch (Exception $e) {
-  echo $e->getMessage(); //Boring error messages from anything else!
+    echo $e->getMessage(); //Boring error messages from anything else!
 }
 
-function cleanEmails($str,$type) {
-  if ($type == 'cc') {
-    $addy['Email'] = $str[0];
-    $addy['Name']  = $str[1];
+function cleanEmails($str, $type)
+{
+    if ($type == 'cc') {
+        $addy['Email'] = $str[0];
+        $addy['Name'] = $str[1];
+        return $addy;
+    }
+    if (!strstr($str, ' <')) {
+        $addy['Name'] = '';
+        $addy['Email'] = $addy;
+        return $addy;
+    }
+    $addyArr = explode(' <', $str);
+    if (substr($addyArr[1], -1) == '>') {
+        $addyArr[1] = substr($addyArr[1], 0, -1);
+    }
+    $addy['Name'] = $addyArr[0];
+    $addy['Email'] = $addyArr[1];
+    $addy['Email'] = str_replace('@', '&#64;', $addy['Email']);
     return $addy;
-  }
-  if (!strstr($str, ' <')) {
-    $addy['Name']  = '';
-    $addy['Email'] = $addy;
-    return $addy;
-  }
-  $addyArr = explode(' <', $str);
-  if (substr($addyArr[1],-1) == '>') {
-    $addyArr[1] = substr($addyArr[1],0,-1);
-  }
-  $addy['Name']  = $addyArr[0];
-  $addy['Email'] = $addyArr[1];
-  $addy['Email'] = str_replace('@', '&#64;', $addy['Email']);
-  return $addy;
 }
 
 ?>

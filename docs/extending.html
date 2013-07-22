@@ -27,8 +27,8 @@ $mail->Mailer   = "smtp";
 
 @MYSQL_CONNECT("localhost","root","password");
 @mysql_select_db("my_company");
-$query  = "SELECT full_name, email, photo FROM employee WHERE id=$id";
-$result = @MYSQL_QUERY($query);
+$queryï¿½ =ï¿½"SELECT full_name, email,ï¿½photoï¿½FROM employeeï¿½WHEREï¿½id=$id";
+$resultï¿½=ï¿½@MYSQL_QUERY($query);
 
 while ($row = mysql_fetch_array ($result))
 {
@@ -46,15 +46,15 @@ while ($row = mysql_fetch_array ($result))
 
     $mail->Body    = $body;
     $mail->AltBody = $text_body;
-    $mail->AddAddress($row["email"], $row["full_name"]);
-    $mail->AddStringAttachment($row["photo"], "YourPhoto.jpg");
+    $mail->addAddress($row["email"], $row["full_name"]);
+    $mail->addStringAttachment($row["photo"], "YourPhoto.jpg");
 
-    if(!$mail->Send())
+    if(!$mail->send())
         echo "There has been a mail error sending to " . $row["email"] . "&lt;br&gt;";
 
     // Clear all addresses and attachments for next loop
-    $mail->ClearAddresses();
-    $mail->ClearAttachments();
+    $mail->clearAddresses();
+    $mail->clearAttachments();
 }
 </pre>
 </td>
@@ -90,7 +90,7 @@ class my_phpmailer extends phpmailer {
     var $From     = "from@example.com";
     var $FromName = "Mailer";
     var $Host     = "smtp1.example.com;smtp2.example.com";
-    var $Mailer   = "smtp";                         // Alternative to IsSMTP()
+    var $Mailer   = "smtp";                         // Alternative to isSMTP()
     var $WordWrap = 75;
 
     // Replace the default error_handler
@@ -106,15 +106,14 @@ class my_phpmailer extends phpmailer {
         // Place your new code here
     }
 }
+</pre>
 </td>
 </tr>
 </table>
 <br>
 
-Now here's a normal PHP page in the site, which will have all the defaults set
-above:<br>
+Now here's a normal PHP page in the site, which will have all the defaults set above:<br>
 Normal PHP file: <b>mail_test.php</b>
-<p>
 
 <table cellpadding="4" border="1" width="80%">
 <tr>
@@ -126,12 +125,12 @@ require("mail.inc.php");
 $mail = new my_phpmailer;
 
 // Now you only need to add the necessary stuff
-$mail->AddAddress("josh@example.com", "Josh Adams");
+$mail->addAddress("josh@example.com", "Josh Adams");
 $mail->Subject = "Here is the subject";
 $mail->Body    = "This is the message body";
-$mail->AddAttachment("c:/temp/11-10-00.zip", "new_name.zip");  // optional name
+$mail->addAttachment("c:/temp/11-10-00.zip", "new_name.zip");  // optional name
 
-if(!$mail->Send())
+if(!$mail->send())
 {
    echo "There was an error sending the message";
    exit;
@@ -142,7 +141,5 @@ echo "Message was sent successfully";
 </td>
 </tr>
 </table>
-</p>
-
 </body>
 </html>

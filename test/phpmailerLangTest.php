@@ -18,7 +18,7 @@ require 'PHPUnit/Autoload.php';
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class phpmailerLangTest extends PHPUnit_Framework_TestCase
+class PHPMailerLangTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Holds the default phpmailer instance.
@@ -56,7 +56,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
     /**
      * Run before each test is started.
      */
-    function setUp()
+    public function setUp()
     {
 
         if (file_exists('./testbootstrap.php')) {
@@ -94,7 +94,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
         $this->Mail->Username = "";
         $this->Mail->Password = "";
         $this->Mail->PluginDir = $this->INCLUDE_DIR;
-        $this->Mail->AddReplyTo("no_reply@phpmailer.example.com", "Reply Guy");
+        $this->Mail->addReplyTo("no_reply@phpmailer.example.com", "Reply Guy");
         $this->Mail->Sender = "unit_test@phpmailer.example.com";
 
         if (strlen($this->Mail->Host) > 0) {
@@ -105,17 +105,17 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
         }
 
         if (array_key_exists('mail_to', $_REQUEST)) {
-            $this->SetAddress($_REQUEST['mail_to'], 'Test User', 'to');
+            $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
         }
         if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
-            $this->SetAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
+            $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
 
     /**
      * Run after each test is completed.
      */
-    function tearDown()
+    public function tearDown()
     {
         // Clean global variables
         $this->Mail = null;
@@ -129,7 +129,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
      * @private
      * @returns void
      */
-    function BuildBody()
+    public function buildBody()
     {
         $this->CheckChanges();
 
@@ -159,7 +159,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
         }
 
         // If attachments then create an attachment list
-        $attachments = $this->Mail->GetAttachments();
+        $attachments = $this->Mail->getAttachments();
         if (count($attachments) > 0) {
             $ReportBody .= "Attachments:" . $eol;
             $ReportBody .= $bullet_start;
@@ -205,34 +205,34 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
      * @private
      * @returns void
      */
-    function CheckChanges()
+    public function checkChanges()
     {
         if ($this->Mail->Priority != 3) {
-            $this->AddChange("Priority", $this->Mail->Priority);
+            $this->addChange("Priority", $this->Mail->Priority);
         }
         if ($this->Mail->Encoding != "8bit") {
-            $this->AddChange("Encoding", $this->Mail->Encoding);
+            $this->addChange("Encoding", $this->Mail->Encoding);
         }
         if ($this->Mail->CharSet != "iso-8859-1") {
-            $this->AddChange("CharSet", $this->Mail->CharSet);
+            $this->addChange("CharSet", $this->Mail->CharSet);
         }
         if ($this->Mail->Sender != "") {
-            $this->AddChange("Sender", $this->Mail->Sender);
+            $this->addChange("Sender", $this->Mail->Sender);
         }
         if ($this->Mail->WordWrap != 0) {
-            $this->AddChange("WordWrap", $this->Mail->WordWrap);
+            $this->addChange("WordWrap", $this->Mail->WordWrap);
         }
         if ($this->Mail->Mailer != "mail") {
-            $this->AddChange("Mailer", $this->Mail->Mailer);
+            $this->addChange("Mailer", $this->Mail->Mailer);
         }
         if ($this->Mail->Port != 25) {
-            $this->AddChange("Port", $this->Mail->Port);
+            $this->addChange("Port", $this->Mail->Port);
         }
         if ($this->Mail->Helo != "localhost.localdomain") {
-            $this->AddChange("Helo", $this->Mail->Helo);
+            $this->addChange("Helo", $this->Mail->Helo);
         }
         if ($this->Mail->SMTPAuth) {
-            $this->AddChange("SMTPAuth", "true");
+            $this->addChange("SMTPAuth", "true");
         }
     }
 
@@ -243,7 +243,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
      * @param string $sNewValue
      * @return void
      */
-    function AddChange($sName, $sNewValue)
+    public function addChange($sName, $sNewValue)
     {
         $this->ChangeLog[] = array($sName, $sNewValue);
     }
@@ -254,7 +254,7 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
      * @param string $sValue
      * @return void
      */
-    function AddNote($sValue)
+    public function addNote($sValue)
     {
         $this->NoteLog[] = $sValue;
     }
@@ -267,31 +267,27 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
      * @param string $sType
      * @return boolean
      */
-    function SetAddress($sAddress, $sName = '', $sType = 'to')
+    public function setAddress($sAddress, $sName = '', $sType = 'to')
     {
         switch ($sType) {
             case 'to':
-                return $this->Mail->AddAddress($sAddress, $sName);
+                return $this->Mail->addAddress($sAddress, $sName);
             case 'cc':
-                return $this->Mail->AddCC($sAddress, $sName);
+                return $this->Mail->addCC($sAddress, $sName);
             case "bcc":
-                return $this->Mail->AddBCC($sAddress, $sName);
+                return $this->Mail->addBCC($sAddress, $sName);
         }
         return false;
     }
-
-    /////////////////////////////////////////////////
-    // UNIT TESTS
-    /////////////////////////////////////////////////
 
     /**
      * Test language files for missing and excess translations
      * All languages are compared with English
      */
-    function test_Translations()
+    public function testTranslations()
     {
-        $this->Mail->SetLanguage('en');
-        $definedStrings = $this->Mail->GetTranslations();
+        $this->Mail->setLanguage('en');
+        $definedStrings = $this->Mail->getTranslations();
         $err = '';
         foreach (new DirectoryIterator('../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
@@ -321,24 +317,24 @@ class phpmailerLangTest extends PHPUnit_Framework_TestCase
  * This is a sample form for setting appropriate test values through a browser
  * These values can also be set using a file called testbootstrap.php (not in svn) in the same folder as this script
  * which is probably more useful if you run these tests a lot
-<html>
-<body>
-<h3>phpmailer Unit Test</h3>
-By entering a SMTP hostname it will automatically perform tests with SMTP.
-
-<form name="phpmailer_unit" action=__FILE__ method="get">
-<input type="hidden" name="submitted" value="1"/>
-From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
-<br/>
-To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
-<br/>
-Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
-<br/>
-SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
-<p/>
-<input type="submit" value="Run Test"/>
-
-</form>
-</body>
-</html>
+ * <html>
+ * <body>
+ * <h3>phpmailer Unit Test</h3>
+ * By entering a SMTP hostname it will automatically perform tests with SMTP.
+ *
+ * <form name="phpmailer_unit" action=__FILE__ method="get">
+ * <input type="hidden" name="submitted" value="1"/>
+ * From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
+ * <br/>
+ * To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
+ * <br/>
+ * Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
+ * <br/>
+ * SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
+ * <p/>
+ * <input type="submit" value="Run Test"/>
+ *
+ * </form>
+ * </body>
+ * </html>
  */

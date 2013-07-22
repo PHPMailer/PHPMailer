@@ -1,5 +1,6 @@
 # ChangeLog
 
+## Version 5.2.7 ()
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
@@ -14,19 +15,23 @@
 * Update SyntaxHighlighter
 * Major overhaul and cleanup of example code
 * New PHPMailer graphic
-* MsgHTML now uses RFC2392-compliant content ids
-* Add line break normalization function and use it in MsgHTML
+* msgHTML now uses RFC2392-compliant content ids
+* Add line break normalization function and use it in msgHTML
 * Don't set unnecessary reply-to addresses
 * Make fakesendmail.sh a bit cleaner and safer
 * Set a content-transfer-encoding on multiparts (fixes msglint error)
-* Fix cid generation in MsgHTML (Thanks to @digitalthought)
+* Fix cid generation in msgHTML (Thanks to @digitalthought)
 * Fix handling of multiple SMTP servers (Thanks to @NanoCaiordo)
-* SMTP->Connect() now supports stream context options (Thanks to @stanislavdavid)
+* SMTP->connect() now supports stream context options (Thanks to @stanislavdavid)
 * Add support for iCal event alternatives (Thanks to @reblutus)
 * Update to Polish language file (Thanks to Krzysztof Kowalewski)
 * Update to Norwegian language file (Thanks to @datagutten)
 * Update to Hungarian language file (Thanks to @dominicus-75)
 * Add Persian/Farsi translation from @jaii
+* Make SMTPDebug property type match type in SMTP class
+* Add unit tests for DKIM
+* Major refactor of SMTP class
+* Reformat to PSR-2 coding standard
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer

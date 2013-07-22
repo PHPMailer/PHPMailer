@@ -7,7 +7,7 @@ Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](htt
 - Probably the world's most popular code for sending email from PHP!
 - Used by many open-source projects: Drupal, SugarCRM, Yii, Joomla! and many more
 - Integrated SMTP support - send without a local mail server
-- Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
+- send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for 8bit, base64, binary, and quoted-printable encoding
 - SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
@@ -42,7 +42,7 @@ require 'class.phpmailer.php';
 
 $mail = new PHPMailer;
 
-$mail->IsSMTP();                                      // Set mailer to use SMTP
+$mail->isSMTP();                                      // Set mailer to use SMTP
 $mail->Host = 'smtp1.example.com;smtp2.example.com';  // Specify main and backup server
 $mail->SMTPAuth = true;                               // Enable SMTP authentication
 $mail->Username = 'jswan';                            // SMTP username
@@ -51,22 +51,22 @@ $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl
 
 $mail->From = 'from@example.com';
 $mail->FromName = 'Mailer';
-$mail->AddAddress('josh@example.net', 'Josh Adams');  // Add a recipient
-$mail->AddAddress('ellen@example.com');               // Name is optional
-$mail->AddReplyTo('info@example.com', 'Information');
-$mail->AddCC('cc@example.com');
-$mail->AddBCC('bcc@example.com');
+$mail->addAddress('josh@example.net', 'Josh Adams');  // Add a recipient
+$mail->addAddress('ellen@example.com');               // Name is optional
+$mail->addReplyTo('info@example.com', 'Information');
+$mail->addCC('cc@example.com');
+$mail->addBCC('bcc@example.com');
 
 $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-$mail->AddAttachment('/var/tmp/file.tar.gz');         // Add attachments
-$mail->AddAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-$mail->IsHTML(true);                                  // Set email format to HTML
+$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+$mail->isHTML(true);                                  // Set email format to HTML
 
 $mail->Subject = 'Here is the subject';
 $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-if(!$mail->Send()) {
+if(!$mail->send()) {
    echo 'Message could not be sent.';
    echo 'Mailer Error: ' . $mail->ErrorInfo;
    exit;
@@ -84,7 +84,7 @@ PHPMailer defaults to English, but in the `languages` folder you'll find numerou
 
 ```php
 // To load the French version
-$mail->SetLanguage('fr', '/optional/path/to/language/directory/');
+$mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
 
 ## Documentation
