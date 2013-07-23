@@ -1232,31 +1232,31 @@ class PHPMailer
      * Creates recipient headers.
      * @access public
      * @param string $type
-     * @param array $addr
+     * @param array $addr An array of recipient,
+     * where each recipient is a 2-element indexed array with element 0 containing an address
+     * and element 1 containing a name, like:
+     * array(array('joe@example.com', 'Joe User'), array('zoe@example.com', 'Zoe User'))
      * @return string
      */
     public function addrAppend($type, $addr)
     {
-        $addr_str = $type . ': ';
         $addresses = array();
         foreach ($addr as $a) {
             $addresses[] = $this->addrFormat($a);
         }
-        $addr_str .= implode(', ', $addresses);
-        $addr_str .= $this->LE;
-
-        return $addr_str;
+        return $type . ': ' . implode(', ', $addresses) . $this->LE;
     }
 
     /**
-     * Formats an address correctly.
+     * Formats an address for use in a message header.
      * @access public
-     * @param string $addr
+     * @param array $addr A 2-element indexed array, element 0 containing an address, element 1 containing a name
+     *      like array('joe@example.com', 'Joe User')
      * @return string
      */
     public function addrFormat($addr)
     {
-        if (empty($addr[1])) {
+        if (empty($addr[1])) { // No name provided
             return $this->secureHeader($addr[0]);
         } else {
             return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . " <" . $this->secureHeader(
@@ -1465,10 +1465,7 @@ class PHPMailer
             }
         }
 
-        $from = array();
-        $from[0][0] = trim($this->From);
-        $from[0][1] = $this->FromName;
-        $result .= $this->addrAppend('From', $from);
+        $result .= $this->addrAppend('From', array(array(trim($this->From), $this->FromName)));
 
         // sendmail and mail() extract Cc from the header before sending
         if (count($this->cc) > 0) {
