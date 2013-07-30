@@ -3222,7 +3222,7 @@ class PHPMailer
 }
 
 /**
- * Exception handler for PHPMailer
+ * PHPMailer exception handler
  * @package PHPMailer
  */
 class phpmailerException extends Exception

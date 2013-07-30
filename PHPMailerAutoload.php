@@ -1,12 +1,12 @@
 <?php
 /**
- * PHPMailer - PHP email creation and transport class
+ * PHPMailer SPL autoloader.
  * PHP Version 5.0.0
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/
- * @author Marcus Bointon (coolbru) phpmailer@synchromedia.co.uk
- * @author Jim Jagielski (jimjag) jimjag@gmail.com
- * @author Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net
+ * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
+ * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
  * @copyright 2013 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -18,8 +18,8 @@
  */
 
 /**
- * Define an SPL autoloader for PHPMailer classes
- * @param string The name of the class to load
+ * PHPMailer SPL autoloader.
+ * @param string $classname The name of the class to load
  */
 function PHPMailerAutoload($classname)
 {

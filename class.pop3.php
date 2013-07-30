@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPMailer - PHP POP-Before-SMTP Authentication Class
+ * PHPMailer POP-Before-SMTP Authentication Class.
  * PHP Version 5.0.0
  * Version 5.2.7
  * @package PHPMailer
@@ -19,7 +19,7 @@
  */
 
 /**
- * PHP POP-Before-SMTP Authentication Class.
+ * PHPMailer POP-Before-SMTP Authentication Class.
  * Specifically for PHPMailer to use for RFC1939 POP-before-SMTP authentication.
  * Does not support APOP.
  * @package PHPMailer

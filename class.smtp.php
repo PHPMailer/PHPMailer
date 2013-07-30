@@ -1,6 +1,6 @@
 <?php
 /**
- * SMTP email transport class.
+ * PHPMailer RFC821 SMTP email transport class.
  * Version 5.2.7
  * PHP version 5.0.0
  * @category  PHP
@@ -16,7 +16,7 @@
  */
 
 /**
- * PHP RFC821 SMTP email transport class.
+ * PHPMailer RFC821 SMTP email transport class.
  *
  * Implements RFC 821 SMTP commands
  * and provides some utility methods for sending mail to an SMTP server.
