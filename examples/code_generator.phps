@@ -3,7 +3,7 @@
 * revised, updated and corrected 27/02/2013
 * by matt.sturdy@gmail.com
 */
-require '../class.phpmailer.php';
+require '../PHPMailerAutoload.php';
 
 $CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
 $CFG['smtp_debugoutput'] = 'html';
@@ -39,7 +39,7 @@ $results_messages = array();
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
-$example_code = "\nrequire_once '../class.phpmailer.php';";
+$example_code = "\nrequire_once '../PHPMailerAutoload.php';";
 $example_code .= "\n\n\$results_messages = array();";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled

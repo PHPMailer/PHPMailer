@@ -32,6 +32,9 @@
 * Add unit tests for DKIM
 * Major refactor of SMTP class
 * Reformat to PSR-2 coding standard
+* Introduce autoloader
+* Allow overriding of SMTP class
+* Overhaul of PHPDocs
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer

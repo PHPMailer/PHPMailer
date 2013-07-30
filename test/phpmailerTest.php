@@ -16,6 +16,7 @@
  */
 
 require 'PHPUnit/Autoload.php';
+require '../PHPMailerAutoload.php';
 
 /**
  * PHPMailer - PHP email transport unit test class
@@ -64,7 +65,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         if (file_exists('./testbootstrap.php')) {
             include './testbootstrap.php'; //Overrides go in here
         }
-        require_once $this->INCLUDE_DIR . 'class.phpmailer.php';
+        //require_once $this->INCLUDE_DIR . 'class.phpmailer.php';
         $this->Mail = new PHPMailer;
 
         $this->Mail->Priority = 3;

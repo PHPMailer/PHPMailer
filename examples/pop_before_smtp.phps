@@ -6,8 +6,7 @@
 </head>
 <body>
 <?php
-require '../class.phpmailer.php';
-require '../class.pop3.php';
+require '../PHPMailerAutoload.php';
 
 //Create a new POP client instance
 $pop = new POP3();

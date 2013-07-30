@@ -6,7 +6,7 @@
 </head>
 <body>
 <?php
-require '../class.phpmailer.php';
+require '../PHPMailerAutoload.php';
 
 //Create a new PHPMailer instance
 //Passing true to the constructor enables the use of exceptions for error handling
