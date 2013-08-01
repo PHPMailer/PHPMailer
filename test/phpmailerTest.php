@@ -27,33 +27,34 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Holds the default phpmailer instance.
      * @private
-     * @var PHPMailer
+     * @type PHPMailer
      */
     public $Mail;
 
     /**
      * Holds the SMTP mail host.
      * @public
-     * @var string
+     * @type string
      */
     public $Host = '';
 
     /**
      * Holds the change log.
      * @private
-     * @var string[]
+     * @type string[]
      */
     public $ChangeLog = array();
 
     /**
      * Holds the note log.
      * @private
-     * @var string[]
+     * @type string[]
      */
     public $NoteLog = array();
 
     /**
-     * @var string Default include path
+     * Default include path
+     * @type string
      */
     public $INCLUDE_DIR = '../';
 
@@ -65,9 +66,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         if (file_exists('./testbootstrap.php')) {
             include './testbootstrap.php'; //Overrides go in here
         }
-        //require_once $this->INCLUDE_DIR . 'class.phpmailer.php';
         $this->Mail = new PHPMailer;
-
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';
@@ -99,14 +98,12 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->PluginDir = $this->INCLUDE_DIR;
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-
         if (strlen($this->Mail->Host) > 0) {
             $this->Mail->Mailer = 'smtp';
         } else {
             $this->Mail->Mailer = 'mail';
             $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         }
-
         if (array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
         }
@@ -1164,6 +1161,12 @@ EOT;
             '=C2=A1Hola!_Se=C3=B1or!',
             $this->Mail->encodeQ("\xc2\xa1Hola! Se\xc3\xb1or!", 'text'),
             'Q Encoding (text) failed'
+        );
+        //Strings containing '=' are a special case
+        $this->assertEquals(
+            'Nov=C3=A1=3D',
+            $this->Mail->encodeQ("Nov\xc3\xa1=", 'text'),
+            'Q Encoding (text) failed 2'
         );
     }
 

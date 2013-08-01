@@ -1687,7 +1687,7 @@ class PHPMailer
     /**
      * Returns the whole MIME message.
      * Includes complete headers and body.
-     * Only valid post preSend().
+     * Only valid post PreSend().
      * @see PHPMailer::PreSend()
      * @access public
      * @return string
@@ -2353,22 +2353,31 @@ class PHPMailer
         $encoded = str_replace(array("\r", "\n"), '', $str);
         switch (strtolower($position)) {
             case 'phrase':
+                //RFC 2047 section 5.3
                 $pattern = '^A-Za-z0-9!*+\/ -';
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
+                //RFC 2047 section 5.2
                 $pattern = '\(\)"';
                 //intentional fall-through
                 //for this reason we build the $pattern without including delimiters and []
             case 'text':
             default:
-                //Replace every high ascii, control =, ? and _ characters
-                //We put \075 (=) as first value to make sure it's the first one
-                //in being converted, preventing double encode
-                $pattern = '\075\000-\011\013\014\016-\037\077\137\177-\377' . $pattern;
+                //RFC 2047 section 5.1
+                //Replace every high ascii, control, =, ? and _ characters
+                $pattern = '\000-\011\013\014\016-\037\075\077\137\177-\377' . $pattern;
                 break;
         }
+        $matches = array();
         if (preg_match_all("/[{$pattern}]/", $encoded, $matches)) {
+            //If the string contains an '=', make sure it's the first thing we replace
+            //so as to avoid double-encoding
+            $s = array_search('=', $matches[0]);
+            if ($s !== false) {
+                unset($matches[0][$s]);
+                array_unshift($matches[0], '=');
+            }
             foreach (array_unique($matches[0]) as $char) {
                 $encoded = str_replace($char, '=' . sprintf('%02X', ord($char)), $encoded);
             }
