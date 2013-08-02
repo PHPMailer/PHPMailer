@@ -558,7 +558,7 @@ class SMTP
         }
 
         // Message data has been sent, complete the command
-        return $this->sendCommand('DATA END', self::CRLF . '.', 250);
+        return $this->sendCommand('DATA END', '.', 250);
     }
 
     /**
