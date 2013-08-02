@@ -35,6 +35,10 @@
 * Introduce autoloader
 * Allow overriding of SMTP class
 * Overhaul of PHPDocs
+* Fix broken Q-encoding
+* Czech language update (Thanks to @nemelu)
+* Removal of excess blank lines in messages
+* Added fake POP server and unit tests for POP-before-SMTP
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer

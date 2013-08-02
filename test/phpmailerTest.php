@@ -59,6 +59,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     public $INCLUDE_DIR = '../';
 
     /**
+     * PIDs of any processes we need to kill
+     * @type array
+     * @access private
+     */
+    private $pids = array();
+
+    /**
      * Run before each test is started.
      */
     public function setUp()
@@ -121,6 +128,11 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail = null;
         $this->ChangeLog = array();
         $this->NoteLog = array();
+
+        foreach ($this->pids as $pid) {
+            $p = escapeshellarg($pid);
+            shell_exec("ps $p && kill -TERM $p");
+        }
     }
 
 
@@ -1136,7 +1148,7 @@ EOT;
     }
 
     /**
-     * Encoding tests
+     * Encoding and charset tests
      */
     public function testEncodings()
     {
@@ -1170,6 +1182,13 @@ EOT;
         );
     }
 
+    public function testBase64()
+    {
+        $this->Mail->Subject .= ': Base-64 encoding';
+        $this->Mail->Encoding = 'base64';
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), 'Base64 encoding failed');
+    }
     /**
      * S/MIME Signing tests
      */
@@ -1257,6 +1276,34 @@ EOT;
         $this->assertEquals($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
         $this->assertEquals($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
         $this->assertEquals($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+    }
+
+    /**
+     * Use a fake POP3 server to test POP-before-SMTP auth
+     */
+    public function testPopBeforeSmtp()
+    {
+        //Start a fake POP server
+        $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
+        $this->pids[] = $pid;
+
+        //Test a known-good login
+        $this->assertTrue(
+            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test'),
+            'POP before SMTP failed'
+        );
+        //Kill the fake server
+        shell_exec('kill -TERM '.escapeshellarg($pid));
+
+        $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
+        $this->pids[] = $pid;
+
+        //Test a known-bad login
+        $this->assertFalse(
+            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'xxx'),
+            'POP before SMTP should have failed'
+        );
+        shell_exec('kill -TERM '.escapeshellarg($pid));
     }
 
     /**

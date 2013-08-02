@@ -8,12 +8,10 @@
 <?php
 require '../PHPMailerAutoload.php';
 
-//Create a new POP client instance
-$pop = new POP3();
-//authenticate via POP
-$pop->authorise('pop3.yourdomain.com', 110, 30, 'username', 'password', 1);
+//Authenticate via POP3
 //Now you should be clear to submit messages over SMTP for a while
 //Only applies if your host supports POP-before-SMTP
+$pop = POP3::popBeforeSmtp('pop3.example.com', 110, 30, 'username', 'password', 1);
 
 //Create a new PHPMailer instance
 //Passing true to the constructor enables the use of exceptions for error handling

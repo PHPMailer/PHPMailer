@@ -56,6 +56,7 @@ class POP3
      * POP3 Carriage Return + Line Feed.
      * @type string
      * @access public
+     * @deprecated Use the constant instead
      */
     public $CRLF = "\r\n";
 
@@ -124,15 +125,34 @@ class POP3
     private $error;
 
     /**
+     * Line break constant
+     */
+    const CRLF = "\r\n";
+
+    /**
      * Constructor.
      * @access public
-     * @access private
      */
     public function __construct()
     {
         $this->pop_conn = 0;
         $this->connected = false;
         $this->error = null;
+    }
+
+    /**
+     * Simple static wrapper for all-in-one POP before SMTP
+     * @param $host
+     * @param bool $port
+     * @param bool $tval
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public static function popBeforeSmtp($host, $port = false, $tval = false, $username = '', $password = '')
+    {
+        $pop = new POP3;
+        return $pop->authorise($host, $port, $tval, $username, $password);
     }
 
     /**
@@ -151,14 +171,14 @@ class POP3
     public function authorise($host, $port = false, $tval = false, $username = '', $password = '', $debug_level = 0)
     {
         $this->host = $host;
-        //  If no port value is passed, retrieve it
-        if ($port == false) {
+        // If no port value provided, use default
+        if ($port === false) {
             $this->port = $this->POP3_PORT;
         } else {
             $this->port = $port;
         }
-        //  If no port value is passed, retrieve it
-        if ($tval == false) {
+        // If no timeout value provided, use default
+        if ($tval === false) {
             $this->tval = $this->POP3_TIMEOUT;
         } else {
             $this->tval = $tval;
@@ -177,7 +197,7 @@ class POP3
                 return true;
             }
         }
-        //  We need to disconnect regardless if the login succeeded
+        // We need to disconnect regardless of whether the login succeeded
         $this->disconnect();
         return false;
     }
@@ -274,14 +294,13 @@ class POP3
         if (empty($password)) {
             $password = $this->password;
         }
-        $pop_username = "USER $username" . $this->CRLF;
-        $pop_password = "PASS $password" . $this->CRLF;
-        //  send the Username
-        $this->sendString($pop_username);
+
+        // Send the Username
+        $this->sendString("USER $username" . self::CRLF);
         $pop3_response = $this->getResponse();
         if ($this->checkResponse($pop3_response)) {
-            //  send the Password
-            $this->sendString($pop_password);
+            // Send the Password
+            $this->sendString("PASS $password" . self::CRLF);
             $pop3_response = $this->getResponse();
             if ($this->checkResponse($pop3_response)) {
                 return true;
@@ -297,7 +316,9 @@ class POP3
     public function disconnect()
     {
         $this->sendString('QUIT');
-        fclose($this->pop_conn);
+        //The QUIT command may cause the daemon to exit, which will kill our connection
+        //So ignore errors here
+        @fclose($this->pop_conn);
     }
 
     /**
@@ -309,8 +330,7 @@ class POP3
      */
     private function getResponse($size = 128)
     {
-        $pop3_response = fgets($this->pop_conn, $size);
-        return $pop3_response;
+        return fgets($this->pop_conn, $size);
     }
 
     /**
@@ -321,8 +341,10 @@ class POP3
      */
     private function sendString($string)
     {
-        $bytes_sent = fwrite($this->pop_conn, $string, strlen($string));
-        return $bytes_sent;
+        if ($this->pop_conn) {
+            return fwrite($this->pop_conn, $string, strlen($string));
+        }
+        return 0;
     }
 
     /**
