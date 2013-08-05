@@ -147,12 +147,19 @@ class POP3
      * @param bool $tval
      * @param string $username
      * @param string $password
+     * @param int $debug_level
      * @return bool
      */
-    public static function popBeforeSmtp($host, $port = false, $tval = false, $username = '', $password = '')
-    {
+    public static function popBeforeSmtp(
+        $host,
+        $port = false,
+        $tval = false,
+        $username = '',
+        $password = '',
+        $debug_level = 0
+    ) {
         $pop = new POP3;
-        return $pop->authorise($host, $port, $tval, $username, $password);
+        return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
     }
 
     /**
@@ -330,7 +337,11 @@ class POP3
      */
     private function getResponse($size = 128)
     {
-        return fgets($this->pop_conn, $size);
+        $r = fgets($this->pop_conn, $size);
+        if ($this->do_debug >= 1) {
+            echo "Server -> Client: $r";
+        }
+        return $r;
     }
 
     /**
@@ -342,6 +353,9 @@ class POP3
     private function sendString($string)
     {
         if ($this->pop_conn) {
+            if ($this->do_debug >= 2) { //Show client messages when debug >= 2
+                echo "Client -> Server: $string";
+            }
             return fwrite($this->pop_conn, $string, strlen($string));
         }
         return 0;

@@ -1280,30 +1280,44 @@ EOT;
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
+     * With a known-good login
      */
-    public function testPopBeforeSmtp()
+    public function testPopBeforeSmtpGood()
     {
         //Start a fake POP server
         $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
         $this->pids[] = $pid;
 
+        sleep(2);
         //Test a known-good login
         $this->assertTrue(
-            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test'),
+            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', 0),
             'POP before SMTP failed'
         );
         //Kill the fake server
         shell_exec('kill -TERM '.escapeshellarg($pid));
+        sleep(2);
+    }
 
-        $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
+    /**
+     * Use a fake POP3 server to test POP-before-SMTP auth
+     * With a known-bad login
+     */
+    public function testPopBeforeSmtpBad()
+    {
+        //Start a fake POP server on a different port
+        //so we don't inadvertently connect to the previous instance
+        $pid = shell_exec('nohup ./runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!');
         $this->pids[] = $pid;
 
+        sleep(2);
         //Test a known-bad login
         $this->assertFalse(
-            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'xxx'),
+            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', 0),
             'POP before SMTP should have failed'
         );
         shell_exec('kill -TERM '.escapeshellarg($pid));
+        sleep(2);
     }
 
     /**

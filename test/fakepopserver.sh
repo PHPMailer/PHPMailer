@@ -20,7 +20,7 @@ LOGFILE=${LOGFOLDER}/fakepop.log
 
 LOGGING=1
 DEBUG=1
-TIMEOUT=10
+TIMEOUT=60
 
 POP_USER=
 POP_PASSWRD=test
@@ -78,10 +78,10 @@ while [ ${BREAK} -eq 0 ] ; do
         ;;
       PASS)
         if [ "${POP_PASSWRD}" == "${ARGS}" ] ; then
-          ANSWER="+OK Logged in.\r\n"
+          ANSWER="+OK Logged in."
           AUTH=1
         else
-          ANSWER="-ERR Login failed\r\n"
+          ANSWER="-ERR Login failed."
         fi
         ;;
       LIST)
@@ -117,7 +117,7 @@ while [ ${BREAK} -eq 0 ] ; do
         ;;
      esac
   else
-    echo "+OK Connection timed out\r\n"
+    echo "+OK Connection timed out"
     break
   fi
 done
