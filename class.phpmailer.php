@@ -480,6 +480,13 @@ class PHPMailer
     protected $CustomHeader = array();
 
     /**
+     * The most recent Message-ID (including angular brackets).
+     * @type string
+     * @access protected
+     */
+    protected $lastMessageID = '';
+
+    /**
      * The message's MIME type.
      * @type string
      * @access protected
@@ -804,6 +811,18 @@ class PHPMailer
             }
         }
         return true;
+    }
+
+    /**
+     * Return the Message-ID header of the last email.
+     * Technically this is the value from the last time the headers were created,
+     * but it also the message ID of the last sent message except in
+     * pathological cases.
+     * @return string
+     */
+    public function GetLastMessageID()
+    {
+        return $this->lastMessageID;
     }
 
     /**
@@ -1606,10 +1625,11 @@ class PHPMailer
         }
 
         if ($this->MessageID != '') {
-            $result .= $this->headerLine('Message-ID', $this->MessageID);
+            $this->lastMessageID = $this->MessageID;
         } else {
-            $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->serverHostname(), $this->LE);
+            $this->lastMessageID = sprintf("<%s@%s>", $uniq_id, $this->ServerHostname());
         }
+        $result .= $this->HeaderLine('Message-ID', $this->lastMessageID);
         $result .= $this->headerLine('X-Priority', $this->Priority);
         if ($this->XMailer == '') {
             $result .= $this->headerLine(
@@ -2914,7 +2934,7 @@ class PHPMailer
             'avi' => 'video/x-msvideo',
             'movie' => 'video/x-sgi-movie'
         );
-        return (!isset($mimes[strtolower($ext)])) ? 'application/octet-stream' : $mimes[strtolower($ext)];
+        return (array_key_exists(strtolower($ext), $mimes) ? $mimes[strtolower($ext)]: 'application/octet-stream');
     }
 
     /**
