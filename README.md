@@ -107,13 +107,13 @@ We're particularly interested in fixing edge-cases, expanding test coverage and 
 
 With the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
 
-git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
+`git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git`
 
 Please *don't* use the SourceForge or Google Code projects any more.
 
 ## Changelog
 
-See changelog.md
+See [changelog](changelog.md).
 
 ## History
 - PHPMailer was originally written in 2001 by Brent R. Matzelle as a [SourceForge project](http://sourceforge.net/projects/phpmailer/).
