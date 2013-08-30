@@ -1321,6 +1321,20 @@ EOT;
     }
 
     /**
+     * Test setting and retrieving message ID
+     */
+    public function testMessageID()
+    {
+        $this->Mail->Body = 'Test message ID.';
+        $id = md5(12345);
+        $this->Mail->MessageID = $id;
+        $this->buildBody();
+        $this->Mail->preSend();
+        $lastid = $this->Mail->getLastMessageID();
+        $this->assertEquals($lastid, $id, 'Custom Message ID mismatch');
+    }
+
+    /**
      * Miscellaneous calls to improve test coverage and some small tests
      */
     public function testMiscellaneous()

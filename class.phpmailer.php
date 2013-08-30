@@ -816,11 +816,11 @@ class PHPMailer
     /**
      * Return the Message-ID header of the last email.
      * Technically this is the value from the last time the headers were created,
-     * but it also the message ID of the last sent message except in
+     * but it's also the message ID of the last sent message except in
      * pathological cases.
      * @return string
      */
-    public function GetLastMessageID()
+    public function getLastMessageID()
     {
         return $this->lastMessageID;
     }
