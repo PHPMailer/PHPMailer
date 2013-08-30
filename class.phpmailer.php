@@ -469,6 +469,11 @@ class PHPMailer {
    */
   protected   $CustomHeader   = array();
   /**
+   * @var string The most recent Message-ID (including angular brackets)
+   * @access protected
+   */
+  protected   $lastMessageID   = '';
+  /**
    * @var string The message's MIME type
    * @access protected
    */
@@ -755,6 +760,17 @@ class PHPMailer {
       }
     }
     return true;
+  }
+
+  /**
+   * Return the Message-ID header of the last email.
+   * Technically this is the value from the last time the headers were created,
+   * but it also the message ID of the last sent message except in
+   * pathological cases.
+   * @return string
+   */
+  public function GetLastMessageID() {
+    return $this->lastMessageID;
   }
 
   /**
@@ -1461,10 +1477,11 @@ class PHPMailer {
     }
 
     if($this->MessageID != '') {
-      $result .= $this->HeaderLine('Message-ID', $this->MessageID);
+      $this->lastMessageID = $this->MessageID;
     } else {
-      $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
+      $this->lastMessageID = sprintf("<%s@%s>", $uniq_id, $this->ServerHostname());
     }
+    $result .= $this->HeaderLine('Message-ID', $this->lastMessageID);
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
     if ($this->XMailer == '') {
         $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (https://github.com/PHPMailer/PHPMailer/)');
