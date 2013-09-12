@@ -74,7 +74,12 @@ class SMTP
 
     /**
      * Debug output level.
-     * Options: 0 for no output, 1 for commands, 2 for data and commands
+     * Options:
+     *   0: no output
+     *   1: commands
+     *   2: data and commands
+     *   3: as 2 plus connection status
+     *   4: low level data output
      * @type int
      */
     public $do_debug = 0;
@@ -93,10 +98,11 @@ class SMTP
     public $do_verp = false;
 
     /**
-     * The SMTP timeout value for reads, in seconds.
+     * The timeout value for connection, in seconds.
+     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @type int
      */
-    public $Timeout = 15;
+    public $Timeout = 300;
 
     /**
      * The SMTP timelimit value for reads, in seconds.
@@ -164,8 +170,7 @@ class SMTP
                 break;
             case 'echo':
             default:
-                //Just echoes whatever was received
-                echo $str;
+                echo gmdate('Y-m-d H:i:s')."\t".trim($str)."\n";
         }
     }
 
@@ -195,6 +200,10 @@ class SMTP
         }
 
         // Connect to the SMTP server
+        if ($this->do_debug >= 3) {
+            $this->edebug('Connection: opening');
+        }
+
         $errno = 0;
         $errstr = '';
         $socket_context = stream_context_create($options);
@@ -217,11 +226,14 @@ class SMTP
             );
             if ($this->do_debug >= 1) {
                 $this->edebug(
-                    'SMTP -> ERROR: ' . $this->error['error']
+                    'SMTP ERROR: ' . $this->error['error']
                     . ": $errstr ($errno)"
                 );
             }
             return false;
+        }
+        if ($this->do_debug >= 3) {
+            $this->edebug('Connection: opened');
         }
 
         // SMTP server can take longer to respond, give longer timeout for first read
@@ -238,7 +250,7 @@ class SMTP
         $announce = $this->get_lines();
 
         if ($this->do_debug >= 2) {
-            $this->edebug('SMTP -> FROM SERVER:' . $announce);
+            $this->edebug('SERVER -> CLIENT: ' . $announce);
         }
 
         return true;
@@ -437,7 +449,7 @@ class SMTP
                 // the socket is valid but we are not connected
                 if ($this->do_debug >= 1) {
                     $this->edebug(
-                        'SMTP -> NOTICE: EOF caught while checking if connected'
+                        'SMTP NOTICE: EOF caught while checking if connected'
                     );
                 }
                 $this->close();
@@ -462,6 +474,9 @@ class SMTP
         if (!empty($this->smtp_conn)) {
             // close the connection and cleanup
             fclose($this->smtp_conn);
+            if ($this->do_debug >= 3) {
+                $this->edebug('Connection: closed');
+            }
             $this->smtp_conn = 0;
         }
     }
@@ -691,7 +706,7 @@ class SMTP
         $code = substr($reply, 0, 3);
 
         if ($this->do_debug >= 2) {
-            $this->edebug('SMTP -> FROM SERVER:' . $reply);
+            $this->edebug('SERVER -> CLIENT: ' . $reply);
         }
 
         if (!in_array($code, (array)$expect)) {
@@ -703,7 +718,7 @@ class SMTP
             );
             if ($this->do_debug >= 1) {
                 $this->edebug(
-                    'SMTP -> ERROR: ' . $this->error['error'] . ': ' . $reply
+                    'SMTP ERROR: ' . $this->error['error'] . ': ' . $reply
                 );
             }
             return false;
@@ -769,7 +784,7 @@ class SMTP
             'error' => 'The SMTP TURN command is not implemented'
         );
         if ($this->do_debug >= 1) {
-            $this->edebug('SMTP -> NOTICE: ' . $this->error['error']);
+            $this->edebug('SMTP NOTICE: ' . $this->error['error']);
         }
         return false;
     }
@@ -783,7 +798,7 @@ class SMTP
     public function client_send($data)
     {
         if ($this->do_debug >= 1) {
-            $this->edebug("CLIENT -> SMTP: $data");
+            $this->edebug("CLIENT -> SERVER: $data");
         }
         return fwrite($this->smtp_conn, $data);
     }

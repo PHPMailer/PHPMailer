@@ -1,5 +1,9 @@
 # ChangeLog
 
+* Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
+* Add timestamps to default debug output
+* Add connection events and new level 3 to debug output options
+
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
