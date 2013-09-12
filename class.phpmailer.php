@@ -550,10 +550,13 @@ class PHPMailer {
   }
 
   /**
-   * Outputs debugging info via user-defined method
+   * Outputs debugging info via user-defined method if debug output is enabled
    * @param string $str
    */
   protected function edebug($str) {
+    if (!$this->SMTPDebug) {
+        return;
+    }
     switch ($this->Debugoutput) {
       case 'error_log':
         error_log($str);
@@ -699,9 +702,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException('Invalid recipient array: ' . $kind);
       }
-      if ($this->SMTPDebug) {
-        $this->edebug($this->Lang('Invalid recipient array').': '.$kind);
-      }
+      $this->edebug($this->Lang('Invalid recipient array').': '.$kind);
       return false;
     }
     $address = trim($address);
@@ -711,9 +712,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      if ($this->SMTPDebug) {
-        $this->edebug($this->Lang('invalid_address').': '.$address);
-      }
+      $this->edebug($this->Lang('invalid_address').': '.$address);
       return false;
     }
     if ($kind != 'Reply-To') {
@@ -747,9 +746,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      if ($this->SMTPDebug) {
-        $this->edebug($this->Lang('invalid_address').': '.$address);
-      }
+      $this->edebug($this->Lang('invalid_address').': '.$address);
       return false;
     }
     $this->From = $address;
@@ -905,9 +902,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw $e;
       }
-      if ($this->SMTPDebug) {
-        $this->edebug($e->getMessage()."\n");
-      }
+      $this->edebug($e->getMessage()."\n");
     }
     return false;
   }
@@ -1821,9 +1816,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw $e;
       }
-      if ($this->SMTPDebug) {
-        $this->edebug($e->getMessage()."\n");
-      }
+      $this->edebug($e->getMessage()."\n");
       return false;
     }
     return true;
