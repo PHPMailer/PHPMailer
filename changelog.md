@@ -1,6 +1,6 @@
 # ChangeLog
 
-## Version 5.2.7 ()
+## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
