@@ -4,6 +4,7 @@
 * Add timestamps to default debug output
 * Add connection events and new level 3 to debug output options
 * Chinese language update (Thanks to @binaryoung)
+* Allow custom Mailer types (thanks to @michield)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
