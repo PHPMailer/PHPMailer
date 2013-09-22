@@ -1247,13 +1247,13 @@ class PHPMailer
         $hosts = explode(';', $this->Host);
         $lastexception = null;
 
-        foreach ($hosts as $hostentry) {
+        foreach ($hosts as $host) {
             $hostinfo = array();
-            $host = $hostentry;
+            $host = trim($host);
             $port = $this->Port;
             if (preg_match(
                 '/^(.+):([0-9]+)$/',
-                $hostentry,
+                $host,
                 $hostinfo
             )
             ) { //If $hostentry contains 'address:port', override default
