@@ -1248,17 +1248,10 @@ class PHPMailer
         $lastexception = null;
 
         foreach ($hosts as $hostentry) {
-            $hostinfo = array();
-            $host = $hostentry;
+            $host = trim($hostentry);
             $port = $this->Port;
-            if (preg_match(
-                '/^(.+):([0-9]+)$/',
-                $hostentry,
-                $hostinfo
-            )
-            ) { //If $hostentry contains 'address:port', override default
-                $host = $hostinfo[1];
-                $port = $hostinfo[2];
+            if (strpos($host, ':') !== false) {
+                list($host, $port) = explode(':', $host);
             }
             if ($this->smtp->connect(($ssl ? 'ssl://' : '') . $host, $port, $this->Timeout, $options)) {
                 try {
