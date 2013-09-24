@@ -410,7 +410,7 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
-     * 
+     *
      * @type string
      */
     public $action_function = '';
@@ -1247,20 +1247,31 @@ class PHPMailer
         $hosts = explode(';', $this->Host);
         $lastexception = null;
 
-        foreach ($hosts as $host) {
+        foreach ($hosts as $hostentry) {
+
             $hostinfo = array();
-            $host = trim($host);
+            $host = trim($hostentry);
             $port = $this->Port;
-            if (preg_match(
-                '/^(.+):([0-9]+)$/',
-                $host,
-                $hostinfo
-            )
-            ) { //If $hostentry contains 'address:port', override default
+
+            //If $hostentry contains 'address:port', override default
+            if (preg_match('/^(.+):([0-9]+)$/', $hostentry, $hostinfo)) {
                 $host = $hostinfo[1];
                 $port = $hostinfo[2];
             }
-            if ($this->smtp->connect(($ssl ? 'ssl://' : '') . $host, $port, $this->Timeout, $options)) {
+
+            //tls per host
+            $host_tls = $tls;
+            if (stripos($host,'tls://') === 0) {
+                $host_tls = true;
+                $host = substr($host,6);
+            }
+
+            //add ssl:// to host if it's missing
+            if ($ssl && stripos($host,'ssl://') === false) {
+                $host = 'ssl://'.$host;
+            }
+
+            if ($this->smtp->connect($host, $port, $this->Timeout, $options)) {
                 try {
                     if ($this->Helo) {
                         $hello = $this->Helo;
@@ -1269,7 +1280,7 @@ class PHPMailer
                     }
                     $this->smtp->hello($hello);
 
-                    if ($tls) {
+                    if ($host_tls) {
                         if (!$this->smtp->startTLS()) {
                             throw new phpmailerException($this->lang('connect_host'));
                         }
