@@ -1242,18 +1242,36 @@ class PHPMailer
         $this->smtp->setDebugLevel($this->SMTPDebug);
         $this->smtp->setDebugOutput($this->Debugoutput);
         $this->smtp->setVerp($this->do_verp);
-        $tls = ($this->SMTPSecure == 'tls');
-        $ssl = ($this->SMTPSecure == 'ssl');
         $hosts = explode(';', $this->Host);
         $lastexception = null;
 
         foreach ($hosts as $hostentry) {
-            $host = trim($hostentry);
-            $port = $this->Port;
-            if (strpos($host, ':') !== false) {
-                list($host, $port) = explode(':', $host);
+            $hostinfo = array();
+            if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-]*):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
+                //Not a valid host entry
+                continue;
             }
-            if ($this->smtp->connect(($ssl ? 'ssl://' : '') . $host, $port, $this->Timeout, $options)) {
+            //$hostinfo[2]: optional ssl or tls prefix
+            //$hostinfo[3]: the hostname
+            //$hostinfo[4]: optional port number
+            //The host string prefix can temporarily override the current setting for SMTPSecure
+            //If it's not specified, the default value is used
+            $prefix = '';
+            $tls = ($this->SMTPSecure == 'tls');
+            if ($hostinfo[2] == 'ssl') {
+                $prefix = 'ssl://';
+                $tls = false; //Can't have SSL and TLS at once
+            } elseif ($hostinfo[2] == 'tls') {
+                $tls = true;
+                //tls doesn't use a prefix
+            }
+            $host = $hostinfo[3];
+            $port = $this->Port;
+            $tport = (integer)$hostinfo[4];
+            if ($tport > 0 and $tport < 65536) {
+                $port = $tport;
+            }
+            if ($this->smtp->connect($prefix . $host, $port, $this->Timeout, $options)) {
                 try {
                     if ($this->Helo) {
                         $hello = $this->Helo;
