@@ -1258,7 +1258,7 @@ class PHPMailer
             //If it's not specified, the default value is used
             $prefix = '';
             $tls = ($this->SMTPSecure == 'tls');
-            if ($hostinfo[2] == 'ssl') {
+            if ($hostinfo[2] == 'ssl' or ($hostinfo[2] == '' and $this->SMTPSecure == 'ssl')) {
                 $prefix = 'ssl://';
                 $tls = false; //Can't have SSL and TLS at once
             } elseif ($hostinfo[2] == 'tls') {
