@@ -7,6 +7,7 @@
 * Allow custom Mailer types (thanks to @michield)
 * Cope with spaces around SMTP host specs
 * Fix processing of multiple hosts in connect string
+* Added Galician translation (Thanks to @donatorouco)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
