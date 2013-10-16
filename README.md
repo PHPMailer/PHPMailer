@@ -12,6 +12,7 @@ Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](htt
 - Support for 8bit, base64, binary, and quoted-printable encoding
 - SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
 - Native language support
+- DKIM support
 - Compatible with PHP 5.0 and later
 - Much more!
 
@@ -29,16 +30,18 @@ The PHP mail() function usually sends via a local mail server, typically fronted
 This software is licenced under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
 software availability and distribution.
 
-## Installation
+## Installation & loading
 
 PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer). Alternatively, just copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
+PHPMailer provides an SPL-compatible autoloader, and that is the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work. The autoloader does not throw errors if it can't find classes so it prepends itself to the SPL list, allowing your own (or your framework's) autoloader to catch errors. SPL autoloading was introduced in PHP 5.1.0, so if you are using a version older than that you will need to require/include each class manually.
+PHPMailer does *not* declare a namespace, as namespaces were only introduced in PHP 5.3.
 
 ## A Simple Example
 
 ```php
 <?php
-require 'class.phpmailer.php';
+require 'PHPMailerAutoload.php';
 
 $mail = new PHPMailer;
 
@@ -80,20 +83,24 @@ You'll find plenty more to play with in the `examples` folder.
 That's it. You should now be ready to use PHPMailer!
 
 ## Localization
-PHPMailer defaults to English, but in the `languages` folder you'll find numerous translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (31 at the time of writing) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
 
 ```php
 // To load the French version
 $mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
 
+We welcome corrections and new languages.
+
 ## Documentation
 
-You'll find some basic user-level docs in the docs folder, and you can generate complete API-level documentation using the `generatedocs.sh` shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first.
+Generated documentation is [available online](http://phpmailer.github.io/PHPMailer/).
+
+You'll find some basic user-level docs in the [docs](docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. There are also various examples and a code generator in the [examples folder](examples). You may find [the unit tests](test/phpMailerTest.php) a good source of how to do various operations such as encryption.
 
 ## Tests
 
-You'll find a PHPUnit test script in the `test` folder.
+There is a PHPUnit test script in the [test folder](test).
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
 
@@ -128,7 +135,7 @@ See [changelog](changelog.md).
 - Test suite.
 - Continuous integration with Travis-CI.
 - Composer support.
-- Rolling releases.
+- Public development.
 - Additional languages and language strings.
 - CRAM-MD5 authentication support.
 - Preserves full repo history of authors, commits and branches from the original SourceForge project.
