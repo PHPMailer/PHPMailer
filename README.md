@@ -7,12 +7,12 @@ Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](htt
 - Probably the world's most popular code for sending email from PHP!
 - Used by many open-source projects: Drupal, SugarCRM, Yii, Joomla! and many more
 - Integrated SMTP support - send without a local mail server
-- send emails with multiple TOs, CCs, BCCs and REPLY-TOs
+- Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for 8bit, base64, binary, and quoted-printable encoding
 - SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
 - Native language support
-- DKIM support
+- DKIM and S/MIME encryption support
 - Compatible with PHP 5.0 and later
 - Much more!
 
@@ -35,7 +35,11 @@ software availability and distribution.
 PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer). Alternatively, just copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
 PHPMailer provides an SPL-compatible autoloader, and that is the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work. The autoloader does not throw errors if it can't find classes so it prepends itself to the SPL list, allowing your own (or your framework's) autoloader to catch errors. SPL autoloading was introduced in PHP 5.1.0, so if you are using a version older than that you will need to require/include each class manually.
-PHPMailer does *not* declare a namespace, as namespaces were only introduced in PHP 5.3.
+PHPMailer does *not* declare a namespace because namespaces were only introduced in PHP 5.3.
+
+### Minimal installation
+
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), similarly if you're using POP-before SMTP, you'll need [class.php3.php](class.php3.php). for all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the `language` folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the `extras` folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
 
 ## A Simple Example
 
@@ -78,7 +82,7 @@ if(!$mail->send()) {
 echo 'Message has been sent';
 ```
 
-You'll find plenty more to play with in the `examples` folder.
+You'll find plenty more to play with in the [examples](examples/) folder.
 
 That's it. You should now be ready to use PHPMailer!
 
@@ -96,11 +100,11 @@ We welcome corrections and new languages.
 
 Generated documentation is [available online](http://phpmailer.github.io/PHPMailer/).
 
-You'll find some basic user-level docs in the [docs](docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. There are also various examples and a code generator in the [examples folder](examples). You may find [the unit tests](test/phpMailerTest.php) a good source of how to do various operations such as encryption.
+You'll find some basic user-level docs in the [docs](docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. You may find [the unit tests](test/phpmailerTest.php) a good source of how to do various operations such as encryption.
 
 ## Tests
 
-There is a PHPUnit test script in the [test folder](test).
+There is a PHPUnit test script in the [test](test/) folder.
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
 
