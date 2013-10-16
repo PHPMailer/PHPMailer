@@ -39,7 +39,7 @@ PHPMailer does *not* declare a namespace because namespaces were only introduced
 
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), similarly if you're using POP-before SMTP, you'll need [class.php3.php](class.php3.php). for all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the `language` folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the `extras` folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.php3.php](class.php3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
 
 ## A Simple Example
 
