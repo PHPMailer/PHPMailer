@@ -10,6 +10,7 @@
 * Added Galician translation (Thanks to @donatorouco)
 * Autoloader now prepends
 * Minor docs update
+* Add Latvian translation (Thanks to @eddsstudio)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
