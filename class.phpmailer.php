@@ -675,7 +675,7 @@ class PHPMailer
     public function isSendmail()
     {
         if (!stristr(ini_get('sendmail_path'), 'sendmail')) {
-            $this->Sendmail = '/var/qmail/bin/sendmail';
+            $this->Sendmail = '/usr/sbin/sendmail';
         }
         $this->Mailer = 'sendmail';
     }
@@ -687,9 +687,9 @@ class PHPMailer
     public function isQmail()
     {
         if (stristr(ini_get('sendmail_path'), 'qmail')) {
-            $this->Sendmail = '/var/qmail/bin/sendmail';
+            $this->Sendmail = '/var/qmail/bin/qmail-inject';
         }
-        $this->Mailer = 'sendmail';
+        $this->Mailer = 'qmail';
     }
 
     /**
@@ -915,9 +915,8 @@ class PHPMailer
     /**
      * Create a message and send it.
      * Uses the sending method specified by $Mailer.
-     * Returns false on error - Use the ErrorInfo variable to view description of the error.
      * @throws phpmailerException
-     * @return bool
+     * @return bool false on error - See the ErrorInfo property for details of the error.
      */
     public function send()
     {
@@ -1015,17 +1014,18 @@ class PHPMailer
             // Choose the mailer and send through it
             switch ($this->Mailer) {
                 case 'sendmail':
+                case 'qmail':
                     return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
                 case 'smtp':
                     return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
                 case 'mail':
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
                 default:
-                    if (method_exists($this,$this->Mailer.'Send')) {
-                      $sendMethod = $this->Mailer.'Send';
-                      return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
+                    if (method_exists($this, $this->Mailer.'Send')) {
+                        $sendMethod = $this->Mailer.'Send';
+                        return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
                     } else {
-                      return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
+                        return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
                     }
             }
         } catch (phpmailerException $e) {
@@ -1050,9 +1050,17 @@ class PHPMailer
     protected function sendmailSend($header, $body)
     {
         if ($this->Sender != '') {
-            $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+            if ($this->Mailer == 'qmail') {
+                $sendmail = sprintf("%s -f%s", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+            } else {
+                $sendmail = sprintf("%s -oi -f%s -t", escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+            }
         } else {
-            $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
+            if ($this->Mailer == 'qmail') {
+                $sendmail = sprintf("%s", escapeshellcmd($this->Sendmail));
+            } else {
+                $sendmail = sprintf("%s -oi -t", escapeshellcmd($this->Sendmail));
+            }
         }
         if ($this->SingleTo === true) {
             foreach ($this->SingleToArray as $val) {
@@ -1627,7 +1635,11 @@ class PHPMailer
         }
 
         // sendmail and mail() extract Bcc from the header before sending
-        if ((($this->Mailer == 'sendmail') || ($this->Mailer == 'mail')) && (count($this->bcc) > 0)) {
+        if ((
+                $this->Mailer == 'sendmail' or $this->Mailer == 'qmail' or $this->Mailer == 'mail'
+            )
+            and count($this->bcc) > 0
+        ) {
             $result .= $this->addrAppend('Bcc', $this->bcc);
         }
 

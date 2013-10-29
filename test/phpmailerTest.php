@@ -977,6 +977,23 @@ EOT;
     }
 
     /**
+     * Test sending using Qmail
+     */
+    public function testQmailSend()
+    {
+        //Only run if we have qmail installed
+        if (file_exists('/var/qmail/bin/qmail-inject')) {
+            $this->Mail->Body = 'Sending via qmail';
+            $this->BuildBody();
+            $subject = $this->Mail->Subject;
+
+            $this->Mail->Subject = $subject . ': qmail';
+            $this->Mail->IsQmail();
+            $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+        }
+    }
+
+    /**
      * Test sending using PHP mail() function
      */
     public function testMailSend()
