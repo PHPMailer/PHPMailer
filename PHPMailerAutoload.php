@@ -30,4 +30,13 @@ function PHPMailerAutoload($classname)
     }
 }
 
-spl_autoload_register('PHPMailerAutoload', true, true);
+if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
+    //SPL autoloading was introduced in PHP 5.1.2
+    spl_autoload_register('PHPMailerAutoload', true, true);
+} else {
+    //Fall back to traditional autoload for old PHP versions
+    function __autoload($classname)
+    {
+        PHPMailerAutoload($classname);
+    }
+}
