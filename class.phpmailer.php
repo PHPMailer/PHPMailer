@@ -571,7 +571,8 @@ class PHPMailer
     {
         $this->exceptions = ($exceptions == true);
         //Make sure our autoloader is loaded
-        if (version_compare(PHP_VERSION, '5.1.2', '>=') and !spl_autoload_functions() || !in_array('PHPMailerAutoload', spl_autoload_functions())) {
+        if (version_compare(PHP_VERSION, '5.1.2', '>=') and
+            !spl_autoload_functions() || !in_array('PHPMailerAutoload', spl_autoload_functions())) {
             require 'PHPMailerAutoload.php';
         }
     }
@@ -1866,6 +1867,7 @@ class PHPMailer
                 if (!defined('PKCS7_TEXT')) {
                     throw new phpmailerException($this->lang('signing') . ' OpenSSL extension missing.');
                 }
+                //TODO would be nice to use php://temp streams here, but need to wrap for PHP < 5.1
                 $file = tempnam(sys_get_temp_dir(), 'mail');
                 file_put_contents($file, $body); //TODO check this worked
                 $signed = tempnam(sys_get_temp_dir(), 'signed');
@@ -3092,7 +3094,7 @@ class PHPMailer
 
 
     /**
-     * Set the private key file and password for S/MIME signing.
+     * Set the public and private key files and password for S/MIME signing.
      * @access public
      * @param string $cert_filename
      * @param string $key_filename
