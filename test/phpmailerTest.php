@@ -743,7 +743,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->isHTML(true);
         $this->Mail->Subject .= ": HTML only";
 
-        $this->Mail->Body = <<<'EOT'
+        $this->Mail->Body = <<<EOT
 <html>
     <head>
         <title>HTML email test</title>
