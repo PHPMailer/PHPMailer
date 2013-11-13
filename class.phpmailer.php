@@ -693,7 +693,7 @@ class PHPMailer
      */
     public function isQmail()
     {
-        if (stristr(ini_get('sendmail_path'), 'qmail')) {
+        if (!stristr(ini_get('sendmail_path'), 'qmail')) {
             $this->Sendmail = '/var/qmail/bin/qmail-inject';
         }
         $this->Mailer = 'qmail';
