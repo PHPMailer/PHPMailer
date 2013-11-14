@@ -1218,9 +1218,6 @@ class PHPMailer
             $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body, $this->From);
         }
 
-        if (count($bad_rcpt) > 0) { //Create error message for any bad addresses
-            throw new phpmailerException($this->lang('recipients_failed') . implode(', ', $bad_rcpt));
-        }
         if (!$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
@@ -1229,6 +1226,12 @@ class PHPMailer
         } else {
             $this->smtp->quit();
             $this->smtp->close();
+        }
+        if (count($bad_rcpt) > 0) { //Create error message for any bad addresses
+            throw new phpmailerException(
+                $this->lang('recipients_failed') . implode(', ', $bad_rcpt),
+                self::STOP_CONTINUE
+            );
         }
         return true;
     }
