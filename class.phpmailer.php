@@ -3056,7 +3056,6 @@ class PHPMailer
      * NOTE: will not work with arrays, there are no arrays to set/reset
      * @throws phpmailerException
      * @return bool
-     * @todo Should this not be using __set() magic function?
      */
     public function set($name, $value = '')
     {
@@ -3073,6 +3072,14 @@ class PHPMailer
             }
         }
         return true;
+    }
+
+    /**
+     * Limit setting/resetting instance properties to those provided with class definition alone.
+    */
+    public function __set($name, $value)
+    {
+        $this->set($name, $value);
     }
 
     /**
