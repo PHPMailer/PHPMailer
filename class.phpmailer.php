@@ -3060,7 +3060,7 @@ class PHPMailer
     public function set($name, $value = '')
     {
         try {
-            if (isset($this->$name)) {
+            if ($this->isProperty($name)) {
                 $this->$name = $value;
             } else {
                 throw new phpmailerException($this->lang('variable_set') . $name, self::STOP_CRITICAL);
@@ -3080,6 +3080,14 @@ class PHPMailer
     public function __set($name, $value)
     {
         $this->set($name, $value);
+    }
+
+    /**
+     * Slightly improved check of property existence
+    */
+    protected function isProperty($name)
+    {
+        return version_compare(PHP_VERSION, '5.1.0', '>=') ? property_exists($this, $name) : isset($this->$name);
     }
 
     /**
