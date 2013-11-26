@@ -711,12 +711,12 @@ class PHPMailer
     {
         if (count($parts=preg_split('/[<[]/',$address))==2){
            $address=trim(substr($parts[1],0,-1),']> ');
-           $name=$parts[0]; // 
+           $name=str_replace('"','',$parts[0]); // strip quotes because they will be added later 
         }
         else {
            $address=trim($address);
         }
-        $name = trim(preg_replace('/["\r\n]+/', '', $name)); //Strip quotes, breaks and trim
+        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         return compact(array("address","name"));
     }/**/
 
