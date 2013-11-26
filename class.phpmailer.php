@@ -700,6 +700,27 @@ class PHPMailer
     }
 
     /**
+     * Accepts bare email and name, or a fancy address ie "Foo" (Bar) <baz@qux.net>
+     * Returns the bare address and trimmed name
+     * 
+     * @param type $address
+     * @param type $name
+     * @return array
+     */
+    function cleanAddress($address, $name = '')
+    {
+        if (count($parts=preg_split('/[<[]/',$address))==2){
+           $address=trim(substr($parts[1],0,-1),']> ');
+           $name=$parts[0]; // 
+        }
+        else {
+           $address=trim($address);
+        }
+        $name = trim(preg_replace('/["\r\n]+/', '', $name)); //Strip quotes, breaks and trim
+        return compact(array("address","name"));
+    }/**/
+
+    /**
      * Add a "To" address.
      * @param string $address
      * @param string $name
@@ -765,8 +786,7 @@ class PHPMailer
             $this->edebug($this->lang('Invalid recipient array') . ': ' . $kind);
             return false;
         }
-        $address = trim($address);
-        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+        extract($this->cleanAddress($address,$name));
         if (!$this->validateAddress($address)) {
             $this->setError($this->lang('invalid_address') . ': ' . $address);
             if ($this->exceptions) {
@@ -800,8 +820,7 @@ class PHPMailer
      */
     public function setFrom($address, $name = '', $auto = true)
     {
-        $address = trim($address);
-        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+        extract($this->cleanAddress($address,$name));
         if (!$this->validateAddress($address)) {
             $this->setError($this->lang('invalid_address') . ': ' . $address);
             if ($this->exceptions) {
