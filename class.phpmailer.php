@@ -757,6 +757,10 @@ class PHPMailer
      */
     protected function addAnAddress($kind, $address, $name = '')
     {
+        if (count($parts=preg_split('/[<[]/',$address))==2){ // handle 'fancy' address
+           $address=trim(substr($parts[1],0,-1),']>');
+           $name=trim($parts[0]);
+        }
         if (!preg_match('/^(to|cc|bcc|Reply-To)$/', $kind)) {
             $this->setError($this->lang('Invalid recipient array') . ': ' . $kind);
             if ($this->exceptions) {
@@ -800,6 +804,10 @@ class PHPMailer
      */
     public function setFrom($address, $name = '', $auto = true)
     {
+        if (count($parts=preg_split('/[<[]/',$address))==2){ // handle 'fancy' address
+           $address=trim(substr($parts[1],0,-1),']>');
+           $name=trim($parts[0]);
+        }
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (!$this->validateAddress($address)) {
