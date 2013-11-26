@@ -707,7 +707,7 @@ class PHPMailer
      * @param type $name
      * @return array
      */
-    function cleanAddress($address, $name = '')
+    protected function cleanAddress($address, $name = '')
     {
         if (count($parts=preg_split('/[<[]/',$address))==2){
            $address=trim(substr($parts[1],0,-1),']> ');
