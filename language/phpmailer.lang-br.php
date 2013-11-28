@@ -1,7 +1,7 @@
 <?php
 /**
 * PHPMailer language file: refer to English translation for definitive list
-* Portuguese Version
+* Brazilian Portuguese Version
 * By Paulo Henrique Garcia - paulo@controllerweb.com.br
 * Edited by Lucas Guimarães - lucas@lucasguimaraes.com
 */
