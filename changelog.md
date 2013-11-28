@@ -14,6 +14,7 @@
 * Add Belarusian translation (Thanks to @amaksymiuk)
 * Make autoloader work better on older PHP versions
 * Avoid double-encoding if mbstring is overloading mail()
+* Add Portuguese translation (Thanks to @Jonadabe)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
