@@ -43,6 +43,20 @@ class PHPMailer
     public $Version = '5.2.7';
 
     /**
+     * Add undisclosed recipients if no To field is provided.
+     * It can be handy to turn off this feature if you send emails via only Bcc, but you would add a meaningfull To header.
+     * An example for this:
+     *
+     *  $mailer->addBcc($address);
+     *  $mailer->AddUndisclosedRecipientsIfToEmpty = false;
+     *  $mailer->addCustomHeader('To', 'FakeToHeader');
+     *
+     * @type boolean
+     *
+     */
+    public $AddUndisclosedRecipientsIfToEmpty = true;
+
+    /**
      * Email priority.
      * Options: 1 = High, 3 = Normal, 5 = low.
      * @type int
@@ -975,7 +989,7 @@ class PHPMailer
             if ($this->Mailer == 'mail') {
                 if (count($this->to) > 0) {
                     $this->mailHeader .= $this->addrAppend("To", $this->to);
-                } else {
+                } elseif($this->AddUndisclosedRecipientsIfToEmpty) {
                     $this->mailHeader .= $this->headerLine("To", "undisclosed-recipients:;");
                 }
                 $this->mailHeader .= $this->headerLine(
@@ -1631,7 +1645,7 @@ class PHPMailer
             } else {
                 if (count($this->to) > 0) {
                     $result .= $this->addrAppend('To', $this->to);
-                } elseif (count($this->cc) == 0) {
+                } elseif (count($this->cc) == 0 && $this->AddUndisclosedRecipientsIfToEmpty) {
                     $result .= $this->headerLine('To', 'undisclosed-recipients:;');
                 }
             }
