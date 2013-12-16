@@ -458,6 +458,14 @@ class PHPMailer
     protected $ReplyTo = array();
 
     /**
+     * Fallback value for To: field.
+     * "There's nothing particularly special about the 'undisclosed-recipients' name, it's the fact that it's an address string ending with :; that is important because it is an RFC2822 address group with no members."
+     * @type string
+     * @access protected
+     */
+    protected $emptyGroupName = 'undisclosed-recipients:;';
+
+    /**
      * An array of all kinds of addresses.
      * Includes all of $to, $cc, $bcc, $replyto
      * @type array
@@ -976,7 +984,7 @@ class PHPMailer
                 if (count($this->to) > 0) {
                     $this->mailHeader .= $this->addrAppend("To", $this->to);
                 } else {
-                    $this->mailHeader .= $this->headerLine("To", "undisclosed-recipients:;");
+                    $this->mailHeader .= $this->headerLine("To", $this->emptyGroupName);
                 }
                 $this->mailHeader .= $this->headerLine(
                     'Subject',
@@ -1632,7 +1640,7 @@ class PHPMailer
                 if (count($this->to) > 0) {
                     $result .= $this->addrAppend('To', $this->to);
                 } elseif (count($this->cc) == 0) {
-                    $result .= $this->headerLine('To', 'undisclosed-recipients:;');
+                    $result .= $this->headerLine('To', $this->emptyGroupName);
                 }
             }
         }
@@ -3072,6 +3080,24 @@ class PHPMailer
                 return false;
             }
         }
+        return true;
+    }
+
+    /**
+     * Set the empty groupname property. It can be useful if you use only the bcc field to add recipients but you would like to add something meaningful to the To field.
+     *
+     * Usage Example:
+     *
+     *      $mailer->addBcc($address);
+     *      $mailer->setEmptyGroupName('FakeToHeader');
+     *
+     * @access public
+     * @param string $name
+     * @return bool
+     */
+    public function setEmptyGroupName($EmptyGroupName)
+    {
+        $this->emptyGroupName = $EmptyGroupName;
         return true;
     }
 
