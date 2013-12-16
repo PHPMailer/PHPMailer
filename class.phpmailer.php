@@ -3092,7 +3092,7 @@ class PHPMailer
      *      $mailer->setEmptyGroupName('FakeToHeader');
      *
      * @access public
-     * @param string $name
+     * @param string $EmptyGroupName
      * @return bool
      */
     public function setEmptyGroupName($EmptyGroupName)
