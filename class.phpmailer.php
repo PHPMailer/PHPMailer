@@ -396,11 +396,7 @@ class PHPMailer
      * The function that handles the result of the send email action.
      * It is called out by send() for each email sent.
      *
-     * Value can be:
-     * - 'function_name' for function names
-     * - 'Class::Method' for static method calls
-     * - array($object, 'Method') for calling methods on $object
-     * See http://php.net/is_callable manual page for more details.
+     * Value can be any php callable: http://www.php.net/is_callable
      *
      * Parameters:
      *   bool    $result        result of the send action
@@ -410,7 +406,6 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
-     * 
      * @type string
      */
     public $action_function = '';

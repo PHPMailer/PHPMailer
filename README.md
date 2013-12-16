@@ -1,6 +1,8 @@
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
 Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](https://travis-ci.org/Synchro/PHPMailer)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Synchro/PHPMailer/badges/quality-score.png?s=320d104c5f7ae0bdb10abd98ea04e0cb107fe905)](https://scrutinizer-ci.com/g/Synchro/PHPMailer/)
+[![Code Coverage](https://scrutinizer-ci.com/g/Synchro/PHPMailer/badges/coverage.png?s=4a55049051633406197503e4f66cc8eeb224c9a4)](https://scrutinizer-ci.com/g/Synchro/PHPMailer/)
 
 ## Class Features
 

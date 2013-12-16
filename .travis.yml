@@ -9,6 +9,7 @@ before_install:
 before_script:
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
+  - mkdir -p build/logs
   - cd test
   - cp testbootstrap-dist.php testbootstrap.php
   - chmod +x fakesendmail.sh
@@ -16,5 +17,10 @@ before_script:
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
   - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -i|grep "PHP Version"|head -n 1|grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
+  - pwd
+  - ls -al
 script:
-  - phpunit phpmailerTest
+  - phpunit --configuration ../travis.phpunit.xml.dist
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml

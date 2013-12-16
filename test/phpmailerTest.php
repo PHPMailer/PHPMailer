@@ -1,10 +1,7 @@
 <?php
 /**
  * PHPMailer - PHP email transport unit tests
- * Requires PHPUnit 3.3 or later. Install like this:
- *   pear install "channel://pear.phpunit.de/PHPUnit"
- * Then run the tests like this:
- *   phpunit phpmailerTest
+ * Requires PHPUnit 3.3 or later.
  *
  * PHP version 5.0.0
  *
@@ -12,11 +9,12 @@
  * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @copyright 2004 - 2009 Andy Prevost
+ * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-require 'PHPUnit/Autoload.php';
-require '../PHPMailerAutoload.php';
+require_once 'PHPUnit/Autoload.php';
+require_once '../PHPMailerAutoload.php';
 
 /**
  * PHPMailer - PHP email transport unit test class
@@ -990,6 +988,8 @@ EOT;
             $this->Mail->Subject = $subject . ': qmail';
             $this->Mail->IsQmail();
             $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+        } else {
+            $this->markTestSkipped('Qmail is not installed');
         }
     }
 
