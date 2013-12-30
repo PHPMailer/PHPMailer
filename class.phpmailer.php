@@ -1183,7 +1183,7 @@ class PHPMailer
             throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
         }
 
-        // Attempt to send attach all recipients
+        // Attempt to send to all recipients
         foreach ($this->to as $to) {
             if (!$this->smtp->recipient($to[0])) {
                 $bad_rcpt[] = $to[0];
@@ -1212,7 +1212,8 @@ class PHPMailer
             $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body, $this->From);
         }
 
-        if (!$this->smtp->data($header . $body)) {
+        //Only send the DATA command if we have viable recipients
+        if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
         if ($this->SMTPKeepAlive == true) {
