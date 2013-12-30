@@ -2717,14 +2717,14 @@ class PHPMailer
      */
     protected function serverHostname()
     {
+        $result = 'localhost.localdomain';
         if (!empty($this->Hostname)) {
             $result = $this->Hostname;
-        } elseif (isset($_SERVER['SERVER_NAME'])) {
+        } elseif (isset($_SERVER) and array_key_exists('SERVER_NAME', $_SERVER) and !empty($_SERVER['SERVER_NAME'])) {
             $result = $_SERVER['SERVER_NAME'];
-        } else {
-            $result = 'localhost.localdomain';
+        } elseif (gethostname() !== false) {
+            $result = gethostname();
         }
-
         return $result;
     }
 
