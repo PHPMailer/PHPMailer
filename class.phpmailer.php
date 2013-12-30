@@ -2720,6 +2720,8 @@ class PHPMailer
             $result = $this->Hostname;
         } elseif (isset($_SERVER['SERVER_NAME'])) {
             $result = $_SERVER['SERVER_NAME'];
+        } elseif (gethostname() != false) {
+            $result = gethostname();
         } else {
             $result = 'localhost.localdomain';
         }
