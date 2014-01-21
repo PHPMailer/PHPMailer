@@ -566,9 +566,11 @@ class PHPMailer
     {
         $this->exceptions = ($exceptions == true);
         //Make sure our autoloader is loaded
-        if (version_compare(PHP_VERSION, '5.1.2', '>=') and
-            !spl_autoload_functions() || !in_array('PHPMailerAutoload', spl_autoload_functions())) {
-            require 'PHPMailerAutoload.php';
+        if (version_compare(PHP_VERSION, '5.1.2', '>=')) {
+            $al = spl_autoload_functions();
+            if ($al === false or !in_array('PHPMailerAutoload', $al)) {
+                require 'PHPMailerAutoload.php';
+            }
         }
     }
 
