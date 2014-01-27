@@ -2364,7 +2364,7 @@ class PHPMailer
     public function encodeQP($string, $line_max = 76)
     {
         if (function_exists('quoted_printable_encode')) { //Use native function if it's available (>= PHP5.3)
-            return quoted_printable_encode($string);
+            return $this->fixEOL(quoted_printable_encode($string));
         }
         //Fall back to a pure PHP implementation
         $string = str_replace(
@@ -2373,7 +2373,7 @@ class PHPMailer
             rawurlencode($string)
         );
         $string = preg_replace('/[^\r\n]{' . ($line_max - 3) . '}[^=\r\n]{2}/', "$0=\r\n", $string);
-        return $string;
+        return $this->fixEOL($string);
     }
 
     /**
