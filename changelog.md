@@ -15,6 +15,8 @@
 * Make autoloader work better on older PHP versions
 * Avoid double-encoding if mbstring is overloading mail()
 * Add Portuguese translation (Thanks to @Jonadabe)
+* Make quoted-printable encoder respect line ending setting
+* Improve Chinese translation (Thanks to @PeterDaveHello)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
