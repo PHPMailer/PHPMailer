@@ -17,6 +17,8 @@
 * Add Portuguese translation (Thanks to @Jonadabe)
 * Make quoted-printable encoder respect line ending setting
 * Improve Chinese translation (Thanks to @PeterDaveHello)
+* Add Georgian translation (Thanks to @akalongman)
+* Add Greek translation (Thanks to @lenasterg)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
