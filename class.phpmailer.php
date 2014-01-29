@@ -1380,13 +1380,13 @@ class PHPMailer
         //Overwrite language-specific strings.
         //This way we'll never have missing translations - no more "language string failed to load"!
         $l = true;
-        $path = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
+        $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         if ($langcode != 'en') { //There is no English translation file
             //Make sure language file path is readable
-            if (!is_readable($path)) {
+            if (!is_readable($lang_file)) {
                 $l = false;
             } else {
-                $l = include $path;
+                $l = include $lang_file;
             }
         }
         $this->language = $PHPMAILER_LANG;
