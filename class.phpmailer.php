@@ -3275,6 +3275,56 @@ class PHPMailer
     }
 
     /**
+     * Allows for public read access to 'to' property.
+     * @access public
+     * @return array
+     */
+    public function getToAddresses()
+    {
+        return $this->to;
+    }
+
+    /**
+     * Allows for public read access to 'cc' property.
+     * @access public
+     * @return array
+     */
+    public function getCcAddresses()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * Allows for public read access to 'bcc' property.
+     * @access public
+     * @return array
+     */
+    public function getBccAddresses()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * Allows for public read access to 'ReplyTo' property.
+     * @access public
+     * @return array
+     */
+    public function getReplyToAddresses()
+    {
+        return $this->ReplyTo;
+    }
+
+    /**
+     * Allows for public read access to 'all_recipients' property.
+     * @access public
+     * @return array
+     */
+    public function getAllRecipientAddresses()
+    {
+        return $this->all_recipients;
+    }
+
+    /**
      * Perform a callback.
      * @param bool $isSent
      * @param string $to
