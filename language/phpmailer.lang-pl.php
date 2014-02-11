@@ -4,7 +4,7 @@
 * Polish Version
 */
 
-$PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić autentykacji.';
+$PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić autoryzacji.';
 $PHPMAILER_LANG['connect_host']         = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Błąd SMTP: Dane nie zostały przyjęte.';
 $PHPMAILER_LANG['empty_message']        = 'Wiadomość jest pusta.';
@@ -21,4 +21,4 @@ $PHPMAILER_LANG['recipients_failed']    = 'Błąd SMTP: Następujący odbiorcy s
 $PHPMAILER_LANG['signing']              = 'Błąd podpisywania wiadomości: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() zakończone niepowodzeniem.';
 $PHPMAILER_LANG['smtp_error']           = 'Błąd SMTP: ';
-$PHPMAILER_LANG['variable_set']         = 'Nie można zmienić zmiennej: ';
+$PHPMAILER_LANG['variable_set']         = 'Nie można ustawić lub zmodyfikować zmiennej: ';
