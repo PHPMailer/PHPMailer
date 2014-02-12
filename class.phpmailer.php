@@ -763,13 +763,16 @@ class PHPMailer
         }
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-        if (!$this->validateAddress($address)) {
-            $this->setError($this->lang('invalid_address') . ': ' . $address);
-            $this->edebug($this->lang('invalid_address') . ': ' . $address);
-            if ($this->exceptions) {
-                throw new phpmailerException($this->lang('invalid_address') . ': ' . $address);
+        $address_array = explode(',', $address);
+        foreach ($address_array as $val) {
+            if (!$this->validateAddress(trim($val))) {
+                $this->setError($this->lang('invalid_address') . ': ' . $address);
+                $this->edebug($this->lang('invalid_address') . ': ' . $address);
+                if ($this->exceptions) {
+                    throw new phpmailerException($this->lang('invalid_address') . ': ' . $address);
+                }
+                return false;
             }
-            return false;
         }
         if ($kind != 'Reply-To') {
             if (!isset($this->all_recipients[strtolower($address)])) {
