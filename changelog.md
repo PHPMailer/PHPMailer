@@ -315,31 +315,6 @@ Please note, this is BETA software
 * included example showing how to use PHPMailer with GMAIL
 * fixed the missing Cc in SendMail() and Mail()
 
-******************
-A note on sending bulk emails:
-
-If the email you are sending is not personalized, consider using the
-"undisclosed-recipient:;" strategy. That is, put all of your recipients
-in the Bcc field and set the To field to "undisclosed-recipients:;".
-It's a lot faster (only one send) and saves quite a bit on resources.
-Contrary to some opinions, this will not get you listed in spam engines -
-it's a legitimate way for you to send emails.
-
-A partial example for use with PHPMailer:
-
-```
-$mail->AddAddress("undisclosed-recipients:;");
-$mail->AddBCC("email1@anydomain.com,email2@anyotherdomain.com,email3@anyalternatedomain.com");
-```
-
-Many email service providers restrict the number of emails that can be sent
-in any given time period. Often that is between 50 - 60 emails maximum
-per hour or per send session.
-
-If that's the case, then break up your Bcc lists into chunks that are one
-less than your limit, and put a pause in your script.
-*******************
-
 ## Version 2.0.0 rc1 (Thu, Nov 08 2007), interim release
 * dramatically simplified using inline graphics ... it's fully automated and requires no user input
 * added automatic document type detection for attachments and pictures
@@ -352,26 +327,8 @@ less than your limit, and put a pause in your script.
 * added Estonian language file by Indrek P&auml;ri
 * added header injection patch
 * added "set" method to permit users to create their own pseudo-properties like 'X-Headers', etc.
-  example of use:
-
-```
-$mail->set('X-Priority', '3');
-$mail->set('X-MSMail-Priority', 'Normal');
-```
-
 * fixed warning message in SMTP get_lines method
-* added TLS/SSL SMTP support. Example of use:
-
-```
-$mail = new PHPMailer();
-$mail->Mailer = "smtp";
-$mail->Host = "smtp.example.com";
-$mail->SMTPSecure   = "tls"; // option
-//$mail->SMTPSecure   = "ssl";  // option
-...
-$mail->Send();
-```
-
+* added TLS/SSL SMTP support.
 * PHPMailer has been tested with PHP4 (4.4.7) and PHP5 (5.2.7)
 * Works with PHP installed as a module or as CGI-PHP
 NOTE: will NOT work with PHP5 in E_STRICT error mode
