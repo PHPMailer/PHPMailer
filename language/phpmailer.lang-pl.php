@@ -4,7 +4,7 @@
 * Polish Version
 */
 
-$PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić autoryzacji.';
+$PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić uwierzytelnienia.';
 $PHPMAILER_LANG['connect_host']         = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Błąd SMTP: Dane nie zostały przyjęte.';
 $PHPMAILER_LANG['empty_message']        = 'Wiadomość jest pusta.';
