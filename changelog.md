@@ -19,6 +19,7 @@
 * Improve Chinese translation (Thanks to @PeterDaveHello)
 * Add Georgian translation (Thanks to @akalongman)
 * Add Greek translation (Thanks to @lenasterg)
+* Fix serverHostname on PHP < 5.3
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
