@@ -3062,12 +3062,11 @@ class PHPMailer
      * NOTE: will not work with arrays, there are no arrays to set/reset
      * @throws phpmailerException
      * @return bool
-     * @todo Should this not be using __set() magic function?
      */
     public function set($name, $value = '')
     {
         try {
-            if (isset($this->$name)) {
+            if ($this->isProperty($name)) {
                 $this->$name = $value;
             } else {
                 throw new phpmailerException($this->lang('variable_set') . $name, self::STOP_CRITICAL);
@@ -3079,6 +3078,22 @@ class PHPMailer
             }
         }
         return true;
+    }
+
+    /**
+     * Limit setting/resetting instance properties to those provided with class definition alone.
+    */
+    public function __set($name, $value)
+    {
+        $this->set($name, $value);
+    }
+
+    /**
+     * Slightly improved check of property existence
+    */
+    protected function isProperty($name)
+    {
+        return version_compare(PHP_VERSION, '5.1.0', '>=') ? property_exists($this, $name) : isset($this->$name);
     }
 
     /**
