@@ -1571,7 +1571,6 @@ class PHPMailer
         return $maxLength;
     }
 
-
     /**
      * Set the body wrapping.
      * @access public
@@ -1933,7 +1932,10 @@ class PHPMailer
         $result .= $this->textLine('--' . $boundary);
         $result .= sprintf("Content-Type: %s; charset=%s", $contentType, $charSet);
         $result .= $this->LE;
-        $result .= $this->headerLine('Content-Transfer-Encoding', $encoding);
+        //RFC1341 part 5 says 7bit is assumed if not specified
+        if ($encoding != '7bit') {
+            $result .= $this->headerLine('Content-Transfer-Encoding', $encoding);
+        }
         $result .= $this->LE;
 
         return $result;
@@ -2108,7 +2110,10 @@ class PHPMailer
                     $this->encodeHeader($this->secureHeader($name)),
                     $this->LE
                 );
-                $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
+                //RFC1341 part 5 says 7bit is assumed if not specified
+                if ($encoding != '7bit') {
+                    $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
+                }
 
                 if ($disposition == 'inline') {
                     $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
@@ -2250,7 +2255,7 @@ class PHPMailer
         switch (strtolower($position)) {
             case 'phrase':
                 if (!preg_match('/[\200-\377]/', $str)) {
-                    // Can't use addslashes as we don't know what value has magic_quotes_sybase
+                    // Can't use addslashes as we don't know the value of magic_quotes_sybase
                     $encoded = addcslashes($str, "\0..\37\177\\\"");
                     if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) {
                         return ($encoded);
@@ -2295,7 +2300,7 @@ class PHPMailer
             $encoded = str_replace('=' . self::CRLF, "\n", trim($encoded));
         }
 
-        $encoded = preg_replace('/^(.*)$/m', " =?" . $this->CharSet . "?$encoding?\\1?=", $encoded);
+        $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
         $encoded = trim(str_replace("\n", $this->LE, $encoded));
 
         return $encoded;
@@ -2319,7 +2324,8 @@ class PHPMailer
     /**
      * Encode and wrap long multibyte strings for mail headers
      * without breaking lines within a character.
-     * Adapted from a function by paravoid at http://uk.php.net/manual/en/function.mb-encode-mimeheader.php
+     * Adapted from a function by paravoid
+     * @link http://www.php.net/manual/en/function.mb-encode-mimeheader.php#60283
      * @access public
      * @param string $str multi-byte text to wrap encode
      * @param string $lf string to use as linefeed/end-of-line
