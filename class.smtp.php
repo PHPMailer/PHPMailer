@@ -49,6 +49,11 @@ class SMTP
     const DEFAULT_SMTP_PORT = 25;
 
     /**
+     * The maximum line length allowed by RFC 2822 section 2.1.1
+     */
+    const MAX_LINE_LENGTH = 998;
+
+    /**
      * The PHPMailer SMTP Version number.
      * @type string
      * @deprecated This should be a constant
@@ -187,23 +192,19 @@ class SMTP
     {
         // Clear errors to avoid confusion
         $this->error = null;
-
         // Make sure we are __not__ connected
         if ($this->connected()) {
             // Already connected, generate error
             $this->error = array('error' => 'Already connected to a server');
             return false;
         }
-
         if (empty($port)) {
             $port = self::DEFAULT_SMTP_PORT;
         }
-
         // Connect to the SMTP server
         if ($this->do_debug >= 3) {
             $this->edebug('Connection: opening');
         }
-
         $errno = 0;
         $errstr = '';
         $socket_context = stream_context_create($options);
@@ -216,7 +217,6 @@ class SMTP
             STREAM_CLIENT_CONNECT,
             $socket_context
         );
-
         // Verify we connected properly
         if (empty($this->smtp_conn)) {
             $this->error = array(
@@ -235,7 +235,6 @@ class SMTP
         if ($this->do_debug >= 3) {
             $this->edebug('Connection: opened');
         }
-
         // SMTP server can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
         if (substr(PHP_OS, 0, 3) != 'WIN') {
@@ -245,14 +244,11 @@ class SMTP
             }
             stream_set_timeout($this->smtp_conn, $timeout, 0);
         }
-
         // Get any announcement
         $announce = $this->get_lines();
-
         if ($this->do_debug >= 2) {
             $this->edebug('SERVER -> CLIENT: ' . $announce);
         }
-
         return true;
     }
 
@@ -263,7 +259,7 @@ class SMTP
      */
     public function startTLS()
     {
-        if (!$this->sendCommand("STARTTLS", "STARTTLS", 220)) {
+        if (!$this->sendCommand('STARTTLS', 'STARTTLS', 220)) {
             return false;
         }
         // Begin encrypted connection
@@ -271,8 +267,7 @@ class SMTP
             $this->smtp_conn,
             true,
             STREAM_CRYPTO_METHOD_TLS_CLIENT
-        )
-        ) {
+        )) {
             return false;
         }
         return true;
@@ -300,7 +295,6 @@ class SMTP
         if (empty($authtype)) {
             $authtype = 'LOGIN';
         }
-
         switch ($authtype) {
             case 'PLAIN':
                 // Start authentication
@@ -363,7 +357,6 @@ class SMTP
                 ) {
                     return false;
                 }
-
                 //Though 0 based, there is a white space after the 3 digit number
                 //msg2
                 $challenge = substr($this->last_reply, 3);
@@ -498,62 +491,52 @@ class SMTP
         if (!$this->sendCommand('DATA', 'DATA', 354)) {
             return false;
         }
-
         /* The server is ready to accept data!
-         * according to rfc821 we should not send more than 1000
-         * including the CRLF
-         * characters on a single line so we will break the data up
-         * into lines by \r and/or \n then if needed we will break
-         * each of those into smaller lines to fit within the limit.
-         * in addition we will be looking for lines that start with
-         * a period '.' and append and additional period '.' to that
-         * line. NOTE: this does not count towards limit.
+         * According to rfc821 we should not send more than 1000 characters on a single line (including the CRLF)
+         * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
+         * smaller lines to fit within the limit.
+         * We will also look for lines that start with a '.' and prepend an additional '.'.
+         * NOTE: this does not count towards line-length limit.
          */
 
-        // Normalize the line breaks before exploding
-        $msg_data = str_replace("\r\n", "\n", $msg_data);
-        $msg_data = str_replace("\r", "\n", $msg_data);
-        $lines = explode("\n", $msg_data);
+        // Normalize line breaks before exploding
+        $lines = explode("\n", str_replace(array("\r\n", "\r"), "\n", $msg_data));
 
-        /* We need to find a good way to determine if headers are
-         * in the msg_data or if it is a straight msg body
-         * currently I am assuming rfc822 definitions of msg headers
-         * and if the first field of the first line (':' separated)
-         * does not contain a space then it _should_ be a header
-         * and we can process all lines before a blank "" line as
-         * headers.
+        /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
+         * of the first line (':' separated) does not contain a space then it _should_ be a header and we will
+         * process all lines before a blank line as headers.
          */
 
         $field = substr($lines[0], 0, strpos($lines[0], ':'));
         $in_headers = false;
-        if (!empty($field) && !strstr($field, ' ')) {
+        if (!empty($field) && strpos($field, ' ') === false) {
             $in_headers = true;
         }
 
-        //RFC 2822 section 2.1.1 limit
-        $max_line_length = 998;
-
         foreach ($lines as $line) {
-            $lines_out = null;
-            if ($line == '' && $in_headers) {
+            $lines_out = array();
+            if ($in_headers and $line == '') {
                 $in_headers = false;
             }
             // ok we need to break this line up into several smaller lines
-            while (strlen($line) > $max_line_length) {
-                $pos = strrpos(substr($line, 0, $max_line_length), ' ');
-
-                // Patch to fix DOS attack
-                if (!$pos) {
-                    $pos = $max_line_length - 1;
+            //This is a small micro-optimisation: isset($str[$len]) is equivalent to (strlen($str) > $len)
+            while (isset($line[self::MAX_LINE_LENGTH])) {
+                //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
+                //so as to avoid breaking in the middle of a word
+                $pos = strrpos(substr($line, 0, self::MAX_LINE_LENGTH), ' ');
+                if (!$pos) { //Deliberately matches both false and 0
+                    //No nice break found, add a hard break
+                    $pos = self::MAX_LINE_LENGTH - 1;
                     $lines_out[] = substr($line, 0, $pos);
                     $line = substr($line, $pos);
                 } else {
+                    //Break at the found point
                     $lines_out[] = substr($line, 0, $pos);
+                    //Move along by the amount we dealt with
                     $line = substr($line, $pos + 1);
                 }
-
                 /* If processing headers add a LWSP-char to the front of new line
-                 * rfc822 on long msg headers
+                 * RFC822 section 3.1.1
                  */
                 if ($in_headers) {
                     $line = "\t" . $line;
@@ -561,12 +544,11 @@ class SMTP
             }
             $lines_out[] = $line;
 
-            // send the lines to the server
-            while (list(, $line_out) = @each($lines_out)) {
-                if (strlen($line_out) > 0) {
-                    if (substr($line_out, 0, 1) == '.') {
-                        $line_out = '.' . $line_out;
-                    }
+            // Send the lines to the server
+            foreach ($lines_out as $line_out) {
+                //RFC2821 section 4.5.2
+                if (!empty($line_out) and $line_out[0] == '.') {
+                    $line_out = '.' . $line_out;
                 }
                 $this->client_send($line_out . self::CRLF);
             }
@@ -580,7 +562,7 @@ class SMTP
      * Send an SMTP HELO or EHLO command.
      * Used to identify the sending server to the receiving server.
      * This makes sure that client and server are in a known state.
-     * Implements from RFC 821: HELO <SP> <domain> <CRLF>
+     * Implements RFC 821: HELO <SP> <domain> <CRLF>
      * and RFC 2821 EHLO.
      * @param string $host The host name or IP to connect to
      * @access public
@@ -589,13 +571,7 @@ class SMTP
     public function hello($host = '')
     {
         // Try extended hello first (RFC 2821)
-        if (!$this->sendHello('EHLO', $host)) {
-            if (!$this->sendHello('HELO', $host)) {
-                return false;
-            }
-        }
-
-        return true;
+        return (bool)($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
     }
 
     /**
@@ -603,7 +579,7 @@ class SMTP
      * Low-level implementation used by hello()
      * @see hello()
      * @param string $hello The HELO string
-     * @param string $host  The hostname to say we are
+     * @param string $host The hostname to say we are
      * @access protected
      * @return bool
      */
@@ -666,7 +642,7 @@ class SMTP
     public function recipient($to)
     {
         return $this->sendCommand(
-            'RCPT TO ',
+            'RCPT TO',
             'RCPT TO:<' . $to . '>',
             array(250, 251)
         );
@@ -696,7 +672,7 @@ class SMTP
     {
         if (!$this->connected()) {
             $this->error = array(
-                "error" => "Called $command without being connected"
+                'error' => "Called $command without being connected"
             );
             return false;
         }
@@ -712,9 +688,9 @@ class SMTP
         if (!in_array($code, (array)$expect)) {
             $this->last_reply = null;
             $this->error = array(
-                "error" => "$command command failed",
-                "smtp_code" => $code,
-                "detail" => substr($reply, 4)
+                'error' => "$command command failed",
+                'smtp_code' => $code,
+                'detail' => substr($reply, 4)
             );
             if ($this->do_debug >= 1) {
                 $this->edebug(
@@ -744,7 +720,7 @@ class SMTP
      */
     public function sendAndMail($from)
     {
-        return $this->sendCommand("SAML", "SAML FROM:$from", 250);
+        return $this->sendCommand('SAML', "SAML FROM:$from", 250);
     }
 
     /**
@@ -755,7 +731,7 @@ class SMTP
      */
     public function verify($name)
     {
-        return $this->sendCommand("VRFY", "VRFY $name", array(250, 251));
+        return $this->sendCommand('VRFY', "VRFY $name", array(250, 251));
     }
 
     /**
@@ -766,14 +742,14 @@ class SMTP
      */
     public function noop()
     {
-        return $this->sendCommand("NOOP", "NOOP", 250);
+        return $this->sendCommand('NOOP', 'NOOP', 250);
     }
 
     /**
      * Send an SMTP TURN command.
      * This is an optional command for SMTP that this class does not support.
-     * This method is here to make the RFC821 Definition
-     * complete for this class and __may__ be implemented in future
+     * This method is here to make the RFC821 Definition complete for this class
+     * and _may_ be implemented in future
      * Implements from rfc 821: TURN <CRLF>
      * @access public
      * @return bool
@@ -793,7 +769,7 @@ class SMTP
      * Send raw data to the server.
      * @param string $data The data to send
      * @access public
-     * @return int|bool The number of bytes sent to the server or FALSE on error
+     * @return int|bool The number of bytes sent to the server or false on error
      */
     public function client_send($data)
     {
@@ -834,12 +810,12 @@ class SMTP
      */
     protected function get_lines()
     {
+        // If the connection is bad, give up straight away
+        if (!is_resource($this->smtp_conn)) {
+            return '';
+        }
         $data = '';
         $endtime = 0;
-        // If the connection is bad, give up now
-        if (!is_resource($this->smtp_conn)) {
-            return $data;
-        }
         stream_set_timeout($this->smtp_conn, $this->Timeout);
         if ($this->Timelimit > 0) {
             $endtime = time() + $this->Timelimit;
@@ -854,8 +830,8 @@ class SMTP
             if ($this->do_debug >= 4) {
                 $this->edebug("SMTP -> get_lines(): \$data is \"$data\"");
             }
-            // if 4th character is a space, we are done reading, break the loop
-            if (substr($str, 3, 1) == ' ') {
+            // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
+            if ((isset($str[3]) and $str[3] == ' ')) {
                 break;
             }
             // Timed-out? Log and break
@@ -873,8 +849,8 @@ class SMTP
                 if (time() > $endtime) {
                     if ($this->do_debug >= 4) {
                         $this->edebug(
-                            'SMTP -> get_lines(): timelimit reached ('
-                            . $this->Timelimit . ' sec)'
+                            'SMTP -> get_lines(): timelimit reached ('.
+                            $this->Timelimit . ' sec)'
                         );
                     }
                     break;
