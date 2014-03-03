@@ -845,16 +845,14 @@ class SMTP
                 break;
             }
             // Now check if reads took too long
-            if ($endtime) {
-                if (time() > $endtime) {
-                    if ($this->do_debug >= 4) {
-                        $this->edebug(
-                            'SMTP -> get_lines(): timelimit reached ('.
-                            $this->Timelimit . ' sec)'
-                        );
-                    }
-                    break;
+            if ($endtime and time() > $endtime) {
+                if ($this->do_debug >= 4) {
+                    $this->edebug(
+                        'SMTP -> get_lines(): timelimit reached ('.
+                        $this->Timelimit . ' sec)'
+                    );
                 }
+                break;
             }
         }
         return $data;
