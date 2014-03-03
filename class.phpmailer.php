@@ -2338,7 +2338,8 @@ class PHPMailer
      * @param string $text
      * @return bool
      */
-    public function has8bitChars($text) {
+    public function has8bitChars($text)
+    {
         return (bool)preg_match('/[\x80-\xFF]/', $text);
     }
 
