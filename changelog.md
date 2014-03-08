@@ -22,6 +22,7 @@
 * Fix serverHostname on PHP < 5.3
 * Improve performance of SMTP class
 * Implement automatic 7bit downgrade
+* Add Vietnamese translation (Thanks to @vinades)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
