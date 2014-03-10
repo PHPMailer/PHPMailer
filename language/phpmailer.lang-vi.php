@@ -3,9 +3,8 @@
 /**
  * @PHPMailer language file
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
- * @License GNU/GPL version 2 or any later version
+ * @License GNU/GPL version 2 or GNU/LGPL version 2.1 or any later version
  * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
  */
 
