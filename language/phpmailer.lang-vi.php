@@ -1,13 +1,10 @@
 <?php
-
 /**
- * @PHPMailer language file
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Language Tiếng Việt
- * @License GNU/GPL version 2 or GNU/LGPL version 2.1 or any later version
- * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
+ * PHPMailer language file: refer to English translation for definitive list.
+ * Vietnamese (Tiếng Việt) Version
+ * @author VINADES.,JSC <contact@vinades.vn>
+ * @license GNU/GPL version 2 or GNU/LGPL version 2.1 or any later version
  */
-
 $PHPMAILER_LANG['authenticate'] = 'Lỗi SMTP: Không thể xác thực.';
 $PHPMAILER_LANG['connect_host'] = 'Lỗi SMTP: Không thể kết nối máy chủ SMTP.';
 $PHPMAILER_LANG['data_not_accepted'] = 'Lỗi SMTP: Dữ liệu không được chấp nhận.';
@@ -26,5 +23,3 @@ $PHPMAILER_LANG['signing'] = 'Lỗi đăng nhập: ';
 $PHPMAILER_LANG['smtp_connect_failed'] = 'Lỗi kết nối với SMTP';
 $PHPMAILER_LANG['smtp_error'] = 'Lỗi máy chủ smtp ';
 $PHPMAILER_LANG['variable_set'] = 'Không thể thiết lập hoặc thiết lập lại biến: ';
-
-?>
