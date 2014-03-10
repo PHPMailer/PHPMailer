@@ -1,3 +1,5 @@
+![PHPMailer](https://raw.github.com/PHPMailer/PHPMailer/master/examples/images/phpmailer.png)
+
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
