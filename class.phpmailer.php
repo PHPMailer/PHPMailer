@@ -250,6 +250,18 @@ class PHPMailer
     public $SMTPSecure = '';
 
     /**
+     * Path of CA hashed cert store
+     * @type string
+     */
+    public $SSLCaPath = '/etc/ssl/certs';
+
+    /**
+     * Whether to allow insecure SSL connection
+     * @type bool
+     */
+    public $SSLallowInsecure = false;
+
+    /**
      * Whether to use SMTP authentication.
      * Uses the Username and Password properties.
      * @type bool
@@ -1175,8 +1187,17 @@ class PHPMailer
     protected function smtpSend($header, $body)
     {
         $bad_rcpt = array();
+	
+	$options = array ();
+	if (!$this->SSLallowInsecure)
+	{
+	   $options['ssl']['capath'] = $this->SSLCaPath;
+	   $options['ssl']['verify_peer'] = true;
+	   $options['ssl']['CN_match'] = $this->Host;
+	   $options['ssl']['allow_self_signed'] = false;
+	}
 
-        if (!$this->smtpConnect()) {
+        if (!$this->smtpConnect($options)) {
             throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
         $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
