@@ -24,6 +24,7 @@
 * Implement automatic 7bit downgrade
 * Add Vietnamese translation (Thanks to @vinades)
 * Improve example images, switch to PNG
+* Add Croatian translation (Thanks to @hrvoj3e)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
