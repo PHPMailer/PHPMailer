@@ -1379,7 +1379,11 @@ class PHPMailer
         );
         //Load the language path from absolute position
         if(!$lang_path) {
-            $lang_path = __DIR__ . '/language/';
+            if (version_compare(PHP_VERSION, '5.3.0', 'lt')) {
+                $lang_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
+            } else {
+                $lang_path = __DIR__ . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
+            }
         }
         //Overwrite language-specific strings.
         //This way we'll never have missing translations - no more "language string failed to load"!
