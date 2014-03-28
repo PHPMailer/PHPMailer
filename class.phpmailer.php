@@ -1354,7 +1354,7 @@ class PHPMailer
      * @return bool
      * @access public
      */
-    public function setLanguage($langcode = 'en', $lang_path = 'language/')
+    public function setLanguage($langcode = 'en', $lang_path = null)
     {
         //Define full set of translatable strings
         $PHPMAILER_LANG = array(
@@ -1377,6 +1377,10 @@ class PHPMailer
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: '
         );
+        //Load the language path from absolute position
+        if(!$lang_path) {
+            $lang_path = __DIR__ . '/language/';
+        }
         //Overwrite language-specific strings.
         //This way we'll never have missing translations - no more "language string failed to load"!
         $l = true;
