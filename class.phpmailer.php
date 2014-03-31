@@ -1625,17 +1625,19 @@ class PHPMailer
         }
 
         // To be created automatically by mail()
-        if ($this->Mailer != 'mail') {
-            if ($this->SingleTo === true) {
+        if ($this->SingleTo === true) {
+            if ($this->Mailer != 'mail') {
                 foreach ($this->to as $t) {
                     $this->SingleToArray[] = $this->addrFormat($t);
                 }
-            } else {
-                if (count($this->to) > 0) {
+            }
+        } else {
+            if (count($this->to) > 0) {
+                if ($this->Mailer != 'mail') {
                     $result .= $this->addrAppend('To', $this->to);
-                } elseif (count($this->cc) == 0) {
-                    $result .= $this->headerLine('To', 'undisclosed-recipients:;');
                 }
+            } elseif (count($this->cc) == 0) {
+                $result .= $this->headerLine('To', 'undisclosed-recipients:;');
             }
         }
 
