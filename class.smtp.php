@@ -416,13 +416,13 @@ class SMTP
         // Eliminates the need to install mhash to compute a HMAC
         // Hacked by Lance Rushing
 
-        $b = 64; // byte length for md5
-        if (strlen($key) > $b) {
+        $bytelen = 64; // byte length for md5
+        if (strlen($key) > $bytelen) {
             $key = pack('H*', md5($key));
         }
-        $key = str_pad($key, $b, chr(0x00));
-        $ipad = str_pad('', $b, chr(0x36));
-        $opad = str_pad('', $b, chr(0x5c));
+        $key = str_pad($key, $bytelen, chr(0x00));
+        $ipad = str_pad('', $bytelen, chr(0x36));
+        $opad = str_pad('', $bytelen, chr(0x5c));
         $k_ipad = $key ^ $ipad;
         $k_opad = $key ^ $opad;
 
@@ -622,28 +622,28 @@ class SMTP
     public function quit($close_on_error = true)
     {
         $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
-        $e = $this->error; //Save any error
+        $err = $this->error; //Save any error
         if ($noerror or $close_on_error) {
             $this->close();
-            $this->error = $e; //Restore any error from the quit command
+            $this->error = $err; //Restore any error from the quit command
         }
         return $noerror;
     }
 
     /**
      * Send an SMTP RCPT command.
-     * Sets the TO argument to $to.
+     * Sets the TO argument to $toaddr.
      * Returns true if the recipient was accepted false if it was rejected.
      * Implements from rfc 821: RCPT <SP> TO:<forward-path> <CRLF>
-     * @param string $to The address the message is being sent to
+     * @param string $toaddr The address the message is being sent to
      * @access public
      * @return bool
      */
-    public function recipient($to)
+    public function recipient($toaddr)
     {
         return $this->sendCommand(
             'RCPT TO',
-            'RCPT TO:<' . $to . '>',
+            'RCPT TO:<' . $toaddr . '>',
             array(250, 251)
         );
     }

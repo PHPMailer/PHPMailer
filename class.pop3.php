@@ -337,11 +337,11 @@ class POP3
      */
     private function getResponse($size = 128)
     {
-        $r = fgets($this->pop_conn, $size);
+        $response = fgets($this->pop_conn, $size);
         if ($this->do_debug >= 1) {
-            echo "Server -> Client: $r";
+            echo "Server -> Client: $response";
         }
-        return $r;
+        return $response;
     }
 
     /**
