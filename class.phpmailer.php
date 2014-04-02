@@ -99,7 +99,13 @@ class PHPMailer
      * @type string
      */
     public $ReturnPath = '';
-
+    
+    /**
+     * If Return-Path header should be disabled.
+     * If strict compliance to RFC 5321 should be met.
+     * @type boolean
+     */
+    public $DisableReturnPath = false;
     /**
      * The Subject of the message.
      * @type string
@@ -1615,13 +1621,16 @@ class PHPMailer
         } else {
             $result .= $this->headerLine('Date', $this->MessageDate);
         }
-
-        if ($this->ReturnPath) {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->ReturnPath) . '>');
-        } elseif ($this->Sender == '') {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->From) . '>');
-        } else {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->Sender) . '>');
+        
+        //rfc 5321 - only final delivery should include Return-Path
+        if(!$this->DisableReturnPath){
+            if ($this->ReturnPath) {
+                $result .= $this->headerLine('Return-Path', '<' . trim($this->ReturnPath) . '>');
+            } elseif ($this->Sender == '') {
+                $result .= $this->headerLine('Return-Path', '<' . trim($this->From) . '>');
+            } else {
+                $result .= $this->headerLine('Return-Path', '<' . trim($this->Sender) . '>');
+            }
         }
 
         // To be created automatically by mail()
