@@ -72,6 +72,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             include './testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer;
+        $this->Mail->SMTPDebug = 4; //Full debug output
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';
@@ -1262,7 +1263,6 @@ EOT;
         $this->Mail->Subject .= ': DKIM signing';
         $this->Mail->Body = 'This message is DKIM signed.';
         $this->buildBody();
-        //$this->Mail->SMTPDebug = 2;
         $privatekeyfile = 'dkim_private.key';
         //Make a new key pair
         //(2048 bits is the recommended minimum key length -
