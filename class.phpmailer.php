@@ -1023,12 +1023,12 @@ class PHPMailer
                 case 'mail':
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
                 default:
-                    if (method_exists($this, $this->Mailer.'Send')) {
-                        $sendMethod = $this->Mailer.'Send';
+                    $sendMethod = $this->Mailer.'Send';
+                    if (method_exists($this, $sendMethod)) {
                         return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
-                    } else {
-                        return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
                     }
+                    
+                    return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
             }
         } catch (phpmailerException $exc) {
             $this->setError($exc->getMessage());
