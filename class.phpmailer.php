@@ -95,7 +95,7 @@ class PHPMailer
      * @type string
      */
     public $ReturnPath = '';
-
+    
     /**
      * The Subject of the message.
      * @type string
@@ -1613,14 +1613,6 @@ class PHPMailer
             $result .= $this->headerLine('Date', self::rfcDate());
         } else {
             $result .= $this->headerLine('Date', $this->MessageDate);
-        }
-
-        if ($this->ReturnPath) {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->ReturnPath) . '>');
-        } elseif ($this->Sender == '') {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->From) . '>');
-        } else {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->Sender) . '>');
         }
 
         // To be created automatically by mail()
