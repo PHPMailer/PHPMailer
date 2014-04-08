@@ -1,62 +1,59 @@
 <?php
 /**
  * PHPMailer RFC821 SMTP email transport class.
- * Version 5.2.7
- * PHP version 5.0.0
- * @category  PHP
- * @package   PHPMailer
- * @link      https://github.com/PHPMailer/PHPMailer/
- * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * PHP Version 5
+ * @package PHPMailer
+ * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @copyright 2013 Marcus Bointon
- * @copyright 2004 - 2008 Andy Prevost
+ * @author Brent R. Matzelle (original founder)
+ * @copyright 2014 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
- * @license   http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * @copyright 2004 - 2009 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @note This program is distributed in the hope that it will be useful - WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
 /**
  * PHPMailer RFC821 SMTP email transport class.
- *
- * Implements RFC 821 SMTP commands
- * and provides some utility methods for sending mail to an SMTP server.
- *
- * PHP Version 5.0.0
- *
- * @category PHP
- * @package  PHPMailer
- * @link     https://github.com/PHPMailer/PHPMailer/blob/master/class.smtp.php
- * @author   Chris Ryan <unknown@example.com>
- * @author   Marcus Bointon <phpmailer@synchromedia.co.uk>
- * @license  http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
+ * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
+ * @package PHPMailer
+ * @author Chris Ryan <unknown@example.com>
+ * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  */
-
 class SMTP
 {
     /**
-     * The PHPMailer SMTP Version number.
+     * The PHPMailer SMTP version number.
+     * @type string
      */
     const VERSION = '5.2.7';
 
     /**
      * SMTP line break constant.
+     * @type string
      */
     const CRLF = "\r\n";
 
     /**
      * The SMTP port to use if one is not specified.
+     * @type int
      */
     const DEFAULT_SMTP_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
+     * @type int
      */
     const MAX_LINE_LENGTH = 998;
 
     /**
      * The PHPMailer SMTP Version number.
      * @type string
-     * @deprecated This should be a constant
+     * @deprecated Use the constant instead
      * @see SMTP::VERSION
      */
     public $Version = '5.2.7';
@@ -64,15 +61,15 @@ class SMTP
     /**
      * SMTP server port number.
      * @type int
-     * @deprecated This is only ever ued as default value, so should be a constant
+     * @deprecated This is only ever used as a default value, so use the constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
      */
     public $SMTP_PORT = 25;
 
     /**
-     * SMTP reply line ending
+     * SMTP reply line ending.
      * @type string
-     * @deprecated Use the class constant instead
+     * @deprecated Use the constant instead
      * @see SMTP::CRLF
      */
     public $CRLF = "\r\n";
@@ -80,24 +77,29 @@ class SMTP
     /**
      * Debug output level.
      * Options:
-     *   0: no output
-     *   1: commands
-     *   2: data and commands
-     *   3: as 2 plus connection status
-     *   4: low level data output
+     * * `0` No output
+     * * `1` Commands
+     * * `2` Data and commands
+     * * `3` As 2 plus connection status
+     * * `4` Low-level data output
      * @type int
      */
     public $do_debug = 0;
 
     /**
-     * The function/method to use for debugging output.
-     * Options: 'echo', 'html' or 'error_log'
+     * How to handle debug output.
+     * Options:
+     * * `echo` Output plain-text as-is, appropriate for CLI
+     * * `html` Output escaped, line breaks converted to <br>, appropriate for browser output
+     * * `error_log` Output to error log as configured in php.ini
      * @type string
      */
     public $Debugoutput = 'echo';
 
     /**
      * Whether to use VERP.
+     * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
+     * @link http://www.postfix.org/VERP_README.html Info on VERP
      * @type bool
      */
     public $do_verp = false;
@@ -105,6 +107,8 @@ class SMTP
     /**
      * The timeout value for connection, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
+     * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
      * @type int
      */
     public $Timeout = 300;
@@ -148,7 +152,6 @@ class SMTP
         $this->smtp_conn = 0;
         $this->error = null;
         $this->helo_rply = null;
-
         $this->do_debug = 0;
     }
 
@@ -181,8 +184,8 @@ class SMTP
 
     /**
      * Connect to an SMTP server.
-     * @param string $host    SMTP server IP or host name
-     * @param int $port    The port number to connect to
+     * @param string $host SMTP server IP or host name
+     * @param int $port The port number to connect to
      * @param int $timeout How long to wait for the connection to open
      * @param array $options An array of options for stream_context_create()
      * @access public

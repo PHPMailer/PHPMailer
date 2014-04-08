@@ -1,15 +1,14 @@
 <?php
 /**
  * PHPMailer POP-Before-SMTP Authentication Class.
- * PHP Version 5.0.0
- * Version 5.2.7
+ * PHP Version 5
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/
- * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2013 Marcus Bointon
+ * @copyright 2012 - 2014 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -24,11 +23,10 @@
  * Does not support APOP.
  * @package PHPMailer
  * @author Richard Davey (original author) <rich@corephp.co.uk>
- * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  */
-
 class POP3
 {
     /**

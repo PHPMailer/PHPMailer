@@ -1,15 +1,14 @@
 <?php
 /**
  * PHPMailer - PHP email creation and transport class.
- * PHP Version 5.0.0
- * Version 5.2.7
+ * PHP Version 5
  * @package PHPMailer
- * @link https://github.com/PHPMailer/PHPMailer/
- * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2013 Marcus Bointon
+ * @copyright 2012 - 2014 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -20,15 +19,11 @@
 
 /**
  * PHPMailer - PHP email creation and transport class.
- * PHP Version 5.0.0
  * @package PHPMailer
- * @author Marcus Bointon (coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2013 Marcus Bointon
- * @copyright 2010 - 2012 Jim Jagielski
- * @copyright 2004 - 2009 Andy Prevost
  */
 class PHPMailer
 {
@@ -295,19 +290,27 @@ class PHPMailer
 
     /**
      * SMTP class debug output mode.
-     * Options: 0 = off, 1 = commands, 2 = commands and data
+     * Options:
+     *   0: no output
+     *   1: commands
+     *   2: data and commands
+     *   3: as 2 plus connection status
+     *   4: low level data output
      * @type int
      * @see SMTP::$do_debug
      */
     public $SMTPDebug = 0;
 
     /**
-     * The function/method to use for debugging output.
-     * Options: "echo" or "error_log"
+     * How to handle debug output.
+     * Options:
+     *   'echo': Output plain-text as-is, appropriate for CLI
+     *   'html': Output escaped, line breaks converted to <br>, appropriate for browser output
+     *   'error_log': Output to error log as configured in php.ini
      * @type string
      * @see SMTP::$Debugoutput
      */
-    public $Debugoutput = "echo";
+    public $Debugoutput = 'echo';
 
     /**
      * Whether to keep SMTP connection open after each message.
@@ -335,6 +338,7 @@ class PHPMailer
      * Whether to generate VERP addresses on send.
      * Only applicable when sending via SMTP.
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
+     * @link http://www.postfix.org/VERP_README.html Postfix VERP info
      * @type bool
      */
     public $do_verp = false;
@@ -831,11 +835,12 @@ class PHPMailer
      * Check that a string looks like an email address.
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
-     *   'auto' - pick best one automatically;
-     *   'pcre8' - use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
-     *   'pcre' - use old PCRE implementation;
-     *   'php' - use PHP built-in FILTER_VALIDATE_EMAIL; faster, less thorough;
-     *   'noregex' - super fast, really dumb.
+     * * `auto` Pick strictest one automatically;
+     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
+     * * `pcre` Use old PCRE implementation;
+     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL; same as pcre8 but does not allow 'dotless' domains;
+     * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
+     * * `noregex` Don't use a regex: super fast, really dumb.
      * @return bool
      * @static
      * @access public
@@ -846,7 +851,7 @@ class PHPMailer
             if (defined(
                 'PCRE_VERSION'
             )
-            ) { //Check this instead of extension_loaded so it works when that function is disabled
+            ) { //Check this constant so it works when extension_loaded() is disabled
                 if (version_compare(PCRE_VERSION, '8.0') >= 0) {
                     $patternselect = 'pcre8';
                 } else {
@@ -864,9 +869,7 @@ class PHPMailer
         switch ($patternselect) {
             case 'pcre8':
                 /**
-                 * Conforms to RFC5322: Uses *correct* regex on which FILTER_VALIDATE_EMAIL is
-                 * based; So why not use FILTER_VALIDATE_EMAIL? Because it was broken to
-                 * not allow a@b type valid addresses :(
+                 * Uses the same RFC5322 regex on which FILTER_VALIDATE_EMAIL is based, but allows dotless domains.
                  * @link http://squiloople.com/2009/12/20/email-address-validation/
                  * @copyright 2009-2010 Michael Rushton
                  * Feel free to use and redistribute this code. But please keep this copyright notice.
@@ -899,6 +902,14 @@ class PHPMailer
                     '|[1-9]?[0-9])(?>\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\])$/isD',
                     $address
                 );
+                break;
+            case 'html5':
+                /**
+                 * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
+                 * @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
+                 */
+                return '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])'.
+                    '?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD';
                 break;
             case 'php':
             default:
@@ -1353,9 +1364,9 @@ class PHPMailer
      * @return bool
      * @access public
      */
-    public function setLanguage($langcode = 'en', $lang_path = 'language/')
+    public function setLanguage($langcode = 'en', $lang_path = '')
     {
-        //Define full set of translatable strings
+        //Define full set of translatable strings in English
         $PHPMAILER_LANG = array(
             'authenticate' => 'SMTP Error: Could not authenticate.',
             'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
@@ -1376,8 +1387,10 @@ class PHPMailer
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: '
         );
-        //Overwrite language-specific strings.
-        //This way we'll never have missing translations - no more "language string failed to load"!
+        if (empty($lang_path)) {
+            //Calculate an absolute path so it can work if CWD is not here
+            $lang_path = dirname(__FILE__). DIRECTORY_SEPARATOR . 'language'. DIRECTORY_SEPARATOR;
+        }
         $foundlang = true;
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         if ($langcode != 'en') { //There is no English translation file
@@ -1385,6 +1398,8 @@ class PHPMailer
             if (!is_readable($lang_file)) {
                 $foundlang = false;
             } else {
+                //Overwrite language-specific strings.
+                //This way we'll never have missing translations.
                 $foundlang = include $lang_file;
             }
         }
@@ -2394,7 +2409,7 @@ class PHPMailer
      * @param string $string The text to encode
      * @param integer $line_max Number of chars allowed on a line before wrapping
      * @return string
-     * @link PHP version adapted from http://www.php.net/manual/en/function.quoted-printable-decode.php#89417
+     * @link http://www.php.net/manual/en/function.quoted-printable-decode.php#89417 Adapted from this comment
      */
     public function encodeQP($string, $line_max = 76)
     {
