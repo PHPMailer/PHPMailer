@@ -3007,6 +3007,8 @@ class PHPMailer
             'txt' => 'text/plain',
             'rtx' => 'text/richtext',
             'rtf' => 'text/rtf',
+            'vcf' => 'text/vcard',
+            'vcard' => 'text/vcard',
             'xml' => 'text/xml',
             'xsl' => 'text/xml',
             'mpeg' => 'video/mpeg',
