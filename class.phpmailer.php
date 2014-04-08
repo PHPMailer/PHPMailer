@@ -88,6 +88,9 @@ class PHPMailer
      * The Return-Path of the message.
      * If empty, it will be set to either From or Sender.
      * @type string
+     * @deprecated Email senders should never set a return-path header;
+     * it's the receiver's job (RFC5321 section 4.4), so this no longer does anything.
+     * @link https://tools.ietf.org/html/rfc5321#section-4.4 RFC5321 reference
      */
     public $ReturnPath = '';
 
@@ -1628,14 +1631,6 @@ class PHPMailer
             $result .= $this->headerLine('Date', self::rfcDate());
         } else {
             $result .= $this->headerLine('Date', $this->MessageDate);
-        }
-
-        if ($this->ReturnPath) {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->ReturnPath) . '>');
-        } elseif ($this->Sender == '') {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->From) . '>');
-        } else {
-            $result .= $this->headerLine('Return-Path', '<' . trim($this->Sender) . '>');
         }
 
         // To be created automatically by mail()
