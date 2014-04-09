@@ -14,7 +14,6 @@ $mail->isSMTP();
 $mail->Host = 'smtp.example.com';
 $mail->SMTPAuth = true;
 $mail->SMTPKeepAlive = true; // SMTP connection will not close after each email sent, reduces SMTP overhead
-$mail->Host = 'mail.example.com';
 $mail->Port = 25;
 $mail->Username = 'yourname@example.com';
 $mail->Password = 'yourpassword';
