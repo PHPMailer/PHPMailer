@@ -1788,13 +1788,13 @@ class PHPMailer
 
         $bodyEncoding = $this->Encoding;
         $bodyCharSet = $this->CharSet;
-        if (!$this->has8bitChars($this->Body)) {
+        if ($bodyEncoding == '8bit' and !$this->has8bitChars($this->Body)) {
             $bodyEncoding = '7bit';
             $bodyCharSet = 'us-ascii';
         }
         $altBodyEncoding = $this->Encoding;
         $altBodyCharSet = $this->CharSet;
-        if (!$this->has8bitChars($this->AltBody)) {
+        if ($altBodyEncoding == '8bit' and !$this->has8bitChars($this->AltBody)) {
             $altBodyEncoding = '7bit';
             $altBodyCharSet = 'us-ascii';
         }
