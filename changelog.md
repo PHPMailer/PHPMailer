@@ -28,6 +28,7 @@
 * Remove setting the Return-Path and deprecate the Return-path property - it's just wrong!
 * Fix language file loading if CWD has changed (@stephandesouza)
 * Add HTML5 email validation pattern
+* Improve Turkish translations (Thanks to @yasinaydin)
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
