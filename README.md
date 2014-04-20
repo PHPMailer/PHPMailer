@@ -110,7 +110,7 @@ You'll find some basic user-level docs in the [docs](docs/) folder, and you can 
 
 There is a PHPUnit test script in the [test](test/) folder.
 
-Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
+Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](https://travis-ci.org/PHPMailer/PHPMailer)
 
 If this isn't passing, is there something you can do to help?
 
