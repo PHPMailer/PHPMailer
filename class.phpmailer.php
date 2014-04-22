@@ -1721,6 +1721,7 @@ class PHPMailer
     public function getMailMIME()
     {
         $result = '';
+        $ismultipart = true;
         switch ($this->message_type) {
             case 'inline':
                 $result .= $this->headerLine('Content-Type', 'multipart/related;');
@@ -1741,11 +1742,20 @@ class PHPMailer
             default:
                 // Catches case 'plain': and case '':
                 $result .= $this->textLine('Content-Type: ' . $this->ContentType . '; charset=' . $this->CharSet);
+                $ismultipart = false;
                 break;
         }
         //RFC1341 part 5 says 7bit is assumed if not specified
         if ($this->Encoding != '7bit') {
-            $result .= $this->headerLine('Content-Transfer-Encoding', $this->Encoding);
+            //RFC 2045 section 6.4 says multipart MIME parts may only use 7bit, 8bit or binary CTE
+            if ($ismultipart) {
+                if ($this->Encoding == '8bit') {
+                    $result .= $this->headerLine('Content-Transfer-Encoding', '8bit');
+                }
+                //The only remaining alternatives are quoted-printable and base64, which are both 7bit compatible
+            } else {
+                $result .= $this->headerLine('Content-Transfer-Encoding', $this->Encoding);
+            }
         }
 
         if ($this->Mailer != 'mail') {
