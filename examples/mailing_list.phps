@@ -22,15 +22,20 @@ $mail->addReplyTo('list@example.com', 'List manager');
 
 $mail->Subject = "PHPMailer Simple database mailing list test";
 
-//connect to the database and select the recipients from your mailing list that have not yet been sent to
+//Same body for all messages, so set this before the sending loop
+//If you generate a different body for each recipient (e.g. you're using a templating system),
+//set it inside the loop
+$mail->msgHTML($body);
+//msgHTML also sets AltBody, so if you want a custom one, set it afterwards
+$mail->AltBody = 'To view the message, please use an HTML compatible email viewer!';
+
+//Connect to the database and select the recipients from your mailing list that have not yet been sent to
 //You'll need to alter this to match your database
 $mysql = mysql_connect('localhost', 'username', 'password');
 mysql_select_db('mydb', $mysql);
 $result = mysql_query("SELECT full_name, email, photo FROM mailinglist WHERE sent = false", $mysql);
 
 while ($row = mysql_fetch_array($result)) {
-    $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!';
-    $mail->msgHTML($body);
     $mail->addAddress($row['email'], $row['full_name']);
     $mail->addStringAttachment($row['photo'], 'YourPhoto.jpg'); //Assumes the image data is stored in the DB
 
