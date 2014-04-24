@@ -29,6 +29,8 @@
 * Fix language file loading if CWD has changed (@stephandesouza)
 * Add HTML5 email validation pattern
 * Improve Turkish translations (Thanks to @yasinaydin)
+* Improve Romanian translations (Thanks to @aflorea)
+* Fix quoted-printable encoding of multiparts
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
