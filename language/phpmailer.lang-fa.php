@@ -8,9 +8,9 @@
 
 $PHPMAILER_LANG['authenticate']         = 'خطای SMTP: احراز هویت با شکست مواجه شد.';
 $PHPMAILER_LANG['connect_host']         = 'خطای SMTP: اتصال به سرور SMTP برقرار نشد.';
-$PHPMAILER_LANG['data_not_accepted']    = 'خطای SMTP: داده ها نا‌درست هستند.';
+$PHPMAILER_LANG['data_not_accepted']    = 'خطای SMTP: داده‌ها نا‌درست هستند.';
 $PHPMAILER_LANG['empty_message']        = 'بخش متن پیام خالی است.';
-$PHPMAILER_LANG['encoding']             = 'رمز‌گذاری نا‌شناخته: ';
+$PHPMAILER_LANG['encoding']             = 'کد‌گذاری نا‌شناخته: ';
 $PHPMAILER_LANG['execute']              = 'امکان اجرا وجود ندارد: ';
 $PHPMAILER_LANG['file_access']          = 'امکان دسترسی به فایل وجود ندارد: ';
 $PHPMAILER_LANG['file_open']            = 'خطای File: امکان بازکردن فایل وجود ندارد: ';
