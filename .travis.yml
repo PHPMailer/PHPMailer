@@ -3,8 +3,7 @@ php:
   - 5.5
   - 5.4
   - 5.3
-  - hhvm
-before_install:
+Dbefore_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
 before_script:
