@@ -1633,10 +1633,10 @@ class PHPMailer
         $this->boundary[3] = 'b3_' . $uniq_id;
 
         if ($this->MessageDate == '') {
-            $result .= $this->headerLine('Date', self::rfcDate());
-        } else {
-            $result .= $this->headerLine('Date', $this->MessageDate);
+            $this->MessageDate = self::rfcDate();
         }
+        $result .= $this->headerLine('Date', $this->MessageDate);
+
 
         // To be created automatically by mail()
         if ($this->SingleTo === true) {
