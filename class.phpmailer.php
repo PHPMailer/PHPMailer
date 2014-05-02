@@ -858,11 +858,8 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = 'auto')
     {
-        if ($patternselect == 'auto') {
-            if (defined(
-                'PCRE_VERSION'
-            )
-            ) { //Check this constant so it works when extension_loaded() is disabled
+        if (!$patternselect or $patternselect == 'auto') {
+            if (defined('PCRE_VERSION')) { //Check this constant so it works when extension_loaded() is disabled
                 if (version_compare(PCRE_VERSION, '8.0') >= 0) {
                     $patternselect = 'pcre8';
                 } else {
@@ -919,8 +916,8 @@ class PHPMailer
                  * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
                  * @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                  */
-                return '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])'.
-                    '?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD';
+                return (bool)preg_match('/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
+                    '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD', $address);
                 break;
             case 'php':
             default:
@@ -1776,8 +1773,8 @@ class PHPMailer
     /**
      * Returns the whole MIME message.
      * Includes complete headers and body.
-     * Only valid post PreSend().
-     * @see PHPMailer::PreSend()
+     * Only valid post preSend().
+     * @see PHPMailer::preSend()
      * @access public
      * @return string
      */
