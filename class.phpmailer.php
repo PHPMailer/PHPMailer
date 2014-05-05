@@ -1386,6 +1386,7 @@ class PHPMailer
             'encoding' => 'Unknown encoding: ',
             'execute' => 'Could not execute: ',
             'file_access' => 'Could not access file: ',
+            'empty_altbody_warning' => 'To view this email message, open it in a program that understands HTML!',
             'file_open' => 'File Error: Could not open file: ',
             'from_failed' => 'The following From address failed: ',
             'instantiate' => 'Could not instantiate mail function.',
@@ -2913,8 +2914,7 @@ class PHPMailer
         $this->Body = $this->normalizeBreaks($message);
         $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
         if (empty($this->AltBody)) {
-            $this->AltBody = 'To view this email message, open it in a program that understands HTML!' .
-                self::CRLF . self::CRLF;
+            $this->AltBody = $this->lang('empty_altbody_warning') . self::CRLF . self::CRLF;
         }
         return $this->Body;
     }
