@@ -22,3 +22,4 @@ $PHPMAILER_LANG['signing']              = 'Ошибка подписывания
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Ошибка соединения с SMTP-сервером';
 $PHPMAILER_LANG['smtp_error']           = 'Ошибка SMTP-сервера: ';
 $PHPMAILER_LANG['variable_set']         = 'Невозможно установить или переустановить переменную: ';
+$PHPMAILER_LANG['empty_altbody_warning'] = 'Чтобы прочитать это email-сообщение, откройте его в программе, работающей с форматом HTML!';

@@ -1379,6 +1379,7 @@ class PHPMailer
             'authenticate' => 'SMTP Error: Could not authenticate.',
             'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
             'data_not_accepted' => 'SMTP Error: data not accepted.',
+            'empty_altbody_warning' => 'To view this email message, open it in a program that understands HTML!',            
             'empty_message' => 'Message body empty',
             'encoding' => 'Unknown encoding: ',
             'execute' => 'Could not execute: ',
@@ -2910,8 +2911,7 @@ class PHPMailer
         $this->Body = $this->normalizeBreaks($message);
         $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
         if (empty($this->AltBody)) {
-            $this->AltBody = 'To view this email message, open it in a program that understands HTML!' .
-                self::CRLF . self::CRLF;
+            $this->AltBody = $this->lang('empty_altbody_warning') . self::CRLF . self::CRLF;
         }
         return $this->Body;
     }
