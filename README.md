@@ -13,10 +13,10 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - Integrated SMTP support - send without a local mail server
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
-- Support for 8bit, base64, binary, and quoted-printable encoding
-- SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms
+- Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
+- SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms over SSL and TLS transports
 - Native language support
-- DKIM and S/MIME encryption support
+- DKIM and S/MIME signing support
 - Compatible with PHP 5.0 and later
 - Much more!
 
@@ -54,15 +54,15 @@ require 'PHPMailerAutoload.php';
 $mail = new PHPMailer;
 
 $mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = 'smtp1.example.com;smtp2.example.com';  // Specify main and backup server
+$mail->Host = 'smtp1.example.com;smtp2.example.com';  // Specify main and backup SMTP servers
 $mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = 'jswan';                            // SMTP username
+$mail->Username = 'user@example.com';                 // SMTP username
 $mail->Password = 'secret';                           // SMTP password
 $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
 
 $mail->From = 'from@example.com';
 $mail->FromName = 'Mailer';
-$mail->addAddress('josh@example.net', 'Josh Adams');  // Add a recipient
+$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
 $mail->addAddress('ellen@example.com');               // Name is optional
 $mail->addReplyTo('info@example.com', 'Information');
 $mail->addCC('cc@example.com');
@@ -78,12 +78,11 @@ $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
 if(!$mail->send()) {
-   echo 'Message could not be sent.';
-   echo 'Mailer Error: ' . $mail->ErrorInfo;
-   exit;
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message has been sent';
 }
-
-echo 'Message has been sent';
 ```
 
 You'll find plenty more to play with in the [examples](examples/) folder.
@@ -91,14 +90,14 @@ You'll find plenty more to play with in the [examples](examples/) folder.
 That's it. You should now be ready to use PHPMailer!
 
 ## Localization
-PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (31 at the time of writing) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (39 at the time of writing) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
 
 ```php
 // To load the French version
 $mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
 
-We welcome corrections and new languages.
+We welcome corrections and new languages - if you're looking for corrections to do, run the [phpmailerLangTest.php](test/phpmailerLangTest.php) script in the tests folder and it will show any missing translations.
 
 ## Documentation
 

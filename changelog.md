@@ -33,6 +33,12 @@
 * Fix quoted-printable encoding of multiparts
 * Check php.ini for path to sendmail/qmail before using default
 * Improve Farsi translation (Thanks to @MHM5000)
+* Don't use quoted-printable encoding for multipart types
+* Add Serbian translation (Thanks to ajevremovic at gmail.com)
+* Remove useless PHP5 check
+* Use SVG for build status badges
+* Store MessageDate on creation
+* Better default behaviour for validateAddress
 
 ## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
