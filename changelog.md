@@ -1,5 +1,6 @@
 # ChangeLog
 
+## Version 5.2.8 (May 14th 2014)
 * Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
 * Add timestamps to default debug output
 * Add connection events and new level 3 to debug output options
