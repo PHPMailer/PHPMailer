@@ -31,7 +31,6 @@
 * Add HTML5 email validation pattern
 * Improve Turkish translations (Thanks to @yasinaydin)
 * Improve Romanian translations (Thanks to @aflorea)
-* Fix quoted-printable encoding of multiparts
 * Check php.ini for path to sendmail/qmail before using default
 * Improve Farsi translation (Thanks to @MHM5000)
 * Don't use quoted-printable encoding for multipart types
