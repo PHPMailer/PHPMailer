@@ -1125,7 +1125,7 @@ class PHPMailer
      * Send mail using the PHP mail() function.
      * @param string $header The message headers
      * @param string $body The message body
-     * @link http:// www.php.net/manual/en/book.mail.php
+     * @link http://www.php.net/manual/en/book.mail.php
      * @throws phpmailerException
      * @access protected
      * @return bool
