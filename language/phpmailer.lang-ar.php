@@ -5,17 +5,17 @@
 * by : bahjat al mostafa <bahjat983@hotmail.com>
 */
 
-$PHPMAILER_LANG['authenticate']         = 'خطأ SMTP : لم نستطع تأكيد الهوية.';
-$PHPMAILER_LANG['connect_host']         = 'خطأ SMTP: لم نستطع الاتصال بالخادم SMTP.';
+$PHPMAILER_LANG['authenticate']         = 'خطأ SMTP : لا يمكن تأكيد الهوية.';
+$PHPMAILER_LANG['connect_host']         = 'خطأ SMTP: لا يمكن الاتصال بالخادم SMTP.';
 $PHPMAILER_LANG['data_not_accepted']    = 'خطأ SMTP: لم يتم قبول المعلومات .';
 $PHPMAILER_LANG['empty_message']        = 'نص الرسالة فارغ';
 $PHPMAILER_LANG['encoding']             = 'ترميز غير معروف: ';
-$PHPMAILER_LANG['execute']              = 'لم أستطع تنفيذ : ';
-$PHPMAILER_LANG['file_access']          = 'لم نستطع الوصول للملف: ';
-$PHPMAILER_LANG['file_open']            = 'خطأ في الملف: لم نستطع فتح الملف: ';
-$PHPMAILER_LANG['from_failed']          = 'البريد التالي لم نستطع ارسال البريد له : ';
-$PHPMAILER_LANG['instantiate']          = 'لم نستطع توفير خدمة البريد.';
-$PHPMAILER_LANG['invalid_address']      = 'الإرسال عير ممكن لأنعنوان البريد الإلكتروني غير صالح.';
+$PHPMAILER_LANG['execute']              = 'لا يمكن تنفيذ : ';
+$PHPMAILER_LANG['file_access']          = 'لا يمكن الوصول للملف: ';
+$PHPMAILER_LANG['file_open']            = 'خطأ في الملف: لا يمكن فتحه: ';
+$PHPMAILER_LANG['from_failed']          = 'خطأ على مستوى عنوان المرسل : ';
+$PHPMAILER_LANG['instantiate']          = 'لا يمكن توفير خدمة البريد.';
+$PHPMAILER_LANG['invalid_address']      = 'الإرسال غير ممكن لأن عنوان البريد الإلكتروني غير صالح.';
 $PHPMAILER_LANG['mailer_not_supported'] = ' برنامج الإرسال غير مدعوم.';
 $PHPMAILER_LANG['provide_address']      = 'يجب توفير عنوان البريد الإلكتروني لمستلم واحد على الأقل.';
 $PHPMAILER_LANG['recipients_failed']    = 'خطأ SMTP: الأخطاء التالية ' .
