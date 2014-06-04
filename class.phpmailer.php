@@ -913,12 +913,11 @@ class PHPMailer
                  * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
                  * @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                  */
-                return (bool)preg_match('/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
-                    '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD', $address);
-                break;
-            case 'php':
-            default:
-                return (bool)filter_var($address, FILTER_VALIDATE_EMAIL);
+                return (bool)preg_match(
+                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
+                    '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
+                    $address
+                );
                 break;
             case 'noregex':
                 //No PCRE! Do something _very_ approximate!
@@ -927,6 +926,9 @@ class PHPMailer
                     and strpos($address, '@') >= 1
                     and strpos($address, '@') != strlen($address) - 1);
                 break;
+            case 'php':
+            default:
+                return (bool)filter_var($address, FILTER_VALIDATE_EMAIL);
         }
     }
 
@@ -1081,17 +1083,15 @@ class PHPMailer
             }
         }
         if ($this->SingleTo === true) {
-            foreach ($this->SingleToArray as $val) {
+            foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
                     throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
-                fputs($mail, 'To: ' . $val . "\n");
+                fputs($mail, 'To: ' . $toAddr . "\n");
                 fputs($mail, $header);
                 fputs($mail, $body);
                 $result = pclose($mail);
-                // implement call back function if it exists
-                $isSent = ($result == 0) ? 1 : 0;
-                $this->doCallback($isSent, $val, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+                $this->doCallback(($result == 0), array($toAddr), $this->cc, $this->bcc, $this->Subject, $body, $this->From);
                 if ($result != 0) {
                     throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
@@ -1103,9 +1103,7 @@ class PHPMailer
             fputs($mail, $header);
             fputs($mail, $body);
             $result = pclose($mail);
-            // implement call back function if it exists
-            $isSent = ($result == 0) ? 1 : 0;
-            $this->doCallback($isSent, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+            $this->doCallback(($result == 0), $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
             if ($result != 0) {
                 throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
@@ -1141,17 +1139,13 @@ class PHPMailer
         }
         $result = false;
         if ($this->SingleTo === true && count($toArr) > 1) {
-            foreach ($toArr as $val) {
-                $result = $this->mailPassthru($val, $this->Subject, $body, $header, $params);
-                // implement call back function if it exists
-                $isSent = ($result == 1) ? 1 : 0;
-                $this->doCallback($isSent, $val, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+            foreach ($toArr as $toAddr) {
+                $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
+                $this->doCallback($result, array($toAddr), $this->cc, $this->bcc, $this->Subject, $body, $this->From);
             }
         } else {
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
-            // implement call back function if it exists
-            $isSent = ($result == 1) ? 1 : 0;
-            $this->doCallback($isSent, $to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+            $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
         }
         if (isset($old_from)) {
             ini_set('sendmail_from', $old_from);
@@ -1204,29 +1198,29 @@ class PHPMailer
         foreach ($this->to as $to) {
             if (!$this->smtp->recipient($to[0])) {
                 $bad_rcpt[] = $to[0];
-                $isSent = 0;
+                $isSent = false;
             } else {
-                $isSent = 1;
+                $isSent = true;
             }
-            $this->doCallback($isSent, $to[0], '', '', $this->Subject, $body, $this->From);
+            $this->doCallback($isSent, array($to[0]), array(), array(), $this->Subject, $body, $this->From);
         }
         foreach ($this->cc as $cc) {
             if (!$this->smtp->recipient($cc[0])) {
                 $bad_rcpt[] = $cc[0];
-                $isSent = 0;
+                $isSent = false;
             } else {
-                $isSent = 1;
+                $isSent = true;
             }
-            $this->doCallback($isSent, '', $cc[0], '', $this->Subject, $body, $this->From);
+            $this->doCallback($isSent, array(), array($cc[0]), array(), $this->Subject, $body, $this->From);
         }
         foreach ($this->bcc as $bcc) {
             if (!$this->smtp->recipient($bcc[0])) {
                 $bad_rcpt[] = $bcc[0];
-                $isSent = 0;
+                $isSent = false;
             } else {
-                $isSent = 1;
+                $isSent = true;
             }
-            $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body, $this->From);
+            $this->doCallback($isSent, array(), array(), array($bcc[0]), $this->Subject, $body, $this->From);
         }
 
         //Only send the DATA command if we have viable recipients
@@ -2219,8 +2213,11 @@ class PHPMailer
             $magic_quotes = get_magic_quotes_runtime();
             if ($magic_quotes) {
                 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-                    set_magic_quotes_runtime(0);
+                    set_magic_quotes_runtime(false);
                 } else {
+                    //Doesn't exist in PHP 5.4, but we don't need to check because
+                    //get_magic_quotes_runtime always returns false in 5.4+
+                    //so it will never get here
                     ini_set('magic_quotes_runtime', 0);
                 }
             }
@@ -2230,7 +2227,7 @@ class PHPMailer
                 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
                     set_magic_quotes_runtime($magic_quotes);
                 } else {
-                    ini_set('magic_quotes_runtime', $magic_quotes);
+                    ini_set('magic_quotes_runtime', ($magic_quotes?'1':'0'));
                 }
             }
             return $file_buffer;
@@ -3068,36 +3065,33 @@ class PHPMailer
     {
         $ret = array('dirname' => '', 'basename' => '', 'extension' => '', 'filename' => '');
         $pathinfo = array();
-        preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im', $path, $pathinfo);
-        if (array_key_exists(1, $pathinfo)) {
-            $ret['dirname'] = $pathinfo[1];
-        }
-        if (array_key_exists(2, $pathinfo)) {
-            $ret['basename'] = $pathinfo[2];
-        }
-        if (array_key_exists(5, $pathinfo)) {
-            $ret['extension'] = $pathinfo[5];
-        }
-        if (array_key_exists(3, $pathinfo)) {
-            $ret['filename'] = $pathinfo[3];
+        if (preg_match('%^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^\.\\\\/]+?)|))[\\\\/\.]*$%im', $path, $pathinfo)) {
+            if (array_key_exists(1, $pathinfo)) {
+                $ret['dirname'] = $pathinfo[1];
+            }
+            if (array_key_exists(2, $pathinfo)) {
+                $ret['basename'] = $pathinfo[2];
+            }
+            if (array_key_exists(5, $pathinfo)) {
+                $ret['extension'] = $pathinfo[5];
+            }
+            if (array_key_exists(3, $pathinfo)) {
+                $ret['filename'] = $pathinfo[3];
+            }
         }
         switch ($options) {
             case PATHINFO_DIRNAME:
             case 'dirname':
                 return $ret['dirname'];
-                break;
             case PATHINFO_BASENAME:
             case 'basename':
                 return $ret['basename'];
-                break;
             case PATHINFO_EXTENSION:
             case 'extension':
                 return $ret['extension'];
-                break;
             case PATHINFO_FILENAME:
             case 'filename':
                 return $ret['filename'];
-                break;
             default:
                 return $ret;
         }
@@ -3382,14 +3376,14 @@ class PHPMailer
     /**
      * Perform a callback.
      * @param bool $isSent
-     * @param string $to
-     * @param string $cc
-     * @param string $bcc
+     * @param array $to
+     * @param array $cc
+     * @param array $bcc
      * @param string $subject
      * @param string $body
      * @param string $from
      */
-    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from = null)
+    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from)
     {
         if (!empty($this->action_function) && is_callable($this->action_function)) {
             $params = array($isSent, $to, $cc, $bcc, $subject, $body, $from);
