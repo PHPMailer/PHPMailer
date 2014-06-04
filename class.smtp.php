@@ -123,37 +123,26 @@ class SMTP
      * The socket for the server connection.
      * @type resource
      */
-    protected $smtp_conn;
+    protected $smtp_conn = null;
 
     /**
      * Error message, if any, for the last call.
-     * @type string
+     * @type array
      */
-    protected $error = '';
+    protected $error = array();
 
     /**
      * The reply the server sent to us for HELO.
-     * @type string
+     * If null, no HELO string has yet been received.
+     * @type string|null
      */
-    protected $helo_rply = '';
+    protected $helo_rply = null;
 
     /**
      * The most recent reply received from the server.
      * @type string
      */
     protected $last_reply = '';
-
-    /**
-     * Constructor.
-     * @access public
-     */
-    public function __construct()
-    {
-        $this->smtp_conn = 0;
-        $this->error = null;
-        $this->helo_rply = null;
-        $this->do_debug = 0;
-    }
 
     /**
      * Output debugging info via a user-selected method.
@@ -194,7 +183,7 @@ class SMTP
     public function connect($host, $port = null, $timeout = 30, $options = array())
     {
         // Clear errors to avoid confusion
-        $this->error = null;
+        $this->error = array();
         // Make sure we are __not__ connected
         if ($this->connected()) {
             // Already connected, generate error
@@ -465,7 +454,7 @@ class SMTP
      */
     public function close()
     {
-        $this->error = null; // so there is no confusion
+        $this->error = array();
         $this->helo_rply = null;
         if (!empty($this->smtp_conn)) {
             // close the connection and cleanup
@@ -473,7 +462,7 @@ class SMTP
             if ($this->do_debug >= 3) {
                 $this->edebug('Connection: closed');
             }
-            $this->smtp_conn = 0;
+            $this->smtp_conn = null;
         }
     }
 
@@ -704,7 +693,7 @@ class SMTP
         }
 
         $this->last_reply = $reply;
-        $this->error = null;
+        $this->error = array();
         return true;
     }
 
