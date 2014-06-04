@@ -891,7 +891,6 @@ class PHPMailer
                     '|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD',
                     $address
                 );
-                break;
             case 'pcre':
                 //An older regex that doesn't need a recent PCRE
                 return (bool)preg_match(
@@ -907,7 +906,6 @@ class PHPMailer
                     '|[1-9]?[0-9])(?>\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\])$/isD',
                     $address
                 );
-                break;
             case 'html5':
                 /**
                  * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
@@ -918,14 +916,12 @@ class PHPMailer
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
                 );
-                break;
             case 'noregex':
                 //No PCRE! Do something _very_ approximate!
                 //Check the address is 3 chars or longer and contains an @ that's not the first or last char
                 return (strlen($address) >= 3
                     and strpos($address, '@') >= 1
                     and strpos($address, '@') != strlen($address) - 1);
-                break;
             case 'php':
             default:
                 return (bool)filter_var($address, FILTER_VALIDATE_EMAIL);
@@ -1091,7 +1087,15 @@ class PHPMailer
                 fputs($mail, $header);
                 fputs($mail, $body);
                 $result = pclose($mail);
-                $this->doCallback(($result == 0), array($toAddr), $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+                $this->doCallback(
+                    ($result == 0),
+                    array($toAddr),
+                    $this->cc,
+                    $this->bcc,
+                    $this->Subject,
+                    $body,
+                    $this->From
+                );
                 if ($result != 0) {
                     throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
