@@ -123,7 +123,7 @@ class SMTP
      * The socket for the server connection.
      * @type resource
      */
-    protected $smtp_conn = null;
+    protected $smtp_conn;
 
     /**
      * Error message, if any, for the last call.
@@ -366,7 +366,6 @@ class SMTP
                 );
                 // send encoded username
                 return $this->sendCommand('Username', base64_encode($msg3), 235);
-                break;
             case 'CRAM-MD5':
                 // Start authentication
                 if (!$this->sendCommand('AUTH CRAM-MD5', 'AUTH CRAM-MD5', 334)) {
@@ -380,7 +379,6 @@ class SMTP
 
                 // send encoded credentials
                 return $this->sendCommand('Username', base64_encode($response), 235);
-                break;
         }
         return true;
     }
