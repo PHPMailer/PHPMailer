@@ -292,6 +292,18 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Check that we have loaded default test params.
+     * Pretty much everything will fail due to unset recipient if this is not done.
+     */
+    public function testBootstrap()
+    {
+        $this->assertTrue(
+            file_exists('./testbootstrap.php'),
+            'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
+        );
+    }
+
+    /**
      * Test CRAM-MD5 authentication
      * Needs a connection to a server that supports this auth mechanism, so commented out by default
      */
@@ -639,9 +651,12 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     public function testWordWrap()
     {
         $this->Mail->WordWrap = 40;
-        $my_body = 'Here is the main body of this message.  It should ' .
-            'be quite a few lines.  It should be wrapped at the ' .
-            '40 characters.  Make sure that it is.';
+        $my_body = str_repeat(
+            'Here is the main body of this message.  It should ' .
+            'be quite a few lines.  It should be wrapped at ' .
+            '40 characters.  Make sure that it is. ',
+            10
+        );
         $nBodyLen = strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
@@ -1340,7 +1355,7 @@ EOT;
         sleep(2);
         //Test a known-good login
         $this->assertTrue(
-            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', 0),
+            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
         );
         //Kill the fake server
@@ -1362,7 +1377,7 @@ EOT;
         sleep(2);
         //Test a known-bad login
         $this->assertFalse(
-            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', 0),
+            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
             'POP before SMTP should have failed'
         );
         shell_exec('kill -TERM '.escapeshellarg($pid));
