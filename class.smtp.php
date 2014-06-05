@@ -210,7 +210,7 @@ class SMTP
             $socket_context
         );
         // Verify we connected properly
-        if (empty($this->smtp_conn)) {
+        if (is_resource($this->smtp_conn)) {
             $this->error = array(
                 'error' => 'Failed to connect to server',
                 'errno' => $errno,
@@ -426,7 +426,7 @@ class SMTP
      */
     public function connected()
     {
-        if (!empty($this->smtp_conn)) {
+        if (is_resource($this->smtp_conn)) {
             $sock_status = stream_get_meta_data($this->smtp_conn);
             if ($sock_status['eof']) {
                 // the socket is valid but we are not connected
@@ -454,13 +454,12 @@ class SMTP
     {
         $this->error = array();
         $this->helo_rply = null;
-        if (!empty($this->smtp_conn)) {
+        if (is_resource($this->smtp_conn)) {
             // close the connection and cleanup
             fclose($this->smtp_conn);
             if ($this->do_debug >= 3) {
                 $this->edebug('Connection: closed');
             }
-            $this->smtp_conn = null;
         }
     }
 
