@@ -644,7 +644,6 @@ class PHPMailer
 
     /**
      * Sets message type to HTML or plain.
-     * @TODO rename to setBodyHtml
      * @param bool $isHtml True for HTML mode.
      * @return void
      */
@@ -659,7 +658,6 @@ class PHPMailer
 
     /**
      * Send messages using SMTP.
-     * @TODO rename to setSmtp
      * @return void
      */
     public function isSMTP()
@@ -669,7 +667,6 @@ class PHPMailer
 
     /**
      * Send messages using PHP's mail() function.
-     * @TODO rename to setPhpMailFn
      * @return void
      */
     public function isMail()
@@ -679,7 +676,6 @@ class PHPMailer
 
     /**
      * Send messages using $Sendmail.
-     * @TODO rename to setSendmail
      * @return void
      */
     public function isSendmail()
@@ -696,7 +692,6 @@ class PHPMailer
 
     /**
      * Send messages using qmail.
-     * @TODO rename to setQmail
      * @return void
      */
     public function isQmail()
@@ -2941,7 +2936,6 @@ class PHPMailer
 
     /**
      * Get the MIME type for a file extension.
-     * @TODO rename to mimeTypes
      * @param string $ext File extension
      * @access public
      * @return string MIME type of file.
@@ -3064,7 +3058,6 @@ class PHPMailer
      * Multi-byte-safe pathinfo replacement.
      * Drop-in replacement for pathinfo(), but multibyte-safe, cross-platform-safe, old-version-safe.
      * Works similarly to the one in PHP >= 5.2.0
-     * @TODO rename to mbPathInfo
      * @link http://www.php.net/manual/en/function.pathinfo.php#107461
      * @param string $path A filename or path, does not need to exist as a file
      * @param integer|string $options Either a PATHINFO_* constant,
@@ -3182,7 +3175,6 @@ class PHPMailer
 
     /**
      * Quoted-Printable-encode a DKIM header.
-     * @TODO rename to dkimQp
      * @access public
      * @param string $txt
      * @return string
@@ -3203,7 +3195,6 @@ class PHPMailer
 
     /**
      * Generate a DKIM signature.
-     * @TODO rename to dkimSign
      * @access public
      * @param $signHeader string
      * @throws phpmailerException
@@ -3231,7 +3222,6 @@ class PHPMailer
 
     /**
      * Generate a DKIM canonicalization header.
-     * @TODO rename to dkimHeaderC
      * @access public
      * @param string $signHeader Header
      * @return string
@@ -3252,7 +3242,6 @@ class PHPMailer
 
     /**
      * Generate a DKIM canonicalization body.
-     * @TODO rename to dkimBodyC
      * @access public
      * @param string $body Message Body
      * @return string
@@ -3274,7 +3263,6 @@ class PHPMailer
 
     /**
      * Create the DKIM header and body in a new message header.
-     * @TODO rename to dkimAdd
      * @access public
      * @param string $headers_line Header lines
      * @param string $subject Subject
