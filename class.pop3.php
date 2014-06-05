@@ -360,7 +360,8 @@ class POP3
      * Also display debug output if it's enabled.
      * @param $error
      */
-    private function setError($error) {
+    private function setError($error)
+    {
         $this->errors[] = $error;
         if ($this->do_debug >= 1) {
             echo '<pre>';
