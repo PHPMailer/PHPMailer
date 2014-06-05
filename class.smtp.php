@@ -210,7 +210,7 @@ class SMTP
             $socket_context
         );
         // Verify we connected properly
-        if (is_resource($this->smtp_conn)) {
+        if (!is_resource($this->smtp_conn)) {
             $this->error = array(
                 'error' => 'Failed to connect to server',
                 'errno' => $errno,
