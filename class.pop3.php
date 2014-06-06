@@ -27,7 +27,7 @@
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  */
-class pop3
+class POP3
 {
     /**
      * The POP3 PHPMailer Version number.
@@ -38,14 +38,14 @@ class pop3
 
     /**
      * Default POP3 port number.
-     * @type int
+     * @type integer
      * @access public
      */
     public $POP3_PORT = 110;
 
     /**
      * Default timeout in seconds.
-     * @type int
+     * @type integer
      * @access public
      */
     public $POP3_TIMEOUT = 30;
@@ -61,7 +61,7 @@ class pop3
     /**
      * Debug display level.
      * Options: 0 = no, 1+ = yes
-     * @type int
+     * @type integer
      * @access public
      */
     public $do_debug = 0;
@@ -75,14 +75,14 @@ class pop3
 
     /**
      * POP3 port number.
-     * @type int
+     * @type integer
      * @access public
      */
     public $port;
 
     /**
      * POP3 Timeout Value in seconds.
-     * @type int
+     * @type integer
      * @access public
      */
     public $tval;
@@ -110,7 +110,7 @@ class pop3
 
     /**
      * Are we connected?
-     * @type bool
+     * @type boolean
      * @access private
      */
     private $connected = false;
@@ -130,12 +130,12 @@ class pop3
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      * @param $host
-     * @param bool $port
-     * @param bool $tval
+     * @param boolean $port
+     * @param boolean $tval
      * @param string $username
      * @param string $password
-     * @param int $debug_level
-     * @return bool
+     * @param integer $debug_level
+     * @return boolean
      */
     public static function popBeforeSmtp(
         $host,
@@ -155,12 +155,12 @@ class pop3
      * appropriate for POP-before SMTP authorisation.
      * @access public
      * @param string $host
-     * @param bool|int $port
-     * @param bool|int $tval
+     * @param integer|boolean $port
+     * @param integer|boolean $tval
      * @param string $username
      * @param string $password
-     * @param int $debug_level
-     * @return bool
+     * @param integer $debug_level
+     * @return boolean
      */
     public function authorise($host, $port = false, $tval = false, $username = '', $password = '', $debug_level = 0)
     {
@@ -200,7 +200,7 @@ class pop3
      * Connect to a POP3 server.
      * @access public
      * @param string $host
-     * @param bool|integer $port
+     * @param integer|boolean $port
      * @param integer $tval
      * @return boolean
      */

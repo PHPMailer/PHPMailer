@@ -34,7 +34,7 @@
  *
  * @param string $tagname the name of the tag.
  * @param array $attary the array of attributes and their values
- * @param int $tagtype The type of the tag (see in comments).
+ * @param integer $tagtype The type of the tag (see in comments).
  * @return string A string with the final tag representation.
  */
 function tln_tagprint($tagname, $attary, $tagtype)
@@ -75,9 +75,9 @@ function tln_casenormalize(&$val)
  * a string and to the next non-whitespace value.
  *
  * @param string $body the string
- * @param int $offset the offset within the string where we should start
+ * @param integer $offset the offset within the string where we should start
  *                   looking for the next non-whitespace character.
- * @return int          the location within the $body where the next
+ * @return integer          the location within the $body where the next
  *                   non-whitespace char is located.
  */
 function tln_skipspace($body, $offset)
@@ -96,9 +96,9 @@ function tln_skipspace($body, $offset)
  * nicely.
  *
  * @param string $body   The string to look for needle in.
- * @param int $offset Start looking from this position.
+ * @param integer $offset Start looking from this position.
  * @param string $needle The character/string to look for.
- * @return int           location of the next occurrence of the needle, or
+ * @return integer           location of the next occurrence of the needle, or
  *                   strlen($body) if needle wasn't found.
  */
 function tln_findnxstr($body, $offset, $needle)
@@ -115,7 +115,7 @@ function tln_findnxstr($body, $offset, $needle)
  * within the string.
  *
  * @param string $body   The string to look for needle in.
- * @param int $offset Start looking from here.
+ * @param integer $offset Start looking from here.
  * @param string $reg       A PCRE-style regex to match.
  * @return array|boolean  Returns a false if no matches found, or an array
  *                   with the following members:
@@ -143,7 +143,7 @@ function tln_findnxreg($body, $offset, $reg)
  * This function looks for the next tag.
  *
  * @param string $body   String where to look for the next tag.
- * @param int $offset Start looking from here.
+ * @param integer $offset Start looking from here.
  * @return array|boolean false if no more tags exist in the body, or
  *                   an array with the following members:
  *                   - string with the name of the tag
@@ -436,8 +436,8 @@ function tln_getnxtag($body, $offset)
  *
  * @param string $attvalue the by-ref value to check.
  * @param string $regex    the regular expression to check against.
- * @param bool $hex        whether the entites are hexadecimal.
- * @return bool            True or False depending on whether there were matches.
+ * @param boolean $hex        whether the entites are hexadecimal.
+ * @return boolean            True or False depending on whether there were matches.
  */
 function tln_deent(&$attvalue, $regex, $hex = false)
 {
@@ -583,7 +583,7 @@ function tln_fixatts(
  * @param array $tag_list                see description above
  * @param array $rm_tags_with_content see description above
  * @param array $self_closing_tags    see description above
- * @param bool $force_tag_closing    see description above
+ * @param boolean $force_tag_closing    see description above
  * @param array $rm_attnames            see description above
  * @param array $bad_attvals            see description above
  * @param array $add_attr_to_tag        see description above
