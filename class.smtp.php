@@ -195,7 +195,7 @@ class SMTP
         }
         // Connect to the SMTP server
         if ($this->do_debug >= 3) {
-            $this->edebug('Connection: opening');
+            $this->edebug("Connection: opening to $host:$port, t=$timeout, opt=".var_export($options, true));
         }
         $errno = 0;
         $errstr = '';
