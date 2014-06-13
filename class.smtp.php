@@ -182,6 +182,12 @@ class SMTP
      */
     public function connect($host, $port = null, $timeout = 30, $options = array())
     {
+        static $streamok;
+        //This is enabled by default since 5.0.0 but some providers disable it
+        //Check this once and cache the result
+        if (is_null($streamok)) {
+            $streamok = function_exists('stream_socket_client');
+        }
         // Clear errors to avoid confusion
         $this->error = array();
         // Make sure we are __not__ connected
@@ -199,16 +205,30 @@ class SMTP
         }
         $errno = 0;
         $errstr = '';
-        $socket_context = stream_context_create($options);
-        //Suppress errors; connection failures are handled at a higher level
-        $this->smtp_conn = @stream_socket_client(
-            $host . ":" . $port,
-            $errno,
-            $errstr,
-            $timeout,
-            STREAM_CLIENT_CONNECT,
-            $socket_context
-        );
+        if ($streamok) {
+            $socket_context = stream_context_create($options);
+            //Suppress errors; connection failures are handled at a higher level
+            $this->smtp_conn = @stream_socket_client(
+                $host . ":" . $port,
+                $errno,
+                $errstr,
+                $timeout,
+                STREAM_CLIENT_CONNECT,
+                $socket_context
+            );
+        } else {
+            //Fall back to fsockopen which should work in more places, but is missing some features
+            if ($this->do_debug >= 3) {
+                $this->edebug("Connection: stream_socket_client not available, falling back to fsockopen");
+            }
+            $this->smtp_conn = fsockopen(
+                $host,
+                $port,
+                $errno,
+                $errstr,
+                $timeout
+            );
+        }
         // Verify we connected properly
         if (!is_resource($this->smtp_conn)) {
             $this->error = array(
