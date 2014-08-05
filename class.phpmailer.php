@@ -856,12 +856,18 @@ class PHPMailer
     public static function validateAddress($address, $patternselect = 'auto')
     {
         if (!$patternselect or $patternselect == 'auto') {
-            if (defined('PCRE_VERSION')) { //Check this constant so it works when extension_loaded() is disabled
-                if (version_compare(PCRE_VERSION, '8.0') >= 0) {
+            //Check this constant first so it works when extension_loaded() is disabled by safe mode
+            //Constant was added in PHP 5.2.4
+            if (defined('PCRE_VERSION')) {
+                //This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
+                if (version_compare(PCRE_VERSION, '8.0.3') >= 0) {
                     $patternselect = 'pcre8';
                 } else {
                     $patternselect = 'pcre';
                 }
+            } elseif (function_exists('extension_loaded') and extension_loaded('pcre')) {
+                //Fall back to older PCRE
+                $patternselect = 'pcre';
             } else {
                 //Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
                 if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
