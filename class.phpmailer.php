@@ -2000,17 +2000,17 @@ class PHPMailer
      */
     protected function setMessageType()
     {
-        $this->message_type = array();
+        $type = array();
         if ($this->alternativeExists()) {
-            $this->message_type[] = 'alt';
+            $type[] = 'alt';
         }
         if ($this->inlineImageExists()) {
-            $this->message_type[] = 'inline';
+            $type[] = 'inline';
         }
         if ($this->attachmentExists()) {
-            $this->message_type[] = 'attach';
+            $type[] = 'attach';
         }
-        $this->message_type = implode('_', $this->message_type);
+        $this->message_type = implode('_', $type);
         if ($this->message_type == '') {
             $this->message_type = 'plain';
         }
