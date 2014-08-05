@@ -9,6 +9,7 @@
 * More consistent handling of error states and debug output
 * Use property defaults, remove constructors
 * Remove unreachable code
+* Use older regex validation pattern for troublesome PCRE library versions
 
 ## Version 5.2.8 (May 14th 2014)
 * Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
