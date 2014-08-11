@@ -146,6 +146,8 @@ class SMTP
 
     /**
      * Output debugging info via a user-selected method.
+     * @see SMTP::$Debugoutput
+     * @see SMTP::$do_debug
      * @param string $str Debug string to output
      * @return void
      */

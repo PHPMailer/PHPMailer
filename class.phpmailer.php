@@ -618,27 +618,33 @@ class PHPMailer
 
     /**
      * Output debugging info via user-defined method.
-     * Only if debug output is enabled.
+     * Only generates output if SMTP debug output is enabled (@see SMTP::$do_debug).
      * @see PHPMailer::$Debugoutput
      * @see PHPMailer::$SMTPDebug
      * @param string $str
      */
     protected function edebug($str)
     {
-        if (!$this->SMTPDebug) {
+        if ($this->SMTPDebug <= 0) {
             return;
         }
         switch ($this->Debugoutput) {
             case 'error_log':
+                //Don't output, just log
                 error_log($str);
                 break;
             case 'html':
-                //Cleans up output a bit for a better looking display that's HTML-safe
-                echo htmlentities(preg_replace('/[\r\n]+/', '', $str), ENT_QUOTES, $this->CharSet) . "<br>\n";
+                //Cleans up output a bit for a better looking, HTML-safe output
+                echo htmlentities(
+                    preg_replace('/[\r\n]+/', '', $str),
+                    ENT_QUOTES,
+                    'UTF-8'
+                )
+                . "<br>\n";
                 break;
             case 'echo':
             default:
-                echo $str."\n";
+                echo gmdate('Y-m-d H:i:s') . "\t" . trim($str) . "\n";
         }
     }
 
