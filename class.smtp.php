@@ -53,7 +53,7 @@ class SMTP
     /**
      * The PHPMailer SMTP Version number.
      * @type string
-     * @deprecated Use the constant instead
+     * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
     public $Version = '5.2.8';
@@ -61,7 +61,7 @@ class SMTP
     /**
      * SMTP server port number.
      * @type integer
-     * @deprecated This is only ever used as a default value, so use the constant instead
+     * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
      */
     public $SMTP_PORT = 25;
@@ -69,7 +69,7 @@ class SMTP
     /**
      * SMTP reply line ending.
      * @type string
-     * @deprecated Use the constant instead
+     * @deprecated Use the `CRLF` constant instead
      * @see SMTP::CRLF
      */
     public $CRLF = "\r\n";
@@ -90,8 +90,9 @@ class SMTP
      * How to handle debug output.
      * Options:
      * * `echo` Output plain-text as-is, appropriate for CLI
-     * * `html` Output escaped, line breaks converted to <br>, appropriate for browser output
+     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
+     *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
@@ -177,8 +178,12 @@ class SMTP
                 break;
             case 'echo':
             default:
+                //Normalize line breaks
+                $str = preg_replace('/(\r\n|\r|\n)/ms', "\n", $str);
                 echo gmdate('Y-m-d H:i:s') . "\t" . str_replace(
-                    "\r\n", "\r\n                   \t                  ", trim($str)
+                    "\n",
+                    "\n                   \t                  ",
+                    trim($str)
                 )."\n";
         }
     }

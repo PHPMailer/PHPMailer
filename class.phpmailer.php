@@ -216,6 +216,8 @@ class PHPMailer
      * You can also specify a different port
      * for each host by using this format: [hostname:port]
      * (e.g. "smtp1.example.com:25;smtp2.example.com").
+     * You can also specify encryption type, for example:
+     * (e.g. "tls://smtp1.example.com:587;ssl://smtp2.example.com:465").
      * Hosts will be tried in order.
      * @type string
      */
@@ -293,12 +295,13 @@ class PHPMailer
 
     /**
      * SMTP class debug output mode.
+     * Debug output level.
      * Options:
-     *   0: no output
-     *   1: commands
-     *   2: data and commands
-     *   3: as 2 plus connection status
-     *   4: low level data output
+     * * `0` No output
+     * * `1` Commands
+     * * `2` Data and commands
+     * * `3` As 2 plus connection status
+     * * `4` Low-level data output
      * @type integer
      * @see SMTP::$do_debug
      */
@@ -307,9 +310,10 @@ class PHPMailer
     /**
      * How to handle debug output.
      * Options:
-     *   'echo': Output plain-text as-is, appropriate for CLI
-     *   'html': Output escaped, line breaks converted to <br>, appropriate for browser output
-     *   'error_log': Output to error log as configured in php.ini
+     * * `echo` Output plain-text as-is, appropriate for CLI
+     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
+     * * `error_log` Output to error log as configured in php.ini
+     *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
@@ -546,27 +550,27 @@ class PHPMailer
     protected $exceptions = false;
 
     /**
-     * Error severity: message only, continue processing
+     * Error severity: message only, continue processing.
      */
     const STOP_MESSAGE = 0;
 
     /**
-     * Error severity: message, likely ok to continue processing
+     * Error severity: message, likely ok to continue processing.
      */
     const STOP_CONTINUE = 1;
 
     /**
-     * Error severity: message, plus full stop, critical error reached
+     * Error severity: message, plus full stop, critical error reached.
      */
     const STOP_CRITICAL = 2;
 
     /**
-     * SMTP RFC standard line ending
+     * SMTP RFC standard line ending.
      */
     const CRLF = "\r\n";
 
     /**
-     * Constructor
+     * Constructor.
      * @param boolean $exceptions Should we throw external exceptions?
      */
     public function __construct($exceptions = false)
@@ -652,7 +656,13 @@ class PHPMailer
                 break;
             case 'echo':
             default:
-                echo gmdate('Y-m-d H:i:s') . "\t" . trim($str) . "\n";
+                //Normalize line breaks
+                $str = preg_replace('/(\r\n|\r|\n)/ms', "\n", $str);
+                echo gmdate('Y-m-d H:i:s') . "\t" . str_replace(
+                    "\n",
+                    "\n                   \t                  ",
+                    trim($str)
+                ) . "\n";
         }
     }
 
