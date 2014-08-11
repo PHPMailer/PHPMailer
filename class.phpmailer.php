@@ -310,7 +310,11 @@ class PHPMailer
      *   'echo': Output plain-text as-is, appropriate for CLI
      *   'html': Output escaped, line breaks converted to <br>, appropriate for browser output
      *   'error_log': Output to error log as configured in php.ini
-     * @type string
+     * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
+     * <code>
+     * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
+     * </code>
+     * @type string|callable
      * @see SMTP::$Debugoutput
      */
     public $Debugoutput = 'echo';
@@ -626,6 +630,10 @@ class PHPMailer
     protected function edebug($str)
     {
         if ($this->SMTPDebug <= 0) {
+            return;
+        }
+        if (is_callable($this->Debugoutput)) {
+            call_user_func($this->Debugoutput, $str, $this->SMTPDebug);
             return;
         }
         switch ($this->Debugoutput) {
