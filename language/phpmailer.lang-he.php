@@ -1,9 +1,9 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Hebrew Version, UTF-8
-* by : Ronny Sherer <ronny@hoojima.com>
-*/
+ * Hebrew PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Ronny Sherer <ronny@hoojima.com>
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'שגיאת SMTP: פעולת האימות נכשלה.';
 $PHPMAILER_LANG['connect_host']         = 'שגיאת SMTP: לא הצלחתי להתחבר לשרת SMTP.';

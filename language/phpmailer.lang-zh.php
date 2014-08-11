@@ -1,10 +1,10 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Traditional Chinese Version
-* @author liqwei <liqwei@liqwei.com>
-* @author Peter Dave Hello <https://github.com/PeterDaveHello/>
-*/
+ * Traditional Chinese PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author liqwei <liqwei@liqwei.com>
+ * @author Peter Dave Hello <@PeterDaveHello/>
+ */
 
 $PHPMAILER_LANG['authenticate'] = 'SMTP 錯誤：登入失敗。';
 $PHPMAILER_LANG['connect_host'] = 'SMTP 錯誤：無法連線到 SMTP 主機。';

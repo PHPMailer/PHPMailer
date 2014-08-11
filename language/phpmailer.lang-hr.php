@@ -1,8 +1,8 @@
 <?php
 /**
- * PHPMailer language file: refer to English translation for definitive list
- * Croatian Version
- * By Hrvoj3e <hrvoj3e@gmail.com>
+ * Croatian PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Hrvoj3e <hrvoj3e@gmail.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Greška: Neuspjela autentikacija.';

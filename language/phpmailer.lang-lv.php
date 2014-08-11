@@ -1,8 +1,9 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Latvian version by Eduards M. <e@npd.lv>
-*/
+ * Latvian PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Eduards M. <e@npd.lv>
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP kļūda: Autorizācija neizdevās.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP Kļūda: Nevar izveidot savienojumu ar SMTP serveri.';

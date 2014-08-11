@@ -1,8 +1,8 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Polish Version
-*/
+ * Polish PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'Błąd SMTP: Nie można przeprowadzić uwierzytelnienia.';
 $PHPMAILER_LANG['connect_host']         = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';

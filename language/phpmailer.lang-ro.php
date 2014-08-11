@@ -1,10 +1,9 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Romanian Version
-* @package PHPMailer
-* @author Catalin Constantin <catalin@dazoot.ro>
-*/
+ * Romanian PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Catalin Constantin <catalin@dazoot.ro>
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'Eroare SMTP: Nu a functionat autentificarea.';
 $PHPMAILER_LANG['connect_host']         = 'Eroare SMTP: Nu m-am putut conecta la adresa SMTP.';

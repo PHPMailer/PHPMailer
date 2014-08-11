@@ -1,9 +1,9 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Catalan Version
-* By Ivan: web AT microstudi DOT com
-*/
+ * Catalan PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Ivan <web AT microstudi DOT com>
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: No s’ha pogut autenticar.';
 $PHPMAILER_LANG['connect_host']         = 'Error SMTP: No es pot connectar al servidor SMTP.';

@@ -1,9 +1,9 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Swedish Version
-* Author: Johan Linnér <johan@linner.biz>
-*/
+ * Swedish PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Johan Linnér <johan@linner.biz>
+ */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP fel: Kunde inte autentisera.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP fel: Kunde inte ansluta till SMTP-server.';
