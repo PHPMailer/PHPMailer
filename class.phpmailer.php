@@ -2892,6 +2892,23 @@ class PHPMailer
         preg_match_all('/(src|background)=["\'](.*)["\']/Ui', $message, $images);
         if (isset($images[2])) {
             foreach ($images[2] as $imgindex => $url) {
+                // convert data: uri's into embedded images
+				if (preg_match('#^data:(image[^;,]*)(;base64)?,#', $url, $match)) {
+					$data = substr($url, strpos($url, ','));
+					if ($match[2]) {
+						$data = base64_decode($data);
+					} else { 
+						$data = rawurldecode($data);
+					}
+					$cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
+					if ( $this->addStringEmbeddedImage($data, $cid, '', 'base64', $match[1]) ) {
+                        $message = preg_replace(
+                            '/' . $images[1][$imgindex] . '=["\']' . preg_quote($url, '/') . '["\']/Ui',
+                            $images[1][$imgindex] . '="cid:' . $cid . '"',
+                            $message
+                        );
+					}
+				} else
                 // do not change urls for absolute images (thanks to corvuscorax)
                 if (!preg_match('#^[A-z]+://#', $url)) {
                     $filename = basename($url);
