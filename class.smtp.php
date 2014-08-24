@@ -712,7 +712,7 @@ class SMTP
         }
 
         if (!in_array($code, (array)$expect)) {
-            $this->last_reply = null;
+            $this->last_reply = $reply;
             $this->error = array(
                 'error' => "$command command failed",
                 'smtp_code' => $code,
