@@ -15,7 +15,7 @@
 * Allow user-defined debug output method via a callable
 * msgHTML now converts data URIs to embedded images
 * SMTP::getLastReply() will now always be populated
-* The autolaoder is no longer autoloaded by the PHPMailer class
+* The autoloader is no longer autoloaded by the PHPMailer class
 * Improved example code in README
 
 ## Version 5.2.8 (May 14th 2014)
