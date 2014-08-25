@@ -43,7 +43,7 @@ PHPMailer does *not* declare a namespace because namespaces were only introduced
 
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
 
 ## A Simple Example
 
@@ -53,12 +53,15 @@ require 'PHPMailerAutoload.php';
 
 $mail = new PHPMailer;
 
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
 $mail->isSMTP();                                      // Set mailer to use SMTP
 $mail->Host = 'smtp1.example.com;smtp2.example.com';  // Specify main and backup SMTP servers
 $mail->SMTPAuth = true;                               // Enable SMTP authentication
 $mail->Username = 'user@example.com';                 // SMTP username
 $mail->Password = 'secret';                           // SMTP password
-$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 587;                                    // TCP port to connect to
 
 $mail->From = 'from@example.com';
 $mail->FromName = 'Mailer';
