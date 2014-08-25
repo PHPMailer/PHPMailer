@@ -14,6 +14,9 @@
 * Handle debug output consistently, and always in UTF-8
 * Allow user-defined debug output method via a callable
 * msgHTML now converts data URIs to embedded images
+* SMTP::getLastReply() will now always be populated
+* The autolaoder is no longer autoloaded by the PHPMailer class
+* Improved example code in README
 
 ## Version 5.2.8 (May 14th 2014)
 * Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
