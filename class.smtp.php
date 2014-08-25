@@ -704,29 +704,27 @@ class SMTP
         }
         $this->client_send($commandstring . self::CRLF);
 
-        $reply = $this->get_lines();
-        $code = substr($reply, 0, 3);
+        $this->last_reply = $this->get_lines();
+        $code = substr($this->last_reply, 0, 3);
 
         if ($this->do_debug >= 2) {
-            $this->edebug('SERVER -> CLIENT: ' . $reply);
+            $this->edebug('SERVER -> CLIENT: ' . $this->last_reply);
         }
 
         if (!in_array($code, (array)$expect)) {
-            $this->last_reply = $reply;
             $this->error = array(
                 'error' => "$command command failed",
                 'smtp_code' => $code,
-                'detail' => substr($reply, 4)
+                'detail' => substr($this->last_reply, 4)
             );
             if ($this->do_debug >= 1) {
                 $this->edebug(
-                    'SMTP ERROR: ' . $this->error['error'] . ': ' . $reply
+                    'SMTP ERROR: ' . $this->error['error'] . ': ' . $this->last_reply
                 );
             }
             return false;
         }
 
-        $this->last_reply = $reply;
         $this->error = array();
         return true;
     }
