@@ -2180,18 +2180,19 @@ class PHPMailer
                 // Fixes a warning in IETF's msglint MIME checker
                 // Allow for bypassing the Content-Disposition header totally
                 if (!(empty($disposition))) {
-                    if (preg_match('/[ \(\)<>@,;:\\"\/\[\]\?=]/', $name)) {
+                    $encoded_name = $this->encodeHeader($this->secureHeader($name));
+                    if (preg_match('/[ \(\)<>@,;:\\"\/\[\]\?=]/', $encoded_name)) {
                         $mime[] = sprintf(
                             'Content-Disposition: %s; filename="%s"%s',
                             $disposition,
-                            $this->encodeHeader($this->secureHeader($name)),
+                            $encoded_name,
                             $this->LE . $this->LE
                         );
                     } else {
                         $mime[] = sprintf(
                             'Content-Disposition: %s; filename=%s%s',
                             $disposition,
-                            $this->encodeHeader($this->secureHeader($name)),
+                            $encoded_name,
                             $this->LE . $this->LE
                         );
                     }
