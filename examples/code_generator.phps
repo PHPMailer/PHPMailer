@@ -183,13 +183,6 @@ try {
             "'phpmailer_mini.png');  // optional name";
         $example_code .= "\n\$mail->addAttachment('images/phpmailer.png', 'phpmailer.png');  // optional name";
 
-        try {
-            $mail->send();
-            $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
-        } catch (phpmailerException $e) {
-            throw new phpmailerAppException("Unable to send to: " . $to . ': ' . $e->getMessage());
-        }
-
         $example_code .= "\n\ntry {";
         $example_code .= "\n  \$mail->send();";
         $example_code .= "\n  \$results_messages[] = \"Message has been sent using " .
@@ -198,6 +191,13 @@ try {
         $example_code .= "\ncatch (phpmailerException \$e) {";
         $example_code .= "\n  throw new phpmailerAppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
         $example_code .= "\n}";
+
+        try {
+            $mail->send();
+            $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
+        } catch (phpmailerException $e) {
+            throw new phpmailerAppException("Unable to send to: " . $to . ': ' . $e->getMessage());
+        }
     }
 } catch (phpmailerAppException $e) {
     $results_messages[] = $e->errorMessage();
