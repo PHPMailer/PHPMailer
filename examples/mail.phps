@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>PHPMailer - mail() test</title>
-</head>
-<body>
 <?php
+/**
+ * This example shows sending a message using PHP's mail() function.
+ */
+
 require '../PHPMailerAutoload.php';
 
 //Create a new PHPMailer instance
@@ -32,6 +29,3 @@ if (!$mail->send()) {
 } else {
     echo "Message sent!";
 }
-?>
-</body>
-</html>

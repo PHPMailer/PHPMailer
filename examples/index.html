@@ -40,6 +40,9 @@
 <h2><a href="mailing_list.phps">mailing_list.phps</a></h2>
 <p>This is a somewhat naïve example of sending similar emails to a list of different addresses. It sets up a PHPMailer instance using SMTP, then connects to a MySQL database to retrieve a list of recipients. The code loops over this list, sending email to each person using their info and marks them as sent in the database. It makes use of SMTP keepalive which saves reconnecting and re-authenticating between each message.</p>
 <hr>
+<h2><a href="smtp_check.phps">smtp_check.phps</a></h2>
+<p>This is an example showing how to use the SMTP class by itself (without PHPMailer) to check an SMTP connection.</p>
+<hr>
 <p>Most of these examples use the 'example.com' domain. This domain is reserved by IANA for illustrative purposes, as documented in <a href="http://tools.ietf.org/html/rfc2606">RFC 2606</a>. Don't use made-up domains like 'mydomain.com' or 'somedomain.com' in examples as someone, somewhere, probably owns them!</p>
 </body>
 </html>

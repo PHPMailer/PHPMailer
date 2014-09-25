@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>PHPMailer - POP-before-SMTP test</title>
-</head>
-<body>
 <?php
+/**
+ * This example shows how to use POP-before-SMTP for authentication.
+ */
+
 require '../PHPMailerAutoload.php';
 
 //Authenticate via POP3.
@@ -55,6 +52,3 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage(); //Boring error messages from anything else!
 }
-?>
-</body>
-</html>

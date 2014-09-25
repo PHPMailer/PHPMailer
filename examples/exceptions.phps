@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>PHPMailer - Exceptions test</title>
-</head>
-<body>
 <?php
+/**
+ * This example shows how to make use of PHPMailer's exceptions for error handling.
+ */
+
 require '../PHPMailerAutoload.php';
 
 //Create a new PHPMailer instance
@@ -36,6 +33,3 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage(); //Boring error messages from anything else!
 }
-?>
-</body>
-</html>
