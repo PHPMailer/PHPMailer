@@ -6,7 +6,7 @@
 require '../PHPMailerAutoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer();
+$mail = new PHPMailer;
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address
