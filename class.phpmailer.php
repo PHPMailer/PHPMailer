@@ -2238,17 +2238,22 @@ class PHPMailer
             if (!is_readable($path)) {
                 throw new phpmailerException($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
-            $magic_quotes = get_magic_quotes_runtime();
-            if ($magic_quotes) {
-                if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-                    set_magic_quotes_runtime(false);
-                } else {
-                    //Doesn't exist in PHP 5.4, but we don't need to check because
-                    //get_magic_quotes_runtime always returns false in 5.4+
-                    //so it will never get here
-                    ini_set('magic_quotes_runtime', 0);
-                }
+            
+            // Check PHP version, if lower then 5.4 use magic_quotes
+            if (version_compare(PHP_VERSION, '5.4.0', '<'))
+            {
+                $magic_quotes = true;
+                set_magic_quotes_runtime($magic_quotes);
             }
+            else
+            {
+                $magic_quotes = false;
+                //Doesn't exist in PHP 5.4, but we don't need to check because
+                //get_magic_quotes_runtime always returns false in 5.4+
+                //so it will never get here
+                ini_set('magic_quotes_runtime', 0);
+            }
+                
             $file_buffer = file_get_contents($path);
             $file_buffer = $this->encodeString($file_buffer, $encoding);
             if ($magic_quotes) {
