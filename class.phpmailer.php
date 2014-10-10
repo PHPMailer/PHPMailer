@@ -289,9 +289,10 @@ class PHPMailer
 
     /**
      * The SMTP server timeout in seconds.
+     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @type integer
      */
-    public $Timeout = 10;
+    public $Timeout = 300;
 
     /**
      * SMTP class debug output mode.
