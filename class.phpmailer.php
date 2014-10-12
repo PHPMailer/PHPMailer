@@ -2986,6 +2986,7 @@ class PHPMailer
     {
         $mimes = array(
             'xl' => 'application/excel',
+            'js' => 'application/javascript',
             'hqx' => 'application/mac-binhex40',
             'cpt' => 'application/mac-compactpro',
             'bin' => 'application/macbinary',
@@ -3022,7 +3023,6 @@ class PHPMailer
             'php' => 'application/x-httpd-php',
             'phtml' => 'application/x-httpd-php',
             'phps' => 'application/x-httpd-php-source',
-            'js' => 'application/x-javascript',
             'swf' => 'application/x-shockwave-flash',
             'sit' => 'application/x-stuffit',
             'tar' => 'application/x-tar',
