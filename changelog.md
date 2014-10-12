@@ -64,7 +64,7 @@
 * Better default behaviour for validateAddress
 
 ## Version 5.2.7 (September 12th 2013)
-* Add Ukranian translation from @Krezalis
+* Add Ukrainian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
 * Propagate Debugoutput option to SMTP class (@Reblutus)
@@ -502,7 +502,7 @@ NOTE: will NOT work with PHP5 in E_STRICT error mode
 ## Version 1.15 (Fri, Jun 15 2001)
 Note: these changes contributed by Patrice Fournier
 * Changed all remaining \n to \r\n
-* Bcc: header no longer writen to message except
+* Bcc: header no longer written to message except
   when sent directly to sendmail
 * Added a small message to non-MIME compliant mail reader
 * Added Sender variable to change the Sender email
