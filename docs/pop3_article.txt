@@ -6,7 +6,7 @@ I didn't want to modify the PHP Mailer classes at all, so you will have to inclu
 
 When you need it, create your POP3 object
 
-Right before I invoke PHP Mailer I activate the POP3 authorisation. POP3 before SMTP is a process whereby you login to your web hosts POP3 mail server BEFORE sending out any emails via SMTP. The POP3 logon 'verifies' your ability to send email by SMTP, which typically otherwise blocks you. On my web host (Pair Networks) a single POP3 logon is enough to 'verify' you for 90 minutes. Here is some sample PHP code that activates the POP3 logon and then sends an email via PHP Mailer:
+Right before I invoke PHP Mailer I activate the POP3 authorization. POP3 before SMTP is a process whereby you login to your web hosts POP3 mail server BEFORE sending out any emails via SMTP. The POP3 logon 'verifies' your ability to send email by SMTP, which typically otherwise blocks you. On my web host (Pair Networks) a single POP3 logon is enough to 'verify' you for 90 minutes. Here is some sample PHP code that activates the POP3 logon and then sends an email via PHP Mailer:
 
 <?php
 $pop->authorise('pop3.example.com', 110, 30, 'mailer', 'password', 1);
@@ -42,7 +42,7 @@ Final Comments + the Download
 
 2) Opening and closing lots of POP3 connections can be quite a resource/network drain. If you need to send a whole batch of emails then just perform the authentication once at the start, and then loop through your mail sending script. Providing this process doesn't take longer than the verification period lasts on your POP3 server, you should be fine. With my host that period is 90 minutes, i.e. plenty of time.
 
-3) If you have heavy requirements for this script (i.e. send a LOT of email on a frequent basis) then I would advise seeking out an alternative sending method (direct SMTP ideally). If this isn't possible then you could modify this class so the 'last authorised' date is recorded somewhere (MySQL, Flat file, etc) meaning you only open a new connection if the old one has expired, saving you precious overhead.
+3) If you have heavy requirements for this script (i.e. send a LOT of email on a frequent basis) then I would advise seeking out an alternative sending method (direct SMTP ideally). If this isn't possible then you could modify this class so the 'last authorized' date is recorded somewhere (MySQL, Flat file, etc) meaning you only open a new connection if the old one has expired, saving you precious overhead.
 
 4) There are lots of other POP3 classes for PHP available. However most of them implement the full POP3 command set, where-as this one is purely for authentication, and much lighter as a result. However using any of the other POP3 classes to just logon to your server would have the same net result. At the end of the day, use whatever method you feel most comfortable with.
 Download
