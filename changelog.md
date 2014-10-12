@@ -24,7 +24,7 @@
 * Simplify examples, don't use mysql* functions
 
 ## Version 5.2.8 (May 14th 2014)
-* Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
+* Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greet delays, fixes #104
 * Add timestamps to default debug output
 * Add connection events and new level 3 to debug output options
 * Chinese language update (Thanks to @binaryoung)
@@ -61,10 +61,10 @@
 * Remove useless PHP5 check
 * Use SVG for build status badges
 * Store MessageDate on creation
-* Better default behaviour for validateAddress
+* Better default behavior for validateAddress
 
 ## Version 5.2.7 (September 12th 2013)
-* Add Ukranian translation from @Krezalis
+* Add Ukrainian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
 * Propagate Debugoutput option to SMTP class (@Reblutus)
@@ -104,7 +104,7 @@
 * Added fake POP server and unit tests for POP-before-SMTP
 
 ## Version 5.2.6 (April 11th 2013)
-* Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
+* Reflect move to PHPMailer GitHub organization at https://github.com/PHPMailer/PHPMailer
 * Fix unbumped version numbers
 * Update packagist.org with new location
 * Clean up Changelog
@@ -502,7 +502,7 @@ NOTE: will NOT work with PHP5 in E_STRICT error mode
 ## Version 1.15 (Fri, Jun 15 2001)
 Note: these changes contributed by Patrice Fournier
 * Changed all remaining \n to \r\n
-* Bcc: header no longer writen to message except
+* Bcc: header no longer written to message except
   when sent directly to sendmail
 * Added a small message to non-MIME compliant mail reader
 * Added Sender variable to change the Sender email
