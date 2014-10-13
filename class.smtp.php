@@ -144,10 +144,11 @@ class SMTP
     public $Timeout = 300;
 
     /**
-     * The SMTP timelimit value for reads, in seconds.
+     * How long to wait for commands to complete, in seconds.
+     * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @type integer
      */
-    public $Timelimit = 30;
+    public $Timelimit = 300;
 
     /**
      * The socket for the server connection.
@@ -537,9 +538,11 @@ class SMTP
      */
     public function data($msg_data)
     {
+        //This will use the standard timelimit
         if (!$this->sendCommand('DATA', 'DATA', 354)) {
             return false;
         }
+
         /* The server is ready to accept data!
          * According to rfc821 we should not send more than 1000 characters on a single line (including the CRLF)
          * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
@@ -567,7 +570,7 @@ class SMTP
             if ($in_headers and $line == '') {
                 $in_headers = false;
             }
-            // ok we need to break this line up into several smaller lines
+            //We need to break this line up into several smaller lines
             //This is a small micro-optimisation: isset($str[$len]) is equivalent to (strlen($str) > $len)
             while (isset($line[self::MAX_LINE_LENGTH])) {
                 //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
@@ -584,16 +587,14 @@ class SMTP
                     //Move along by the amount we dealt with
                     $line = substr($line, $pos + 1);
                 }
-                /* If processing headers add a LWSP-char to the front of new line
-                 * RFC822 section 3.1.1
-                 */
+                //If processing headers add a LWSP-char to the front of new line RFC822 section 3.1.1
                 if ($in_headers) {
                     $line = "\t" . $line;
                 }
             }
             $lines_out[] = $line;
 
-            // Send the lines to the server
+            //Send the lines to the server
             foreach ($lines_out as $line_out) {
                 //RFC2821 section 4.5.2
                 if (!empty($line_out) and $line_out[0] == '.') {
@@ -603,8 +604,14 @@ class SMTP
             }
         }
 
-        // Message data has been sent, complete the command
-        return $this->sendCommand('DATA END', '.', 250);
+        //Message data has been sent, complete the command
+        //Increase timelimit for end of DATA command
+        $savetimelimit = $this->Timelimit;
+        $this->Timelimit = $this->Timelimit * 2;
+        $r = $this->sendCommand('DATA END', '.', 250);
+        //Restore timelimit
+        $this->Timelimit = $savetimelimit;
+        return $r;
     }
 
     /**
@@ -619,7 +626,7 @@ class SMTP
      */
     public function hello($host = '')
     {
-        // Try extended hello first (RFC 2821)
+        //Try extended hello first (RFC 2821)
         return (boolean)($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
     }
 
