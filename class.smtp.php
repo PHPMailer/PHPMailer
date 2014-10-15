@@ -919,7 +919,7 @@ class SMTP
 
     /**
      * Set debug output method.
-     * @param string $method The function/method to use for debugging output.
+     * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it.
      */
     public function setDebugOutput($method = 'echo')
     {
