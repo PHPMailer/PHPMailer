@@ -108,6 +108,8 @@ Generated documentation is [available online](http://phpmailer.github.io/PHPMail
 
 You'll find some basic user-level docs in the [docs](docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. You may find [the unit tests](test/phpmailerTest.php) a good source of how to do various operations such as encryption.
 
+Some useful information on troubleshooting and bulk sending with PHPMailer can be found in the [Github wiki](https://github.com/PHPMailer/PHPMailer/wiki).
+
 ## Tests
 
 There is a PHPUnit test script in the [test](test/) folder.
