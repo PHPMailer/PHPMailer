@@ -1,5 +1,8 @@
 # ChangeLog
 
+* Use `application/javascript` for .js attachments
+* Improve RFC2821 compliance for timelimits, especially for end-of-data
+
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
 * Update html2text from https://github.com/mtibben/html2text
