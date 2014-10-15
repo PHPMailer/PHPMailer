@@ -2932,7 +2932,7 @@ class PHPMailer
                         $cid,
                         $filename,
                         'base64',
-                        self::_mime_types(self::mb_pathinfo($filename, PATHINFO_EXTENSION))
+                        self::_mime_types((string)self::mb_pathinfo($filename, PATHINFO_EXTENSION))
                     )
                     ) {
                         $message = preg_replace(
