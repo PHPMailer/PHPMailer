@@ -91,6 +91,8 @@ tools:
                 - unusedcode
                 - naming
                 - design
+            naming_rules:
+                short_variable: { minimum: 2 }
         filter:
             excluded_paths:
                 - 'docs/*'
