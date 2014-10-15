@@ -608,10 +608,10 @@ class SMTP
         //Increase timelimit for end of DATA command
         $savetimelimit = $this->Timelimit;
         $this->Timelimit = $this->Timelimit * 2;
-        $r = $this->sendCommand('DATA END', '.', 250);
+        $result = $this->sendCommand('DATA END', '.', 250);
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
-        return $r;
+        return $result;
     }
 
     /**
