@@ -576,7 +576,7 @@ class PHPMailer
      */
     public function __construct($exceptions = false)
     {
-        $this->exceptions = ($exceptions == true);
+        $this->exceptions = (boolean)$exceptions;
     }
 
     /**
@@ -1102,7 +1102,7 @@ class PHPMailer
                 $sendmail = sprintf('%s -oi -t', escapeshellcmd($this->Sendmail));
             }
         }
-        if ($this->SingleTo === true) {
+        if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
                     throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
@@ -1166,7 +1166,7 @@ class PHPMailer
             ini_set('sendmail_from', $this->Sender);
         }
         $result = false;
-        if ($this->SingleTo === true && count($toArr) > 1) {
+        if ($this->SingleTo && count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
                 $this->doCallback($result, array($toAddr), $this->cc, $this->bcc, $this->Subject, $body, $this->From);
@@ -1255,7 +1255,7 @@ class PHPMailer
         if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
-        if ($this->SMTPKeepAlive == true) {
+        if ($this->SMTPKeepAlive) {
             $this->smtp->reset();
         } else {
             $this->smtp->quit();
@@ -1431,7 +1431,7 @@ class PHPMailer
             }
         }
         $this->language = $PHPMAILER_LANG;
-        return ($foundlang == true); // Returns false if language not found
+        return (boolean)$foundlang; // Returns false if language not found
     }
 
     /**
@@ -1586,7 +1586,7 @@ class PHPMailer
         while (!$foundSplitPos) {
             $lastChunk = substr($encodedText, $maxLength - $lookBack, $lookBack);
             $encodedCharPos = strpos($lastChunk, '=');
-            if ($encodedCharPos !== false) {
+            if (false !== $encodedCharPos) {
                 // Found start of encoded character byte within $lookBack block.
                 // Check the encoded byte value (the 2 chars after the '=')
                 $hex = substr($encodedText, $maxLength - $lookBack + $encodedCharPos + 1, 2);
@@ -1658,7 +1658,7 @@ class PHPMailer
 
 
         // To be created automatically by mail()
-        if ($this->SingleTo === true) {
+        if ($this->SingleTo) {
             if ($this->Mailer != 'mail') {
                 foreach ($this->to as $toaddr) {
                     $this->SingleToArray[] = $this->addrFormat($toaddr);
@@ -1937,7 +1937,9 @@ class PHPMailer
                 }
                 // @TODO would be nice to use php://temp streams here, but need to wrap for PHP < 5.1
                 $file = tempnam(sys_get_temp_dir(), 'mail');
-                file_put_contents($file, $body); // @TODO check this worked
+                if (false === file_put_contents($file, $body)) {
+                    throw new phpmailerException($this->lang('signing') . ' Could not write temp file');
+                }
                 $signed = tempnam(sys_get_temp_dir(), 'signed');
                 if (@openssl_pkcs7_sign(
                     $file,
@@ -2513,7 +2515,7 @@ class PHPMailer
             // If the string contains an '=', make sure it's the first thing we replace
             // so as to avoid double-encoding
             $eqkey = array_search('=', $matches[0]);
-            if ($eqkey !== false) {
+            if (false !== $eqkey) {
                 unset($matches[0][$eqkey]);
                 array_unshift($matches[0], '=');
             }
@@ -2564,7 +2566,7 @@ class PHPMailer
     /**
      * Add an embedded (inline) attachment from a file.
      * This can include images, sounds, and just about any other document type.
-     * These differ from 'regular' attachmants in that they are intended to be
+     * These differ from 'regular' attachments in that they are intended to be
      * displayed inline with the message, not just attached for download.
      * This is used in HTML messages that embed the images
      * the HTML refers to using the $cid value.
@@ -3088,7 +3090,7 @@ class PHPMailer
     {
         // In case the path is a URL, strip any query string before getting extension
         $qpos = strpos($filename, '?');
-        if ($qpos !== false) {
+        if (false !== $qpos) {
             $filename = substr($filename, 0, $qpos);
         }
         $pathinfo = self::mb_pathinfo($filename);
