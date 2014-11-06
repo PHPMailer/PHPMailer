@@ -2,6 +2,8 @@
 
 * Use `application/javascript` for .js attachments
 * Improve RFC2821 compliance for timelimits, especially for end-of-data
+* Add Azerbaijani translations (Thanks to @mirjalal)
+* Minor code cleanup for robustness
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
