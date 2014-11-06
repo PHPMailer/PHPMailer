@@ -33,6 +33,10 @@ tools:
         command:              phpcs
         config:
             standard:         PSR2
+            sniffs:
+                generic:
+                    files:
+                        one_class_per_file_sniff: false
         filter:
             excluded_paths:
                 - 'docs/*'
@@ -113,6 +117,7 @@ tools:
             - vendor
 
     # Runs Scrutinizer's PHP Analyzer Tool
+    # https://scrutinizer-ci.com/docs/tools/php/php-analyzer/config_reference
     php_analyzer:
         enabled:              true
         config:
@@ -122,8 +127,10 @@ tools:
                     enabled: true
                     property_name: ^[_a-zA-Z][a-zA-Z0-9_]*$ #Allow underscores & caps
                     method_name: ^(?:[_a-zA-Z]|__)[a-zA-Z0-9_]*$ #Allow underscores & caps
+                    parameter_name: ^[a-z][a-zA-Z0-9_]*$ # Allow underscores
+                    local_variable: ^[a-zA-Z][a-zA-Z0-9_]*$ #Allow underscores & caps
+                    exception_name: ^[a-zA-Z][a-zA-Z0-9]*Exception$
                     isser_method_name: ^(?:[_a-zA-Z]|__)[a-zA-Z0-9]*$ #Allow underscores & caps
-                    local_variable: ^[a-zA-Z][a-zA-Z0-9_]*$ #Allow caps
         filter:
             excluded_paths:
                 - 'docs/*'
