@@ -116,12 +116,13 @@ tools:
     # Runs Scrutinizer's PHP Analyzer Tool
     php_analyzer:
         enabled:              true
-        checks:
-            php:
-                function_in_camel_caps: false
-                no_underscore_prefix_in_methods: false
-                no_underscore_prefix_in_properties: false
-                one_class_per_file: false
+        config:
+            checkstyle:
+                enabled: true
+                naming:
+                    enabled: true
+                    property_name: ^[_a-z][a-zA-Z0-9]*$ #Allow leading underscores
+                    method_name: ^(?:[_a-z]|__)[a-zA-Z0-9]*$ #Allow leading underscores
         filter:
             excluded_paths:
                 - 'docs/*'
