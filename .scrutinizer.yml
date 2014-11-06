@@ -101,7 +101,6 @@ tools:
                 - 'test/*'
                 - 'vendor/*'
 
-
     # Analyzes the size and structure of a PHP project.
     php_pdepend:
         enabled:              true
@@ -121,8 +120,10 @@ tools:
                 enabled: true
                 naming:
                     enabled: true
-                    property_name: ^[_a-z][a-zA-Z0-9]*$ #Allow leading underscores
-                    method_name: ^(?:[_a-z]|__)[a-zA-Z0-9]*$ #Allow leading underscores
+                    property_name: ^[_a-zA-Z][a-zA-Z0-9_]*$ #Allow leading cap and underscores
+                    method_name: ^(?:[_a-z]|__)[a-zA-Z0-9_]*$ #Allow underscores
+                    isser_method_name: ^(?:[_a-z]|__)[a-zA-Z0-9]*$
+                    local_variable: ^[a-z][a-zA-Z0-9_]*$
         filter:
             excluded_paths:
                 - 'docs/*'
