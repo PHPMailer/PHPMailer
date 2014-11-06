@@ -120,10 +120,10 @@ tools:
                 enabled: true
                 naming:
                     enabled: true
-                    property_name: ^[_a-zA-Z][a-zA-Z0-9_]*$ #Allow leading cap and underscores
-                    method_name: ^(?:[_a-z]|__)[a-zA-Z0-9_]*$ #Allow underscores
-                    isser_method_name: ^(?:[_a-z]|__)[a-zA-Z0-9]*$
-                    local_variable: ^[a-z][a-zA-Z0-9_]*$
+                    property_name: ^[_a-zA-Z][a-zA-Z0-9_]*$ #Allow underscores & caps
+                    method_name: ^(?:[_a-zA-Z]|__)[a-zA-Z0-9_]*$ #Allow underscores & caps
+                    isser_method_name: ^(?:[_a-zA-Z]|__)[a-zA-Z0-9]*$ #Allow underscores & caps
+                    local_variable: ^[a-zA-Z][a-zA-Z0-9_]*$ #Allow caps
         filter:
             excluded_paths:
                 - 'docs/*'
