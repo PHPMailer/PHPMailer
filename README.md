@@ -9,7 +9,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 ## Class Features
 
 - Probably the world's most popular code for sending email from PHP!
-- Used by many open-source projects: Drupal, SugarCRM, Yii, Joomla! and many more
+- Used by many open-source projects: Wordpress, Drupal, 1CRM, SugarCRM, Yii, Joomla! and many more
 - Integrated SMTP support - send without a local mail server
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
@@ -93,7 +93,7 @@ You'll find plenty more to play with in the [examples](examples/) folder.
 That's it. You should now be ready to use PHPMailer!
 
 ## Localization
-PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (39 at the time of writing) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (41 at the time of writing!) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
 
 ```php
 // To load the French version
@@ -129,6 +129,14 @@ With the move to the PHPMailer GitHub organisation, you'll need to update any re
 `git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git`
 
 Please *don't* use the SourceForge or Google Code projects any more.
+
+## Sponsorship
+
+Development time and resources for PHPMailer are provided by [Smartmessages.net](https://info.smartmessages.net/), a powerful email marketing system.
+
+[![Smartmessages email marketing](http://www.smartmessages.net/images/smartmessages-logo.svg =270x28)](https://info.smartmessages.net/)
+
+Other contributions are gladly received, whether in beer 🍺, T-shirts 👕, Amazon wishlist raids, or cold, hard cash 💰.
 
 ## Changelog
 
