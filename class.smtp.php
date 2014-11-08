@@ -163,11 +163,15 @@ class SMTP
     protected $error = array();
 
     /**
-     * The reply the server sent to us for HELO.
-     * If null, no HELO string has yet been received.
-     * @type string|null
+     * The set of SMTP extensions sent in reply to EHLO command.
+     * Indexes of the array are extension names.
+     * Value at index 'HELO' or 'EHLO' (according to command that was sent)
+     * represents the server name. In case of HELO it is the only element of the array.
+     * Other values can be boolean TRUE or an array containing extension options.
+     * If null, no HELO/EHLO string has yet been received.
+     * @type array|null
      */
-    protected $helo_rply = null;
+    protected $server_caps = null;
 
     /**
      * The most recent reply received from the server.
@@ -516,7 +520,7 @@ class SMTP
     public function close()
     {
         $this->error = array();
-        $this->helo_rply = null;
+        $this->server_caps = null;
         if (is_resource($this->smtp_conn)) {
             // close the connection and cleanup
             fclose($this->smtp_conn);
@@ -643,8 +647,35 @@ class SMTP
     protected function sendHello($hello, $host)
     {
         $noerror = $this->sendCommand($hello, $hello . ' ' . $host, 250);
-        $this->helo_rply = $this->last_reply;
+        if($noerror)
+            $this->parseHelloFields($hello);
+        else $this->server_caps = null;
         return $noerror;
+    }
+
+    /**
+     * Parse a reply to HELO/EHLO command to discover server extensions.
+     * In case of HELO, the only parameter that can be discovered is a server name.
+     * @access protected
+     * @param string $type - 'HELO' or 'EHLO'
+     */
+    protected function parseHelloFields($type)
+    {
+        $this->server_caps = array();
+        $lines = explode("\n", $this->last_reply);
+        foreach($lines as $n => $s) {
+            $s = trim(substr($s, 4));
+            if(!$s) continue;
+            $fields = explode(' ', $s);
+            if($fields) {
+                if(!$n) { $name = $type; $fields = $fields[0]; }
+                else {
+                    $name = array_shift($fields);
+                    if($name == 'SIZE') $fields = $fields[0];
+                }
+                $this->server_caps[$name] = $fields ? $fields : true;
+            }
+        }
     }
 
     /**
@@ -847,6 +878,38 @@ class SMTP
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * Get SMTP extensions available on the server
+     * @access public
+     * @return array|null
+     */
+    public function getServerExtensions() {
+        return $this->server_caps;
+    }
+
+    /**
+     * Check for authentication ability
+     * If available, returns an arry of auth mechs allowed
+     * If no EHLO command was sent, returns null
+     * @access public
+     * @return array|boolean|null
+     */
+    public function getAuthAllowed() {
+        if($this->server_caps === null || !array_key_exists('EHLO', $this->server_caps)) return null;
+        if(!array_key_exists('AUTH', $this->server_caps)) return false;
+        return $this->server_caps['AUTH'];
+    }
+
+    /** Check if STARTTLS is allowed
+     * If no EHLO command was sent, returns null
+     * @access public
+     * @return boolean|null
+     */
+    public function getTLSAllowed() {
+        if($this->server_caps === null || !array_key_exists('EHLO', $this->server_caps)) return null;
+        return array_key_exists('STARTTLS', $this->server_caps);
     }
 
     /**
