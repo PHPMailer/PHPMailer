@@ -349,11 +349,51 @@ class SMTP
     public function authenticate(
         $username,
         $password,
-        $authtype = 'LOGIN',
+        $authtype = null,
         $realm = '',
         $workstation = ''
     ) {
-        if (empty($authtype)) {
+        if(!$this->server_caps) {
+            $this->error = array( 'error' => 'Authentication is not allowed before HELO/EHLO' );
+            return false;
+        }
+
+        if(array_key_exists('EHLO', $this->server_caps)) {
+        // SMTP extensions are available. Let's try to find a proper authentication method
+
+            if(!array_key_exists('AUTH', $this->server_caps)) {
+                $this->error = array( 'error' => 'Authentication is not allowed at this stage' );
+                // 'at this stage' means that auth may be allowed after the stage changes
+                // e.g. after STARTTLS
+                return false;
+            }
+
+            self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'));
+            self::edebug('Auth methods available on the server: '
+                . implode(',', $this->server_caps['AUTH']),
+                self::DEBUG_LOWLEVEL);
+
+            if(empty($authtype)) {
+                foreach(array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
+                    if(in_array($method, $this->server_caps['AUTH'])) {
+                        $authtype = $method;
+                        break;
+                    }
+                }
+                if(empty($authtype)) {
+                    $this->error = array( 'error' => 'No supported authentication methods found' );
+                    return false;
+                }
+                self::edebug('Auth method selected: '.$authtype, self::DEBUG_LOWLEVEL);
+            }
+
+            if(!in_array($authtype, $this->server_caps['AUTH'])) {
+                $this->error = array( 'error' => 'The requested authentication method "'
+                    . $authtype . '" is not supported by the server' );
+                return false;
+            }
+        }
+        else if (empty($authtype)) {
             $authtype = 'LOGIN';
         }
         switch ($authtype) {
@@ -447,6 +487,9 @@ class SMTP
 
                 // send encoded credentials
                 return $this->sendCommand('Username', base64_encode($response), 235);
+            default:
+                $this->error = array( 'error' => 'Authentication method "' . $authtype . '" is not supported' );
+                return false;
         }
         return true;
     }
@@ -891,7 +934,7 @@ class SMTP
 
     /**
      * Check for authentication ability
-     * If available, returns an arry of auth mechs allowed
+     * If available, returns an arry of auth methods allowed
      * If no EHLO command was sent, returns null
      * @access public
      * @return array|boolean|null
