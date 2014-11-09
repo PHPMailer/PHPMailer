@@ -368,7 +368,7 @@ class SMTP
                 return false;
             }
 
-            self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'));
+            self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'), self::DEBUG_LOWLEVEL);
             self::edebug('Auth methods available on the server: '
                 . implode(',', $this->server_caps['AUTH']),
                 self::DEBUG_LOWLEVEL);
