@@ -163,6 +163,13 @@ class SMTP
     protected $error = array();
 
     /**
+     * The reply the server sent to us for HELO.
+     * If null, no HELO string has yet been received.
+     * @type string|null
+     */
+    protected $helo_rply = null;
+
+    /**
      * The set of SMTP extensions sent in reply to EHLO command.
      * Indexes of the array are extension names.
      * Value at index 'HELO' or 'EHLO' (according to command that was sent)
@@ -564,6 +571,7 @@ class SMTP
     {
         $this->error = array();
         $this->server_caps = null;
+        $this->helo_rply = null;
         if (is_resource($this->smtp_conn)) {
             // close the connection and cleanup
             fclose($this->smtp_conn);
@@ -690,6 +698,7 @@ class SMTP
     protected function sendHello($hello, $host)
     {
         $noerror = $this->sendCommand($hello, $hello . ' ' . $host, 250);
+        $this->helo_rply = $this->last_reply;
         if($noerror)
             $this->parseHelloFields($hello);
         else $this->server_caps = null;
@@ -928,31 +937,44 @@ class SMTP
      * @access public
      * @return array|null
      */
-    public function getServerExtensions() {
+    public function getServerExtList() {
         return $this->server_caps;
     }
 
     /**
-     * Check for authentication ability
-     * If available, returns an arry of auth methods allowed
-     * If no EHLO command was sent, returns null
-     * @access public
-     * @return array|boolean|null
+     * A multipurpose method
+     * The method works in three ways, dependent on argument value and current state
+     *   1. HELO/EHLO was not sent - returns null and set up $this->error
+     *   2. HELO was sent
+     *     $name = 'HELO': returns server name
+     *     $name = 'EHLO': returns boolean false
+     *     $name = any string: returns null and set up $this->error
+     *   3. EHLO was sent
+     *     $name = 'HELO'|'EHLO': returns server name
+     *     $name = any string: if extension $name exists, returns boolean True
+     *       or its options. Otherwise returns boolean False
+     * In other words, one can use this method to detect 3 conditions:
+     *  - null returned: handshake was not or we don't know about ext (refer to $this->error)
+     *  - false returned: the requested feature exactly not exists
+     *  - positive value returned: the requested feature exists
+     * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
+     * @return mixed
      */
-    public function getAuthAllowed() {
-        if($this->server_caps === null || !array_key_exists('EHLO', $this->server_caps)) return null;
-        if(!array_key_exists('AUTH', $this->server_caps)) return false;
-        return $this->server_caps['AUTH'];
-    }
+    public function getServerExt($name) {
+        if(!$this->server_caps) {
+            $this->error = array( 'No HELO/EHLO was sent' );
+            return null;
+        }
 
-    /** Check if STARTTLS is allowed
-     * If no EHLO command was sent, returns null
-     * @access public
-     * @return boolean|null
-     */
-    public function getTLSAllowed() {
-        if($this->server_caps === null || !array_key_exists('EHLO', $this->server_caps)) return null;
-        return array_key_exists('STARTTLS', $this->server_caps);
+        // the tight logic knot ;)
+        if(!array_key_exists($name, $this->server_caps)) {
+            if($name == 'HELO') return $this->server_caps['EHLO'];
+            if($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) return false;
+            $this->error = array( 'HELO handshake was used. Client knows nothing about server extensions' );
+            return null;
+        }
+
+        return $this->server_caps[$name];
     }
 
     /**
