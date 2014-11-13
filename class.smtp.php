@@ -170,6 +170,17 @@ class SMTP
     protected $helo_rply = null;
 
     /**
+     * The set of SMTP extensions sent in reply to EHLO command.
+     * Indexes of the array are extension names.
+     * Value at index 'HELO' or 'EHLO' (according to command that was sent)
+     * represents the server name. In case of HELO it is the only element of the array.
+     * Other values can be boolean TRUE or an array containing extension options.
+     * If null, no HELO/EHLO string has yet been received.
+     * @type array|null
+     */
+    protected $server_caps = null;
+
+    /**
      * The most recent reply received from the server.
      * @type string
      */
@@ -345,11 +356,51 @@ class SMTP
     public function authenticate(
         $username,
         $password,
-        $authtype = 'LOGIN',
+        $authtype = null,
         $realm = '',
         $workstation = ''
     ) {
-        if (empty($authtype)) {
+        if(!$this->server_caps) {
+            $this->error = array( 'error' => 'Authentication is not allowed before HELO/EHLO' );
+            return false;
+        }
+
+        if(array_key_exists('EHLO', $this->server_caps)) {
+        // SMTP extensions are available. Let's try to find a proper authentication method
+
+            if(!array_key_exists('AUTH', $this->server_caps)) {
+                $this->error = array( 'error' => 'Authentication is not allowed at this stage' );
+                // 'at this stage' means that auth may be allowed after the stage changes
+                // e.g. after STARTTLS
+                return false;
+            }
+
+            self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'), self::DEBUG_LOWLEVEL);
+            self::edebug('Auth methods available on the server: '
+                . implode(',', $this->server_caps['AUTH']),
+                self::DEBUG_LOWLEVEL);
+
+            if(empty($authtype)) {
+                foreach(array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
+                    if(in_array($method, $this->server_caps['AUTH'])) {
+                        $authtype = $method;
+                        break;
+                    }
+                }
+                if(empty($authtype)) {
+                    $this->error = array( 'error' => 'No supported authentication methods found' );
+                    return false;
+                }
+                self::edebug('Auth method selected: '.$authtype, self::DEBUG_LOWLEVEL);
+            }
+
+            if(!in_array($authtype, $this->server_caps['AUTH'])) {
+                $this->error = array( 'error' => 'The requested authentication method "'
+                    . $authtype . '" is not supported by the server' );
+                return false;
+            }
+        }
+        else if (empty($authtype)) {
             $authtype = 'LOGIN';
         }
         switch ($authtype) {
@@ -443,6 +494,9 @@ class SMTP
 
                 // send encoded credentials
                 return $this->sendCommand('Username', base64_encode($response), 235);
+            default:
+                $this->error = array( 'error' => 'Authentication method "' . $authtype . '" is not supported' );
+                return false;
         }
         return true;
     }
@@ -516,6 +570,7 @@ class SMTP
     public function close()
     {
         $this->error = array();
+        $this->server_caps = null;
         $this->helo_rply = null;
         if (is_resource($this->smtp_conn)) {
             // close the connection and cleanup
@@ -644,7 +699,35 @@ class SMTP
     {
         $noerror = $this->sendCommand($hello, $hello . ' ' . $host, 250);
         $this->helo_rply = $this->last_reply;
+        if($noerror)
+            $this->parseHelloFields($hello);
+        else $this->server_caps = null;
         return $noerror;
+    }
+
+    /**
+     * Parse a reply to HELO/EHLO command to discover server extensions.
+     * In case of HELO, the only parameter that can be discovered is a server name.
+     * @access protected
+     * @param string $type - 'HELO' or 'EHLO'
+     */
+    protected function parseHelloFields($type)
+    {
+        $this->server_caps = array();
+        $lines = explode("\n", $this->last_reply);
+        foreach($lines as $n => $s) {
+            $s = trim(substr($s, 4));
+            if(!$s) continue;
+            $fields = explode(' ', $s);
+            if($fields) {
+                if(!$n) { $name = $type; $fields = $fields[0]; }
+                else {
+                    $name = array_shift($fields);
+                    if($name == 'SIZE') $fields = $fields[0];
+                }
+                $this->server_caps[$name] = $fields ? $fields : true;
+            }
+        }
     }
 
     /**
@@ -736,7 +819,18 @@ class SMTP
         $this->client_send($commandstring . self::CRLF);
 
         $this->last_reply = $this->get_lines();
-        $code = substr($this->last_reply, 0, 3);
+        // fetch SMTP code and possible error code explanation
+        if(preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $m)) {
+            $code = $m[1];
+            $code_ex = (count($m) > 2 ? $m[2] : null);
+            // cut off error code from every response line
+            $detail = preg_replace("/{$code}[ -]".($code_ex ? str_replace(".", "\\.", $code_ex)." " : "")."/m",
+                "", $this->last_reply);
+        } else { // fallback to simple parsing, if regex fails for some unexpected reason
+            $code = substr($this->last_reply, 0, 3);
+            $code_ex = null;
+            $detail = substr($this->last_reply, 4);
+        }
 
         $this->edebug('SERVER -> CLIENT: ' . $this->last_reply, self::DEBUG_SERVER);
 
@@ -744,7 +838,8 @@ class SMTP
             $this->error = array(
                 'error' => "$command command failed",
                 'smtp_code' => $code,
-                'detail' => substr($this->last_reply, 4)
+                'smtp_code_ex' => $code_ex,
+                'detail' => $detail
             );
             $this->edebug(
                 'SMTP ERROR: ' . $this->error['error'] . ': ' . $this->last_reply,
@@ -835,6 +930,51 @@ class SMTP
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * Get SMTP extensions available on the server
+     * @access public
+     * @return array|null
+     */
+    public function getServerExtList() {
+        return $this->server_caps;
+    }
+
+    /**
+     * A multipurpose method
+     * The method works in three ways, dependent on argument value and current state
+     *   1. HELO/EHLO was not sent - returns null and set up $this->error
+     *   2. HELO was sent
+     *     $name = 'HELO': returns server name
+     *     $name = 'EHLO': returns boolean false
+     *     $name = any string: returns null and set up $this->error
+     *   3. EHLO was sent
+     *     $name = 'HELO'|'EHLO': returns server name
+     *     $name = any string: if extension $name exists, returns boolean True
+     *       or its options. Otherwise returns boolean False
+     * In other words, one can use this method to detect 3 conditions:
+     *  - null returned: handshake was not or we don't know about ext (refer to $this->error)
+     *  - false returned: the requested feature exactly not exists
+     *  - positive value returned: the requested feature exists
+     * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
+     * @return mixed
+     */
+    public function getServerExt($name) {
+        if(!$this->server_caps) {
+            $this->error = array( 'No HELO/EHLO was sent' );
+            return null;
+        }
+
+        // the tight logic knot ;)
+        if(!array_key_exists($name, $this->server_caps)) {
+            if($name == 'HELO') return $this->server_caps['EHLO'];
+            if($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) return false;
+            $this->error = array( 'HELO handshake was used. Client knows nothing about server extensions' );
+            return null;
+        }
+
+        return $this->server_caps[$name];
     }
 
     /**
