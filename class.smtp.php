@@ -21,7 +21,7 @@
  * PHPMailer RFC821 SMTP email transport class.
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
  * @package PHPMailer
- * @author Chris Ryan <unknown@example.com>
+ * @author Chris Ryan
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  */
 class SMTP
@@ -360,15 +360,15 @@ class SMTP
         $realm = '',
         $workstation = ''
     ) {
-        if(!$this->server_caps) {
-            $this->error = array( 'error' => 'Authentication is not allowed before HELO/EHLO' );
+        if (!$this->server_caps) {
+            $this->error = array('error' => 'Authentication is not allowed before HELO/EHLO');
             return false;
         }
 
-        if(array_key_exists('EHLO', $this->server_caps)) {
+        if (array_key_exists('EHLO', $this->server_caps)) {
         // SMTP extensions are available. Let's try to find a proper authentication method
 
-            if(!array_key_exists('AUTH', $this->server_caps)) {
+            if (!array_key_exists('AUTH', $this->server_caps)) {
                 $this->error = array( 'error' => 'Authentication is not allowed at this stage' );
                 // 'at this stage' means that auth may be allowed after the stage changes
                 // e.g. after STARTTLS
@@ -376,31 +376,31 @@ class SMTP
             }
 
             self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'), self::DEBUG_LOWLEVEL);
-            self::edebug('Auth methods available on the server: '
-                . implode(',', $this->server_caps['AUTH']),
-                self::DEBUG_LOWLEVEL);
+            self::edebug(
+                'Auth methods available on the server: ' . implode(',', $this->server_caps['AUTH']),
+                self::DEBUG_LOWLEVEL
+            );
 
-            if(empty($authtype)) {
-                foreach(array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
-                    if(in_array($method, $this->server_caps['AUTH'])) {
+            if (empty($authtype)) {
+                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
+                    if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
                     }
                 }
-                if(empty($authtype)) {
+                if (empty($authtype)) {
                     $this->error = array( 'error' => 'No supported authentication methods found' );
                     return false;
                 }
                 self::edebug('Auth method selected: '.$authtype, self::DEBUG_LOWLEVEL);
             }
 
-            if(!in_array($authtype, $this->server_caps['AUTH'])) {
+            if (!in_array($authtype, $this->server_caps['AUTH'])) {
                 $this->error = array( 'error' => 'The requested authentication method "'
                     . $authtype . '" is not supported by the server' );
                 return false;
             }
-        }
-        else if (empty($authtype)) {
+        } elseif (empty($authtype)) {
             $authtype = 'LOGIN';
         }
         switch ($authtype) {
@@ -699,9 +699,11 @@ class SMTP
     {
         $noerror = $this->sendCommand($hello, $hello . ' ' . $host, 250);
         $this->helo_rply = $this->last_reply;
-        if($noerror)
+        if ($noerror) {
             $this->parseHelloFields($hello);
-        else $this->server_caps = null;
+        } else {
+            $this->server_caps = null;
+        }
         return $noerror;
     }
 
@@ -715,17 +717,23 @@ class SMTP
     {
         $this->server_caps = array();
         $lines = explode("\n", $this->last_reply);
-        foreach($lines as $n => $s) {
+        foreach ($lines as $n => $s) {
             $s = trim(substr($s, 4));
-            if(!$s) continue;
+            if (!$s) {
+                continue;
+            }
             $fields = explode(' ', $s);
-            if($fields) {
-                if(!$n) { $name = $type; $fields = $fields[0]; }
-                else {
+            if ($fields) {
+                if (!$n) {
+                    $name = $type;
+                    $fields = $fields[0];
+                } else {
                     $name = array_shift($fields);
-                    if($name == 'SIZE') $fields = $fields[0];
+                    if ($name == 'SIZE') {
+                        $fields = $fields[0];
+                    }
                 }
-                $this->server_caps[$name] = $fields ? $fields : true;
+                $this->server_caps[$name] = ($fields ? $fields : true);
             }
         }
     }
@@ -819,14 +827,17 @@ class SMTP
         $this->client_send($commandstring . self::CRLF);
 
         $this->last_reply = $this->get_lines();
-        // fetch SMTP code and possible error code explanation
-        if(preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $m)) {
+        // Fetch SMTP code and possible error code explanation
+        if (preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $m)) {
             $code = $m[1];
             $code_ex = (count($m) > 2 ? $m[2] : null);
-            // cut off error code from every response line
-            $detail = preg_replace("/{$code}[ -]".($code_ex ? str_replace(".", "\\.", $code_ex)." " : "")."/m",
-                "", $this->last_reply);
-        } else { // fallback to simple parsing, if regex fails for some unexpected reason
+            // Cut off error code from each response line
+            $detail = preg_replace(
+                "/{$code}[ -]".($code_ex ? str_replace(".", "\\.", $code_ex)." " : "")."/m",
+                '',
+                $this->last_reply
+            );
+        } else { // Fallb ack to simple parsing if regex fails for some unexpected reason
             $code = substr($this->last_reply, 0, 3);
             $code_ex = null;
             $detail = substr($this->last_reply, 4);
@@ -937,7 +948,8 @@ class SMTP
      * @access public
      * @return array|null
      */
-    public function getServerExtList() {
+    public function getServerExtList()
+    {
         return $this->server_caps;
     }
 
@@ -960,17 +972,22 @@ class SMTP
      * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
      * @return mixed
      */
-    public function getServerExt($name) {
-        if(!$this->server_caps) {
-            $this->error = array( 'No HELO/EHLO was sent' );
+    public function getServerExt($name)
+    {
+        if (!$this->server_caps) {
+            $this->error = array('No HELO/EHLO was sent');
             return null;
         }
 
         // the tight logic knot ;)
-        if(!array_key_exists($name, $this->server_caps)) {
-            if($name == 'HELO') return $this->server_caps['EHLO'];
-            if($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) return false;
-            $this->error = array( 'HELO handshake was used. Client knows nothing about server extensions' );
+        if (!array_key_exists($name, $this->server_caps)) {
+            if ($name == 'HELO') {
+                return $this->server_caps['EHLO'];
+            }
+            if ($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) {
+                return false;
+            }
+            $this->error = array('HELO handshake was used. Client knows nothing about server extensions');
             return null;
         }
 
