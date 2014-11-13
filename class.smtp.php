@@ -828,16 +828,17 @@ class SMTP
 
         $this->last_reply = $this->get_lines();
         // Fetch SMTP code and possible error code explanation
-        if (preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $m)) {
-            $code = $m[1];
-            $code_ex = (count($m) > 2 ? $m[2] : null);
+        $matches = array();
+        if (preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $matches)) {
+            $code = $matches[1];
+            $code_ex = (count($matches) > 2 ? $matches[2] : null);
             // Cut off error code from each response line
             $detail = preg_replace(
-                "/{$code}[ -]".($code_ex ? str_replace(".", "\\.", $code_ex)." " : "")."/m",
+                "/{$code}[ -]".($code_ex ? str_replace('.', '\\.', $code_ex).' ' : '')."/m",
                 '',
                 $this->last_reply
             );
-        } else { // Fallb ack to simple parsing if regex fails for some unexpected reason
+        } else { // Fall back to simple parsing if regex fails
             $code = substr($this->last_reply, 0, 3);
             $code_ex = null;
             $detail = substr($this->last_reply, 4);
