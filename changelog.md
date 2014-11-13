@@ -6,6 +6,7 @@
 * Minor code cleanup for robustness
 * Add Indonesian translations (Thanks to @ceceprawiro)
 * Avoid `error_log` Debugoutput naming clash
+* Add ability to parse server capabilities in response to EHLO (useful for SendGrid etc)
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
