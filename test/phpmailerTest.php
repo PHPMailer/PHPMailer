@@ -146,12 +146,12 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         // Determine line endings for message
         if ($this->Mail->ContentType == 'text/html' || strlen($this->Mail->AltBody) > 0) {
-            $eol = '<br/>';
+            $eol = "<br/>". PHPMailer::CRLF;
             $bullet = '<li>';
             $bullet_start = '<ul>';
             $bullet_end = '</ul>';
         } else {
-            $eol = "\n";
+            $eol = PHPMailer::CRLF;
             $bullet = ' - ';
             $bullet_start = '';
             $bullet_end = '';
@@ -1041,6 +1041,57 @@ EOT;
     }
 
     /**
+     * Test constructing a message that contains lines that are too long for RFC compliance.
+     */
+    public function testLongBody()
+    {
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
+        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::CRLF, 2);
+
+        $this->Mail->Body = "This message contains lines that are too long.".
+            PHPMailer::CRLF . PHPMailer::CRLF . $oklen . $badlen . $oklen;
+        $this->assertTrue(
+            PHPMailer::hasLineLongerThanMax($this->Mail->Body),
+            'Test content does not contain long lines!'
+        );
+        $this->buildBody();
+        $this->Mail->Encoding = '8bit';
+        $this->Mail->preSend();
+        $message = $this->Mail->getSentMIMEMessage();
+        $this->assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
+        $this->assertContains(
+            'Content-Transfer-Encoding: quoted-printable',
+            $message,
+            'Long line did not cause transfer encoding switch.'
+        );
+    }
+
+    /**
+     * Test constructing a message that does NOT contain lines that are too long for RFC compliance.
+     */
+    public function testShortBody()
+    {
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
+
+        $this->Mail->Body = "This message does not contain lines that are too long.".
+            PHPMailer::CRLF . PHPMailer::CRLF . $oklen;
+        $this->assertFalse(
+            PHPMailer::hasLineLongerThanMax($this->Mail->Body),
+            'Test content contains long lines!'
+        );
+        $this->buildBody();
+        $this->Mail->Encoding = '8bit';
+        $this->Mail->preSend();
+        $message = $this->Mail->getSentMIMEMessage();
+        $this->assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
+        $this->assertNotContains(
+            'Content-Transfer-Encoding: quoted-printable',
+            $message,
+            'Short line caused transfer encoding switch.'
+        );
+    }
+
+    /**
      * Test keepalive (sending multiple messages in a single connection)
      */
     public function testSmtpKeepAlive()
@@ -1286,6 +1337,20 @@ EOT;
         $this->assertEquals($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
         $this->assertEquals($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
         $this->assertEquals($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+    }
+
+    /**
+     * Test line length detection
+     */
+    public function testLineLength()
+    {
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH)."\r\n", 10);
+        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
+        $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
+        $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
+        $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen . $oklen), 'Long line not detected (last)');
+        $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen . $oklen), 'Long line not detected (middle)');
+        $this->assertFalse(PHPMailer::hasLineLongerThanMax($oklen), 'Long line false positive');
     }
 
     /**

@@ -571,6 +571,12 @@ class PHPMailer
     const CRLF = "\r\n";
 
     /**
+     * The maximum line length allowed by RFC 2822 section 2.1.1
+     * @type integer
+     */
+    const MAX_LINE_LENGTH = 998;
+
+    /**
      * Constructor.
      * @param boolean $exceptions Should we throw external exceptions?
      */
@@ -1001,8 +1007,9 @@ class PHPMailer
                 throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
             }
 
-            $this->MIMEHeader = $this->createHeader();
+            //Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEBody = $this->createBody();
+            $this->MIMEHeader = $this->createHeader();
 
             // To capture the complete message when using mail(), create
             // an extra header list which createHeader() doesn't fold in
@@ -1823,14 +1830,28 @@ class PHPMailer
 
         $bodyEncoding = $this->Encoding;
         $bodyCharSet = $this->CharSet;
+        //Can we do a 7-bit downgrade?
         if ($bodyEncoding == '8bit' and !$this->has8bitChars($this->Body)) {
             $bodyEncoding = '7bit';
             $bodyCharSet = 'us-ascii';
         }
+        //If lines are too long, change to quoted-printable transfer encoding
+        if (self::hasLineLongerThanMax($this->Body)) {
+            $this->Encoding = 'quoted-printable';
+            $bodyEncoding = 'quoted-printable';
+            $bodyCharSet = 'us-ascii'; //qp always fits into ascii
+        }
+
         $altBodyEncoding = $this->Encoding;
         $altBodyCharSet = $this->CharSet;
+        //Can we do a 7-bit downgrade?
         if ($altBodyEncoding == '8bit' and !$this->has8bitChars($this->AltBody)) {
             $altBodyEncoding = '7bit';
+            $altBodyCharSet = 'us-ascii';
+        }
+        //If lines are too long, change to quoted-printable transfer encoding
+        if (self::hasLineLongerThanMax($this->AltBody)) {
+            $altBodyEncoding = 'quoted-printable';
             $altBodyCharSet = 'us-ascii';
         }
         switch ($this->message_type) {
@@ -3369,6 +3390,18 @@ class PHPMailer
         );
         $signed = $this->DKIM_Sign($toSign);
         return $dkimhdrs . $signed . "\r\n";
+    }
+
+    /**
+     * Detect if a string contains a line longer than the maximum line length allowed.
+     * @param $str
+     * @return boolean
+     * @static
+     */
+    public static function hasLineLongerThanMax($str)
+    {
+        //+2 to include CRLF line break for a 1000 total
+        return (boolean)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + 2).',})/m', $str);
     }
 
     /**
