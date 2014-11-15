@@ -2897,7 +2897,7 @@ class PHPMailer
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
-        preg_match_all('/(src=|background=|url()["\'](.*)["\']/Ui', $message, $images);
+        preg_match_all('/(src=|background=|url\()["\'](.*)["\']/Ui', $message, $images);
         if (isset($images[2])) {
             foreach ($images[2] as $imgindex => $url) {
                 // Convert data URIs into embedded images
