@@ -2910,7 +2910,7 @@ class PHPMailer
                     }
                     $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
                     if ($this->addStringEmbeddedImage($data, $cid, '', 'base64', $match[1])) {
-                    	  $message = str_replace($images[0][$imgindex], $images[1][$imgindex] . '="cid:' . $cid . '"', $message);
+                        $message = str_replace($images[0][$imgindex], $images[1][$imgindex] . '="cid:' . $cid . '"', $message);
                     }
                 } elseif (!preg_match('#^[A-z]+://#', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
