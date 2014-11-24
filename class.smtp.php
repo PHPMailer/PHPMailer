@@ -730,7 +730,7 @@ class SMTP
                 } else {
                     $name = array_shift($fields);
                     if ($name == 'SIZE') {
-                        $fields = $fields[0];
+                        $fields = ($fields) ? $fields[0] : 0;
                     }
                 }
                 $this->server_caps[$name] = ($fields ? $fields : true);
