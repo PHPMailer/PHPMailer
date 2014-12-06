@@ -71,7 +71,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             include './testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer;
-        $this->Mail->SMTPDebug = 4; //Full debug output
+        $this->Mail->SMTPDebug = 3; //Full debug output
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';
@@ -1390,6 +1390,7 @@ EOT;
      */
     public function testSmtpConnect()
     {
+        $this->Mail->SMTPDebug = 4; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
         $this->Mail->Host = "ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10";
