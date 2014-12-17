@@ -783,6 +783,7 @@ EOT;
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
+        //Uses internal HTML to text conversion
         $this->Mail->msgHTML($message, '../examples');
         $this->Mail->Subject .= ': msgHTML';
 
@@ -790,11 +791,13 @@ EOT;
         $this->assertNotEmpty($this->Mail->AltBody, 'AltBody not set by msgHTML');
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
-        //Again, using the advanced HTML to text converter
+        //Again, using a custom HTML to text converter
         $this->Mail->AltBody = '';
-        $this->Mail->msgHTML($message, '../examples', true);
-        $this->Mail->Subject .= ' + html2text advanced';
-        $this->assertNotEmpty($this->Mail->AltBody, 'Advanced AltBody not set by msgHTML');
+        $this->Mail->msgHTML($message, '../examples', function ($html) {
+            return strtoupper(strip_tags($html));
+        });
+        $this->Mail->Subject .= ' + custom html2text';
+        $this->assertNotEmpty($this->Mail->AltBody, 'Custom AltBody not set by msgHTML');
 
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }

@@ -2893,7 +2893,8 @@ class PHPMailer
      * @access public
      * @param string $message HTML message string
      * @param string $basedir baseline directory for path
-     * @param boolean $advanced Whether to use the advanced HTML to text converter
+     * @param boolean|callable $advanced Whether to use the internal HTML to text converter
+     *    or your own custom converter @see html2text()
      * @return string $message
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
@@ -2911,7 +2912,11 @@ class PHPMailer
                     }
                     $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
                     if ($this->addStringEmbeddedImage($data, $cid, '', 'base64', $match[1])) {
-                        $message = str_replace($images[0][$imgindex], $images[1][$imgindex] . '="cid:' . $cid . '"', $message);
+                        $message = str_replace(
+                            $images[0][$imgindex],
+                            $images[1][$imgindex] . '="cid:' . $cid . '"',
+                            $message
+                        );
                     }
                 } elseif (!preg_match('#^[A-z]+://#', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
@@ -2957,16 +2962,28 @@ class PHPMailer
 
     /**
      * Convert an HTML string into plain text.
+     * This is used by msgHTML().
+     * Note - older versions of this function used a bundled advanced converter
+     * which was been removed for license reasons in #232
+     * Example usage:
+     * <code>
+     * // Use default conversion
+     * $plain = $mail->html2text($html);
+     * // Use your own custom converter
+     * $plain = $mail->html2text($html, function($html) {
+     *     $converter = new MyHtml2text($html);
+     *     return $converter->get_text();
+     * });
+     * </code>
      * @param string $html The HTML text to convert
-     * @param boolean $advanced Should this use the more complex html2text converter or just a simple one?
+     * @param boolean|callable $advanced Any boolean value to use the internal converter,
+     *   or provide your own callable for custom conversion.
      * @return string
      */
     public function html2text($html, $advanced = false)
     {
-        if ($advanced) {
-            require_once 'extras/class.html2text.php';
-            $htmlconverter = new html2text($html);
-            return $htmlconverter->get_text();
+        if (is_callable($advanced)) {
+            return $advanced($html);
         }
         return html_entity_decode(
             trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/si', '', $html))),
