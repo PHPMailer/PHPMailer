@@ -15,12 +15,15 @@ $smtp = new SMTP;
 
 //Enable connection-level debug output
 $smtp->do_debug = SMTP::DEBUG_CONNECTION;
+$smtp->SMTPSecure = 'tls'; // tls or ssl
 
 try {
 //Connect to an SMTP server
     if ($smtp->connect('mail.example.com', 25)) {
         //Say hello
         if ($smtp->hello('localhost')) { //Put your host name in here
+            //Before authenticate
+            $smtp->startTLS();
             //Authenticate
             if ($smtp->authenticate('username', 'password')) {
                 echo "Connected ok!";
