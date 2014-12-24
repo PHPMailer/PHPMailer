@@ -7,6 +7,10 @@
 * Add Indonesian translations (Thanks to @ceceprawiro)
 * Avoid `error_log` Debugoutput naming clash
 * Add ability to parse server capabilities in response to EHLO (useful for SendGrid etc)
+* Amended default values for WordWrap to match RFC
+* Remove html2text converter class, provide new mechanism for injecting converters
+* Improve pointers to docs and support in README
+* Add example file upload script
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
