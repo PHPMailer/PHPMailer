@@ -404,8 +404,7 @@ function tln_getnxtag($body, $offset)
                      * If it's ">" it will be caught at the top.
                      */
                     $attval = preg_replace('/\"/s', '&quot;', $attval);
-                            $attary{$attname} = '"' . $attval . '"';
-                        }
+                    $attary{$attname} = '"' . $attval . '"';
                 }
             } elseif (preg_match('|[\w/>]|', $char)) {
                 /**
