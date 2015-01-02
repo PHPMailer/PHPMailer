@@ -33,13 +33,14 @@ class EasyPeasyICS {
 	 * Add event to calendar
 	 * @param string $calendarName
 	 */	
-	public function addEvent($start, $end, $summary="", $description="", $url=""){
+	public function addEvent($start, $end, $summary="", $description="", $url="", $uid){
 		$this->events[] = array(
 			"start" => $start,
 			"end"   => $end,
 			"summary" => $summary,
 			"description" => $description,
-			"url" => $url
+			"url" => $url,
+            		"uid" => $uid
 		);
 	}//function
 	
@@ -60,7 +61,7 @@ PRODID:-//hacksw/handcal//NONSGML v1.0//EN";
 		foreach($this->events as $event){
 			$ics .= "
 BEGIN:VEVENT
-UID:". md5(uniqid(mt_rand(), true)) ."@EasyPeasyICS.php
+UID:". $event["uid"] ."@EasyPeasyICS.php
 DTSTAMP:" . gmdate('Ymd').'T'. gmdate('His') . "Z
 DTSTART:".gmdate('Ymd', $event["start"])."T".gmdate('His', $event["start"])."Z
 DTEND:".gmdate('Ymd', $event["end"])."T".gmdate('His', $event["end"])."Z
