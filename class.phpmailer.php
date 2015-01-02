@@ -2982,7 +2982,7 @@ class PHPMailer
     public function html2text($html, $advanced = false)
     {
         if (is_callable($advanced)) {
-            return $advanced($html);
+            return call_user_func($advanced, $html);
         }
         return html_entity_decode(
             trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/si', '', $html))),
