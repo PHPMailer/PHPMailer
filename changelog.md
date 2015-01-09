@@ -11,6 +11,7 @@
 * Remove html2text converter class, provide new mechanism for injecting converters
 * Improve pointers to docs and support in README
 * Add example file upload script
+* Refactor and major cleanup of EasyPeasyICS, now a lot more usable
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**

@@ -929,12 +929,43 @@ EOT;
      */
     public function testIcal()
     {
+        //Standalone ICS tests
+        require_once '../extras/EasyPeasyICS.php';
+        $ICS = new EasyPeasyICS("PHPMailer test calendar");
+        $this->assertNotEmpty(
+            $ICS->addEvent(
+                strtotime('tomorrow 10:00 Europe/Paris'),
+                strtotime('tomorrow 11:00 Europe/Paris'),
+                'PHPMailer iCal test',
+                'A test of PHPMailer iCal support',
+                'https://github.com/PHPMailer/PHPMailer'
+            ),
+            'Generated event string is empty'
+        );
+        $ICS->addEvent(
+            strtotime('tomorrow 10:00 Europe/Paris'),
+            strtotime('tomorrow 11:00 Europe/Paris'),
+            'PHPMailer iCal test',
+            'A test of PHPMailer iCal support',
+            'https://github.com/PHPMailer/PHPMailer'
+        );
+        $events = $ICS->getEvents();
+        $this->assertEquals(2, count($events), 'Event count mismatch');
+        $ICS->clearEvents();
+        $events = $ICS->getEvents();
+        $this->assertEquals(0, count($events), 'Event clearing failed');
+        $ICS->setName('test');
+        $this->assertEquals('test', $ICS->getName(), 'Setting ICS name failed');
+        $this->assertNotEmpty($ICS->render(false), 'Empty calendar');
+        //Need to test generated output but PHPUnit isn't playing nice
+        //$rendered = $ICS->render();
+
+        //Now test sending an ICS
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->AltBody = 'This is the text part of the email.';
         $this->Mail->Subject .= ': iCal';
         $this->Mail->isHTML(true);
         $this->buildBody();
-        require_once '../extras/EasyPeasyICS.php';
         $ICS = new EasyPeasyICS("PHPMailer test calendar");
         $ICS->addEvent(
             strtotime('tomorrow 10:00 Europe/Paris'),
