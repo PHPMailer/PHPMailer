@@ -424,8 +424,8 @@ class PHPMailer
     public $action_function = '';
 
     /**
-     * What to use in the X-Mailer header.
-     * Options: null for default, whitespace for none, or a string to use
+     * What to put in the X-Mailer header.
+     * Options: An empty string for PHPMailer default, whitespace for none, or a string to use
      * @type string
      */
     public $XMailer = '';
@@ -3160,33 +3160,27 @@ class PHPMailer
 
     /**
      * Set or reset instance properties.
-     *
+     * You should avoid this function - it's more verbose, less efficient, more error-prone and
+     * harder to debug than setting properties directly.
      * Usage Example:
-     * $page->set('X-Priority', '3');
-     *
+     * `$mail->set('SMTPSecure', 'tls');`
+     *   is the same as:
+     * `$mail->SMTPSecure = 'tls';`
      * @access public
-     * @param string $name
-     * @param mixed $value
-     * NOTE: will not work with arrays, there are no arrays to set/reset
-     * @throws phpmailerException
+     * @param string $name The property name to set
+     * @param mixed $value The value to set the property to
      * @return boolean
-     * @TODO Should this not be using __set() magic function?
+     * @TODO Should this not be using the __set() magic function?
      */
     public function set($name, $value = '')
     {
-        try {
-            if (isset($this->$name)) {
-                $this->$name = $value;
-            } else {
-                throw new phpmailerException($this->lang('variable_set') . $name, self::STOP_CRITICAL);
-            }
-        } catch (Exception $exc) {
-            $this->setError($exc->getMessage());
-            if ($exc->getCode() == self::STOP_CRITICAL) {
-                return false;
-            }
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+            return true;
+        } else {
+            $this->setError($this->lang('variable_set') . $name);
+            return false;
         }
-        return true;
     }
 
     /**

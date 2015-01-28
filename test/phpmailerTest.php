@@ -1355,6 +1355,8 @@ EOT;
         $this->Mail->createHeader();
         $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
         $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+        $this->assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
+        $this->assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
         //Test pathinfo
         $a = '/mnt/files/飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
