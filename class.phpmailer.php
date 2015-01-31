@@ -424,6 +424,12 @@ class PHPMailer
     public $action_function = '';
 
     /**
+     * Dictionary of callables. Used by listen() and emit()
+     * in order to provide a basic event mechanism.
+     */
+    protected $listeners = array();
+
+    /**
      * What to put in the X-Mailer header.
      * Options: An empty string for PHPMailer default, whitespace for none, or a string to use
      * @type string
@@ -1217,6 +1223,13 @@ class PHPMailer
         if (!$this->smtpConnect()) {
             throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
+        $self = $this;
+        $smtpListener = function ($progress) use (&$self) {
+            $this->emit("smtp-request-progress", array($progress));
+        };
+
+        $this->smtp->setListener($smtpListener);
+
         $smtp_from = ($this->Sender == '') ? $this->From : $this->Sender;
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
@@ -3429,6 +3442,41 @@ class PHPMailer
     }
 
     /**
+     * Offer a way to listen to various events.
+     * @param string $event
+     * @param callable $listener
+     */
+    public function listen($event, $listener)
+    {
+        if (!is_callable($listener)) {
+            throw new phpmailerException('Listener isn\'t a callable: ' . $listener);
+        }
+        if (!array_key_exists($event, $this->listeners)) {
+            $this->listeners[$event] = array();
+        }
+        if (!array_search($listener, $this->listeners[$event])) {
+            array_push($this->listeners[$event], $listener);
+        }
+    }
+
+    /**
+     * Emit an event to the callback registered via listen method.
+     * @param string $event
+     * @param array $args
+     */
+    protected function emit($event, $args)
+    {
+        if (!array_key_exists($event, $this->listeners)) {
+            return;
+        }
+        $listeners = $this->listeners[$event];
+        for ($i = 0; $i < count($listeners); $i++) {
+            $listener = $listeners[$i];
+            call_user_func_array($listener, $args);
+        }
+    }
+
+    /**
      * Perform a callback.
      * @param boolean $isSent
      * @param array $to
@@ -3444,6 +3492,7 @@ class PHPMailer
             $params = array($isSent, $to, $cc, $bcc, $subject, $body, $from);
             call_user_func_array($this->action_function, $params);
         }
+        $this->emit("request-status", array($isSent, $to, $cc, $bcc, $subject, $body, $from));
     }
 }
 
