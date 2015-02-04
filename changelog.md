@@ -14,6 +14,7 @@
 * Refactor and major cleanup of EasyPeasyICS, now a lot more usable
 * Make set() method simpler and more reliable
 * Add Malay translation (Thanks to @nawawi)
+* Add Bulgarian translation (Thanks to @mialy)
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
