@@ -1614,11 +1614,11 @@ class PHPMailer
     }
 
     /**
-     * Set the body wrapping.
+     * Applies the body wrapping.
      * @access public
      * @return void
      */
-    public function setWordWrap()
+    public function applyWordwrap()
     {
         if ($this->WordWrap < 1) {
             return;
@@ -1819,7 +1819,7 @@ class PHPMailer
             $body .= $this->getMailMIME() . $this->LE;
         }
 
-        $this->setWordWrap();
+        $this->applyWordwrap();
 
         $bodyEncoding = $this->Encoding;
         $bodyCharSet = $this->CharSet;

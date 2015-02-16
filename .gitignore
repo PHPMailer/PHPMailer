@@ -1,5 +1,8 @@
 docs/phpdoc/
 test/message.txt
 test/testbootstrap.php
+test/*key*
+test/cert*
 .idea
 build/
+vendor
