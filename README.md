@@ -15,7 +15,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
 - SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms over SSL and TLS transports
-- Error messages in 45 languages!
+- Error messages in 46 languages!
 - DKIM and S/MIME signing support
 - Compatible with PHP 5.0 and later
 - Much more!
@@ -93,7 +93,7 @@ You'll find plenty more to play with in the [examples](examples/) folder.
 That's it. You should now be ready to use PHPMailer!
 
 ## Localization
-PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (44 at the time of writing!) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+PHPMailer defaults to English, but in the [language](language/) folder you'll find numerous (45 at the time of writing!) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
 
 ```php
 // To load the French version

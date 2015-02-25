@@ -16,6 +16,7 @@
 * Add Malay translation (Thanks to @nawawi)
 * Add Bulgarian translation (Thanks to @mialy)
 * Add Armenian translation (Thanks to Hrayr Grigoryan)
+* Add Slovenian translation (Thanks to Klemen Tušar)
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
