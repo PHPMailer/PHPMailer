@@ -585,7 +585,8 @@ class PHPMailer
      */
     public function __destruct()
     {
-        if ($this->Mailer == 'smtp') { //close any open SMTP connection nicely
+        //Close any open SMTP connection nicely
+        if ($this->Mailer == 'smtp') {
             $this->smtpClose();
         }
     }
@@ -1262,7 +1263,8 @@ class PHPMailer
             $this->smtp->quit();
             $this->smtp->close();
         }
-        if (count($bad_rcpt) > 0) { // Create error message for any bad addresses
+        //Create error message for any bad addresses
+        if (count($bad_rcpt) > 0) {
             throw new phpmailerException(
                 $this->lang('recipients_failed') . implode(', ', $bad_rcpt),
                 self::STOP_CONTINUE
@@ -2339,7 +2341,8 @@ class PHPMailer
                 break;
         }
 
-        if ($matchcount == 0) { // There are no chars that need encoding
+        //There are no chars that need encoding
+        if ($matchcount == 0) {
             return ($str);
         }
 

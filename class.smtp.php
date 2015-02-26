@@ -309,7 +309,8 @@ class SMTP
         // Windows does not have support for this timeout function
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $max = ini_get('max_execution_time');
-            if ($max != 0 && $timeout > $max) { // Don't bother if unlimited
+            // Don't bother if unlimited
+            if ($max != 0 && $timeout > $max) {
                 @set_time_limit($timeout);
             }
             stream_set_timeout($this->smtp_conn, $timeout, 0);
@@ -632,7 +633,8 @@ class SMTP
                 //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
                 //so as to avoid breaking in the middle of a word
                 $pos = strrpos(substr($line, 0, self::MAX_LINE_LENGTH), ' ');
-                if (!$pos) { //Deliberately matches both false and 0
+                //Deliberately matches both false and 0
+                if (!$pos) {
                     //No nice break found, add a hard break
                     $pos = self::MAX_LINE_LENGTH - 1;
                     $lines_out[] = substr($line, 0, $pos);
@@ -838,7 +840,8 @@ class SMTP
                 '',
                 $this->last_reply
             );
-        } else { // Fall back to simple parsing if regex fails
+        } else {
+            // Fall back to simple parsing if regex fails
             $code = substr($this->last_reply, 0, 3);
             $code_ex = null;
             $detail = substr($this->last_reply, 4);
