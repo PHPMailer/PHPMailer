@@ -32,6 +32,7 @@ class SMTP
      */
     const VERSION = '5.2.9';
 
+
     /**
      * SMTP line break constant.
      * @type string
@@ -48,7 +49,7 @@ class SMTP
      * The maximum line length allowed by RFC 2822 section 2.1.1
      * @type integer
      */
-    const MAX_LINE_LENGTH = 998;
+    const MAX_LINE_LENGTH = 332;
 
     /**
      * Debug level for no output
@@ -148,7 +149,7 @@ class SMTP
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @type integer
      */
-    public $Timelimit = 300;
+    public $Timelimit = 30;
 
     /**
      * The socket for the server connection.
@@ -200,7 +201,7 @@ class SMTP
             return;
         }
         //Avoid clash with built-in function names
-        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) and is_callable($this->Debugoutput)) {
+        if ( is_callable($this->Debugoutput)) {
             call_user_func($this->Debugoutput, $str, $this->do_debug);
             return;
         }
@@ -628,21 +629,23 @@ class SMTP
             }
             //We need to break this line up into several smaller lines
             //This is a small micro-optimisation: isset($str[$len]) is equivalent to (strlen($str) > $len)
-            while (isset($line[self::MAX_LINE_LENGTH])) {
+            while ( mb_strlen($line, "UTF-8") > self::MAX_LINE_LENGTH ) {
                 //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
                 //so as to avoid breaking in the middle of a word
-                $pos = strrpos(substr($line, 0, self::MAX_LINE_LENGTH), ' ');
-                if (!$pos) { //Deliberately matches both false and 0
-                    //No nice break found, add a hard break
-                    $pos = self::MAX_LINE_LENGTH - 1;
-                    $lines_out[] = substr($line, 0, $pos);
-                    $line = substr($line, $pos);
-                } else {
-                    //Break at the found point
-                    $lines_out[] = substr($line, 0, $pos);
-                    //Move along by the amount we dealt with
-                    $line = substr($line, $pos + 1);
-                }
+//                $pos = strrpos(substr($line, 0, self::MAX_LINE_LENGTH), ' ');
+//                if (!$pos) { //Deliberately matches both false and 0
+//                    //No nice break found, add a hard break
+//                    $pos = self::MAX_LINE_LENGTH - 1;
+//                    $lines_out[] = substr($line, 0, $pos);
+//                    $line = substr($line, $pos);
+//                } else {
+//                    //Break at the found point
+//                    $lines_out[] = substr($line, 0, $pos);
+//                    //Move along by the amount we dealt with
+//                    $line = substr($line, $pos + 1);
+//                }
+                $lines_out[] = trim(mb_substr($line, 0, self::MAX_LINE_LENGTH, "UTF-8"));
+                               $line = mb_substr($line, self::MAX_LINE_LENGTH, NULL, "UTF-8");
                 //If processing headers add a LWSP-char to the front of new line RFC822 section 3.1.1
                 if ($in_headers) {
                     $line = "\t" . $line;
@@ -662,12 +665,13 @@ class SMTP
 
         //Message data has been sent, complete the command
         //Increase timelimit for end of DATA command
-        $savetimelimit = $this->Timelimit;
-        $this->Timelimit = $this->Timelimit * 2;
-        $result = $this->sendCommand('DATA END', '.', 250);
-        //Restore timelimit
-        $this->Timelimit = $savetimelimit;
-        return $result;
+//        $savetimelimit = $this->Timelimit;
+//        $this->Timelimit = $this->Timelimit * 2;
+//        $result = $this->sendCommand('DATA END', '.', 250);
+//        //Restore timelimit
+//        $this->Timelimit = $savetimelimit;
+//        return $result;
+        return $this->sendCommand('DATA END', '.', 250);
     }
 
     /**
