@@ -1956,8 +1956,8 @@ class PHPMailer
                     $body = file_get_contents($signed);
                     @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
-                    $parts = preg_split('/\n\n/', $body, 2);
-                    $this->mailHeader .= $parts[0] ."\n";
+                    $parts = explode("\n\n", $body, 2);
+                    $this->MIMEHeader .= $parts[0] . $this->LE . $this->LE;
                     $body = $parts[1];
                 } else {
                     @unlink($file);
