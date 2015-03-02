@@ -17,6 +17,7 @@
 * Add Bulgarian translation (Thanks to @mialy)
 * Add Armenian translation (Thanks to Hrayr Grigoryan)
 * Add Slovenian translation (Thanks to Klemen Tušar)
+* Fix incorrect MIME structure when using S/MIME signing and isMail() (#372)
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**

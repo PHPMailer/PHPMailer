@@ -1955,6 +1955,10 @@ class PHPMailer
                     @unlink($file);
                     $body = file_get_contents($signed);
                     @unlink($signed);
+                    //The message returned by openssl contains both headers and body, so need to split them up
+                    $parts = preg_split('/\n\n/', $body, 2);
+                    $this->mailHeader .= $parts[0] ."\n";
+                    $body = $parts[1];
                 } else {
                     @unlink($file);
                     @unlink($signed);
@@ -2452,7 +2456,8 @@ class PHPMailer
      */
     public function encodeQP($string, $line_max = 76)
     {
-        if (function_exists('quoted_printable_encode')) { // Use native function if it's available (>= PHP5.3)
+        // Use native function if it's available (>= PHP5.3)
+        if (function_exists('quoted_printable_encode')) {
             return $this->fixEOL(quoted_printable_encode($string));
         }
         // Fall back to a pure PHP implementation
