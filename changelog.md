@@ -8,7 +8,8 @@
 * Avoid `error_log` Debugoutput naming clash
 * Add ability to parse server capabilities in response to EHLO (useful for SendGrid etc)
 * Amended default values for WordWrap to match RFC
-* Remove html2text converter class, provide new mechanism for injecting converters
+* Remove html2text converter class (has incompatible license)
+* Provide new mechanism for injecting html to text converters
 * Improve pointers to docs and support in README
 * Add example file upload script
 * Refactor and major cleanup of EasyPeasyICS, now a lot more usable
