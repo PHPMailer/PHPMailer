@@ -1504,20 +1504,23 @@ class PHPMailer
         $crlflen = strlen(self::CRLF);
 
         $message = $this->fixEOL($message);
+        //Remove a trailing line break
         if (substr($message, -$lelen) == $this->LE) {
             $message = substr($message, 0, -$lelen);
         }
 
-        $line = explode($this->LE, $message); // Magic. We know fixEOL uses $LE
+        //Split message into lines
+        $lines = explode($this->LE, $message);
+        //Message will be rebuilt in here
         $message = '';
-        for ($i = 0; $i < count($line); $i++) {
-            $line_part = explode(' ', $line[$i]);
+        foreach ($lines as $line) {
+            $words = explode(' ', $line);
             $buf = '';
-            for ($e = 0; $e < count($line_part); $e++) {
-                $word = $line_part[$e];
+            $firstword = true;
+            foreach ($words as $word) {
                 if ($qp_mode and (strlen($word) > $length)) {
                     $space_left = $length - strlen($buf) - $crlflen;
-                    if ($e != 0) {
+                    if (!$firstword) {
                         if ($space_left > 20) {
                             $len = $space_left;
                             if ($is_utf8) {
@@ -1559,13 +1562,17 @@ class PHPMailer
                     }
                 } else {
                     $buf_o = $buf;
-                    $buf .= ($e == 0) ? $word : (' ' . $word);
+                    if (!$firstword) {
+                        $buf .= ' ';
+                    }
+                    $buf .= $word;
 
                     if (strlen($buf) > $length and $buf_o != '') {
                         $message .= $buf_o . $soft_break;
                         $buf = $word;
                     }
                 }
+                $firstword = false;
             }
             $message .= $buf . self::CRLF;
         }
@@ -1726,10 +1733,10 @@ class PHPMailer
         }
 
         // Add custom headers
-        for ($index = 0; $index < count($this->CustomHeader); $index++) {
+        foreach ($this->CustomHeader as $header) {
             $result .= $this->headerLine(
-                trim($this->CustomHeader[$index][0]),
-                $this->encodeHeader(trim($this->CustomHeader[$index][1]))
+                trim($header[0]),
+                $this->encodeHeader(trim($header[1]))
             );
         }
         if (!$this->sign_key_file) {
