@@ -530,6 +530,13 @@ class PHPMailer
     protected $sign_cert_file = '';
 
     /**
+     * The S/MIME extra certificate file path.
+     * @type string
+     * @access protected
+     */
+    protected $sign_extra_cert_file = '';
+
+    /**
      * The S/MIME key file path.
      * @type string
      * @access protected
@@ -1966,12 +1973,15 @@ class PHPMailer
                     throw new phpmailerException($this->lang('signing') . ' Could not write temp file');
                 }
                 $signed = tempnam(sys_get_temp_dir(), 'signed');
+                if ( !isset($sign_extra_cert_file)) {
+                    $sign_extra_cert_file = '';
+                }
                 if (@openssl_pkcs7_sign(
                     $file,
                     $signed,
                     'file://' . realpath($this->sign_cert_file),
                     array('file://' . realpath($this->sign_key_file), $this->sign_key_pass),
-                    null
+                    array(), PKCS7_DETACHED, $sign_extra_cert_file
                 )
                 ) {
                     @unlink($file);
@@ -3239,17 +3249,19 @@ class PHPMailer
 
 
     /**
-     * Set the public and private key files and password for S/MIME signing.
+     * Set the public and private key files and password and/or extra certificates for S/MIME signing.
      * @access public
      * @param string $cert_filename
      * @param string $key_filename
      * @param string $key_pass Password for private key
+     * @param string $extra_cert_filename
      */
-    public function sign($cert_filename, $key_filename, $key_pass)
+    public function sign($cert_filename, $key_filename, $key_pass, $extra_cert_filename)
     {
         $this->sign_cert_file = $cert_filename;
         $this->sign_key_file = $key_filename;
         $this->sign_key_pass = $key_pass;
+        $this->sign_extra_cert_file = $extra_cert_filename;
     }
 
     /**
