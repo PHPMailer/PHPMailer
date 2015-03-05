@@ -187,6 +187,14 @@ class SMTP
     protected $last_reply = '';
 
     /**
+     * Optional function called to track progress of the requests.
+     * Called with only one number argument between 0 and 1 to represent the progress
+     * of data() call.
+     * @type function
+     */
+    protected $listener = null;
+
+    /**
      * Output debugging info via a user-selected method.
      * @see SMTP::$Debugoutput
      * @see SMTP::$do_debug
@@ -595,6 +603,11 @@ class SMTP
      */
     public function data($msg_data)
     {
+        $listener = $this->listener;
+        if ($listener) {
+            $listener(0);
+        }
+
         //This will use the standard timelimit
         if (!$this->sendCommand('DATA', 'DATA', 354)) {
             return false;
@@ -610,6 +623,14 @@ class SMTP
 
         // Normalize line breaks before exploding
         $lines = explode("\n", str_replace(array("\r\n", "\r"), "\n", $msg_data));
+
+        $x = 0;
+        $n = count($lines) + 2; // Count first DATA command and DATA END.
+
+        if ($listener) {
+            // notify about the first DATA command
+            $listener($x++ / $n);
+        }
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
          * of the first line (':' separated) does not contain a space then it _should_ be a header and we will
@@ -659,6 +680,11 @@ class SMTP
                     $line_out = '.' . $line_out;
                 }
                 $this->client_send($line_out . self::CRLF);
+
+            }
+
+            if ($listener) {
+                $listener($x++ / $n);
             }
         }
 
@@ -667,6 +693,9 @@ class SMTP
         $savetimelimit = $this->Timelimit;
         $this->Timelimit = $this->Timelimit * 2;
         $result = $this->sendCommand('DATA END', '.', 250);
+        if ($listener) {
+            $listener(1);
+        }
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
         return $result;
@@ -1113,6 +1142,16 @@ class SMTP
     public function getDebugLevel()
     {
         return $this->do_debug;
+    }
+
+    /*
+     * Register a listener function called with only one argument,
+     * a float between 0 and 1 to represent the progress of data() calls.
+     * @param function $listener
+     */
+    public function setListener($listener = null)
+    {
+        $this->listener = $listener;
     }
 
     /**
