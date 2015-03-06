@@ -537,6 +537,13 @@ class PHPMailer
     protected $sign_key_file = '';
 
     /**
+     * The optional S/MIME extra certificates ("CA Chain") file path.
+     * @type string
+     * @access protected
+     */
+    protected $sign_extracerts_file = '';
+
+    /**
      * The S/MIME password for the key.
      * Used only if the key is encrypted.
      * @type string
@@ -1971,7 +1978,9 @@ class PHPMailer
                     $signed,
                     'file://' . realpath($this->sign_cert_file),
                     array('file://' . realpath($this->sign_key_file), $this->sign_key_pass),
-                    null
+                    null,
+                    PKCS7_DETACHED,
+                    $this->sign_extracerts_file
                 )
                 ) {
                     @unlink($file);
@@ -3244,12 +3253,14 @@ class PHPMailer
      * @param string $cert_filename
      * @param string $key_filename
      * @param string $key_pass Password for private key
+     * @param string $extracerts_filename Optional path to chain certificate
      */
-    public function sign($cert_filename, $key_filename, $key_pass)
+    public function sign($cert_filename, $key_filename, $key_pass, $extracerts_filename = '')
     {
         $this->sign_cert_file = $cert_filename;
         $this->sign_key_file = $key_filename;
         $this->sign_key_pass = $key_pass;
+        $this->sign_extracerts_file = $extracerts_filename;
     }
 
     /**
