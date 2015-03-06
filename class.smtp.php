@@ -725,7 +725,7 @@ class SMTP
                 continue;
             }
             $fields = explode(' ', $s);
-            if ($fields) {
+            if (!empty($fields)) {
                 if (!$n) {
                     $name = $type;
                     $fields = $fields[0];
