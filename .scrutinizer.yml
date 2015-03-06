@@ -1,8 +1,11 @@
+build:
+    environment:
+        php: '5.6.0'
+
 before_commands:
     - "composer install --prefer-source"
 
 tools:
-    # Code Coverage
     external_code_coverage:
         enabled: true
         timeout: 300
@@ -14,10 +17,8 @@ tools:
                 - 'test/*'
                 - 'vendor/*'
 
-
     php_code_coverage:
         enabled:              false
-        test_command:         phpunit
         filter:
             excluded_paths:
                 - 'docs/*'
@@ -26,11 +27,8 @@ tools:
                 - 'test/*'
                 - 'vendor/*'
 
-
-    # Code Sniffer
     php_code_sniffer:
         enabled:              true
-        command:              phpcs
         config:
             standard:         PSR2
             sniffs:
@@ -45,11 +43,9 @@ tools:
                 - 'test/*'
                 - 'vendor/*'
 
-
     # Copy/Paste Detector
     php_cpd:
         enabled:              true
-        command:              phpcpd
         excluded_dirs:
             - docs
             - examples
@@ -57,11 +53,9 @@ tools:
             - test
             - vendor
 
-
     # PHP CS Fixer (http://http://cs.sensiolabs.org/).
     php_cs_fixer:
         enabled:              true
-        command:              php-cs-fixer
         config:
             level:            psr2
         filter:
@@ -72,11 +66,9 @@ tools:
                 - 'test/*'
                 - 'vendor/*'
 
-
     # Analyzes the size and structure of a PHP project.
     php_loc:
         enabled:              true
-        command:              phploc
         excluded_dirs:
             - docs
             - examples
@@ -84,11 +76,9 @@ tools:
             - test
             - vendor
 
-
     # PHP Mess Detector (http://phpmd.org).
     php_mess_detector:
         enabled:              true
-        command:              phpmd
         config:
             rulesets:
                 - codesize
@@ -108,7 +98,6 @@ tools:
     # Analyzes the size and structure of a PHP project.
     php_pdepend:
         enabled:              true
-        command:              pdepend
         excluded_dirs:
             - docs
             - examples
