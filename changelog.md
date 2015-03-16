@@ -21,6 +21,7 @@
 * More efficient word wrapping
 * Add support for S/MIME signing with additional CA certificate (thanks to @IgitBuh)
 * Fix incorrect MIME structure when using S/MIME signing and isMail() (#372)
+* Improved checks and error messages for missing extensions
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
