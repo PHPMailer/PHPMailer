@@ -23,3 +23,4 @@ $PHPMAILER_LANG['recipients_failed']    = 'SMTP 错误： 下面的 收件人失
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

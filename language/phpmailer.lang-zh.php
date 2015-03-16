@@ -24,3 +24,4 @@ $PHPMAILER_LANG['signing']              = '登入失敗: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP連線失敗';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP伺服器錯誤: ';
 $PHPMAILER_LANG['variable_set']         = '無法設定或重設變數: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

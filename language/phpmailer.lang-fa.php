@@ -24,3 +24,4 @@ $PHPMAILER_LANG['signing']              = 'خطا در امضا: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'خطا در اتصال به SMTP.';
 $PHPMAILER_LANG['smtp_error']           = 'خطا در SMTP Server: ';
 $PHPMAILER_LANG['variable_set']         = 'امکان ارسال یا ارسال مجدد متغیر‌ها وجود ندارد: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

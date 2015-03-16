@@ -1145,7 +1145,7 @@ EOT;
      */
     public function testError()
     {
-        $this->Mail->Subject .= ': This should be sent';
+        $this->Mail->Subject .= ': Error hendling test - this should be sent ok';
         $this->buildBody();
         $this->Mail->clearAllRecipients(); // no addresses should cause an error
         $this->assertTrue($this->Mail->isError() == false, 'Error found');
