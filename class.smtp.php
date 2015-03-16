@@ -628,7 +628,7 @@ class SMTP
                 $in_headers = false;
             }
             //We need to break this line up into several smaller lines
-            //This is a small micro-optimisation: isset($str[$len]) is equivalent to (strlen($str) > $len)
+            //Micro-optimisation: isset($str[$len]) is faster than (strlen($str) > $len),
             while (isset($line[self::MAX_LINE_LENGTH])) {
                 //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on
                 //so as to avoid breaking in the middle of a word
