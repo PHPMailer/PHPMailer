@@ -192,7 +192,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $ReportBody .= $list_start;
             for ($i = 0; $i < count($this->ChangeLog); $i++) {
                 $ReportBody .= $bullet_start . $this->ChangeLog[$i][0] . ' was changed to [' .
-                    $this->ChangeLog[$i][1] . ']' . $eol;
+                    $this->ChangeLog[$i][1] . ']' . $bullet_end;
             }
             $ReportBody .= $list_end . $eol . $eol;
         }
@@ -204,7 +204,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
             $ReportBody .= $list_start;
             for ($i = 0; $i < count($this->NoteLog); $i++) {
-                $ReportBody .= $bullet_start . $this->NoteLog[$i] . $eol;
+                $ReportBody .= $bullet_start . $this->NoteLog[$i] . $bullet_end;
             }
             $ReportBody .= $list_end;
         }
