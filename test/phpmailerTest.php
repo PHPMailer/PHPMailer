@@ -146,15 +146,17 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         // Determine line endings for message
         if ($this->Mail->ContentType == 'text/html' || strlen($this->Mail->AltBody) > 0) {
-            $eol = '<br/>';
-            $bullet = '<li>';
-            $bullet_start = '<ul>';
-            $bullet_end = '</ul>';
+            $eol = "<br/>\r\n";
+            $bullet_start = '<li>';
+            $bullet_end = "</li>\r\n";
+            $list_start = '<ul>';
+            $list_end = "</ul>\r\n";
         } else {
-            $eol = "\n";
-            $bullet = ' - ';
-            $bullet_start = '';
+            $eol = "\r\n";
+            $bullet_start = ' - ';
             $bullet_end = '';
+            $list_start = '';
+            $list_end = '';
         }
 
         $ReportBody = '';
@@ -173,13 +175,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $attachments = $this->Mail->getAttachments();
         if (count($attachments) > 0) {
             $ReportBody .= 'Attachments:' . $eol;
-            $ReportBody .= $bullet_start;
+            $ReportBody .= $list_start;
             foreach ($attachments as $attachment) {
-                $ReportBody .= $bullet . 'Name: ' . $attachment[1] . ', ';
+                $ReportBody .= $bullet_start . 'Name: ' . $attachment[1] . ', ';
                 $ReportBody .= 'Encoding: ' . $attachment[3] . ', ';
-                $ReportBody .= 'Type: ' . $attachment[4] . $eol;
+                $ReportBody .= 'Type: ' . $attachment[4] . $bullet_end;
             }
-            $ReportBody .= $bullet_end . $eol;
+            $ReportBody .= $list_end . $eol;
         }
 
         // If there are changes then list them
@@ -187,12 +189,12 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $ReportBody .= 'Changes' . $eol;
             $ReportBody .= '-------' . $eol;
 
-            $ReportBody .= $bullet_start;
+            $ReportBody .= $list_start;
             for ($i = 0; $i < count($this->ChangeLog); $i++) {
-                $ReportBody .= $bullet . $this->ChangeLog[$i][0] . ' was changed to [' .
+                $ReportBody .= $bullet_start . $this->ChangeLog[$i][0] . ' was changed to [' .
                     $this->ChangeLog[$i][1] . ']' . $eol;
             }
-            $ReportBody .= $bullet_end . $eol . $eol;
+            $ReportBody .= $list_end . $eol . $eol;
         }
 
         // If there are notes then list them
@@ -200,11 +202,11 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $ReportBody .= 'Notes' . $eol;
             $ReportBody .= '-----' . $eol;
 
-            $ReportBody .= $bullet_start;
+            $ReportBody .= $list_start;
             for ($i = 0; $i < count($this->NoteLog); $i++) {
-                $ReportBody .= $bullet . $this->NoteLog[$i] . $eol;
+                $ReportBody .= $bullet_start . $this->NoteLog[$i] . $eol;
             }
-            $ReportBody .= $bullet_end;
+            $ReportBody .= $list_end;
         }
 
         // Re-attach the original body
