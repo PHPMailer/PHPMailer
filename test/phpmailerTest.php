@@ -146,7 +146,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         // Determine line endings for message
         if ($this->Mail->ContentType == 'text/html' || strlen($this->Mail->AltBody) > 0) {
-            $eol = "<br/>\r\n";
+            $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
             $list_start = '<ul>';
