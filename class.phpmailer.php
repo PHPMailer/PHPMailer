@@ -1220,6 +1220,7 @@ class PHPMailer
      */
     protected function smtpSend($header, $body)
     {
+        require_once $this->PluginDir . 'class.smtp.php';
         $bad_rcpt = array();
 
         if (!$this->smtpConnect()) {
