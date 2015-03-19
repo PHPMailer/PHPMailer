@@ -20,6 +20,7 @@
 * Add Slovenian translation (Thanks to Klemen Tušar)
 * More efficient word wrapping
 * Add support for S/MIME signing with additional CA certificate (thanks to @IgitBuh)
+* Store and report SMTP errors more consistently
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
