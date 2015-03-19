@@ -2820,8 +2820,8 @@ class PHPMailer
         $this->error_count++;
         if ($this->Mailer == 'smtp' and !is_null($this->smtp)) {
             $lasterror = $this->smtp->getError();
-            if (!empty($lasterror) and array_key_exists('smtp_msg', $lasterror)) {
-                $msg .= '<p>' . $this->lang('smtp_error') . $lasterror['smtp_msg'] . "</p>\n";
+            if (!empty($lasterror) and array_key_exists('detail', $lasterror)) {
+                $msg .= '<p>' . $this->lang('smtp_error') . $lasterror['detail'] . "</p>\n";
             }
         }
         $this->ErrorInfo = $msg;
