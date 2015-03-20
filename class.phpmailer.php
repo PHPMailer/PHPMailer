@@ -1874,7 +1874,7 @@ class PHPMailer
             $altBodyCharSet = 'us-ascii';
         }
         //Use this as a preamble in all multipart message types
-        $mimepre = "This is a multi-part message in MIME format.".$this->LE;
+        $mimepre = "This is a multi-part message in MIME format." . $this->LE . $this->LE;
         switch ($this->message_type) {
             case 'inline':
                 $body .= $mimepre;

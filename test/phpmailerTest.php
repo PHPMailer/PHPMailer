@@ -154,7 +154,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         } else {
             $eol = "\r\n";
             $bullet_start = ' - ';
-            $bullet_end = '';
+            $bullet_end = "\r\n";
             $list_start = '';
             $list_end = '';
         }
