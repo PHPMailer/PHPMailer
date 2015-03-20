@@ -149,7 +149,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
-            $list_start = '<ul>';
+            $list_start = '<ul>\r\n';
             $list_end = "</ul>\r\n";
         } else {
             $eol = "\r\n";
@@ -793,6 +793,55 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         <p>Thank you!</p>
     </body>
 </html>
+EOT;
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        $msg = $this->Mail->getSentMIMEMessage();
+        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+    }
+
+    /**
+     * Send a message containing multilingual UTF-8 text.
+     */
+    public function testHtmlUtf8()
+    {
+        $this->Mail->isHTML(true);
+        $this->Mail->Subject .= ": UTF-8 HTML";
+        $this->Mail->CharSet = 'UTF-8';
+
+        $this->Mail->Body = <<<EOT
+<html>
+    <head>
+        <title>HTML email test</title>
+    </head>
+    <body>
+        <p>Chinese text: 郵件內容為空</p>
+        <p>Russian text: Пустое тело сообщения</p>
+        <p>Armenian text: Հաղորդագրությունը դատարկ է</p>
+        <p>Czech text: Prázdné tělo zprávy</p>
+    </body>
+</html>
+EOT;
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        $msg = $this->Mail->getSentMIMEMessage();
+        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+    }
+
+    /**
+     * Send a message containing multilingual UTF-8 text.
+     */
+    public function testPlainUtf8()
+    {
+        $this->Mail->isHTML(false);
+        $this->Mail->Subject .= ": UTF-8 plain text";
+        $this->Mail->CharSet = 'UTF-8';
+
+        $this->Mail->Body = <<<EOT
+Chinese text: 郵件內容為空
+Russian text: Пустое тело сообщения
+Armenian text: Հաղորդագրությունը դատարկ է
+Czech text: Prázdné tělo zprávy
 EOT;
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
