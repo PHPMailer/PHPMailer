@@ -559,6 +559,13 @@ class PHPMailer
     protected $exceptions = false;
 
     /**
+     * Unique ID used for message ID and boundaries.
+     * @type string
+     * @access protected
+     */
+    protected $uniqueid = '';
+
+    /**
      * Error severity: message only, continue processing.
      */
     const STOP_MESSAGE = 0;
@@ -1694,12 +1701,6 @@ class PHPMailer
     {
         $result = '';
 
-        // Set the boundaries
-        $uniq_id = md5(uniqid(time()));
-        $this->boundary[1] = 'b1_' . $uniq_id;
-        $this->boundary[2] = 'b2_' . $uniq_id;
-        $this->boundary[3] = 'b3_' . $uniq_id;
-
         if ($this->MessageDate == '') {
             $this->MessageDate = self::rfcDate();
         }
@@ -1751,7 +1752,7 @@ class PHPMailer
         if ($this->MessageID != '') {
             $this->lastMessageID = $this->MessageID;
         } else {
-            $this->lastMessageID = sprintf('<%s@%s>', $uniq_id, $this->ServerHostname());
+            $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->ServerHostname());
         }
         $result .= $this->headerLine('Message-ID', $this->lastMessageID);
         $result .= $this->headerLine('X-Priority', $this->Priority);
@@ -1861,6 +1862,11 @@ class PHPMailer
     public function createBody()
     {
         $body = '';
+        //Create unique IDs and preset boundaries
+        $this->uniqueid = md5(uniqid(time()));
+        $this->boundary[1] = 'b1_' . $this->uniqueid;
+        $this->boundary[2] = 'b2_' . $this->uniqueid;
+        $this->boundary[3] = 'b3_' . $this->uniqueid;
 
         if ($this->sign_key_file) {
             $body .= $this->getMailMIME() . $this->LE;

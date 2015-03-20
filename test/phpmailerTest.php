@@ -1558,8 +1558,19 @@ EOT;
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen . $oklen), 'Long line not detected (last)');
-        $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen . $oklen), 'Long line not detected (middle)');
+        $this->assertTrue(
+            PHPMailer::hasLineLongerThanMax($oklen . $badlen . $oklen),
+            'Long line not detected (middle)'
+        );
         $this->assertFalse(PHPMailer::hasLineLongerThanMax($oklen), 'Long line false positive');
+        $this->Mail->isHTML(false);
+        $this->Mail->Subject .= ": Line length test";
+        $this->Mail->CharSet = 'UTF-8';
+        $this->Mail->Encoding = '8bit';
+        $this->Mail->Body = $oklen . $badlen . $oklen . $badlen;
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        $this->assertEquals('quoted-printable', $this->Mail->Encoding, 'Long line did not override transfer encoding');
     }
 
     /**
