@@ -10,9 +10,9 @@
 <h2>About testing email sending</h2>
 <p>When working on email sending code you'll find yourself worrying about what might happen if all these test emails got sent to your mailing list. The solution is to use a fake mail server, one that acts just like the real thing, but just doesn't actually send anything out. Some offer web interfaces, feedback, logging, the ability to return specific error codes, all things that are useful for testing error handling, authentication etc. Here's a selection of mail testing tools you might like to try:</p>
 <ul>
+  <li><a href="https://github.com/Nilhcem/FakeSMTP">FakeSMTP</a>, a Java desktop app with the ability to show an SMTP log and save messages to a folder. </li>
   <li><a href="https://github.com/isotoma/FakeEmail">FakeEmail</a>, a Python-based fake mail server with a web interface.</li>
   <li><a href="http://www.postfix.org/smtp-sink.1.html">smtp-sink</a>, part of the Postfix mail server, so you probably already have this installed. This is used in the Travis-CI configuration to run PHPMailer's unit tests.</li>
-  <li><a href="https://github.com/Nilhcem/FakeSMTP">FakeSMTP</a>, a Java desktop app with the ability to show an SMTP log and save messages to a folder.</li>
   <li><a href="http://smtp4dev.codeplex.com">smtp4dev</a>, a dummy SMTP server for Windows.</li>
   <li><a href="https://github.com/PHPMailer/PHPMailer/blob/master/test/fakesendmail.sh">fakesendmail.sh</a>, part of PHPMailer's test setup, this is a shell script that emulates sendmail for testing 'mail' or 'sendmail' methods in PHPMailer.</li>
   <li><a href="http://tools.ietf.org/tools/msglint/">msglint</a>, not a mail server, the IETF's MIME structure analyser checks the formatting of your messages.</li>

@@ -22,3 +22,4 @@ $PHPMAILER_LANG['signing']              = 'Eraro de subskribo: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP konektado malsukcesis.';
 $PHPMAILER_LANG['smtp_error']           = 'Eraro de servilo SMTP : ';
 $PHPMAILER_LANG['variable_set']         = 'Variablo ne pravalorizeblas aŭ ne repravalorizeblas: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

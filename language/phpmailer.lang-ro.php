@@ -23,3 +23,4 @@ $PHPMAILER_LANG['signing']              = 'A aparut o problema la semnarea email
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Conectarea la serverul SMTP a esuat.';
 $PHPMAILER_LANG['smtp_error']           = 'A aparut o eroare la serverul SMTP. ';
 $PHPMAILER_LANG['variable_set']         = 'Nu se poate seta/reseta variabila. ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

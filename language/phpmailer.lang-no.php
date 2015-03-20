@@ -22,3 +22,4 @@ $PHPMAILER_LANG['signing']              = 'Signeringsfeil: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() feilet.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP-serverfeil: ';
 $PHPMAILER_LANG['variable_set']         = 'Kan ikke sette eller resette variabelen: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
