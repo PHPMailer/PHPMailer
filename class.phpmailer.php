@@ -240,11 +240,19 @@ class PHPMailer
     public $Helo = '';
 
     /**
-     * The secure connection prefix.
-     * Options: "", "ssl" or "tls"
+     * What kind of encryption to use on the SMTP connection.
+     * Options: '', 'ssl' or 'tls'
      * @type string
      */
     public $SMTPSecure = '';
+
+    /**
+     * Whether to enable TLS encryption automatically if a server supports it,
+     * even if `SMTPSecure` is not set to 'tls'.
+     * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
+     * @type boolean
+     */
+    public $SMTPAutoTLS = true;
 
     /**
      * Whether to use SMTP authentication.
@@ -1333,9 +1341,10 @@ class PHPMailer
                 $secure = 'tls';
             }
             //Do we need the OpenSSL extension?
+            $sslext = defined('OPENSSL_ALGO_SHA1');
             if ('tls' === $secure or 'ssl' === $secure) {
                 //Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
-                if (!defined('OPENSSL_ALGO_SHA1')) {
+                if (!$sslext) {
                     throw new phpmailerException($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
                 }
             }
@@ -1353,7 +1362,14 @@ class PHPMailer
                         $hello = $this->serverHostname();
                     }
                     $this->smtp->hello($hello);
-
+                    //Automatically enable TLS encryption if:
+                    // * it's not disabled
+                    // * we have openssl extension
+                    // * we are not already using SSL
+                    // * the server offers STARTTLS
+                    if ($this->SMTPAutoTLS and $sslext and $secure != 'ssl' and $this->smtp->getServerExt('STARTTLS')) {
+                        $tls = true;
+                    }
                     if ($tls) {
                         if (!$this->smtp->startTLS()) {
                             throw new phpmailerException($this->lang('connect_host'));
