@@ -631,7 +631,7 @@ class SMTP
             if ($in_headers and $line == '') {
                 $in_headers = false;
             }
-            //We need to break this line up into several smaller lines
+            //Break this line up into several smaller lines if it's too long
             //Micro-optimisation: isset($str[$len]) is faster than (strlen($str) > $len),
             while (isset($line[self::MAX_LINE_LENGTH])) {
                 //Working backwards, try to find a space within the last MAX_LINE_LENGTH chars of the line to break on

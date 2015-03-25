@@ -149,7 +149,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
-            $list_start = '<ul>\r\n';
+            $list_start = "<ul>\r\n";
             $list_end = "</ul>\r\n";
         } else {
             $eol = "\r\n";
@@ -166,6 +166,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $ReportBody .= '---------------------' . $eol;
         $ReportBody .= 'phpmailer version: ' . $this->Mail->Version . $eol;
         $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
+        $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
 
         if (strlen($this->Mail->Host) > 0) {
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
@@ -210,7 +211,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         }
 
         // Re-attach the original body
-        $this->Mail->Body .= $eol . $eol . $ReportBody;
+        $this->Mail->Body .= $eol . $ReportBody;
     }
 
     /**
@@ -801,6 +802,29 @@ EOT;
     }
 
     /**
+     * Send a message containing ISO-8859-1 text.
+     */
+    public function testHtmlIso8859()
+    {
+        $this->Mail->isHTML(false);
+        $this->Mail->Subject .= ": ISO-8859-1 HTML";
+        $this->Mail->CharSet = 'iso-8859-1';
+
+        //This file is in ISO-8859-1 charset
+        //Needs to be external because this file is in UTF-8
+        $content = file_get_contents('../examples/contents.html');
+        //Make sure it really is in ISO-8859-1!
+        $this->Mail->Body =
+            mb_convert_encoding(
+                $content,
+                "ISO-8859-1",
+                mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
+            );
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
      * Send a message containing multilingual UTF-8 text.
      */
     public function testHtmlUtf8()
@@ -812,6 +836,7 @@ EOT;
         $this->Mail->Body = <<<EOT
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>HTML email test</title>
     </head>
     <body>
@@ -826,6 +851,41 @@ EOT;
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
         $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+    }
+
+    /**
+     * Send a message containing multilingual UTF-8 text with an embedded image.
+     */
+    public function testUtf8WithEmbeddedImage()
+    {
+        $this->Mail->isHTML(true);
+        $this->Mail->Subject .= ": UTF-8 with embedded image";
+        $this->Mail->CharSet = 'UTF-8';
+
+        $this->Mail->Body = <<<EOT
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>HTML email test</title>
+    </head>
+    <body>
+        <p>Chinese text: 郵件內容為空</p>
+        <p>Russian text: Пустое тело сообщения</p>
+        <p>Armenian text: Հաղորդագրությունը դատարկ է</p>
+        <p>Czech text: Prázdné tělo zprávy</p>
+        Embedded Image: <img alt="phpmailer" src="cid:my-attach">
+    </body>
+</html>
+EOT;
+        $this->Mail->addEmbeddedImage(
+            '../examples/images/phpmailer.png',
+            'my-attach',
+            'phpmailer.png',
+            'base64',
+            'image/png'
+        );
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -854,7 +914,7 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents('../examples/contents.html');
+        $message = file_get_contents('../examples/contentsutf8.html');
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
@@ -904,7 +964,7 @@ EOT;
     public function testEmbeddedImage()
     {
         $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
-            'Here is an image!</a>';
+            'Here is an image!';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
