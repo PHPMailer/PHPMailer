@@ -24,6 +24,7 @@
 * Improved checks and error messages for missing extensions
 * Store and report SMTP errors more consistently
 * Add MIME multipart preamble for better Outlook compatibility
+* Enable TLS encryption automatically if the server offers it
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
