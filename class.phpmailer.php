@@ -3411,8 +3411,8 @@ class PHPMailer
                 $to_header = $header;
                 $current = 'to_header';
             } else {
-                if ($current && strpos($header, ' =?') === 0) {
-                    $current .= $header;
+                if (!empty($$current) && strpos($header, ' =?') === 0) {
+                    $$current .= $header;
                 } else {
                     $current = '';
                 }
