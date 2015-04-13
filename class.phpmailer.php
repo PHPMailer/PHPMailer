@@ -640,7 +640,7 @@ class PHPMailer
             return;
         }
         //Avoid clash with built-in function names
-        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) and is_callable($this->Debugoutput)) {
+        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) && is_callable($this->Debugoutput)) {
             call_user_func($this->Debugoutput, $str, $this->SMTPDebug);
             return;
         }
