@@ -130,8 +130,8 @@ class POP3
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      * @param $host
-     * @param boolean $port
-     * @param boolean $tval
+     * @param integer|boolean $port The port number to connect to
+     * @param integer|boolean $timeout The timeout value
      * @param string $username
      * @param string $password
      * @param integer $debug_level
