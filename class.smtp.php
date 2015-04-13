@@ -205,7 +205,7 @@ class SMTP
             return;
         }
         //Avoid clash with built-in function names
-        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) and is_callable($this->Debugoutput)) {
+        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) && is_callable($this->Debugoutput)) {
             call_user_func($this->Debugoutput, $str, $this->do_debug);
             return;
         }
@@ -628,7 +628,7 @@ class SMTP
 
         foreach ($lines as $line) {
             $lines_out = array();
-            if ($in_headers and $line == '') {
+            if ($in_headers && $line == '') {
                 $in_headers = false;
             }
             //Break this line up into several smaller lines if it's too long
@@ -659,7 +659,7 @@ class SMTP
             //Send the lines to the server
             foreach ($lines_out as $line_out) {
                 //RFC2821 section 4.5.2
-                if (!empty($line_out) and $line_out[0] == '.') {
+                if (!empty($line_out) && $line_out[0] == '.') {
                     $line_out = '.' . $line_out;
                 }
                 $this->client_send($line_out . self::CRLF);
@@ -689,7 +689,7 @@ class SMTP
     public function hello($host = '')
     {
         //Try extended hello first (RFC 2821)
-        return (boolean)($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
+        return (boolean)($this->sendHello('EHLO', $host) || $this->sendHello('HELO', $host));
     }
 
     /**
@@ -777,7 +777,7 @@ class SMTP
     {
         $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
         $err = $this->error; //Save any error
-        if ($noerror or $close_on_error) {
+        if ($noerror || $close_on_error) {
             $this->close();
             $this->error = $err; //Restore any error from the quit command
         }
@@ -1036,7 +1036,7 @@ class SMTP
             $data .= $str;
             $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
             // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
-            if ((isset($str[3]) and $str[3] == ' ')) {
+            if ((isset($str[3]) && $str[3] == ' ')) {
                 break;
             }
             // Timed-out? Log and break
@@ -1049,7 +1049,7 @@ class SMTP
                 break;
             }
             // Now check if reads took too long
-            if ($endtime and time() > $endtime) {
+            if ($endtime && time() > $endtime) {
                 $this->edebug(
                     'SMTP -> get_lines(): timelimit reached ('.
                     $this->Timelimit . ' sec)',
