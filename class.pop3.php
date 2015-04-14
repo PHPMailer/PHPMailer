@@ -140,13 +140,13 @@ class POP3
     public static function popBeforeSmtp(
         $host,
         $port = false,
-        $tval = false,
+        $timeout = false,
         $username = '',
         $password = '',
         $debug_level = 0
     ) {
         $pop = new POP3;
-        return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
+        return $pop->authorise($host, $port, $timeout, $username, $password, $debug_level);
     }
 
     /**
