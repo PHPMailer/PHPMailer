@@ -467,7 +467,7 @@ class PHPMailer
 
     /**
      * An array of all kinds of addresses.
-     * Includes all of $to, $cc, $bcc, $replyto
+     * Includes all of $to, $cc, $bcc
      * @type array
      * @access protected
      */
