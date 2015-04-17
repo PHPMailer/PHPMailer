@@ -1379,6 +1379,7 @@ class PHPMailer
                     return true;
                 } catch (phpmailerException $exc) {
                     $lastexception = $exc;
+                    $this->edebug($exc->getMessage());
                     // We must have connected, but then failed TLS or Auth, so close connection nicely
                     $this->smtp->quit();
                 }
