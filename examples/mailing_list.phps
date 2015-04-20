@@ -42,10 +42,10 @@ foreach ($result as $row) { //This iterator syntax only works in PHP 5.4+
     }
 
     if (!$mail->send()) {
-        echo "Mailer Error (" . str_replace("@", "&#64;", $row["email"]) . ') ' . $mail->ErrorInfo . '<br />';
+        echo "Mailer Error (" , str_replace("@", "&#64;", $row["email"]) , ') ' , $mail->ErrorInfo . '<br />';
         break; //Abandon sending
     } else {
-        echo "Message sent to :" . $row['full_name'] . ' (' . str_replace("@", "&#64;", $row['email']) . ')<br />';
+        echo "Message sent to :" , $row['full_name'] , ' (' , str_replace("@", "&#64;", $row['email']) . ')<br />';
         //Mark it as sent in the DB
         mysqli_query(
             $mysql,
