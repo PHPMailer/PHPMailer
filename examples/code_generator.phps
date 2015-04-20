@@ -357,7 +357,7 @@ $example_code .= "\n}";
 <body>
 <?php
 if (version_compare(PHP_VERSION, '5.0.0', '<')) {
-    echo 'Current PHP version: ' . phpversion() . "<br>";
+    echo 'Current PHP version: ' , phpversion() , "<br>";
     echo exit("ERROR: Wrong PHP version. Must be PHP 5 or above.");
 }
 
@@ -589,7 +589,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
             <div style="margin-bottom: 1em; ">
                 <input type="submit" value="Submit" name="submit">
             </div>
-            <?php echo 'Current PHP version: ' . phpversion(); ?>
+            <?php echo 'Current PHP version: ' , phpversion(); ?>
         </div>
     </div>
 </form>

@@ -34,7 +34,7 @@ try {
         throw new Exception('Connect failed');
     }
 } catch (Exception $e) {
-    echo 'SMTP error: '. $e->getMessage(), "\n";
+    echo 'SMTP error: ', $e->getMessage(), "\n";
 }
 //Whatever happened, close the connection.
 $smtp->quit(true);
