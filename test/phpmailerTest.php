@@ -946,7 +946,7 @@ EOT;
         $this->Mail->Subject .= ': HTML + Attachment';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
+        if (!$this->Mail->addAttachment('../examples/images/phpmailer_mini.png', 'phpmailer_mini.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
