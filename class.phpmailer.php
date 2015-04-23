@@ -2953,6 +2953,16 @@ class PHPMailer
     }
 
     /**
+     * Returns all custom headers
+     *
+     * @return array
+     */
+    public function getCustomHeaders()
+    {
+        return $this->CustomHeader;
+    }
+
+    /**
      * Create a message from an HTML string.
      * Automatically makes modifications for inline images and backgrounds
      * and creates a plain-text version by converting the HTML.

@@ -1680,6 +1680,33 @@ EOT;
             'SMTP connect with options failed'
         );
     }
+
+    /**
+     * Tests the Custom header getter
+     */
+    public function testCustomHeaderGetter()
+    {
+        $this->Mail->addCustomHeader('foo', 'bar');
+        $this->assertEquals(array(array('foo', 'bar')), $this->Mail->getCustomHeaders());
+
+        $this->Mail->addCustomHeader('foo', 'baz');
+        $this->assertEquals(array(
+            array('foo', 'bar'),
+            array('foo', 'baz')
+        ), $this->Mail->getCustomHeaders());
+
+        $this->Mail->clearCustomHeaders();
+        $this->assertEmpty($this->Mail->getCustomHeaders());
+
+        $this->Mail->addCustomHeader('yux');
+        $this->assertEquals(array(array('yux')), $this->Mail->getCustomHeaders());
+
+        $this->Mail->addCustomHeader('Content-Type: application/json');
+        $this->assertEquals(array(
+            array('yux'),
+            array('Content-Type', ' application/json')
+        ), $this->Mail->getCustomHeaders());
+    }
 }
 
 /**
