@@ -26,6 +26,7 @@
 * Add MIME multipart preamble for better Outlook compatibility
 * Provide detailed errors when individual recipients fail
 * Report more errors when connecting
+* Add extras classes to composer classmap
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
