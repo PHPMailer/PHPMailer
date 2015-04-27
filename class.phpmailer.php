@@ -256,6 +256,12 @@ class PHPMailer
     public $SMTPAuth = false;
 
     /**
+     * Options array passed to stream_context_create when connecting via SMTP.
+     * @type array
+     */
+    public $SMTPOptions = array();
+
+    /**
      * SMTP username.
      * @type string
      */
@@ -1220,7 +1226,7 @@ class PHPMailer
     protected function smtpSend($header, $body)
     {
         $bad_rcpt = array();
-        if (!$this->smtpConnect()) {
+        if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
         if ('' == $this->Sender) {
