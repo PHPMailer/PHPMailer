@@ -3500,7 +3500,7 @@ class PHPMailer
 
     /**
      * Detect if a string contains a line longer than the maximum line length allowed.
-     * @param $str
+     * @param string $str
      * @return boolean
      * @static
      */

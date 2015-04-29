@@ -29,6 +29,7 @@
 * Report more errors when connecting
 * Add extras classes to composer classmap
 * Expose stream_context_create options via new SMTPOptions property
+* Automatic encoding switch to quoted-printable if message lines are too long
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
