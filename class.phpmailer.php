@@ -565,6 +565,13 @@ class PHPMailer
     protected $exceptions = false;
 
     /**
+     * Unique ID used for message ID and boundaries.
+     * @type string
+     * @access protected
+     */
+    protected $uniqueid = '';
+
+    /**
      * Error severity: message only, continue processing.
      */
     const STOP_MESSAGE = 0;
@@ -583,6 +590,12 @@ class PHPMailer
      * SMTP RFC standard line ending.
      */
     const CRLF = "\r\n";
+
+    /**
+     * The maximum line length allowed by RFC 2822 section 2.1.1
+     * @type integer
+     */
+    const MAX_LINE_LENGTH = 998;
 
     /**
      * Constructor.
@@ -1016,8 +1029,9 @@ class PHPMailer
                 throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
             }
 
-            $this->MIMEHeader = $this->createHeader();
+            //Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEBody = $this->createBody();
+            $this->MIMEHeader = $this->createHeader();
 
             // To capture the complete message when using mail(), create
             // an extra header list which createHeader() doesn't fold in
@@ -1683,12 +1697,6 @@ class PHPMailer
     {
         $result = '';
 
-        // Set the boundaries
-        $uniq_id = md5(uniqid(time()));
-        $this->boundary[1] = 'b1_' . $uniq_id;
-        $this->boundary[2] = 'b2_' . $uniq_id;
-        $this->boundary[3] = 'b3_' . $uniq_id;
-
         if ($this->MessageDate == '') {
             $this->MessageDate = self::rfcDate();
         }
@@ -1740,7 +1748,7 @@ class PHPMailer
         if ($this->MessageID != '') {
             $this->lastMessageID = $this->MessageID;
         } else {
-            $this->lastMessageID = sprintf('<%s@%s>', $uniq_id, $this->ServerHostname());
+            $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->ServerHostname());
         }
         $result .= $this->headerLine('Message-ID', $this->lastMessageID);
         $result .= $this->headerLine('X-Priority', $this->Priority);
@@ -1850,6 +1858,11 @@ class PHPMailer
     public function createBody()
     {
         $body = '';
+        //Create unique IDs and preset boundaries
+        $this->uniqueid = md5(uniqid(time()));
+        $this->boundary[1] = 'b1_' . $this->uniqueid;
+        $this->boundary[2] = 'b2_' . $this->uniqueid;
+        $this->boundary[3] = 'b3_' . $this->uniqueid;
 
         if ($this->sign_key_file) {
             $body .= $this->getMailMIME() . $this->LE;
@@ -1859,14 +1872,28 @@ class PHPMailer
 
         $bodyEncoding = $this->Encoding;
         $bodyCharSet = $this->CharSet;
+        //Can we do a 7-bit downgrade?
         if ($bodyEncoding == '8bit' and !$this->has8bitChars($this->Body)) {
             $bodyEncoding = '7bit';
             $bodyCharSet = 'us-ascii';
         }
+        //If lines are too long, change to quoted-printable transfer encoding
+        if (self::hasLineLongerThanMax($this->Body)) {
+            $this->Encoding = 'quoted-printable';
+            $bodyEncoding = 'quoted-printable';
+            $bodyCharSet = 'us-ascii'; //qp always fits into ascii
+        }
+
         $altBodyEncoding = $this->Encoding;
         $altBodyCharSet = $this->CharSet;
+        //Can we do a 7-bit downgrade?
         if ($altBodyEncoding == '8bit' and !$this->has8bitChars($this->AltBody)) {
             $altBodyEncoding = '7bit';
+            $altBodyCharSet = 'us-ascii';
+        }
+        //If lines are too long, change to quoted-printable transfer encoding
+        if (self::hasLineLongerThanMax($this->AltBody)) {
+            $altBodyEncoding = 'quoted-printable';
             $altBodyCharSet = 'us-ascii';
         }
         //Use this as a preamble in all multipart message types
@@ -3469,6 +3496,18 @@ class PHPMailer
         );
         $signed = $this->DKIM_Sign($toSign);
         return $dkimhdrs . $signed . "\r\n";
+    }
+
+    /**
+     * Detect if a string contains a line longer than the maximum line length allowed.
+     * @param $str
+     * @return boolean
+     * @static
+     */
+    public static function hasLineLongerThanMax($str)
+    {
+        //+2 to include CRLF line break for a 1000 total
+        return (boolean)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + 2).',})/m', $str);
     }
 
     /**
