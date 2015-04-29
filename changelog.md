@@ -1,5 +1,6 @@
 # ChangeLog
 
+## Version 5.2.10 (April 29th 2015)
 * Add custom header getter
 * Use `application/javascript` for .js attachments
 * Improve RFC2821 compliance for timelimits, especially for end-of-data
