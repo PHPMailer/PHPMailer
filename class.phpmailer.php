@@ -1030,16 +1030,20 @@ class PHPMailer
                 $this->ContentType = 'multipart/alternative';
             }
 
-            $this->error_count = 0; // reset errors
+            $this->error_count = 0; // Reset errors
             $this->setMessageType();
             // Refuse to send an empty message unless we are specifically allowing it
             if (!$this->AllowEmpty and empty($this->Body)) {
                 throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
             }
 
-            //Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
+            // Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
+            $this->MIMEHeader = '';
             $this->MIMEBody = $this->createBody();
+            // createBody may have added some headers, so retain them
+            $tempheaders = $this->MIMEHeader;
             $this->MIMEHeader = $this->createHeader();
+            $this->MIMEHeader .= $tempheaders;
 
             // To capture the complete message when using mail(), create
             // an extra header list which createHeader() doesn't fold in

@@ -806,21 +806,29 @@ EOT;
      */
     public function testHtmlIso8859()
     {
-        $this->Mail->isHTML(false);
+        $this->Mail->isHTML(true);
         $this->Mail->Subject .= ": ISO-8859-1 HTML";
         $this->Mail->CharSet = 'iso-8859-1';
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
         $content = file_get_contents('../examples/contents.html');
+        // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
+        $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
-        $this->Mail->Body =
+        $this->Mail->msgHTML(
             mb_convert_encoding(
                 $content,
                 "ISO-8859-1",
                 mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
-            );
+            ),
+            '../examples'
+        );
         $this->buildBody();
+        $this->assertTrue(
+            strpos($this->Mail->Body, $check) !== false,
+            'ISO message body does not contain expected text'
+        );
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1095,35 +1103,13 @@ EOT;
         //Need to test generated output but PHPUnit isn't playing nice
         //$rendered = $ICS->render();
 
-        //Now test sending an ICS
+        //Test sending an ICS
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->AltBody = 'This is the text part of the email.';
         $this->Mail->Subject .= ': iCal';
         $this->Mail->isHTML(true);
         $this->buildBody();
-        $ICS = new EasyPeasyICS("PHPMailer test calendar");
-        $ICS->addEvent(
-            strtotime('tomorrow 10:00 Europe/Paris'),
-            strtotime('tomorrow 11:00 Europe/Paris'),
-            'PHPMailer iCal test',
-            'A test of PHPMailer iCal support',
-            'https://github.com/PHPMailer/PHPMailer'
-        );
         $this->Mail->Ical = $ICS->render(false);
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
-            'Here is an image!</a>.';
-        $this->Mail->AltBody = 'This is the text part of the email.';
-        $this->Mail->Subject .= ': iCal + inline';
-        $this->Mail->isHTML(true);
-        $this->Mail->addEmbeddedImage(
-            '../examples/images/phpmailer.png',
-            'my-attach',
-            'phpmailer.png',
-            'base64',
-            'image/png'
-        );
-        $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
