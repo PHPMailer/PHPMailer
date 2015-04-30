@@ -1901,7 +1901,6 @@ class PHPMailer
         if (self::hasLineLongerThanMax($this->Body)) {
             $this->Encoding = 'quoted-printable';
             $bodyEncoding = 'quoted-printable';
-            $bodyCharSet = 'us-ascii'; //qp always fits into ascii
         }
 
         $altBodyEncoding = $this->Encoding;
@@ -1914,7 +1913,6 @@ class PHPMailer
         //If lines are too long, change to quoted-printable transfer encoding
         if (self::hasLineLongerThanMax($this->AltBody)) {
             $altBodyEncoding = 'quoted-printable';
-            $altBodyCharSet = 'us-ascii';
         }
         //Use this as a preamble in all multipart message types
         $mimepre = "This is a multi-part message in MIME format." . $this->LE . $this->LE;
