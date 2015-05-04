@@ -967,6 +967,29 @@ EOT;
     }
 
     /**
+     * Simple HTML and multiple attachment test
+     */
+    public function testHTMLMultiAttachment()
+    {
+        $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
+        $this->Mail->Subject .= ': HTML + multiple Attachment';
+        $this->Mail->isHTML(true);
+
+        if (!$this->Mail->addAttachment('../examples/images/phpmailer_mini.png', 'phpmailer_mini.png')) {
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            return;
+        }
+
+        if (!$this->Mail->addAttachment('../examples/images/phpmailer.png', 'phpmailer.png')) {
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            return;
+        }
+
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
      * An embedded attachment test.
      */
     public function testEmbeddedImage()
