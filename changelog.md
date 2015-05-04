@@ -33,6 +33,7 @@
 * Expose stream_context_create options via new SMTPOptions property
 * Automatic encoding switch to quoted-printable if message lines are too long
 * Add Korean translation (Thanks to @ChalkPE)
+* Provide a pointer to troubleshooting docs on SMTP connection failure
 
 ## Version 5.2.9 (Sept 25th 2014)
 * **Important: The autoloader is no longer autoloaded by the PHPMailer class**
