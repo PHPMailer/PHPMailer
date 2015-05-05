@@ -1,5 +1,7 @@
 # ChangeLog
 
+* Don't switch to quoted-printable for long lines if already using base64
+
 ## Version 5.2.10 (May 4th 2015)
 * Add custom header getter
 * Use `application/javascript` for .js attachments
