@@ -33,7 +33,7 @@ The PHP mail() function usually sends via a local mail server, typically fronted
 
 ## License
 
-This software is licenced under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
+This software is licensed under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
 software availability and distribution.
 
 ## Installation & loading
@@ -134,7 +134,7 @@ Please submit bug reports, suggestions and pull requests to the [GitHub issue tr
 
 We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
 
-With the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
+With the move to the PHPMailer GitHub organization, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
 
 `git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git`
 
@@ -146,7 +146,7 @@ Development time and resources for PHPMailer are provided by [Smartmessages.net]
 
 <a href="https://info.smartmessages.net/"><img src="https://www.smartmessages.net/img/smartmessages-logo.svg" width="250" height="28" alt="Smartmessages email marketing"></a>
 
-Other contributions are gladly received, whether in beer 🍺, T-shirts 👕, Amazon wishlist raids, or cold, hard cash 💰.
+Other contributions are gladly received, whether in beer 🍺, T-shirts 👕, Amazon wish list raids, or cold, hard cash 💰.
 
 ## Changelog
 
@@ -158,7 +158,7 @@ See [changelog](changelog.md).
 - Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski.
 - Marcus created his fork on [GitHub](https://github.com/Synchro/PHPMailer).
 - Jim and Marcus decide to join forces and use GitHub as the canonical and official repo for PHPMailer.
-- PHPMailer moves to the [PHPMailer organisation](https://github.com/PHPMailer) on GitHub.
+- PHPMailer moves to the [PHPMailer organization](https://github.com/PHPMailer) on GitHub.
 
 ### What's changed since moving from SourceForge?
 - Official successor to the SourceForge and Google Code projects.
