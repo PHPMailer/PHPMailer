@@ -25,9 +25,7 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
-  - php --ini
-  - php -r 'echo PHP_VERSION;'
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -r 'if (PHP_VERSION) < \'7.0\') echo PHP_VERSION else echo \'7.0\';'`/etc/conf.d/sendmail.ini"
+  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > `php --ini|grep 'ini files in:'|cut -d : -f 2`'/sendmail.ini'
   - pwd
   - ls -al
 script:
