@@ -33,12 +33,12 @@ The PHP mail() function usually sends via a local mail server, typically fronted
 
 ## License
 
-This software is licenced under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html). Please read LICENSE for information on the
+This software is distributed under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html) license. Please read LICENSE for information on the
 software availability and distribution.
 
 ## Installation & loading
 
-PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer), so just add this line to your `composer.json` file:
+PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), so just add this line to your `composer.json` file:
 
     "phpmailer/phpmailer": "~5.2"
 
