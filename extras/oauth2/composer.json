@@ -1,0 +1,35 @@
+{
+    "name": "league/oauth2-client",
+    "description": "OAuth 2.0 Client Library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0",
+         "guzzle/guzzle": "~3.7"
+        
+    },
+    
+    "keywords": [
+        "oauth",
+        "oauth2",
+        "authorization",
+        "authentication",
+        "idp",
+        "identity",
+        "sso",
+        "single sign on"
+    ],
+    "authors": [
+        {
+            "name": "Alex Bilbie",
+            "email": "hello@alexbilbie.com",
+            "homepage": "http://www.alexbilbie.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "League\\OAuth2\\Client\\": "src/"
+        }
+    }
+  }
+

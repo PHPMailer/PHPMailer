@@ -364,7 +364,11 @@ class SMTP
         $password,
         $authtype = null,
         $realm = '',
-        $workstation = ''
+        $workstation = '',
+        $useremail='',
+        $refreshtoken='', 
+        $clientid = '', 
+        $clientsecret= ''
     ) {
         if (!$this->server_caps) {
             $this->setError('Authentication is not allowed before HELO/EHLO');
@@ -433,6 +437,28 @@ class SMTP
                     return false;
                 }
                 if (!$this->sendCommand("Password", base64_encode($password), 235)) {
+                    return false;
+                }
+                break;
+            case 'XOAUTH':
+                
+                //To be refined
+                require 'extras/oauth2/vendor/autoload.php';
+                
+                $refreshToken = $refreshtoken;
+                
+                $provider = new League\OAuth2\Client\Provider\Google([
+                    'clientId' => $clientid,
+                    'clientSecret' => $clientsecret
+                ]);
+                
+                $grant = new \League\OAuth2\Client\Grant\RefreshToken();
+                $TOKEN = $provider->getAccessToken($grant, ['refresh_token' => $refreshToken]);
+
+                $oauth = base64_encode("user=" . $useremail . "\001auth=Bearer " . $TOKEN . "\001\001");
+
+                // Start authentication
+                if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
                     return false;
                 }
                 break;
