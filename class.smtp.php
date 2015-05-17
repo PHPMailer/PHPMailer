@@ -364,7 +364,8 @@ class SMTP
         $password,
         $authtype = null,
         $realm = '',
-        $workstation = ''
+        $workstation = '',
+        $OAuth = null
     ) {
         if (!$this->server_caps) {
             $this->setError('Authentication is not allowed before HELO/EHLO');
@@ -433,6 +434,19 @@ class SMTP
                     return false;
                 }
                 if (!$this->sendCommand("Password", base64_encode($password), 235)) {
+                    return false;
+                }
+                break;
+            case 'XOAUTH':  
+                //If the OAuth Instance is not set. Can be a case when PHPMailer is used
+                //instead of PHPMailer54
+                if(is_null($OAuth)) 
+                    return false;
+                
+                $oauth = $OAuth->getOauth64();
+
+                // Start authentication
+                if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
                     return false;
                 }
                 break;
