@@ -449,10 +449,10 @@ class PHPMailer
      * Options: An empty string for PHPMailer default, Enter the email used to get access token
      * @type string
      */
-    public $UserEmail = '';
-    public $RefreshToken = '';
-    public $ClientId = '';
-    public $ClientSecret = '';
+//    public $UserEmail = '';
+//    public $RefreshToken = '';
+//    public $ClientId = '';
+//    public $ClientSecret = '';
     
     
     /**
@@ -1328,7 +1328,7 @@ class PHPMailer
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
         }
-
+       
         // Already connected?
         if ($this->smtp->connected()) {
             return true;
@@ -1407,11 +1407,7 @@ class PHPMailer
                             $this->Password, 
                             $this->AuthType, 
                             $this->Realm, 
-                            $this->Workstation, 
-                            $this->UserEmail,
-                            $this->RefreshToken, 
-                            $this->ClientId, 
-                            $this->ClientSecret
+                            $this->Workstation
                         )
                         ) {
                             throw new phpmailerException($this->lang('authenticate'));

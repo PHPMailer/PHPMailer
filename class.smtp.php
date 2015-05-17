@@ -365,10 +365,7 @@ class SMTP
         $authtype = null,
         $realm = '',
         $workstation = '',
-        $useremail='',
-        $refreshtoken='', 
-        $clientid = '', 
-        $clientsecret= ''
+        $OAuth = null
     ) {
         if (!$this->server_caps) {
             $this->setError('Authentication is not allowed before HELO/EHLO');
@@ -440,22 +437,13 @@ class SMTP
                     return false;
                 }
                 break;
-            case 'XOAUTH':
+            case 'XOAUTH':  
+                //If the OAuth Instance is not set. Can be a case when PHPMailer is used
+                //instead of PHPMailer54
+                if(is_null($OAuth)) 
+                    return false;
                 
-                //To be refined
-                require 'extras/oauth2/vendor/autoload.php';
-                
-                $refreshToken = $refreshtoken;
-                
-                $provider = new League\OAuth2\Client\Provider\Google([
-                    'clientId' => $clientid,
-                    'clientSecret' => $clientsecret
-                ]);
-                
-                $grant = new \League\OAuth2\Client\Grant\RefreshToken();
-                $TOKEN = $provider->getAccessToken($grant, ['refresh_token' => $refreshToken]);
-
-                $oauth = base64_encode("user=" . $useremail . "\001auth=Bearer " . $TOKEN . "\001\001");
+                $oauth = $OAuth->getOauth64();
 
                 // Start authentication
                 if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
