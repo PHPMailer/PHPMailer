@@ -16,7 +16,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
-- SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms over SSL and TLS transports
+- SMTP authentication with LOGIN, PLAIN, NTLM, CRAM-MD5 and Google's XOAUTH2 mechanisms over SSL and TLS transports
 - Error messages in 47 languages!
 - DKIM and S/MIME signing support
 - Compatible with PHP 5.0 and later
@@ -48,9 +48,11 @@ If you're not using composer's autoloader, PHPMailer provides an SPL-compatible 
 
 PHPMailer does *not* declare a namespace because namespaces were only introduced in PHP 5.3.
 
+If you want to use Google's XOAUTH2 authentication mechanism, you need to be running at least PHP 5.4, and load the dependencies listed in `composer.json`.
+
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation. If you're using Google XOAUTH2 you will need `class.phpmaileroauth.php` and `class.oauth.php` classes too, as well as the composer dependencies.
 
 ## A Simple Example
 
