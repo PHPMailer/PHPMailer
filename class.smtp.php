@@ -351,13 +351,13 @@ class SMTP
      * Perform SMTP authentication.
      * Must be run after hello().
      * @see hello()
-     * @param string $username    The user name
-     * @param string $password    The password
-     * @param string $authtype    The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5)
-     * @param string $realm       The auth realm for NTLM
+     * @param string $username The user name
+     * @param string $password The password
+     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5)
+     * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
-     * @access public
-     * @return boolean True if successfully authenticated.
+     * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
+     * @return bool True if successfully authenticated.* @access public
      */
     public function authenticate(
         $username,
@@ -437,12 +437,12 @@ class SMTP
                     return false;
                 }
                 break;
-            case 'XOAUTH':  
+            case 'XOAUTH':
                 //If the OAuth Instance is not set. Can be a case when PHPMailer is used
-                //instead of PHPMailer54
-                if(is_null($OAuth)) 
+                //instead of PHPMailerOAuth
+                if (is_null($OAuth)) {
                     return false;
-                
+                }
                 $oauth = $OAuth->getOauth64();
 
                 // Start authentication

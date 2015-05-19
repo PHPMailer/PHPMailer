@@ -10,8 +10,8 @@ date_default_timezone_set('Etc/UTC');
 require '../PHPMailerAutoload.php';
 
 
-//Create a new PHPMailer instance
-$mail = new PHPMailer54;
+//Create a new PHPMailerOAuth instance
+$mail = new PHPMailerOAuth;
 
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();

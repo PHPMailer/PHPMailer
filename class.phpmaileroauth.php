@@ -1,50 +1,87 @@
 <?php
+/**
+ * PHPMailer - PHP email creation and transport class.
+ * PHP Version 5.4
+ * @package PHPMailer
+ * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
+ * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author Brent R. Matzelle (original founder)
+ * @copyright 2012 - 2014 Marcus Bointon
+ * @copyright 2010 - 2012 Jim Jagielski
+ * @copyright 2004 - 2009 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @note This program is distributed in the hope that it will be useful - WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ */
 
-class PHPMailer54 extends PHPMailer {
-    
+/**
+ * PHPMailerOAuth - PHPMailer subclass adding OAuth support.
+ * @package PHPMailer
+ * @author @sherryl4george
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ */
+class PHPMailerOAuth extends PHPMailer
+{
+    /**
+     * The OAuth user's email address
+     * @type string
+     */
     public $oauthUserEmail = '';
+
+    /**
+     * The OAuth refresh token
+     * @type string
+     */
     public $oauthRefreshToken = '';
+
+    /**
+     * The OAuth client ID
+     * @type string
+     */
     public $oauthClientId = '';
+
+    /**
+     * The OAuth client secret
+     * @type string
+     */
     public $oauthClientSecret = '';
 
     /**
-     * An instance of the SMTP sender class.
-     * @type SMTP
+     * An instance of the OAuth class.
+     * @type OAuth
      * @access protected
      */
     protected $oauth = null;
     
-    public function __construct()
-    {
-        parent::__construct($exceptions = false);
-    }
-
     /**
-     * Destructor.
-     */
-    public function __destruct()
-    {
-        //Close any open SMTP connection nicely
-        parent::__destruct();
-    }
-    
-    /**
-     * Get an instance to use for SMTP operations.
-     * Override this function to load your own SMTP implementation
-     * @return SMTP
+     * Get an OAuth instance to use.
+     * @return OAuth
      */
     public function getOAUTHInstance()
     {
         if (!is_object($this->oauth)) {
-            $this->oauth = new OAuth($this->oauthUserEmail,
-                                      $this->oauthClientSecret,  
-                                     $this->oauthClientId,
-                                     $this->oauthRefreshToken
-                                     );
+            $this->oauth = new OAuth(
+                $this->oauthUserEmail,
+                $this->oauthClientSecret,
+                $this->oauthClientId,
+                $this->oauthRefreshToken
+            );
         }
         return $this->oauth;
     }
-    
+
+    /**
+     * Initiate a connection to an SMTP server.
+     * Overrides the original smtpConnect method to add support for OAuth.
+     * @param array $options An array of options compatible with stream_context_create()
+     * @uses SMTP
+     * @access public
+     * @throws phpmailerException
+     * @return boolean
+     */
     public function smtpConnect($options = array())
     {
         if (is_null($this->smtp)) {
@@ -129,11 +166,11 @@ class PHPMailer54 extends PHPMailer {
                     }
                     if ($this->SMTPAuth) {
                         if (!$this->smtp->authenticate(
-                            $this->Username, 
-                            $this->Password, 
-                            $this->AuthType, 
-                            $this->Realm, 
-                            $this->Workstation, 
+                            $this->Username,
+                            $this->Password,
+                            $this->AuthType,
+                            $this->Realm,
+                            $this->Workstation,
                             $this->oauth
                         )
                         ) {
@@ -157,7 +194,4 @@ class PHPMailer54 extends PHPMailer {
         }
         return false;
     }
-    
 }
-
-?>
