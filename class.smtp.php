@@ -353,7 +353,7 @@ class SMTP
      * @see hello()
      * @param string $username The user name
      * @param string $password The password
-     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5)
+     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH)
      * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
      * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
