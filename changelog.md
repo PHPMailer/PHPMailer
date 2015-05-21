@@ -2,6 +2,7 @@
 
 * Don't switch to quoted-printable for long lines if already using base64
 * Fixed Travis-CI config when run on PHP 7
+* Add address parser for RFC822-format addresses
 
 ## Version 5.2.10 (May 4th 2015)
 * Add custom header getter
