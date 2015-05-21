@@ -7,10 +7,11 @@
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
 
-require 'PHPMailerAutoload.php';
+require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailerOAuth;
 
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();
@@ -36,8 +37,8 @@ $mail->SMTPSecure = 'tls';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 
-//Set AuthTYpe
-$mail->AuthType = 'XOAUTH';
+//Set AuthType
+$mail->AuthType = 'XOAUTH2';
 
 //UserEmail to use for SMTP authentication - Use the same Email used in Google Developer Console
 $mail->UserEmail = "someone@gmail.com";
@@ -54,10 +55,8 @@ $mail->ClientSecret = "RANDOMCHARS-----lGyjPcRtvP";
 $mail->RefreshToken = "RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0";
 
 //Set who the message is to be sent from
+//For gmail, this generally needs to be the same as the user you logged in as
 $mail->setFrom('from@example.com', 'First Last');
-
-//Set an alternative reply-to address
-$mail->addReplyTo('replyto@example.com', 'First Last');
 
 //Set who the message is to be sent to
 $mail->addAddress('whoto@example.com', 'John Doe');
@@ -81,4 +80,3 @@ if (!$mail->send()) {
 } else {
     echo "Message sent!";
 }
-?>

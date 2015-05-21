@@ -1,19 +1,17 @@
 <?php
-
-require_once 'vendor/autoload.php';
-
-class OAuth {
-
+class OAuth
+{
     private $oauthUserEmail = '';
     private $oauthRefreshToken = '';
     private $oauthClientId = '';
     private $oauthClientSecret = '';
     
-    public function __construct($UserEmail,
-                                $ClientSecret,  
-                                $ClientId,
-                                $RefreshToken
-                                ) {
+    public function __construct(
+        $UserEmail,
+        $ClientSecret,
+        $ClientId,
+        $RefreshToken
+    ) {
         $this->oauthClientId = $ClientId;
         $this->oauthClientSecret = $ClientSecret;
         $this->oauthRefreshToken = $RefreshToken;
@@ -27,23 +25,22 @@ class OAuth {
         ]);
     }
     
-    private function getGrant(){
+    private function getGrant()
+    {
         return new \League\OAuth2\Client\Grant\RefreshToken();
     }
     
-    private function getToken(){
+    private function getToken()
+    {
         $provider = $this->getProvider();
         $grant = $this->getGrant();
         return $provider->getAccessToken($grant, ['refresh_token' => $this->oauthRefreshToken]);
     }
     
-    public function getOauth64(){
+    public function getOauth64()
+    {
         $token = $this->getToken();
         echo $this->oauthUserEmail;
         return base64_encode("user=" . $this->oauthUserEmail . "\001auth=Bearer " . $token . "\001\001");
-    }    
-                
-
+    }
 }
-?>
-

@@ -353,7 +353,7 @@ class SMTP
      * @see hello()
      * @param string $username The user name
      * @param string $password The password
-     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH)
+     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
      * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
      * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
@@ -389,7 +389,7 @@ class SMTP
             );
 
             if (empty($authtype)) {
-                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN') as $method) {
+                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN', 'XOAUTH2') as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
@@ -437,7 +437,7 @@ class SMTP
                     return false;
                 }
                 break;
-            case 'XOAUTH':
+            case 'XOAUTH2':
                 //If the OAuth Instance is not set. Can be a case when PHPMailer is used
                 //instead of PHPMailerOAuth
                 if (is_null($OAuth)) {

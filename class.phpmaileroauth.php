@@ -21,7 +21,7 @@
  * PHPMailerOAuth - PHPMailer subclass adding OAuth support.
  * @package PHPMailer
  * @author @sherryl4george
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon (@Synchro) <phpmailer@synchromedia.co.uk>
  */
 class PHPMailerOAuth extends PHPMailer
 {
