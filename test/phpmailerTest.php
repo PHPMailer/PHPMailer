@@ -1365,6 +1365,90 @@ EOT;
     }
 
     /**
+     * Test RFC822 address splitting.
+     */
+    public function testAddressSplitting()
+    {
+        //Test built-in address parser
+        $this->assertCount(
+            2,
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>, Jill User <jill@example.net>'
+            ),
+            'Failed to recognise address list (IMAP parser)'
+        );
+        //Test simple address parser
+        $this->assertCount(
+            2,
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>, Jill User <jill@example.net>',
+                false
+            ),
+            'Failed to recognise address list'
+        );
+        //Test single address
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>',
+                false
+            ),
+            'Failed to recognise single address'
+        );
+        //Test quoted name IMAP
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'Tim "The Book" O\'Reilly <foo@example.com>'
+            ),
+            'Failed to recognise quoted name (IMAP)'
+        );
+        //Test quoted name
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'Tim "The Book" O\'Reilly <foo@example.com>',
+                false
+            ),
+            'Failed to recognise quoted name'
+        );
+        //Test single address IMAP
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>'
+            ),
+            'Failed to recognise single address (IMAP)'
+        );
+        //Test unnamed address
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'joe@example.com',
+                false
+            ),
+            'Failed to recognise unnamed address'
+        );
+        //Test unnamed address IMAP
+        $this->assertNotEmpty(
+            $this->Mail->parseAddresses(
+                'joe@example.com'
+            ),
+            'Failed to recognise unnamed address (IMAP)'
+        );
+        //Test invalid addresses
+        $this->assertEmpty(
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com.>, Jill User <jill.@example.net>'
+            ),
+            'Failed to recognise invalid addresses (IMAP)'
+        );
+        //Test invalid addresses
+        $this->assertEmpty(
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
+                false
+            ),
+            'Failed to recognise invalid addresses'
+        );
+    }
+
+    /**
      * Test address escaping.
      */
     public function testAddressEscaping()
