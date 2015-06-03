@@ -40,7 +40,6 @@ class OAuth
     public function getOauth64()
     {
         $token = $this->getToken();
-        echo $this->oauthUserEmail;
         return base64_encode("user=" . $this->oauthUserEmail . "\001auth=Bearer " . $token . "\001\001");
     }
 }
