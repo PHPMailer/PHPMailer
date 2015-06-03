@@ -8,6 +8,9 @@
 date_default_timezone_set('Etc/UTC');
 
 require '../PHPMailerAutoload.php';
+
+//Load dependnecies from composer
+//If this causes an error, run 'composer install'
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
@@ -40,19 +43,19 @@ $mail->SMTPAuth = true;
 //Set AuthType
 $mail->AuthType = 'XOAUTH2';
 
-//UserEmail to use for SMTP authentication - Use the same Email used in Google Developer Console
-$mail->UserEmail = "someone@gmail.com";
+//User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
+$mail->oauthUserEmail = "someone@gmail.com";
 
 //Obtained From Google Developer Console
-$mail->ClientId = "RANDOMCHARS-----duv1n2.apps.googleusercontent.com";
+$mail->oauthClientId = "RANDOMCHARS-----duv1n2.apps.googleusercontent.com";
 
 //Obtained From Google Developer Console
-$mail->ClientSecret = "RANDOMCHARS-----lGyjPcRtvP";
+$mail->oauthClientSecret = "RANDOMCHARS-----lGyjPcRtvP";
 
 //Obtained By running get_oauth_token.php after setting up APP in Google Developer Console.
 //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
 // eg: http://localhost/phpmail/get_oauth_token.php
-$mail->RefreshToken = "RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0";
+$mail->oauthRefreshToken = "RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0";
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
