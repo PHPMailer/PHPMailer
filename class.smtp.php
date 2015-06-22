@@ -30,7 +30,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @type string
      */
-    const VERSION = '5.2.9';
+    const VERSION = '5.2.10';
 
     /**
      * SMTP line break constant.
@@ -81,7 +81,7 @@ class SMTP
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.9';
+    public $Version = '5.2.10';
 
     /**
      * SMTP server port number.
@@ -265,7 +265,7 @@ class SMTP
         }
         // Connect to the SMTP server
         $this->edebug(
-            "Connection: opening to $host:$port, t=$timeout, opt=".var_export($options, true),
+            "Connection: opening to $host:$port, timeout=$timeout, options=".var_export($options, true),
             self::DEBUG_CONNECTION
         );
         $errno = 0;

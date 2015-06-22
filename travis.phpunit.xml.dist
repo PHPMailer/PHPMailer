@@ -10,7 +10,6 @@
          convertWarningsToExceptions="true"
          colors="false"
          forceCoversAnnotation="false"
-         strict="false"
          processIsolation="false">
     <testsuites>
         <testsuite name="PHPMailer Tests">

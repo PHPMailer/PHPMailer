@@ -9,7 +9,6 @@ php:
  
 matrix:
   allow_failures:
-    - php: 7.0
     - php: hhvm
 
 before_install:
@@ -25,9 +24,7 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -r 'echo PHP_VERSION;'`/etc/conf.d/sendmail.ini"
-  - pwd
-  - ls -al
+  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 script:
   - phpunit --configuration ../travis.phpunit.xml.dist
 after_script:
