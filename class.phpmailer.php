@@ -35,10 +35,11 @@ class PHPMailer
 
     /**
      * Email priority.
-     * Options: 1 = High, 3 = Normal, 5 = low.
+     * Options: null (default), 1 = High, 3 = Normal, 5 = low.
+     * When null, the header is not set at all.
      * @type integer
      */
-    public $Priority = 3;
+    public $Priority = null;
 
     /**
      * The character set of the message.
@@ -1826,7 +1827,9 @@ class PHPMailer
             $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->ServerHostname());
         }
         $result .= $this->headerLine('Message-ID', $this->lastMessageID);
-        $result .= $this->headerLine('X-Priority', $this->Priority);
+        if (!is_null($this->Priority)) {
+            $result .= $this->headerLine('X-Priority', $this->Priority);
+        }
         if ($this->XMailer == '') {
             $result .= $this->headerLine(
                 'X-Mailer',
