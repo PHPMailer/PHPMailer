@@ -3108,8 +3108,9 @@ class PHPMailer
                             $message
                         );
                     }
-                } elseif (!preg_match('#^[A-z]+://#', $url)) {
+                } elseif (!preg_match('#^[A-z]+://#', $url) && !preg_match('#^cid:#', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
+					// Do not change urls that are already inline images
                     $filename = basename($url);
                     $directory = dirname($url);
                     if ($directory == '.') {
