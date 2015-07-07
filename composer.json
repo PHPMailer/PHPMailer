@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "*",
-        "phpunit/phpunit": "4.3.*"
+        "phpunit/phpunit": "4.7.*"
     },
     "autoload": {
         "classmap": [
