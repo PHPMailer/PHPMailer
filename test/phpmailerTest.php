@@ -761,6 +761,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         //Check that a quoted printable encode and decode results in the same as went in
         $t = file_get_contents(__FILE__); //Use this file as test content
+        //Force line breaks to UNIX-style
+        $t = str_replace(array("\r\n", "\r"), "\n", $t);
         $this->assertEquals(
             $t,
             quoted_printable_decode($this->Mail->encodeQP($t)),
@@ -770,6 +772,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $this->Mail->encodeQP($t),
             $this->Mail->encodeQPphp($t),
             'Quoted-Printable BC wrapper failed'
+        );
+        //Force line breaks to Windows-style
+        $t = str_replace("\n", "\r\n", $t);
+        $this->assertEquals(
+            $t,
+            quoted_printable_decode($this->Mail->encodeQP($t)),
+            'Quoted-Printable encoding round-trip failed (Windows line breaks)'
         );
     }
 
