@@ -40,7 +40,15 @@ software availability and distribution.
 
 PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), so just add this line to your `composer.json` file:
 
-    "phpmailer/phpmailer": "~5.2"
+```json
+"phpmailer/phpmailer": "~5.2"
+```
+
+or
+
+```sh
+composer require phpmailer/phpmailer
+```
 
 Alternatively, copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
@@ -136,7 +144,9 @@ We're particularly interested in fixing edge-cases, expanding test coverage and 
 
 With the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
 
-`git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git`
+```sh
+git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
+```
 
 Please *don't* use the SourceForge or Google Code projects any more.
 
