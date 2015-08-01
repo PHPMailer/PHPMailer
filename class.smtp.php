@@ -723,9 +723,11 @@ class SMTP
     {
         $this->server_caps = array();
         $lines = explode("\n", $this->last_reply);
+
         foreach ($lines as $n => $s) {
+            //First 4 chars contain response code followed by - or space
             $s = trim(substr($s, 4));
-            if (!$s) {
+            if (empty($s)) {
                 continue;
             }
             $fields = explode(' ', $s);
@@ -735,11 +737,20 @@ class SMTP
                     $fields = $fields[0];
                 } else {
                     $name = array_shift($fields);
-                    if ($name == 'SIZE') {
-                        $fields = ($fields) ? $fields[0] : 0;
+                    switch ($name) {
+                        case 'SIZE':
+                            $fields = ($fields ? $fields[0] : 0);
+                            break;
+                        case 'AUTH':
+                            if (!is_array($fields)) {
+                                $fields = array();
+                            }
+                            break;
+                        default:
+                            $fields = true;
                     }
                 }
-                $this->server_caps[$name] = ($fields ? $fields : true);
+                $this->server_caps[$name] = $fields;
             }
         }
     }
