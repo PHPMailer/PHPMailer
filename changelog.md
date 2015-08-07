@@ -4,6 +4,8 @@
 * Fixed Travis-CI config when run on PHP 7
 * Add address parser for RFC822-format addresses
 * Update MS Office MIME types
+* Don't convert line breaks when using quoted-printable encoding
+* Handle MS Exchange returning an invalid empty AUTH-type list in EHLO
 
 ## Version 5.2.10 (May 4th 2015)
 * Add custom header getter

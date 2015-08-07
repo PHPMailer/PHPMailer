@@ -2618,7 +2618,7 @@ class PHPMailer
     {
         // Use native function if it's available (>= PHP5.3)
         if (function_exists('quoted_printable_encode')) {
-            return $this->fixEOL(quoted_printable_encode($string));
+            return quoted_printable_encode($string);
         }
         // Fall back to a pure PHP implementation
         $string = str_replace(
@@ -2626,8 +2626,7 @@ class PHPMailer
             array(' ', "\r\n=2E", "\r\n", '='),
             rawurlencode($string)
         );
-        $string = preg_replace('/[^\r\n]{' . ($line_max - 3) . '}[^=\r\n]{2}/', "$0=\r\n", $string);
-        return $this->fixEOL($string);
+        return preg_replace('/[^\r\n]{' . ($line_max - 3) . '}[^=\r\n]{2}/', "$0=\r\n", $string);
     }
 
     /**
