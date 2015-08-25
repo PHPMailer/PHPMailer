@@ -976,6 +976,31 @@ EOT;
     }
 
     /**
+     * Test embedded image without a name
+     */
+    public function testHTMLStringEmbedNoName()
+    {
+        $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
+        $this->Mail->Subject .= ': HTML + unnamed embedded image';
+        $this->Mail->isHTML(true);
+
+        if (!$this->Mail->addStringEmbeddedImage(
+            file_get_contents('../examples/images/phpmailer_mini.png'),
+            md5('phpmailer_mini.png').'@phpmailer.0',
+            '', //intentionally empty name
+            'base64',
+            'image/png',
+            'inline')
+        ) {
+            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            return;
+        }
+
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
      * Simple HTML and multiple attachment test
      */
     public function testHTMLMultiAttachment()
