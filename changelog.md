@@ -6,6 +6,7 @@
 * Update MS Office MIME types
 * Don't convert line breaks when using quoted-printable encoding
 * Handle MS Exchange returning an invalid empty AUTH-type list in EHLO
+* Don't set name or filename properties on MIME parts that don't have one
 
 ## Version 5.2.10 (May 4th 2015)
 * Add custom header getter
