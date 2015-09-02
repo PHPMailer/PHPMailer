@@ -1,5 +1,9 @@
 # ChangeLog
 
+## Version 5.2.12 (Sep 1st 2015)
+* Fix incorrect composer package dependencies
+* Skip existing embedded image `cid`s in `msgHTML`
+
 ## Version 5.2.11 (Aug 31st 2015)
 * Don't switch to quoted-printable for long lines if already using base64
 * Fixed Travis-CI config when run on PHP 7
