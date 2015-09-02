@@ -20,13 +20,15 @@
         }
     ],
     "require": {
-        "php": ">=5.0.0",
-        "league/oauth2-client": "0.10.*",
-        "guzzle/guzzle": "~3.7"
+        "php": ">=5.0.0"
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "*",
         "phpunit/phpunit": "4.3.*"
+    },
+    "suggest": {
+        "league/oauth2-client": "0.10.*",
+        "guzzle/guzzle": "~3.7"
     },
     "autoload": {
         "classmap": [
