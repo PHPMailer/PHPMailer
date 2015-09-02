@@ -27,8 +27,7 @@
         "phpunit/phpunit": "4.3.*"
     },
     "suggest": {
-        "league/oauth2-client": "0.10.*",
-        "guzzle/guzzle": "~3.7"
+        "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system"
     },
     "autoload": {
         "classmap": [
