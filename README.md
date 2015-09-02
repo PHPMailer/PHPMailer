@@ -50,6 +50,12 @@ or
 composer require phpmailer/phpmailer
 ```
 
+or use the command below:
+
+```sh
+composer require phpmailer/phpmailer
+```
+
 Alternatively, copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
 If you're not using composer's autoloader, PHPMailer provides an SPL-compatible autoloader, and that is the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work. The autoloader does not throw errors if it can't find classes so it prepends itself to the SPL list, allowing your own (or your framework's) autoloader to catch errors. SPL autoloading was introduced in PHP 5.1.0, so if you are using a version older than that you will need to require/include each class manually.
