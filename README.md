@@ -16,7 +16,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
-- SMTP authentication with LOGIN, PLAIN, NTLM and CRAM-MD5 mechanisms over SSL and TLS transports
+- SMTP authentication with LOGIN, PLAIN, NTLM, CRAM-MD5 and Google's XOAUTH2 mechanisms over SSL and TLS transports
 - Error messages in 47 languages!
 - DKIM and S/MIME signing support
 - Compatible with PHP 5.0 and later
@@ -50,15 +50,19 @@ or
 composer require phpmailer/phpmailer
 ```
 
+If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-client` package.
+
 Alternatively, copy the contents of the PHPMailer folder into somewhere that's in your PHP `include_path` setting. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
 If you're not using composer's autoloader, PHPMailer provides an SPL-compatible autoloader, and that is the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work. The autoloader does not throw errors if it can't find classes so it prepends itself to the SPL list, allowing your own (or your framework's) autoloader to catch errors. SPL autoloading was introduced in PHP 5.1.0, so if you are using a version older than that you will need to require/include each class manually.
 
 PHPMailer does *not* declare a namespace because namespaces were only introduced in PHP 5.3.
 
+If you want to use Google's XOAUTH2 authentication mechanism, you need to be running at least PHP 5.4, and load the dependencies listed in `composer.json`.
+
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation. If you're using Google XOAUTH2 you will need `class.phpmaileroauth.php` and `class.oauth.php` classes too, as well as the composer dependencies.
 
 ## A Simple Example
 

@@ -26,9 +26,14 @@
         "phpdocumentor/phpdocumentor": "*",
         "phpunit/phpunit": "4.7.*"
     },
+    "suggest": {
+        "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system"
+    },
     "autoload": {
         "classmap": [
             "class.phpmailer.php",
+            "class.phpmaileroauth.php",
+            "class.oauth.php",
             "class.smtp.php",
             "class.pop3.php",
             "extras/EasyPeasyICS.php",

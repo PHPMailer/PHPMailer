@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @type string
      */
-    public $Version = '5.2.10';
+    public $Version = '5.2.12';
 
     /**
      * Email priority.
@@ -444,7 +444,18 @@ class PHPMailer
      * @type string
      */
     public $XMailer = '';
-
+    
+    /**
+     * Only For XOAUTH - Google
+     * Options: An empty string for PHPMailer default, Enter the email used to get access token
+     * @type string
+     */
+//    public $UserEmail = '';
+//    public $RefreshToken = '';
+//    public $ClientId = '';
+//    public $ClientSecret = '';
+    
+    
     /**
      * An instance of the SMTP sender class.
      * @type SMTP
@@ -1373,7 +1384,7 @@ class PHPMailer
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
         }
-
+       
         // Already connected?
         if ($this->smtp->connected()) {
             return true;
@@ -1448,10 +1459,10 @@ class PHPMailer
                     }
                     if ($this->SMTPAuth) {
                         if (!$this->smtp->authenticate(
-                            $this->Username,
-                            $this->Password,
-                            $this->AuthType,
-                            $this->Realm,
+                            $this->Username, 
+                            $this->Password, 
+                            $this->AuthType, 
+                            $this->Realm, 
                             $this->Workstation
                         )
                         ) {
@@ -2330,12 +2341,21 @@ class PHPMailer
                 $cidUniq[$cid] = true;
 
                 $mime[] = sprintf('--%s%s', $boundary, $this->LE);
-                $mime[] = sprintf(
-                    'Content-Type: %s; name="%s"%s',
-                    $type,
-                    $this->encodeHeader($this->secureHeader($name)),
-                    $this->LE
-                );
+                //Only include a filename property if we have one
+                if (!empty($name)) {
+                    $mime[] = sprintf(
+                        'Content-Type: %s; name="%s"%s',
+                        $type,
+                        $this->encodeHeader($this->secureHeader($name)),
+                        $this->LE
+                    );
+                } else {
+                    $mime[] = sprintf(
+                        'Content-Type: %s%s',
+                        $type,
+                        $this->LE
+                    );
+                }
                 // RFC1341 part 5 says 7bit is assumed if not specified
                 if ($encoding != '7bit') {
                     $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, $this->LE);
@@ -2359,12 +2379,20 @@ class PHPMailer
                             $this->LE . $this->LE
                         );
                     } else {
-                        $mime[] = sprintf(
-                            'Content-Disposition: %s; filename=%s%s',
-                            $disposition,
-                            $encoded_name,
-                            $this->LE . $this->LE
-                        );
+                        if (!empty($encoded_name)) {
+                            $mime[] = sprintf(
+                                'Content-Disposition: %s; filename=%s%s',
+                                $disposition,
+                                $encoded_name,
+                                $this->LE . $this->LE
+                            );
+                        } else {
+                            $mime[] = sprintf(
+                                'Content-Disposition: %s%s',
+                                $disposition,
+                                $this->LE . $this->LE
+                            );
+                        }
                     }
                 } else {
                     $mime[] = $this->LE;
@@ -2801,7 +2829,7 @@ class PHPMailer
         $disposition = 'inline'
     ) {
         // If a MIME type is not specified, try to work it out from the name
-        if ($type == '') {
+        if ($type == '' and !empty($name)) {
             $type = self::filenameToType($name);
         }
 
@@ -3103,15 +3131,16 @@ class PHPMailer
                         $data = rawurldecode($data);
                     }
                     $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
-                    if ($this->addStringEmbeddedImage($data, $cid, '', 'base64', $match[1])) {
+                    if ($this->addStringEmbeddedImage($data, $cid, 'embed' . $imgindex, 'base64', $match[1])) {
                         $message = str_replace(
                             $images[0][$imgindex],
                             $images[1][$imgindex] . '="cid:' . $cid . '"',
                             $message
                         );
                     }
-                } elseif (!preg_match('#^[A-z]+://#', $url)) {
+                } elseif (substr($url, 0, 4) !== 'cid:' && !preg_match('#^[A-z]+://#', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
+					// Do not change urls that are already inline images
                     $filename = basename($url);
                     $directory = dirname($url);
                     if ($directory == '.') {
