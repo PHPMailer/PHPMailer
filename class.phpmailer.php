@@ -1107,6 +1107,10 @@ class PHPMailer
             // Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEHeader = '';
             $this->MIMEBody = $this->createBody();
+            // Check if something went wrong during body creation.
+            if ($this->MIMEBody == '') {
+                throw new phpmailerException($this->lang('create_body'), self::STOP_CRITICAL);
+            }
             // createBody may have added some headers, so retain them
             $tempheaders = $this->MIMEHeader;
             $this->MIMEHeader = $this->createHeader();
@@ -1532,7 +1536,8 @@ class PHPMailer
             'smtp_connect_failed' => 'SMTP connect() failed.',
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: ',
-            'extension_missing' => 'Extension missing: '
+            'extension_missing' => 'Extension missing: ',
+            'create_body' => 'Message body creation failed: '
         );
         if (empty($lang_path)) {
             // Calculate an absolute path so it can work if CWD is not here
