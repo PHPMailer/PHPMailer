@@ -63,7 +63,7 @@ class PHPMailerOAuth extends PHPMailer
     public function getOAUTHInstance()
     {
         if (!is_object($this->oauth)) {
-            $this->oauth = new OAuth(
+            $this->oauth = new PHPMailerOAuthGoogle(
                 $this->oauthUserEmail,
                 $this->oauthClientSecret,
                 $this->oauthClientId,

@@ -33,7 +33,7 @@
         "classmap": [
             "class.phpmailer.php",
             "class.phpmaileroauth.php",
-            "class.oauth.php",
+            "class.phpmaileroauthgoogle.php",
             "class.smtp.php",
             "class.pop3.php",
             "extras/EasyPeasyICS.php",
