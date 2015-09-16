@@ -1,5 +1,9 @@
 # ChangeLog
 
+## Version 5.2.13 (Sep 14th 2015)
+* Rename internal oauth class to avoid name clashes
+* Improve Estonian translations
+
 ## Version 5.2.12 (Sep 1st 2015)
 * Fix incorrect composer package dependencies
 * Skip existing embedded image `cid`s in `msgHTML`

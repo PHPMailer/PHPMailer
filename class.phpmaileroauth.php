@@ -55,7 +55,7 @@ class PHPMailerOAuth extends PHPMailer
      * @access protected
      */
     protected $oauth = null;
-    
+
     /**
      * Get an OAuth instance to use.
      * @return OAuth
@@ -63,7 +63,7 @@ class PHPMailerOAuth extends PHPMailer
     public function getOAUTHInstance()
     {
         if (!is_object($this->oauth)) {
-            $this->oauth = new OAuth(
+            $this->oauth = new PHPMailerOAuthGoogle(
                 $this->oauthUserEmail,
                 $this->oauthClientSecret,
                 $this->oauthClientId,
@@ -87,11 +87,11 @@ class PHPMailerOAuth extends PHPMailer
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
         }
-        
+
         if (is_null($this->oauth)) {
             $this->oauth = $this->getOAUTHInstance();
         }
-       
+
         // Already connected?
         if ($this->smtp->connected()) {
             return true;
