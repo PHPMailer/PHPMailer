@@ -45,9 +45,11 @@ $example_code .= "\n\n\$results_messages = array();";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
 $mail->CharSet = 'utf-8';
+ini_set('default_charset', 'UTF-8');
 $mail->Debugoutput = $CFG['smtp_debugoutput'];
 $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
+$example_code .= "\nini_set('default_charset', 'UTF-8');";
 
 class phpmailerAppException extends phpmailerException
 {
