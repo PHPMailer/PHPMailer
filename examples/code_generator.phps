@@ -45,9 +45,11 @@ $example_code .= "\n\n\$results_messages = array();";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
 $mail->CharSet = 'utf-8';
+ini_set('default_charset', 'UTF-8');
 $mail->Debugoutput = $CFG['smtp_debugoutput'];
 $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
+$example_code .= "\nini_set('default_charset', 'UTF-8');";
 
 class phpmailerAppException extends phpmailerException
 {
@@ -117,21 +119,19 @@ try {
         try {
             if ($_POST['From_Name'] != '') {
                 $mail->addReplyTo($_POST['From_Email'], $_POST['From_Name']);
-                $mail->From = $_POST['From_Email'];
-                $mail->FromName = $_POST['From_Name'];
+                $mail->setFrom($_POST['From_Email'], $_POST['From_Name']);
 
                 $example_code .= "\n\$mail->addReplyTo(\"" .
                     $_POST['From_Email'] . "\", \"" . $_POST['From_Name'] . "\");";
-                $example_code .= "\n\$mail->From       = \"" . $_POST['From_Email'] . "\";";
-                $example_code .= "\n\$mail->FromName   = \"" . $_POST['From_Name'] . "\";";
+                $example_code .= "\n\$mail->setFrom(\"" .
+                    $_POST['From_Email'] . "\", \"" . $_POST['From_Name'] . "\");";
             } else {
                 $mail->addReplyTo($_POST['From_Email']);
-                $mail->From = $_POST['From_Email'];
-                $mail->FromName = $_POST['From_Email'];
+                $mail->setFrom($_POST['From_Email'], $_POST['From_Email']);
 
                 $example_code .= "\n\$mail->addReplyTo(\"" . $_POST['From_Email'] . "\");";
-                $example_code .= "\n\$mail->From       = \"" . $_POST['From_Email'] . "\";";
-                $example_code .= "\n\$mail->FromName   = \"" . $_POST['From_Email'] . "\";";
+                $example_code .= "\n\$mail->setFrom(\"" .
+                    $_POST['From_Email'] . "\", \"" . $_POST['From_Email'] . "\");";
             }
 
             if ($_POST['To_Name'] != '') {
@@ -162,7 +162,7 @@ try {
         }
         $mail->Subject = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
         $example_code .= "\n\$mail->Subject  = \"" . $_POST['Subject'] .
-            '(PHPMailer test using ' . strtoupper($_POST['test_type']) . ')";';
+            ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')";';
 
         if ($_POST['Message'] == '') {
             $body = file_get_contents('contents.html');
