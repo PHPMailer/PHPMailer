@@ -2447,13 +2447,13 @@ class PHPMailer
                     ini_set('magic_quotes_runtime', false);
                 }
             }
-            // Just read instead and test the return code instead of doing
+            // Just read the file and test the return code instead of doing
             // is_readable() before: the latter could erroneously fail in
             // some corner cases. For example:
             // https://bugs.php.net/bug.php?id=70467
             $file_buffer = file_get_contents($path);
             if ($file_buffer === false) {
-                throw new phpmailerException($this->lang('file_open') . $path, self::STOP_CONTINUE);
+                throw new phpmailerException($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
             $file_buffer = $this->encodeString($file_buffer, $encoding);
             if ($magic_quotes) {
