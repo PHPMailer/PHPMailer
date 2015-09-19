@@ -190,7 +190,7 @@ class PHPMailer
     public $ConfirmReadingTo = '';
 
     /**
-     * The hostname to use in the Message-ID header.
+     * The hostname to use in the Message-ID header and as default HELO string.
      * If empty, PHPMailer attempts to find one with, in order,
      * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
      * 'localhost.localdomain'.
@@ -234,7 +234,8 @@ class PHPMailer
 
     /**
      * The SMTP HELO of the message.
-     * Default is obtained with the same method as $Hostname.
+     * Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
+     * one with the same method described above for $Hostname.
      * @type string
      * @see PHPMailer::$Hostname
      */
