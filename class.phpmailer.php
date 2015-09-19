@@ -190,16 +190,16 @@ class PHPMailer
     public $ConfirmReadingTo = '';
 
     /**
-     * The hostname to use in Message-Id and Received headers
-     * and as default HELO string.
-     * If empty, the value returned
-     * by SERVER_NAME is used or 'localhost.localdomain'.
+     * The hostname to use in the Message-ID header and as default HELO string.
+     * If empty, PHPMailer attempts to find one with, in order,
+     * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
+     * 'localhost.localdomain'.
      * @type string
      */
     public $Hostname = '';
 
     /**
-     * An ID to be used in the Message-Id header.
+     * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
      * @type string
      */
@@ -234,7 +234,8 @@ class PHPMailer
 
     /**
      * The SMTP HELO of the message.
-     * Default is $Hostname.
+     * Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
+     * one with the same method described above for $Hostname.
      * @type string
      * @see PHPMailer::$Hostname
      */
@@ -365,7 +366,7 @@ class PHPMailer
     /**
      * Whether to generate VERP addresses on send.
      * Only applicable when sending via SMTP.
-     * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
+     * @link https://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Postfix VERP info
      * @type boolean
      */
@@ -1835,7 +1836,7 @@ class PHPMailer
         if ($this->MessageID != '') {
             $this->lastMessageID = $this->MessageID;
         } else {
-            $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->ServerHostname());
+            $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());
         }
         $result .= $this->headerLine('Message-ID', $this->lastMessageID);
         if (!is_null($this->Priority)) {
