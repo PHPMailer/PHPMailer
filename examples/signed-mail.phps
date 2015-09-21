@@ -38,7 +38,7 @@
  *
  * openssl pkcs12 -in exported-cert.pfx -cacerts -out certchain.pem
  *
- * Again, the way you name your certificate is up to you. You will be also asked for the Import Password.
+ * Again, the way you name your chain file is up to you. You will be also asked for the Import Password.
  *
  *
  * STEP 3 - Code (most of the code is copied from the mail.phps example)
@@ -70,7 +70,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 $mail->sign('/path/to/cert.crt', //the location of your certificate file
 			'/path/to/cert.key', //the location of your private key file
 		   'yourSecretPrivateKeyPassword', //the password you protected your private key with (may be empty but parameter can not mit omitted!)
-		   '/path/to/certchain.pem');  //the location of your key chain file
+		   '/path/to/certchain.pem');  //the location of your chain file
 		//!!!! yourSecretPrivateKeyPassword is not the Import Password !!!!
 
 //send the message, check for errors
