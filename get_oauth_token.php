@@ -10,6 +10,7 @@
  * If no refresh token is obtained when running this file, revoke access to your app
  * using link: https://accounts.google.com/b/0/IssuedAuthSubTokens and run the script again.
  * This script requires PHP 5.4 or later
+ * PHP Version 5.4
  */
 
 require 'vendor/autoload.php';
@@ -19,19 +20,20 @@ session_start();
 //If this automatic URL doesn't work, set it yourself manually
 $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/phpmailer/get_oauth_token.php';
+
+//These details obtained are by setting up app in Google developer console.
 $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
-//All details obtained by setting up app in Google developer console.
 //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
-$provider = new League\OAuth2\Client\Provider\Google (
-    [
+$provider = new League\OAuth2\Client\Provider\Google(
+    array(
         'clientId' => $clientId,
         'clientSecret' => $clientSecret,
         'redirectUri' => $redirectUri,
-        'scopes' => ['https://mail.google.com/'],
+        'scopes' => array('https://mail.google.com/'),
         'accessType' => 'offline'
-    ]
+    )
 );
 
 if (!isset($_GET['code'])) {
@@ -49,9 +51,9 @@ if (!isset($_GET['code'])) {
     // Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
         'authorization_code',
-        [
+        array(
             'code' => $_GET['code']
-        ]
+        )
     );
     // Use this to interact with an API on the users behalf
     //    echo $token->accessToken.'<br>';
