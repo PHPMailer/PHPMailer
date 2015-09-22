@@ -41,7 +41,7 @@
  * Again, the way you name your chain file is up to you. You will be also asked for the Import Password.
  *
  *
- * STEP 3 - Code (most of the code is copied from the mail.phps example)
+ * STEP 3 - Code
  */
 
 require '../PHPMailerAutoload.php';
@@ -59,21 +59,22 @@ $mail->addAddress('whoto@example.com', 'John Doe');
 //Set the subject line
 $mail->Subject = 'PHPMailer mail() test';
 //Read an HTML message body from an external file, convert referenced images to embedded,
-//convert HTML into a basic plain-text alternative body
+//Convert HTML into a basic plain-text alternative body
 $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 //Replace the plain text body with one created manually
 $mail->AltBody = 'This is a plain-text message body';
 //Attach an image file
 $mail->addAttachment('images/phpmailer_mini.png');
 
-//signing the email
-$mail->sign('/path/to/cert.crt', //the location of your certificate file
-			'/path/to/cert.key', //the location of your private key file
-		   'yourSecretPrivateKeyPassword', //the password you protected your private key with (may be empty but parameter can not mit omitted!)
-		   '/path/to/certchain.pem');  //the location of your chain file
-		//!!!! yourSecretPrivateKeyPassword is not the Import Password !!!!
+//Configure message signing (the actual signing does not occur until sending)
+$mail->sign(
+    '/path/to/cert.crt', //The location of your certificate file
+    '/path/to/cert.key', //The location of your private key file
+    'yourSecretPrivateKeyPassword', //The password you protected your private key with (not the Import Password! may be empty but parameter must not be omitted!)
+    '/path/to/certchain.pem' //The location of your chain file
+);
 
-//send the message, check for errors
+//Send the message, check for errors
 if (!$mail->send()) {
     echo "Mailer Error: " . $mail->ErrorInfo;
 } else {
