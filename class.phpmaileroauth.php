@@ -54,7 +54,16 @@ class PHPMailerOAuth extends PHPMailer
      * @type OAuth
      * @access protected
      */
+    public $oauthProviderName = '';
+
+    /**
+     * An instance of the OAuth class.
+     * @type OAuth
+     * @access protected
+     */
     protected $oauth = null;
+    
+    
 
     /**
      * Get an OAuth instance to use.
@@ -63,7 +72,8 @@ class PHPMailerOAuth extends PHPMailer
     public function getOAUTHInstance()
     {
         if (!is_object($this->oauth)) {
-            $this->oauth = new PHPMailerOAuthGoogle(
+            $this->oauth = new PHPMailerOAuthProvider(
+                $this->oauthProviderName,
                 $this->oauthUserEmail,
                 $this->oauthClientSecret,
                 $this->oauthClientId,
