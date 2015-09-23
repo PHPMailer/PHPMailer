@@ -356,7 +356,7 @@ class SMTP
      * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
      * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
-     * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
+     * @param null|PHPMailerOAuthProvider  $OAuth An optional PHPMailerOAuthProvider instance (@see PHPMailerOAuth)
      * @return bool True if successfully authenticated.* @access public
      */
     public function authenticate(

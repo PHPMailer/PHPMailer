@@ -18,17 +18,17 @@
  */
 
 /**
- * PHPMailerOAuthProvider - Wrapper for League OAuth2 Google provider.
+ * PHPMailerOAuthProvider - Wrapper for League OAuth2 Microsoft provider.
  * @package PHPMailer
  * @author @hayageek
  * @author Ravishanker Kusuma (hayageek@gmail.com)
  * @link https://github.com/hayageek
  */
 
-class PHPMailerOAuthGoogle extends PHPMailerOAuthProvider
+class PHPMailerOAuthMicrosoft extends PHPMailerOAuthProvider
 {
     public function getProvider() {
-        return new League\OAuth2\Client\Provider\Google([
+        return new Stevenmaguire\OAuth2\Client\Provider\Microsoft([
             'clientId' => $this->oauthClientId,
             'clientSecret' => $this->oauthClientSecret
         ]);
