@@ -27,13 +27,19 @@
         "phpunit/phpunit": "4.7.*"
     },
     "suggest": {
-        "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system"
+        "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system",
+        "league/oauth2-google": "^1.0",
+        "hayageek/oauth2-yahoo": "^2.0",
+        "stevenmaguire/oauth2-microsoft": "^0.2.0"
     },
     "autoload": {
         "classmap": [
             "class.phpmailer.php",
             "class.phpmaileroauth.php",
+            "class.phpmaileroauthprovider.php",
             "class.phpmaileroauthgoogle.php",
+            "class.phpmaileroauthyahoo.php",
+            "class.phpmaileroauthmicrosoft.php",
             "class.smtp.php",
             "class.pop3.php",
             "extras/EasyPeasyICS.php",
