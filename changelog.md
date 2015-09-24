@@ -1,5 +1,8 @@
 # ChangeLog
 
+* Allow access to POP3 errors
+* Make all POP3 private properties and methods protected
+
 ## Version 5.2.13 (Sep 14th 2015)
 * Rename internal oauth class to avoid name clashes
 * Improve Estonian translations
