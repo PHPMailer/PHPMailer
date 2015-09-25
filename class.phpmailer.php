@@ -157,7 +157,7 @@ class PHPMailer
 
     /**
      * Which method to use to send mail.
-     * Options: "mail", "sendmail", or "smtp".
+     * Options: "mail", "sendmail", "direct" or "smtp".
      * @type string
      */
     public $Mailer = 'mail';
@@ -725,6 +725,15 @@ class PHPMailer
     }
 
     /**
+     * Send messages using SMTP directly to recipient host.
+     * @return void
+     */
+    public function isDirect()
+    {
+        $this->Mailer = 'direct';
+    }
+
+    /**
      * Send messages using SMTP.
      * @return void
      */
@@ -1166,6 +1175,8 @@ class PHPMailer
                     return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
                 case 'smtp':
                     return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
+                case 'direct':
+                    return $this->directSend($this->MIMEHeader, $this->MIMEBody);
                 case 'mail':
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
                 default:
@@ -1303,6 +1314,43 @@ class PHPMailer
             $this->smtp = new SMTP;
         }
         return $this->smtp;
+    }
+
+    /**
+     * Send mail directly via SMTP.
+     * This function first clears the recipients and then calls smtpSend for each.
+     * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
+     * Uses the PHPMailerSMTP class by default.
+     * @see PHPMailer::getSMTPInstance() to use a different class.
+     * @param string $header The message headers
+     * @param string $body The message body
+     * @throws phpmailerException
+     * @uses SMTP
+     * @access protected
+     * @return boolean
+     */
+    protected function directSend($header, $body)
+    {
+        //first back up original recipients
+        //  as we will call clearAllRecipients in the next step.
+        $orig=array();
+        $orig['to']=$this->to;
+        $orig['cc']=$this->cc;
+        $orig['bcc']=$this->bcc;
+
+        $result=true;
+        foreach(array_keys($orig) as $kind){
+          foreach($orig[$kind] as $to){
+            //we only send the mail if we can find a MX 
+            if($host=$this->getMXForAddress($to[0])){
+              $this->clearAllRecipients();
+              $this->Host=$host;
+              $this->addAnAddress($kind,$to[0],$to[1]);
+              $result=($this->smtpSend($header, $body) && $result);
+            }
+          }
+        }
+        return $result;
     }
 
     /**
@@ -3702,6 +3750,45 @@ class PHPMailer
             call_user_func_array($this->action_function, $params);
         }
     }
+
+    /** 
+     * Try to get the best MX for a given Destination address
+     * @param string $to The destination address
+     * @return string the best mx we could find for this address or false otherwise
+     */
+    protected function getMXForAddress($to)
+    {
+        $mx = array();
+        $weight = array();
+        list($user, $host) = explode('@', $to);
+        if(getmxrr ( $host, $mx, $weight )){
+            asort($weight,SORT_NUMERIC);
+            foreach(array_keys($weight) as $key){
+                $host=$mx[$key];
+                //close existing smtp connection if there is one
+                $this->smtpClose();
+                $this->Host=$host;
+                $this->Port=25;
+                //first try with tls
+                $this->SMTPSecure='tls';
+                if($this->smtpConnect()){
+                  $this->smtpClose();
+                  $this->SMTPSecure='';
+                  return 'tls://'.$host;
+                }else{
+                  //if that fails try without tls
+                  $this->SMTPSecure='';
+                  if($this->smtpConnect()){
+                    $this->smtpClose();
+                    return $host;
+                  }
+                }
+            }
+        }
+        //if no host works return false
+        return false;
+   }
+
 }
 
 /**
