@@ -27,31 +27,31 @@ class PHPMailerOAuth extends PHPMailer
 {
     /**
      * The OAuth user's email address
-     * @type string
+     * @var string
      */
     public $oauthUserEmail = '';
 
     /**
      * The OAuth refresh token
-     * @type string
+     * @var string
      */
     public $oauthRefreshToken = '';
 
     /**
      * The OAuth client ID
-     * @type string
+     * @var string
      */
     public $oauthClientId = '';
 
     /**
      * The OAuth client secret
-     * @type string
+     * @var string
      */
     public $oauthClientSecret = '';
 
     /**
      * An instance of the OAuth class.
-     * @type OAuth
+     * @var OAuth
      * @access protected
      */
     protected $oauth = null;
