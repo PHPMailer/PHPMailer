@@ -24,40 +24,40 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Holds the default phpmailer instance.
      * @private
-     * @type PHPMailer
+     * @var PHPMailer
      */
     public $Mail;
 
     /**
      * Holds the SMTP mail host.
      * @public
-     * @type string
+     * @var string
      */
     public $Host = '';
 
     /**
      * Holds the change log.
      * @private
-     * @type string[]
+     * @var string[]
      */
     public $ChangeLog = array();
 
     /**
      * Holds the note log.
      * @private
-     * @type string[]
+     * @var string[]
      */
     public $NoteLog = array();
 
     /**
      * Default include path
-     * @type string
+     * @var string
      */
     public $INCLUDE_DIR = '../';
 
     /**
      * PIDs of any processes we need to kill
-     * @type array
+     * @var array
      * @access private
      */
     private $pids = array();

@@ -31,28 +31,28 @@ class POP3
 {
     /**
      * The POP3 PHPMailer Version number.
-     * @type string
+     * @var string
      * @access public
      */
     public $Version = '5.2.13';
 
     /**
      * Default POP3 port number.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $POP3_PORT = 110;
 
     /**
      * Default timeout in seconds.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $POP3_TIMEOUT = 30;
 
     /**
      * POP3 Carriage Return + Line Feed.
-     * @type string
+     * @var string
      * @access public
      * @deprecated Use the constant instead
      */
@@ -61,63 +61,63 @@ class POP3
     /**
      * Debug display level.
      * Options: 0 = no, 1+ = yes
-     * @type integer
+     * @var integer
      * @access public
      */
     public $do_debug = 0;
 
     /**
      * POP3 mail server hostname.
-     * @type string
+     * @var string
      * @access public
      */
     public $host;
 
     /**
      * POP3 port number.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $port;
 
     /**
      * POP3 Timeout Value in seconds.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $tval;
 
     /**
      * POP3 username
-     * @type string
+     * @var string
      * @access public
      */
     public $username;
 
     /**
      * POP3 password.
-     * @type string
+     * @var string
      * @access public
      */
     public $password;
 
     /**
      * Resource handle for the POP3 connection socket.
-     * @type resource
+     * @var resource
      * @access protected
      */
     protected $pop_conn;
 
     /**
      * Are we connected?
-     * @type boolean
+     * @var boolean
      * @access protected
      */
     protected $connected = false;
 
     /**
      * Error container.
-     * @type array
+     * @var array
      * @access protected
      */
     protected $errors = array();
