@@ -28,25 +28,25 @@ class SMTP
 {
     /**
      * The PHPMailer SMTP version number.
-     * @type string
+     * @var string
      */
     const VERSION = '5.2.13';
 
     /**
      * SMTP line break constant.
-     * @type string
+     * @var string
      */
     const CRLF = "\r\n";
 
     /**
      * The SMTP port to use if one is not specified.
-     * @type integer
+     * @var integer
      */
     const DEFAULT_SMTP_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
-     * @type integer
+     * @var integer
      */
     const MAX_LINE_LENGTH = 998;
 
@@ -77,7 +77,7 @@ class SMTP
 
     /**
      * The PHPMailer SMTP Version number.
-     * @type string
+     * @var string
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
@@ -85,7 +85,7 @@ class SMTP
 
     /**
      * SMTP server port number.
-     * @type integer
+     * @var integer
      * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
      */
@@ -93,7 +93,7 @@ class SMTP
 
     /**
      * SMTP reply line ending.
-     * @type string
+     * @var string
      * @deprecated Use the `CRLF` constant instead
      * @see SMTP::CRLF
      */
@@ -107,7 +107,7 @@ class SMTP
      * * self::DEBUG_SERVER (`2`) Client commands and server responses
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
-     * @type integer
+     * @var integer
      */
     public $do_debug = self::DEBUG_OFF;
 
@@ -122,7 +122,7 @@ class SMTP
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
-     * @type string|callable
+     * @var string|callable
      */
     public $Debugoutput = 'echo';
 
@@ -130,7 +130,7 @@ class SMTP
      * Whether to use VERP.
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Info on VERP
-     * @type boolean
+     * @var boolean
      */
     public $do_verp = false;
 
@@ -139,26 +139,26 @@ class SMTP
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
-     * @type integer
+     * @var integer
      */
     public $Timeout = 300;
 
     /**
      * How long to wait for commands to complete, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
-     * @type integer
+     * @var integer
      */
     public $Timelimit = 300;
 
     /**
      * The socket for the server connection.
-     * @type resource
+     * @var resource
      */
     protected $smtp_conn;
 
     /**
      * Error information, if any, for the last SMTP command.
-     * @type array
+     * @var array
      */
     protected $error = array(
         'error' => '',
@@ -170,7 +170,7 @@ class SMTP
     /**
      * The reply the server sent to us for HELO.
      * If null, no HELO string has yet been received.
-     * @type string|null
+     * @var string|null
      */
     protected $helo_rply = null;
 
@@ -181,13 +181,13 @@ class SMTP
      * represents the server name. In case of HELO it is the only element of the array.
      * Other values can be boolean TRUE or an array containing extension options.
      * If null, no HELO/EHLO string has yet been received.
-     * @type array|null
+     * @var array|null
      */
     protected $server_caps = null;
 
     /**
      * The most recent reply received from the server.
-     * @type string
+     * @var string
      */
     protected $last_reply = '';
 
