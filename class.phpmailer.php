@@ -840,6 +840,14 @@ class PHPMailer
             }
             return false;
         }
+        if (function_exists('idn_to_ascii') && $this->hasMultiBytes($address)) { ##@TODO: Write our own "idn_to_ascii" function for PHP 5.2 and earlier.
+            // can't use $this->parseAddresses, because it calls validateAddress, which will fail here
+            $elements = explode('@',strrev($address),2);
+            if (!empty($elements[0]) && !empty($elements[1])) {
+                $address = strrev($elements[1]).'@'.idn_to_ascii(strrev($elements[0]));
+            }
+            unset($elements);
+        }
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (!$this->validateAddress($address)) {
