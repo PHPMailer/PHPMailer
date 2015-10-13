@@ -356,7 +356,7 @@ class SMTP
      * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
      * @param string $realm The auth realm for NTLM
      * @param string $workstation The auth workstation for NTLM
-     * @param null|OAuth  $OAuth An optional OAuth instance (@see PHPMailerOAuth)
+     * @param null|OAuth $OAuth An optional OAuth instance (@see PHPMailerOAuth)
      * @return bool True if successfully authenticated.* @access public
      */
     public function authenticate(
@@ -841,9 +841,9 @@ class SMTP
 
     /**
      * Send a command to an SMTP server and check its return code.
-     * @param string $command       The command name - not sent to the server
+     * @param string $command The command name - not sent to the server
      * @param string $commandstring The actual command to send
-     * @param integer|array $expect     One or more expected integer success codes
+     * @param integer|array $expect One or more expected integer success codes
      * @access protected
      * @return boolean True on success.
      */
