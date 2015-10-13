@@ -843,13 +843,13 @@ class PHPMailer
             return false;
         }
         if ($kind != 'Reply-To') {
-            if (!isset($this->all_recipients[strtolower($address)])) {
+            if (!array_key_exists(strtolower($address), $this->all_recipients)) {
                 array_push($this->$kind, array($address, $name));
                 $this->all_recipients[strtolower($address)] = true;
                 return true;
             }
         } else {
-            if (!isset($this->ReplyTo[strtolower($address)])) {
+            if (!array_key_exists(strtolower($address), $this->ReplyTo)) {
                 $this->ReplyTo[strtolower($address)] = array($address, $name);
                 return true;
             }
@@ -2336,7 +2336,7 @@ class PHPMailer
                 $type = $attachment[4];
                 $disposition = $attachment[6];
                 $cid = $attachment[7];
-                if ($disposition == 'inline' && isset($cidUniq[$cid])) {
+                if ($disposition == 'inline' && array_key_exists($cid, $cidUniq)) {
                     continue;
                 }
                 $cidUniq[$cid] = true;
@@ -3118,7 +3118,7 @@ class PHPMailer
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
         preg_match_all('/(src|background)=["\'](.*)["\']/Ui', $message, $images);
-        if (isset($images[2])) {
+        if (array_key_exists(2, $images)) {
             foreach ($images[2] as $imgindex => $url) {
                 // Convert data URIs into embedded images
                 if (preg_match('#^data:(image[^;,]*)(;base64)?,#', $url, $match)) {
