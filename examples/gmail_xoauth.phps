@@ -9,7 +9,7 @@ date_default_timezone_set('Etc/UTC');
 
 require '../PHPMailerAutoload.php';
 
-//Load dependnecies from composer
+//Load dependencies from composer
 //If this causes an error, run 'composer install'
 require '../vendor/autoload.php';
 
