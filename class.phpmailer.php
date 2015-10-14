@@ -184,7 +184,7 @@ class PHPMailer
     public $PluginDir = '';
 
     /**
-     * The email address that a reading confirmation should be sent to.
+     * The email address that a reading confirmation should be sent to, also known as read receipt.
      * @var string
      */
     public $ConfirmReadingTo = '';
@@ -491,6 +491,28 @@ class PHPMailer
     protected $all_recipients = array();
 
     /**
+     * An array of names and addresses queued for validation.
+     * In send(), valid and non duplicate entries are moved to $all_recipients
+     * and one of $to, $cc, or $bcc.
+     * This array is used only for addresses with IDN.
+     * @var array
+     * @access protected
+     * @see PHPMailer::$to @see PHPMailer::$cc @see PHPMailer::$bcc
+     * @see PHPMailer::$all_recipients
+     */
+    protected $RecipientsQueue = array();
+
+    /**
+     * An array of reply-to names and addresses queued for validation.
+     * In send(), valid and non duplicate entries are moved to $ReplyTo.
+     * This array is used only for addresses with IDN.
+     * @var array
+     * @access protected
+     * @see PHPMailer::$ReplyTo
+     */
+    protected $ReplyToQueue = array();
+
+    /**
      * The array of attachments.
      * @var array
      * @access protected
@@ -772,7 +794,7 @@ class PHPMailer
      */
     public function addAddress($address, $name = '')
     {
-        return $this->addAnAddress('to', $address, $name);
+        return $this->addOrEnqueueAnAddress('to', $address, $name);
     }
 
     /**
@@ -784,7 +806,7 @@ class PHPMailer
      */
     public function addCC($address, $name = '')
     {
-        return $this->addAnAddress('cc', $address, $name);
+        return $this->addOrEnqueueAnAddress('cc', $address, $name);
     }
 
     /**
@@ -796,7 +818,7 @@ class PHPMailer
      */
     public function addBCC($address, $name = '')
     {
-        return $this->addAnAddress('bcc', $address, $name);
+        return $this->addOrEnqueueAnAddress('bcc', $address, $name);
     }
 
     /**
@@ -807,7 +829,53 @@ class PHPMailer
      */
     public function addReplyTo($address, $name = '')
     {
-        return $this->addAnAddress('Reply-To', $address, $name);
+        return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
+    }
+
+    /**
+     * Add an address to one of the recipient arrays or to the ReplyTo array. Because PHPMailer
+     * can't validate addresses with an IDN without knowing the PHPMailer::$CharSet (that can still
+     * modified after calling this function), addition of such addresses is delayed until send().
+     * Addresses that have been added already return false, but do not throw exceptions.
+     * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
+     * @param string $address The email address to send, resp. to reply to
+     * @param string $name
+     * @throws phpmailerException
+     * @return boolean true on success, false if address already used or invalid in some way
+     * @access protected
+     */
+    protected function addOrEnqueueAnAddress($kind, $address, $name)
+    {
+        $address = trim($address);
+        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+        if (($pos = strrpos($address, '@')) === false) {
+            // At-sign is misssing.
+            $error_message = $this->lang('invalid_address') . $address;
+            $this->setError($error_message);
+            $this->edebug($error_message);
+            if ($this->exceptions) {
+                throw new phpmailerException($error_message);
+            }
+            return false;
+        }
+        $params = array($kind, $address, $name);
+        // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
+        if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
+            if ($kind != 'Reply-To') {
+                if (!array_key_exists($address, $this->RecipientsQueue)) {
+                    $this->RecipientsQueue[$address] = $params;
+                    return true;
+                }
+            } else {
+                if (!array_key_exists($address, $this->ReplyToQueue)) {
+                    $this->ReplyToQueue[$address] = $params;
+                    return true;
+                }
+            }
+            return false;
+        }
+        // Immediately add standard addresses without IDN.
+        return call_user_func_array(array($this, 'addAnAddress'), $params);
     }
 
     /**
@@ -823,7 +891,7 @@ class PHPMailer
     protected function addAnAddress($kind, $address, $name = '')
     {
         if (!in_array($kind, array('to', 'cc', 'bcc', 'Reply-To'))) {
-            $error_message = $this->lang('Invalid recipient array') . ': ' . $kind;
+            $error_message = $this->lang('Invalid recipient kind: ') . $kind;
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -831,10 +899,8 @@ class PHPMailer
             }
             return false;
         }
-        $address = trim($address);
-        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (!$this->validateAddress($address)) {
-            $error_message = $this->lang('invalid_address') . ': ' . $address;
+            $error_message = $this->lang('invalid_address') . $address;
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -924,8 +990,11 @@ class PHPMailer
     {
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-        if (!$this->validateAddress($address)) {
-            $error_message = $this->lang('invalid_address') . ': ' . $address;
+        // Don't validate now addresses with IDN. Will be done in send().
+        if (($pos = strrpos($address, '@')) === false or
+            (!$this->has8bitChars(substr($address, ++$pos)) or !$this->idnSupported()) and
+            !$this->validateAddress($address)) {
+            $error_message = $this->lang('invalid_address') . $address;
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1051,6 +1120,48 @@ class PHPMailer
     }
 
     /**
+     * Tells whether IDNs (Internationalized Domain Names) are supported or not. This requires the
+     * "intl" and "mbstring" PHP extensions.
+     * @return bool "true" if required functions for IDN support are present
+     */
+    public function idnSupported()
+    {
+        // @TODO: Write our own "idn_to_ascii" function for PHP <= 5.2.
+        return function_exists('idn_to_ascii') and function_exists('mb_convert_encoding');
+    }
+
+    /**
+     * Converts IDN in given email address to its ASCII form, also known as punycode, if possible.
+     * Important: Address must be passed in same encoding as currently set in PHPMailer::$CharSet.
+     * This function silently returns unmodified address if:
+     * - No conversion is necessary (i.e. domain name is not an IDN, or is already in ASCII form)
+     * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
+     *   or fails for any reason (e.g. domain has characters not allowed in an IDN)
+     * @see PHPMailer::$CharSet
+     * @param string $address The email address to convert
+     * @return string The encoded address in ASCII form
+     */
+    public function punyencodeAddress($address)
+    {
+        // Verify we have required functions, CharSet, and at-sign.
+        if ($this->idnSupported() and
+            !empty($this->CharSet) and
+            ($pos = strrpos($address, '@')) !== false) {
+            $domain = substr($address, ++$pos);
+            // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
+            if ($this->has8bitChars($domain) and @mb_check_encoding($domain, $this->CharSet)) {
+                $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
+                if (($punycode = defined('INTL_IDNA_VARIANT_UTS46') ?
+                    idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46) :
+                    idn_to_ascii($domain)) !== false) {
+                    return substr($address, 0, $pos) . $punycode;
+                }
+            }
+        }
+        return $address;
+    }
+
+    /**
      * Create a message and send it.
      * Uses the sending method specified by $Mailer.
      * @throws phpmailerException
@@ -1081,9 +1192,34 @@ class PHPMailer
     public function preSend()
     {
         try {
+            $this->error_count = 0; // Reset errors
             $this->mailHeader = '';
+
+            // Dequeue recipient and Reply-To addresses with IDN
+            foreach (array_merge($this->RecipientsQueue, $this->ReplyToQueue) as $params) {
+                $params[1] = $this->punyencodeAddress($params[1]);
+                call_user_func_array(array($this, 'addAnAddress'), $params);
+            }
             if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
                 throw new phpmailerException($this->lang('provide_address'), self::STOP_CRITICAL);
+            }
+
+            // Validate From, Sender, and ConfirmReadingTo addresses
+            foreach (array('From', 'Sender', 'ConfirmReadingTo') as $address_kind) {
+                $this->$address_kind = trim($this->$address_kind);
+                if (empty($this->$address_kind)) {
+                    continue;
+                }
+                $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
+                if (!$this->validateAddress($this->$address_kind)) {
+                    $error_message = $this->lang('invalid_address') . $this->$address_kind;
+                    $this->setError($error_message);
+                    $this->edebug($error_message);
+                    if ($this->exceptions) {
+                        throw new phpmailerException($error_message);
+                    }
+                    return false;
+                }
             }
 
             // Set whether the message is multipart/alternative
@@ -1091,7 +1227,6 @@ class PHPMailer
                 $this->ContentType = 'multipart/alternative';
             }
 
-            $this->error_count = 0; // Reset errors
             $this->setMessageType();
             // Refuse to send an empty message unless we are specifically allowing it
             if (!$this->AllowEmpty and empty($this->Body)) {
@@ -1526,7 +1661,7 @@ class PHPMailer
             'file_open' => 'File Error: Could not open file: ',
             'from_failed' => 'The following From address failed: ',
             'instantiate' => 'Could not instantiate mail function.',
-            'invalid_address' => 'Invalid address',
+            'invalid_address' => 'Invalid address: ',
             'mailer_not_supported' => ' mailer is not supported.',
             'provide_address' => 'You must provide at least one recipient email address.',
             'recipients_failed' => 'SMTP Error: The following recipients failed: ',
@@ -1855,7 +1990,7 @@ class PHPMailer
         }
 
         if ($this->ConfirmReadingTo != '') {
-            $result .= $this->headerLine('Disposition-Notification-To', '<' . trim($this->ConfirmReadingTo) . '>');
+            $result .= $this->headerLine('Disposition-Notification-To', '<' . $this->ConfirmReadingTo . '>');
         }
 
         // Add custom headers
@@ -2885,6 +3020,30 @@ class PHPMailer
     }
 
     /**
+     * Clear queued addresses of given kind.
+     * @access protected
+     * @param string $kind 'to', 'cc', or 'bcc'
+     * @return void
+     */
+    protected function clearQueuedAddresses($kind)
+    {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $RecipientsQueue = $this->RecipientsQueue;
+            foreach ($RecipientsQueue as $address => $params) {
+                if ($params[0] == $kind) {
+                    unset($this->RecipientsQueue[$address]);
+                }
+            }
+        } else {
+            $this->RecipientsQueue = array_filter(
+                $this->RecipientsQueue,
+                function ($params) use ($kind) {
+                    return $params[0] != $kind;
+                });
+        }
+    }
+
+    /**
      * Clear all To recipients.
      * @return void
      */
@@ -2894,6 +3053,7 @@ class PHPMailer
             unset($this->all_recipients[strtolower($to[0])]);
         }
         $this->to = array();
+        $this->clearQueuedAddresses('to');
     }
 
     /**
@@ -2906,6 +3066,7 @@ class PHPMailer
             unset($this->all_recipients[strtolower($cc[0])]);
         }
         $this->cc = array();
+        $this->clearQueuedAddresses('cc');
     }
 
     /**
@@ -2918,6 +3079,7 @@ class PHPMailer
             unset($this->all_recipients[strtolower($bcc[0])]);
         }
         $this->bcc = array();
+        $this->clearQueuedAddresses('bcc');
     }
 
     /**
@@ -2927,6 +3089,7 @@ class PHPMailer
     public function clearReplyTos()
     {
         $this->ReplyTo = array();
+        $this->ReplyToQueue = array();
     }
 
     /**
@@ -2939,6 +3102,7 @@ class PHPMailer
         $this->cc = array();
         $this->bcc = array();
         $this->all_recipients = array();
+        $this->RecipientsQueue = array();
     }
 
     /**
@@ -3633,6 +3797,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'to' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3643,6 +3808,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'cc' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3653,6 +3819,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'bcc' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3663,6 +3830,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'ReplyTo' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
@@ -3673,6 +3841,7 @@ class PHPMailer
 
     /**
      * Allows for public read access to 'all_recipients' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
      * @access public
      * @return array
      */
