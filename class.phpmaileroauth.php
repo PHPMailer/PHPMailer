@@ -57,8 +57,8 @@ class PHPMailerOAuth extends PHPMailer
     protected $oauth = null;
 
     /**
-     * Get an OAuth instance to use.
-     * @return OAuth
+     * Get a PHPMailerOAuthGoogle instance to use.
+     * @return PHPMailerOAuthGoogle
      */
     public function getOAUTHInstance()
     {
