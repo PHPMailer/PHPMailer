@@ -50,8 +50,8 @@ class PHPMailerOAuth extends PHPMailer
     public $oauthClientSecret = '';
 
     /**
-     * An instance of the OAuth class.
-     * @var OAuth
+     * An instance of the PHPMailerOAuthGoogle class.
+     * @var PHPMailerOAuthGoogle
      * @access protected
      */
     protected $oauth = null;
@@ -79,8 +79,7 @@ class PHPMailerOAuth extends PHPMailer
      * @param array $options An array of options compatible with stream_context_create()
      * @uses SMTP
      * @access public
-     * @throws phpmailerException
-     * @return boolean
+     * @return bool
      */
     public function smtpConnect($options = array())
     {
