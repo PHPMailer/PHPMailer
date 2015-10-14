@@ -31,6 +31,12 @@ class PHPMailerOAuthGoogle
     private $oauthClientId = '';
     private $oauthClientSecret = '';
 
+    /**
+     * @param string $UserEmail
+     * @param string $ClientSecret
+     * @param string $ClientId
+     * @param string $RefreshToken
+     */
     public function __construct(
         $UserEmail,
         $ClientSecret,
