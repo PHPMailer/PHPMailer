@@ -1,5 +1,6 @@
 # ChangeLog
 
+* Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors
 * Make all POP3 private properties and methods protected
 

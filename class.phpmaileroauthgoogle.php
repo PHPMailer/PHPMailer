@@ -24,7 +24,6 @@
  * @author Ravishanker Kusuma (hayageek@gmail.com)
  * @link https://github.com/hayageek
  */
-
 class PHPMailerOAuthGoogle extends PHPMailerOAuthProvider
 {
     public function getProvider() {

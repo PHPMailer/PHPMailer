@@ -24,40 +24,40 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Holds the default phpmailer instance.
      * @private
-     * @type PHPMailer
+     * @var PHPMailer
      */
     public $Mail;
 
     /**
      * Holds the SMTP mail host.
      * @public
-     * @type string
+     * @var string
      */
     public $Host = '';
 
     /**
      * Holds the change log.
      * @private
-     * @type string[]
+     * @var string[]
      */
     public $ChangeLog = array();
 
     /**
      * Holds the note log.
      * @private
-     * @type string[]
+     * @var string[]
      */
     public $NoteLog = array();
 
     /**
      * Default include path
-     * @type string
+     * @var string
      */
     public $INCLUDE_DIR = '../';
 
     /**
      * PIDs of any processes we need to kill
-     * @type array
+     * @var array
      * @access private
      */
     private $pids = array();
@@ -107,7 +107,6 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $this->Mail->Mailer = 'smtp';
         } else {
             $this->Mail->Mailer = 'mail';
-            $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         }
         if (array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
@@ -468,7 +467,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1::b2:11.22.33.44]',
             'test@test.com',
             'test@xn--example.com',
-            'test@example.com'
+            'test@example.com',
         );
         $invalidaddresses = array(
             'first.last@sub.do,com',
@@ -608,16 +607,27 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6::a2::b4]',
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
-            'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]'
+            'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
+        );
+        // IDNs in Unicode and ASCII forms.
+        $unicodeaddresses = array(
+            'first.last@bücher.ch',
+            'first.last@кто.рф',
+            'first.last@phplíst.com',
+        );
+        $asciiaddresses = array(
+            'first.last@xn--bcher-kva.ch',
+            'first.last@xn--j1ail.xn--p1ai',
+            'first.last@xn--phplst-6va.com',
         );
         $goodfails = array();
-        foreach ($validaddresses as $address) {
+        foreach (array_merge($validaddresses, $asciiaddresses) as $address) {
             if (!PHPMailer::validateAddress($address)) {
                 $goodfails[] = $address;
             }
         }
         $badpasses = array();
-        foreach ($invalidaddresses as $address) {
+        foreach (array_merge($invalidaddresses, $unicodeaddresses) as $address) {
             if (PHPMailer::validateAddress($address)) {
                 $badpasses[] = $address;
             }
@@ -1909,6 +1919,128 @@ EOT;
             array('yux'),
             array('Content-Type', ' application/json')
         ), $this->Mail->getCustomHeaders());
+    }
+
+    /**
+     * Tests setting and retrieving ConfirmReadingTo address, also known as "read receipt" address.
+     */
+    public function testConfirmReadingTo()
+    {
+        $this->Mail->CharSet = 'utf-8';
+        $this->buildBody();
+
+        $this->Mail->ConfirmReadingTo = 'test@example..com';  //Invalid address
+        $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
+
+        $this->Mail->ConfirmReadingTo = ' test@example.com';  //Extra space to trim
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        $this->assertEquals(
+            'test@example.com',
+            $this->Mail->ConfirmReadingTo,
+            'Unexpected read receipt address');
+
+        $this->Mail->ConfirmReadingTo = 'test@françois.ch';  //Address with IDN
+        if ($this->Mail->idnSupported()) {
+            $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+            $this->assertEquals(
+                'test@xn--franois-xxa.ch',
+                $this->Mail->ConfirmReadingTo,
+                'IDN address not converted to punycode');
+        } else {
+            $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
+        }
+    }
+
+    /**
+     * Tests CharSet and Unicode -> ASCII conversions for addresses with IDN.
+     */
+    public function testConvertEncoding()
+    {
+        if (!$this->Mail->idnSupported()) {
+            $this->markTestSkipped('intl and/or mbstring extensions are not available');
+        }
+
+        $this->Mail->clearAllRecipients();
+        $this->Mail->clearReplyTos();
+
+        // This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
+        $domain = '@' . mb_convert_encoding('françois.ch', 'ISO-8859-1', 'UTF-8');
+        $this->Mail->addAddress('test' . $domain);
+        $this->Mail->addCC('test+cc' . $domain);
+        $this->Mail->addBCC('test+bcc' . $domain);
+        $this->Mail->addReplyTo('test+replyto' . $domain);
+
+        // Queued addresses are not returned by get*Addresses() before send() call.
+        $this->assertEmpty($this->Mail->getToAddresses(), 'Bad "to" recipients');
+        $this->assertEmpty($this->Mail->getCcAddresses(), 'Bad "cc" recipients');
+        $this->assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
+        $this->assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
+
+        // Clear queued BCC recipient.
+        $this->Mail->clearBCCs();
+
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+
+        // Addresses with IDN are returned by get*Addresses() after send() call.
+        $domain = $this->Mail->punyencodeAddress($domain);
+        $this->assertEquals(
+            array(array('test' . $domain, '')),
+            $this->Mail->getToAddresses(),
+            'Bad "to" recipients');
+        $this->assertEquals(
+            array(array('test+cc' . $domain, '')),
+            $this->Mail->getCcAddresses(),
+            'Bad "cc" recipients');
+        $this->assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
+        $this->assertEquals(
+            array('test+replyto' . $domain => array('test+replyto' . $domain, '')),
+            $this->Mail->getReplyToAddresses(),
+            'Bad "reply-to" addresses');
+    }
+
+    /**
+     * Tests removal of duplicate recipients and reply-tos.
+     */
+    public function testDuplicateIDNRemoved()
+    {
+        if (!$this->Mail->idnSupported()) {
+            $this->markTestSkipped('intl and/or mbstring extensions are not available');
+        }
+
+        $this->Mail->clearAllRecipients();
+        $this->Mail->clearReplyTos();
+
+        $this->Mail->CharSet = 'utf-8';
+
+        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+        $this->assertFalse($this->Mail->addAddress('test@françois.ch'));
+        $this->assertTrue($this->Mail->addAddress('test@FRANÇOIS.CH'));
+        $this->assertFalse($this->Mail->addAddress('test@FRANÇOIS.CH'));
+        $this->assertTrue($this->Mail->addAddress('test@xn--franois-xxa.ch'));
+        $this->assertFalse($this->Mail->addAddress('test@xn--franois-xxa.ch'));
+        $this->assertFalse($this->Mail->addAddress('test@XN--FRANOIS-XXA.CH'));
+
+        $this->assertTrue($this->Mail->addReplyTo('test+replyto@françois.ch'));
+        $this->assertFalse($this->Mail->addReplyTo('test+replyto@françois.ch'));
+        $this->assertTrue($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
+        $this->assertFalse($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
+        $this->assertTrue($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
+        $this->assertFalse($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
+        $this->assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
+
+        $this->buildBody();
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+
+        // There should be only one "To" address and one "Reply-To" address.
+        $this->assertEquals(
+            1,
+            count($this->Mail->getToAddresses()),
+            'Bad count of "to" recipients');
+        $this->assertEquals(
+            1,
+            count($this->Mail->getReplyToAddresses()),
+            'Bad count of "reply-to" addresses');
     }
 }
 

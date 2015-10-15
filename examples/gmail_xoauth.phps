@@ -9,8 +9,7 @@ date_default_timezone_set('Etc/UTC');
 
 require '../PHPMailerAutoload.php';
 
-
-//Load dependnecies from composer
+//Load dependencies from composer
 //If this causes an error, run 'composer install'
 require '../vendor/autoload.php';
 
@@ -65,10 +64,10 @@ $mail->oauthRefreshToken = "{OAUTH_TOKEN_FROM_GOOGLE}";
 $mail->setFrom('sender@gmail.com', 'test test');
 
 //Set who the message is to be sent to
-$mail->addAddress('receiver@test.com', 'test test');
+$mail->addAddress('whoto@example.com', 'John Doe');
 
 //Set the subject line
-$mail->Subject = 'PHPMailer GMail SMTP test.Gmail';
+$mail->Subject = 'PHPMailer GMail SMTP test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
