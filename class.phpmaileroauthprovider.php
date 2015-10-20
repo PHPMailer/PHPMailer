@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.4.
@@ -20,16 +19,14 @@
  */
 
 /**
- * PHPMailerOAuthProvider - Wrapper for League OAuth2 Google/Yahoo/Microsoft provider.
- *
+ * PHPMailerOAuthProvider class
+ * An abstract base class for service-provider-specific OAuth implementations.
  * @author @hayageek
  * @author Ravishanker Kusuma (hayageek@gmail.com)
- *
- * @link https://github.com/hayageek
  */
-abstract class PHPMailerOAuthProvider extends PHPMailerOAuth
+abstract class PHPMailerOAuthProvider
 {
-    protected $ouathToken = null;
+    protected $oauthToken = null;
     
     public function __construct(
         $UserEmail = '',
@@ -45,11 +42,6 @@ abstract class PHPMailerOAuthProvider extends PHPMailerOAuth
 
     abstract public function getProvider();
 
-    /**
-     * An instance of the PHPMailerOAuthProvider class.
-     * @type PHPMailerOAuthProvider
-     * @access public
-     */
     public function getOAUTHInstance()
     {
         return $this;
@@ -62,7 +54,6 @@ abstract class PHPMailerOAuthProvider extends PHPMailerOAuth
 
     private function getToken()
     {
-        echo "Getting Token";
         $provider = $this->getProvider();
         $grant = $this->getGrant();
 
@@ -71,13 +62,11 @@ abstract class PHPMailerOAuthProvider extends PHPMailerOAuth
 
     public function getOauth64()
     {
-        /* 
-        Get the new token only if it not available or expired
-        */
-        if ($this->ouathToken == null || ($this->ouathToken != null && $this->ouathToken->hasExpired()))
+        // Get the new token only if it not available or expired
+        if ($this->oauthToken == null || ($this->oauthToken != null && $this->oauthToken->hasExpired()))
         {
-            $this->ouathToken = $this->getToken();
+            $this->oauthToken = $this->getToken();
         }
-        return base64_encode('user='.$this->oauthUserEmail."\001auth=Bearer ".$this->ouathToken."\001\001");
+        return base64_encode('user='.$this->oauthUserEmail."\001auth=Bearer ".$this->oauthToken."\001\001");
     }
 }
