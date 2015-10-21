@@ -3025,21 +3025,13 @@ class PHPMailer
      * @param string $kind 'to', 'cc', or 'bcc'
      * @return void
      */
-    protected function clearQueuedAddresses($kind)
+    public function clearQueuedAddresses($kind)
     {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $RecipientsQueue = $this->RecipientsQueue;
-            foreach ($RecipientsQueue as $address => $params) {
-                if ($params[0] == $kind) {
-                    unset($this->RecipientsQueue[$address]);
-                }
+        $RecipientsQueue = $this->RecipientsQueue;
+        foreach ($RecipientsQueue as $address => $params) {
+            if ($params[0] == $kind) {
+                unset($this->RecipientsQueue[$address]);
             }
-        } else {
-            $this->RecipientsQueue = array_filter(
-                $this->RecipientsQueue,
-                function ($params) use ($kind) {
-                    return $params[0] != $kind;
-                });
         }
     }
 
