@@ -47,7 +47,6 @@ if (!isset($_GET['code'])) {
     unset($_SESSION['oauth2state']);
     exit('Invalid state');
 } else {
-    $provider->accessType = 'offline';
     // Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
         'authorization_code',
@@ -55,12 +54,7 @@ if (!isset($_GET['code'])) {
             'code' => $_GET['code']
         )
     );
-    // Use this to interact with an API on the users behalf
-    //    echo $token->accessToken.'<br>';
 
     // Use this to get a new access token if the old one expires
     echo 'Refresh Token: ' . $token->getRefreshToken();
-
-    // Unix timestamp of when the token will expire, and need refreshing
-    //    echo $token->expires;
 }
