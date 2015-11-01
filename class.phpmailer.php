@@ -1679,14 +1679,9 @@ class PHPMailer
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         // There is no English translation file
         if ($langcode != 'en') {
-            // Make sure language file path is readable
-            if (!is_readable($lang_file)) {
-                $foundlang = false;
-            } else {
-                // Overwrite language-specific strings.
-                // This way we'll never have missing translation keys.
-                $foundlang = include $lang_file;
-            }
+            // Overwrite language-specific strings.
+            // This way we'll never have missing translation keys.
+            $foundlang = !is_readable($lang_file) ? false : include $lang_file;
         }
         $this->language = $PHPMAILER_LANG;
         return (boolean)$foundlang; // Returns false if language not found
