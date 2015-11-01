@@ -1028,10 +1028,10 @@ class PHPMailer
      * Check that a string looks like an email address.
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
-     * * `auto` Pick strictest one automatically;
+     * * `auto` Pick best pattern automatically;
      * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
      * * `pcre` Use old PCRE implementation;
-     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL; same as pcre8 but does not allow 'dotless' domains;
+     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
      * * `noregex` Don't use a regex: super fast, really dumb.
      * @return boolean
@@ -1040,6 +1040,10 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = 'auto')
     {
+        //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
+        if (strpos($address, "\n") !== false or strpos($address, "\r") !== false) {
+            return false;
+        }
         if (!$patternselect or $patternselect == 'auto') {
             //Check this constant first so it works when extension_loaded() is disabled by safe mode
             //Constant was added in PHP 5.2.4

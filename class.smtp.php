@@ -814,15 +814,15 @@ class SMTP
      * Sets the TO argument to $toaddr.
      * Returns true if the recipient was accepted false if it was rejected.
      * Implements from rfc 821: RCPT <SP> TO:<forward-path> <CRLF>
-     * @param string $toaddr The address the message is being sent to
+     * @param string $address The address the message is being sent to
      * @access public
      * @return boolean
      */
-    public function recipient($toaddr)
+    public function recipient($address)
     {
         return $this->sendCommand(
             'RCPT TO',
-            'RCPT TO:<' . $toaddr . '>',
+            'RCPT TO:<' . $address . '>',
             array(250, 251)
         );
     }
@@ -851,6 +851,11 @@ class SMTP
     {
         if (!$this->connected()) {
             $this->setError("Called $command without being connected");
+            return false;
+        }
+        //Reject line breaks in all commands
+        if (strpos($commandstring, "\n") !== false or strpos($commandstring, "\r") !== false) {
+            $this->setError("Command '$command' contained line breaks");
             return false;
         }
         $this->client_send($commandstring . self::CRLF);

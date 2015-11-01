@@ -3,6 +3,8 @@
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors
 * Make all POP3 private properties and methods protected
+* **SECURITY** Fix vulnerability that allowed email addresses with line breaks (valid in RFC5322) to pass to SMTP, permitting message injection at the SMTP level. Mitigated in both the address validator and in the lower-level SMTP class. Thanks to Takeshi Terada.
+* Updated Brazilian Portuguese translations (Thanks to @phelipealves)
 
 ## Version 5.2.13 (Sep 14th 2015)
 * Rename internal oauth class to avoid name clashes
