@@ -17,6 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer;
+
 /**
  * PHPMailer POP-Before-SMTP Authentication Class.
  * Specifically for PHPMailer to use for RFC1939 POP-before-SMTP authentication.
@@ -34,7 +36,7 @@ class POP3
      * @var string
      * @access public
      */
-    public $Version = '5.2.14';
+    public $Version = '5.4.0';
 
     /**
      * Default POP3 port number.

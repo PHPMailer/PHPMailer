@@ -2,8 +2,9 @@
 /**
  * This example shows sending a message using a local sendmail binary.
  */
+namespace PHPMailer\PHPMailer;
 
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer;

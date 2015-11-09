@@ -1,10 +1,8 @@
 <?php
 /**
  * PHPMailer - PHP email transport unit tests
- * Requires PHPUnit 3.3 or later.
  *
- * PHP version 5.0.0
- *
+ * PHP version 5.4.0
  * @package PHPMailer
  * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
@@ -13,16 +11,17 @@
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-require_once '../PHPMailerAutoload.php';
+namespace PHPMailer\PHPMailer;
+require '../vendor/autoload.php';
 
 /**
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class PHPMailerTest extends PHPUnit_Framework_TestCase
+class PHPMailerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Holds the default phpmailer instance.
+     * Holds the phpmailer instance.
      * @private
      * @var PHPMailer
      */
@@ -100,7 +99,6 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->SMTPAuth = false;
         $this->Mail->Username = '';
         $this->Mail->Password = '';
-        $this->Mail->PluginDir = $this->INCLUDE_DIR;
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         if (strlen($this->Mail->Host) > 0) {
@@ -607,7 +605,9 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
             'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
-            "(\r\n RCPT TO:websec02@d.mbsd.jp\r\n DATA \\\nSubject: spam10\\\n\r\n Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@gmail.com" //This is valid RCC5322, but we don't want to allow it
+            //This is valid RCC5322, but we don't want to allow it
+            "(\r\n RCPT TO:websec02@d.mbsd.jp\r\n DATA \\\nSubject: spam10\\\n\r\n".
+                " Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@gmail.com"
         );
         // IDNs in Unicode and ASCII forms.
         $unicodeaddresses = array(
@@ -777,11 +777,6 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             $t,
             quoted_printable_decode($this->Mail->encodeQP($t)),
             'Quoted-Printable encoding round-trip failed'
-        );
-        $this->assertEquals(
-            $this->Mail->encodeQP($t),
-            $this->Mail->encodeQPphp($t),
-            'Quoted-Printable BC wrapper failed'
         );
         //Force line breaks to Windows-style
         $t = str_replace("\n", "\r\n", $t);
@@ -1132,52 +1127,6 @@ EOT;
         } else {
             $this->assertTrue(false, 'Could not write local file - check permissions');
         }
-    }
-
-    /**
-     * iCal event test.
-     */
-    public function testIcal()
-    {
-        //Standalone ICS tests
-        require_once '../extras/EasyPeasyICS.php';
-        $ICS = new EasyPeasyICS("PHPMailer test calendar");
-        $this->assertNotEmpty(
-            $ICS->addEvent(
-                strtotime('tomorrow 10:00 Europe/Paris'),
-                strtotime('tomorrow 11:00 Europe/Paris'),
-                'PHPMailer iCal test',
-                'A test of PHPMailer iCal support',
-                'https://github.com/PHPMailer/PHPMailer'
-            ),
-            'Generated event string is empty'
-        );
-        $ICS->addEvent(
-            strtotime('tomorrow 10:00 Europe/Paris'),
-            strtotime('tomorrow 11:00 Europe/Paris'),
-            'PHPMailer iCal test',
-            'A test of PHPMailer iCal support',
-            'https://github.com/PHPMailer/PHPMailer'
-        );
-        $events = $ICS->getEvents();
-        $this->assertEquals(2, count($events), 'Event count mismatch');
-        $ICS->clearEvents();
-        $events = $ICS->getEvents();
-        $this->assertEquals(0, count($events), 'Event clearing failed');
-        $ICS->setName('test');
-        $this->assertEquals('test', $ICS->getName(), 'Setting ICS name failed');
-        $this->assertNotEmpty($ICS->render(false), 'Empty calendar');
-        //Need to test generated output but PHPUnit isn't playing nice
-        //$rendered = $ICS->render();
-
-        //Test sending an ICS
-        $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
-        $this->Mail->AltBody = 'This is the text part of the email.';
-        $this->Mail->Subject .= ': iCal';
-        $this->Mail->isHTML(true);
-        $this->buildBody();
-        $this->Mail->Ical = $ICS->render(false);
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**

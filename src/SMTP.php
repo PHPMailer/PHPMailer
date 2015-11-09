@@ -17,6 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer;
+
 /**
  * PHPMailer RFC821 SMTP email transport class.
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
@@ -30,7 +32,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @var string
      */
-    const VERSION = '5.2.14';
+    const VERSION = '5.4.0';
 
     /**
      * SMTP line break constant.
@@ -74,14 +76,6 @@ class SMTP
      * Debug level to show all messages
      */
     const DEBUG_LOWLEVEL = 4;
-
-    /**
-     * The PHPMailer SMTP Version number.
-     * @var string
-     * @deprecated Use the `VERSION` constant instead
-     * @see SMTP::VERSION
-     */
-    public $Version = '5.2.14';
 
     /**
      * SMTP server port number.

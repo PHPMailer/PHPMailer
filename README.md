@@ -38,37 +38,36 @@ software availability and distribution.
 
 ## Installation & loading
 
-PHPMailer is available via [Composer/Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), so just add this line to your `composer.json` file:
+PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via composer is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
 
 ```json
-"phpmailer/phpmailer": "~5.2"
+"phpmailer/phpmailer": "~5.4"
 ```
 
-or
+or run
 
 ```sh
 composer require phpmailer/phpmailer
 ```
 
-If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-client` package.
+PHPMailer declares the namespace `PHPMailer\PHPMailer`.
 
-Alternatively, copy the contents of the PHPMailer folder into one of the `include_path` directories specified in your PHP configuration.. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
+If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-client` package in your `composer.json`.
 
-If you're not using composer's autoloader, PHPMailer provides an SPL-compatible autoloader, and that is the preferred way of loading the library - just `require '/path/to/PHPMailerAutoload.php';` and everything should work. The autoloader does not throw errors if it can't find classes so it prepends itself to the SPL list, allowing your own (or your framework's) autoloader to catch errors. SPL autoloading was introduced in PHP 5.1.0, so if you are using a version older than that you will need to require/include each class manually.
+Alternatively, if you're not using composer, copy the contents of the PHPMailer folder into one of the `include_path` directories specified in your PHP configuration and load each one manually.
 
-PHPMailer does *not* declare a namespace because namespaces were only introduced in PHP 5.3.
-
-If you want to use Google's XOAUTH2 authentication mechanism, you need to be running at least PHP 5.4, and load the dependencies listed in `composer.json`.
+If you don't speak git or just want a tarball, click the 'zip' button on the right of the project page in GitHub.
 
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation. If you're using Google XOAUTH2 you will need `class.phpmaileroauth.php` and `class.oauth.php` classes too, as well as the composer dependencies.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](src/POP3.php). You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need `src/PHPMailerOAuth.php` and `src/OAuthProvider/Google.php` classes, as well as the composer dependencies. Really, it's much easier to use composer!
 
 ## A Simple Example
 
 ```php
 <?php
-require 'PHPMailerAutoload.php';
+namespace PHPMailer\PHPMailer;
+require 'vendor/autoload.php';
 
 $mail = new PHPMailer;
 
@@ -105,7 +104,7 @@ if(!$mail->send()) {
 }
 ```
 
-You'll find plenty more to play with in the [examples](examples/) folder.
+You'll find plenty of examples to play with in the [examples](examples/) folder. They are saved with a `.phps` extension which will make them display as highlighted source in a browser, avoiding the possibility of them running in default installations. You can run them directly from a command line client, or rename them with a `.php` extension and run them via your web server.
 
 That's it. You should now be ready to use PHPMailer!
 
@@ -121,9 +120,9 @@ We welcome corrections and new languages - if you're looking for corrections to 
 
 ## Documentation
 
-Examples of how to use PHPMailer for common scenarios can be found in the [examples](examples/) folder. If you're looking for a good starting point, we recommend you start with [the gmail example](examples/gmail.phps).
+Start reading at the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, this should be the first place you look as it's the most frequently updated.
 
-There are tips and a troubleshooting guide in the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, this should be the first place you look as it's the most frequently updated.
+Examples of how to use PHPMailer for common scenarios can be found in the [examples](examples/) folder. If you're looking for a good starting point, we recommend you start with [the gmail example](examples/gmail.phps).
 
 Complete generated API documentation is [available online](http://phpmailer.github.io/PHPMailer/).
 
@@ -133,7 +132,7 @@ If the documentation doesn't cover what you need, search the [many questions on 
 
 ## Tests
 
-There is a PHPUnit test script in the [test](test/) folder.
+There is a PHPUnit test script in the [test](test/) folder. PHPMailer uses PHPUnit 4.8 - we would use 5.0 but we need to run on PHP 5.4.
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](https://travis-ci.org/PHPMailer/PHPMailer)
 
@@ -145,13 +144,13 @@ Please submit bug reports, suggestions and pull requests to the [GitHub issue tr
 
 We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
 
-With the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
+If you have git clones from prior to the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
 
 ```sh
 git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
 ```
 
-Please *don't* use the SourceForge or Google Code projects any more.
+Please *don't* use the SourceForge or Google Code projects any more; they are obsolete and no longer maintained.
 
 ## Sponsorship
 

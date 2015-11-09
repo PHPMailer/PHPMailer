@@ -1,5 +1,17 @@
 # ChangeLog
 
+## Version 5.4
+This is a major update that breaks backwards compatibility.
+* Requires PHP 5.4 or later
+* Uses the `PHPMailer\PHPMailer` namespace
+* File structure simplified, classes live in the `src/` folder
+* Custom autoloader has been removed, now PSR-4 compatible
+* Classes renamed to make use of the namespace
+* `Extras` classes have been removed - use packages from packagist.org instead
+* All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
+
+To avoid version confusion, this release is called **5.4**, **not 5.3**!
+
 ## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors

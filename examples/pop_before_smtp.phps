@@ -2,8 +2,9 @@
 /**
  * This example shows how to use POP-before-SMTP for authentication.
  */
+namespace PHPMailer\PHPMailer;
 
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Authenticate via POP3.
 //After this you should be allowed to submit messages over SMTP for a while.

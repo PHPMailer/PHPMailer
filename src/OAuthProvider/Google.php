@@ -17,14 +17,16 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer\OAuthProvider;
+
 /**
- * PHPMailerOAuthGoogle - Wrapper for League OAuth2 Google provider.
+ * PHPMailer Google OAuth class- Wrapper for League OAuth2 Google provider.
  * @package PHPMailer
  * @author @sherryl4george
  * @author Marcus Bointon (@Synchro) <phpmailer@synchromedia.co.uk>
  * @link https://github.com/thephpleague/oauth2-client
  */
-class PHPMailerOAuthGoogle
+class Google
 {
     private $oauthUserEmail = '';
     private $oauthRefreshToken = '';
@@ -49,7 +51,8 @@ class PHPMailerOAuthGoogle
         $this->oauthUserEmail = $UserEmail;
     }
 
-    private function getProvider() {
+    private function getProvider()
+    {
         return new League\OAuth2\Client\Provider\Google([
             'clientId' => $this->oauthClientId,
             'clientSecret' => $this->oauthClientSecret
