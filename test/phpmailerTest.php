@@ -1,13 +1,13 @@
 <?php
 /**
- * PHPMailer - PHP email transport unit tests
+ * PHPMailer - PHP email transport unit tests.
  *
  * PHP version 5.4.0
  * @package PHPMailer
- * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Andy Prevost
+ * @copyright 2012 - 2015 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
@@ -16,8 +16,7 @@ namespace PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 /**
- * PHPMailer - PHP email transport unit test class
- * Performs authentication tests
+ * PHPMailer - PHP email transport unit test class.
  */
 class PHPMailerTest extends \PHPUnit_Framework_TestCase
 {
@@ -996,8 +995,8 @@ EOT;
             '', //intentionally empty name
             'base64',
             'image/png',
-            'inline')
-        ) {
+            'inline'
+        )) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -1034,7 +1033,7 @@ EOT;
      */
     public function testEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.'cid:my-attach">' .
             'Here is an image!';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
@@ -1063,7 +1062,7 @@ EOT;
      */
     public function testMultiEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.'cid:my-attach">' .
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image + Attachment';
         $this->Mail->isHTML(true);
@@ -1831,7 +1830,8 @@ EOT;
         $this->assertEquals(
             'test@example.com',
             $this->Mail->ConfirmReadingTo,
-            'Unexpected read receipt address');
+            'Unexpected read receipt address'
+        );
 
         $this->Mail->ConfirmReadingTo = 'test@françois.ch';  //Address with IDN
         if ($this->Mail->idnSupported()) {
@@ -1839,7 +1839,8 @@ EOT;
             $this->assertEquals(
                 'test@xn--franois-xxa.ch',
                 $this->Mail->ConfirmReadingTo,
-                'IDN address not converted to punycode');
+                'IDN address not converted to punycode'
+            );
         } else {
             $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
         }
@@ -1933,11 +1934,13 @@ EOT;
         $this->assertEquals(
             1,
             count($this->Mail->getToAddresses()),
-            'Bad count of "to" recipients');
+            'Bad count of "to" recipients'
+        );
         $this->assertEquals(
             1,
             count($this->Mail->getReplyToAddresses()),
-            'Bad count of "reply-to" addresses');
+            'Bad count of "reply-to" addresses'
+        );
     }
 
     /**

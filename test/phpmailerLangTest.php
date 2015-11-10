@@ -5,10 +5,10 @@
  * PHP version 5.4.0
  *
  * @package PHPMailer
- * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Andy Prevost
+ * @copyright 2010 - 2015 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
