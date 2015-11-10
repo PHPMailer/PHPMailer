@@ -8,7 +8,7 @@
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2014 Marcus Bointon
+ * @copyright 2012 - 2015 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -17,21 +17,30 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer\OAuthProvider;
+
+use Hayageek\OAuth2\Client\Provider\Yahoo as HayageekYahoo;
+
 /**
- * PHPMailerOAuthProvider - Wrapper for League OAuth2 provider.
+ * Wrapper for League Yahoo OAuth2 provider.
  * @package PHPMailer
  * @author @hayageek
  * @author Ravishanker Kusuma (hayageek@gmail.com)
  * @link https://github.com/hayageek
  */
  
-class PHPMailerOAuthYahoo extends PHPMailerOAuthProvider
+class Yahoo extends Base
 {
-   
-    public function getProvider() {
-        return new Hayageek\OAuth2\Client\Provider\Yahoo([
-            'clientId' => $this->oauthClientId,
-            'clientSecret' => $this->oauthClientSecret
-        ]);
+    public function getProvider()
+    {
+        if (is_null($this->provider)) {
+            $this->provider = new HayageekYahoo(
+                [
+                    'clientId' => $this->oauthClientId,
+                    'clientSecret' => $this->oauthClientSecret
+                ]
+            );
+        }
+        return $this->provider;
     }
 }

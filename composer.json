@@ -20,17 +20,19 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "league/oauth2-google": "^1.0",
+        "hayageek/oauth2-yahoo": "^2.0",
+        "stevenmaguire/oauth2-microsoft": "^0.2.0"
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.*"
     },
     "suggest": {
-        "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system",
-        "league/oauth2-google": "^1.0",
-        "hayageek/oauth2-yahoo": "^2.0",
-        "stevenmaguire/oauth2-microsoft": "^0.2.0"
+        "league/oauth2-google": "Needed to use XOAUTH2 with Goole Gmail",
+        "hayageek/oauth2-yahoo": "Needed to use XOAUTH2 with Yahoo",
+        "stevenmaguire/oauth2-microsoft": "Needed to use XOAUTH2 with Microsoft services"
     },
     "autoload": {
         "psr-4": {

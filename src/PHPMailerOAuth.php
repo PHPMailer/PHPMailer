@@ -8,7 +8,7 @@
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2014 Marcus Bointon
+ * @copyright 2012 - 2015 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -28,51 +28,24 @@ namespace PHPMailer\PHPMailer;
 class PHPMailerOAuth extends PHPMailer
 {
     /**
-     * The OAuth user's email address
-     * @var string
-     */
-    public $oauthUserEmail = '';
-
-    /**
-     * The OAuth refresh token
-     * @var string
-     */
-    public $oauthRefreshToken = '';
-
-    /**
-     * The OAuth client ID
-     * @var string
-     */
-    public $oauthClientId = '';
-
-    /**
-     * The OAuth client secret
-     * @var string
-     */
-    public $oauthClientSecret = '';
-
-    /**
-     * An instance of the OAuthProvider\Google class.
-     * @var OAuthProvider\Google
+     * An instance of an OAuthProvider\Base derivative class.
+     * @var OAuthProvider\Base
      * @access protected
      */
     protected $oauth = null;
 
     /**
-     * Get an OAuthProvider\Google instance to use.
-     * @return OAuthProvider\Google
+     * Get an OAuthProvider instance to use.
+     * @return OAuthProvider\Base
      */
-    public function getOAUTHInstance()
+    public function getOAuth()
     {
-        if (!is_object($this->oauth)) {
-            $this->oauth = new OAuthProvider\Google(
-                $this->oauthUserEmail,
-                $this->oauthClientSecret,
-                $this->oauthClientId,
-                $this->oauthRefreshToken
-            );
-        }
         return $this->oauth;
+    }
+
+    public function setOAuth(OAuthProvider\Base $oauth)
+    {
+        $this->oauth = $oauth;
     }
 
     /**
@@ -92,7 +65,7 @@ class PHPMailerOAuth extends PHPMailer
         }
 
         if (is_null($this->oauth)) {
-            $this->oauth = $this->getOAUTHInstance();
+            $this->oauth = $this->getOAuth();
         }
 
         // Already connected?
@@ -157,7 +130,7 @@ class PHPMailerOAuth extends PHPMailer
                     // * we have openssl extension
                     // * we are not already using SSL
                     // * the server offers STARTTLS
-                    if ($this->SMTPAutoTLS and $sslext and $secure != 'ssl' and $this->smtp->getServerExt('STARTTLS')) {
+                    if ($this->SMTPAutoTLS and $sslext and 'ssl' != $secure and $this->smtp->getServerExt('STARTTLS')) {
                         $tls = true;
                     }
                     if ($tls) {
@@ -172,8 +145,6 @@ class PHPMailerOAuth extends PHPMailer
                             $this->Username,
                             $this->Password,
                             $this->AuthType,
-                            $this->Realm,
-                            $this->Workstation,
                             $this->oauth
                         )
                         ) {

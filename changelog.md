@@ -9,6 +9,8 @@ This is a major update that breaks backwards compatibility.
 * Classes renamed to make use of the namespace
 * `Extras` classes have been removed - use packages from packagist.org instead
 * All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
+* NTLM authentication removed - never worked anyway!
+* SMTP::authenticate method signature changed
 
 To avoid version confusion, this release is called **5.4**, **not 5.3**!
 

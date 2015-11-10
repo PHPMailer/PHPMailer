@@ -8,7 +8,7 @@
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2014 Marcus Bointon
+ * @copyright 2012 - 2015 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -19,20 +19,34 @@
 
 namespace PHPMailer\PHPMailer\OAuthProvider;
 
+use League\OAuth2\Client\Provider\Google as LeagueGoogle;
+
 /**
- * PHPMailer Google OAuth class- Wrapper for League OAuth2 Google provider.
+ * Wrapper for League Google OAuth2 provider.
  * @package PHPMailer
  * @author @sherryl4george
  * @author Marcus Bointon (@Synchro) <phpmailer@synchromedia.co.uk>
  * @link https://github.com/thephpleague/oauth2-client
  */
-class PHPMailerOAuthGoogle extends PHPMailerOAuthProvider
-class Google
+
+class Google extends Base
 {
-    public function getProvider() {
-        return new League\OAuth2\Client\Provider\Google([
-            'clientId' => $this->oauthClientId,
-            'clientSecret' => $this->oauthClientSecret
-        ]);
+    public function getProvider()
+    {
+        if (is_null($this->provider)) {
+            $this->provider = new LeagueGoogle([
+                'clientId' => $this->oauthClientId,
+                'clientSecret' => $this->oauthClientSecret
+            ]);
+        }
+        return $this->provider;
+    }
+
+    public function getOptions()
+    {
+        return [
+            'scope' => ['https://mail.google.com/'],
+            'approval_prompt' => 'force'
+        ];
     }
 }

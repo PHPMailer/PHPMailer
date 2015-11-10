@@ -1,78 +1,75 @@
 <?php
 /**
- * Get an OAuth2 token from Google.
+ * PHPMailer - PHP email creation and transport class.
+ * PHP Version 5.4
+ * @package PHPMailer
+ * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
+ * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author Brent R. Matzelle (original founder)
+ * @copyright 2012 - 2015 Marcus Bointon
+ * @copyright 2010 - 2012 Jim Jagielski
+ * @copyright 2004 - 2009 Andy Prevost
+ * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @note This program is distributed in the hope that it will be useful - WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ */
+
+/**
+ * Get an OAuth2 token from an OAuth2 provider.
  * * Install this script on your server so that it's accessible
  * as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
- * e.g.: http://localhost/phpmail/get_oauth_token.php
+ * e.g.: http://localhost/phpmailer/get_oauth_token.php
  * * Ensure dependencies are installed with 'composer install'
  * * Set up an app in your Google/Yahoo/Microsoft account
  * * Set the script address as the app's redirect URL
- * If no refresh token is obtained when running this file, revoke access to your app
- * using link: https://accounts.google.com/b/0/IssuedAuthSubTokens and run the script again.
- * This script requires PHP 5.4 or later
+ * If no refresh token is obtained when running this file,
+ * revoke access to your app and run the script again.
  * PHP Version 5.4
  */
+
+if (!isset($_GET['code']) && !isset($_GET['provider'])) {
+    ?>
+    <html>
+    <body>Select Provider:<br/>
+    <a href='?provider=Google'>Google</a><br/>
+    <a href='?provider=Yahoo'>Yahoo</a><br/>
+    <a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br/>
+    </body>
+    <?php
+    exit;
+}
+
 require 'vendor/autoload.php';
 
 session_start();
 
-if (!isset($_GET['code']) && !isset($_GET['provider_name'])) {
-    echo '<html><body><b>Select Provider</b>:<br/>';
-    echo "<a href='?provider_name=google'>Google</a><br/>";
-    echo "<a href='?provider_name=yahoo'>Yahoo</a><br/>";
-    echo "<a href='?provider_name=microsoft'>Microsoft/Outlook/Live</a><br/>";
-    echo '</body>';
-    exit;
+$providerName = '';
+
+if (array_key_exists('provider', $_GET)) {
+    $providerName             = $_GET['provider'];
+    $_SESSION['provider'] = $providerName;
+} elseif (array_key_exists('provider', $_SESSION)) {
+    $providerName = $_SESSION['provider'];
+}
+if (!preg_match('/^(Google|Microsoft|Yahoo)$/', $providerName)) {
+    exit("Only Google, Microsoft and Yahoo OAuth2 providers are currently supported.");
 }
 
-$provider_name = '';
-$options = array();
+//Alter this to point at the URL of this script on your own server
+//Should be an HTTPS URL
+$redirectUri = 'https://example.com/PHPMailer/get_oauth_token.php';
 
-if (isset($_GET['provider_name'])) {
-    $provider_name             = $_GET['provider_name'];
-    $_SESSION['provider_name'] = $provider_name;
-} elseif (isset($_SESSION['provider_name'])) {
-    $provider_name = $_SESSION['provider_name'];
-}
-//save in session for subsequent requests.
-$redirectUri = 'https://kusuma.com/phpmail/PHPMailer/get_oauth_token.php';
+$providerClass = '\\PHPMailer\\PHPMailer\\OAuthProvider\\'.$providerName;
 
-if ($provider_name == 'google') {
-    $provider         = new League\OAuth2\Client\Provider\Google(array(
-        'clientId' => '{GOOGLE_APP_ID}',
-        'clientSecret' => '{GOOGLE_APP_SECRET}',
-        'redirectUri' => $redirectUri,
-        'accessType' => 'offline'
-    ));
-    //scope for mail
-    $options['scope'] = array(
-        'https://mail.google.com/'
-    );
-
-    //To get the refresh token everytime
-    $options['approval_prompt'] = 'force';
-} elseif ($provider_name == 'yahoo') {
-    $provider = new Hayageek\OAuth2\Client\Provider\Yahoo(array(
-        'clientId' => '{YAHOO_APP_ID}',
-        'clientSecret' => '{YAHOO_APP_SECRET}',
-        'redirectUri' => $redirectUri //for yahoo redirect URL should be https
-    ));
-} elseif ($provider_name == 'microsoft') {
-    $provider = new Stevenmaguire\OAuth2\Client\Provider\Microsoft(array(
-        'clientId' => '{MICROSOFT_APP_ID}',
-        'clientSecret' => '{MICROSOFT_APP_SECRET}',
-        'redirectUri' => $redirectUri
-    ));
-
-    //scopes
-    $options['scope'] = array(
-        'wl.imap',
-        'wl.offline_access'
-    );
-} else {
-    echo 'Not supported for now';
-    exit;
-}
+$provider = new $providerClass(
+    '{YOUR_APP_ID}',
+    '{YOUR_APP_SECRET}',
+    $redirectUri,
+    'offline'
+);
 
 if (!isset($_GET['code'])) {
     // If we don't have an authorization code then get one
@@ -86,10 +83,10 @@ if (!isset($_GET['code'])) {
 // Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
-    unset($_SESSION['provider_name']);
+    unset($_SESSION['provider']);
     exit('Invalid state');
 } else {
-    unset($_SESSION['provider_name']);
+    unset($_SESSION['provider']);
 
     // Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken('authorization_code', array(
