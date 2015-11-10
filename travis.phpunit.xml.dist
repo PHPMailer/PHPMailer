@@ -16,11 +16,6 @@
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <blacklist>
-            <directory suffix=".php">./extras</directory>
-        </blacklist>
-    </filter>
     <groups>
         <exclude>
             <group>languages</group>

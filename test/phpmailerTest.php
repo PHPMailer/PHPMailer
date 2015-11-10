@@ -13,8 +13,6 @@
 
 namespace PHPMailer\PHPMailer;
 
-require '../vendor/autoload.php';
-
 /**
  * PHPMailer - PHP email transport unit test class.
  */
