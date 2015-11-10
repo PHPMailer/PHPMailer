@@ -8,7 +8,7 @@
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2014 Marcus Bointon
+ * @copyright 2012 - 2015 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -1138,9 +1138,7 @@ class PHPMailer
             // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
             if ($this->has8bitChars($domain) and @mb_check_encoding($domain, $this->CharSet)) {
                 $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
-                if (($punycode = defined('INTL_IDNA_VARIANT_UTS46') ?
-                    idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46) :
-                    idn_to_ascii($domain)) !== false) {
+                if (false !== ($punycode = idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46))) {
                     return substr($address, 0, $pos) . $punycode;
                 }
             }
@@ -2220,7 +2218,7 @@ class PHPMailer
                 if (!defined('PKCS7_TEXT')) {
                     throw new Exception($this->lang('extension_missing') . 'openssl');
                 }
-                // @TODO would be nice to use php://temp streams here, but need to wrap for PHP < 5.1
+                // @TODO would be nice to use php://temp streams here
                 $file = tempnam(sys_get_temp_dir(), 'mail');
                 if (false === file_put_contents($file, $body)) {
                     throw new Exception($this->lang('signing') . ' Could not write temp file');
