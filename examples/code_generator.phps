@@ -36,12 +36,12 @@ $authenticate_username = (isset($_POST['authenticate_username'])) ?
     $_POST['authenticate_username'] : $CFG['smtp_username'];
 
 // storing all status output from the script to be shown to the user later
-$results_messages = array();
+$results_messages = [];
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
 $example_code = "\nrequire_once '../PHPMailerAutoload.php';";
-$example_code .= "\n\n\$results_messages = array();";
+$example_code .= "\n\n\$results_messages = [];";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
 $mail->CharSet = 'utf-8';
