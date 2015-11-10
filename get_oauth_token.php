@@ -27,7 +27,6 @@
  * * Set the script address as the app's redirect URL
  * If no refresh token is obtained when running this file,
  * revoke access to your app and run the script again.
- * PHP Version 5.4
  */
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
@@ -95,6 +94,12 @@ if (!isset($_GET['code'])) {
 
     // Use this to interact with an API on the users behalf
     echo 'Token: ' . $token->getToken() . '<br>';
+    $token = $provider->getAccessToken(
+        'authorization_code',
+        [
+            'code' => $_GET['code']
+        ]
+    );
 
     // Use this to get a new access token if the old one expires
     echo 'Refresh Token: ' . $token->getRefreshToken() . '<br>';

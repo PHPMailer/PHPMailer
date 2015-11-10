@@ -12,6 +12,7 @@
  */
 
 namespace PHPMailer\PHPMailer;
+
 require '../vendor/autoload.php';
 
 /**
@@ -39,14 +40,14 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * @private
      * @var string[]
      */
-    public $ChangeLog = array();
+    public $ChangeLog = [];
 
     /**
      * Holds the note log.
      * @private
      * @var string[]
      */
-    public $NoteLog = array();
+    public $NoteLog = [];
 
     /**
      * Default include path
@@ -59,7 +60,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * @var array
      * @access private
      */
-    private $pids = array();
+    private $pids = [];
 
     /**
      * Run before each test is started.
@@ -121,8 +122,8 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     {
         // Clean global variables
         $this->Mail = null;
-        $this->ChangeLog = array();
-        $this->NoteLog = array();
+        $this->ChangeLog = [];
+        $this->NoteLog = [];
 
         foreach ($this->pids as $pid) {
             $p = escapeshellarg($pid);
@@ -161,7 +162,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $ReportBody .= '---------------------' . $eol;
         $ReportBody .= 'Unit Test Information' . $eol;
         $ReportBody .= '---------------------' . $eol;
-        $ReportBody .= 'phpmailer version: ' . $this->Mail->Version . $eol;
+        $ReportBody .= 'phpmailer version: ' . PHPMailer::VERSION . $eol;
         $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
         $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
 
@@ -256,7 +257,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function addChange($sName, $sNewValue)
     {
-        $this->ChangeLog[] = array($sName, $sNewValue);
+        $this->ChangeLog[] = [$sName, $sNewValue];
     }
 
     /**
@@ -332,7 +333,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validaddresses = array(
+        $validaddresses = [
             'first@iana.org',
             'first.last@iana.org',
             '1234567890123456789012345678901234567890123456789012345678901234@iana.org',
@@ -465,8 +466,8 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
             'test@test.com',
             'test@xn--example.com',
             'test@example.com'
-        );
-        $invalidaddresses = array(
+        ];
+        $invalidaddresses = [
             'first.last@sub.do,com',
             'first\@last@iana.org',
             '123456789012345678901234567890123456789012345678901234567890' .
@@ -608,25 +609,25 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
             //This is valid RCC5322, but we don't want to allow it
             "(\r\n RCPT TO:websec02@d.mbsd.jp\r\n DATA \\\nSubject: spam10\\\n\r\n".
                 " Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@gmail.com"
-        );
+        ];
         // IDNs in Unicode and ASCII forms.
-        $unicodeaddresses = array(
+        $unicodeaddresses = [
             'first.last@bücher.ch',
             'first.last@кто.рф',
             'first.last@phplíst.com',
-        );
-        $asciiaddresses = array(
+        ];
+        $asciiaddresses = [
             'first.last@xn--bcher-kva.ch',
             'first.last@xn--j1ail.xn--p1ai',
             'first.last@xn--phplst-6va.com',
-        );
-        $goodfails = array();
+        ];
+        $goodfails = [];
         foreach (array_merge($validaddresses, $asciiaddresses) as $address) {
             if (!PHPMailer::validateAddress($address)) {
                 $goodfails[] = $address;
             }
         }
-        $badpasses = array();
+        $badpasses = [];
         foreach (array_merge($invalidaddresses, $unicodeaddresses) as $address) {
             if (PHPMailer::validateAddress($address)) {
                 $badpasses[] = $address;
@@ -772,7 +773,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         //Check that a quoted printable encode and decode results in the same as went in
         $t = file_get_contents(__FILE__); //Use this file as test content
         //Force line breaks to UNIX-style
-        $t = str_replace(array("\r\n", "\r"), "\n", $t);
+        $t = str_replace(["\r\n", "\r"], "\n", $t);
         $this->assertEquals(
             $t,
             quoted_printable_decode($this->Mail->encodeQP($t)),
@@ -1523,7 +1524,7 @@ EOT;
         $this->Mail->Body = 'This message is S/MIME signed.';
         $this->buildBody();
 
-        $dn = array(
+        $dn = [
             'countryName' => 'UK',
             'stateOrProvinceName' => 'Here',
             'localityName' => 'There',
@@ -1531,12 +1532,12 @@ EOT;
             'organizationalUnitName' => 'PHPMailer',
             'commonName' => 'PHPMailer Test',
             'emailAddress' => 'phpmailer@example.com'
-        );
-        $keyconfig = array(
+        ];
+        $keyconfig = [
             "digest_alg" => "sha256",
             "private_key_bits" => 2048,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        ];
         $password = 'password';
         $certfile = 'certfile.txt';
         $keyfile = 'keyfile.txt';
@@ -1580,7 +1581,7 @@ EOT;
         $this->Mail->Body = 'This message is S/MIME signed with an extra CA cert.';
         $this->buildBody();
 
-        $certprops = array(
+        $certprops = [
             'countryName' => 'UK',
             'stateOrProvinceName' => 'Here',
             'localityName' => 'There',
@@ -1588,8 +1589,8 @@ EOT;
             'organizationalUnitName' => 'PHPMailer',
             'commonName' => 'PHPMailer Test',
             'emailAddress' => 'phpmailer@example.com'
-        );
-        $cacertprops = array(
+        ];
+        $cacertprops = [
             'countryName' => 'UK',
             'stateOrProvinceName' => 'Here',
             'localityName' => 'There',
@@ -1597,12 +1598,12 @@ EOT;
             'organizationalUnitName' => 'PHPMailer CA',
             'commonName' => 'PHPMailer Test CA',
             'emailAddress' => 'phpmailer@example.com'
-        );
-        $keyconfig = array(
-            "digest_alg" => "sha256",
-            "private_key_bits" => 2048,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        ];
+        $keyconfig = [
+            'digest_alg' => 'sha256',
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+        ];
         $password = 'password';
         $cacertfile = 'cacertfile.pem';
         $cakeyfile = 'cakeyfile.pem';
@@ -1664,10 +1665,10 @@ EOT;
         //(2048 bits is the recommended minimum key length -
         //gmail won't accept less than 1024 bits)
         $pk = openssl_pkey_new(
-            array(
+            [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA
-            )
+            ]
         );
         openssl_pkey_export_to_file($pk, $privatekeyfile);
         $this->Mail->DKIM_domain = 'example.com';
@@ -1787,25 +1788,31 @@ EOT;
     public function testCustomHeaderGetter()
     {
         $this->Mail->addCustomHeader('foo', 'bar');
-        $this->assertEquals(array(array('foo', 'bar')), $this->Mail->getCustomHeaders());
+        $this->assertEquals([['foo', 'bar']], $this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('foo', 'baz');
-        $this->assertEquals(array(
-            array('foo', 'bar'),
-            array('foo', 'baz')
-        ), $this->Mail->getCustomHeaders());
+        $this->assertEquals(
+            [
+                ['foo', 'bar'],
+                ['foo', 'baz']
+            ],
+            $this->Mail->getCustomHeaders()
+        );
 
         $this->Mail->clearCustomHeaders();
         $this->assertEmpty($this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('yux');
-        $this->assertEquals(array(array('yux')), $this->Mail->getCustomHeaders());
+        $this->assertEquals([['yux']], $this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('Content-Type: application/json');
-        $this->assertEquals(array(
-            array('yux'),
-            array('Content-Type', ' application/json')
-        ), $this->Mail->getCustomHeaders());
+        $this->assertEquals(
+            [
+                ['yux'],
+                ['Content-Type', ' application/json']
+            ],
+            $this->Mail->getCustomHeaders()
+        );
     }
 
     /**
@@ -1872,18 +1879,21 @@ EOT;
         // Addresses with IDN are returned by get*Addresses() after send() call.
         $domain = $this->Mail->punyencodeAddress($domain);
         $this->assertEquals(
-            array(array('test' . $domain, '')),
+            [['test' . $domain, '']],
             $this->Mail->getToAddresses(),
-            'Bad "to" recipients');
+            'Bad "to" recipients'
+        );
         $this->assertEquals(
-            array(array('test+cc' . $domain, '')),
+            [['test+cc' . $domain, '']],
             $this->Mail->getCcAddresses(),
-            'Bad "cc" recipients');
+            'Bad "cc" recipients'
+        );
         $this->assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
         $this->assertEquals(
-            array('test+replyto' . $domain => array('test+replyto' . $domain, '')),
+            ['test+replyto' . $domain => ['test+replyto' . $domain, '']],
             $this->Mail->getReplyToAddresses(),
-            'Bad "reply-to" addresses');
+            'Bad "reply-to" addresses'
+        );
     }
 
     /**
@@ -1981,19 +1991,19 @@ EOT;
         $this->Mail->SMTPDebug = 4; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = "ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10";
+        $this->Mail->Host = 'ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10';
         $this->assertFalse($this->Mail->smtpConnect(), 'SMTP bad multi-connect succeeded');
         $this->Mail->smtpClose();
-        $this->Mail->Host = "localhost:12345;10.10.10.10:54321;" . $_REQUEST['mail_host'];
+        $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = " localhost:12345 ; " . $_REQUEST['mail_host'] . ' ';
+        $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
         $this->Mail->Host = $_REQUEST['mail_host'];
         //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->assertTrue(
-            $this->Mail->smtpConnect(array('ssl' => array('verify_depth' => 10))),
+            $this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]),
             'SMTP connect with options failed'
         );
     }
