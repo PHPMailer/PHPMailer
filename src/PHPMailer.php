@@ -1,7 +1,7 @@
 <?php
 /**
  * PHPMailer - PHP email creation and transport class.
- * PHP Version 5
+ * PHP Version 5.4
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
@@ -17,6 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer;
+
 /**
  * PHPMailer - PHP email creation and transport class.
  * @package PHPMailer
@@ -30,8 +32,9 @@ class PHPMailer
     /**
      * The PHPMailer Version number.
      * @var string
+     * @deprecated Use the VERSION class constant instead
      */
-    public $Version = '5.2.13';
+    public $Version = '5.4.0';
 
     /**
      * Email priority.
@@ -84,16 +87,6 @@ class PHPMailer
      * @var string
      */
     public $Sender = '';
-
-    /**
-     * The Return-Path of the message.
-     * If empty, it will be set to either From or Sender.
-     * @var string
-     * @deprecated Email senders should never set a return-path header;
-     * it's the receiver's job (RFC5321 section 4.4), so this no longer does anything.
-     * @link https://tools.ietf.org/html/rfc5321#section-4.4 RFC5321 reference
-     */
-    public $ReturnPath = '';
 
     /**
      * The Subject of the message.
@@ -174,14 +167,6 @@ class PHPMailer
      * @var boolean
      */
     public $UseSendmailOptions = true;
-
-    /**
-     * Path to PHPMailer plugins.
-     * Useful if the SMTP class is not in the PHP include path.
-     * @var string
-     * @deprecated Should not be needed now there is an autoloader.
-     */
-    public $PluginDir = '';
 
     /**
      * The email address that a reading confirmation should be sent to, also known as read receipt.
@@ -605,6 +590,11 @@ class PHPMailer
     protected $uniqueid = '';
 
     /**
+     * The PHPMailer Version number.
+     */
+    const VERSION = '5.4.0';
+
+    /**
      * Error severity: message only, continue processing.
      */
     const STOP_MESSAGE = 0;
@@ -835,12 +825,12 @@ class PHPMailer
     /**
      * Add an address to one of the recipient arrays or to the ReplyTo array. Because PHPMailer
      * can't validate addresses with an IDN without knowing the PHPMailer::$CharSet (that can still
-     * modified after calling this function), addition of such addresses is delayed until send().
+     * be modified after calling this function), addition of such addresses is delayed until send().
      * Addresses that have been added already return false, but do not throw exceptions.
      * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
      * @param string $address The email address to send, resp. to reply to
      * @param string $name
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
@@ -854,7 +844,7 @@ class PHPMailer
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
-                throw new phpmailerException($error_message);
+                throw new Exception($error_message);
             }
             return false;
         }
@@ -884,7 +874,7 @@ class PHPMailer
      * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
      * @param string $address The email address to send, resp. to reply to
      * @param string $name
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
@@ -895,7 +885,7 @@ class PHPMailer
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
-                throw new phpmailerException($error_message);
+                throw new Exception($error_message);
             }
             return false;
         }
@@ -904,7 +894,7 @@ class PHPMailer
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
-                throw new phpmailerException($error_message);
+                throw new Exception($error_message);
             }
             return false;
         }
@@ -983,7 +973,7 @@ class PHPMailer
      * @param string $address
      * @param string $name
      * @param boolean $auto Whether to also set the Sender address, defaults to true
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean
      */
     public function setFrom($address, $name = '', $auto = true)
@@ -998,7 +988,7 @@ class PHPMailer
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
-                throw new phpmailerException($error_message);
+                throw new Exception($error_message);
             }
             return false;
         }
@@ -1028,10 +1018,10 @@ class PHPMailer
      * Check that a string looks like an email address.
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
-     * * `auto` Pick strictest one automatically;
-     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
+     * * `auto` Pick best pattern automatically;
+     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0;
      * * `pcre` Use old PCRE implementation;
-     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL; same as pcre8 but does not allow 'dotless' domains;
+     * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
      * * `noregex` Don't use a regex: super fast, really dumb.
      * @return boolean
@@ -1040,9 +1030,12 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = 'auto')
     {
+        //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
+        if (strpos($address, "\n") !== false or strpos($address, "\r") !== false) {
+            return false;
+        }
         if (!$patternselect or $patternselect == 'auto') {
             //Check this constant first so it works when extension_loaded() is disabled by safe mode
-            //Constant was added in PHP 5.2.4
             if (defined('PCRE_VERSION')) {
                 //This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
                 if (version_compare(PCRE_VERSION, '8.0.3') >= 0) {
@@ -1054,12 +1047,7 @@ class PHPMailer
                 //Fall back to older PCRE
                 $patternselect = 'pcre';
             } else {
-                //Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
-                if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
-                    $patternselect = 'php';
-                } else {
-                    $patternselect = 'noregex';
-                }
+                $patternselect = 'php';
             }
         }
         switch ($patternselect) {
@@ -1126,7 +1114,6 @@ class PHPMailer
      */
     public function idnSupported()
     {
-        // @TODO: Write our own "idn_to_ascii" function for PHP <= 5.2.
         return function_exists('idn_to_ascii') and function_exists('mb_convert_encoding');
     }
 
@@ -1164,7 +1151,7 @@ class PHPMailer
     /**
      * Create a message and send it.
      * Uses the sending method specified by $Mailer.
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean false on error - See the ErrorInfo property for details of the error.
      */
     public function send()
@@ -1174,7 +1161,7 @@ class PHPMailer
                 return false;
             }
             return $this->postSend();
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
             $this->mailHeader = '';
             $this->setError($exc->getMessage());
             if ($this->exceptions) {
@@ -1186,7 +1173,7 @@ class PHPMailer
 
     /**
      * Prepare a message for sending.
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean
      */
     public function preSend()
@@ -1201,7 +1188,7 @@ class PHPMailer
                 call_user_func_array(array($this, 'addAnAddress'), $params);
             }
             if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
-                throw new phpmailerException($this->lang('provide_address'), self::STOP_CRITICAL);
+                throw new Exception($this->lang('provide_address'), self::STOP_CRITICAL);
             }
 
             // Validate From, Sender, and ConfirmReadingTo addresses
@@ -1216,7 +1203,7 @@ class PHPMailer
                     $this->setError($error_message);
                     $this->edebug($error_message);
                     if ($this->exceptions) {
-                        throw new phpmailerException($error_message);
+                        throw new Exception($error_message);
                     }
                     return false;
                 }
@@ -1230,7 +1217,7 @@ class PHPMailer
             $this->setMessageType();
             // Refuse to send an empty message unless we are specifically allowing it
             if (!$this->AllowEmpty and empty($this->Body)) {
-                throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
+                throw new Exception($this->lang('empty_message'), self::STOP_CRITICAL);
             }
 
             // Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
@@ -1269,7 +1256,7 @@ class PHPMailer
                     str_replace("\r\n", "\n", $header_dkim) . self::CRLF;
             }
             return true;
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
             $this->setError($exc->getMessage());
             if ($this->exceptions) {
                 throw $exc;
@@ -1281,7 +1268,7 @@ class PHPMailer
     /**
      * Actually send a message.
      * Send the email via the selected mechanism
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean
      */
     public function postSend()
@@ -1304,7 +1291,7 @@ class PHPMailer
 
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
             }
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
             if ($this->exceptions) {
@@ -1319,7 +1306,7 @@ class PHPMailer
      * @param string $header The message headers
      * @param string $body The message body
      * @see PHPMailer::$Sendmail
-     * @throws phpmailerException
+     * @throws Exception
      * @access protected
      * @return boolean
      */
@@ -1341,7 +1328,7 @@ class PHPMailer
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
-                    throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+                    throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
                 fputs($mail, 'To: ' . $toAddr . "\n");
                 fputs($mail, $header);
@@ -1357,12 +1344,12 @@ class PHPMailer
                     $this->From
                 );
                 if ($result != 0) {
-                    throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+                    throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
             }
         } else {
             if (!@$mail = popen($sendmail, 'w')) {
-                throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+                throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
             fputs($mail, $header);
             fputs($mail, $body);
@@ -1377,7 +1364,7 @@ class PHPMailer
                 $this->From
             );
             if ($result != 0) {
-                throw new phpmailerException($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
+                throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
         }
         return true;
@@ -1388,7 +1375,7 @@ class PHPMailer
      * @param string $header The message headers
      * @param string $body The message body
      * @link http://www.php.net/manual/en/book.mail.php
-     * @throws phpmailerException
+     * @throws Exception
      * @access protected
      * @return boolean
      */
@@ -1423,7 +1410,7 @@ class PHPMailer
             ini_set('sendmail_from', $old_from);
         }
         if (!$result) {
-            throw new phpmailerException($this->lang('instantiate'), self::STOP_CRITICAL);
+            throw new Exception($this->lang('instantiate'), self::STOP_CRITICAL);
         }
         return true;
     }
@@ -1448,7 +1435,7 @@ class PHPMailer
      * @see PHPMailer::getSMTPInstance() to use a different class.
      * @param string $header The message headers
      * @param string $body The message body
-     * @throws phpmailerException
+     * @throws Exception
      * @uses SMTP
      * @access protected
      * @return boolean
@@ -1457,7 +1444,7 @@ class PHPMailer
     {
         $bad_rcpt = array();
         if (!$this->smtpConnect($this->SMTPOptions)) {
-            throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
+            throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
         if ('' == $this->Sender) {
             $smtp_from = $this->From;
@@ -1466,7 +1453,7 @@ class PHPMailer
         }
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
-            throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
+            throw new Exception($this->ErrorInfo, self::STOP_CRITICAL);
         }
 
         // Attempt to send to all recipients
@@ -1485,7 +1472,7 @@ class PHPMailer
 
         // Only send the DATA command if we have viable recipients
         if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
-            throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
+            throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
         if ($this->SMTPKeepAlive) {
             $this->smtp->reset();
@@ -1499,7 +1486,7 @@ class PHPMailer
             foreach ($bad_rcpt as $bad) {
                 $errstr .= $bad['to'] . ': ' . $bad['error'];
             }
-            throw new phpmailerException(
+            throw new Exception(
                 $this->lang('recipients_failed') . $errstr,
                 self::STOP_CONTINUE
             );
@@ -1511,10 +1498,11 @@ class PHPMailer
      * Initiate a connection to an SMTP server.
      * Returns false if the operation failed.
      * @param array $options An array of options compatible with stream_context_create()
+     * @return bool
+     * @throws Exception
+     * @throws null
      * @uses SMTP
      * @access public
-     * @throws phpmailerException
-     * @return boolean
      */
     public function smtpConnect($options = array())
     {
@@ -1562,7 +1550,7 @@ class PHPMailer
             if ('tls' === $secure or 'ssl' === $secure) {
                 //Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
                 if (!$sslext) {
-                    throw new phpmailerException($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
+                    throw new Exception($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
                 }
             }
             $host = $hostinfo[3];
@@ -1589,7 +1577,7 @@ class PHPMailer
                     }
                     if ($tls) {
                         if (!$this->smtp->startTLS()) {
-                            throw new phpmailerException($this->lang('connect_host'));
+                            throw new Exception($this->lang('connect_host'));
                         }
                         // We must resend HELO after tls negotiation
                         $this->smtp->hello($hello);
@@ -1603,11 +1591,11 @@ class PHPMailer
                             $this->Workstation
                         )
                         ) {
-                            throw new phpmailerException($this->lang('authenticate'));
+                            throw new Exception($this->lang('authenticate'));
                         }
                     }
                     return true;
-                } catch (phpmailerException $exc) {
+                } catch (Exception $exc) {
                     $lastexception = $exc;
                     $this->edebug($exc->getMessage());
                     // We must have connected, but then failed TLS or Auth, so close connection nicely
@@ -1980,7 +1968,7 @@ class PHPMailer
         if ($this->XMailer == '') {
             $result .= $this->headerLine(
                 'X-Mailer',
-                'PHPMailer ' . $this->Version . ' (https://github.com/PHPMailer/PHPMailer)'
+                'PHPMailer ' . self::VERSION . ' (https://github.com/PHPMailer/PHPMailer)'
             );
         } else {
             $myXmailer = trim($this->XMailer);
@@ -2077,7 +2065,7 @@ class PHPMailer
      * Assemble the message body.
      * Returns an empty string on failure.
      * @access public
-     * @throws phpmailerException
+     * @throws Exception
      * @return string The assembled message body
      */
     public function createBody()
@@ -2230,12 +2218,12 @@ class PHPMailer
         } elseif ($this->sign_key_file) {
             try {
                 if (!defined('PKCS7_TEXT')) {
-                    throw new phpmailerException($this->lang('extension_missing') . 'openssl');
+                    throw new Exception($this->lang('extension_missing') . 'openssl');
                 }
                 // @TODO would be nice to use php://temp streams here, but need to wrap for PHP < 5.1
                 $file = tempnam(sys_get_temp_dir(), 'mail');
                 if (false === file_put_contents($file, $body)) {
-                    throw new phpmailerException($this->lang('signing') . ' Could not write temp file');
+                    throw new Exception($this->lang('signing') . ' Could not write temp file');
                 }
                 $signed = tempnam(sys_get_temp_dir(), 'signed');
                 //Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
@@ -2269,9 +2257,9 @@ class PHPMailer
                 } else {
                     @unlink($file);
                     @unlink($signed);
-                    throw new phpmailerException($this->lang('signing') . openssl_error_string());
+                    throw new Exception($this->lang('signing') . openssl_error_string());
                 }
-            } catch (phpmailerException $exc) {
+            } catch (Exception $exc) {
                 $body = '';
                 if ($this->exceptions) {
                     throw $exc;
@@ -2381,14 +2369,14 @@ class PHPMailer
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type File extension (MIME) type.
      * @param string $disposition Disposition to use
-     * @throws phpmailerException
+     * @throws Exception
      * @return boolean
      */
     public function addAttachment($path, $name = '', $encoding = 'base64', $type = '', $disposition = 'attachment')
     {
         try {
             if (!@is_file($path)) {
-                throw new phpmailerException($this->lang('file_access') . $path, self::STOP_CONTINUE);
+                throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
             // If a MIME type is not specified, try to work it out from the file name
@@ -2412,7 +2400,7 @@ class PHPMailer
                 7 => 0
             );
 
-        } catch (phpmailerException $exc) {
+        } catch (Exception $exc) {
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
             if ($this->exceptions) {
@@ -2561,7 +2549,7 @@ class PHPMailer
      * Returns an empty string on failure.
      * @param string $path The full path to the file
      * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
-     * @throws phpmailerException
+     * @throws Exception
      * @access protected
      * @return string
      */
@@ -2569,28 +2557,10 @@ class PHPMailer
     {
         try {
             if (!is_readable($path)) {
-                throw new phpmailerException($this->lang('file_open') . $path, self::STOP_CONTINUE);
-            }
-            $magic_quotes = get_magic_quotes_runtime();
-            if ($magic_quotes) {
-                if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-                    set_magic_quotes_runtime(false);
-                } else {
-                    //Doesn't exist in PHP 5.4, but we don't need to check because
-                    //get_magic_quotes_runtime always returns false in 5.4+
-                    //so it will never get here
-                    ini_set('magic_quotes_runtime', false);
-                }
+                throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
             $file_buffer = file_get_contents($path);
             $file_buffer = $this->encodeString($file_buffer, $encoding);
-            if ($magic_quotes) {
-                if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-                    set_magic_quotes_runtime($magic_quotes);
-                } else {
-                    ini_set('magic_quotes_runtime', $magic_quotes);
-                }
-            }
             return $file_buffer;
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -2790,24 +2760,6 @@ class PHPMailer
             rawurlencode($string)
         );
         return preg_replace('/[^\r\n]{' . ($line_max - 3) . '}[^=\r\n]{2}/', "$0=\r\n", $string);
-    }
-
-    /**
-     * Backward compatibility wrapper for an old QP encoding function that was removed.
-     * @see PHPMailer::encodeQP()
-     * @access public
-     * @param string $string
-     * @param integer $line_max
-     * @param boolean $space_conv
-     * @return string
-     * @deprecated Use encodeQP instead.
-     */
-    public function encodeQPphp(
-        $string,
-        $line_max = 76,
-        /** @noinspection PhpUnusedParameterInspection */ $space_conv = false
-    ) {
-        return $this->encodeQP($string, $line_max);
     }
 
     /**
@@ -3025,21 +2977,13 @@ class PHPMailer
      * @param string $kind 'to', 'cc', or 'bcc'
      * @return void
      */
-    protected function clearQueuedAddresses($kind)
+    public function clearQueuedAddresses($kind)
     {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            $RecipientsQueue = $this->RecipientsQueue;
-            foreach ($RecipientsQueue as $address => $params) {
-                if ($params[0] == $kind) {
-                    unset($this->RecipientsQueue[$address]);
-                }
+        $RecipientsQueue = $this->RecipientsQueue;
+        foreach ($RecipientsQueue as $address => $params) {
+            if ($params[0] == $kind) {
+                unset($this->RecipientsQueue[$address]);
             }
-        } else {
-            $this->RecipientsQueue = array_filter(
-                $this->RecipientsQueue,
-                function ($params) use ($kind) {
-                    return $params[0] != $kind;
-                });
         }
     }
 
@@ -3646,14 +3590,14 @@ class PHPMailer
      * Generate a DKIM signature.
      * @access public
      * @param string $signHeader
-     * @throws phpmailerException
+     * @throws Exception
      * @return string
      */
     public function DKIM_Sign($signHeader)
     {
         if (!defined('PKCS7_TEXT')) {
             if ($this->exceptions) {
-                throw new phpmailerException($this->lang('extension_missing') . 'openssl');
+                throw new Exception($this->lang('extension_missing') . 'openssl');
             }
             return '';
         }
@@ -3866,22 +3810,5 @@ class PHPMailer
             $params = array($isSent, $to, $cc, $bcc, $subject, $body, $from);
             call_user_func_array($this->action_function, $params);
         }
-    }
-}
-
-/**
- * PHPMailer exception handler
- * @package PHPMailer
- */
-class phpmailerException extends Exception
-{
-    /**
-     * Prettify error message output
-     * @return string
-     */
-    public function errorMessage()
-    {
-        $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />\n";
-        return $errorMsg;
     }
 }

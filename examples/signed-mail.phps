@@ -1,4 +1,5 @@
 <?php
+namespace PHPMailer\PHPMailer;
 /**
  * This example shows signing a message and then sending it via the mail() function of PHP.
  * 
@@ -44,7 +45,7 @@
  * STEP 3 - Code
  */
 
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer();

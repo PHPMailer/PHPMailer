@@ -1,8 +1,23 @@
 # ChangeLog
 
+## Version 5.4
+This is a major update that breaks backwards compatibility.
+* Requires PHP 5.4 or later
+* Uses the `PHPMailer\PHPMailer` namespace
+* File structure simplified, classes live in the `src/` folder
+* Custom autoloader has been removed, now PSR-4 compatible
+* Classes renamed to make use of the namespace
+* `Extras` classes have been removed - use packages from packagist.org instead
+* All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
+
+To avoid version confusion, this release is called **5.4**, **not 5.3**!
+
+## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors
 * Make all POP3 private properties and methods protected
+* **SECURITY** Fix vulnerability that allowed email addresses with line breaks (valid in RFC5322) to pass to SMTP, permitting message injection at the SMTP level. Mitigated in both the address validator and in the lower-level SMTP class. Thanks to Takeshi Terada.
+* Updated Brazilian Portuguese translations (Thanks to @phelipealves)
 
 ## Version 5.2.13 (Sep 14th 2015)
 * Rename internal oauth class to avoid name clashes

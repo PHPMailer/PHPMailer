@@ -4,7 +4,7 @@
  * revised, updated and corrected 27/02/2013
  * by matt.sturdy@gmail.com
  */
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 $CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
 $CFG['smtp_debugoutput'] = 'html';
@@ -356,9 +356,9 @@ $example_code .= "\n}";
 </head>
 <body>
 <?php
-if (version_compare(PHP_VERSION, '5.0.0', '<')) {
+if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     echo 'Current PHP version: ' . phpversion() . "<br>";
-    echo exit("ERROR: Wrong PHP version. Must be PHP 5 or above.");
+    echo exit("ERROR: Wrong PHP version. Must be PHP 5.4 or later.");
 }
 
 if (count($results_messages) > 0) {

@@ -17,6 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+namespace PHPMailer\PHPMailer;
+
 /**
  * PHPMailerOAuth - PHPMailer subclass adding OAuth support.
  * @package PHPMailer
@@ -50,20 +52,20 @@ class PHPMailerOAuth extends PHPMailer
     public $oauthClientSecret = '';
 
     /**
-     * An instance of the OAuth Provider class.
-     * @type PHPMailerOAuthProvider
+     * An instance of the OAuthProvider\Google class.
+     * @var OAuthProvider\Google
      * @access protected
      */
     protected $oauth = null;
 
     /**
-     * Get an OAuth instance to use.
-     * @return PHPMailerOAuthProvider
+     * Get an OAuthProvider\Google instance to use.
+     * @return OAuthProvider\Google
      */
     public function getOAUTHInstance()
     {
         if (!is_object($this->oauth)) {
-            $this->oauth = new PHPMailerOAuthGoogle(
+            $this->oauth = new OAuthProvider\Google(
                 $this->oauthUserEmail,
                 $this->oauthClientSecret,
                 $this->oauthClientId,
@@ -77,10 +79,11 @@ class PHPMailerOAuth extends PHPMailer
      * Initiate a connection to an SMTP server.
      * Overrides the original smtpConnect method to add support for OAuth.
      * @param array $options An array of options compatible with stream_context_create()
+     * @return bool
+     * @throws null
+     * @throws Exception
      * @uses SMTP
      * @access public
-     * @throws phpmailerException
-     * @return boolean
      */
     public function smtpConnect($options = array())
     {
@@ -132,7 +135,7 @@ class PHPMailerOAuth extends PHPMailer
             if ('tls' === $secure or 'ssl' === $secure) {
                 //Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
                 if (!$sslext) {
-                    throw new phpmailerException($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
+                    throw new Exception($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
                 }
             }
             $host = $hostinfo[3];
@@ -159,7 +162,7 @@ class PHPMailerOAuth extends PHPMailer
                     }
                     if ($tls) {
                         if (!$this->smtp->startTLS()) {
-                            throw new phpmailerException($this->lang('connect_host'));
+                            throw new Exception($this->lang('connect_host'));
                         }
                         // We must resend HELO after tls negotiation
                         $this->smtp->hello($hello);
@@ -174,11 +177,11 @@ class PHPMailerOAuth extends PHPMailer
                             $this->oauth
                         )
                         ) {
-                            throw new phpmailerException($this->lang('authenticate'));
+                            throw new Exception($this->lang('authenticate'));
                         }
                     }
                     return true;
-                } catch (phpmailerException $exc) {
+                } catch (Exception $exc) {
                     $lastexception = $exc;
                     $this->edebug($exc->getMessage());
                     // We must have connected, but then failed TLS or Auth, so close connection nicely

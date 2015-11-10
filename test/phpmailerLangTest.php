@@ -1,9 +1,8 @@
 <?php
 /**
  * PHPMailer - language file tests
- * Requires PHPUnit 3.3 or later.
  *
- * PHP version 5.0.0
+ * PHP version 5.4.0
  *
  * @package PHPMailer
  * @author Andy Prevost
@@ -13,16 +12,18 @@
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-require_once '../PHPMailerAutoload.php';
+namespace PHPMailer\PHPMailer;
+
+require_once '../vendor/autoload.php';
 
 /**
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class PHPMailerLangTest extends PHPUnit_Framework_TestCase
+class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Holds a phpmailer instance.
+     * Holds a PHPMailer instance.
      * @private
      * @var PHPMailer
      */
@@ -51,7 +52,7 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
         $this->Mail->setLanguage('en');
         $definedStrings = $this->Mail->getTranslations();
         $err = '';
-        foreach (new DirectoryIterator('../language') as $fileInfo) {
+        foreach (new \DirectoryIterator('../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }

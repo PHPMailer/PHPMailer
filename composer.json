@@ -20,13 +20,11 @@
         }
     ],
     "require": {
-        "php": ">=5.0.0",
-        "league/oauth2-client": "^1.0",
-        "league/oauth2-google": "^1.0"
+        "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "*",
-        "phpunit/phpunit": "4.7.*"
+        "phpdocumentor/phpdocumentor": "2.*",
+        "phpunit/phpunit": "4.*"
     },
     "suggest": {
         "league/oauth2-client": "Needed for Gmail's XOAUTH2 authentication system",
@@ -35,18 +33,9 @@
         "stevenmaguire/oauth2-microsoft": "^0.2.0"
     },
     "autoload": {
-        "classmap": [
-            "class.phpmailer.php",
-            "class.phpmaileroauth.php",
-            "class.phpmaileroauthprovider.php",
-            "class.phpmaileroauthgoogle.php",
-            "class.phpmaileroauthyahoo.php",
-            "class.phpmaileroauthmicrosoft.php",
-            "class.smtp.php",
-            "class.pop3.php",
-            "extras/EasyPeasyICS.php",
-            "extras/ntlm_sasl_client.php"
-        ]
+        "psr-4": {
+            "PHPMailer\\PHPMailer\\": "src/"
+        }
     },
     "license": "LGPL-2.1"
 }

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>PHPMailer Lite - DKIM and Callback Function test</title>
+    <title>PHPMailer - DKIM and Callback Function test</title>
 </head>
 <body>
 
@@ -33,8 +33,8 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
     return true;
 }
 
-require_once '../PHPMailerAutoload.php';
-$mail = new PHPMailer();
+require_once '../vendor/autoload.php';
+$mail = new PHPMailer\PHPMailer\PHPMailer();
 
 try {
     $mail->isMail();
@@ -49,9 +49,9 @@ try {
     $mail->action_function = 'callbackAction';
     $mail->send();
     echo "Message Sent OK</p>\n";
-} catch (phpmailerException $e) {
+} catch (PHPMailer\PHPMailer\Exception $e) {
     echo $e->errorMessage(); //Pretty error messages from PHPMailer
-} catch (Exception $e) {
+} catch (\Exception $e) {
     echo $e->getMessage(); //Boring error messages from anything else!
 }
 
