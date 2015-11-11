@@ -28,9 +28,9 @@ before_script:
     if [[ $TRAVIS_PHP_VERSION != "hhv"* ]]; then
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
     fi
-
+  - pwd
 script:
-  - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap bootstrap.php
+  - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap ./vendor/autoload.php
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml
