@@ -5,7 +5,6 @@ php:
   - 5.5
   - 5.4
   - hhvm
- 
 matrix:
   allow_failures:
     - php: hhvm
@@ -14,7 +13,7 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
 install:
-  - composer install
+  - composer update
 before_script:
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
@@ -25,9 +24,13 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+  - |
+    if [[ $TRAVIS_PHP_VERSION != "hhv"* ]]; then
+      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+    fi
+  - pwd
 script:
-  - phpunit --configuration ../travis.phpunit.xml.dist
+  - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap ../vendor/autoload.php
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml
