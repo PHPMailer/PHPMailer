@@ -29,6 +29,8 @@ before_script:
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
     fi
   - pwd
+  - phpunit --version
+  - which phpunit
 script:
   - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap ../vendor/autoload.php
 after_script:
