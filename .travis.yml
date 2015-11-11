@@ -30,7 +30,7 @@ before_script:
     fi
   - pwd
 script:
-  - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap ./vendor/autoload.php
+  - phpunit --configuration ../travis.phpunit.xml.dist --bootstrap ../vendor/autoload.php
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml
