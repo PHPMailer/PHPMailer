@@ -2979,7 +2979,10 @@ class PHPMailer
     {
         $this->RecipientsQueue = array_filter(
             $this->RecipientsQueue,
-            function ($params) use ($kind) { return $params[0] != $kind; });
+            function ($params) use ($kind) {
+                return $params[0] != $kind;
+            }
+        );
     }
 
     /**
