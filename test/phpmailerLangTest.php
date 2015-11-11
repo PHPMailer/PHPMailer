@@ -14,8 +14,6 @@
 
 namespace PHPMailer\PHPMailer;
 
-require_once '../vendor/autoload.php';
-
 /**
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
