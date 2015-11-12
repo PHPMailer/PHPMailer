@@ -12,7 +12,7 @@
 # Licensed under the GNU Lesser General Public License: http://www.gnu.org/copyleft/lesser.html
 
 # Enable debug output
-#set -xv
+set -xv
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
 LOGFOLDER=/tmp
