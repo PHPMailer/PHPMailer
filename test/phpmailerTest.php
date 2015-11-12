@@ -1961,11 +1961,11 @@ EOT;
     public function testPopBeforeSmtpGood()
     {
         //Start a fake POP server
-        $pid = shell_exec(
-            'nohup '.
+        $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' >/dev/null 2>/dev/null & printf "%u" $!'
-        );
+            ' >/dev/null 2>/dev/null & printf "%u" $!';
+        $pid = shell_exec($cmd);
+        echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
 
         sleep(2);
@@ -1987,11 +1987,11 @@ EOT;
     {
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
-        $pid = shell_exec(
-            'nohup '.
+        $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' 1101 >/dev/null 2>/dev/null & printf "%u" $!'
-        );
+            ' 1101 >/dev/null 2>/dev/null & printf "%u" $!';
+        $pid = shell_exec($cmd);
+        echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
 
         sleep(2);
