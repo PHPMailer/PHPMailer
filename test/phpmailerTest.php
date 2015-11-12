@@ -1966,7 +1966,7 @@ EOT;
 //            ' >/dev/null 2>/dev/null & printf "%u" $!';
         $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' & printf "%u" $!';
+            ' > /tmp/popout.txt 2>&1 & printf "%u" $!';
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
@@ -1980,6 +1980,7 @@ EOT;
         //Kill the fake server
         shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
+        readfile('/tmp/popout.txt');
     }
 
     /**
@@ -1995,7 +1996,7 @@ EOT;
 //            ' 1101 >/dev/null 2>/dev/null & printf "%u" $!';
         $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' 1101 & printf "%u" $!';
+            ' 1101 2>&1 > /tmp/popout.txt & printf "%u" $!';
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
@@ -2008,6 +2009,7 @@ EOT;
         );
         shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
+        readfile('/tmp/popout.txt');
     }
 
     /**
