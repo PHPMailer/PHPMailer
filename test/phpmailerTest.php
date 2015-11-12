@@ -64,10 +64,10 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
-        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         $this->Mail = new PHPMailer;
         $this->Mail->SMTPDebug = 3; //Full debug output
         $this->Mail->Priority = 3;
