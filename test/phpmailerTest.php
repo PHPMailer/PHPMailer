@@ -825,7 +825,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents($this->INCLUDE_DIR.'examples/contents.html');
+        $content = file_get_contents($this->INCLUDE_DIR.'/examples/contents.html');
         // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -835,7 +835,7 @@ EOT;
                 "ISO-8859-1",
                 mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
             ),
-            $this->INCLUDE_DIR.'examples'
+            $this->INCLUDE_DIR.'/examples'
         );
         $this->buildBody();
         $this->assertTrue(
@@ -899,7 +899,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -935,12 +935,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents($this->INCLUDE_DIR .'examples/contentsutf8.html');
+        $message = file_get_contents($this->INCLUDE_DIR .'/examples/contentsutf8.html');
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, $this->INCLUDE_DIR .'examples');
+        $this->Mail->msgHTML($message, $this->INCLUDE_DIR .'/examples');
         $this->Mail->Subject .= ': msgHTML';
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
@@ -951,7 +951,7 @@ EOT;
         $this->Mail->AltBody = '';
         $this->Mail->msgHTML(
             $message,
-            $this->INCLUDE_DIR .'examples',
+            $this->INCLUDE_DIR .'/examples',
             function ($html) {
                 return strtoupper(strip_tags($html));
             }
@@ -972,7 +972,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            $this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png',
+            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
             'phpmailer_mini.png'
         )
         ) {
@@ -997,7 +997,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents($this->INCLUDE_DIR .'examples/images/phpmailer_mini.png'),
+            file_get_contents($this->INCLUDE_DIR .'/examples/images/phpmailer_mini.png'),
             md5('phpmailer_mini.png').'@phpmailer.0',
             '', //intentionally empty name
             'base64',
@@ -1022,7 +1022,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            $this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png',
+            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
             'phpmailer_mini.png'
         )
         ) {
@@ -1030,7 +1030,7 @@ EOT;
             return;
         }
 
-        if (!$this->Mail->addAttachment($this->INCLUDE_DIR .'examples/images/phpmailer.png', 'phpmailer.png')) {
+        if (!$this->Mail->addAttachment($this->INCLUDE_DIR .'/examples/images/phpmailer.png', 'phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -1050,7 +1050,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1079,7 +1079,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
