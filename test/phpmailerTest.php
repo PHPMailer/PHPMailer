@@ -64,8 +64,8 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (file_exists('./testbootstrap.php')) {
-            include './testbootstrap.php'; //Overrides go in here
+        if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
+            include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         $this->Mail = new PHPMailer;
@@ -297,7 +297,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     public function testBootstrap()
     {
         $this->assertTrue(
-            file_exists('./testbootstrap.php'),
+            file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php'),
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
     }
