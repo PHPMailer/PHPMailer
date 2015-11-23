@@ -1967,7 +1967,7 @@ EOT;
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -v -p '.$pid);
+        shell_exec('ps -v -p '. escapeshellarg($pid));
 
         sleep(2);
         //Test a known-good login
@@ -1994,7 +1994,7 @@ EOT;
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -v -p ' . $pid);
+        shell_exec('ps -v -p ' . escapeshellarg($pid));
 
         sleep(2);
         //Test a known-bad login
