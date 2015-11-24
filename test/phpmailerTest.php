@@ -1961,13 +1961,15 @@ EOT;
     public function testPopBeforeSmtpGood()
     {
         //Start a fake POP server
+//        $cmd = 'nohup ' .
+//            escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
+//            ' >/dev/null 2>/dev/null & printf "%u" $!';
         $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' >/dev/null 2>/dev/null & printf "%u" $!';
+        ' & printf "%u" $!';
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -f --pid ' . escapeshellarg($pid));
 
         sleep(2);
         //Test a known-good login
@@ -1988,13 +1990,16 @@ EOT;
     {
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
+//        $cmd = 'nohup ' .
+//            escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
+//            ' 1101 >/dev/null 2>/dev/null & printf "%u" $!';
         $cmd = 'nohup ' .
             escapeshellcmd($this->INCLUDE_DIR . '/test/runfakepopserver.sh') .
-            ' 1101 >/dev/null 2>/dev/null & printf "%u" $!';
+            ' 1101 & printf "%u" $!';
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -f --pid ' . escapeshellarg($pid));
+        shell_exec('ps -f -p ' . escapeshellarg($pid));
 
         sleep(2);
         //Test a known-bad login
