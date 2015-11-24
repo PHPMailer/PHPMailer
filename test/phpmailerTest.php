@@ -1967,7 +1967,7 @@ EOT;
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -v -p '. escapeshellarg($pid));
+        shell_exec('ps -f --pid ' . escapeshellarg($pid));
 
         sleep(2);
         //Test a known-good login
@@ -1994,7 +1994,7 @@ EOT;
         $pid = shell_exec($cmd);
         echo "Running POP3 server $cmd\nPID = $pid\n";
         $this->pids[] = $pid;
-        shell_exec('ps -v -p ' . escapeshellarg($pid));
+        shell_exec('ps -f --pid ' . escapeshellarg($pid));
 
         sleep(2);
         //Test a known-bad login
@@ -2039,7 +2039,7 @@ EOT;
  * which is probably more useful if you run these tests a lot
  * <html>
  * <body>
- * <h3>phpmailer Unit Test</h3>
+ * <h3>PHPMailer Unit Test</h3>
  * By entering a SMTP hostname it will automatically perform tests with SMTP.
  *
  * <form name="phpmailer_unit" action=__FILE__ method="get">
