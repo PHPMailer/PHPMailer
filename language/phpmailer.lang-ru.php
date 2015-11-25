@@ -3,6 +3,7 @@
  * Russian PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
  * @author Alexey Chumakov <alex@chumakov.ru>
+ * @author Foster Snowhill <i18n@forstwoof.ru>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Ошибка SMTP: ошибка авторизации.';
@@ -15,11 +16,12 @@ $PHPMAILER_LANG['file_open']            = 'Файловая ошибка: не �
 $PHPMAILER_LANG['from_failed']          = 'Неверный адрес отправителя: ';
 $PHPMAILER_LANG['instantiate']          = 'Невозможно запустить функцию mail.';
 $PHPMAILER_LANG['provide_address']      = 'Пожалуйста, введите хотя бы один адрес e-mail получателя.';
-$PHPMAILER_LANG['mailer_not_supported'] = ' - почтовый сервер не поддерживается.';
+$PHPMAILER_LANG['mailer_not_supported'] = ' — почтовый сервер не поддерживается.';
 $PHPMAILER_LANG['recipients_failed']    = 'Ошибка SMTP: отправка по следующим адресам получателей не удалась: ';
 $PHPMAILER_LANG['empty_message']        = 'Пустое тело сообщения';
-$PHPMAILER_LANG['invalid_address']        = 'Не отослано, неправильный формат email адреса: ';
+$PHPMAILER_LANG['invalid_address']      = 'Не отослано, неправильный формат email адреса: ';
 $PHPMAILER_LANG['signing']              = 'Ошибка подписывания: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Ошибка соединения с SMTP-сервером';
 $PHPMAILER_LANG['smtp_error']           = 'Ошибка SMTP-сервера: ';
 $PHPMAILER_LANG['variable_set']         = 'Невозможно установить или переустановить переменную: ';
+$PHPMAILER_LANG['extension_missing']    = 'Расширение отсутствует: ';

@@ -31,28 +31,28 @@ class POP3
 {
     /**
      * The POP3 PHPMailer Version number.
-     * @type string
+     * @var string
      * @access public
      */
-    public $Version = '5.2.9';
+    public $Version = '5.2.14';
 
     /**
      * Default POP3 port number.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $POP3_PORT = 110;
 
     /**
      * Default timeout in seconds.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $POP3_TIMEOUT = 30;
 
     /**
      * POP3 Carriage Return + Line Feed.
-     * @type string
+     * @var string
      * @access public
      * @deprecated Use the constant instead
      */
@@ -61,66 +61,66 @@ class POP3
     /**
      * Debug display level.
      * Options: 0 = no, 1+ = yes
-     * @type integer
+     * @var integer
      * @access public
      */
     public $do_debug = 0;
 
     /**
      * POP3 mail server hostname.
-     * @type string
+     * @var string
      * @access public
      */
     public $host;
 
     /**
      * POP3 port number.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $port;
 
     /**
      * POP3 Timeout Value in seconds.
-     * @type integer
+     * @var integer
      * @access public
      */
     public $tval;
 
     /**
      * POP3 username
-     * @type string
+     * @var string
      * @access public
      */
     public $username;
 
     /**
      * POP3 password.
-     * @type string
+     * @var string
      * @access public
      */
     public $password;
 
     /**
      * Resource handle for the POP3 connection socket.
-     * @type resource
-     * @access private
+     * @var resource
+     * @access protected
      */
-    private $pop_conn;
+    protected $pop_conn;
 
     /**
      * Are we connected?
-     * @type boolean
-     * @access private
+     * @var boolean
+     * @access protected
      */
-    private $connected = false;
+    protected $connected = false;
 
     /**
      * Error container.
-     * @type array
-     * @access private
+     * @var array
+     * @access protected
      */
-    private $errors = array();
+    protected $errors = array();
 
     /**
      * Line break constant
@@ -130,8 +130,8 @@ class POP3
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      * @param $host
-     * @param boolean $port
-     * @param boolean $tval
+     * @param integer|boolean $port The port number to connect to
+     * @param integer|boolean $timeout The timeout value
      * @param string $username
      * @param string $password
      * @param integer $debug_level
@@ -140,13 +140,13 @@ class POP3
     public static function popBeforeSmtp(
         $host,
         $port = false,
-        $tval = false,
+        $timeout = false,
         $username = '',
         $password = '',
         $debug_level = 0
     ) {
         $pop = new POP3;
-        return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
+        return $pop->authorise($host, $port, $timeout, $username, $password, $debug_level);
     }
 
     /**
@@ -310,9 +310,9 @@ class POP3
      * $size is the maximum number of bytes to retrieve
      * @param integer $size
      * @return string
-     * @access private
+     * @access protected
      */
-    private function getResponse($size = 128)
+    protected function getResponse($size = 128)
     {
         $response = fgets($this->pop_conn, $size);
         if ($this->do_debug >= 1) {
@@ -325,9 +325,9 @@ class POP3
      * Send raw data to the POP3 server.
      * @param string $string
      * @return integer
-     * @access private
+     * @access protected
      */
-    private function sendString($string)
+    protected function sendString($string)
     {
         if ($this->pop_conn) {
             if ($this->do_debug >= 2) { //Show client messages when debug >= 2
@@ -343,9 +343,9 @@ class POP3
      * Looks for for +OK or -ERR.
      * @param string $string
      * @return boolean
-     * @access private
+     * @access protected
      */
-    private function checkResponse($string)
+    protected function checkResponse($string)
     {
         if (substr($string, 0, 3) !== '+OK') {
             $this->setError(array(
@@ -363,8 +363,9 @@ class POP3
      * Add an error to the internal error store.
      * Also display debug output if it's enabled.
      * @param $error
+     * @access protected
      */
-    private function setError($error)
+    protected function setError($error)
     {
         $this->errors[] = $error;
         if ($this->do_debug >= 1) {
@@ -377,14 +378,23 @@ class POP3
     }
 
     /**
+     * Get an array of error messages, if any.
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
      * POP3 connection error handler.
      * @param integer $errno
      * @param string $errstr
      * @param string $errfile
      * @param integer $errline
-     * @access private
+     * @access protected
      */
-    private function catchWarning($errno, $errstr, $errfile, $errline)
+    protected function catchWarning($errno, $errstr, $errfile, $errline)
     {
         $this->setError(array(
             'error' => "Connecting to the POP3 server raised a PHP warning: ",

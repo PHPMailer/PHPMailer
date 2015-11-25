@@ -23,3 +23,4 @@ $PHPMAILER_LANG['signing']              = 'Erro ó firmar: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() fallou.';
 $PHPMAILER_LANG['smtp_error']           = 'Erro do servidor SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'Non puidemos axustar ou reaxustar a variábel: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

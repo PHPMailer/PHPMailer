@@ -1,6 +1,6 @@
 <?php
 /**
- * This example shows settings to use when sending via Google's Gmail servers.
+ * This example shows settings to use when sending over SMTP with TLS and custom connection options.
  */
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
@@ -25,10 +25,7 @@ $mail->SMTPDebug = 2;
 $mail->Debugoutput = 'html';
 
 //Set the hostname of the mail server
-$mail->Host = 'smtp.gmail.com';
-// use
-// $mail->Host = gethostbyname('smtp.gmail.com');
-// if your network does not support SMTP over IPv6
+$mail->Host = 'smtp.example.com';
 
 //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
 $mail->Port = 587;
@@ -36,11 +33,22 @@ $mail->Port = 587;
 //Set the encryption system to use - ssl (deprecated) or tls
 $mail->SMTPSecure = 'tls';
 
+//Custom connection options
+$mail->SMTPOptions = array (
+    'ssl' => array(
+        'verify_peer'  => true,
+        'verify_depth' => 3,
+        'allow_self_signed' => true,
+        'peer_name' => 'smtp.example.com',
+        'cafile' => '/etc/ssl/ca_cert.pem',
+    )
+);
+
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = "username@gmail.com";
+$mail->Username = "username@example.com";
 
 //Password to use for SMTP authentication
 $mail->Password = "yourpassword";
@@ -48,24 +56,15 @@ $mail->Password = "yourpassword";
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 
-//Set an alternative reply-to address
-$mail->addReplyTo('replyto@example.com', 'First Last');
-
 //Set who the message is to be sent to
 $mail->addAddress('whoto@example.com', 'John Doe');
 
 //Set the subject line
-$mail->Subject = 'PHPMailer GMail SMTP test';
+$mail->Subject = 'PHPMailer SMTP options test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
-
-//Replace the plain text body with one created manually
-$mail->AltBody = 'This is a plain-text message body';
-
-//Attach an image file
-$mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {

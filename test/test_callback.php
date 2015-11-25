@@ -33,7 +33,7 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
     return true;
 }
 
-require_once '../class.phpmailer.php';
+require_once '../PHPMailerAutoload.php';
 $mail = new PHPMailer();
 
 try {

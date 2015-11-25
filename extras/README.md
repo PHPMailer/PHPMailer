@@ -4,10 +4,6 @@ These classes provide optional additional functions to PHPMailer.
 
 These are not loaded by the PHPMailer autoloader, so in some cases you may need to `require` them yourself before using them.
 
-##HTML2Text
-
-This class was written by Jon Abernathy and provides a simple conversion of HTML to plain-text, while attempting to preserve some aspects of the formatting. It is used in PHPMailer if you set the `advanced` parameter to `true` in either the `msgHTML()` or `html2text` methods of PHPMailer.
-
 ##EasyPeasyICS
 
 This class was originally written by Manuel Reinhard and provides a simple means of generating ICS/vCal files that are used in sending calendar events. PHPMailer does not use it directly, but you can use it to generate content appropriate for placing in the `Ical` property of PHPMailer. The PHPMailer project is now its official home as Manuel has given permission for that and is no longer maintaining it himself.

@@ -4,8 +4,8 @@
  * @package PHPMailer
  */
 
-$PHPMAILER_LANG['authenticate']         = 'SMTP Feil: Kunne ikke authentisere.';
-$PHPMAILER_LANG['connect_host']         = 'SMTP Feil: Kunne ikke koble til SMTP host.';
+$PHPMAILER_LANG['authenticate']         = 'SMTP Feil: Kunne ikke autentisere.';
+$PHPMAILER_LANG['connect_host']         = 'SMTP Feil: Kunne ikke koble til SMTP tjener.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP Feil: Data ble ikke akseptert.';
 $PHPMAILER_LANG['empty_message']        = 'Meldingsinnholdet er tomt';
 $PHPMAILER_LANG['encoding']             = 'Ukjent tegnkoding: ';
@@ -22,3 +22,4 @@ $PHPMAILER_LANG['signing']              = 'Signeringsfeil: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() feilet.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP-serverfeil: ';
 $PHPMAILER_LANG['variable_set']         = 'Kan ikke sette eller resette variabelen: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
