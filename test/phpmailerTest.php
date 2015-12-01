@@ -1962,8 +1962,8 @@ EOT;
     {
         //Start a fake POP server
         $pid = shell_exec(
-            'nohup ' . $this->INCLUDE_DIR .
-            '/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
+            '/usr/bin/nohup ' . $this->INCLUDE_DIR .
+            '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
 
@@ -1988,7 +1988,7 @@ EOT;
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec(
             'nohup '. $this->INCLUDE_DIR .
-            '/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
+            '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
 
