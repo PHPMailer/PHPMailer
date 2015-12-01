@@ -1957,6 +1957,7 @@ EOT;
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth.
      * With a known-good login
+     * @group pop3
      */
     public function testPopBeforeSmtpGood()
     {
@@ -1981,13 +1982,14 @@ EOT;
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth.
      * With a known-bad login
+     * @group pop3
      */
     public function testPopBeforeSmtpBad()
     {
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec(
-            'nohup '. $this->INCLUDE_DIR .
+            '/usr/bin/nohup '. $this->INCLUDE_DIR .
             '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
