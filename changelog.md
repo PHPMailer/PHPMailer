@@ -12,6 +12,8 @@ This is a major update that breaks backwards compatibility.
 
 To avoid version confusion, this release is called **5.4**, **not 5.3**!
 
+* Fix gmail XOAUTH2 scope, thanks to @sherryl4george
+
 ## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors
