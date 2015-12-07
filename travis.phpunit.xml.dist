@@ -19,6 +19,7 @@
     <groups>
         <exclude>
             <group>languages</group>
+            <group>pop3</group>
         </exclude>
     </groups>
     <logging>

@@ -50,7 +50,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * Default include path
      * @var string
      */
-    public $INCLUDE_DIR = '../';
+    public $INCLUDE_DIR = './';
 
     /**
      * PIDs of any processes we need to kill
@@ -64,8 +64,9 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (file_exists('./testbootstrap.php')) {
-            include './testbootstrap.php'; //Overrides go in here
+        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
+        if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
+            include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer;
         $this->Mail->SMTPDebug = 3; //Full debug output
@@ -296,7 +297,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     public function testBootstrap()
     {
         $this->assertTrue(
-            file_exists('./testbootstrap.php'),
+            file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php'),
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
     }
@@ -723,7 +724,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment('../examples/images/phpmailer.png')) {
+        if (!$this->Mail->addAttachment($this->INCLUDE_DIR.'/examples/images/phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -824,7 +825,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents('../examples/contents.html');
+        $content = file_get_contents($this->INCLUDE_DIR.'/examples/contents.html');
         // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -834,7 +835,7 @@ EOT;
                 "ISO-8859-1",
                 mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
             ),
-            '../examples'
+            $this->INCLUDE_DIR.'/examples'
         );
         $this->buildBody();
         $this->assertTrue(
@@ -898,7 +899,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            '../examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -934,12 +935,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents('../examples/contentsutf8.html');
+        $message = file_get_contents($this->INCLUDE_DIR .'/examples/contentsutf8.html');
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, '../examples');
+        $this->Mail->msgHTML($message, $this->INCLUDE_DIR .'/examples');
         $this->Mail->Subject .= ': msgHTML';
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
@@ -948,9 +949,13 @@ EOT;
 
         //Again, using a custom HTML to text converter
         $this->Mail->AltBody = '';
-        $this->Mail->msgHTML($message, '../examples', function ($html) {
-            return strtoupper(strip_tags($html));
-        });
+        $this->Mail->msgHTML(
+            $message,
+            $this->INCLUDE_DIR .'/examples',
+            function ($html) {
+                return strtoupper(strip_tags($html));
+            }
+        );
         $this->Mail->Subject .= ' + custom html2text';
         $this->assertNotEmpty($this->Mail->AltBody, 'Custom AltBody not set by msgHTML');
 
@@ -966,7 +971,11 @@ EOT;
         $this->Mail->Subject .= ': HTML + Attachment';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addAttachment('../examples/images/phpmailer_mini.png', 'phpmailer_mini.png')) {
+        if (!$this->Mail->addAttachment(
+            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
+            'phpmailer_mini.png'
+        )
+        ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -988,7 +997,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents('../examples/images/phpmailer_mini.png'),
+            file_get_contents($this->INCLUDE_DIR .'/examples/images/phpmailer_mini.png'),
             md5('phpmailer_mini.png').'@phpmailer.0',
             '', //intentionally empty name
             'base64',
@@ -1012,12 +1021,16 @@ EOT;
         $this->Mail->Subject .= ': HTML + multiple Attachment';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addAttachment('../examples/images/phpmailer_mini.png', 'phpmailer_mini.png')) {
+        if (!$this->Mail->addAttachment(
+            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
+            'phpmailer_mini.png'
+        )
+        ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
-        if (!$this->Mail->addAttachment('../examples/images/phpmailer.png', 'phpmailer.png')) {
+        if (!$this->Mail->addAttachment($this->INCLUDE_DIR .'/examples/images/phpmailer.png', 'phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -1037,7 +1050,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            '../examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1066,7 +1079,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            '../examples/images/phpmailer.png',
+            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1944,33 +1957,41 @@ EOT;
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth.
      * With a known-good login
+     * @group pop3
      */
     public function testPopBeforeSmtpGood()
     {
         //Start a fake POP server
-        $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
+        $pid = shell_exec(
+            '/usr/bin/nohup ' . $this->INCLUDE_DIR .
+            '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
+        );
         $this->pids[] = $pid;
 
-        sleep(2);
+        sleep(1);
         //Test a known-good login
         $this->assertTrue(
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
         );
-        //Kill the fake server
-        shell_exec('kill -TERM ' . escapeshellarg($pid));
+        //Kill the fake server, don't care if it fails
+        @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth.
      * With a known-bad login
+     * @group pop3
      */
     public function testPopBeforeSmtpBad()
     {
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
-        $pid = shell_exec('nohup ./runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!');
+        $pid = shell_exec(
+            '/usr/bin/nohup '. $this->INCLUDE_DIR .
+            '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
+        );
         $this->pids[] = $pid;
 
         sleep(2);
@@ -1979,7 +2000,8 @@ EOT;
             POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
             'POP before SMTP should have failed'
         );
-        shell_exec('kill -TERM ' . escapeshellarg($pid));
+        //Kill the fake server, don't care if it fails
+        @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
 
@@ -2016,7 +2038,7 @@ EOT;
  * which is probably more useful if you run these tests a lot
  * <html>
  * <body>
- * <h3>phpmailer Unit Test</h3>
+ * <h3>PHPMailer Unit Test</h3>
  * By entering a SMTP hostname it will automatically perform tests with SMTP.
  *
  * <form name="phpmailer_unit" action=__FILE__ method="get">
