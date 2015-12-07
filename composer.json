@@ -27,7 +27,7 @@
         "phpunit/phpunit": "4.*"
     },
     "suggest": {
-        "league/oauth2-client": "Needed for XOAUTH2 authentication"
+        "league/oauth2-client": "Needed for XOAUTH2 authentication",
         "hayageek/oauth2-yahoo": "Needed to use XOAUTH2 with Yahoo",
         "stevenmaguire/oauth2-microsoft": "Needed to use XOAUTH2 with Microsoft services"
     },
