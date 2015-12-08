@@ -27,8 +27,7 @@
         "phpunit/phpunit": "4.7.*"
     },
     "suggest": {
-        "league/oauth2-client": "Needed for XOAUTH2 authentication",
-        "league/oauth2-google": "Needed for Gmail XOAUTH2"
+        "league/oauth2-client": "Needed for XOAUTH2 authentication"
     },
     "autoload": {
         "classmap": [
