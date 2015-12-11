@@ -461,6 +461,13 @@ class PHPMailer
     protected $to = array();
 
     /**
+     * The array of 'to' names and addresses.
+     * @var array
+     * @access protected
+     */
+    protected $envelope_to = array();
+
+    /**
      * The array of 'cc' names and addresses.
      * @var array
      * @access protected
@@ -798,6 +805,17 @@ class PHPMailer
     }
 
     /**
+     * Add a "envelope_to" address.
+     * @param string $address The email address to send to
+     * @param string $name
+     * @return boolean true on success, false if address already used or invalid in some way
+     */
+    public function addEnvelopeTo($address, $name = '')
+    {
+        return $this->addOrEnqueueAnAddress('envelope_to', $address, $name);
+    }
+
+    /**
      * Add a "CC" address.
      * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
      * @param string $address The email address to send to
@@ -881,7 +899,7 @@ class PHPMailer
     /**
      * Add an address to one of the recipient arrays or to the ReplyTo array.
      * Addresses that have been added already return false, but do not throw exceptions.
-     * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
+     * @param string $kind One of 'envelope_to', 'to', 'cc', 'bcc', or 'ReplyTo'
      * @param string $address The email address to send, resp. to reply to
      * @param string $name
      * @throws phpmailerException
@@ -890,7 +908,7 @@ class PHPMailer
      */
     protected function addAnAddress($kind, $address, $name = '')
     {
-        if (!in_array($kind, array('to', 'cc', 'bcc', 'Reply-To'))) {
+        if (!in_array($kind, array('envelope_to', 'to', 'cc', 'bcc', 'Reply-To'))) {
             $error_message = $this->lang('Invalid recipient kind: ') . $kind;
             $this->setError($error_message);
             $this->edebug($error_message);
@@ -908,10 +926,14 @@ class PHPMailer
             }
             return false;
         }
+
         if ($kind != 'Reply-To') {
             if (!array_key_exists(strtolower($address), $this->all_recipients)) {
                 array_push($this->$kind, array($address, $name));
-                $this->all_recipients[strtolower($address)] = true;
+                if ($kind != 'envelope_to') {
+                    $this->all_recipients[strtolower($address)] = true;
+                }
+
                 return true;
             }
         } else {
@@ -1474,8 +1496,8 @@ class PHPMailer
         }
 
         // Attempt to send to all recipients
-        foreach (array($this->to, $this->cc, $this->bcc) as $togroup) {
-            foreach ($togroup as $to) {
+        if (!empty($this->envelope_to)) {
+            foreach ($this->envelope_to as $to) {
                 if (!$this->smtp->recipient($to[0])) {
                     $error = $this->smtp->getError();
                     $bad_rcpt[] = array('to' => $to[0], 'error' => $error['detail']);
@@ -1484,6 +1506,20 @@ class PHPMailer
                     $isSent = true;
                 }
                 $this->doCallback($isSent, array($to[0]), array(), array(), $this->Subject, $body, $this->From);
+            }
+
+        } else {
+            foreach (array($this->to, $this->cc, $this->bcc) as $togroup) {
+                foreach ($togroup as $to) {
+                    if (!$this->smtp->recipient($to[0])) {
+                        $error = $this->smtp->getError();
+                        $bad_rcpt[] = array('to' => $to[0], 'error' => $error['detail']);
+                        $isSent = false;
+                    } else {
+                        $isSent = true;
+                    }
+                    $this->doCallback($isSent, array($to[0]), array(), array(), $this->Subject, $body, $this->From);
+                }
             }
         }
 
@@ -3801,6 +3837,17 @@ class PHPMailer
     public function getToAddresses()
     {
         return $this->to;
+    }
+
+    /**
+     * Allows for public read access to 'envelope_to' property.
+     * @note: Before the send() call, queued addresses (i.e. with IDN) are not yet included.
+     * @access public
+     * @return array
+     */
+    public function getEnvelopeToAddresses()
+    {
+        return $this->envelope_to;
     }
 
     /**
