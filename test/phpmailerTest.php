@@ -1376,7 +1376,7 @@ EOT;
         //Test built-in address parser
         $this->assertCount(
             2,
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>, Jill User <jill@example.net>'
             ),
             'Failed to recognise address list (IMAP parser)'
@@ -1384,7 +1384,7 @@ EOT;
         //Test simple address parser
         $this->assertCount(
             2,
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>, Jill User <jill@example.net>',
                 false
             ),
@@ -1392,7 +1392,7 @@ EOT;
         );
         //Test single address
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>',
                 false
             ),
@@ -1400,14 +1400,14 @@ EOT;
         );
         //Test quoted name IMAP
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Tim "The Book" O\'Reilly <foo@example.com>'
             ),
             'Failed to recognise quoted name (IMAP)'
         );
         //Test quoted name
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Tim "The Book" O\'Reilly <foo@example.com>',
                 false
             ),
@@ -1415,14 +1415,14 @@ EOT;
         );
         //Test single address IMAP
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>'
             ),
             'Failed to recognise single address (IMAP)'
         );
         //Test unnamed address
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'joe@example.com',
                 false
             ),
@@ -1430,21 +1430,21 @@ EOT;
         );
         //Test unnamed address IMAP
         $this->assertNotEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'joe@example.com'
             ),
             'Failed to recognise unnamed address (IMAP)'
         );
         //Test invalid addresses
         $this->assertEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com.>, Jill User <jill.@example.net>'
             ),
             'Failed to recognise invalid addresses (IMAP)'
         );
         //Test invalid addresses
         $this->assertEmpty(
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
                 false
             ),
