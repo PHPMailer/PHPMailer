@@ -1,7 +1,7 @@
 # ChangeLog
 
 ## Version 5.4
-This is a major update that breaks backwards compatibility.
+This is a major update that breaks backwards compatibility. To emphasise that this release requires PHP 5.4, this release is called **5.4**, **not 5.3**!
 * Requires PHP 5.4 or later
 * Uses the `PHPMailer\PHPMailer` namespace
 * File structure simplified, classes live in the `src/` folder
@@ -9,8 +9,8 @@ This is a major update that breaks backwards compatibility.
 * Classes renamed to make use of the namespace
 * `Extras` classes have been removed - use packages from packagist.org instead
 * All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
-
-To avoid version confusion, this release is called **5.4**, **not 5.3**!
+* `parseAddresses()` is now static
+* `validateAddress()` is now called statically from `parseAddresses()`
 
 * Fix gmail XOAUTH2 scope, thanks to @sherryl4george
 

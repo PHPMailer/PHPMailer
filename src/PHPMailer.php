@@ -923,7 +923,7 @@ class PHPMailer
      * @return array
      * @link http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      */
-    public function parseAddresses($addrstr, $useimap = true)
+    public static function parseAddresses($addrstr, $useimap = true)
     {
         $addresses = [];
         if ($useimap and function_exists('imap_rfc822_parse_adrlist')) {
@@ -931,7 +931,7 @@ class PHPMailer
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             foreach ($list as $address) {
                 if ($address->host != '.SYNTAX-ERROR.') {
-                    if ($this->validateAddress($address->mailbox . '@' . $address->host)) {
+                    if (self::validateAddress($address->mailbox . '@' . $address->host)) {
                         $addresses[] = [
                             'name' => (property_exists($address, 'personal') ? $address->personal : ''),
                             'address' => $address->mailbox . '@' . $address->host
@@ -947,7 +947,7 @@ class PHPMailer
                 //Is there a separate name part?
                 if (strpos($address, '<') === false) {
                     //No separate name, just use the whole thing
-                    if ($this->validateAddress($address)) {
+                    if (self::validateAddress($address)) {
                         $addresses[] = [
                             'name' => '',
                             'address' => $address
@@ -956,7 +956,7 @@ class PHPMailer
                 } else {
                     list($name, $email) = explode('<', $address);
                     $email = trim(str_replace('>', '', $email));
-                    if ($this->validateAddress($email)) {
+                    if (self::validateAddress($email)) {
                         $addresses[] = [
                             'name' => trim(str_replace(['"', "'"], '', $name)),
                             'address' => $email
