@@ -1508,6 +1508,24 @@ EOT;
     }
 
     /**
+     * Test MIME structure assembly.
+     */
+    public function testMIMEStructure()
+    {
+        $this->Mail->Subject .= ': MIME structure';
+        $this->Mail->Body = '<h3>MIME structure test.</h3>';
+        $this->Mail->AltBody = 'MIME structure test.';
+        $this->buildBody();
+        $this->Mail->preSend();
+        $this->assertRegExp(
+            "/Content-Transfer-Encoding: 8bit\r\n\r\n".
+            "This is a multi-part message in MIME format./",
+            $this->Mail->getSentMIMEMessage(),
+            'MIME structure broken'
+        );
+    }
+
+    /**
      * Test BCC-only addressing.
      */
     public function testBCCAddressing()
