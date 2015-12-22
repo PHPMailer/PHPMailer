@@ -605,8 +605,8 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
             'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
             //This is valid RCC5322, but we don't want to allow it
-            "(\r\n RCPT TO:websec02@d.mbsd.jp\r\n DATA \\\nSubject: spam10\\\n\r\n".
-                " Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@gmail.com"
+            "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello," .
+                "\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net"
         ];
         // IDNs in Unicode and ASCII forms.
         $unicodeaddresses = [
@@ -1465,6 +1465,24 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !== false));
+    }
+
+    /**
+     * Test MIME structure assembly.
+     */
+    public function testMIMEStructure()
+    {
+        $this->Mail->Subject .= ': MIME structure';
+        $this->Mail->Body = '<h3>MIME structure test.</h3>';
+        $this->Mail->AltBody = 'MIME structure test.';
+        $this->buildBody();
+        $this->Mail->preSend();
+        $this->assertRegExp(
+            "/Content-Transfer-Encoding: 8bit\r\n\r\n".
+            "This is a multi-part message in MIME format./",
+            $this->Mail->getSentMIMEMessage(),
+            'MIME structure broken'
+        );
     }
 
     /**
