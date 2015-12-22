@@ -25,30 +25,26 @@ use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Wrapper for League Google OAuth2 provider.
+ * Wrapper for League Microsoft OAuth2 provider.
  * @package PHPMailer
+ * @author @hayageek
  * @author @sherryl4george
- * @author Marcus Bointon (@Synchro) <phpmailer@synchromedia.co.uk>
- * @link https://github.com/thephpleague/oauth2-client
+ * @link https://github.com/sherryl4george
  */
 
-class Google extends Base
+class Microsoft extends Base
 {
-	use BearerAuthorizationTrait;
-
-    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'id';
-		
     public function getProvider()
     {
         if (is_null($this->provider)) {
-            $this->provider = new Google([
+            $this->provider = new Microsoft([
                 'clientId' => $this->oauthClientId,
                 'clientSecret' => $this->oauthClientSecret
             ]);
         }
         return $this->provider;
     }
-	
+		
 	/**
      * @param array $options
      * @return string
@@ -57,18 +53,14 @@ class Google extends Base
     public function getOptions()
     {
         return [
-            'scope' => ['https://mail.google.com/'],
-            'approval_prompt' => 'force',
-			'hd'          => '',
-            'access_type' => 'offline',            
-            // if the user is logged in with more than one account ask which one to use for the login!
-            'authuser'    => '-1'
+            'scope' => ['wl.imap',
+						'wl.offline_access']            
         ];
     }
 	
 	public function getBaseAuthorizationUrl()
     {		
-        return 'https://accounts.google.com/o/oauth2/auth';
+        return 'https://login.live.com/oauth20_authorize.srf';
     }
 	
 	/**
@@ -78,7 +70,7 @@ class Google extends Base
 
     public function getBaseAccessTokenUrl(array $params)
     {
-        return 'https://accounts.google.com/o/oauth2/token';
+        return 'https://login.live.com/oauth20_token.srf';
     }
 
     protected function getAuthorizationParameters(array $options)
@@ -95,31 +87,37 @@ class Google extends Base
         );      
         return $params;
     }
+	
+	/**
+     * Check a provider response for errors.
+     *
+     * @throws IdentityProviderException
+     * @param  ResponseInterface $response
+     * @return void
+     */
+    protected function checkResponseUtility(ResponseInterface $response, $data)
+    {
+        if (isset($data['error'])) {
+			var_dump($data);
+			//exit();
+            throw new IdentityProviderException(
+                (isset($data['error']['message']) ? $data['error']['message'] : $response->getReasonPhrase()),
+                $response->getStatusCode(),
+                $response
+            );
+        }
+    }
 
     protected function getDefaultScopes()
     {
        return [
-           'https://mail.google.com/'           
+           'wl.imap',
+           'wl.offline_access'           
         ];		
     }
 
     protected function getScopeSeparator()
     {
         return ' ';
-    } 
-		
-	private function checkResponseUtility(ResponseInterface $response, $data)
-    {   var_dump($response);    
-        if (!empty($data['error'])) {
-            $code  = 0;
-            $error = $data['error'];
-            
-            if (is_array($error)) {
-                $code  = $error['code'];
-                $error = $error['message'];
-            }
-            
-            throw new IdentityProviderException($error, $code, $data);
-        }
-    }
+    }       
 }

@@ -8,7 +8,6 @@ namespace PHPMailer\PHPMailer;
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
 
-require '../vendor/autoload.php';
 
 //Load dependencies from composer
 //If this causes an error, run 'composer install'
@@ -24,7 +23,7 @@ $mail->isSMTP();
 // 0 = off (for production use)
 // 1 = client messages
 // 2 = client and server messages
-$mail->SMTPDebug = 0;
+$mail->SMTPDebug = 3;
 
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
@@ -48,19 +47,26 @@ $mail->AuthType = 'XOAUTH2';
 $mail->oauthUserEmail = "someone@gmail.com";
 
 //Obtained From Google Developer Console
-$mail->oauthClientId = "RANDOMCHARS-----duv1n2.apps.googleusercontent.com";
+$mail->oauthClientId = "0************74";
 
 //Obtained From Google Developer Console
-$mail->oauthClientSecret = "RANDOMCHARS-----lGyjPcRtvP";
+$mail->oauthClientSecret = "KS***************aU";
 
 //Obtained By running get_oauth_token.php after setting up APP in Google Developer Console.
 //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
 // eg: http://localhost/phpmail/get_oauth_token.php
-$mail->oauthRefreshToken = "RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0";
+$mail->oauthRefreshToken = "MCeW******************mxyQ$$";
+
+$option = [ 'mailObj' => $mail ];
+
+//This has to be set 
+$mail->setOAuth(new OAuthProvider\Google($option));
+//$mail->setOAuth(new OAuthProvider\Yahoo($option));
+//$mail->setOAuth(new OAuthProvider\Microsoft($option));
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
-$mail->setFrom('from@example.com', 'First Last');
+$mail->setFrom('someone@gmail.com', 'First Last');
 
 //Set who the message is to be sent to
 $mail->addAddress('whoto@example.com', 'John Doe');
