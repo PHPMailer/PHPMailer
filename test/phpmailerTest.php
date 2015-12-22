@@ -607,7 +607,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
             'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
-            "(\r\n RCPT TO:websec02@d.mbsd.jp\r\n DATA \\\nSubject: spam10\\\n\r\n Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@gmail.com" //This is valid RCC5322, but we don't want to allow it
+            "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net" //This is valid RCC5322, but we don't want to allow it
         );
         // IDNs in Unicode and ASCII forms.
         $unicodeaddresses = array(
