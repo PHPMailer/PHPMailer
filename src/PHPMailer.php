@@ -661,7 +661,7 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
-        if (ini_get('safe_mode') || !($this->UseSendmailOptions)) {
+        if (!($this->UseSendmailOptions)) {
             $result = @mail($to, $subject, $body, $header);
         } else {
             $result = @mail($to, $subject, $body, $header, $params);
@@ -1390,7 +1390,7 @@ class PHPMailer
         } else {
             $params = sprintf('-f%s', $this->Sender);
         }
-        if ($this->Sender != '' and !ini_get('safe_mode')) {
+        if ($this->Sender != '') {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
