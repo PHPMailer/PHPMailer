@@ -27,7 +27,7 @@
         "phpunit/phpunit": "4.*"
     },
     "suggest": {
-        "league/oauth2-client": "Needed for XOAUTH2 authentication"
+        "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
     },
     "autoload": {
         "psr-4": {
