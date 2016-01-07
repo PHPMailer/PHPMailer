@@ -41,12 +41,6 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
     exit;
 }
 
-/**
- * Added a new class for getting the Refresh Token with right scopes
- * as the OAuth-Client for Google from GitHub didnot provide setting the
- * scope out of the box
- */
-
 namespace League\OAuth2\Client\Provider;
 
 require 'vendor/autoload.php';
