@@ -1799,7 +1799,18 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        $this->assertEquals($lastid, $id, 'Custom Message ID mismatch');
+        $this->assertNotEquals($lastid, $id, 'Invalid Message ID allowed');
+        $id = '<'.md5(12345).'@example.com>';
+        $this->Mail->MessageID = $id;
+        $this->buildBody();
+        $this->Mail->preSend();
+        $lastid = $this->Mail->getLastMessageID();
+        $this->assertEquals($lastid, $id, 'Custom Message ID not used');
+        $this->Mail->MessageID = '';
+        $this->buildBody();
+        $this->Mail->preSend();
+        $lastid = $this->Mail->getLastMessageID();
+        $this->assertRegExp('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
     }
 
     /**

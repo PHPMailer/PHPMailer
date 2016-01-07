@@ -1227,7 +1227,7 @@ class PHPMailer
             }
 
             // Set whether the message is multipart/alternative
-            if (!empty($this->AltBody)) {
+            if ($this->alternativeExists()) {
                 $this->ContentType = 'multipart/alternative';
             }
 
@@ -1972,7 +1972,7 @@ class PHPMailer
             $result .= $this->headerLine('Subject', $this->encodeHeader($this->secureHeader($this->Subject)));
         }
 
-        if ($this->MessageID != '') {
+        if ('' != $this->MessageID and preg_match('/^<.*@.*>$/', $this->MessageID)) {
             $this->lastMessageID = $this->MessageID;
         } else {
             $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());
@@ -3333,7 +3333,7 @@ class PHPMailer
         // Convert all message body line breaks to CRLF, makes quoted-printable encoding work much better
         $this->Body = $this->normalizeBreaks($message);
         $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
-        if (empty($this->AltBody)) {
+        if (!$this->alternativeExists()) {
             $this->AltBody = 'To view this email message, open it in a program that understands HTML!' .
                 self::CRLF . self::CRLF;
         }
