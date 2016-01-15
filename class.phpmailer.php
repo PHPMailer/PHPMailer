@@ -873,6 +873,10 @@ class PHPMailer
      */
     protected function addOrEnqueueAnAddress($kind, $address, $name, $send)
     {
+        if ( !$send && $this->Mailer != 'smtp') {
+            throw new phpmailerException('Non-send recipients only supported for SMTP Mailer');
+        }
+
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (($pos = strrpos($address, '@')) === false) {
