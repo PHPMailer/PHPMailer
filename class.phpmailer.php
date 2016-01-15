@@ -812,11 +812,12 @@ class PHPMailer
      * Add a "To" address.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addAddress($address, $name = '')
+    public function addAddress($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('to', $address, $name);
+        return $this->addOrEnqueueAnAddress('to', $address, $name, $send);
     }
 
     /**
@@ -824,11 +825,12 @@ class PHPMailer
      * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addCC($address, $name = '')
+    public function addCC($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('cc', $address, $name);
+        return $this->addOrEnqueueAnAddress('cc', $address, $name, $send);
     }
 
     /**
@@ -836,22 +838,24 @@ class PHPMailer
      * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addBCC($address, $name = '')
+    public function addBCC($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('bcc', $address, $name);
+        return $this->addOrEnqueueAnAddress('bcc', $address, $name, $send);
     }
 
     /**
      * Add a "Reply-To" address.
      * @param string $address The email address to reply to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addReplyTo($address, $name = '')
+    public function addReplyTo($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
+        return $this->addOrEnqueueAnAddress('Reply-To', $address, $name, $send);
     }
 
     /**
@@ -862,11 +866,12 @@ class PHPMailer
      * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
      * @param string $address The email address to send, resp. to reply to
      * @param string $name
+     * @param boolean $send Whether to actually send the email to this address
      * @throws phpmailerException
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
-    protected function addOrEnqueueAnAddress($kind, $address, $name)
+    protected function addOrEnqueueAnAddress($kind, $address, $name, $send)
     {
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
@@ -880,7 +885,7 @@ class PHPMailer
             }
             return false;
         }
-        $params = array($kind, $address, $name);
+        $params = array($kind, $address, $name, $send);
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
             if ($kind != 'Reply-To') {
@@ -910,7 +915,7 @@ class PHPMailer
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
-    protected function addAnAddress($kind, $address, $name = '')
+    protected function addAnAddress($kind, $address, $name = '', $send)
     {
         if (!in_array($kind, array('to', 'cc', 'bcc', 'Reply-To'))) {
             $error_message = $this->lang('Invalid recipient kind: ') . $kind;
@@ -933,7 +938,7 @@ class PHPMailer
         if ($kind != 'Reply-To') {
             if (!array_key_exists(strtolower($address), $this->all_recipients)) {
                 array_push($this->$kind, array($address, $name));
-                $this->all_recipients[strtolower($address)] = true;
+                $this->all_recipients[strtolower($address)] = $send;
                 return true;
             }
         } else {
@@ -1550,22 +1555,25 @@ class PHPMailer
             throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
         }
 
-        // Attempt to send to all recipients
-        foreach (array($this->to, $this->cc, $this->bcc) as $togroup) {
-            foreach ($togroup as $to) {
-                if (!$this->smtp->recipient($to[0])) {
-                    $error = $this->smtp->getError();
-                    $bad_rcpt[] = array('to' => $to[0], 'error' => $error['detail']);
-                    $isSent = false;
-                } else {
-                    $isSent = true;
-                }
-                $this->doCallback($isSent, array($to[0]), array(), array(), $this->Subject, $body, $this->From);
+        // Attempt to send to all selected recipients
+        $nSent = 0;
+        foreach ($this->all_recipients as $to => $send) {
+            if (!$send) {
+                $isSent = false;
             }
+            else if (!$this->smtp->recipient($to)) {
+                $error = $this->smtp->getError();
+                $bad_rcpt[] = array('to' => $to, 'error' => $error['detail']);
+                $isSent = false;
+            } else {
+                $nSent++;
+                $isSent = true;
+            }
+            $this->doCallback($isSent, array($to), array(), array(), $this->Subject, $body, $this->From);
         }
 
         // Only send the DATA command if we have viable recipients
-        if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
+        if ($nSent > 0 and !$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
         if ($this->SMTPKeepAlive) {
