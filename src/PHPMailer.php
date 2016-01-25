@@ -30,13 +30,6 @@ namespace PHPMailer\PHPMailer;
 class PHPMailer
 {
     /**
-     * The PHPMailer Version number.
-     * @var string
-     * @deprecated Use the VERSION class constant instead
-     */
-    public $Version = '5.4.0';
-
-    /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
      * When null, the header is not set at all.
