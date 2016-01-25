@@ -53,14 +53,6 @@ class POP3
     public $POP3_TIMEOUT = 30;
 
     /**
-     * POP3 Carriage Return + Line Feed.
-     * @var string
-     * @access public
-     * @deprecated Use the constant instead
-     */
-    public $CRLF = "\r\n";
-
-    /**
      * Debug display level.
      * Options: 0 = no, 1+ = yes
      * @var integer

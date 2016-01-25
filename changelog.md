@@ -2,18 +2,28 @@
 
 ## Version 5.4
 This is a major update that breaks backwards compatibility. To emphasise that this release requires PHP 5.4, this release is called **5.4**, **not 5.3**!
+
 * Requires PHP 5.4 or later
 * Uses the `PHPMailer\PHPMailer` namespace
 * File structure simplified, classes live in the `src/` folder
 * Custom autoloader has been removed, now PSR-4 compatible
 * Classes renamed to make use of the namespace
 * `Extras` classes have been removed - use packages from packagist.org instead
+* All elements previously marked as deprecated have been removed:
+  * `PHPMailer->Version`
+  * `PHPMailer->ReturnPath`
+  * `PHPMailer->PluginDir`
+  * `PHPMailer->encodeQPphp()`
+  * `SMTP->CRLF`
+  * `SMTP->Version`
+  * `SMTP->SMTP_PORT`
+  * `POP3->CRLF`
+  * `POP3->Version`
 * All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
 * NTLM authentication removed - never worked anyway!
-* SMTP::authenticate method signature changed
+* `SMTP::authenticate method signature changed
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
-
 * Fix gmail XOAUTH2 scope, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 

@@ -30,13 +30,6 @@ namespace PHPMailer\PHPMailer;
 class PHPMailer
 {
     /**
-     * The PHPMailer Version number.
-     * @var string
-     * @deprecated Use the VERSION class constant instead
-     */
-    public $Version = '5.4.0';
-
-    /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
      * When null, the header is not set at all.
@@ -661,7 +654,7 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
-        if (ini_get('safe_mode') || !($this->UseSendmailOptions)) {
+        if (!($this->UseSendmailOptions)) {
             $result = @mail($to, $subject, $body, $header);
         } else {
             $result = @mail($to, $subject, $body, $header, $params);
@@ -1390,7 +1383,7 @@ class PHPMailer
         } else {
             $params = sprintf('-f%s', $this->Sender);
         }
-        if ($this->Sender != '' and !ini_get('safe_mode')) {
+        if ($this->Sender != '') {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
