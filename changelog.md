@@ -21,10 +21,10 @@ This is a major update that breaks backwards compatibility. To emphasise that th
   * `POP3->Version`
 * All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
 * NTLM authentication removed - never worked anyway!
-* `SMTP::authenticate method signature changed
+* `SMTP::authenticate` method signature changed
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
-* Fix gmail XOAUTH2 scope, thanks to @sherryl4george
+* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 
 ## Version 5.2.14 (Nov 1st 2015)
