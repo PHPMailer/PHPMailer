@@ -28,9 +28,12 @@ use League\OAuth2\Client\Provider\Google as LeagueGoogle;
  * @author Marcus Bointon (@Synchro) <phpmailer@synchromedia.co.uk>
  * @link https://github.com/thephpleague/oauth2-client
  */
-
 class Google extends Base
 {
+    /**
+     * Return the OAuth provider implementation for this adaptor.
+     * @return League\OAuth2\Client\Provider\AbstractProvider
+     */
     public function getProvider()
     {
         if (is_null($this->provider)) {

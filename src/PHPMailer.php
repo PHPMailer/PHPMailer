@@ -263,24 +263,17 @@ class PHPMailer
 
     /**
      * SMTP auth type.
-     * Options are LOGIN (default), PLAIN, NTLM, CRAM-MD5
+     * Options are LOGIN (default), PLAIN, NTLM, CRAM-MD5, XOAUTH2
      * @var string
      */
     public $AuthType = '';
 
     /**
-     * SMTP realm.
-     * Used for NTLM auth
-     * @var string
+     * An instance of an OAuthProvider\Base derivative class.
+     * @var OAuthProvider\Base
+     * @access protected
      */
-    public $Realm = '';
-
-    /**
-     * SMTP workstation.
-     * Used for NTLM auth
-     * @var string
-     */
-    public $Workstation = '';
+    protected $oauth = null;
 
     /**
      * The SMTP server timeout in seconds.
@@ -1578,8 +1571,7 @@ class PHPMailer
                             $this->Username,
                             $this->Password,
                             $this->AuthType,
-                            $this->Realm,
-                            $this->Workstation
+                            $this->oauth
                         )
                         ) {
                             throw new Exception($this->lang('authenticate'));
@@ -3802,5 +3794,23 @@ class PHPMailer
             $params = [$isSent, $to, $cc, $bcc, $subject, $body, $from];
             call_user_func_array($this->action_function, $params);
         }
+    }
+
+    /**
+     * Get the OAuthProvider instance.
+     * @return OAuthProvider\Base
+     */
+    public function getOAuth()
+    {
+        return $this->oauth;
+    }
+
+    /**
+     * Set an OAuthProvider instance.
+     * @param OAuthProvider\Base $oauth
+     */
+    public function setOAuth(OAuthProvider\Base $oauth)
+    {
+        $this->oauth = $oauth;
     }
 }
