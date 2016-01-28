@@ -10,14 +10,14 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 
 ## Class Features
 
-- Probably the world's most popular code for sending email from PHP!
+- Probably the world's most popular code for sending email using PHP
 - Used by many open-source projects: WordPress, Drupal, 1CRM, SugarCRM, Yii, Joomla! and many more
 - Integrated SMTP support - send without a local mail server
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
-- Multipart/alternative emails for mail clients that do not read HTML email
+- Multi-part/alternative emails for mail clients that do not read HTML email
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
 - SMTP authentication with LOGIN, PLAIN, NTLM, CRAM-MD5 and Google's XOAUTH2 mechanisms over SSL and TLS transports
-- Error messages in 47 languages!
+- Error messages in 47 languages
 - DKIM and S/MIME signing support
 - Compatible with PHP 5.0 and later
 - Much more!
@@ -129,7 +129,7 @@ Complete generated API documentation is [available online](http://phpmailer.gith
 
 You'll find some basic user-level docs in the [docs](docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. You may find [the unit tests](test/phpmailerTest.php) a good source of how to do various operations such as encryption.
 
-If the documentation doesn't cover what you need, search the [many questions on StackOverflow](http://stackoverflow.com/questions/tagged/phpmailer), and before you ask a question about "SMTP Error: Could not connect to SMTP host.", [read the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
+If the documentation doesn't cover what you need, search the [many questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer), and before you ask a question about "SMTP Error: Could not connect to SMTP host.", [read the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
 
 ## Tests
 
@@ -151,7 +151,7 @@ With the move to the PHPMailer GitHub organisation, you'll need to update any re
 git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
 ```
 
-Please *don't* use the SourceForge or Google Code projects any more.
+Please *don't* use the SourceForge or Google Code projects anymore.
 
 ## Sponsorship
 
