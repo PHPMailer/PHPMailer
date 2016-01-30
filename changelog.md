@@ -2,6 +2,7 @@
 
 * Fix gmail XOAUTH2 scope, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
+* Improve DKIM signing to use SHA-2
 
 ## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
