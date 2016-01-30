@@ -61,7 +61,6 @@ If you don't speak git or just want a tarball, click the 'zip' button on the rig
 ### Minimal installation
 
 While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](src/POP3.php). You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need `src/PHPMailerOAuth.php` and `src/OAuthProvider/Google.php` classes, as well as the composer dependencies. Really, it's much easier to use composer!
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](https://github.com/PHPMailer/PHPMailer/class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](https://github.com/PHPMailer/PHPMailer/class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](https://github.com/PHPMailer/PHPMailer/PHPMailerAutoload.php) too as otherwise you will either have to `require` all classes manually or use some other autoloader. You can skip the [language](https://github.com/PHPMailer/PHPMailer/language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication and ics generation. If you're using Google XOAUTH2 you will need `class.phpmaileroauth.php` and `class.oauth.php` classes too, as well as the composer dependencies.
 
 ## A Simple Example
 
@@ -106,7 +105,6 @@ if(!$mail->send()) {
 ```
 
 You'll find plenty of examples to play with in the [examples](examples/) folder. They are saved with a `.phps` extension which will make them display as highlighted source in a browser, avoiding the possibility of them running in default installations. You can run them directly from a command line client, or rename them with a `.php` extension and run them via your web server.
-You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/examples/) folder.
 
 That's it. You should now be ready to use PHPMailer!
 
@@ -124,7 +122,6 @@ We welcome corrections and new languages - if you're looking for corrections to 
 
 Start reading at the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, this should be the first place you look as it's the most frequently updated.
 
-Examples of how to use PHPMailer for common scenarios can be found in the [examples](examples/) folder. If you're looking for a good starting point, we recommend you start with [the gmail example](examples/gmail.phps).
 Examples of how to use PHPMailer for common scenarios can be found in the [examples](https://github.com/PHPMailer/PHPMailer/examples/) folder. If you're looking for a good starting point, we recommend you start with [the Gmail example](https://github.com/PHPMailer/PHPMailer/examples/gmail.phps).
 
 Complete generated API documentation is [available online](http://phpmailer.github.io/PHPMailer/).
@@ -136,7 +133,6 @@ If the documentation doesn't cover what you need, search the [many questions on 
 ## Tests
 
 There is a PHPUnit test script in the [test](test/) folder. PHPMailer uses PHPUnit 4.8 - we would use 5.0 but we need to run on PHP 5.4.
-There is a PHPUnit test script in the [test](https://github.com/PHPMailer/PHPMailer/test/) folder.
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](https://travis-ci.org/PHPMailer/PHPMailer)
 
