@@ -105,7 +105,7 @@ if(!$mail->send()) {
 }
 ```
 
-You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/examples/) folder.
+You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
 
 That's it. You should now be ready to use PHPMailer!
 
@@ -121,7 +121,7 @@ We welcome corrections and new languages - if you're looking for corrections to 
 
 ## Documentation
 
-Examples of how to use PHPMailer for common scenarios can be found in the [examples](https://github.com/PHPMailer/PHPMailer/examples/) folder. If you're looking for a good starting point, we recommend you start with [the Gmail example](https://github.com/PHPMailer/PHPMailer/examples/gmail.phps).
+Examples of how to use PHPMailer for common scenarios can be found in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder. If you're looking for a good starting point, we recommend you start with [the Gmail example](https://github.com/PHPMailer/PHPMailer/examples/gmail.phps).
 
 There are tips and a troubleshooting guide in the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, this should be the first place you look as it's the most frequently updated.
 
