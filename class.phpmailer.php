@@ -309,7 +309,7 @@ class PHPMailer
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @var integer
      */
-    public $Timeout = 30;
+    public $Timeout = 300;
 
     /**
      * SMTP class debug output mode.
@@ -1612,14 +1612,6 @@ class PHPMailer
                 }
             }
             $host = $hostinfo[3];
-            $port = $this->Port;
-			if('tls'===$secure && 465 === $port){
-				throw new phpmailerException($this->lang('tls can\t be used with port 465 '), self::STOP_CRITICAL);
-			}
-			if('ssl'===$secure && 587 === $port){
-				throw new phpmailerException($this->lang('ssl can\'t be used with port 587'), self::STOP_CRITICAL);
-			}
-
             $tport = (integer)$hostinfo[4];
             if ($tport > 0 and $tport < 65536) {
                 $port = $tport;
