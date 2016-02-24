@@ -309,7 +309,7 @@ class PHPMailer
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @var integer
      */
-    public $Timeout = 300;
+    public $Timeout = 30;
 
     /**
      * SMTP class debug output mode.
@@ -1164,6 +1164,47 @@ class PHPMailer
         }
         return $address;
     }
+	
+	
+	/**
+     * Try to diagnose problems and output them.
+     */
+    public function diagnose()
+    {
+		$findings = array( nl2br("There was a problem sending your message.\nBefore asking a question on stackoverflow or opening an issue on github, read this page:\nhttps://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting"));
+		$this->addFindings($findings,$this->diagnoseEncryptionPortMismatch());
+		$this->addFindings($findings,$this->diagnoseResolveHostname());
+		$this->addFindings($findings,$this->diagnoseOpenSSL());
+		echo("<ul>");
+		foreach ($findings as $finding) {
+			echo("<li>".$finding."</li>");
+		}
+		echo("</ul>");
+    }
+	private function addFindings(&$findings, $potentialFinding) {
+		if($potentialFinding !== NULL){
+			array_push($findings,$potentialFinding);	
+		}
+	}
+	private function diagnoseResolveHostname(){
+		if($this->Host===gethostbyname($this->Host)){
+			return "The hostname '".$this->Host."' can't be resolved. Check the hostname itself and your dns settings.";
+		}
+	}
+	private function diagnoseOpenSSL(){
+		if(!extension_loaded('openssl')){
+			return "The OpenSSL extension couldn't be loaded";
+		}
+	}
+	private function diagnoseEncryptionPortMismatch(){
+		if('tls'===$this->SMTPSecure && 465 === $this->Port){
+			return "tls normally isn't used with port 465, you might want to reconsider your settings";
+		}
+		if('ssl'===$this->SMTPSecure && 587 === $this->Port){
+			return "ssl normally isn't used with port 587, you might want to reconsider your settings";
+		}
+	}
+	
 
     /**
      * Create a message and send it.
@@ -1525,12 +1566,11 @@ class PHPMailer
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
         }
-
         // Already connected?
         if ($this->smtp->connected()) {
             return true;
         }
-
+		
         $this->smtp->setTimeout($this->Timeout);
         $this->smtp->setDebugLevel($this->SMTPDebug);
         $this->smtp->setDebugOutput($this->Debugoutput);
@@ -1552,6 +1592,7 @@ class PHPMailer
             $prefix = '';
             $secure = $this->SMTPSecure;
             $tls = ($this->SMTPSecure == 'tls');
+
             if ('ssl' == $hostinfo[2] or ('' == $hostinfo[2] and 'ssl' == $this->SMTPSecure)) {
                 $prefix = 'ssl://';
                 $tls = false; // Can't have SSL and TLS at the same time
@@ -1561,6 +1602,7 @@ class PHPMailer
                 // tls doesn't use a prefix
                 $secure = 'tls';
             }
+
             //Do we need the OpenSSL extension?
             $sslext = defined('OPENSSL_ALGO_SHA1');
             if ('tls' === $secure or 'ssl' === $secure) {
@@ -1571,17 +1613,17 @@ class PHPMailer
             }
             $host = $hostinfo[3];
             $port = $this->Port;
+			if('tls'===$secure && 465 === $port){
+				throw new phpmailerException($this->lang('tls can\t be used with port 465 '), self::STOP_CRITICAL);
+			}
+			if('ssl'===$secure && 587 === $port){
+				throw new phpmailerException($this->lang('ssl can\'t be used with port 587'), self::STOP_CRITICAL);
+			}
+
             $tport = (integer)$hostinfo[4];
             if ($tport > 0 and $tport < 65536) {
                 $port = $tport;
             }
-            //Check for invalid combination of encryption algorithm and port
-	    if('tls'===$secure && 465 === $port){
-                throw new phpmailerException($this->lang('tls can\'t be used with port 465 '), self::STOP_CRITICAL);
-	    }
-	    if('ssl'===$secure && 587 === $port){
-                throw new phpmailerException($this->lang('ssl can\'t be used with port 587'), self::STOP_CRITICAL);
-	    }
             if ($this->smtp->connect($prefix . $host, $port, $this->Timeout, $options)) {
                 try {
                     if ($this->Helo) {
