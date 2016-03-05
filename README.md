@@ -19,7 +19,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - SMTP authentication with LOGIN, PLAIN, NTLM, CRAM-MD5 and Google's XOAUTH2 mechanisms over SSL and TLS transports
 - Error messages in 47 languages!
 - DKIM and S/MIME signing support
-- Compatible with PHP 5.0 and later
+- Compatible with PHP 5.4 and later
 - Much more!
 
 ## Why you might need it
@@ -60,7 +60,7 @@ If you don't speak git or just want a tarball, click the 'zip' button on the rig
 
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](src/POP3.php). You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need `src/PHPMailerOAuth.php` and `src/OAuthProvider/Google.php` classes, as well as the composer dependencies. Really, it's much easier to use composer!
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/POP3.php). You can skip the [language](https://github.com/PHPMailer/PHPMailer/tree/master/language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need `src/PHPMailerOAuth.php` and `src/OAuthProvider/Google.php` classes, as well as the composer dependencies. Really, it's much easier to use composer!
 
 ## A Simple Example
 
@@ -104,30 +104,30 @@ if(!$mail->send()) {
 }
 ```
 
-You'll find plenty of examples to play with in the [examples](examples/) folder. They are saved with a `.phps` extension which will make them display as highlighted source in a browser, avoiding the possibility of them running in default installations. You can run them directly from a command line client, or rename them with a `.php` extension and run them via your web server.
+You'll find plenty of examples to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples/) folder. They are saved with a `.phps` extension which will make them display as highlighted source in a browser, avoiding the possibility of them running in default installations. You can run them directly from a command line client, or rename them with a `.php` extension and run them via your web server.
 You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
 
 That's it. You should now be ready to use PHPMailer!
 
 ## Localization
-PHPMailer defaults to English, but in the [language](https://github.com/PHPMailer/PHPMailer/language/) folder you'll find numerous (46 at the time of writing!) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
+PHPMailer defaults to English, but in the [language](https://github.com/PHPMailer/PHPMailer/tree/master/language/) folder you'll find numerous (46 at the time of writing!) translations for PHPMailer error messages that you may encounter. Their filenames contain [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code for the translations, for example `fr` for French. To specify a language, you need to tell PHPMailer which one to use, like this:
 
 ```php
 // To load the French version
 $mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
 
-We welcome corrections and new languages - if you're looking for corrections to do, run the [phpmailerLangTest.php](https://github.com/PHPMailer/PHPMailer/test/phpmailerLangTest.php) script in the tests folder and it will show any missing translations.
+We welcome corrections and new languages - if you're looking for corrections to do, run the [phpmailerLangTest.php](https://github.com/PHPMailer/PHPMailer/tree/master/test/phpmailerLangTest.php) script in the tests folder and it will show any missing translations.
 
 ## Documentation
 
 Start reading at the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, this should be the first place you look as it's the most frequently updated.
 
-Examples of how to use PHPMailer for common scenarios can be found in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder. If you're looking for a good starting point, we recommend you start with [the Gmail example](https://github.com/PHPMailer/PHPMailer/examples/gmail.phps).
+Examples of how to use PHPMailer for common scenarios can be found in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder. If you're looking for a good starting point, we recommend you start with [the Gmail example](https://github.com/PHPMailer/PHPMailer/tree/master/examples/gmail.phps).
 
 Complete generated API documentation is [available online](http://phpmailer.github.io/PHPMailer/).
 
-You'll find some basic user-level docs in the [docs](https://github.com/PHPMailer/PHPMailer/tree/master/docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](https://github.com/PHPMailer/PHPMailer/docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. You may find [the unit tests](https://github.com/PHPMailer/PHPMailer/test/phpmailerTest.php) a good source of how to do various operations such as encryption.
+You'll find some basic user-level docs in the [docs](https://github.com/PHPMailer/PHPMailer/tree/master/docs/) folder, and you can generate complete API-level documentation using the [generatedocs.sh](https://github.com/PHPMailer/PHPMailer/tree/master/docs/generatedocs.sh) shell script in the docs folder, though you'll need to install [PHPDocumentor](http://www.phpdoc.org) first. You may find [the unit tests](https://github.com/PHPMailer/PHPMailer/tree/master/test/phpmailerTest.php) a good source of how to do various operations such as encryption.
 
 If the documentation doesn't cover what you need, search the [many questions on Stack Overflow](http://stackoverflow.com/questions/tagged/phpmailer), and before you ask a question about "SMTP Error: Could not connect to SMTP host.", [read the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting).
 

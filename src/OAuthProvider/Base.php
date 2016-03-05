@@ -19,21 +19,25 @@
 
 namespace PHPMailer\PHPMailer\OAuthProvider;
 
+use League\OAuth2\Client\Grant\RefreshToken;
+use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Token\AccessToken;
+
 /**
  * PHPMailer OAuthProvider Base class.
  * An abstract base class for service-provider-specific OAuth implementations.
- * @author @hayageek
+ * Acts as a wrapper around the League OAuth2 classes.
  * @author Ravishanker Kusuma (hayageek@gmail.com)
  */
 abstract class Base
 {
     /**
-     * @var League\OAuth2\Client\Provider\AbstractProvider
+     * @var AbstractProvider
      */
     protected $provider = null;
 
     /**
-     * @var League\OAuth2\Client\Token\AccessToken
+     * @var AccessToken
      */
     protected $oauthToken = null;
 
@@ -70,7 +74,7 @@ abstract class Base
     }
 
     /**
-     * @return League\OAuth2\Client\Provider\AbstractProvider
+     * @return AbstractProvider
      */
     abstract public function getProvider();
 
@@ -84,21 +88,22 @@ abstract class Base
     }
 
     /**
-     * @return \League\OAuth2\Client\Grant\RefreshToken
+     * @return RefreshToken
      */
     protected function getGrant()
     {
-        return new \League\OAuth2\Client\Grant\RefreshToken();
+        return new RefreshToken();
     }
 
     /**
-     * @return League\OAuth2\Client\Token\AccessToken
+     * @return AccessToken
      */
-    protected function getToken()
+    public function getToken()
     {
-        $provider = $this->getProvider();
-        $grant = $this->getGrant();
-        return $provider->getAccessToken($grant, ['refresh_token' => $this->oauthRefreshToken]);
+        return $this->getProvider()->getAccessToken(
+            $this->getGrant(),
+            ['refresh_token' => $this->oauthRefreshToken]
+        );
     }
 
     /**
@@ -125,5 +130,13 @@ abstract class Base
             $options = $this->getOptions();
         }
         return $this->getProvider()->getAuthorizationUrl($options);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->getProvider()->getState();
     }
 }
