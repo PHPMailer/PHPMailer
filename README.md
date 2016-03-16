@@ -61,6 +61,7 @@ If you don't speak git or just want a tarball, click the 'zip' button on the rig
 ### Minimal installation
 
 While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/POP3.php). You can skip the [language](https://github.com/PHPMailer/PHPMailer/tree/master/language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need `src/PHPMailerOAuth.php` and `src/OAuthProvider/Google.php` classes, as well as the composer dependencies. Really, it's much easier to use composer!
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [src/PHPMailer.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/PHPMailer.php). If you're using SMTP, you'll need [src/SMTP.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/SMTP.php), and if you're using POP-before SMTP, you'll need [src/POP3.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/POP3.php). You can skip the [language](https://github.com/PHPMailer/PHPMailer/tree/master/language/) folder if you're not showing errors to users and can make do with English-only errors. If you're using Google XOAUTH2 you will need [src/PHPMailerOAuth.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/PHPMailerOAuth.php) and [src/OAuthProvider/Google.php](https://github.com/PHPMailer/PHPMailer/tree/master/src/OAuthProvider/Google.php) classes, as well as the composer dependencies. Really, it's much easier to use composer!
 
 ## A Simple Example
 
@@ -104,7 +105,6 @@ if(!$mail->send()) {
 }
 ```
 
-You'll find plenty of examples to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples/) folder. They are saved with a `.phps` extension which will make them display as highlighted source in a browser, avoiding the possibility of them running in default installations. You can run them directly from a command line client, or rename them with a `.php` extension and run them via your web server.
 You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
 
 That's it. You should now be ready to use PHPMailer!
@@ -133,7 +133,7 @@ If the documentation doesn't cover what you need, search the [many questions on 
 
 ## Tests
 
-There is a PHPUnit test script in the [test](https://github.com/PHPMailer/PHPMailer/tree/master/test/) folder.
+There is a PHPUnit test script in the [test](https://github.com/PHPMailer/PHPMailer/tree/master/test/) folder. PHPMailer uses PHPUnit 4.8 - we would use 5.0 but we need to run on PHP 5.4.
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](https://travis-ci.org/PHPMailer/PHPMailer)
 
