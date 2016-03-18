@@ -352,6 +352,7 @@ class PHPMailer
     /**
      * Whether to split multiple to addresses into multiple messages
      * or send them all in one message.
+     * Only supported in `mail` and `sendmail` transports, not in SMTP.
      * @var boolean
      */
     public $SingleTo = false;
