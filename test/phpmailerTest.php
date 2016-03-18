@@ -1127,11 +1127,6 @@ EOT;
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        if (is_writable('.')) {
-            file_put_contents('message.txt', $this->Mail->createHeader() . $this->Mail->createBody());
-        } else {
-            $this->assertTrue(false, 'Could not write local file - check permissions');
-        }
     }
 
     /**
@@ -1607,8 +1602,8 @@ EOT;
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         );
         $password = 'password';
-        $certfile = 'certfile.txt';
-        $keyfile = 'keyfile.txt';
+        $certfile = 'certfile.pem';
+        $keyfile = 'keyfile.pem';
 
         //Make a new key pair
         $pk = openssl_pkey_new($keyconfig);
