@@ -67,8 +67,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (file_exists(realpath('./testbootstrap.php'))) {
-            include realpath('./testbootstrap.php'); //Overrides go in here
+        if (file_exists(('testbootstrap.php'))) {
+            include ('testbootstrap.php'); //Overrides go in here
         }
         $this->Mail = new PHPMailer;
         $this->Mail->SMTPDebug = 3; //Full debug output
@@ -300,7 +300,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     public function testBootstrap()
     {
         $this->assertTrue(
-            file_exists(realpath('./testbootstrap.php')),
+            file_exists(('testbootstrap.php')),
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
     }
