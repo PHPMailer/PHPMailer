@@ -12,7 +12,7 @@ if (array_key_exists('userfile', $_FILES)) {
         // Upload handled successfully
         // Now create a message
         // This should be somewhere in your include_path
-        require 'PHPMailerAutoload.php';
+        require '../PHPMailerAutoload.php';
         $mail = new PHPMailer;
         $mail->setFrom('from@example.com', 'First Last');
         $mail->addAddress('whoto@example.com', 'John Doe');
@@ -21,19 +21,19 @@ if (array_key_exists('userfile', $_FILES)) {
         // Attach the uploaded file
         $mail->addAttachment($uploadfile, 'My uploaded file');
         if (!$mail->send()) {
-            $msg = "Mailer Error: " . $mail->ErrorInfo;
+            $msg .= "Mailer Error: " . $mail->ErrorInfo;
         } else {
-            $msg = "Message sent!";
+            $msg .= "Message sent!";
         }
     } else {
-        $msg = 'Failed to move file to ' . $uploadfile;
+        $msg .= 'Failed to move file to ' . $uploadfile;
     }
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Upload</title>
 </head>
 <body>
