@@ -81,10 +81,10 @@ $mail->setOAuth(new OAuthProvider\Base(
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
-$mail->setFrom('sherryl4george@gmail.com', 'First Last');
+$mail->setFrom('someone@gmail.com', 'First Last');
 
 //Set who the message is to be sent to
-$mail->addAddress('gmathew016@gmail.com', 'John Doe');
+$mail->addAddress('someone@gmail.com', 'John Doe');
 
 //Set the subject line
 $mail->Subject = 'PHPMailer GMail SMTP test';
