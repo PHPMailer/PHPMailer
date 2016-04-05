@@ -1,22 +1,16 @@
 <?php
-
 /**
  * This example shows settings to use when sending via Google's Gmail servers.
  */
 
 namespace PHPMailer\PHPMailer;
 
-// Give alias to the League Provider Classes that may be used
+// Alias the League OAuth2 provider class
 use League\OAuth2\Client\Provider\Google as Google;
-use Stevenmaguire\OAuth2\Client\Provider\Microsoft as Microsoft;
-use Hayageek\OAuth2\Client\Provider\Yahoo as Yahoo;
-
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
-
-require '../vendor/autoload.php';
 
 //Load dependencies from composer
 //If this causes an error, run 'composer install'
@@ -32,7 +26,7 @@ $mail->isSMTP();
 // 0 = off (for production use)
 // 1 = client messages
 // 2 = client and server messages
-$mail->SMTPDebug = 0;
+$mail->SMTPDebug = 2;
 
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
@@ -62,22 +56,20 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 // eg: http://localhost/phpmail/get_oauth_token.php
 $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
-//Change the Class Name depending on the Provider Used
-if (!isset($provider)) {
-    $provider = new Google([
-        'clientId' => $clientId,
-        'clientSecret' => $clientSecret
-    ]);
-}
-
-$mail->setOAuth(new OAuth(
-        [
-    'provider' => $provider,
+$provider = new Google([
     'clientId' => $clientId,
-    'clientSecret' => $clientSecret,
-    'refreshToken' => $refreshToken,
-    'userName' => $email]
-));
+    'clientSecret' => $clientSecret
+]);
+
+$mail->setOAuth(
+    new OAuth([
+        'provider' => $provider,
+        'clientId' => $clientId,
+        'clientSecret' => $clientSecret,
+        'refreshToken' => $refreshToken,
+        'userName' => $email
+    ])
+);
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
@@ -98,14 +90,6 @@ $mail->AltBody = 'This is a plain-text message body';
 
 //Attach an image file
 $mail->addAttachment('images/phpmailer_mini.png');
-
-$mail->SMTPOptions = array(
-    'ssl' => array(
-        'verify_peer' => false,
-        'verify_peer_name' => false,
-        'allow_self_signed' => true
-    )
-);
 
 //send the message, check for errors
 if (!$mail->send()) {

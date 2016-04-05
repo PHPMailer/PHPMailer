@@ -31,6 +31,7 @@
 namespace PHPMailer\PHPMailer;
 
 // Aliases for League Provider Classes that may be used
+// Make sure you have added these to your composer.json and run `composer install`
 use League\OAuth2\Client\Provider\Google as Google;
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft as Microsoft;
 use Hayageek\OAuth2\Client\Provider\Yahoo as Yahoo;
@@ -60,7 +61,7 @@ if (array_key_exists('provider', $_GET)) {
     $providerName = $_SESSION['provider'];
 }
 if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
-    exit("Only Google, Microsoft and Yahoo OAuth2 providers are currently supported.");
+    exit('Only Google, Microsoft and Yahoo OAuth2 providers are currently supported in this script.');
 }
 
 //These details obtained are by setting up app in Google developer console.
@@ -72,7 +73,7 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/PHPMailer/redirect';
 
-$provider = new Google(
+$provider = new $providerName(
     [
         'clientId' => $clientId,
         'clientSecret' => $clientSecret,
@@ -81,21 +82,17 @@ $provider = new Google(
     ]
 );
 
-// Define scopes as a array here.
+// Set OAuth options
 $options = [
     'scope' => [
         'https://mail.google.com/'
     ]
 ];
 
-
 if (!isset($_GET['code'])) {
-
     // If we don't have an authorization code then get one
     $authUrl = $provider->getAuthorizationUrl($options);
-
     $_SESSION['oauth2state'] = $provider->getState();
-
     header('Location: ' . $authUrl);
     exit;
 // Check given state against previously stored one to mitigate CSRF attack
@@ -105,13 +102,12 @@ if (!isset($_GET['code'])) {
     exit('Invalid state');
 } else {
     unset($_SESSION['provider']);
-
     // Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
         'authorization_code',
-        array(
+        [
             'code' => $_GET['code']
-        )
+        ]
     );
     // Use this to interact with an API on the users behalf
     // Use this to get a new access token if the old one expires
