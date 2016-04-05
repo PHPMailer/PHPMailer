@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.4
@@ -19,25 +20,15 @@
 
 namespace PHPMailer\PHPMailer\OAuthProvider;
 
-use League\OAuth2\Client\Grant\RefreshToken;
-use League\OAuth2\Client\Provider\AbstractProvider;
-use League\OAuth2\Client\Token\AccessToken;
+class Base {
 
-/**
- * PHPMailer OAuthProvider Base class.
- * An abstract base class for service-provider-specific OAuth implementations.
- * Acts as a wrapper around the League OAuth2 classes.
- * @author Ravishanker Kusuma (hayageek@gmail.com)
- */
-abstract class Base
-{
     /**
-     * @var AbstractProvider
+     * @var League\OAuth2\Client\Provider\AbstractProvider
      */
     protected $provider = null;
 
     /**
-     * @var AccessToken
+     * @var League\OAuth2\Client\Token\AccessToken
      */
     protected $oauthToken = null;
 
@@ -60,83 +51,58 @@ abstract class Base
      * @var string
      */
     protected $refreshToken = '';
-    
+
     public function __construct(
-        $userEmail = '',
-        $clientSecret = '',
-        $clientId = '',
-        $refreshToken = ''
-    ) {
-        $this->oauthUserEmail = $userEmail;
-        $this->oauthClientSecret = $clientSecret;
-        $this->oauthClientId = $clientId;
-        $this->oauthRefreshToken = $refreshToken;
+    $options) {
+        $this->provider = $options['provdier'];
+        $this->oauthUserEmail = $options['userName'];
+        $this->oauthClientSecret = $options['clientSecret'];
+        $this->oauthClientId = $options['clientId'];
+        $this->oauthRefreshToken = $options['refreshToken'];
     }
 
     /**
-     * @return AbstractProvider
+     * @return League\OAuth2\Client\Provider\AbstractProvider
      */
-    abstract public function getProvider();
+//    abstract public function getProvider();
 
     /**
-     * Array of default options.
-     * @return array
+     * Returns the current value of the state parameter.
+     *
+     * This can be accessed by the redirect handler during authorization.
+     *
+     * @return string
      */
-    protected function getOptions()
-    {
-        return [];
+    public function getState() {
+        return $this->state;
     }
 
     /**
-     * @return RefreshToken
+     * @return \League\OAuth2\Client\Grant\RefreshToken
      */
-    protected function getGrant()
-    {
-        return new RefreshToken();
+    protected function getGrant() {
+        return new \League\OAuth2\Client\Grant\RefreshToken();
     }
 
     /**
-     * @return AccessToken
+     * @return League\OAuth2\Client\Token\AccessToken
      */
-    public function getToken()
-    {
-        return $this->getProvider()->getAccessToken(
-            $this->getGrant(),
-            ['refresh_token' => $this->oauthRefreshToken]
-        );
+    protected function getToken() {
+        $provider = $this->provider;
+        $grant = $this->getGrant();
+        return $provider->getAccessToken($grant, ['refresh_token' => $this->oauthRefreshToken]);
     }
 
     /**
      * Generate a base64-encoded OAuth token.
      * @return string
      */
-    public function getOauth64()
-    {
+    public function getOauth64() {
         // Get a new token if it's not available or has expired
         if (is_null($this->oauthToken) or $this->oauthToken->hasExpired()) {
             $this->oauthToken = $this->getToken();
         }
-        return base64_encode('user='.$this->oauthUserEmail."\001auth=Bearer ".$this->oauthToken."\001\001");
+        return base64_encode('user=' . $this->oauthUserEmail . "\001auth=Bearer " . $this->oauthToken . "\001\001");
     }
 
-    /**
-     * @param array $options
-     * @return string
-     */
-    public function getAuthorizationUrl($options = [])
-    {
-        //If no options provided, use defaults
-        if (empty($options)) {
-            $options = $this->getOptions();
-        }
-        return $this->getProvider()->getAuthorizationUrl($options);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getState()
-    {
-        return $this->getProvider()->getState();
-    }
 }
