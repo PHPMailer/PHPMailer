@@ -30,85 +30,90 @@
 
 namespace PHPMailer\PHPMailer;
 
-// Give alias to the League Provider Classes that may be used
+// Aliases for League Provider Classes that may be used
 use League\OAuth2\Client\Provider\Google as Google;
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft as Microsoft;
 use Hayageek\OAuth2\Client\Provider\Yahoo as Yahoo;
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
-    ?>
-    <html>
-        <body>Select Provider:<br/>
-            <a href='?provider=Google'>Google</a><br/>
-            <a href='?provider=Yahoo'>Yahoo</a><br/>
-            <a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br/>
-        </body>
-        <?php
-        exit;
-    }
+?>
+<html>
+<body>Select Provider:<br/>
+<a href='?provider=Google'>Google</a><br/>
+<a href='?provider=Yahoo'>Yahoo</a><br/>
+<a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br/>
+</body>
+<?php
+exit;
+}
 
-    require 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
-    session_start();
+session_start();
 
-    $providerName = '';
+$providerName = '';
 
-    if (array_key_exists('provider', $_GET)) {
-        $providerName = $_GET['provider'];
-        $_SESSION['provider'] = $providerName;
-    } elseif (array_key_exists('provider', $_SESSION)) {
-        $providerName = $_SESSION['provider'];
-    }
-    if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
-        exit("Only Google, Microsoft and Yahoo OAuth2 providers are currently supported.");
-    }
-    
-    //These details obtained are by setting up app in Google developer console.
-    // Changed the hardcode to variables above, so even newbies can use it easily.
-    $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
-    $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
+if (array_key_exists('provider', $_GET)) {
+    $providerName = $_GET['provider'];
+    $_SESSION['provider'] = $providerName;
+} elseif (array_key_exists('provider', $_SESSION)) {
+    $providerName = $_SESSION['provider'];
+}
+if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
+    exit("Only Google, Microsoft and Yahoo OAuth2 providers are currently supported.");
+}
 
-    //If this automatic URL doesn't work, set it yourself manually
-    $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-    //$redirectUri = 'http://localhost/PHPMailer/redirect';
+//These details obtained are by setting up app in Google developer console.
+// Changed the hardcode to variables above, so even newbies can use it easily.
+$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
+$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
-    $provider = new Google(
-            [
+//If this automatic URL doesn't work, set it yourself manually
+$redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+//$redirectUri = 'http://localhost/PHPMailer/redirect';
+
+$provider = new Google(
+    [
         'clientId' => $clientId,
         'clientSecret' => $clientSecret,
         'redirectUri' => $redirectUri,
-        'accessType' => 'offline']
-    );
+        'accessType' => 'offline'
+    ]
+);
 
-    // Define scopes as a array here.
-    $options = ['scope' => [
-            'https://mail.google.com/'
-    ]];
+// Define scopes as a array here.
+$options = [
+    'scope' => [
+        'https://mail.google.com/'
+    ]
+];
 
 
-    if (!isset($_GET['code'])) {
+if (!isset($_GET['code'])) {
 
-        // If we don't have an authorization code then get one
-        $authUrl = $provider->getAuthorizationUrl($options);
+    // If we don't have an authorization code then get one
+    $authUrl = $provider->getAuthorizationUrl($options);
 
-        $_SESSION['oauth2state'] = $provider->getState();
+    $_SESSION['oauth2state'] = $provider->getState();
 
-        header('Location: ' . $authUrl);
-        exit;
+    header('Location: ' . $authUrl);
+    exit;
 // Check given state against previously stored one to mitigate CSRF attack
-    } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-        unset($_SESSION['oauth2state']);
-        unset($_SESSION['provider']);
-        exit('Invalid state');
-    } else {
-        unset($_SESSION['provider']);
+} elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
+    unset($_SESSION['oauth2state']);
+    unset($_SESSION['provider']);
+    exit('Invalid state');
+} else {
+    unset($_SESSION['provider']);
 
-        // Try to get an access token (using the authorization code grant)
-        $token = $provider->getAccessToken('authorization_code', array(
+    // Try to get an access token (using the authorization code grant)
+    $token = $provider->getAccessToken(
+        'authorization_code',
+        array(
             'code' => $_GET['code']
-        ));
-        // Use this to interact with an API on the users behalf
-        // Use this to get a new access token if the old one expires
-        echo 'Refresh Token: ' . $token->getRefreshToken();
-    }
-    ?>
+        )
+    );
+    // Use this to interact with an API on the users behalf
+    // Use this to get a new access token if the old one expires
+    echo 'Refresh Token: ' . $token->getRefreshToken();
+}

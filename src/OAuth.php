@@ -18,9 +18,9 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-namespace PHPMailer\PHPMailer\OAuthProvider;
+namespace PHPMailer\PHPMailer;
 
-class Base {
+class OAuth {
 
     /**
      * @var League\OAuth2\Client\Provider\AbstractProvider

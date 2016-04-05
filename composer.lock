@@ -3482,12 +3482,12 @@
             "version": "1.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zetacomponents/Base.git",
+                "url": "https://github.com/zetacomponents/OAuth.git",
                 "reference": "f20df24e8de3e48b6b69b2503f917e457281e687"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zetacomponents/Base/zipball/f20df24e8de3e48b6b69b2503f917e457281e687",
+                "url": "https://api.github.com/repos/zetacomponents/OAuth/zipball/f20df24e8de3e48b6b69b2503f917e457281e687",
                 "reference": "f20df24e8de3e48b6b69b2503f917e457281e687",
                 "shasum": ""
             },
@@ -3536,7 +3536,7 @@
                     "name": "Alexandru Stanoi"
                 }
             ],
-            "description": "The Base package provides the basic infrastructure that all packages rely on. Therefore every component relies on this package.",
+            "description": "The OAuth package provides the basic infrastructure that all packages rely on. Therefore every component relies on this package.",
             "homepage": "https://github.com/zetacomponents",
             "time": "2014-09-19 03:28:34"
         },

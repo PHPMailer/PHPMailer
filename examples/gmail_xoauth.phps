@@ -70,9 +70,9 @@ if (!isset($provider)) {
     ]);
 }
 
-$mail->setOAuth(new OAuthProvider\Base(
+$mail->setOAuth(new OAuth(
         [
-    'provdier' => $provider,
+    'provider' => $provider,
     'clientId' => $clientId,
     'clientSecret' => $clientSecret,
     'refreshToken' => $refreshToken,

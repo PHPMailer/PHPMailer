@@ -332,8 +332,9 @@ class SMTP
      * @param string $username The user name
      * @param string $password The password
      * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
-     * @param OAuthProvider\Base $OAuth An optional OAuth provider instance (@see PHPMailerOAuth)
-     * @return bool True if successfully authenticated.* @access public
+     * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     * @return bool True if successfully authenticated.
+     * @access public
      */
     public function authenticate(
         $username,
