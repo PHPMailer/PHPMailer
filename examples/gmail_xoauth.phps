@@ -1,12 +1,12 @@
 <?php
 /**
- * This example shows settings to use when sending via Google's Gmail servers.
+ * This example shows how to send via Google's Gmail servers using XOAUTH2 authentication.
  */
 
 namespace PHPMailer\PHPMailer;
 
-// Alias the League OAuth2 provider class
-use League\OAuth2\Client\Provider\Google as Google;
+// Alias the League Google OAuth2 provider class
+use League\OAuth2\Client\Provider\Google;
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that

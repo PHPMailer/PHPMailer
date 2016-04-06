@@ -32,9 +32,9 @@ namespace PHPMailer\PHPMailer;
 
 // Aliases for League Provider Classes that may be used
 // Make sure you have added these to your composer.json and run `composer install`
-use League\OAuth2\Client\Provider\Google as Google;
-use Stevenmaguire\OAuth2\Client\Provider\Microsoft as Microsoft;
-use Hayageek\OAuth2\Client\Provider\Yahoo as Yahoo;
+use League\OAuth2\Client\Provider\Google;
+use Hayageek\OAuth2\Client\Provider\Yahoo;
+use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 ?>
@@ -65,7 +65,6 @@ if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
 }
 
 //These details obtained are by setting up app in Google developer console.
-// Changed the hardcode to variables above, so even newbies can use it easily.
 $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
@@ -73,21 +72,31 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 $redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/PHPMailer/redirect';
 
-$provider = new $providerName(
-    [
-        'clientId' => $clientId,
-        'clientSecret' => $clientSecret,
-        'redirectUri' => $redirectUri,
-        'accessType' => 'offline'
-    ]
-);
-
-// Set OAuth options
-$options = [
-    'scope' => [
-        'https://mail.google.com/'
-    ]
+$params = [
+    'clientId' => $clientId,
+    'clientSecret' => $clientSecret,
+    'redirectUri' => $redirectUri,
+    'accessType' => 'offline'
 ];
+
+$options = [];
+
+switch ($providerName) {
+    case 'Google':
+        $provider = new Google($params);
+        $options = [
+            'scope' => [
+                'https://mail.google.com/'
+            ]
+        ];
+        break;
+    case 'Yahoo':
+        $provider = new Yahoo($params);
+        break;
+    case 'Microsoft':
+        $provider = new Microsoft($params);
+        break;
+}
 
 if (!isset($_GET['code'])) {
     // If we don't have an authorization code then get one
