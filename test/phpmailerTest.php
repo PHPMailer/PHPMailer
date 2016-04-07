@@ -2,7 +2,7 @@
 /**
  * PHPMailer - PHP email transport unit tests.
  *
- * PHP version 5.4.0
+ * PHP version 5.5.0
  * @package PHPMailer
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @author Andy Prevost
@@ -50,7 +50,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * Default include path
      * @var string
      */
-    public $INCLUDE_DIR = './';
+    public $INCLUDE_DIR = '..';
 
     /**
      * PIDs of any processes we need to kill
@@ -724,7 +724,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'))) {
+        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -825,7 +825,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents(realpath($this->INCLUDE_DIR.'/examples/contents.html'));
+        $content = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contents.html'));
         // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -835,7 +835,7 @@ EOT;
                 "ISO-8859-1",
                 mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
             ),
-            realpath($this->INCLUDE_DIR . 'examples')
+            realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
         $this->assertTrue(
@@ -899,7 +899,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -935,13 +935,14 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents(realpath($this->INCLUDE_DIR . 'examples/contentsutf8.html'));
+        $message = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . 'examples'));
+        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . '/examples'));
         $this->Mail->Subject .= ': msgHTML';
+        $this->Mail->addAddress('user@example.com');
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
         $this->assertNotEmpty($this->Mail->AltBody, 'AltBody not set by msgHTML');
@@ -972,7 +973,9 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png'), 'phpmailer_mini.png')
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            'phpmailer_mini.png'
+        )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -995,7 +998,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png')),
+            file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
             md5('phpmailer_mini.png').'@phpmailer.0',
             '', //intentionally empty name
             'base64',
@@ -1020,15 +1023,19 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png'),
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
-            )
+        )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
-        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'), 'phpmailer.png')) {
+        if (!$this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            'phpmailer.png'
+        )
+        ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -1042,14 +1049,14 @@ EOT;
      */
     public function testEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="' .
             'cid:my-attach">' .
             'Here is an image!';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1079,7 +1086,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1174,12 +1181,12 @@ EOT;
         //Only run if we have qmail installed
         if (file_exists('/var/qmail/bin/qmail-inject')) {
             $this->Mail->Body = 'Sending via qmail';
-            $this->BuildBody();
+            $this->buildBody();
             $subject = $this->Mail->Subject;
 
             $this->Mail->Subject = $subject . ': qmail';
-            $this->Mail->IsQmail();
-            $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+            $this->Mail->isQmail();
+            $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         } else {
             $this->markTestSkipped('Qmail is not installed');
         }
@@ -1987,7 +1994,8 @@ EOT;
     {
         //Start a fake POP server
         $pid = shell_exec(
-            '/usr/bin/nohup ' . $this->INCLUDE_DIR .
+            '/usr/bin/nohup ' .
+            $this->INCLUDE_DIR .
             '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
@@ -2013,7 +2021,8 @@ EOT;
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec(
-            '/usr/bin/nohup '. $this->INCLUDE_DIR .
+            '/usr/bin/nohup ' .
+            $this->INCLUDE_DIR .
             '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;

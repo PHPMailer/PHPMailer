@@ -36,7 +36,7 @@ $mysql = mysqli_connect('localhost', 'username', 'password');
 mysqli_select_db($mysql, 'mydb');
 $result = mysqli_query($mysql, 'SELECT full_name, email, photo FROM mailinglist WHERE sent = false');
 
-foreach ($result as $row) { //This iterator syntax only works in PHP 5.4+
+foreach ($result as $row) {
     $mail->addAddress($row['email'], $row['full_name']);
     if (!empty($row['photo'])) {
         $mail->addStringAttachment($row['photo'], 'YourPhoto.jpg'); //Assumes the image data is stored in the DB

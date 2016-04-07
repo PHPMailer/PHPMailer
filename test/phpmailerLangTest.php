@@ -2,8 +2,7 @@
 /**
  * PHPMailer - language file tests
  *
- * PHP version 5.4.0
- *
+ * PHP version 5.5.0
  * @package PHPMailer
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @author Andy Prevost
