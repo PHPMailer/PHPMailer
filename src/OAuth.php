@@ -54,7 +54,7 @@ class OAuth {
 
     public function __construct(
     $options) {
-        $this->provider = $options['provdier'];
+        $this->provider = $options['provider'];
         $this->oauthUserEmail = $options['userName'];
         $this->oauthClientSecret = $options['clientSecret'];
         $this->oauthClientId = $options['clientId'];
