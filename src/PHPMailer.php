@@ -1,7 +1,7 @@
 <?php
 /**
  * PHPMailer - PHP email creation and transport class.
- * PHP Version 5.4
+ * PHP Version 5.5
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
@@ -323,6 +323,7 @@ class PHPMailer
     /**
      * Whether to split multiple to addresses into multiple messages
      * or send them all in one message.
+     * Only supported in `mail` and `sendmail` transports, not in SMTP.
      * @var boolean
      */
     public $SingleTo = false;
@@ -578,7 +579,7 @@ class PHPMailer
     /**
      * The PHPMailer Version number.
      */
-    const VERSION = '5.4.0';
+    const VERSION = '5.5.0';
 
     /**
      * Error severity: message only, continue processing.
@@ -621,9 +622,7 @@ class PHPMailer
     public function __destruct()
     {
         //Close any open SMTP connection nicely
-        if ($this->Mailer == 'smtp') {
-            $this->smtpClose();
-        }
+        $this->smtpClose();
     }
 
     /**
@@ -1601,7 +1600,7 @@ class PHPMailer
      */
     public function smtpClose()
     {
-        if ($this->smtp !== null) {
+        if (!is_null($this->smtp)) {
             if ($this->smtp->connected()) {
                 $this->smtp->quit();
                 $this->smtp->close();

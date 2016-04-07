@@ -1,12 +1,12 @@
 # ChangeLog
 
-## Version 5.4
-This is a major update that breaks backwards compatibility. To emphasise that this release requires PHP 5.4, this release is called **5.4**, **not 5.3**!
+## Version 5.5
+This is a major update that breaks backwards compatibility. To emphasise that this release requires PHP 5.5, this release is called **5.5**, **not 5.3**!
 
-* Requires PHP 5.4 or later
+* Requires PHP 5.5 or later
 * Uses the `PHPMailer\PHPMailer` namespace
 * File structure simplified, classes live in the `src/` folder
-* Custom autoloader has been removed, now PSR-4 compatible
+* Custom autoloader has been removed, now PSR-4 compatible: **use composer**!
 * Classes renamed to make use of the namespace
 * `Extras` classes have been removed - use packages from packagist.org instead
 * All elements previously marked as deprecated have been removed:

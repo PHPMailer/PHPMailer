@@ -36,7 +36,7 @@ class POP3
      * @var string
      * @access public
      */
-    public $Version = '5.4.0';
+    public $Version = '5.5.0';
 
     /**
      * Default POP3 port number.

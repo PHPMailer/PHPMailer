@@ -4,6 +4,9 @@
  * revised, updated and corrected 27/02/2013
  * by matt.sturdy@gmail.com
  */
+
+namespace PHPMailer\PHPMailer;
+
 require '../vendor/autoload.php';
 
 $CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
@@ -40,7 +43,8 @@ $results_messages = [];
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
-$example_code = "\nrequire_once '../PHPMailerAutoload.php';";
+$example_code = "<?php\nnamespace PHPMailer\\PHPMailer;";
+$example_code .= "\nrequire_once 'vendor/autoload.php';";
 $example_code .= "\n\n\$results_messages = [];";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
@@ -51,23 +55,23 @@ $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
 $example_code .= "\nini_set('default_charset', 'UTF-8');";
 
-class phpmailerAppException extends phpmailerException
+class AppException extends Exception
 {
 }
 
-$example_code .= "\n\nclass phpmailerAppException extends phpmailerException {}";
+$example_code .= "\n\nclass AppException extends Exception {}";
 $example_code .= "\n\ntry {";
 
 try {
     if (isset($_POST["submit"]) && $_POST['submit'] == "Submit") {
         $to = $_POST['To_Email'];
         if (!PHPMailer::validateAddress($to)) {
-            throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
+            throw new AppException("Email address " . $to . " is invalid -- aborting!");
         }
 
         $example_code .= "\n\$to = '{$_POST['To_Email']}';";
         $example_code .= "\nif(!PHPMailer::validateAddress(\$to)) {";
-        $example_code .= "\n  throw new phpmailerAppException(\"Email address \" . " .
+        $example_code .= "\n  throw new AppException(\"Email address \" . " .
             "\$to . \" is invalid -- aborting!\");";
         $example_code .= "\n}";
 
@@ -113,7 +117,7 @@ try {
                 $example_code .= "\n\$mail->isQmail();";
                 break;
             default:
-                throw new phpmailerAppException('Invalid test_type provided');
+                throw new AppException('Invalid test_type provided');
         }
 
         try {
@@ -157,8 +161,8 @@ try {
                     $example_code .= "\n\$mail->addCC(\"$value\");";
                 }
             }
-        } catch (phpmailerException $e) { //Catch all kinds of bad addressing
-            throw new phpmailerAppException($e->getMessage());
+        } catch (Exception $e) { //Catch all kinds of bad addressing
+            throw new AppException($e->getMessage());
         }
         $mail->Subject = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
         $example_code .= "\n\$mail->Subject  = \"" . $_POST['Subject'] .
@@ -190,21 +194,21 @@ try {
             strtoupper($_POST['test_type']) . "\";";
         $example_code .= "\n}";
         $example_code .= "\ncatch (phpmailerException \$e) {";
-        $example_code .= "\n  throw new phpmailerAppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
+        $example_code .= "\n  throw new AppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
         $example_code .= "\n}";
 
         try {
             $mail->send();
             $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
-        } catch (phpmailerException $e) {
-            throw new phpmailerAppException("Unable to send to: " . $to . ': ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new AppException("Unable to send to: " . $to . ': ' . $e->getMessage());
         }
     }
-} catch (phpmailerAppException $e) {
+} catch (AppException $e) {
     $results_messages[] = $e->errorMessage();
 }
 $example_code .= "\n}";
-$example_code .= "\ncatch (phpmailerAppException \$e) {";
+$example_code .= "\ncatch (AppException \$e) {";
 $example_code .= "\n  \$results_messages[] = \$e->errorMessage();";
 $example_code .= "\n}";
 $example_code .= "\n\nif (count(\$results_messages) > 0) {";
@@ -356,9 +360,9 @@ $example_code .= "\n}";
 </head>
 <body>
 <?php
-if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+if (version_compare(PHP_VERSION, '5.5.0', '<')) {
     echo 'Current PHP version: ' . phpversion() . "<br>";
-    echo exit("ERROR: Wrong PHP version. Must be PHP 5.4 or later.");
+    echo exit("ERROR: Wrong PHP version. Must be PHP 5.5 or later.");
 }
 
 if (count($results_messages) > 0) {
