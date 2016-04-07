@@ -724,7 +724,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment($this->INCLUDE_DIR.'/examples/images/phpmailer.png')) {
+        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'))) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -825,7 +825,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents($this->INCLUDE_DIR.'/examples/contents.html');
+        $content = file_get_contents(realpath($this->INCLUDE_DIR.'/examples/contents.html'));
         // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -835,7 +835,7 @@ EOT;
                 "ISO-8859-1",
                 mb_detect_encoding($content, "UTF-8, ISO-8859-1, ISO-8859-15", true)
             ),
-            $this->INCLUDE_DIR.'/examples'
+            realpath($this->INCLUDE_DIR . 'examples')
         );
         $this->buildBody();
         $this->assertTrue(
@@ -899,7 +899,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
+            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -935,12 +935,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents($this->INCLUDE_DIR .'/examples/contentsutf8.html');
+        $message = file_get_contents(realpath($this->INCLUDE_DIR . 'examples/contentsutf8.html'));
         $this->Mail->CharSet = 'utf-8';
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, $this->INCLUDE_DIR .'/examples');
+        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . 'examples'));
         $this->Mail->Subject .= ': msgHTML';
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
@@ -951,7 +951,7 @@ EOT;
         $this->Mail->AltBody = '';
         $this->Mail->msgHTML(
             $message,
-            $this->INCLUDE_DIR .'/examples',
+            realpath($this->INCLUDE_DIR .'/examples'),
             function ($html) {
                 return strtoupper(strip_tags($html));
             }
@@ -972,9 +972,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
-            'phpmailer_mini.png'
-        )
+            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png'), 'phpmailer_mini.png')
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
@@ -997,7 +995,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents($this->INCLUDE_DIR .'/examples/images/phpmailer_mini.png'),
+            file_get_contents(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png')),
             md5('phpmailer_mini.png').'@phpmailer.0',
             '', //intentionally empty name
             'base64',
@@ -1022,15 +1020,15 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            $this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png',
+            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
-        )
+            )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
-        if (!$this->Mail->addAttachment($this->INCLUDE_DIR .'/examples/images/phpmailer.png', 'phpmailer.png')) {
+        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'), 'phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
@@ -1044,13 +1042,14 @@ EOT;
      */
     public function testEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.'cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.
+            'cid:my-attach">' .
             'Here is an image!';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
+            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1073,13 +1072,14 @@ EOT;
      */
     public function testMultiEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="'.'cid:my-attach">' .
+        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="' .
+            'cid:my-attach">' .
             'Here is an image!</a>';
         $this->Mail->Subject .= ': Embedded Image + Attachment';
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            $this->INCLUDE_DIR .'/examples/images/phpmailer.png',
+            realpath($this->INCLUDE_DIR . 'examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1133,11 +1133,6 @@ EOT;
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        if (is_writable('.')) {
-            file_put_contents('message.txt', $this->Mail->createHeader() . $this->Mail->createBody());
-        } else {
-            $this->assertTrue(false, 'Could not write local file - check permissions');
-        }
     }
 
     /**
@@ -1567,8 +1562,8 @@ EOT;
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         ];
         $password = 'password';
-        $certfile = 'certfile.txt';
-        $keyfile = 'keyfile.txt';
+        $certfile = 'certfile.pem';
+        $keyfile = 'keyfile.pem';
 
         //Make a new key pair
         $pk = openssl_pkey_new($keyconfig);
@@ -2009,8 +2004,8 @@ EOT;
     }
 
     /**
-     * Use a fake POP3 server to test POP-before-SMTP auth.
-     * With a known-bad login
+     * Use a fake POP3 server to test POP-before-SMTP auth
+     * with a known-bad login.
      * @group pop3
      */
     public function testPopBeforeSmtpBad()
