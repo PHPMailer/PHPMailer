@@ -20,7 +20,8 @@
 
 namespace PHPMailer\PHPMailer;
 
-class OAuth {
+class OAuth
+{
 
     /**
      * @var League\OAuth2\Client\Provider\AbstractProvider
@@ -52,8 +53,8 @@ class OAuth {
      */
     protected $refreshToken = '';
 
-    public function __construct(
-    $options) {
+    public function __construct($options)
+    {
         $this->provider = $options['provider'];
         $this->oauthUserEmail = $options['userName'];
         $this->oauthClientSecret = $options['clientSecret'];
@@ -62,32 +63,30 @@ class OAuth {
     }
 
     /**
-     * @return League\OAuth2\Client\Provider\AbstractProvider
-     */
-//    abstract public function getProvider();
-
-    /**
      * Returns the current value of the state parameter.
      *
      * This can be accessed by the redirect handler during authorization.
      *
      * @return string
      */
-    public function getState() {
+    public function getState()
+    {
         return $this->state;
     }
 
     /**
      * @return \League\OAuth2\Client\Grant\RefreshToken
      */
-    protected function getGrant() {
+    protected function getGrant()
+    {
         return new \League\OAuth2\Client\Grant\RefreshToken();
     }
 
     /**
      * @return League\OAuth2\Client\Token\AccessToken
      */
-    protected function getToken() {
+    protected function getToken()
+    {
         $provider = $this->provider;
         $grant = $this->getGrant();
         return $provider->getAccessToken($grant, ['refresh_token' => $this->oauthRefreshToken]);
@@ -97,12 +96,18 @@ class OAuth {
      * Generate a base64-encoded OAuth token.
      * @return string
      */
-    public function getOauth64() {
+    public function getOauth64()
+    {
         // Get a new token if it's not available or has expired
         if (is_null($this->oauthToken) or $this->oauthToken->hasExpired()) {
             $this->oauthToken = $this->getToken();
         }
-        return base64_encode('user=' . $this->oauthUserEmail . "\001auth=Bearer " . $this->oauthToken . "\001\001");
+        return base64_encode(
+            'user=' .
+            $this->oauthUserEmail .
+            "\001auth=Bearer " .
+            $this->oauthToken .
+            "\001\001"
+        );
     }
-
 }
