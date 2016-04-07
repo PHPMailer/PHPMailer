@@ -2,11 +2,11 @@
 /**
  * PHPMailer - language file tests
  *
- * PHP version 5.5.0
+ * PHP version 5.5
  * @package PHPMailer
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @author Andy Prevost
- * @copyright 2010 - 2015 Marcus Bointon
+ * @copyright 2010 - 2016 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */

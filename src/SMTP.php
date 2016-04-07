@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPMailer - PHP email creation and transport class.
+ * PHPMailer RFC821 SMTP email transport class.
  * PHP Version 5.5
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
