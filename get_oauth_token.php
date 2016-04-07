@@ -95,6 +95,12 @@ switch ($providerName) {
         break;
     case 'Microsoft':
         $provider = new Microsoft($params);
+        $options = [
+            'scope' => [
+                'wl.imap',
+                'wl.offline_access'
+            ]
+        ];
         break;
 }
 
