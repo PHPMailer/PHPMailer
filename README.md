@@ -19,7 +19,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - SMTP authentication with LOGIN, PLAIN, NTLM, CRAM-MD5 and Google's XOAUTH2 mechanisms over SSL and TLS transports
 - Error messages in 47 languages!
 - DKIM and S/MIME signing support
-- Compatible with PHP 5.4 and later
+- Compatible with PHP 5.5 and later
 - Much more!
 
 ## Why you might need it
