@@ -23,7 +23,7 @@ try {
     }
     //Say hello
     if (!$smtp->hello(gethostname())) {
-        throw new Exception('EHLO failed: ' . $smtp->getLastReply());
+        throw new Exception('EHLO failed: ' . $smtp->getError()['error']);
     }
     //Get the list of ESMTP services the server offers
     $e = $smtp->getServerExtList();
@@ -31,11 +31,11 @@ try {
     if (array_key_exists('STARTTLS', $e)) {
         $tlsok = $smtp->startTLS();
         if (!$tlsok) {
-            throw new Exception('Failed to start encryption: ' . $smtp->getLastReply());
+            throw new Exception('Failed to start encryption: ' . $smtp->getError()['error']);
         }
         //Repeat EHLO after STARTTLS
         if (!$smtp->hello(gethostname())) {
-            throw new Exception('EHLO (2) failed: ' . $smtp->getLastReply());
+            throw new Exception('EHLO (2) failed: ' . $smtp->getError()['error']);
         }
         //Get new capabilities list, which will usually now include AUTH if it didn't before
         $e = $smtp->getServerExtList();
@@ -45,7 +45,7 @@ try {
         if ($smtp->authenticate('username', 'password')) {
             echo "Connected ok!";
         } else {
-            throw new Exception('Authentication failed: ' . $smtp->getLastReply());
+            throw new Exception('Authentication failed: ' . $smtp->getError()['error']);
         }
     }
 } catch (Exception $e) {
