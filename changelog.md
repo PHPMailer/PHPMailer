@@ -6,8 +6,8 @@ This is a major update that breaks backwards compatibility. To emphasise that th
 * Requires PHP 5.5 or later
 * Uses the `PHPMailer\PHPMailer` namespace
 * File structure simplified, classes live in the `src/` folder
-* Custom autoloader has been removed, now PSR-4 compatible: **use composer**!
-* Classes renamed to make use of the namespace
+* The custom autoloader has been removed, now PSR-4 compatible: **use composer**!
+* Classes & Exceptions renamed to make use of the namespace
 * `Extras` classes have been removed - use packages from packagist.org instead
 * All elements previously marked as deprecated have been removed:
   * `PHPMailer->Version`
@@ -19,13 +19,13 @@ This is a major update that breaks backwards compatibility. To emphasise that th
   * `SMTP->SMTP_PORT`
   * `POP3->CRLF`
   * `POP3->Version`
-* All elements previously marked as deprecated have been removed (e.g. `ReturnPath`)
 * NTLM authentication removed - never worked anyway!
   * `PHPMailer->Workstation`
   * `PHPMailer->Realm`
 * `SMTP::authenticate` method signature changed
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
+* `PHPMailer->SingleToArray` is now protected
 * Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers in the standard PHPMailer class, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 * Improve DKIM signing to use SHA-2
