@@ -614,6 +614,8 @@ class PHPMailer
     public function __construct($exceptions = false)
     {
         $this->exceptions = (boolean)$exceptions;
+        //Pick an appropriate debug output format automatically
+        $this->Debugoutput = ((strpos(PHP_SAPI, 'cli') !== false) ? 'echo' : 'html');
     }
 
     /**
