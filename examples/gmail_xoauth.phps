@@ -28,9 +28,6 @@ $mail->isSMTP();
 // 2 = client and server messages
 $mail->SMTPDebug = 2;
 
-//Ask for HTML-friendly debug output
-$mail->Debugoutput = 'html';
-
 //Set the hostname of the mail server
 $mail->Host = 'smtp.gmail.com';
 
@@ -43,24 +40,25 @@ $mail->SMTPSecure = 'tls';
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 
-//Set AuthType
+//Set AuthType to use XOAUTH2
 $mail->AuthType = 'XOAUTH2';
 
-// Fill all necessary Authentication details here
+//Fill in authentication details here
 $email = 'someone@gmail.com';
 $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
-//Obtained By running get_oauth_token.php after setting up APP in Google Developer Console.
-//Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
-// eg: http://localhost/phpmail/get_oauth_token.php
+//Obtained by configuring and running get_oauth_token.php
+//after setting up an app in Google Developer Console.
 $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
+//Create a new OAuth2 provider instance
 $provider = new Google([
     'clientId' => $clientId,
     'clientSecret' => $clientSecret
 ]);
 
+//Pass the OAuth provider instance to PHPMailer
 $mail->setOAuth(
     new OAuth([
         'provider' => $provider,
@@ -73,17 +71,18 @@ $mail->setOAuth(
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
-$mail->setFrom('someone@gmail.com', 'First Last');
+$mail->setFrom($email, 'First Last');
 
 //Set who the message is to be sent to
 $mail->addAddress('someone@gmail.com', 'John Doe');
 
 //Set the subject line
-$mail->Subject = 'PHPMailer GMail SMTP test';
+$mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
-$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+$mail->CharSet = 'utf-8';
+$mail->msgHTML(file_get_contents('contentsutf8.html'), dirname(__FILE__));
 
 //Replace the plain text body with one created manually
 $mail->AltBody = 'This is a plain-text message body';
