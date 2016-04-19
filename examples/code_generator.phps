@@ -10,7 +10,6 @@ namespace PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 $CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
-$CFG['smtp_debugoutput'] = 'html';
 $CFG['smtp_server'] = 'localhost';
 $CFG['smtp_port'] = '25';
 $CFG['smtp_authenticate'] = false;
@@ -50,7 +49,6 @@ $example_code .= "\n\n\$results_messages = [];";
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
 $mail->CharSet = 'utf-8';
 ini_set('default_charset', 'UTF-8');
-$mail->Debugoutput = $CFG['smtp_debugoutput'];
 $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
 $example_code .= "\nini_set('default_charset', 'UTF-8');";

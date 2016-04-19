@@ -22,9 +22,6 @@ $mail->isSMTP();
 // 2 = client and server messages
 $mail->SMTPDebug = 2;
 
-//Ask for HTML-friendly debug output
-$mail->Debugoutput = 'html';
-
 //Set the hostname of the mail server
 $mail->Host = 'smtp.example.com';
 
@@ -35,6 +32,7 @@ $mail->Port = 587;
 $mail->SMTPSecure = 'tls';
 
 //Custom connection options
+//Note that these settings are INSECURE
 $mail->SMTPOptions = array (
     'ssl' => [
         'verify_peer'  => true,
@@ -49,10 +47,10 @@ $mail->SMTPOptions = array (
 $mail->SMTPAuth = true;
 
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = "username@example.com";
+$mail->Username = 'username@example.com';
 
 //Password to use for SMTP authentication
-$mail->Password = "yourpassword";
+$mail->Password = 'yourpassword';
 
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
@@ -67,9 +65,9 @@ $mail->Subject = 'PHPMailer SMTP options test';
 //convert HTML into a basic plain-text alternative body
 $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
-//send the message, check for errors
+//Send the message, check for errors
 if (!$mail->send()) {
-    echo "Mailer Error: " . $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
-    echo "Message sent!";
+    echo 'Message sent!';
 }
