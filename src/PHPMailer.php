@@ -611,9 +611,11 @@ class PHPMailer
      * Constructor.
      * @param boolean $exceptions Should we throw external exceptions?
      */
-    public function __construct($exceptions = false)
+    public function __construct($exceptions = null)
     {
-        $this->exceptions = (boolean)$exceptions;
+        if ($exceptions !== null) {
+            $this->exceptions = (boolean)$exceptions;
+        }
         //Pick an appropriate debug output format automatically
         $this->Debugoutput = ((strpos(PHP_SAPI, 'cli') !== false) ? 'echo' : 'html');
     }
@@ -648,7 +650,7 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
-        if (!($this->UseSendmailOptions)) {
+        if (!$this->UseSendmailOptions) {
             $result = @mail($to, $subject, $body, $header);
         } else {
             $result = @mail($to, $subject, $body, $header, $params);
@@ -908,6 +910,7 @@ class PHPMailer
      * @param string $addrstr The address list string
      * @param bool $useimap Whether to use the IMAP extension to parse the list
      * @return array
+     * @static
      * @link http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      */
     public static function parseAddresses($addrstr, $useimap = true)
@@ -1006,7 +1009,7 @@ class PHPMailer
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
      * * `auto` Pick best pattern automatically;
-     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0;
+     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
      * * `pcre` Use old PCRE implementation;
      * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
@@ -1377,12 +1380,12 @@ class PHPMailer
         } else {
             $params = sprintf('-f%s', $this->Sender);
         }
-        if ($this->Sender != '') {
+        if ('' != $this->Sender) {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
         $result = false;
-        if ($this->SingleTo && count($toArr) > 1) {
+        if ($this->SingleTo and count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
                 $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From);
@@ -1483,9 +1486,8 @@ class PHPMailer
      * Initiate a connection to an SMTP server.
      * Returns false if the operation failed.
      * @param array $options An array of options compatible with stream_context_create()
-     * @return bool
+     * @return boolean
      * @throws Exception
-     * @throws null
      * @uses SMTP
      * @access public
      */
@@ -3800,7 +3802,7 @@ class PHPMailer
      */
     protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from)
     {
-        if (!empty($this->action_function) && is_callable($this->action_function)) {
+        if (!empty($this->action_function) and is_callable($this->action_function)) {
             $params = [$isSent, $to, $cc, $bcc, $subject, $body, $from];
             call_user_func_array($this->action_function, $params);
         }

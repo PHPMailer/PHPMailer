@@ -1383,6 +1383,19 @@ EOT;
             ),
             'Failed to recognise address list (IMAP parser)'
         );
+        $this->assertEquals(
+            array(
+                array("name" => 'Joe User', 'address' => 'joe@example.com'),
+                array("name" => 'Jill User', 'address' => 'jill@example.net'),
+                array("name" => '', 'address' => 'frank@example.com'),
+            ),
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>,'
+                    . 'Jill User <jill@example.net>,'
+                    . 'frank@example.com,'
+            ),
+            'Parsed addresses'
+        );
         //Test simple address parser
         $this->assertCount(
             2,
