@@ -1,7 +1,7 @@
 # ChangeLog
 
-## Version 5.5
-This is a major update that breaks backwards compatibility. To emphasise that this release requires PHP 5.5, this release is called **5.5**, **not 5.3**!
+## Version 6.0
+This is a major update that breaks backwards compatibility.
 
 * Requires PHP 5.5 or later
 * Uses the `PHPMailer\PHPMailer` namespace

@@ -577,7 +577,7 @@ class PHPMailer
     /**
      * The PHPMailer Version number.
      */
-    const VERSION = '5.5.0';
+    const VERSION = '6.0.0';
 
     /**
      * Error severity: message only, continue processing.
