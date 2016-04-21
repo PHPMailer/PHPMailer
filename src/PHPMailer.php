@@ -301,7 +301,7 @@ class PHPMailer
      * * `echo` Output plain-text as-is, appropriate for CLI
      * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
-     *
+     * By default PHPMailer will use `echo` if run from a `cli` or `cli-server` SAPI, `html` otherwise.
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
