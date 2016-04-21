@@ -20,39 +20,61 @@
 
 namespace PHPMailer\PHPMailer;
 
+/**
+ * OAuth - OAuth2 authentication wrapper class.
+ * @package PHPMailer
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ */
 class OAuth
 {
-
     /**
+     * An instance of the League OAuth Client Provider.
      * @var League\OAuth2\Client\Provider\AbstractProvider
      */
     protected $provider = null;
 
     /**
+     * The current OAuth access token.
      * @var League\OAuth2\Client\Token\AccessToken
      */
     protected $oauthToken = null;
 
     /**
+     * The user's email address, usually used as the login ID
+     * and also the from address when sending email.
      * @var string
      */
     protected $oauthUserEmail = '';
 
     /**
+     * The client secret, generated in the app definition of the service you're connecting to.
      * @var string
      */
     protected $oauthClientSecret = '';
 
     /**
+     * The client ID, generated in the app definition of the service you're connecting to.
      * @var string
      */
     protected $oauthClientId = '';
 
     /**
+     * The refresh token, used to obtain new AccessTokens.
      * @var string
      */
     protected $refreshToken = '';
 
+    /**
+     * The state of the authentication.
+     * @var
+     */
+    protected $state;
+
+    /**
+     * OAuth constructor.
+     * @param array $options Associative array containing
+     *   `provider`, `userName`, `clientSecret`, `clientId` and `refreshToken` elements
+     */
     public function __construct($options)
     {
         $this->provider = $options['provider'];
@@ -63,9 +85,8 @@ class OAuth
     }
 
     /**
-     * Returns the current value of the state parameter.
-     *
-     * This can be accessed by the redirect handler during authorization.
+     * Returns the current value of the state property.
+     * This is used by the redirect handler during authorization.
      *
      * @return string
      */
@@ -75,21 +96,24 @@ class OAuth
     }
 
     /**
+     * Get a new RefreshToken.
      * @return \League\OAuth2\Client\Grant\RefreshToken
      */
     protected function getGrant()
     {
-        return new \League\OAuth2\Client\Grant\RefreshToken();
+        return new \League\OAuth2\Client\Grant\RefreshToken;
     }
 
     /**
+     * Get a new AccessToken.
      * @return League\OAuth2\Client\Token\AccessToken
      */
     protected function getToken()
     {
-        $provider = $this->provider;
-        $grant = $this->getGrant();
-        return $provider->getAccessToken($grant, ['refresh_token' => $this->oauthRefreshToken]);
+        return $this->provider->getAccessToken(
+            $this->getGrant(),
+            ['refresh_token' => $this->oauthRefreshToken]
+        );
     }
 
     /**
