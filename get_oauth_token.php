@@ -30,10 +30,17 @@
 
 namespace PHPMailer\PHPMailer;
 
-// Aliases for League Provider Classes that may be used
-// Make sure you have added these to your composer.json and run `composer install`
+/**
+ * Aliases for League Provider Classes
+ * Make sure you have added these to your composer.json and run `composer install`
+ * Plenty to choose from here:
+ * @link http://oauth2-client.thephpleague.com/providers/thirdparty/
+ */
+// @link https://github.com/thephpleague/oauth2-google
 use League\OAuth2\Client\Provider\Google;
+// @link https://packagist.org/packages/hayageek/oauth2-yahoo
 use Hayageek\OAuth2\Client\Provider\Yahoo;
+// @link https://github.com/stevenmaguire/oauth2-microsoft
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
