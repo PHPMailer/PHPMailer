@@ -64,7 +64,7 @@ class OAuth
      * The refresh token, used to obtain new AccessTokens.
      * @var string
      */
-    protected $refreshToken = '';
+    protected $oauthRefreshToken = '';
 
     /**
      * OAuth constructor.
