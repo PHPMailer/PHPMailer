@@ -22,6 +22,8 @@ namespace PHPMailer\PHPMailer;
 
 /**
  * OAuth - OAuth2 authentication wrapper class.
+ * Uses the oauth2-client package from the League of Extraordinary Packages
+ * @link http://oauth2-client.thephpleague.com
  * @package PHPMailer
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  */
@@ -65,12 +67,6 @@ class OAuth
     protected $refreshToken = '';
 
     /**
-     * The state of the authentication.
-     * @var
-     */
-    protected $state;
-
-    /**
      * OAuth constructor.
      * @param array $options Associative array containing
      *   `provider`, `userName`, `clientSecret`, `clientId` and `refreshToken` elements
@@ -82,17 +78,6 @@ class OAuth
         $this->oauthClientSecret = $options['clientSecret'];
         $this->oauthClientId = $options['clientId'];
         $this->oauthRefreshToken = $options['refreshToken'];
-    }
-
-    /**
-     * Returns the current value of the state property.
-     * This is used by the redirect handler during authorization.
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**
