@@ -1,5 +1,10 @@
 <?php
-namespace PHPMailer\PHPMailer;
+/**
+ * This example shows how to send a message to a whole list of recipients efficiently.
+ */
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
 
 error_reporting(E_STRICT | E_ALL);
 

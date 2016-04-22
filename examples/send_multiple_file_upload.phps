@@ -2,12 +2,15 @@
 /**
  * PHPMailer multiple files upload and send example
  */
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
+require '../vendor/autoload.php';
+
 $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
-
     // Create a message
-    // This should be somewhere in your include_path
-    require '../PHPMailerAutoload.php';
     $mail = new PHPMailer;
     $mail->setFrom('from@example.com', 'First Last');
     $mail->addAddress('whoto@example.com', 'John Doe');

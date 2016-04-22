@@ -5,7 +5,9 @@
  * by matt.sturdy@gmail.com
  */
 
-namespace PHPMailer\PHPMailer;
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php';
 
@@ -42,7 +44,8 @@ $results_messages = [];
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
-$example_code = "<?php\nnamespace PHPMailer\\PHPMailer;";
+$example_code  = "<?php\nuse PHPMailer\\PHPMailer\\PHPMailer;";
+$example_code .= "\nuse PHPMailer\\PHPMailer\\Exception;";
 $example_code .= "\nrequire_once 'vendor/autoload.php';";
 $example_code .= "\n\n\$results_messages = [];";
 
@@ -53,23 +56,18 @@ $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
 $example_code .= "\nini_set('default_charset', 'UTF-8');";
 
-class AppException extends Exception
-{
-}
-
-$example_code .= "\n\nclass AppException extends Exception {}";
 $example_code .= "\n\ntry {";
 
 try {
     if (isset($_POST["submit"]) && $_POST['submit'] == "Submit") {
         $to = $_POST['To_Email'];
         if (!PHPMailer::validateAddress($to)) {
-            throw new AppException("Email address " . $to . " is invalid -- aborting!");
+            throw new Exception("Email address " . $to . " is invalid -- aborting!");
         }
 
         $example_code .= "\n\$to = '{$_POST['To_Email']}';";
         $example_code .= "\nif(!PHPMailer::validateAddress(\$to)) {";
-        $example_code .= "\n  throw new AppException(\"Email address \" . " .
+        $example_code .= "\n  throw new Exception(\"Email address \" . " .
             "\$to . \" is invalid -- aborting!\");";
         $example_code .= "\n}";
 
@@ -115,7 +113,7 @@ try {
                 $example_code .= "\n\$mail->isQmail();";
                 break;
             default:
-                throw new AppException('Invalid test_type provided');
+                throw new Exception('Invalid test_type provided');
         }
 
         try {
@@ -160,7 +158,7 @@ try {
                 }
             }
         } catch (Exception $e) { //Catch all kinds of bad addressing
-            throw new AppException($e->getMessage());
+            throw new Exception($e->getMessage());
         }
         $mail->Subject = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
         $example_code .= "\n\$mail->Subject  = \"" . $_POST['Subject'] .
@@ -191,22 +189,22 @@ try {
         $example_code .= "\n  \$results_messages[] = \"Message has been sent using " .
             strtoupper($_POST['test_type']) . "\";";
         $example_code .= "\n}";
-        $example_code .= "\ncatch (phpmailerException \$e) {";
-        $example_code .= "\n  throw new AppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
+        $example_code .= "\ncatch (Exception \$e) {";
+        $example_code .= "\n  throw new \\Exception('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
         $example_code .= "\n}";
 
         try {
             $mail->send();
             $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
         } catch (Exception $e) {
-            throw new AppException("Unable to send to: " . $to . ': ' . $e->getMessage());
+            throw new Exception("Unable to send to: " . $to . ': ' . $e->getMessage());
         }
     }
-} catch (AppException $e) {
+} catch (Exception $e) {
     $results_messages[] = $e->errorMessage();
 }
 $example_code .= "\n}";
-$example_code .= "\ncatch (AppException \$e) {";
+$example_code .= "\ncatch (Exception \$e) {";
 $example_code .= "\n  \$results_messages[] = \$e->errorMessage();";
 $example_code .= "\n}";
 $example_code .= "\n\nif (count(\$results_messages) > 0) {";

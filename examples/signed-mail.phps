@@ -1,8 +1,7 @@
 <?php
-namespace PHPMailer\PHPMailer;
 /**
  * This example shows signing a message and then sending it via the mail() function of PHP.
- * 
+ *
  * Before you can sign the mail certificates are needed.
  *
  *
@@ -13,25 +12,25 @@ namespace PHPMailer\PHPMailer;
  * The form is directly available via https://secure.comodo.com/products/frontpage?area=SecureEmailCertificate
  * Fill it out and you'll get an email with a link to download your certificate.
  * Usually the certificate will be directly installed into your browser (FireFox/Chrome).
- * 
+ *
  *
  * STEP 2 - Exporting the certificate
  * This is specific to your browser, however, most browsers will give you the option to export your recently added certificate in PKCS12 (.pfx)
  * Include your private key if you are asked for it.
  * Set up a password to protect your exported file.
- * 
+ *
  * STEP 3 - Splitting the .pfx into a private key and the certificate.
  * I use openssl for this. You only need two commands. In my case the certificate file is called 'exported-cert.pfx'
  * To create the private key do the following:
  *
  * openssl pkcs12 -in exported-cert.pfx -nocerts -out cert.key
- * 
+ *
  * Of course the way you name your file (-out) is up to you.
  * You will be asked for a password for the Import password. This is the password you just set while exporting the certificate into the pfx file.
  * Afterwards, you can password protect your private key (recommended)
  * Also make sure to set the permissions to a minimum level and suitable for your application.
  * To create the certificate file use the following command:
- * 
+ *
  * openssl pkcs12 -in exported-cert.pfx -clcerts -nokeys -out cert.crt
  *
  * Again, the way you name your certificate is up to you. You will be also asked for the Import Password.
@@ -45,10 +44,13 @@ namespace PHPMailer\PHPMailer;
  * STEP 3 - Code
  */
 
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer();
+$mail = new PHPMailer;
 //Set who the message is to be sent from
 //IMPORTANT: This must match the email address of your certificate.
 //Although the certificate will be valid, an error will be thrown since it cannot be verified that the sender and the signer are the same person.
@@ -71,7 +73,9 @@ $mail->addAttachment('images/phpmailer_mini.png');
 $mail->sign(
     '/path/to/cert.crt', //The location of your certificate file
     '/path/to/cert.key', //The location of your private key file
-    'yourSecretPrivateKeyPassword', //The password you protected your private key with (not the Import Password! may be empty but parameter must not be omitted!)
+    //The password you protected your private key with (not the Import Password!
+    //May be empty but the parameter must not be omitted!
+    'yourSecretPrivateKeyPassword',
     '/path/to/certchain.pem' //The location of your chain file
 );
 

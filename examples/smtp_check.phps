@@ -3,7 +3,12 @@
  * This uses the SMTP class alone to check that a connection can be made to an SMTP server,
  * authenticate, then disconnect
  */
-namespace PHPMailer\PHPMailer;
+
+//Import the PHPMailer SMTP class into the global namespace
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that

@@ -2,7 +2,9 @@
 /**
  * This example shows settings to use when sending over SMTP with TLS and custom connection options.
  */
-namespace PHPMailer\PHPMailer;
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that

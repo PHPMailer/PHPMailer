@@ -2,7 +2,11 @@
 /**
  * This example shows how to use POP-before-SMTP for authentication.
  */
-namespace PHPMailer\PHPMailer;
+
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\POP3;
 
 require '../vendor/autoload.php';
 
@@ -22,7 +26,7 @@ try {
     // 2 = client and server messages
     $mail->SMTPDebug = 2;
     //Set the hostname of the mail server
-    $mail->Host = "mail.example.com";
+    $mail->Host = 'mail.example.com';
     //Set the SMTP port number - likely to be 25, 465 or 587
     $mail->Port = 25;
     //Whether to use SMTP authentication
@@ -45,9 +49,9 @@ try {
     //send the message
     //Note that we don't need check the response from this because it will throw an exception if it has trouble
     $mail->send();
-    echo "Message sent!";
-} catch (phpmailerException $e) {
-    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+    echo 'Message sent!';
 } catch (Exception $e) {
+    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+} catch (\Exception $e) {
     echo $e->getMessage(); //Boring error messages from anything else!
 }

@@ -2,7 +2,9 @@
 /**
  * This example shows sending a message using a local sendmail binary.
  */
-namespace PHPMailer\PHPMailer;
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
 
 require '../vendor/autoload.php';
 

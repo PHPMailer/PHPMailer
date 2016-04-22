@@ -3,7 +3,9 @@
  * This example shows how to send via Google's Gmail servers using XOAUTH2 authentication.
  */
 
-namespace PHPMailer\PHPMailer;
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\OAuth;
 
 // Alias the League Google OAuth2 provider class
 use League\OAuth2\Client\Provider\Google;

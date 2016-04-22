@@ -1,8 +1,13 @@
 <?php
 /**
- * PHPMailer simple file upload and send example
+ * PHPMailer simple file upload and send example.
  */
-namespace PHPMailer\PHPMailer;
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
+require '../vendor/autoload.php';
+
 $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
     // First handle the upload
