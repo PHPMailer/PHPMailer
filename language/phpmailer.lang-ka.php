@@ -23,4 +23,4 @@ $PHPMAILER_LANG['signing']              = 'ხელმოწერის შე
 $PHPMAILER_LANG['smtp_connect_failed']  = 'შეცდომა SMTP სერვერთან დაკავშირებისას';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP სერვერის შეცდომა: ';
 $PHPMAILER_LANG['variable_set']         = 'შეუძლებელია შემდეგი ცვლადის შექმნა ან შეცვლა: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'ბიბლიოთეკა არ არსებობს: ';
