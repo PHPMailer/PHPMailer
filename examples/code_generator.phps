@@ -220,10 +220,6 @@ $example_code .= "\n}";
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Test Page</title>
-    <script type="text/javascript" src="scripts/shCore.js"></script>
-    <script type="text/javascript" src="scripts/shBrushPhp.js"></script>
-    <link type="text/css" rel="stylesheet" href="styles/shCore.css">
-    <link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css">
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -304,9 +300,6 @@ $example_code .= "\n}";
         }
     </style>
     <script>
-        SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
-        SyntaxHighlighter.all();
-
         function startAgain() {
             var post_params = {
                 "From_Name": "<?php echo $from_name; ?>",
@@ -357,8 +350,7 @@ $example_code .= "\n}";
 <body>
 <?php
 if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-    echo 'Current PHP version: ' . phpversion() . "<br>";
-    echo exit("ERROR: Wrong PHP version. Must be PHP 5.5 or later.");
+    echo exit('ERROR: Your PHP version ' . phpversion() . 'is too old - PHPMailer requires PHP 5.5 or later.');
 }
 
 if (count($results_messages) > 0) {
@@ -373,7 +365,7 @@ if (count($results_messages) > 0) {
 if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
     echo "<button type=\"submit\" onclick=\"startAgain();\">Start Over</button><br>\n";
     echo "<br><span>Script:</span>\n";
-    echo "<pre class=\"brush: php;\">\n";
+    echo "<pre>\n";
     echo $example_code;
     echo "\n</pre>\n";
     echo "\n<hr style=\"margin: 3em;\">\n";

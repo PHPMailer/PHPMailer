@@ -22,7 +22,15 @@ namespace PHPMailer\PHPMailer;
 /**
  * PHPMailer POP-Before-SMTP Authentication Class.
  * Specifically for PHPMailer to use for RFC1939 POP-before-SMTP authentication.
- * Does not support APOP.
+ * 1) This class does not support APOP authentication.
+ * 2) Opening and closing lots of POP3 connections can be quite slow. If you need
+ *   to send a batch of emails then just perform the authentication once at the start,
+ *   and then loop through your mail sending script. Providing this process doesn't
+ *   take longer than the verification period lasts on your POP3 server, you should be fine.
+ * 3) This is really ancient technology; you should only need to use it to talk to very old systems.
+ * 4) This POP3 class is deliberately lightweight and incomplete, and implements just
+ *   enough to do authentication.
+ *   If you want a more complete class there are other POP3 classes for PHP available.
  * @package PHPMailer
  * @author Richard Davey (original author) <rich@corephp.co.uk>
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>

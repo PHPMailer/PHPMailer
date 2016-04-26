@@ -1,8 +1,24 @@
 <?php
+/**
+ * SMTP low memory example.
+ */
+
 namespace PHPMailer\PHPMailer;
+
 require '../vendor/autoload.php';
 
-class SMTP_lowmemory extends SMTP {
+/**
+ * This class demonstrates sending an already-built RFC822 message via SMTP
+ * by extending PHPMailer's SMTP class.
+ * It uses less memory that PHPMailer's usual approach because it keeps
+ * the message as a single string rather than splitting its lines into
+ * an array, which can consume very large amounts of memory if you have
+ * large attachments. The downside is that it's somewhat slower.
+ * This is mainly of academic interest, but shows how you can change how
+ * core classes work without having to alter the library itself.
+ */
+class SMTPLowMemory extends SMTP
+{
     public function data($msg_data)
     {
         //This will use the standard timelimit
@@ -89,5 +105,24 @@ class SMTP_lowmemory extends SMTP {
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
         return $result;
+    }
+}
+
+/**
+ * We need to use a PHPMailer subclass to make it use our SMTP implementation.
+ * @package PHPMailer\PHPMailer
+ */
+class PHPMailerLowMemory extends PHPMailer
+{
+    /**
+     * Patch in the new SMTP class.
+     * @return SMTP
+     */
+    public function getSMTPInstance()
+    {
+        if (!is_object($this->smtp)) {
+            $this->smtp = new SMTPLowMemory;
+        }
+        return $this->smtp;
     }
 }
