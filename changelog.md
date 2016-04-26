@@ -1,14 +1,14 @@
-# ChangeLog
+# PHPMailer Change Log
 
 ## Version 6.0
 This is a major update that breaks backwards compatibility.
 
-* Requires PHP 5.5 or later
+* **Requires PHP 5.5 or later**
 * Uses the `PHPMailer\PHPMailer` namespace
 * File structure simplified, classes live in the `src/` folder
-* The custom autoloader has been removed, now PSR-4 compatible: **use composer**!
+* The custom autoloader has been removed, now PSR-4 compatible: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
-* `Extras` classes have been removed - use packages from packagist.org instead
+* `Extras` classes have been removed - use packages from [packagist.org](https://packagist.org) instead
 * All elements previously marked as deprecated have been removed:
   * `PHPMailer->Version`
   * `PHPMailer->ReturnPath`
@@ -26,9 +26,10 @@ This is a major update that breaks backwards compatibility.
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
 * `PHPMailer->SingleToArray` is now protected
-* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers in the standard PHPMailer class, thanks to @sherryl4george
+* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 * Improve DKIM signing to use SHA-2
+* Major cleanup of docs and examples
 
 ## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
