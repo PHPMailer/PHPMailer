@@ -44,7 +44,7 @@ $results_messages = [];
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
-$example_code  = "<?php\nuse PHPMailer\\PHPMailer\\PHPMailer;";
+$example_code = "<?php\nuse PHPMailer\\PHPMailer\\PHPMailer;";
 $example_code .= "\nuse PHPMailer\\PHPMailer\\Exception;";
 $example_code .= "\nrequire_once 'vendor/autoload.php';";
 $example_code .= "\n\n\$results_messages = [];";
@@ -92,9 +92,9 @@ try {
                 $example_code .= "\n\$mail->Port       = \"" . $_POST['smtp_port'] . "\";";
                 $example_code .= "\n\$mail->SMTPSecure = \"" . strtolower($_POST['smtp_secure']) . "\";";
                 $example_code .= "\n\$mail->SMTPAuth   = " . (array_key_exists(
-                    'smtp_authenticate',
-                    $_POST
-                ) ? 'true' : 'false') . ";";
+                        'smtp_authenticate',
+                        $_POST
+                    ) ? 'true' : 'false') . ";";
                 if (array_key_exists('smtp_authenticate', $_POST)) {
                     $example_code .= "\n\$mail->Username   = \"" . $_POST['authenticate_username'] . "\";";
                     $example_code .= "\n\$mail->Password   = \"" . $_POST['authenticate_password'] . "\";";
@@ -219,7 +219,7 @@ $example_code .= "\n}";
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>PHPMailer Test Page</title>
+    <title>PHPMailer Code Generator</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -470,37 +470,35 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                                 <label for="radio-mail">Mail()</label>
                                 <input class="radio" type="radio" name="test_type" value="mail" id="radio-mail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'mail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'mail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-sendmail">Sendmail</label>
                                 <input class="radio" type="radio" name="test_type" value="sendmail" id="radio-sendmail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'sendmail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'sendmail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-qmail">Qmail</label>
                                 <input class="radio" type="radio" name="test_type" value="qmail" id="radio-qmail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'qmail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'qmail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-smtp">SMTP</label>
                                 <input class="radio" type="radio" name="test_type" value="smtp" id="radio-smtp"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'smtp') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'smtp') ? 'checked' : ''; ?>
                                        required>
                             </div>
                         </td>
                     </tr>
                 </table>
-                <div id="smtp-options-table" style="margin:1em 0 0 0;
-<?php if ($test_type != 'smtp') {
-    echo "display: none;";
-} ?>">
+                <div id="smtp-options-table"
+                     style="margin:1em 0 0 0;<?php echo ($test_type != 'smtp')?'display: none;':''; ?>">
                     <span style="margin:1.25em 0; display:block;"><strong>SMTP Specific Options:</strong></span>
                     <table border="1" class="column">
                         <tr>
@@ -549,9 +547,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colrite">
                                 <input type="checkbox" id="smtp-authenticate"
                                        name="smtp_authenticate"
-<?php if ($smtp_authenticate != '') {
-    echo "checked";
-} ?>
+                                    <?php echo ($smtp_authenticate != '') ? 'checked':''; ?>
                                        value="<?php echo $smtp_authenticate; ?>">
                             </td>
                         </tr>
