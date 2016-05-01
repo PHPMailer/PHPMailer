@@ -24,13 +24,13 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
 {
     echo "Message subject: \"$subject\"\n";
     foreach ($to as $address) {
-        echo "Message to {$address[0]} <{$address[1]}>\n";
+        echo "Message to {$address[1]} <{$address[0]}>\n";
     }
     foreach ($cc as $address) {
-        echo "Message CC to {$address[0]} <{$address[1]}>\n";
+        echo "Message CC to {$address[1]} <{$address[0]}>\n";
     }
     foreach ($bcc as $toaddress) {
-        echo "Message BCC to {$toaddress[0]} <{$toaddress[1]}>\n";
+        echo "Message BCC to {$toaddress[1]} <{$toaddress[0]}>\n";
     }
     if ($result) {
         echo "Message sent successfully\n";
