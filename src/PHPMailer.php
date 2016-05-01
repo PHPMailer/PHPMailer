@@ -3800,8 +3800,7 @@ class PHPMailer
     protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from)
     {
         if (!empty($this->action_function) and is_callable($this->action_function)) {
-            $params = [$isSent, $to, $cc, $bcc, $subject, $body, $from];
-            call_user_func_array($this->action_function, $params);
+            call_user_func_array($this->action_function, [$isSent, $to, $cc, $bcc, $subject, $body, $from]);
         }
     }
 
