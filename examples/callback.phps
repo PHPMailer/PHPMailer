@@ -61,7 +61,6 @@ try {
 
 //Alternative approach using a closure
 try {
-    $mail->isMail();
     $mail->action_function = function ($result, $to, $cc, $bcc, $subject, $body) {
         if ($result) {
             echo "Message sent successfully\n";
