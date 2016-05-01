@@ -1702,7 +1702,7 @@ EOT;
         $this->Mail->Subject .= ': DKIM signing';
         $this->Mail->Body = 'This message is DKIM signed.';
         $this->buildBody();
-        $privatekeyfile = 'dkim_private.key';
+        $privatekeyfile = 'dkim_private.pem';
         //Make a new key pair
         //(2048 bits is the recommended minimum key length -
         //gmail won't accept less than 1024 bits)
