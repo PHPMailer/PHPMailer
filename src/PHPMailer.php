@@ -2513,13 +2513,13 @@ class PHPMailer
                     if ($this->isError()) {
                         return '';
                     }
-                    $mime[] = $this->LE . $this->LE;
+                    $mime[] = $this->LE;
                 } else {
                     $mime[] = $this->encodeFile($path, $encoding);
                     if ($this->isError()) {
                         return '';
                     }
-                    $mime[] = $this->LE . $this->LE;
+                    $mime[] = $this->LE;
                 }
             }
         }
@@ -2728,23 +2728,12 @@ class PHPMailer
      * According to RFC2045 section 6.7.
      * @access public
      * @param string $string The text to encode
-     * @param integer $line_max Number of chars allowed on a line before wrapping
+     * @param integer $line_max Number of chars allowed on a line before wrapping, for compatibility with old versions
      * @return string
-     * @link http://www.php.net/manual/en/function.quoted-printable-decode.php#89417 Adapted from this comment
      */
     public function encodeQP($string, $line_max = 76)
     {
-        // Use native function if it's available (>= PHP5.3)
-        if (function_exists('quoted_printable_encode')) {
-            return quoted_printable_encode($string);
-        }
-        // Fall back to a pure PHP implementation
-        $string = str_replace(
-            ['%20', '%0D%0A.', '%0D%0A', '%'],
-            [' ', "\r\n=2E", "\r\n", '='],
-            rawurlencode($string)
-        );
-        return preg_replace('/[^\r\n]{' . ($line_max - 3) . '}[^=\r\n]{2}/', "$0=\r\n", $string);
+        return quoted_printable_encode($string);
     }
 
     /**
@@ -2916,6 +2905,22 @@ class PHPMailer
             7 => $cid
         ];
         return true;
+    }
+
+    /**
+     * Check if an embedded attachment is present with this cid.
+     * @access protected
+     * @param $cid
+     * @return bool
+     */
+    protected function cidExists($cid)
+    {
+        foreach ($this->attachment as $attachment) {
+            if ('inline' == $attachment[6] and $cid == $attachment[7]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -3214,21 +3219,28 @@ class PHPMailer
         if (array_key_exists(2, $images)) {
             foreach ($images[2] as $imgindex => $url) {
                 // Convert data URIs into embedded images
-                if (preg_match('#^data:(image[^;,]*)(;base64)?,#', $url, $match)) {
-                    $data = substr($url, strpos($url, ','));
-                    if ($match[2]) {
-                        $data = base64_decode($data);
+                //e.g. "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                if (preg_match('#^data:(image/(?:jpe?g|gif|png));?(base64)?,(.+)#', $url, $match)) {
+                    if (count($match) == 4 and 'base64' == $match[2]) {
+                        $data = base64_decode($match[3]);
+                    } elseif ('' == $match[2]) {
+                        $data = rawurldecode($match[3]);
                     } else {
-                        $data = rawurldecode($data);
+                        //Not recognised so leave it alone
+                        continue;
                     }
-                    $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
-                    if ($this->addStringEmbeddedImage($data, $cid, 'embed' . $imgindex, 'base64', $match[1])) {
-                        $message = str_replace(
-                            $images[0][$imgindex],
-                            $images[1][$imgindex] . '="cid:' . $cid . '"',
-                            $message
-                        );
+                    //Hash the decoded data, not the URL so that the same data-URI image used in multiple places
+                    //will only be embedded once, even if it used a different encoding
+                    $cid = md5($data) . '@phpmailer.0'; // RFC2392 S 2
+
+                    if (!$this->cidExists($cid)) {
+                        $this->addStringEmbeddedImage($data, $cid, 'embed' . $imgindex, 'base64', $match[1]);
                     }
+                    $message = str_replace(
+                        $images[0][$imgindex],
+                        $images[1][$imgindex] . '="cid:' . $cid . '"',
+                        $message
+                    );
                 } elseif (substr($url, 0, 4) !== 'cid:' and !preg_match('#^[a-z][a-z0-9+.-]*://#i', $url)) {
                     // Do not change urls for absolute images (thanks to corvuscorax)
                     // Do not change urls that are already inline images
@@ -3433,14 +3445,13 @@ class PHPMailer
         if (false !== $qpos) {
             $filename = substr($filename, 0, $qpos);
         }
-        $pathinfo = self::mb_pathinfo($filename);
-        return self::_mime_types($pathinfo['extension']);
+        $ext = self::mb_pathinfo($filename, PATHINFO_EXTENSION);
+        return self::_mime_types($ext);
     }
 
     /**
      * Multi-byte-safe pathinfo replacement.
-     * Drop-in replacement for pathinfo(), but multibyte-safe, cross-platform-safe, old-version-safe.
-     * Works similarly to the one in PHP >= 5.2.0
+     * Drop-in replacement for pathinfo(), but multibyte- and cross-platform-safe
      * @link http://www.php.net/manual/en/function.pathinfo.php#107461
      * @param string $path A filename or path, does not need to exist as a file
      * @param integer|string $options Either a PATHINFO_* constant,

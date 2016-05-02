@@ -851,7 +851,7 @@ EOT;
     public function testHtmlUtf8()
     {
         $this->Mail->isHTML(true);
-        $this->Mail->Subject .= ": UTF-8 HTML";
+        $this->Mail->Subject .= ": UTF-8 HTML Пустое тело сообщения";
         $this->Mail->CharSet = 'UTF-8';
 
         $this->Mail->Body = <<<EOT
@@ -941,8 +941,8 @@ EOT;
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
         $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . '/examples'));
-        $this->Mail->Subject .= ': msgHTML';
-        $this->Mail->addAddress('user@example.com');
+        $sub = $this->Mail->Subject . ': msgHTML';
+        $this->Mail->Subject .= $sub;
 
         $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
         $this->assertNotEmpty($this->Mail->AltBody, 'AltBody not set by msgHTML');
@@ -957,9 +957,7 @@ EOT;
                 return strtoupper(strip_tags($html));
             }
         );
-        $this->Mail->Subject .= ' + custom html2text';
-        $this->assertNotEmpty($this->Mail->AltBody, 'Custom AltBody not set by msgHTML');
-
+        $this->Mail->Subject = $sub . ' + custom html2text';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1000,9 +998,9 @@ EOT;
         if (!$this->Mail->addStringEmbeddedImage(
             file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
             md5('phpmailer_mini.png').'@phpmailer.0',
-            '', //intentionally empty name
+            '', //Intentionally empty name
             'base64',
-            'image/png',
+            '', //Intentionally empty MIME type
             'inline'
         )) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
@@ -1544,6 +1542,11 @@ EOT;
             $this->Mail->encodeQ("Nov\xc3\xa1=", 'text'),
             'Q Encoding (text) failed 2'
         );
+
+        $this->assertEquals($this->Mail->encodeString('hello', 'binary'), 'hello', 'Binary encoding changed input');
+        $this->Mail->ErrorInfo = '';
+        $this->Mail->encodeString('hello', 'asdfghjkl');
+        $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
     }
 
     /**
@@ -1854,6 +1857,11 @@ EOT;
             '/mnt/files',
             'Dirname path element not matched'
         );
+        $this->assertEquals(
+            PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
+            '飛兒樂 團光茫.mp3',
+            'Basename path element not matched'
+        );
         $this->assertEquals(PHPMailer::mb_pathinfo($a, 'filename'), '飛兒樂 團光茫', 'Filename path element not matched');
         $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
@@ -1861,7 +1869,37 @@ EOT;
         $this->assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'Windows basename not matched');
         $this->assertEquals($q['extension'], 'mp3', 'Windows extension not matched');
         $this->assertEquals($q['filename'], '飛兒樂 團光茫', 'Windows filename not matched');
+
+        $this->assertEquals(
+            PHPMailer::filenameToType('abc.jpg?xyz=1'),
+            'image/jpeg',
+            'Query string not ignored in filename'
+        );
+        $this->assertEquals(
+            PHPMailer::filenameToType('abc.xyzpdq'),
+            'application/octet-stream',
+            'Default MIME type not applied to unknown extension'
+        );
+        
+        //Line break normalization
+        $eol = $this->Mail->LE;
+        $b1 = "1\r2\r3\r";
+        $b2 = "1\n2\n3\n";
+        $b3 = "1\r\n2\r3\n";
+        $this->Mail->LE = "\n";
+        $t1 = "1{$this->Mail->LE}2{$this->Mail->LE}3{$this->Mail->LE}";
+        $this->assertEquals($this->Mail->fixEOL($b1), $t1, 'Failed to normalize line breaks (1)');
+        $this->assertEquals($this->Mail->fixEOL($b2), $t1, 'Failed to normalize line breaks (2)');
+        $this->assertEquals($this->Mail->fixEOL($b3), $t1, 'Failed to normalize line breaks (3)');
+        $this->Mail->LE = "\r\n";
+        $t1 = "1{$this->Mail->LE}2{$this->Mail->LE}3{$this->Mail->LE}";
+        $this->assertEquals($this->Mail->fixEOL($b1), $t1, 'Failed to normalize line breaks (4)');
+        $this->assertEquals($this->Mail->fixEOL($b2), $t1, 'Failed to normalize line breaks (5)');
+        $this->assertEquals($this->Mail->fixEOL($b3), $t1, 'Failed to normalize line breaks (6)');
+        $this->Mail->LE = $eol;
+
     }
+
     public function testBadSMTP()
     {
         $this->Mail->smtpConnect();
@@ -2087,6 +2125,7 @@ EOT;
     /**
      * Test SMTP host connections.
      * This test can take a long time, so run it last
+     * @group slow
      */
     public function testSmtpConnect()
     {
