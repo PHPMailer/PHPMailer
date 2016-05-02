@@ -141,7 +141,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $this->checkChanges();
 
         // Determine line endings for message
-        if ($this->Mail->ContentType == 'text/html' || strlen($this->Mail->AltBody) > 0) {
+        if ('text/html' == $this->Mail->ContentType || strlen($this->Mail->AltBody) > 0) {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
@@ -217,28 +217,28 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      */
     public function checkChanges()
     {
-        if ($this->Mail->Priority != 3) {
+        if (3 != $this->Mail->Priority) {
             $this->addChange('Priority', $this->Mail->Priority);
         }
-        if ($this->Mail->Encoding != '8bit') {
+        if ('8bit' != $this->Mail->Encoding) {
             $this->addChange('Encoding', $this->Mail->Encoding);
         }
-        if ($this->Mail->CharSet != 'iso-8859-1') {
+        if ('iso-8859-1' != $this->Mail->CharSet) {
             $this->addChange('CharSet', $this->Mail->CharSet);
         }
-        if ($this->Mail->Sender != '') {
+        if ('' != $this->Mail->Sender) {
             $this->addChange('Sender', $this->Mail->Sender);
         }
-        if ($this->Mail->WordWrap != 0) {
+        if (0 != $this->Mail->WordWrap) {
             $this->addChange('WordWrap', $this->Mail->WordWrap);
         }
-        if ($this->Mail->Mailer != 'mail') {
+        if ('mail' != $this->Mail->Mailer) {
             $this->addChange('Mailer', $this->Mail->Mailer);
         }
-        if ($this->Mail->Port != 25) {
+        if (25 != $this->Mail->Port) {
             $this->addChange('Port', $this->Mail->Port);
         }
-        if ($this->Mail->Helo != 'localhost.localdomain') {
+        if ('localhost.localdomain' != $this->Mail->Helo) {
             $this->addChange('Helo', $this->Mail->Helo);
         }
         if ($this->Mail->SMTPAuth) {

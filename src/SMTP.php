@@ -293,7 +293,7 @@ class SMTP
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $max = ini_get('max_execution_time');
             // Don't bother if unlimited
-            if ($max != 0 and $timeout > $max) {
+            if (0 != $max and $timeout > $max) {
                 @set_time_limit($timeout);
             }
             stream_set_timeout($this->smtp_conn, $timeout, 0);
@@ -951,10 +951,10 @@ class SMTP
 
         // the tight logic knot ;)
         if (!array_key_exists($name, $this->server_caps)) {
-            if ($name == 'HELO') {
+            if ('HELO' == $name) {
                 return $this->server_caps['EHLO'];
             }
-            if ($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) {
+            if ('EHLO' == $name || array_key_exists('EHLO', $this->server_caps)) {
                 return false;
             }
             $this->setError('HELO handshake was used. Client knows nothing about server extensions');
