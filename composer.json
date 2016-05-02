@@ -20,25 +20,21 @@
         }
     ],
     "require": {
-        "php": ">=5.0.0"
+        "php": ">=5.5.0"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "*",
-        "phpunit/phpunit": "4.7.*"
+        "phpdocumentor/phpdocumentor": "2.*",
+        "phpunit/phpunit": "4.*"
     },
     "suggest": {
-        "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication"
     },
     "autoload": {
-        "classmap": [
-            "class.phpmailer.php",
-            "class.phpmaileroauth.php",
-            "class.phpmaileroauthgoogle.php",
-            "class.smtp.php",
-            "class.pop3.php",
-            "extras/EasyPeasyICS.php",
-            "extras/ntlm_sasl_client.php"
-        ]
+        "psr-4": {
+            "PHPMailer\\PHPMailer\\": "src/"
+        }
     },
     "license": "LGPL-2.1"
 }

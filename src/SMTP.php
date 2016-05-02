@@ -1,14 +1,14 @@
 <?php
 /**
  * PHPMailer RFC821 SMTP email transport class.
- * PHP Version 5
+ * PHP Version 5.5
  * @package PHPMailer
  * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
- * @copyright 2014 Marcus Bointon
+ * @copyright 2012 - 2016 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -16,6 +16,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
+
+namespace PHPMailer\PHPMailer;
 
 /**
  * PHPMailer RFC821 SMTP email transport class.
@@ -30,7 +32,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @var string
      */
-    const VERSION = '5.2.14';
+    const VERSION = '6.0.0';
 
     /**
      * SMTP line break constant.
@@ -74,30 +76,6 @@ class SMTP
      * Debug level to show all messages
      */
     const DEBUG_LOWLEVEL = 4;
-
-    /**
-     * The PHPMailer SMTP Version number.
-     * @var string
-     * @deprecated Use the `VERSION` constant instead
-     * @see SMTP::VERSION
-     */
-    public $Version = '5.2.14';
-
-    /**
-     * SMTP server port number.
-     * @var integer
-     * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
-     * @see SMTP::DEFAULT_SMTP_PORT
-     */
-    public $SMTP_PORT = 25;
-
-    /**
-     * SMTP reply line ending.
-     * @var string
-     * @deprecated Use the `CRLF` constant instead
-     * @see SMTP::CRLF
-     */
-    public $CRLF = "\r\n";
 
     /**
      * Debug output level.
@@ -160,12 +138,12 @@ class SMTP
      * Error information, if any, for the last SMTP command.
      * @var array
      */
-    protected $error = array(
+    protected $error = [
         'error' => '',
         'detail' => '',
         'smtp_code' => '',
         'smtp_code_ex' => ''
-    );
+    ];
 
     /**
      * The reply the server sent to us for HELO.
@@ -205,7 +183,7 @@ class SMTP
             return;
         }
         //Avoid clash with built-in function names
-        if (!in_array($this->Debugoutput, array('error_log', 'html', 'echo')) and is_callable($this->Debugoutput)) {
+        if (!in_array($this->Debugoutput, ['error_log', 'html', 'echo']) and is_callable($this->Debugoutput)) {
             call_user_func($this->Debugoutput, $str, $this->do_debug);
             return;
         }
@@ -244,7 +222,7 @@ class SMTP
      * @access public
      * @return boolean
      */
-    public function connect($host, $port = null, $timeout = 30, $options = array())
+    public function connect($host, $port = null, $timeout = 30, $options = [])
     {
         static $streamok;
         //This is enabled by default since 5.0.0 but some providers disable it
@@ -315,7 +293,7 @@ class SMTP
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $max = ini_get('max_execution_time');
             // Don't bother if unlimited
-            if ($max != 0 && $timeout > $max) {
+            if ($max != 0 and $timeout > $max) {
                 @set_time_limit($timeout);
             }
             stream_set_timeout($this->smtp_conn, $timeout, 0);
@@ -365,17 +343,14 @@ class SMTP
      * @param string $username The user name
      * @param string $password The password
      * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
-     * @param string $realm The auth realm for NTLM
-     * @param string $workstation The auth workstation for NTLM
-     * @param null|OAuth $OAuth An optional OAuth instance (@see PHPMailerOAuth)
-     * @return bool True if successfully authenticated.* @access public
+     * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     * @return bool True if successfully authenticated.
+     * @access public
      */
     public function authenticate(
         $username,
         $password,
         $authtype = null,
-        $realm = '',
-        $workstation = '',
         $OAuth = null
     ) {
         if (!$this->server_caps) {
@@ -400,7 +375,7 @@ class SMTP
             );
 
             if (empty($authtype)) {
-                foreach (array('LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN', 'XOAUTH2') as $method) {
+                foreach (['LOGIN', 'CRAM-MD5', 'NTLM', 'PLAIN', 'XOAUTH2'] as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
@@ -461,56 +436,6 @@ class SMTP
                     return false;
                 }
                 break;
-            case 'NTLM':
-                /*
-                 * ntlm_sasl_client.php
-                 * Bundled with Permission
-                 *
-                 * How to telnet in windows:
-                 * http://technet.microsoft.com/en-us/library/aa995718%28EXCHG.65%29.aspx
-                 * PROTOCOL Docs http://curl.haxx.se/rfc/ntlm.html#ntlmSmtpAuthentication
-                 */
-                require_once 'extras/ntlm_sasl_client.php';
-                $temp = new stdClass;
-                $ntlm_client = new ntlm_sasl_client_class;
-                //Check that functions are available
-                if (!$ntlm_client->Initialize($temp)) {
-                    $this->setError($temp->error);
-                    $this->edebug(
-                        'You need to enable some modules in your php.ini file: '
-                        . $this->error['error'],
-                        self::DEBUG_CLIENT
-                    );
-                    return false;
-                }
-                //msg1
-                $msg1 = $ntlm_client->TypeMsg1($realm, $workstation); //msg1
-
-                if (!$this->sendCommand(
-                    'AUTH NTLM',
-                    'AUTH NTLM ' . base64_encode($msg1),
-                    334
-                )
-                ) {
-                    return false;
-                }
-                //Though 0 based, there is a white space after the 3 digit number
-                //msg2
-                $challenge = substr($this->last_reply, 3);
-                $challenge = base64_decode($challenge);
-                $ntlm_res = $ntlm_client->NTLMResponse(
-                    substr($challenge, 24, 8),
-                    $password
-                );
-                //msg3
-                $msg3 = $ntlm_client->TypeMsg3(
-                    $ntlm_res,
-                    $username,
-                    $realm,
-                    $workstation
-                );
-                // send encoded username
-                return $this->sendCommand('Username', base64_encode($msg3), 235);
             case 'CRAM-MD5':
                 // Start authentication
                 if (!$this->sendCommand('AUTH CRAM-MD5', 'AUTH CRAM-MD5', 334)) {
@@ -638,7 +563,7 @@ class SMTP
          */
 
         // Normalize line breaks before exploding
-        $lines = explode("\n", str_replace(array("\r\n", "\r"), "\n", $msg_data));
+        $lines = explode("\n", str_replace(["\r\n", "\r"], "\n", $msg_data));
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
          * of the first line (':' separated) does not contain a space then it _should_ be a header and we will
@@ -647,12 +572,12 @@ class SMTP
 
         $field = substr($lines[0], 0, strpos($lines[0], ':'));
         $in_headers = false;
-        if (!empty($field) && strpos($field, ' ') === false) {
+        if (!empty($field) and strpos($field, ' ') === false) {
             $in_headers = true;
         }
 
         foreach ($lines as $line) {
-            $lines_out = array();
+            $lines_out = [];
             if ($in_headers and $line == '') {
                 $in_headers = false;
             }
@@ -746,7 +671,7 @@ class SMTP
      */
     protected function parseHelloFields($type)
     {
-        $this->server_caps = array();
+        $this->server_caps = [];
         $lines = explode("\n", $this->helo_rply);
 
         foreach ($lines as $n => $s) {
@@ -768,7 +693,7 @@ class SMTP
                             break;
                         case 'AUTH':
                             if (!is_array($fields)) {
-                                $fields = array();
+                                $fields = [];
                             }
                             break;
                         default:
@@ -834,7 +759,7 @@ class SMTP
         return $this->sendCommand(
             'RCPT TO',
             'RCPT TO:<' . $address . '>',
-            array(250, 251)
+            [250, 251]
         );
     }
 
@@ -873,7 +798,7 @@ class SMTP
 
         $this->last_reply = $this->get_lines();
         // Fetch SMTP code and possible error code explanation
-        $matches = array();
+        $matches = [];
         if (preg_match("/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/", $this->last_reply, $matches)) {
             $code = $matches[1];
             $code_ex = (count($matches) > 2 ? $matches[2] : null);
@@ -936,7 +861,7 @@ class SMTP
      */
     public function verify($name)
     {
-        return $this->sendCommand('VRFY', "VRFY $name", array(250, 251));
+        return $this->sendCommand('VRFY', "VRFY $name", [250, 251]);
     }
 
     /**
@@ -1070,7 +995,7 @@ class SMTP
         if ($this->Timelimit > 0) {
             $endtime = time() + $this->Timelimit;
         }
-        while (is_resource($this->smtp_conn) && !feof($this->smtp_conn)) {
+        while (is_resource($this->smtp_conn) and !feof($this->smtp_conn)) {
             $str = @fgets($this->smtp_conn, 515);
             $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
             $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
@@ -1128,12 +1053,12 @@ class SMTP
      */
     protected function setError($message, $detail = '', $smtp_code = '', $smtp_code_ex = '')
     {
-        $this->error = array(
+        $this->error = [
             'error' => $message,
             'detail' => $detail,
             'smtp_code' => $smtp_code,
             'smtp_code_ex' => $smtp_code_ex
-        );
+        ];
     }
 
     /**

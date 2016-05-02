@@ -1,28 +1,26 @@
 <?php
 /**
  * PHPMailer - language file tests
- * Requires PHPUnit 3.3 or later.
  *
- * PHP version 5.0.0
- *
+ * PHP version 5.5
  * @package PHPMailer
- * @author Andy Prevost
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Andy Prevost
+ * @copyright 2010 - 2016 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-require_once '../PHPMailerAutoload.php';
+namespace PHPMailer\PHPMailer;
 
 /**
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class PHPMailerLangTest extends PHPUnit_Framework_TestCase
+class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Holds a phpmailer instance.
+     * Holds a PHPMailer instance.
      * @private
      * @var PHPMailer
      */
@@ -51,15 +49,15 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
         $this->Mail->setLanguage('en');
         $definedStrings = $this->Mail->getTranslations();
         $err = '';
-        foreach (new DirectoryIterator('../language') as $fileInfo) {
+        foreach (new \DirectoryIterator('../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }
-            $matches = array();
+            $matches = [];
             //Only look at language files, ignore anything else in there
             if (preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
                 $lang = $matches[1]; //Extract language code
-                $PHPMAILER_LANG = array(); //Language strings get put in here
+                $PHPMAILER_LANG = []; //Language strings get put in here
                 include $fileInfo->getPathname(); //Get language strings
                 $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
                 $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
