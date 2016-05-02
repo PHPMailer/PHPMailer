@@ -3591,7 +3591,7 @@ class PHPMailer
         } else {
             $privKey = openssl_pkey_get_private($privKeyStr);
         }
-        if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) { //sha1WithRSAEncryption
+        if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
             openssl_pkey_free($privKey);
             return base64_encode($signature);
         }
@@ -3601,19 +3601,38 @@ class PHPMailer
 
     /**
      * Generate a DKIM canonicalization header.
+     * Uses the 'relaxed' algorithm from RFC6376 section 3.4.2
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.2
      * @access public
      * @param string $signHeader Header
      * @return string
      */
     public function DKIM_HeaderC($signHeader)
     {
-        $signHeader = preg_replace('/\r\n\s+/', ' ', $signHeader);
+        //Unfold all header continuation lines
+        //Also collapses folded whitespace.
+        //Note PCRE \s is too broad a definition of whitespace; RFC5322 defines it as [ \t]
+        //@link https://tools.ietf.org/html/rfc5322#section-2.2
+        //That means this may break if you do something daft like put vertical tabs in your headers.
+        $signHeader = preg_replace('/\r\n[ \t]+/', ' ', $signHeader);
         $lines = explode("\r\n", $signHeader);
         foreach ($lines as $key => $line) {
+            //If the header is missing a :, skip it as it's invalid
+            //This is likely to happen because the explode() above will also split
+            //on the trailing CRLF, leaving an empty line
+            if (strpos($line, ':') === false) {
+                continue;
+            }
             list($heading, $value) = explode(':', $line, 2);
+            //Lower-case header name
             $heading = strtolower($heading);
-            $value = preg_replace('/\s{2,}/', ' ', $value); // Compress useless spaces
-            $lines[$key] = $heading . ':' . trim($value); // Don't forget to remove WSP around the value
+            //Collapse white space within the value
+            $value = preg_replace('/[ \t]{2,}/', ' ', $value);
+            //RFC6376 is slightly unclear here - it says to delete space at the *end* of each value
+            //But then says to delete space before and after the colon.
+            //Net result is the same as trimming both ends of the value.
+            //by elimination, the same applies to the field name
+            $lines[$key] = trim($heading, " \t") . ':' . trim($value, " \t");
         }
         $signHeader = implode("\r\n", $lines);
         return $signHeader;
@@ -3621,6 +3640,8 @@ class PHPMailer
 
     /**
      * Generate a DKIM canonicalization body.
+     * Uses the 'simple' algorithm from RFC6376 section 3.4.3
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.3
      * @access public
      * @param string $body Message Body
      * @return string
@@ -3630,14 +3651,11 @@ class PHPMailer
         if (empty($body)) {
             return "\r\n";
         }
-        // stabilize line endings
+        // Normalize line endings
         $body = str_replace("\r\n", "\n", $body);
         $body = str_replace("\n", "\r\n", $body);
-        // END stabilize line endings
-        while (substr($body, strlen($body) - 4, 4) == "\r\n\r\n") {
-            $body = substr($body, 0, strlen($body) - 2);
-        }
-        return $body;
+        //Reduce multiple trailing line breaks to a single one
+        return rtrim($body, "\r\n")."\r\n";
     }
 
     /**

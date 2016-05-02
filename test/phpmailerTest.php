@@ -1694,6 +1694,40 @@ EOT;
     }
 
     /**
+     * DKIM body canonicalization tests.
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.4
+     */
+    public function testDKIMBodyCanonicalization()
+    {
+        //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
+        $prebody = " C \r\nD \t E\r\n\r\n\r\n";
+        $postbody = " C \r\nD \t E\r\n";
+        $this->assertEquals($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
+        $this->assertEquals(
+            base64_encode(sha1($this->Mail->DKIM_BodyC(''), true)),
+            'uoq1oCgLlTqpdDX/iUbLy7J1Wic=',
+            'DKIM canonicalized empty body hash mismatch'
+        );
+        $this->assertEquals($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
+    }
+
+    /**
+     * DKIM header canonicalization tests.
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.2
+     */
+    public function testDKIMHeaderCanonicalization()
+    {
+        //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
+        $preheaders = "A: X\r\nB : Y\t\r\n\tZ  \r\n";
+        $postheaders = "a:X\r\nb:Y Z\r\n";
+        $this->assertEquals(
+            $this->Mail->DKIM_HeaderC($preheaders),
+            $postheaders,
+            'DKIM header canonicalization incorrect'
+        );
+    }
+
+    /**
      * DKIM Signing tests.
      * @requires extension openssl
      */
