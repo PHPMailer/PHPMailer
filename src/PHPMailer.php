@@ -2384,7 +2384,6 @@ class PHPMailer
                 6 => $disposition,
                 7 => 0
             ];
-
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
