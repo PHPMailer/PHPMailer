@@ -1007,7 +1007,7 @@ class PHPMailer
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
      * * `auto` Pick best pattern automatically;
-     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
+     * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0;
      * * `pcre` Use old PCRE implementation;
      * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
@@ -3454,7 +3454,7 @@ class PHPMailer
      * @link http://www.php.net/manual/en/function.pathinfo.php#107461
      * @param string $path A filename or path, does not need to exist as a file
      * @param integer|string $options Either a PATHINFO_* constant,
-     *      or a string name to return only the specified piece, allows 'filename' to work on PHP < 5.2
+     *      or a string name to return only the specified piece
      * @return string|array
      * @static
      */
