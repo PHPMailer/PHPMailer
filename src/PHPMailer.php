@@ -919,7 +919,7 @@ class PHPMailer
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             foreach ($list as $address) {
                 if ('.SYNTAX-ERROR.' != $address->host) {
-                    if (self::validateAddress($address->mailbox . '@' . $address->host)) {
+                    if (static::validateAddress($address->mailbox . '@' . $address->host)) {
                         $addresses[] = [
                             'name' => (property_exists($address, 'personal') ? $address->personal : ''),
                             'address' => $address->mailbox . '@' . $address->host
@@ -935,7 +935,7 @@ class PHPMailer
                 //Is there a separate name part?
                 if (strpos($address, '<') === false) {
                     //No separate name, just use the whole thing
-                    if (self::validateAddress($address)) {
+                    if (static::validateAddress($address)) {
                         $addresses[] = [
                             'name' => '',
                             'address' => $address
@@ -944,7 +944,7 @@ class PHPMailer
                 } else {
                     list($name, $email) = explode('<', $address);
                     $email = trim(str_replace('>', '', $email));
-                    if (self::validateAddress($email)) {
+                    if (static::validateAddress($email)) {
                         $addresses[] = [
                             'name' => trim(str_replace(['"', "'"], '', $name)),
                             'address' => $email
@@ -1894,7 +1894,7 @@ class PHPMailer
         $result = '';
 
         if ('' == $this->MessageDate) {
-            $this->MessageDate = self::rfcDate();
+            $this->MessageDate = static::rfcDate();
         }
         $result .= $this->headerLine('Date', $this->MessageDate);
 
@@ -2076,7 +2076,7 @@ class PHPMailer
         }
         //If lines are too long, and we're not already using an encoding that will shorten them,
         //change to quoted-printable transfer encoding
-        if ('base64' != $this->Encoding and self::hasLineLongerThanMax($this->Body)) {
+        if ('base64' != $this->Encoding and static::hasLineLongerThanMax($this->Body)) {
             $this->Encoding = 'quoted-printable';
             $bodyEncoding = 'quoted-printable';
         }
@@ -2090,7 +2090,7 @@ class PHPMailer
         }
         //If lines are too long, and we're not already using an encoding that will shorten them,
         //change to quoted-printable transfer encoding
-        if ('base64' != $altBodyEncoding and self::hasLineLongerThanMax($this->AltBody)) {
+        if ('base64' != $altBodyEncoding and static::hasLineLongerThanMax($this->AltBody)) {
             $altBodyEncoding = 'quoted-printable';
         }
         //Use this as a preamble in all multipart message types
@@ -2366,7 +2366,7 @@ class PHPMailer
 
             // If a MIME type is not specified, try to work it out from the file name
             if ('' == $type) {
-                $type = self::filenameToType($path);
+                $type = static::filenameToType($path);
             }
 
             $filename = basename($path);
@@ -2728,10 +2728,9 @@ class PHPMailer
      * According to RFC2045 section 6.7.
      * @access public
      * @param string $string The text to encode
-     * @param integer $line_max Number of chars allowed on a line before wrapping, for compatibility with old versions
      * @return string
      */
-    public function encodeQP($string, $line_max = 76)
+    public function encodeQP($string)
     {
         return quoted_printable_encode($string);
     }
@@ -2804,7 +2803,7 @@ class PHPMailer
     ) {
         // If a MIME type is not specified, try to work it out from the file name
         if ('' == $type) {
-            $type = self::filenameToType($filename);
+            $type = static::filenameToType($filename);
         }
         // Append to $attachment array
         $this->attachment[] = [
@@ -2844,7 +2843,7 @@ class PHPMailer
 
         // If a MIME type is not specified, try to work it out from the file name
         if ('' == $type) {
-            $type = self::filenameToType($path);
+            $type = static::filenameToType($path);
         }
 
         $filename = basename($path);
@@ -2890,7 +2889,7 @@ class PHPMailer
     ) {
         // If a MIME type is not specified, try to work it out from the name
         if ('' == $type and !empty($name)) {
-            $type = self::filenameToType($name);
+            $type = static::filenameToType($name);
         }
 
         // Append to $attachment array
@@ -3261,7 +3260,7 @@ class PHPMailer
                         $cid,
                         $filename,
                         'base64',
-                        self::_mime_types((string)self::mb_pathinfo($filename, PATHINFO_EXTENSION))
+                        static::_mime_types((string)static::mb_pathinfo($filename, PATHINFO_EXTENSION))
                     )
                     ) {
                         $message = preg_replace(
@@ -3445,8 +3444,8 @@ class PHPMailer
         if (false !== $qpos) {
             $filename = substr($filename, 0, $qpos);
         }
-        $ext = self::mb_pathinfo($filename, PATHINFO_EXTENSION);
-        return self::_mime_types($ext);
+        $ext = static::mb_pathinfo($filename, PATHINFO_EXTENSION);
+        return static::_mime_types($ext);
     }
 
     /**
