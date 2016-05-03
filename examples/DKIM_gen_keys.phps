@@ -64,13 +64,13 @@ $dnsvalue = '"v=DKIM1\; h=sha256\; t=s\; p=" ';
 //Many DNS systems don't like long TXT entries
 //but are OK if it's split into 255-char chunks
 //Remove PEM wrapper
-$publickey = preg_replace('/^-+.*?-+$/m', '' , $publickey);
+$publickey = preg_replace('/^-+.*?-+$/m', '', $publickey);
 //Strip line breaks
 $publickey = str_replace(["\r", "\n"], '', $publickey);
 //Split into chunks
 $keyparts = str_split($publickey, 253); //Becomes 255 when quotes are included
 //Quote each chunk
-foreach($keyparts as $keypart) {
+foreach ($keyparts as $keypart) {
     $dnsvalue .= '"'.trim($keypart).'" ';
 }
 echo "\n\nDNS key:\n\n" . trim($dnskey);
