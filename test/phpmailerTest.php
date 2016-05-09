@@ -515,7 +515,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             '"Doug "Ace" L."@iana.org',
             'Doug\ \"Ace\"\ L\.@iana.org',
             'hello world@iana.org',
-            'helloworld@iana .org',
+            //'helloworld@iana .org',
             'gatsby@f.sc.ot.t.f.i.tzg.era.l.d.',
             'test.iana.org',
             'test.@iana.org',
