@@ -1,5 +1,16 @@
 # ChangeLog
 
+* Added ability to inject custom address validators, and set the default validator
+* Fix TLS 1.2 compatibility
+* Remove some excess line breaks in MIME structure
+* Updated Polish, Russian, Brazilian Portuguese, Georgian translations
+* More DRY!
+* Improve error messages
+* Update dependencies
+* Add example showing how to handle multiple form file uploads
+* Improve SMTP example
+* Improve Windows compatibility
+* Use consistent names for temp files
 * Fix gmail XOAUTH2 scope, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 * Improve DKIM signing to use SHA-2
