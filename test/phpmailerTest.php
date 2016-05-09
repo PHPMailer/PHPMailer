@@ -604,7 +604,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
             'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
-            //This is valid RCC5322, but we don't want to allow it
+            //This is a valid RCC5322 address, but we don't want to allow it for obvious reasons!
             "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello," .
                 "\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net"
         ];
@@ -655,6 +655,53 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
         $this->assertFalse(PHPMailer::validateAddress('bad', 'noregex'));
+    }
+
+    /**
+     * Test injecting a custom validator.
+     */
+    public function testCustomValidator()
+    {
+        //Inject a one-off custom validator
+        $this->assertTrue(
+            PHPMailer::validateAddress(
+                'user@example.com',
+                function ($address) {
+                    return (strpos($address, '@') !== false);
+                }
+            ),
+            'Custom validator false negative'
+        );
+        $this->assertFalse(
+            PHPMailer::validateAddress(
+                'userexample.com',
+                function ($address) {
+                    return (strpos($address, '@') !== false);
+                }
+            ),
+            'Custom validator false positive'
+        );
+        //Set the default validator to an injected function
+        PHPMailer::$validator = function ($address) {
+            return ('user@example.com' === $address);
+        };
+        $this->assertTrue(
+            $this->Mail->addAddress('user@example.com'),
+            'Custom default validator false negative'
+        );
+        $this->assertFalse(
+            //Need to pick a failing value which would pass all other validators
+            //to be sure we're using our custom one
+            $this->Mail->addAddress('bananas@example.com'),
+            'Custom default validator false positive'
+        );
+        //Set default validator to PHP built-in
+        PHPMailer::$validator = 'php';
+        $this->assertFalse(
+            //This is a valid address that FILTER_VALIDATE_EMAIL thinks is invalid
+            $this->Mail->addAddress('first.last@example.123'),
+            'PHP validator not behaving as expected'
+        );
     }
 
     /**
