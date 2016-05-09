@@ -448,6 +448,15 @@ class PHPMailer
     public $XMailer = '';
 
     /**
+     * Which validator to use by default when validating email addresses.
+     * May be a callable to inject your own validator, but there are several built-in validators.
+     * @see PHPMailer::validateAddress()
+     * @var string|callable
+     * @static
+     */
+    public static $validator = 'auto';
+
+    /**
      * An instance of the SMTP sender class.
      * @var SMTP
      * @access protected
@@ -1028,19 +1037,30 @@ class PHPMailer
     /**
      * Check that a string looks like an email address.
      * @param string $address The email address to check
-     * @param string $patternselect A selector for the validation pattern to use :
+     * @param string|callable $patternselect A selector for the validation pattern to use :
      * * `auto` Pick best pattern automatically;
      * * `pcre8` Use the squiloople.com pattern, requires PCRE > 8.0, PHP >= 5.3.2, 5.2.14;
      * * `pcre` Use old PCRE implementation;
      * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
      * * `noregex` Don't use a regex: super fast, really dumb.
+     * Alternatively you may pass in a callable to inject your own validator, for example:
+     * PHPMailer::validateAddress('user@example.com', function($address) {
+     *     return (strpos($address, '@') !== false);
+     * });
+     * You can also set the PHPMailer::$validator static to a callable, allowing built-in methods to use your validator.
      * @return boolean
      * @static
      * @access public
      */
-    public static function validateAddress($address, $patternselect = 'auto')
+    public static function validateAddress($address, $patternselect = null)
     {
+        if (is_null($patternselect)) {
+            $patternselect = self::$validator;
+        }
+        if (is_callable($patternselect)) {
+            return call_user_func($patternselect, $address);
+        }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
         if (strpos($address, "\n") !== false or strpos($address, "\r") !== false) {
             return false;
