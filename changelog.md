@@ -8,6 +8,7 @@ This is a major update that breaks backwards compatibility.
 * File structure simplified, classes live in the `src/` folder
 * The custom autoloader has been removed, now PSR-4 compatible: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
+* Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
 * `Extras` classes have been removed - use packages from [packagist.org](https://packagist.org) instead
 * All elements previously marked as deprecated have been removed:
   * `PHPMailer->Version`
