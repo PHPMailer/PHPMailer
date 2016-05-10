@@ -29,6 +29,7 @@ This is a major update that breaks backwards compatibility.
 * Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Major cleanup of docs and examples
 
+## Version 5.2.15 (May 10th 2016)
 * Added ability to inject custom address validators, and set the default validator
 * Fix TLS 1.2 compatibility
 * Remove some excess line breaks in MIME structure
