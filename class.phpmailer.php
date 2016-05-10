@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.14';
+    public $Version = '5.2.15';
 
     /**
      * Email priority.
