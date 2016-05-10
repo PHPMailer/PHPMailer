@@ -1185,6 +1185,47 @@ class PHPMailer
         }
         return $address;
     }
+	
+	
+	/**
+     * Try to diagnose problems and output them.
+     */
+    public function diagnose()
+    {
+		$findings = array( nl2br("There was a problem sending your message.\nBefore asking a question on stackoverflow or opening an issue on github, read this page:\nhttps://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting"));
+		$this->addFindings($findings,$this->diagnoseEncryptionPortMismatch());
+		$this->addFindings($findings,$this->diagnoseResolveHostname());
+		$this->addFindings($findings,$this->diagnoseOpenSSL());
+		echo("<ul>");
+		foreach ($findings as $finding) {
+			echo("<li>".$finding."</li>");
+		}
+		echo("</ul>");
+    }
+	private function addFindings(&$findings, $potentialFinding) {
+		if($potentialFinding !== NULL){
+			array_push($findings,$potentialFinding);	
+		}
+	}
+	private function diagnoseResolveHostname(){
+		if($this->Host===gethostbyname($this->Host)){
+			return "The hostname '".$this->Host."' can't be resolved. Check the hostname itself and your dns settings.";
+		}
+	}
+	private function diagnoseOpenSSL(){
+		if(!extension_loaded('openssl')){
+			return "The OpenSSL extension couldn't be loaded";
+		}
+	}
+	private function diagnoseEncryptionPortMismatch(){
+		if('tls'===$this->SMTPSecure && 465 === $this->Port){
+			return "tls normally isn't used with port 465, you might want to reconsider your settings";
+		}
+		if('ssl'===$this->SMTPSecure && 587 === $this->Port){
+			return "ssl normally isn't used with port 587, you might want to reconsider your settings";
+		}
+	}
+	
 
     /**
      * Create a message and send it.
@@ -1546,12 +1587,11 @@ class PHPMailer
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
         }
-
         // Already connected?
         if ($this->smtp->connected()) {
             return true;
         }
-
+		
         $this->smtp->setTimeout($this->Timeout);
         $this->smtp->setDebugLevel($this->SMTPDebug);
         $this->smtp->setDebugOutput($this->Debugoutput);
@@ -1573,6 +1613,7 @@ class PHPMailer
             $prefix = '';
             $secure = $this->SMTPSecure;
             $tls = ($this->SMTPSecure == 'tls');
+
             if ('ssl' == $hostinfo[2] or ('' == $hostinfo[2] and 'ssl' == $this->SMTPSecure)) {
                 $prefix = 'ssl://';
                 $tls = false; // Can't have SSL and TLS at the same time
@@ -1582,6 +1623,7 @@ class PHPMailer
                 // tls doesn't use a prefix
                 $secure = 'tls';
             }
+
             //Do we need the OpenSSL extension?
             $sslext = defined('OPENSSL_ALGO_SHA1');
             if ('tls' === $secure or 'ssl' === $secure) {
