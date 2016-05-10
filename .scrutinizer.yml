@@ -31,10 +31,6 @@ tools:
         enabled:              true
         config:
             standard:         PSR2
-            sniffs:
-                generic:
-                    files:
-                        one_class_per_file_sniff: false
         filter:
             excluded_paths:
                 - 'docs/*'

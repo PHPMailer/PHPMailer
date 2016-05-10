@@ -1,7 +1,7 @@
-docs/phpdoc/
+docs/*
+!docs/README.md
 test/message.txt
 test/testbootstrap.php
-test/*.pem
-.idea
+*.pem
 build/
 vendor/
