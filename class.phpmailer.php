@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.14';
+    public $Version = '5.2.15';
 
     /**
      * Email priority.
@@ -1541,10 +1541,15 @@ class PHPMailer
      * @throws phpmailerException
      * @return boolean
      */
-    public function smtpConnect($options = array())
+    public function smtpConnect($options = null)
     {
         if (is_null($this->smtp)) {
             $this->smtp = $this->getSMTPInstance();
+        }
+
+        //If no options are provided, use whatever is set in the instance
+        if (is_null($options)) {
+            $options = $this->SMTPOptions;
         }
 
         // Already connected?
