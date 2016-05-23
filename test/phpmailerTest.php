@@ -1311,20 +1311,22 @@ EOT;
     }
 
     /**
-     * Test constructing a message that contains lines that are too long for RFC compliance.
+     * Test constructing a multipart message that contains lines that are too long for RFC compliance.
      */
     public function testLongBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::CRLF, 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
-            PHPMailer::CRLF . PHPMailer::CRLF . $oklen . $badlen . $oklen;
+            PHPMailer::CRLF . $oklen . $badlen . $oklen;
         $this->assertTrue(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
         );
+        $this->Mail->isHTML();
         $this->buildBody();
+        $this->Mail->AltBody = $this->Mail->Body;
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
@@ -1344,7 +1346,7 @@ EOT;
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
 
         $this->Mail->Body = "This message does not contain lines that are too long.".
-            PHPMailer::CRLF . PHPMailer::CRLF . $oklen;
+            PHPMailer::CRLF . $oklen;
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
@@ -1826,7 +1828,7 @@ EOT;
      */
     public function testLineLength()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH)."\r\n", 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH)."\r\n", 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
