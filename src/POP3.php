@@ -127,7 +127,7 @@ class POP3
     /**
      * Line break constant
      */
-    const CRLF = "\r\n";
+    const LE = "\r\n";
 
     /**
      * Simple static wrapper for all-in-one POP before SMTP
@@ -280,11 +280,11 @@ class POP3
         }
 
         // Send the Username
-        $this->sendString("USER $username" . self::CRLF);
+        $this->sendString("USER $username" . static::LE);
         $pop3_response = $this->getResponse();
         if ($this->checkResponse($pop3_response)) {
             // Send the Password
-            $this->sendString("PASS $password" . self::CRLF);
+            $this->sendString("PASS $password" . static::LE);
             $pop3_response = $this->getResponse();
             if ($this->checkResponse($pop3_response)) {
                 return true;

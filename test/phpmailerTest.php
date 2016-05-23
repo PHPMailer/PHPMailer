@@ -1277,11 +1277,11 @@ EOT;
      */
     public function testLongBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 2);
-        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::CRLF, 2);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::LE, 2);
+        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::LE, 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
-            PHPMailer::CRLF . $oklen . $badlen . $oklen;
+            PHPMailer::LE . $oklen . $badlen . $oklen;
         $this->assertTrue(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
@@ -1305,10 +1305,10 @@ EOT;
      */
     public function testShortBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::LE, 10);
 
         $this->Mail->Body = "This message does not contain lines that are too long.".
-            PHPMailer::CRLF . $oklen;
+            PHPMailer::LE . $oklen;
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
@@ -1931,22 +1931,14 @@ EOT;
         );
         
         //Line break normalization
-        $eol = $this->Mail->LE;
+        $eol = PHPMailer::LE;
         $b1 = "1\r2\r3\r";
         $b2 = "1\n2\n3\n";
         $b3 = "1\r\n2\r3\n";
-        $this->Mail->LE = "\n";
-        $t1 = "1{$this->Mail->LE}2{$this->Mail->LE}3{$this->Mail->LE}";
+        $t1 = "1{$eol}2{$eol}3{$eol}";
         $this->assertEquals($this->Mail->fixEOL($b1), $t1, 'Failed to normalize line breaks (1)');
         $this->assertEquals($this->Mail->fixEOL($b2), $t1, 'Failed to normalize line breaks (2)');
         $this->assertEquals($this->Mail->fixEOL($b3), $t1, 'Failed to normalize line breaks (3)');
-        $this->Mail->LE = "\r\n";
-        $t1 = "1{$this->Mail->LE}2{$this->Mail->LE}3{$this->Mail->LE}";
-        $this->assertEquals($this->Mail->fixEOL($b1), $t1, 'Failed to normalize line breaks (4)');
-        $this->assertEquals($this->Mail->fixEOL($b2), $t1, 'Failed to normalize line breaks (5)');
-        $this->assertEquals($this->Mail->fixEOL($b3), $t1, 'Failed to normalize line breaks (6)');
-        $this->Mail->LE = $eol;
-
     }
 
     public function testBadSMTP()

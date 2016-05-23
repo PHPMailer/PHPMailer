@@ -27,7 +27,7 @@ class SMTPLowMemory extends SMTP
         }
 
         /* The server is ready to accept data!
-         * According to rfc821 we should not send more than 1000 characters on a single line (including the CRLF)
+         * According to rfc821 we should not send more than 1000 characters on a single line (including the LE)
          * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
          * smaller lines to fit within the limit.
          * We will also look for lines that start with a '.' and prepend an additional '.'.
@@ -93,7 +93,7 @@ class SMTPLowMemory extends SMTP
                 if (!empty($line_out) and $line_out[0] == '.') {
                     $line_out = '.' . $line_out;
                 }
-                $this->client_send($line_out . self::CRLF);
+                $this->client_send($line_out . self::LE);
             }
         }
 

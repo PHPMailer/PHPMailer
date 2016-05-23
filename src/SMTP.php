@@ -38,7 +38,7 @@ class SMTP
      * SMTP line break constant.
      * @var string
      */
-    const CRLF = "\r\n";
+    const LE = "\r\n";
 
     /**
      * The SMTP port to use if one is not specified.
@@ -342,7 +342,7 @@ class SMTP
      * @see hello()
      * @param string $username The user name
      * @param string $password The password
-     * @param string $authtype The auth type (PLAIN, LOGIN, NTLM, CRAM-MD5, XOAUTH2)
+     * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
      * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
      * @return bool True if successfully authenticated.
      * @access public
@@ -374,7 +374,15 @@ class SMTP
                 self::DEBUG_LOWLEVEL
             );
 
+            //If we have requested a specific auth type, check the server supports it before trying others
+            if (!in_array($authtype, $this->server_caps['AUTH'])) {
+                $this->edebug('Requested auth method not available: ' . $authtype, self::DEBUG_LOWLEVEL);
+                $authtype = null;
+            }
+
             if (empty($authtype)) {
+                //If no auth mechanism is specified, attempt to use these, in this order
+                //Try CRAM-MD5 first as it's more secure than the others
                 foreach (array('CRAM-MD5', 'LOGIN', 'PLAIN', 'XOAUTH2') as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
@@ -386,11 +394,6 @@ class SMTP
                     return false;
                 }
                 $this->edebug('Auth method selected: '.$authtype, self::DEBUG_LOWLEVEL);
-            }
-
-            if (!in_array($authtype, $this->server_caps['AUTH'])) {
-                $this->setError("The requested authentication method \"$authtype\" is not supported by the server");
-                return false;
             }
         } elseif (empty($authtype)) {
             $authtype = 'LOGIN';
@@ -423,19 +426,6 @@ class SMTP
                     return false;
                 }
                 break;
-            case 'XOAUTH2':
-                //If the OAuth Instance is not set. Can be a case when PHPMailer is used
-                //instead of PHPMailerOAuth
-                if (is_null($OAuth)) {
-                    return false;
-                }
-                $oauth = $OAuth->getOauth64();
-
-                // Start authentication
-                if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
-                    return false;
-                }
-                break;
             case 'CRAM-MD5':
                 // Start authentication
                 if (!$this->sendCommand('AUTH CRAM-MD5', 'AUTH CRAM-MD5', 334)) {
@@ -449,6 +439,18 @@ class SMTP
 
                 // send encoded credentials
                 return $this->sendCommand('Username', base64_encode($response), 235);
+            case 'XOAUTH2':
+                //The OAuth instance must be set up prior to requesting auth.
+                if (is_null($OAuth)) {
+                    return false;
+                }
+                $oauth = $OAuth->getOauth64();
+
+                // Start authentication
+                if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
+                    return false;
+                }
+                break;
             default:
                 $this->setError("Authentication method \"$authtype\" is not supported");
                 return false;
@@ -541,7 +543,7 @@ class SMTP
      * finializing the mail transaction. $msg_data is the message
      * that is to be send with the headers. Each header needs to be
      * on a single line followed by a <CRLF> with the message headers
-     * and the message body being separated by and additional <CRLF>.
+     * and the message body being separated by an additional <CRLF>.
      * Implements rfc 821: DATA <CRLF>
      * @param string $msg_data Message data to send
      * @access public
@@ -555,7 +557,7 @@ class SMTP
         }
 
         /* The server is ready to accept data!
-         * According to rfc821 we should not send more than 1000 characters on a single line (including the CRLF)
+         * According to rfc821 we should not send more than 1000 characters on a single line (including the LE)
          * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
          * smaller lines to fit within the limit.
          * We will also look for lines that start with a '.' and prepend an additional '.'.
@@ -612,7 +614,7 @@ class SMTP
                 if (!empty($line_out) and $line_out[0] == '.') {
                     $line_out = '.' . $line_out;
                 }
-                $this->client_send($line_out . self::CRLF);
+                $this->client_send($line_out . static::LE);
             }
         }
 
@@ -794,7 +796,7 @@ class SMTP
             $this->setError("Command '$command' contained line breaks");
             return false;
         }
-        $this->client_send($commandstring . self::CRLF);
+        $this->client_send($commandstring . static::LE);
 
         $this->last_reply = $this->get_lines();
         // Fetch SMTP code and possible error code explanation

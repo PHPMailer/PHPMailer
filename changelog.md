@@ -9,7 +9,13 @@ This is a major update that breaks backwards compatibility.
 * The custom autoloader has been removed, now PSR-4 compatible: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
-* `Extras` classes have been removed - use packages from [packagist.org](https://packagist.org) instead
+* Complete RFC standardisation on CRLF (`\r\n`) line breaks by default:
+  * `PHPMailer:$LE` removed
+  * `PHPMailer::CRLF` line ending constant renamed to `PHPMailer::LE`, defaults to , used everywhere
+  * All uses of `PHPMailer::$LE` property converted to use `static:LE` constant for consistency and ease of overriding
+  * Similar changes to line break handling in SMTP and POP3 classes.
+* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
+* Major cleanup of docs and examples
 * All elements previously marked as deprecated have been removed:
   * `PHPMailer->Version`
   * `PHPMailer->ReturnPath`
@@ -27,8 +33,10 @@ This is a major update that breaks backwards compatibility.
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
 * `PHPMailer->SingleToArray` is now protected
-* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
-* Major cleanup of docs and examples
+* Don't try to use an auth mechanism if it's not supported by the server
+* Reorder automatic AUTH mechanism selector to try most secure method first
+* `Extras` classes have been removed - use packages from [packagist.org](https://packagist.org) instead
+* Better handling of automatic transfer encoding switch in the presence of long lines
 
 ## Version 5.2.15 (May 10th 2016)
 * Added ability to inject custom address validators, and set the default validator
