@@ -1396,6 +1396,12 @@ class PHPMailer
         if (empty($this->Sender)) {
             $params = ' ';
         } else {
+            //A space after `-f` is optional, but there is a long history of its presence
+            //causing problems, so we don't use one
+            //Exim docs: http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
+            //Sendmail docs: http://www.sendmail.org/~ca/email/man/sendmail.html
+            //Qmail docs: http://www.qmail.org/man/man8/qmail-inject.html
+            //Example problem: https://www.drupal.org/node/1057954
             $params = sprintf('-f%s', $this->Sender);
         }
         if ('' != $this->Sender) {
