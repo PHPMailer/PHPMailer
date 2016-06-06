@@ -395,7 +395,7 @@ class PHPMailer
 
     /**
      * DKIM Identity.
-     * Usually the email address used as the source of the email
+     * Usually the email address used as the source of the email.
      * @var string
      */
     public $DKIM_identity = '';
