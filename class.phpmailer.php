@@ -681,7 +681,9 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
-        if (ini_get('safe_mode') || !($this->UseSendmailOptions)) {
+        //Can't use additional_parameters in safe_mode
+        //@link http://php.net/manual/en/function.mail.php
+        if (ini_get('safe_mode') or !$this->UseSendmailOptions) {
             $result = @mail($to, $subject, $body, $header);
         } else {
             $result = @mail($to, $subject, $body, $header, $params);
@@ -1425,9 +1427,9 @@ class PHPMailer
         }
         $to = implode(', ', $toArr);
 
-        if (empty($this->Sender)) {
-            $params = ' ';
-        } else {
+        $params = null;
+        //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
+        if (!empty($this->Sender)) {
             $params = sprintf('-f%s', $this->Sender);
         }
         if ($this->Sender != '' and !ini_get('safe_mode')) {
@@ -1435,7 +1437,7 @@ class PHPMailer
             ini_set('sendmail_from', $this->Sender);
         }
         $result = false;
-        if ($this->SingleTo && count($toArr) > 1) {
+        if ($this->SingleTo and count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
                 $this->doCallback($result, array($toAddr), $this->cc, $this->bcc, $this->Subject, $body, $this->From);
