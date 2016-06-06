@@ -1396,8 +1396,6 @@ class PHPMailer
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (!empty($this->Sender)) {
-            $params = ' ';
-        } else {
             //A space after `-f` is optional, but there is a long history of its presence
             //causing problems, so we don't use one
             //Exim docs: http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
