@@ -364,7 +364,7 @@ class PHPMailer
 
     /**
      * DKIM Identity.
-     * Usually the email address used as the source of the email
+     * Usually the email address used as the source of the email.
      * @var string
      */
     public $DKIM_identity = '';
@@ -1393,7 +1393,9 @@ class PHPMailer
         }
         $to = implode(', ', $toArr);
 
-        if (empty($this->Sender)) {
+        $params = null;
+        //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
+        if (!empty($this->Sender)) {
             $params = ' ';
         } else {
             //A space after `-f` is optional, but there is a long history of its presence
