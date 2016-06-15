@@ -1946,6 +1946,13 @@ EOT;
             array('yux'),
             array('Content-Type', ' application/json')
         ), $this->Mail->getCustomHeaders());
+
+        $this->Mail->clearCustomHeaders();
+        $this->Mail->addCustomHeader('Date', 'Wed, 15 Jun 2016 14:30:16 GMT', true);
+        $this->Mail->addCustomHeader('Date', 'Wed, 15 Jun 2016 14:30:17 GMT', true);
+        $this->assertEquals(array(
+          array('Date', 'Wed, 15 Jun 2016 14:30:17 GMT')
+        ), $this->Mail->getCustomHeaders());
     }
 
     /**
