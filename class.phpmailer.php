@@ -1353,18 +1353,9 @@ class PHPMailer
         return false;
     }
 
-    /**
-     * Send mail using the $Sendmail program.
-     * @param string $header The message headers
-     * @param string $body The message body
-     * @see PHPMailer::$Sendmail
-     * @throws phpmailerException
-     * @access protected
-     * @return boolean
-     */
-    protected function sendmailSend($header, $body)
+    protected function senderMailFormat()
     {
-        if ($this->Sender != '') {
+        if($this->Sender != '') {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
@@ -1377,6 +1368,22 @@ class PHPMailer
                 $sendmail = sprintf('%s -oi -t', escapeshellcmd($this->Sendmail));
             }
         }
+        return $sendmail;
+    }
+
+    /**
+     * Send mail using the $Sendmail program.
+     * @param string $header The message headers
+     * @param string $body The message body
+     * @see PHPMailer::$Sendmail
+     * @throws phpmailerException
+     * @access protected
+     * @return boolean
+     */
+    protected function sendmailSend($header, $body)
+    {
+        $sendmail = $this->senderMailFormat();
+        
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
