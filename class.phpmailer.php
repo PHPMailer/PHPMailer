@@ -3670,6 +3670,17 @@ class PHPMailer
         return $line;
     }
 
+    public fucntion privateKey($privKeyStr)
+    {
+        $privKey = "";
+        if ($this->DKIM_passphrase != '') {
+            $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
+        } else {
+            $privKey = openssl_pkey_get_private($privKeyStr);
+        }
+        return $privKey;
+    }
+
     /**
      * Generate a DKIM signature.
      * @access public
@@ -3686,11 +3697,8 @@ class PHPMailer
             return '';
         }
         $privKeyStr = file_get_contents($this->DKIM_private);
-        if ($this->DKIM_passphrase != '') {
-            $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
-        } else {
-            $privKey = openssl_pkey_get_private($privKeyStr);
-        }
+        $privKey = $this->privateKey($privKeyStr);
+
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) { //sha1WithRSAEncryption
             openssl_pkey_free($privKey);
             return base64_encode($signature);
