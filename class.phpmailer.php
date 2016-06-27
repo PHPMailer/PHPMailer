@@ -1312,6 +1312,26 @@ class PHPMailer
         }
     }
 
+    protected function mailerType()
+    {
+        switch ($this->Mailer) {
+            case 'sendmail':
+            case 'qmail':
+                return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
+            case 'smtp':
+                return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
+            case 'mail':
+                return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
+            default:
+                $sendMethod = $this->Mailer.'Send';
+                if (method_exists($this, $sendMethod)) {
+                    return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
+                }
+
+                return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
+        }
+    }
+
     /**
      * Actually send a message.
      * Send the email via the selected mechanism
@@ -1322,22 +1342,7 @@ class PHPMailer
     {
         try {
             // Choose the mailer and send through it
-            switch ($this->Mailer) {
-                case 'sendmail':
-                case 'qmail':
-                    return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
-                case 'smtp':
-                    return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
-                case 'mail':
-                    return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
-                default:
-                    $sendMethod = $this->Mailer.'Send';
-                    if (method_exists($this, $sendMethod)) {
-                        return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
-                    }
-
-                    return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
-            }
+            return $this->mailerType();
         } catch (phpmailerException $exc) {
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
