@@ -16,7 +16,7 @@ When working on email sending code you'll find yourself worrying about what migh
 Most of these examples use the `example.com` and `example.net` domains. These domains are reserved by IANA for illustrative purposes, as documented in [RFC 2606](http://tools.ietf.org/html/rfc2606). Don't use made-up domains like 'mydomain.com' or 'somedomain.com' in examples as someone, somewhere, probably owns them!
 
 ## Security note
-Before running these examples ia a web server, you'll need to rename them with '.php' extensions. They are supplied as '.phps' files which will usually be displayed with syntax highlighting by PHP instead of running them. This prevents potential security issues with running potential spam-gateway code if you happen to deploy these code examples on a live site - _please don't do that!_
+Before running these examples in a web server, you'll need to rename them with '.php' extensions. They are supplied as '.phps' files which will usually be displayed with syntax highlighting by PHP instead of running them. This prevents potential security issues with running potential spam-gateway code if you happen to deploy these code examples on a live site - _please don't do that!_
 
 Similarly, don't leave your passwords in these files as they will be visible to the world!
 
@@ -27,6 +27,10 @@ This script is a simple code generator - fill in the form and hit submit, and it
 ## [mail.phps](mail.phps)
 
 This is a basic example which creates an email message from an external HTML file, creates a plain text body, sets various addresses, adds an attachment and sends the message. It uses PHP's built-in mail() function which is the simplest to use, but relies on the presence of a local mail server, something which is not usually available on Windows. If you find yourself in that situation, either install a local mail server, or use a remote one and send using SMTP instead.
+
+## [simple_contact_form.phps](simple_contact_form.phps)
+
+This is probably the most common reason for using PHPMailer - building a contact form. This example has a basic, unstyled form and also illustrates how to filter input data before using it, how to validate addresses, how to avoid being abused as a spam gateway, and how to address messages correctly so that you don't fail SPF checks.
 
 ## [exceptions.phps](exceptions.phps)
 
@@ -75,6 +79,10 @@ This is a somewhat naïve, but reasonably efficient example of sending similar e
 ## [ssl_options.phps](ssl_options.phps)
 
 PHP 5.6 introduced SSL certificate verification by default, and this applies to mail servers exactly as it does to web servers. Unfortunately, SSL misconfiguration in mail servers is quite common, so this caused a common problem: those that were previously using servers with bad configs suddenly found they stopped working when they upgraded PHP. PHPMailer provides a mechanism to disable SSL certificate verification as a workaround and this example shows how to do it. Bear in mind that this is **not** a good approach - the right way is to fix your mail server config!
+
+## [smime_signed_mail.phps](smime_signed_mail.phps)
+
+An example of how to sign messages using [S/MIME](https://en.wikipedia.org/wiki/S/MIME), ensuring that your data can't be tampered with in transit, and proves to recipients that it was you that sent it.
 
 * * *
 

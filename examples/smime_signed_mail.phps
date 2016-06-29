@@ -1,6 +1,6 @@
 <?php
 /**
- * This example shows signing a message and then sending it via the mail() function of PHP.
+ * This PHPMailer example shows S/MIME signing a message and then sending.
  *
  * Before you can sign the mail certificates are needed.
  *
@@ -15,7 +15,8 @@
  *
  *
  * STEP 2 - Exporting the certificate
- * This is specific to your browser, however, most browsers will give you the option to export your recently added certificate in PKCS12 (.pfx)
+ * This is specific to your browser, however, most browsers will give you the option
+ * to export your recently added certificate in PKCS12 (.pfx)
  * Include your private key if you are asked for it.
  * Set up a password to protect your exported file.
  *
@@ -26,7 +27,8 @@
  * openssl pkcs12 -in exported-cert.pfx -nocerts -out cert.key
  *
  * Of course the way you name your file (-out) is up to you.
- * You will be asked for a password for the Import password. This is the password you just set while exporting the certificate into the pfx file.
+ * You will be asked for a password for the Import password. This is the password you
+ * set while exporting the certificate into the pfx file.
  * Afterwards, you can password protect your private key (recommended)
  * Also make sure to set the permissions to a minimum level and suitable for your application.
  * To create the certificate file use the following command:
@@ -53,7 +55,8 @@ require '../vendor/autoload.php';
 $mail = new PHPMailer;
 //Set who the message is to be sent from
 //IMPORTANT: This must match the email address of your certificate.
-//Although the certificate will be valid, an error will be thrown since it cannot be verified that the sender and the signer are the same person.
+//Although the certificate will be valid, an error will be thrown since it cannot be verified
+//that the sender and the signer are the same person.
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address
 $mail->addReplyTo('replyto@example.com', 'First Last');
@@ -85,10 +88,10 @@ if (!$mail->send()) {
 } else {
     echo "Message sent!";
 }
-
-/**
+/*
  * REMARKS:
- * If your email client does not support S/MIME it will most likely just show an attachment smime.p7s which is the signature contained in the email.
- * Other clients, such as Thunderbird support S/MIME natively and will validate the signature automatically and report the result in some way.
+ * If your email client does not support S/MIME it will most likely just show an attachment smime.p7s,
+ * which is the signature contained in the email.
+ * Other clients, such as Thunderbird support S/MIME natively and will validate the signature
+ * automatically and report the result in some way.
  */
-?>
