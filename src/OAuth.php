@@ -20,6 +20,10 @@
 
 namespace PHPMailer\PHPMailer;
 
+use League\OAuth2\Client\Grant\RefreshToken;
+use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Provider\AbstractProvider;
+
 /**
  * OAuth - OAuth2 authentication wrapper class.
  * Uses the oauth2-client package from the League of Extraordinary Packages
@@ -31,13 +35,13 @@ class OAuth
 {
     /**
      * An instance of the League OAuth Client Provider.
-     * @var League\OAuth2\Client\Provider\AbstractProvider
+     * @var AbstractProvider
      */
     protected $provider = null;
 
     /**
      * The current OAuth access token.
-     * @var League\OAuth2\Client\Token\AccessToken
+     * @var AccessToken
      */
     protected $oauthToken = null;
 
@@ -82,16 +86,16 @@ class OAuth
 
     /**
      * Get a new RefreshToken.
-     * @return \League\OAuth2\Client\Grant\RefreshToken
+     * @return RefreshToken
      */
     protected function getGrant()
     {
-        return new \League\OAuth2\Client\Grant\RefreshToken;
+        return new RefreshToken;
     }
 
     /**
      * Get a new AccessToken.
-     * @return League\OAuth2\Client\Token\AccessToken
+     * @return AccessToken
      */
     protected function getToken()
     {
