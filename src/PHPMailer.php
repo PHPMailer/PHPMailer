@@ -1141,11 +1141,13 @@ class PHPMailer
         // Verify we have required functions, CharSet, and at-sign.
         if ($this->idnSupported() and
             !empty($this->CharSet) and
-            ($pos = strrpos($address, '@')) !== false) {
+            ($pos = strrpos($address, '@')) !== false
+        ) {
             $domain = substr($address, ++$pos);
             // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
             if ($this->has8bitChars($domain) and @mb_check_encoding($domain, $this->CharSet)) {
                 $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
+                //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 if (false !== ($punycode = idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46))) {
                     return substr($address, 0, $pos) . $punycode;
                 }
