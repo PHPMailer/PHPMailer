@@ -3237,6 +3237,7 @@ class PHPMailer
      * Create a message from an HTML string.
      * Automatically makes modifications for inline images and backgrounds
      * and creates a plain-text version by converting the HTML.
+     * Converts data-uri images into embedded attachments.
      * Overwrites any existing values in $this->Body and $this->AltBody
      * @access public
      * @param string $message HTML message string
@@ -3310,8 +3311,8 @@ class PHPMailer
         $this->Body = $this->normalizeBreaks($message);
         $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
         if (!$this->alternativeExists()) {
-            $this->AltBody = 'To view this email message, open it in a program that understands HTML!' .
-                static::LE . static::LE;
+            $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
+                . static::LE;
         }
         return $this->Body;
     }
