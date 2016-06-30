@@ -2539,7 +2539,8 @@ class PHPMailer
                 4 => $type,
                 5 => false, // isStringAttachment
                 6 => $disposition,
-                7 => 0
+                7 => '',
+                8 => ''
             );
 
         } catch (phpmailerException $exc) {
@@ -2575,6 +2576,7 @@ class PHPMailer
         // Return text of body
         $mime = array();
         $cidUniq = array();
+        $locationUniq = array();
         $incl = array();
 
         // Add all attachments
@@ -2601,10 +2603,22 @@ class PHPMailer
                 $type = $attachment[4];
                 $disposition = $attachment[6];
                 $cid = $attachment[7];
-                if ($disposition == 'inline' && array_key_exists($cid, $cidUniq)) {
-                    continue;
+                $location = $attachment[8];
+
+                if ($disposition == 'inline') {
+                    if ( strlen($cid) > 0 ) {
+                        if (array_key_exists($cid, $cidUniq)) {
+                            continue;
+                        }
+                        $cidUniq[$cid] = true;
+                    }
+                    if ( strlen($location) > 0 ) {
+                        if (array_key_exists($location, $locationUniq)) {
+                            continue;
+                        }
+                        $locationUniq[$location] = true;
+                    }
                 }
-                $cidUniq[$cid] = true;
 
                 $mime[] = sprintf('--%s%s', $boundary, $this->LE);
                 //Only include a filename property if we have one
@@ -2628,7 +2642,12 @@ class PHPMailer
                 }
 
                 if ($disposition == 'inline') {
-                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, $this->LE);
+                    if (strlen($cid) > 0) {
+                        $mime[] = sprintf('Content-ID: <%s>%s', $cid, $this->LE);
+                    }
+                    if (strlen($location) > 0) {
+                        $mime[] = sprintf('Content-Location: %s%s', $this->encodeHeader($this->secureHeader($location)), $this->LE);
+                    }
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
@@ -3019,7 +3038,8 @@ class PHPMailer
             4 => $type,
             5 => true, // isStringAttachment
             6 => $disposition,
-            7 => 0
+            7 => '',
+            8 => ''
         );
     }
 
@@ -3038,9 +3058,10 @@ class PHPMailer
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type File MIME type.
      * @param string $disposition Disposition to use
+     * @param string $location Content Location URL to use
      * @return boolean True on successfully adding an attachment
      */
-    public function addEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '', $disposition = 'inline')
+    public function addEmbeddedImage($path, $cid = '', $name = '', $encoding = 'base64', $type = '', $disposition = 'inline', $location = '')
     {
         if (!@is_file($path)) {
             $this->setError($this->lang('file_access') . $path);
@@ -3057,6 +3078,10 @@ class PHPMailer
             $name = $filename;
         }
 
+        if ( $cid == '' && $location == '' ) {
+            throw new phpmailerException('Must specify either Content ID or Content Location for embedded image');
+        }
+
         // Append to $attachment array
         $this->attachment[] = array(
             0 => $path,
@@ -3066,7 +3091,8 @@ class PHPMailer
             4 => $type,
             5 => false, // isStringAttachment
             6 => $disposition,
-            7 => $cid
+            7 => $cid,
+            8 => $location
         );
         return true;
     }
@@ -3083,15 +3109,17 @@ class PHPMailer
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type MIME type.
      * @param string $disposition Disposition to use
+     * @param string $location Content Location URL to use
      * @return boolean True on successfully adding an attachment
      */
     public function addStringEmbeddedImage(
         $string,
-        $cid,
+        $cid = '',
         $name = '',
         $encoding = 'base64',
         $type = '',
-        $disposition = 'inline'
+        $disposition = 'inline',
+        $location = ''
     ) {
         // If a MIME type is not specified, try to work it out from the name
         if ($type == '' and !empty($name)) {
@@ -3107,7 +3135,8 @@ class PHPMailer
             4 => $type,
             5 => true, // isStringAttachment
             6 => $disposition,
-            7 => $cid
+            7 => $cid,
+            8 => $location
         );
         return true;
     }
