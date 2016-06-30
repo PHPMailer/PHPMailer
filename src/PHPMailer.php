@@ -2126,20 +2126,20 @@ class PHPMailer
             $altBodyEncoding = 'quoted-printable';
         }
         //Use this as a preamble in all multipart message types
-        $mimepre = "This is a multi-part message in MIME format." . static::LE . static::LE;
+        $mimepre = "This is a multi-part message in MIME format." . static::LE;
         switch ($this->message_type) {
             case 'inline':
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->attachAll('inline', $this->boundary[1]);
                 break;
             case 'attach':
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             case 'inline_attach':
@@ -2150,7 +2150,7 @@ class PHPMailer
                 $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->attachAll('inline', $this->boundary[2]);
                 $body .= static::LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
@@ -2159,14 +2159,14 @@ class PHPMailer
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 if (!empty($this->Ical)) {
                     $body .= $this->getBoundary($this->boundary[1], '', 'text/calendar; method=REQUEST', '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
-                    $body .= static::LE . static::LE;
+                    $body .= static::LE;
                 }
                 $body .= $this->endBoundary($this->boundary[1]);
                 break;
@@ -2174,14 +2174,14 @@ class PHPMailer
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', 'multipart/related;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[2] . '"');
                 $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->attachAll('inline', $this->boundary[2]);
                 $body .= static::LE;
                 $body .= $this->endBoundary($this->boundary[1]);
@@ -2194,10 +2194,10 @@ class PHPMailer
                 $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[2], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->endBoundary($this->boundary[2]);
                 $body .= static::LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
@@ -2210,14 +2210,14 @@ class PHPMailer
                 $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[2], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->textLine('--' . $this->boundary[2]);
                 $body .= $this->headerLine('Content-Type', 'multipart/related;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[3] . '"');
                 $body .= static::LE;
                 $body .= $this->getBoundary($this->boundary[3], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE . static::LE;
+                $body .= static::LE;
                 $body .= $this->attachAll('inline', $this->boundary[3]);
                 $body .= static::LE;
                 $body .= $this->endBoundary($this->boundary[2]);
