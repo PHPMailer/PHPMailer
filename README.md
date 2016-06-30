@@ -59,7 +59,7 @@ Alternatively, if you're not using composer, copy the contents of the PHPMailer 
 If you don't speak git or just want a tarball, click the 'zip' button on the right of the project page in GitHub.
 
 ## Upgrading from 5.2
-First of all, [read the changelog](https://github.com/PHPMailer/PHPMailer/tree/master/changelog.md) which has lots of detail on the changes in 6.0. The big thing you'll need to change is how you load PHPMailer. Load PHPMailer from composer (as above) and use composer's `vendor/autoload.php` loader instead of the old `PHPMailerAutoload.php`. Because PHPMailer 6 uses a namespace, you need to import classes you're using explicitly into your own namespace, or the global namespace - all the examples show how to do this. The OAuth2 implementation has been completely redesigned, and you'll need to change your code if you were using OAuth in 5.2. A few obscure functions were removed and there are some other minor differences, but it's unlikely you will run into these. If you're concerned, take a look at the examples as they demonstrate common use cases in a PHPMailer 6.0 style.
+[Read the upgrade guide](https://github.com/PHPMailer/PHPMailer/tree/master/UPGRADING.md).
 
 ## Legacy versions
 PHPMailer 5.2 (which is compatible with PHP 5.0 - 7.0) is no longer being supported for feature updates, and will only be receiving security updates from now on. You will find the latest version of 5.2 in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable), and future versions of 5.2 will be tagged with 5.2.x version numbers, so existing composer configs should remain working. If you're using PHP 5.5 or later, we recommend you make the necessary changes to switch to the 6.0 release.
