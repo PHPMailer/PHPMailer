@@ -2004,7 +2004,7 @@ class PHPMailer
      * @access private
      * @return string
      */
-    private function sendTo($toaddr)
+    private function sendTo()
     {
         $result = '';
         if ($this->SingleTo) {
@@ -2040,7 +2040,7 @@ class PHPMailer
         $result .= $this->headerLine('Date', $this->MessageDate);
 
         // To be created automatically by mail()
-        $result .= $this->sendTo($toaddr);
+        $result .= $this->sendTo();
 
         $result .= $this->addrAppend('From', array(array(trim($this->From), $this->FromName)));
 
