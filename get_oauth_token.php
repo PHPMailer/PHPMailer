@@ -73,7 +73,7 @@ class Google extends AbstractProvider
 
     protected function getAuthorizationParameters(array $options)
     {
-	if (is_array($this->scope)) {
+	   if (is_array($this->scope)) {
             $separator = $this->getScopeSeparator();
             $this->scope = implode($separator, $this->scope);
         }
