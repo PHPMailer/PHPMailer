@@ -659,8 +659,16 @@ class PHPMailer
         //Close any open SMTP connection nicely
         $this->smtpClose();
     }
-
-    public function subjectHeader($subject)
+    
+    /**
+     * Check the mbstring confguration and return secure or encoded
+     * data
+     * 
+     * @param  string $subject Subject
+     * @access private
+     * @return string
+     */
+    private function subjectHeader($subject)
     {
         if (ini_get('mbstring.func_overload') & 1) {
             $subject = $this->secureHeader($subject);
@@ -668,6 +676,28 @@ class PHPMailer
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
         return $subject;
+    }
+    
+    /**
+     * Check if config is in safe mode
+     * 
+     * @param  string $to      To
+     * @param  string $subject Subject
+     * @param  string $body    Body
+     * @param  object $header  Header
+     * @param  string $params  Params
+     * @access private
+     * @return boolean
+     */
+    private function getConfiguration($to, $subject, $body, $header, $params)
+    {
+        $result = '';
+        if (ini_get('safe_mode') or !$this->UseSendmailOptions) {
+            $result = @mail($to, $subject, $body, $header);
+        } else {
+            $result = @mail($to, $subject, $body, $header, $params);
+        }
+        return $result;
     }
 
     /**
@@ -687,14 +717,11 @@ class PHPMailer
     {
         //Check overloading of mail function to avoid double-encoding
         $subject = $this->subjectHeader($subject);
-
+        
         //Can't use additional_parameters in safe_mode
         //@link http://php.net/manual/en/function.mail.php
-        if (ini_get('safe_mode') or !$this->UseSendmailOptions) {
-            $result = @mail($to, $subject, $body, $header);
-        } else {
-            $result = @mail($to, $subject, $body, $header, $params);
-        }
+        $result = $this->getConfiguration($to, $subject, $body, $header, $params);
+        
         return $result;
     }
 
@@ -1042,6 +1069,30 @@ class PHPMailer
     {
         return $this->lastMessageID;
     }
+    
+    public static function checkPCREVersion()
+    {
+        $patternselect = '';
+        if (defined('PCRE_VERSION')) {
+            //This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
+            if (version_compare(PCRE_VERSION, '8.0.3') >= 0) {
+                $patternselect = 'pcre8';
+            } else {
+                $patternselect = 'pcre';
+            }
+        } elseif (function_exists('extension_loaded') and extension_loaded('pcre')) {
+            //Fall back to older PCRE
+            $patternselect = 'pcre';
+        } else {
+            //Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
+            if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
+                $patternselect = 'php';
+            } else {
+                $patternselect = 'noregex';
+            }
+        }
+        return $patternselect;
+    }
 
     /**
      * Check that a string looks like an email address.
@@ -1077,24 +1128,7 @@ class PHPMailer
         if (!$patternselect or $patternselect == 'auto') {
             //Check this constant first so it works when extension_loaded() is disabled by safe mode
             //Constant was added in PHP 5.2.4
-            if (defined('PCRE_VERSION')) {
-                //This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
-                if (version_compare(PCRE_VERSION, '8.0.3') >= 0) {
-                    $patternselect = 'pcre8';
-                } else {
-                    $patternselect = 'pcre';
-                }
-            } elseif (function_exists('extension_loaded') and extension_loaded('pcre')) {
-                //Fall back to older PCRE
-                $patternselect = 'pcre';
-            } else {
-                //Filter_var appeared in PHP 5.2.0 and does not require the PCRE extension
-                if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
-                    $patternselect = 'php';
-                } else {
-                    $patternselect = 'noregex';
-                }
-            }
+            $patternselect = self::checkPCREVersion();
         }
         switch ($patternselect) {
             case 'pcre8':
@@ -1312,26 +1346,6 @@ class PHPMailer
         }
     }
 
-    protected function mailerType()
-    {
-        switch ($this->Mailer) {
-            case 'sendmail':
-            case 'qmail':
-                return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
-            case 'smtp':
-                return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
-            case 'mail':
-                return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
-            default:
-                $sendMethod = $this->Mailer.'Send';
-                if (method_exists($this, $sendMethod)) {
-                    return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
-                }
-
-                return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
-        }
-    }
-
     /**
      * Actually send a message.
      * Send the email via the selected mechanism
@@ -1342,7 +1356,22 @@ class PHPMailer
     {
         try {
             // Choose the mailer and send through it
-            return $this->mailerType();
+            switch ($this->Mailer) {
+                case 'sendmail':
+                case 'qmail':
+                    return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
+                case 'smtp':
+                    return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
+                case 'mail':
+                    return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
+                default:
+                    $sendMethod = $this->Mailer.'Send';
+                    if (method_exists($this, $sendMethod)) {
+                        return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
+                    }
+
+                    return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
+            }
         } catch (phpmailerException $exc) {
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
@@ -1352,10 +1381,16 @@ class PHPMailer
         }
         return false;
     }
-
-    protected function senderMailFormat()
+    
+    /**
+     * Format the input
+     * @access private
+     * @return string
+     */
+    private function sendmailformat()
     {
-        if($this->Sender != '') {
+        $sendmail = '';
+        if ($this->Sender != '') {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
@@ -1370,7 +1405,7 @@ class PHPMailer
         }
         return $sendmail;
     }
-
+    
     /**
      * Send mail using the $Sendmail program.
      * @param string $header The message headers
@@ -1382,7 +1417,7 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        $sendmail = $this->senderMailFormat();
+        $sendmail = $this->sendmailformat();
         
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1964,20 +1999,14 @@ class PHPMailer
     }
 
     /**
-     * Assemble message headers.
-     * @access public
-     * @return string The assembled headers
+     * Get mail reciever
+     * @param  string $toaddr toaddr
+     * @access private
+     * @return string
      */
-    public function createHeader()
+    private function sendTo($toaddr)
     {
         $result = '';
-
-        if ($this->MessageDate == '') {
-            $this->MessageDate = self::rfcDate();
-        }
-        $result .= $this->headerLine('Date', $this->MessageDate);
-
-        // To be created automatically by mail()
         if ($this->SingleTo) {
             if ($this->Mailer != 'mail') {
                 foreach ($this->to as $toaddr) {
@@ -1993,6 +2022,25 @@ class PHPMailer
                 $result .= $this->headerLine('To', 'undisclosed-recipients:;');
             }
         }
+        return $result;
+    }
+    
+    /**
+     * Assemble message headers.
+     * @access public
+     * @return string The assembled headers
+     */
+    public function createHeader()
+    {
+        $result = '';
+
+        if ($this->MessageDate == '') {
+            $this->MessageDate = self::rfcDate();
+        }
+        $result .= $this->headerLine('Date', $this->MessageDate);
+
+        // To be created automatically by mail()
+        $result .= $this->sendTo($toaddr);
 
         $result .= $this->addrAppend('From', array(array(trim($this->From), $this->FromName)));
 
@@ -2058,6 +2106,27 @@ class PHPMailer
 
         return $result;
     }
+    
+    /**
+     * Set the MIME size
+     * 
+     * @param string $ismultipart
+     * @access private
+     * @return string
+     */
+    public function setMIMESize($ismultipart)
+    {
+        $result = '';
+        if ($ismultipart) {
+            if ($this->Encoding == '8bit') {
+                $result .= $this->headerLine('Content-Transfer-Encoding', '8bit');
+            }
+            // The only remaining alternatives are quoted-printable and base64, which are both 7bit compatible
+        } else {
+            $result .= $this->headerLine('Content-Transfer-Encoding', $this->Encoding);
+        }
+        return $result;
+    }
 
     /**
      * Get the message MIME type headers.
@@ -2094,14 +2163,7 @@ class PHPMailer
         // RFC1341 part 5 says 7bit is assumed if not specified
         if ($this->Encoding != '7bit') {
             // RFC 2045 section 6.4 says multipart MIME parts may only use 7bit, 8bit or binary CTE
-            if ($ismultipart) {
-                if ($this->Encoding == '8bit') {
-                    $result .= $this->headerLine('Content-Transfer-Encoding', '8bit');
-                }
-                // The only remaining alternatives are quoted-printable and base64, which are both 7bit compatible
-            } else {
-                $result .= $this->headerLine('Content-Transfer-Encoding', $this->Encoding);
-            }
+            $result .= $this->setMIMESize($ismultipart);
         }
 
         if ($this->Mailer != 'mail') {
@@ -3688,17 +3750,17 @@ class PHPMailer
         }
         return $line;
     }
-
-    public fucntion privateKey($privKeyStr)
+    
+    public function privateKeySign($keyString)
     {
-        $privKey = "";
+        $privKey = '';
         if ($this->DKIM_passphrase != '') {
-            $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
+            $privKey .= openssl_pkey_get_private($keyString, $this->DKIM_passphrase);
         } else {
-            $privKey = openssl_pkey_get_private($privKeyStr);
+            $privKey .= openssl_pkey_get_private($keyString);
         }
         return $privKey;
-    }
+    }   
 
     /**
      * Generate a DKIM signature.
@@ -3716,8 +3778,7 @@ class PHPMailer
             return '';
         }
         $privKeyStr = file_get_contents($this->DKIM_private);
-        $privKey = $this->privateKey($privKeyStr);
-
+        $privKey = $this->privateKeySign($privKeyStr);
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) { //sha1WithRSAEncryption
             openssl_pkey_free($privKey);
             return base64_encode($signature);
