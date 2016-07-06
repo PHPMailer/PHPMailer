@@ -34,7 +34,7 @@ try {
     //Get the list of ESMTP services the server offers
     $e = $smtp->getServerExtList();
     //If server can do TLS encryption, use it
-    if (array_key_exists('STARTTLS', $e)) {
+    if (is_array($e) && array_key_exists('STARTTLS', $e)) {
         $tlsok = $smtp->startTLS();
         if (!$tlsok) {
             throw new Exception('Failed to start encryption: ' . $smtp->getError()['error']);
@@ -47,7 +47,7 @@ try {
         $e = $smtp->getServerExtList();
     }
     //If server supports authentication, do it (even if no encryption)
-    if (array_key_exists('AUTH', $e)) {
+    if (is_array($e) && array_key_exists('AUTH', $e)) {
         if ($smtp->authenticate('username', 'password')) {
             echo "Connected ok!";
         } else {
