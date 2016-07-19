@@ -606,7 +606,9 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]',
             'first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]',
             'first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]',
-            "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello,\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net" //This is valid RCC5322, but we don't want to allow it
+            //This is a valid RCC5322 address, but we don't want to allow it for obvious reasons!
+            "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello,\r\n".
+                " this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net"
         );
         // IDNs in Unicode and ASCII forms.
         $unicodeaddresses = array(
@@ -655,6 +657,53 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
         $this->assertFalse(PHPMailer::validateAddress('bad', 'noregex'));
+    }
+
+    /**
+     * Test injecting a custom validator.
+     */
+    public function testCustomValidator()
+    {
+        //Inject a one-off custom validator
+        $this->assertTrue(
+            PHPMailer::validateAddress(
+                'user@example.com',
+                function ($address) {
+                    return (strpos($address, '@') !== false);
+                }
+            ),
+            'Custom validator false negative'
+        );
+        $this->assertFalse(
+            PHPMailer::validateAddress(
+                'userexample.com',
+                function ($address) {
+                    return (strpos($address, '@') !== false);
+                }
+            ),
+            'Custom validator false positive'
+        );
+        //Set the default validator to an injected function
+        PHPMailer::$validator = function ($address) {
+            return ('user@example.com' === $address);
+        };
+        $this->assertTrue(
+            $this->Mail->addAddress('user@example.com'),
+            'Custom default validator false negative'
+        );
+        $this->assertFalse(
+            //Need to pick a failing value which would pass all other validators
+            //to be sure we're using our custom one
+            $this->Mail->addAddress('bananas@example.com'),
+            'Custom default validator false positive'
+        );
+        //Set default validator to PHP built-in
+        PHPMailer::$validator = 'php';
+        $this->assertFalse(
+            //This is a valid address that FILTER_VALIDATE_EMAIL thinks is invalid
+            $this->Mail->addAddress('first.last@example.123'),
+            'PHP validator not behaving as expected'
+        );
     }
 
     /**
@@ -1262,20 +1311,22 @@ EOT;
     }
 
     /**
-     * Test constructing a message that contains lines that are too long for RFC compliance.
+     * Test constructing a multipart message that contains lines that are too long for RFC compliance.
      */
     public function testLongBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::CRLF, 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
-            PHPMailer::CRLF . PHPMailer::CRLF . $oklen . $badlen . $oklen;
+            PHPMailer::CRLF . $oklen . $badlen . $oklen;
         $this->assertTrue(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
         );
+        $this->Mail->isHTML();
         $this->buildBody();
+        $this->Mail->AltBody = $this->Mail->Body;
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
@@ -1295,7 +1346,7 @@ EOT;
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::CRLF, 10);
 
         $this->Mail->Body = "This message does not contain lines that are too long.".
-            PHPMailer::CRLF . PHPMailer::CRLF . $oklen;
+            PHPMailer::CRLF . $oklen;
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
@@ -1416,6 +1467,19 @@ EOT;
                 'Joe User <joe@example.com>, Jill User <jill@example.net>'
             ),
             'Failed to recognise address list (IMAP parser)'
+        );
+        $this->assertEquals(
+            array(
+                array("name" => 'Joe User', 'address' => 'joe@example.com'),
+                array("name" => 'Jill User', 'address' => 'jill@example.net'),
+                array("name" => '', 'address' => 'frank@example.com'),
+            ),
+            $this->Mail->parseAddresses(
+                'Joe User <joe@example.com>,'
+                    . 'Jill User <jill@example.net>,'
+                    . 'frank@example.com,'
+            ),
+            'Parsed addresses'
         );
         //Test simple address parser
         $this->assertCount(
@@ -1764,7 +1828,7 @@ EOT;
      */
     public function testLineLength()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH)."\r\n", 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH)."\r\n", 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');

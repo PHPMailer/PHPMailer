@@ -1,5 +1,25 @@
 # ChangeLog
 
+## Version 5.2.16 (June 6th 2016)
+* Added DKIM example
+* Fixed empty additional_parameters problem
+* Fixed wrong version number in VERSION file!
+* Improve line-length tests
+* Use instance settings for SMTP::connect by default
+* Use more secure auth mechanisms first
+
+## Version 5.2.15 (May 10th 2016)
+* Added ability to inject custom address validators, and set the default validator
+* Fix TLS 1.2 compatibility
+* Remove some excess line breaks in MIME structure
+* Updated Polish, Russian, Brazilian Portuguese, Georgian translations
+* More DRY!
+* Improve error messages
+* Update dependencies
+* Add example showing how to handle multiple form file uploads
+* Improve SMTP example
+* Improve Windows compatibility
+* Use consistent names for temp files
 * Fix gmail XOAUTH2 scope, thanks to @sherryl4george
 * Fix extra line break in getSentMIMEMessage()
 * Improve DKIM signing to use SHA-2
