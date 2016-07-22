@@ -1681,6 +1681,15 @@ class PHPMailer
      */
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
+        // Backwards compatibility for renamed language codes
+        $renamed_langcodes = array(
+            'dk' => 'da',
+        );
+
+        if (isset($renamed_langcodes[$langcode])) {
+            $langcode = $renamed_langcodes[$langcode];
+        }
+
         // Define full set of translatable strings in English
         $PHPMAILER_LANG = array(
             'authenticate' => 'SMTP Error: Could not authenticate.',
