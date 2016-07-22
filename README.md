@@ -139,6 +139,16 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 
 If this isn't passing, is there something you can do to help?
 
+## Security
+
+Please disclose any vulnerabilities found responsibly - report any security problems found to the maintainers privately.
+
+PHPMailer versions prior to 5.2.14 (released November 2015) are vulnerable to [CVE-2015-8476](https://web.nvd.nist.gov/view/vuln/detail?vulnId=) an SMTP CRLF injection bug permitting arbitrary message sending.
+
+PHPMailer versions prior to 5.2.10 (released May 2015) are vulnerable to [CVE-2008-5619](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2008-5619), a remote code execution vulnerability in the bundled html2text library. This file was removed in 5.2.10, so if you are using a version prior to that and make use of the html2text function, it's vitally important that you upgrade and remove this file.
+
+See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY) for older security issues.
+
 ## Contributing
 
 Please submit bug reports, suggestions and pull requests to the [GitHub issue tracker](https://github.com/PHPMailer/PHPMailer/issues).

@@ -1716,6 +1716,10 @@ class PHPMailer
             // Calculate an absolute path so it can work if CWD is not here
             $lang_path = dirname(__FILE__). DIRECTORY_SEPARATOR . 'language'. DIRECTORY_SEPARATOR;
         }
+        //Validate $langcode
+        if (!preg_match('/^[a-z]{2}$/', $langcode)) {
+            $langcode = 'en';
+        }
         $foundlang = true;
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         // There is no English translation file
