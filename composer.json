@@ -39,6 +39,9 @@
             "class.pop3.php",
             "extras/EasyPeasyICS.php",
             "extras/ntlm_sasl_client.php"
+        ],
+        "files":[
+            "PHPMailerAutoload.php"
         ]
     },
     "license": "LGPL-2.1"

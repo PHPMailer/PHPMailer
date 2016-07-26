@@ -780,6 +780,9 @@ class PHPMailer
         } else {
             $this->ContentType = 'text/plain';
         }
+//---------------------------------------------------------------------------------//
+        //$this->ContentType = $isHtml ? 'text/html' : 'text/plain';               //
+//---------------------------------------------------------------------------------//
     }
 
     /**
@@ -799,7 +802,7 @@ class PHPMailer
     {
         $this->Mailer = 'mail';
     }
-
+//-----------------------------------------------------------------------//
     /**
      * Send messages using $Sendmail.
      * @return void
@@ -831,7 +834,7 @@ class PHPMailer
         }
         $this->Mailer = 'qmail';
     }
-
+//-------------------------------------------------------------------------//
     /**
      * Add a "To" address.
      * @param string $address The email address to send to
@@ -907,6 +910,8 @@ class PHPMailer
         $params = array($kind, $address, $name);
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
+
+//---------------------------------------------------------------------------------------------------------//
             if ($kind != 'Reply-To') {
                 if (!array_key_exists($address, $this->RecipientsQueue)) {
                     $this->RecipientsQueue[$address] = $params;
@@ -919,6 +924,7 @@ class PHPMailer
                 }
             }
             return false;
+//---------------------------------------------------------------------------------------------------------//
         }
         // Immediately add standard addresses without IDN.
         return call_user_func_array(array($this, 'addAnAddress'), $params);
@@ -954,6 +960,7 @@ class PHPMailer
             }
             return false;
         }
+//---------------------------------------------------------------------------------------------------------//
         if ($kind != 'Reply-To') {
             if (!array_key_exists(strtolower($address), $this->all_recipients)) {
                 array_push($this->$kind, array($address, $name));
@@ -967,6 +974,7 @@ class PHPMailer
             }
         }
         return false;
+//---------------------------------------------------------------------------------------------------------//
     }
 
     /**
@@ -1070,6 +1078,7 @@ class PHPMailer
         return $this->lastMessageID;
     }
     
+//---------------------------------------------------------------------------------------------------------//
     public static function checkPCREVersion()
     {
         $patternselect = '';
@@ -1093,6 +1102,7 @@ class PHPMailer
         }
         return $patternselect;
     }
+//---------------------------------------------------------------------------------------------------------//
 
     /**
      * Check that a string looks like an email address.
@@ -1130,6 +1140,7 @@ class PHPMailer
             //Constant was added in PHP 5.2.4
             $patternselect = self::checkPCREVersion();
         }
+//---------------------------------------------------------------------------------------------------------//
         switch ($patternselect) {
             case 'pcre8':
                 /**
@@ -1185,6 +1196,7 @@ class PHPMailer
             default:
                 return (boolean)filter_var($address, FILTER_VALIDATE_EMAIL);
         }
+//---------------------------------------------------------------------------------------------------------//
     }
 
     /**
@@ -1309,6 +1321,7 @@ class PHPMailer
             $this->MIMEHeader = $this->createHeader();
             $this->MIMEHeader .= $tempheaders;
 
+//---------------------------------------------------------------------------------------------------------//
             // To capture the complete message when using mail(), create
             // an extra header list which createHeader() doesn't fold in
             if ($this->Mailer == 'mail') {
@@ -1322,6 +1335,7 @@ class PHPMailer
                     $this->encodeHeader($this->secureHeader(trim($this->Subject)))
                 );
             }
+//---------------------------------------------------------------------------------------------------------//
 
             // Sign with DKIM if enabled
             if (!empty($this->DKIM_domain)
@@ -1490,6 +1504,7 @@ class PHPMailer
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
+//---------------------------------------------------------------------------------------------------------//
         $result = false;
         if ($this->SingleTo and count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
@@ -1500,6 +1515,7 @@ class PHPMailer
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
             $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
         }
+//---------------------------------------------------------------------------------------------------------//
         if (isset($old_from)) {
             ini_set('sendmail_from', $old_from);
         }
@@ -1540,11 +1556,13 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
+//---------------------------------------------------------------------------------------------------------//
         if ('' == $this->Sender) {
             $smtp_from = $this->From;
         } else {
             $smtp_from = $this->Sender;
         }
+//---------------------------------------------------------------------------------------------------------//
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
             throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
@@ -1588,6 +1606,7 @@ class PHPMailer
         return true;
     }
 
+//---------------------------------------------------------------------------------------------------------//
     /**
      * Initiate a connection to an SMTP server.
      * Returns false if the operation failed.
@@ -1709,6 +1728,7 @@ class PHPMailer
         }
         return false;
     }
+//---------------------------------------------------------------------------------------------------------//
 
     /**
      * Close the active SMTP session if one exists.
@@ -1761,6 +1781,7 @@ class PHPMailer
             // Calculate an absolute path so it can work if CWD is not here
             $lang_path = dirname(__FILE__). DIRECTORY_SEPARATOR . 'language'. DIRECTORY_SEPARATOR;
         }
+//---------------------------------------------------------------------------------------------------------//
         $foundlang = true;
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         // There is no English translation file
@@ -1776,6 +1797,7 @@ class PHPMailer
         }
         $this->language = $PHPMAILER_LANG;
         return (boolean)$foundlang; // Returns false if language not found
+//---------------------------------------------------------------------------------------------------------//
     }
 
     /**
@@ -2025,6 +2047,7 @@ class PHPMailer
         return $result;
     }
     
+//---------------------------------------------------------------------------------------------------------//
     /**
      * Assemble message headers.
      * @access public
@@ -2106,6 +2129,7 @@ class PHPMailer
 
         return $result;
     }
+//---------------------------------------------------------------------------------------------------------//
     
     /**
      * Set the MIME size
@@ -2549,6 +2573,7 @@ class PHPMailer
         return $this->attachment;
     }
 
+//---------------------------------------------------------------------------------------------------------//
     /**
      * Attach all file, string, and binary attachments to the message.
      * Returns an empty string on failure.
@@ -2672,6 +2697,7 @@ class PHPMailer
 
         return implode('', $mime);
     }
+//---------------------------------------------------------------------------------------------------------//
 
     /**
      * Encode a file attachment in requested format.
@@ -3484,6 +3510,7 @@ class PHPMailer
         );
     }
 
+//---------------------------------------------------------------------------------------------------------//
     /**
      * Get the MIME type for a file extension.
      * @param string $ext File extension
@@ -3598,6 +3625,7 @@ class PHPMailer
         }
         return 'application/octet-stream';
     }
+//---------------------------------------------------------------------------------------------------------//
 
     /**
      * Map a file name to a MIME type.
@@ -3646,6 +3674,7 @@ class PHPMailer
                 $ret['filename'] = $pathinfo[3];
             }
         }
+//---------------------------------------------------------------------------------------------------------//
         switch ($options) {
             case PATHINFO_DIRNAME:
             case 'dirname':
@@ -3662,6 +3691,7 @@ class PHPMailer
             default:
                 return $ret;
         }
+//---------------------------------------------------------------------------------------------------------//
     }
 
     /**
