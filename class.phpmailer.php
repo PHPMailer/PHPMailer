@@ -3688,7 +3688,7 @@ class PHPMailer
      * @access public
      * @param string $signHeader
      * @throws phpmailerException
-     * @return string
+     * @return string The DKIM signature value
      */
     public function DKIM_Sign($signHeader)
     {
@@ -3699,14 +3699,32 @@ class PHPMailer
             return '';
         }
         $privKeyStr = file_get_contents($this->DKIM_private);
-        if ($this->DKIM_passphrase != '') {
+        if ('' != $this->DKIM_passphrase) {
             $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
         } else {
             $privKey = openssl_pkey_get_private($privKeyStr);
         }
-        if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) { //sha1WithRSAEncryption
-            openssl_pkey_free($privKey);
-            return base64_encode($signature);
+        //Workaround for missing digest algorithms in old PHP & OpenSSL versions
+        //@link http://stackoverflow.com/a/11117338/333340
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0 and
+            in_array('sha256WithRSAEncryption', openssl_get_md_methods(true))) {
+            if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
+                openssl_pkey_free($privKey);
+                return base64_encode($signature);
+            }
+        } else {
+            $pinfo = openssl_pkey_get_details($privKey);
+            $hash = hash('sha256', $signHeader);
+            //'Magic' constant for SHA256 from RFC3447
+            //@link https://tools.ietf.org/html/rfc3447#page-43
+            $t = '3031300d060960864801650304020105000420' . $hash;
+            $pslen = $pinfo['bits'] / 8 - (strlen($t) / 2 + 3);
+            $eb = pack('H*', '0001' . str_repeat('FF', $pslen) . '00' . $t);
+
+            if (openssl_private_encrypt($eb, $signature, $privKey, OPENSSL_NO_PADDING)) {
+                openssl_pkey_free($privKey);
+                return base64_encode($signature);
+            }
         }
         openssl_pkey_free($privKey);
         return '';
