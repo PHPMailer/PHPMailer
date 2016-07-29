@@ -13,6 +13,7 @@
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
+chdir(__DIR__);
 require_once '../PHPMailerAutoload.php';
 
 /**
@@ -31,7 +32,7 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
     /**
      * @var string Default include path
      */
-    public $INCLUDE_DIR = '../';
+    public $INCLUDE_DIR = '';
 
     /**
      * Run before each test is started.

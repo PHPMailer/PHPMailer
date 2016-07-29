@@ -1,4 +1,5 @@
 docs/phpdoc/
+test/fifo
 test/message.txt
 test/testbootstrap.php
 test/*.pem
