@@ -10,7 +10,8 @@
          convertWarningsToExceptions="true"
          colors="false"
          forceCoversAnnotation="false"
-         processIsolation="false">
+         processIsolation="false"
+         bootstrap="test/bootstrap.php">
     <testsuites>
         <testsuite name="PHPMailer Tests">
             <directory>./test/</directory>
