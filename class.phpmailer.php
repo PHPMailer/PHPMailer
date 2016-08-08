@@ -659,11 +659,11 @@ class PHPMailer
         //Close any open SMTP connection nicely
         $this->smtpClose();
     }
-    
+
     /**
      * Check the mbstring confguration and return secure or encoded
      * data
-     * 
+     *
      * @param  string $subject Subject
      * @access private
      * @return string
@@ -677,10 +677,10 @@ class PHPMailer
         }
         return $subject;
     }
-    
+
     /**
      * Check if config is in safe mode
-     * 
+     *
      * @param  string $to      To
      * @param  string $subject Subject
      * @param  string $body    Body
@@ -717,11 +717,11 @@ class PHPMailer
     {
         //Check overloading of mail function to avoid double-encoding
         $subject = $this->subjectHeader($subject);
-        
+
         //Can't use additional_parameters in safe_mode
         //@link http://php.net/manual/en/function.mail.php
         $result = $this->getConfiguration($to, $subject, $body, $header, $params);
-        
+
         return $result;
     }
 
@@ -775,11 +775,10 @@ class PHPMailer
      */
     public function isHTML($isHtml = true)
     {
-        if ($isHtml) {
-            $this->ContentType = 'text/html';
-        } else {
+        if (!$isHtml) {
             $this->ContentType = 'text/plain';
         }
+        $this->ContentType = 'text/html';
 //---------------------------------------------------------------------------------//
         //$this->ContentType = $isHtml ? 'text/html' : 'text/plain';               //
 //---------------------------------------------------------------------------------//
@@ -1077,7 +1076,7 @@ class PHPMailer
     {
         return $this->lastMessageID;
     }
-    
+
 //---------------------------------------------------------------------------------------------------------//
     public static function checkPCREVersion()
     {
@@ -1395,7 +1394,7 @@ class PHPMailer
         }
         return false;
     }
-    
+
     /**
      * Format the input
      * @access private
@@ -1419,7 +1418,7 @@ class PHPMailer
         }
         return $sendmail;
     }
-    
+
     /**
      * Send mail using the $Sendmail program.
      * @param string $header The message headers
@@ -1432,7 +1431,7 @@ class PHPMailer
     protected function sendmailSend($header, $body)
     {
         $sendmail = $this->sendmailformat();
-        
+
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
@@ -2046,7 +2045,7 @@ class PHPMailer
         }
         return $result;
     }
-    
+
 //---------------------------------------------------------------------------------------------------------//
     /**
      * Assemble message headers.
@@ -2130,10 +2129,10 @@ class PHPMailer
         return $result;
     }
 //---------------------------------------------------------------------------------------------------------//
-    
+
     /**
      * Set the MIME size
-     * 
+     *
      * @param string $ismultipart
      * @access private
      * @return string
@@ -3780,7 +3779,7 @@ class PHPMailer
         }
         return $line;
     }
-    
+
     public function privateKeySign($keyString)
     {
         $privKey = '';
@@ -3790,7 +3789,7 @@ class PHPMailer
             $privKey .= openssl_pkey_get_private($keyString);
         }
         return $privKey;
-    }   
+    }
 
     /**
      * Generate a DKIM signature.
