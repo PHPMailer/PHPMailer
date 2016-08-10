@@ -272,8 +272,8 @@ class SMTP
         $errstr = '';
         if ($streamok) {
             $socket_context = stream_context_create($options);
-            //Suppress errors; connection failures are handled at a higher level
-            $this->smtp_conn = @stream_socket_client(
+            set_error_handler(array('self', 'errorHandler'));
+            $this->smtp_conn = stream_socket_client(
                 $host . ":" . $port,
                 $errno,
                 $errstr,
@@ -281,12 +281,14 @@ class SMTP
                 STREAM_CLIENT_CONNECT,
                 $socket_context
             );
+            restore_error_handler();
         } else {
             //Fall back to fsockopen which should work in more places, but is missing some features
             $this->edebug(
                 "Connection: stream_socket_client not available, falling back to fsockopen",
                 self::DEBUG_CONNECTION
             );
+            set_error_handler(array('self', 'errorHandler'));
             $this->smtp_conn = fsockopen(
                 $host,
                 $port,
@@ -294,6 +296,7 @@ class SMTP
                 $errstr,
                 $timeout
             );
+            restore_error_handler();
         }
         // Verify we connected properly
         if (!is_resource($this->smtp_conn)) {
@@ -1188,5 +1191,24 @@ class SMTP
     public function getTimeout()
     {
         return $this->Timeout;
+    }
+
+    /**
+     * Reports an error number and string.
+     * @param integer $errno The error number returned by PHP.
+     * @param string $errmsg The error message returned by PHP.
+     */
+    function errorHandler($errno, $errmsg)
+    {
+        $notice = 'Connection: Failed to connect to server.';
+        $this->setError(
+            $notice,
+            $errno,
+            $errmsg
+        );
+        $this->edebug(
+            $notice . ' Error number ' . $errno . '. "Error notice: ' . $errmsg,
+            self::DEBUG_CONNECTION
+        );
     }
 }
