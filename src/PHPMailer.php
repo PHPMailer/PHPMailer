@@ -740,19 +740,24 @@ class PHPMailer
         $this->Mailer = 'mail';
     }
 
+    private function transportAgent($type, $path)
+    {
+        $ini_sendmail_path = ini_get('sendmail_path');
+
+        if (!stristr($ini_sendmail_path, $type)) {
+            $this->Sendmail = $path;
+        } else {
+            $this->Sendmail = $ini_sendmail_path;
+        }
+    }
+
     /**
      * Send messages using $Sendmail.
      * @return void
      */
     public function isSendmail()
     {
-        $ini_sendmail_path = ini_get('sendmail_path');
-
-        if (!stristr($ini_sendmail_path, 'sendmail')) {
-            $this->Sendmail = '/usr/sbin/sendmail';
-        } else {
-            $this->Sendmail = $ini_sendmail_path;
-        }
+        $this->transportAgent('sendmail', '/usr/sbin/sendmail');
         $this->Mailer = 'sendmail';
     }
 
@@ -762,13 +767,7 @@ class PHPMailer
      */
     public function isQmail()
     {
-        $ini_sendmail_path = ini_get('sendmail_path');
-
-        if (!stristr($ini_sendmail_path, 'qmail')) {
-            $this->Sendmail = '/var/qmail/bin/qmail-inject';
-        } else {
-            $this->Sendmail = $ini_sendmail_path;
-        }
+        $this->transportAgent('qmail', '/var/qmail/bin/qmail-inject');
         $this->Mailer = 'qmail';
     }
 
@@ -818,6 +817,21 @@ class PHPMailer
         return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
     }
 
+    private function enqueue($address, $data)
+    {
+        if (!array_key_exists($address, $data)) {
+            $data[$address] = $params;
+            return true;
+        }
+    }
+
+    private function throwException($error_message)
+    {
+        if ($this->exceptions) {
+            throw new Exception($error_message);
+        }
+    }
+
     /**
      * Add an address to one of the recipient arrays or to the ReplyTo array. Because PHPMailer
      * can't validate addresses with an IDN without knowing the PHPMailer::$CharSet (that can still
@@ -839,24 +853,16 @@ class PHPMailer
             $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
             $this->setError($error_message);
             $this->edebug($error_message);
-            if ($this->exceptions) {
-                throw new Exception($error_message);
-            }
+            $this->throwException($error_message);
             return false;
         }
         $params = [$kind, $address, $name];
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
             if ('Reply-To' != $kind) {
-                if (!array_key_exists($address, $this->RecipientsQueue)) {
-                    $this->RecipientsQueue[$address] = $params;
-                    return true;
-                }
+                return $this->enqueue($address, $this->RecipientsQueue);
             } else {
-                if (!array_key_exists($address, $this->ReplyToQueue)) {
-                    $this->ReplyToQueue[$address] = $params;
-                    return true;
-                }
+                return $this->enqueue($address, $this->ReplyToQueue);
             }
             return false;
         }
@@ -880,18 +886,14 @@ class PHPMailer
             $error_message = $this->lang('Invalid recipient kind: ') . $kind;
             $this->setError($error_message);
             $this->edebug($error_message);
-            if ($this->exceptions) {
-                throw new Exception($error_message);
-            }
+            $this->throwException($error_message);
             return false;
         }
         if (!$this->validateAddress($address)) {
             $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
             $this->setError($error_message);
             $this->edebug($error_message);
-            if ($this->exceptions) {
-                throw new Exception($error_message);
-            }
+            $this->throwException($error_message);
             return false;
         }
         if ('Reply-To' != $kind) {
@@ -984,9 +986,7 @@ class PHPMailer
             $error_message = $this->lang('invalid_address') . " (setFrom) $address";
             $this->setError($error_message);
             $this->edebug($error_message);
-            if ($this->exceptions) {
-                throw new Exception($error_message);
-            }
+            $this->throwException($error_message);
             return false;
         }
         $this->From = $address;
@@ -1210,9 +1210,7 @@ class PHPMailer
                     $error_message = $this->lang('invalid_address') . ' (punyEncode) ' . $this->$address_kind;
                     $this->setError($error_message);
                     $this->edebug($error_message);
-                    if ($this->exceptions) {
-                        throw new Exception($error_message);
-                    }
+                    $this->throwException($error_message);
                     return false;
                 }
             }
@@ -1442,6 +1440,14 @@ class PHPMailer
         return $this->smtp;
     }
 
+    public function getSMTPFrom()
+    {
+        if ('' === $this->Sender) {
+            return $this->From;
+        }
+        return $this->Sender;
+    }
+
     /**
      * Send mail via SMTP.
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
@@ -1460,11 +1466,8 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
-        if ('' == $this->Sender) {
-            $smtp_from = $this->From;
-        } else {
-            $smtp_from = $this->Sender;
-        }
+        $smtp_from = $this->getSMTPFrom();
+
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
             throw new Exception($this->ErrorInfo, self::STOP_CRITICAL);
@@ -1749,11 +1752,10 @@ class PHPMailer
     {
         if (empty($addr[1])) { // No name provided
             return $this->secureHeader($addr[0]);
-        } else {
-            return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . ' <' . $this->secureHeader(
-                $addr[0]
-            ) . '>';
         }
+        return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . ' <' . $this->secureHeader(
+            $addr[0]
+        ) . '>';
     }
 
     /**
@@ -2713,9 +2715,9 @@ class PHPMailer
     {
         if (function_exists('mb_strlen')) {
             return (strlen($str) > mb_strlen($str, $this->CharSet));
-        } else { // Assume no multibytes (we can't handle without mbstring functions anyway)
-            return false;
         }
+        // Assume no multibytes (we can't handle without mbstring functions anyway)
+        return false;
     }
 
     /**
@@ -3186,10 +3188,9 @@ class PHPMailer
                 return $this->language[$key] . ' https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting';
             }
             return $this->language[$key];
-        } else {
-            //Return the key as a fallback
-            return $key;
         }
+        //Return the key as a fallback
+        return $key;
     }
 
     /**
@@ -3561,10 +3562,9 @@ class PHPMailer
         if (property_exists($this, $name)) {
             $this->$name = $value;
             return true;
-        } else {
-            $this->setError($this->lang('variable_set') . $name);
-            return false;
         }
+        $this->setError($this->lang('variable_set') . $name);
+        return false;
     }
 
     /**
@@ -3629,6 +3629,14 @@ class PHPMailer
         return $line;
     }
 
+    private function getPrivKey($privKeyStr)
+    {
+        if ('' != $this->DKIM_passphrase) {
+            return openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
+        }
+        return openssl_pkey_get_private($privKeyStr);
+    }
+
     /**
      * Generate a DKIM signature.
      * @access public
@@ -3645,11 +3653,8 @@ class PHPMailer
             return '';
         }
         $privKeyStr = file_get_contents($this->DKIM_private);
-        if ('' != $this->DKIM_passphrase) {
-            $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
-        } else {
-            $privKey = openssl_pkey_get_private($privKeyStr);
-        }
+        $privKey = $this->getPrivKey($privKeyStr);
+
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
             openssl_pkey_free($privKey);
             return base64_encode($signature);

@@ -5,3 +5,6 @@ test/testbootstrap.php
 test/*.pem
 build/
 vendor/
+
+*.pem
+phpunit.xml

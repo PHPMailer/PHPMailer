@@ -152,6 +152,34 @@ class POP3
     }
 
     /**
+     * Check if port is set
+     * @access private
+     * @param  integer|boolean $port The number to connect to
+     * @return integer
+     */
+    private function getPort($port)
+    {
+        if (false === $port) {
+            return $this->POP3_PORT;
+        }
+        return (integer)$port;
+    }
+
+    /**
+     * Check if timeout is set
+     * @access private
+     * @param  integer|boolean $timeout The timeout value
+     * @return integer
+     */
+    private function getTimeout($timeout)
+    {
+        if (false === $timeout) {
+            return $this->POP3_TIMEOUT;
+        }
+        return (integer)$timeout;
+    }
+
+    /**
      * Authenticate with a POP3 server.
      * A connect, login, disconnect sequence
      * appropriate for POP-before SMTP authorisation.
@@ -168,17 +196,11 @@ class POP3
     {
         $this->host = $host;
         // If no port value provided, use default
-        if (false === $port) {
-            $this->port = $this->POP3_PORT;
-        } else {
-            $this->port = (integer)$port;
-        }
+        $this->port = $this->getPort($port);
+
         // If no timeout value provided, use default
-        if (false === $timeout) {
-            $this->tval = $this->POP3_TIMEOUT;
-        } else {
-            $this->tval = (integer)$timeout;
-        }
+        $this->tval = $this->getTimeout($timeout);
+
         $this->do_debug = $debug_level;
         $this->username = $username;
         $this->password = $password;
@@ -360,9 +382,8 @@ class POP3
                 ]
             );
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
