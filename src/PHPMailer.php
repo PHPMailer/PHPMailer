@@ -817,14 +817,6 @@ class PHPMailer
         return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
     }
 
-    private function enqueue($address, $data, $params)
-    {
-        if (!array_key_exists($address, $data)) {
-            $data[$address] = $params;
-            return true;
-        }
-    }
-
     private function throwException($error_message)
     {
         if ($this->exceptions) {
@@ -853,16 +845,24 @@ class PHPMailer
             $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
             $this->setError($error_message);
             $this->edebug($error_message);
-            $this->throwException($error_message);
+            if ($this->exceptions) {
+                throw new Exception($error_message);
+            }
             return false;
         }
         $params = [$kind, $address, $name];
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
             if ('Reply-To' != $kind) {
-                return $this->enqueue($address, $this->RecipientsQueue, $params);
+                if (!array_key_exists($address, $this->RecipientsQueue)) {
+                    $this->RecipientsQueue[$address] = $params;
+                    return true;
+                }
             } else {
-                return $this->enqueue($address, $this->ReplyToQueue, $params);
+                if (!array_key_exists($address, $this->ReplyToQueue)) {
+                    $this->ReplyToQueue[$address] = $params;
+                    return true;
+                }
             }
             return false;
         }
