@@ -817,7 +817,7 @@ class PHPMailer
         return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
     }
 
-    private function enqueue($address, $data)
+    private function enqueue($address, $data, $params)
     {
         if (!array_key_exists($address, $data)) {
             $data[$address] = $params;
@@ -860,9 +860,9 @@ class PHPMailer
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
             if ('Reply-To' != $kind) {
-                return $this->enqueue($address, $this->RecipientsQueue);
+                return $this->enqueue($address, $this->RecipientsQueue, $params);
             } else {
-                return $this->enqueue($address, $this->ReplyToQueue);
+                return $this->enqueue($address, $this->ReplyToQueue, $params);
             }
             return false;
         }
