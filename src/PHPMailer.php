@@ -33,18 +33,21 @@ class PHPMailer
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
      * When null, the header is not set at all.
+     * @access public
      * @var integer
      */
     public $Priority = null;
 
     /**
      * The character set of the message.
+     * @access public
      * @var string
      */
     public $CharSet = 'iso-8859-1';
 
     /**
      * The MIME Content-type of the message.
+     * @access public
      * @var string
      */
     public $ContentType = 'text/plain';
@@ -52,24 +55,28 @@ class PHPMailer
     /**
      * The message encoding.
      * Options: "8bit", "7bit", "binary", "base64", and "quoted-printable".
+     * @access public
      * @var string
      */
     public $Encoding = '8bit';
 
     /**
      * Holds the most recent mailer error message.
+     * @access public
      * @var string
      */
     public $ErrorInfo = '';
 
     /**
      * The From email address for the message.
+     * @access public
      * @var string
      */
     public $From = 'root@localhost';
 
     /**
      * The From name of the message.
+     * @access public
      * @var string
      */
     public $FromName = 'Root User';
@@ -77,12 +84,14 @@ class PHPMailer
     /**
      * The Sender email (Return-Path) of the message.
      * If not empty, will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
+     * @access public
      * @var string
      */
     public $Sender = '';
 
     /**
      * The Subject of the message.
+     * @access public
      * @var string
      */
     public $Subject = '';
@@ -90,6 +99,7 @@ class PHPMailer
     /**
      * An HTML or plain text message body.
      * If HTML then call isHTML(true).
+     * @access public
      * @var string
      */
     public $Body = '';
@@ -99,6 +109,7 @@ class PHPMailer
      * This body can be read by mail clients that do not have HTML email
      * capability such as mutt & Eudora.
      * Clients that can read HTML will view the normal Body.
+     * @access public
      * @var string
      */
     public $AltBody = '';
@@ -107,6 +118,7 @@ class PHPMailer
      * An iCal message part body.
      * Only supported in simple alt or alt_inline message types
      * To generate iCal events, use the bundled extras/EasyPeasyICS.php class or iCalcreator
+     * @access public
      * @link http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php/
      * @link http://kigkonsult.se/iCalcreator/
      * @var string
@@ -122,21 +134,22 @@ class PHPMailer
 
     /**
      * The complete compiled MIME message headers.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $MIMEHeader = '';
 
     /**
      * Extra headers that createHeader() doesn't fold in.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $mailHeader = '';
 
     /**
      * Word-wrap the message body to this number of chars.
      * Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
+     * @access public
      * @var integer
      */
     public $WordWrap = 0;
@@ -144,12 +157,14 @@ class PHPMailer
     /**
      * Which method to use to send mail.
      * Options: "mail", "sendmail", or "smtp".
+     * @access public
      * @var string
      */
     public $Mailer = 'mail';
 
     /**
      * The path to the sendmail program.
+     * @access public
      * @var string
      */
     public $Sendmail = '/usr/sbin/sendmail';
@@ -157,12 +172,14 @@ class PHPMailer
     /**
      * Whether mail() uses a fully sendmail-compatible MTA.
      * One which supports sendmail's "-oi -f" options.
+     * @access public
      * @var boolean
      */
     public $UseSendmailOptions = true;
 
     /**
      * The email address that a reading confirmation should be sent to, also known as read receipt.
+     * @access public
      * @var string
      */
     public $ConfirmReadingTo = '';
@@ -172,6 +189,7 @@ class PHPMailer
      * If empty, PHPMailer attempts to find one with, in order,
      * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
      * 'localhost.localdomain'.
+     * @access public
      * @var string
      */
     public $Hostname = '';
@@ -179,6 +197,7 @@ class PHPMailer
     /**
      * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
+     * @access public
      * @var string
      */
     public $MessageID = '';
@@ -186,6 +205,7 @@ class PHPMailer
     /**
      * The message Date to be used in the Date header.
      * If empty, the current date will be added.
+     * @access public
      * @var string
      */
     public $MessageDate = '';
@@ -199,12 +219,14 @@ class PHPMailer
      * You can also specify encryption type, for example:
      * (e.g. "tls://smtp1.example.com:587;ssl://smtp2.example.com:465").
      * Hosts will be tried in order.
+     * @access public
      * @var string
      */
     public $Host = 'localhost';
 
     /**
      * The default SMTP server port.
+     * @access public
      * @var integer
      */
     public $Port = 25;
@@ -213,6 +235,7 @@ class PHPMailer
      * The SMTP HELO of the message.
      * Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
      * one with the same method described above for $Hostname.
+     * @access public
      * @var string
      * @see PHPMailer::$Hostname
      */
@@ -221,6 +244,7 @@ class PHPMailer
     /**
      * What kind of encryption to use on the SMTP connection.
      * Options: '', 'ssl' or 'tls'
+     * @access public
      * @var string
      */
     public $SMTPSecure = '';
@@ -229,6 +253,7 @@ class PHPMailer
      * Whether to enable TLS encryption automatically if a server supports it,
      * even if `SMTPSecure` is not set to 'tls'.
      * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
+     * @access public
      * @var boolean
      */
     public $SMTPAutoTLS = true;
@@ -236,6 +261,7 @@ class PHPMailer
     /**
      * Whether to use SMTP authentication.
      * Uses the Username and Password properties.
+     * @access public
      * @var boolean
      * @see PHPMailer::$Username
      * @see PHPMailer::$Password
@@ -244,18 +270,21 @@ class PHPMailer
 
     /**
      * Options array passed to stream_context_create when connecting via SMTP.
+     * @access public
      * @var array
      */
     public $SMTPOptions = [];
 
     /**
      * SMTP username.
+     * @access public
      * @var string
      */
     public $Username = '';
 
     /**
      * SMTP password.
+     * @access public
      * @var string
      */
     public $Password = '';
@@ -263,20 +292,22 @@ class PHPMailer
     /**
      * SMTP auth type.
      * Options are CRAM-MD5, LOGIN, PLAIN, XOAUTH2, attempted in that order if not specified
+     * @access public
      * @var string
      */
     public $AuthType = '';
 
     /**
      * An instance of the PHPMailer OAuth class.
-     * @var OAuth
      * @access protected
+     * @var OAuth
      */
     protected $oauth = null;
 
     /**
      * The SMTP server timeout in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * @access public
      * @var integer
      */
     public $Timeout = 300;
@@ -290,6 +321,7 @@ class PHPMailer
      * * `2` Data and commands
      * * `3` As 2 plus connection status
      * * `4` Low-level data output
+     * @access public
      * @var integer
      * @see SMTP::$do_debug
      */
@@ -306,6 +338,7 @@ class PHPMailer
      * <code>
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
+     * @access public
      * @var string|callable
      * @see SMTP::$Debugoutput
      */
@@ -315,6 +348,7 @@ class PHPMailer
      * Whether to keep SMTP connection open after each message.
      * If this is set to true then to close the connection
      * requires an explicit call to smtpClose().
+     * @access public
      * @var boolean
      */
     public $SMTPKeepAlive = false;
@@ -323,12 +357,14 @@ class PHPMailer
      * Whether to split multiple to addresses into multiple messages
      * or send them all in one message.
      * Only supported in `mail` and `sendmail` transports, not in SMTP.
+     * @access public
      * @var boolean
      */
     public $SingleTo = false;
 
     /**
      * Storage for addresses when SingleTo is enabled.
+     * @access protected
      * @var array
      */
     protected $SingleToArray = [];
@@ -336,6 +372,7 @@ class PHPMailer
     /**
      * Whether to generate VERP addresses on send.
      * Only applicable when sending via SMTP.
+     * @access public
      * @link https://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Postfix VERP info
      * @var boolean
@@ -344,6 +381,7 @@ class PHPMailer
 
     /**
      * Whether to allow sending messages with an empty body.
+     * @access public
      * @var boolean
      */
     public $AllowEmpty = false;
@@ -352,12 +390,14 @@ class PHPMailer
      * The default line ending.
      * @note The default remains "\n". We force LE where we know
      *        it must be used via static::LE.
+     * @access public
      * @var string
      */
     public $LE = "\n";
 
     /**
      * DKIM selector.
+     * @access public
      * @var string
      */
     public $DKIM_selector = '';
@@ -365,6 +405,7 @@ class PHPMailer
     /**
      * DKIM Identity.
      * Usually the email address used as the source of the email.
+     * @access public
      * @var string
      */
     public $DKIM_identity = '';
@@ -372,12 +413,14 @@ class PHPMailer
     /**
      * DKIM passphrase.
      * Used if your key is encrypted.
+     * @access public
      * @var string
      */
     public $DKIM_passphrase = '';
 
     /**
      * DKIM signing domain name.
+     * @access public
      * @example 'example.com'
      * @var string
      */
@@ -385,6 +428,7 @@ class PHPMailer
 
     /**
      * DKIM private key file path.
+     * @access public
      * @var string
      */
     public $DKIM_private = '';
@@ -405,6 +449,7 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
+     * @access public
      * @var string
      */
     public $action_function = '';
@@ -412,6 +457,7 @@ class PHPMailer
     /**
      * What to put in the X-Mailer header.
      * Options: An empty string for PHPMailer default, whitespace for none, or a string to use
+     * @access public
      * @var string
      */
     public $XMailer = '';
@@ -419,6 +465,7 @@ class PHPMailer
     /**
      * Which validator to use by default when validating email addresses.
      * May be a callable to inject your own validator, but there are several built-in validators.
+     * @access public
      * @see PHPMailer::validateAddress()
      * @var string|callable
      * @static
@@ -427,45 +474,47 @@ class PHPMailer
 
     /**
      * An instance of the SMTP sender class.
-     * @var SMTP
      * @access protected
+     * @var SMTP
      */
     protected $smtp = null;
 
     /**
      * The array of 'to' names and addresses.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $to = [];
 
     /**
      * The array of 'cc' names and addresses.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $cc = [];
 
     /**
      * The array of 'bcc' names and addresses.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $bcc = [];
 
     /**
      * The array of reply-to names and addresses.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $ReplyTo = [];
 
     /**
      * An array of all kinds of addresses.
      * Includes all of $to, $cc, $bcc
-     * @var array
      * @access protected
-     * @see PHPMailer::$to @see PHPMailer::$cc @see PHPMailer::$bcc
+     * @var array
+     * @see PHPMailer::$to
+     * @see PHPMailer::$cc
+     * @see PHPMailer::$bcc
      */
     protected $all_recipients = [];
 
@@ -474,9 +523,11 @@ class PHPMailer
      * In send(), valid and non duplicate entries are moved to $all_recipients
      * and one of $to, $cc, or $bcc.
      * This array is used only for addresses with IDN.
-     * @var array
      * @access protected
-     * @see PHPMailer::$to @see PHPMailer::$cc @see PHPMailer::$bcc
+     * @var array
+     * @see PHPMailer::$to
+     * @see PHPMailer::$cc
+     * @see PHPMailer::$bcc
      * @see PHPMailer::$all_recipients
      */
     protected $RecipientsQueue = [];
@@ -485,101 +536,101 @@ class PHPMailer
      * An array of reply-to names and addresses queued for validation.
      * In send(), valid and non duplicate entries are moved to $ReplyTo.
      * This array is used only for addresses with IDN.
-     * @var array
      * @access protected
+     * @var array
      * @see PHPMailer::$ReplyTo
      */
     protected $ReplyToQueue = [];
 
     /**
      * The array of attachments.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $attachment = [];
 
     /**
      * The array of custom headers.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $CustomHeader = [];
 
     /**
      * The most recent Message-ID (including angular brackets).
-     * @var string
      * @access protected
+     * @var string
      */
     protected $lastMessageID = '';
 
     /**
      * The message's MIME type.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $message_type = '';
 
     /**
      * The array of MIME boundary strings.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $boundary = [];
 
     /**
      * The array of available languages.
-     * @var array
      * @access protected
+     * @var array
      */
     protected $language = [];
 
     /**
      * The number of errors encountered.
-     * @var integer
      * @access protected
+     * @var integer
      */
     protected $error_count = 0;
 
     /**
      * The S/MIME certificate file path.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $sign_cert_file = '';
 
     /**
      * The S/MIME key file path.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $sign_key_file = '';
 
     /**
      * The optional S/MIME extra certificates ("CA Chain") file path.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $sign_extracerts_file = '';
 
     /**
      * The S/MIME password for the key.
      * Used only if the key is encrypted.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $sign_key_pass = '';
 
     /**
      * Whether to throw exceptions for errors.
-     * @var boolean
      * @access protected
+     * @var boolean
      */
     protected $exceptions = false;
 
     /**
      * Unique ID used for message ID and boundaries.
-     * @var string
      * @access protected
+     * @var string
      */
     protected $uniqueid = '';
 
@@ -616,6 +667,7 @@ class PHPMailer
 
     /**
      * Constructor.
+     * @access public
      * @param boolean $exceptions Should we throw external exceptions?
      */
     public function __construct($exceptions = null)
@@ -629,6 +681,7 @@ class PHPMailer
 
     /**
      * Destructor.
+     * @access public
      */
     public function __destruct()
     {
@@ -1473,6 +1526,11 @@ class PHPMailer
         return $this->smtp;
     }
 
+    /**
+     * Get the SMTP sender 
+     * @access public
+     * @return string
+     */
     public function getSMTPFrom()
     {
         if ('' === $this->Sender) {
@@ -2119,8 +2177,8 @@ class PHPMailer
      * Returns the whole MIME message.
      * Includes complete headers and body.
      * Only valid post preSend().
-     * @see PHPMailer::preSend()
      * @access public
+     * @see PHPMailer::preSend()
      * @return string
      */
     public function getSentMIMEMessage()
@@ -2484,6 +2542,7 @@ class PHPMailer
 
     /**
      * Return the array of attachments.
+     * @access public
      * @return array
      */
     public function getAttachments()
@@ -3292,6 +3351,7 @@ class PHPMailer
 
     /**
      * Returns all custom headers.
+     * @access public
      * @return array
      */
     public function getCustomHeaders()
@@ -3683,6 +3743,12 @@ class PHPMailer
         return $line;
     }
 
+    /**
+     * Get the privKey set
+     * @access private
+     * @param  string $privKeyStr
+     * @return string
+     */
     private function getPrivKey($privKeyStr)
     {
         if ('' != $this->DKIM_passphrase) {

@@ -28,6 +28,7 @@ class Exception extends \Exception
 {
     /**
      * Prettify error message output
+     * @access public
      * @return string
      */
     public function errorMessage()

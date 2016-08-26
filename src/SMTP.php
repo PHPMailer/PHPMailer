@@ -54,26 +54,31 @@ class SMTP
 
     /**
      * Debug level for no output
+     * @var integer
      */
     const DEBUG_OFF = 0;
 
     /**
      * Debug level to show client -> server messages
+     * @var integer
      */
     const DEBUG_CLIENT = 1;
 
     /**
      * Debug level to show client -> server and server -> client messages
+     * @var integer
      */
     const DEBUG_SERVER = 2;
 
     /**
      * Debug level to show connection status, client -> server and server -> client messages
+     * @var integer
      */
     const DEBUG_CONNECTION = 3;
 
     /**
      * Debug level to show all messages
+     * @var integer
      */
     const DEBUG_LOWLEVEL = 4;
 
@@ -85,6 +90,7 @@ class SMTP
      * * self::DEBUG_SERVER (`2`) Client commands and server responses
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
+     * @access public
      * @var integer
      */
     public $do_debug = self::DEBUG_OFF;
@@ -100,6 +106,7 @@ class SMTP
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
+     * @access public
      * @var string|callable
      */
     public $Debugoutput = 'echo';
@@ -108,6 +115,7 @@ class SMTP
      * Whether to use VERP.
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Info on VERP
+     * @access public
      * @var boolean
      */
     public $do_verp = false;
@@ -117,6 +125,7 @@ class SMTP
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
+     * @access public
      * @var integer
      */
     public $Timeout = 300;
@@ -124,18 +133,21 @@ class SMTP
     /**
      * How long to wait for commands to complete, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     * @access public
      * @var integer
      */
     public $Timelimit = 300;
 
     /**
      * The socket for the server connection.
+     * @access protected
      * @var resource
      */
     protected $smtp_conn;
 
     /**
      * Error information, if any, for the last SMTP command.
+     * @access protected
      * @var array
      */
     protected $error = [
@@ -148,6 +160,7 @@ class SMTP
     /**
      * The reply the server sent to us for HELO.
      * If null, no HELO string has yet been received.
+     * @access protected
      * @var string|null
      */
     protected $helo_rply = null;
@@ -159,12 +172,14 @@ class SMTP
      * represents the server name. In case of HELO it is the only element of the array.
      * Other values can be boolean TRUE or an array containing extension options.
      * If null, no HELO/EHLO string has yet been received.
+     * @access protected
      * @var array|null
      */
     protected $server_caps = null;
 
     /**
      * The most recent reply received from the server.
+     * @access protected
      * @var string
      */
     protected $last_reply = '';
@@ -221,7 +236,6 @@ class SMTP
      * @param integer $port The port number to connect to
      * @param integer $timeout How long to wait for the connection to open
      * @param array $options An array of options for stream_context_create()
-     * @access public
      * @return boolean
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
@@ -348,7 +362,6 @@ class SMTP
      * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
      * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
      * @return bool True if successfully authenticated.
-     * @access public
      */
     public function authenticate(
         $username,
@@ -673,6 +686,7 @@ class SMTP
      * In case of HELO, the only parameter that can be discovered is a server name.
      * @access protected
      * @param string $type - 'HELO' or 'EHLO'
+     * @return void
      */
     protected function parseHelloFields($type)
     {
@@ -1055,7 +1069,7 @@ class SMTP
 
     /**
      * Set error messages and codes.
-     * @access public
+     * @access protected
      * @param string $message The error message
      * @param string $detail Further detail on the error
      * @param string $smtp_code An associated SMTP error code
@@ -1076,6 +1090,7 @@ class SMTP
      * Set debug output method.
      * @access public
      * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it.
+     * @return void
      */
     public function setDebugOutput($method = 'echo')
     {
@@ -1096,6 +1111,7 @@ class SMTP
      * Set debug output level.
      * @access public
      * @param integer $level
+     * @return void
      */
     public function setDebugLevel($level = 0)
     {
@@ -1116,6 +1132,7 @@ class SMTP
      * Set SMTP timeout.
      * @access public
      * @param integer $timeout
+     * @return void
      */
     public function setTimeout($timeout = 0)
     {
