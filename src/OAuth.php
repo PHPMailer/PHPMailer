@@ -35,12 +35,14 @@ class OAuth
 {
     /**
      * An instance of the League OAuth Client Provider.
+     * @access protected
      * @var AbstractProvider
      */
     protected $provider = null;
 
     /**
      * The current OAuth access token.
+     * @access protected
      * @var AccessToken
      */
     protected $oauthToken = null;
@@ -48,30 +50,35 @@ class OAuth
     /**
      * The user's email address, usually used as the login ID
      * and also the from address when sending email.
+     * @access protected
      * @var string
      */
     protected $oauthUserEmail = '';
 
     /**
      * The client secret, generated in the app definition of the service you're connecting to.
+     * @access protected
      * @var string
      */
     protected $oauthClientSecret = '';
 
     /**
      * The client ID, generated in the app definition of the service you're connecting to.
+     * @access protected
      * @var string
      */
     protected $oauthClientId = '';
 
     /**
      * The refresh token, used to obtain new AccessTokens.
+     * @access protected
      * @var string
      */
     protected $oauthRefreshToken = '';
 
     /**
      * OAuth constructor.
+     * @access public
      * @param array $options Associative array containing
      *   `provider`, `userName`, `clientSecret`, `clientId` and `refreshToken` elements
      */
@@ -86,6 +93,7 @@ class OAuth
 
     /**
      * Get a new RefreshToken.
+     * @access protected
      * @return RefreshToken
      */
     protected function getGrant()
@@ -95,6 +103,7 @@ class OAuth
 
     /**
      * Get a new AccessToken.
+     * @access protected
      * @return AccessToken
      */
     protected function getToken()
@@ -107,6 +116,7 @@ class OAuth
 
     /**
      * Generate a base64-encoded OAuth token.
+     * @access public
      * @return string
      */
     public function getOauth64()
