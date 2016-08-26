@@ -720,8 +720,9 @@ class PHPMailer
 
     /**
      * Output debugging info via user-defined method.
-     * Only generates output if SMTP debug output is enabled (@see SMTP::$do_debug).
+     * Only generates output if SMTP debug output is enabled.
      * @access protected
+     * @see SMTP::$do_debug
      * @see PHPMailer::$Debugoutput
      * @see PHPMailer::$SMTPDebug
      * @param string $str
@@ -1214,8 +1215,8 @@ class PHPMailer
      * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
      *   or fails for any reason (e.g. domain has characters not allowed in an IDN)
      * @access public
-     * @see PHPMailer::$CharSet
      * @param string $address The email address to convert
+     * @see PHPMailer::$CharSet
      * @return string The encoded address in ASCII form
      */
     public function punyencodeAddress($address)
@@ -1544,9 +1545,9 @@ class PHPMailer
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
      * Uses the PHPMailerSMTP class by default.
      * @access protected
-     * @see PHPMailer::getSMTPInstance() to use a different class.
      * @param string $header The message headers
      * @param string $body The message body
+     * @see PHPMailer::getSMTPInstance() to use a different class.
      * @throws Exception
      * @uses SMTP
      * @return boolean
@@ -1608,8 +1609,8 @@ class PHPMailer
      * @access public
      * @param array $options An array of options compatible with stream_context_create()
      * @throws Exception
-     * @return boolean
      * @uses SMTP
+     * @return boolean
      */
     public function smtpConnect($options = null)
     {
@@ -2887,7 +2888,6 @@ class PHPMailer
      * @access public
      * @param string $str the text to encode
      * @param string $position Where the text is going to be used, see the RFC for what that means
-     * @access public
      * @return string
      */
     public function encodeQ($str, $position = 'text')
@@ -3369,7 +3369,8 @@ class PHPMailer
      * @param string $message HTML message string
      * @param string $basedir baseline directory for path, with or without a trailing slash
      * @param boolean|callable $advanced Whether to use the internal HTML to text converter
-     *    or your own custom converter @see PHPMailer::html2text()
+     *    or your own custom converter
+     * @see PHPMailer::html2text()
      * @return string $message
      */
     public function msgHTML($message, $basedir = '', $advanced = false)

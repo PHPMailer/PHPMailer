@@ -187,10 +187,10 @@ class SMTP
     /**
      * Output debugging info via a user-selected method.
      * @access protected
-     * @see SMTP::$Debugoutput
-     * @see SMTP::$do_debug
      * @param string $str Debug string to output
      * @param integer $level The debug level of this message; see DEBUG_* constants
+     * @see SMTP::$Debugoutput
+     * @see SMTP::$do_debug
      * @return void
      */
     protected function edebug($str, $level = 0)
@@ -356,11 +356,11 @@ class SMTP
      * Perform SMTP authentication.
      * Must be run after hello().
      * @access public
-     * @see hello()
      * @param string $username The user name
      * @param string $password The password
      * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
      * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     * @see hello()
      * @return bool True if successfully authenticated.
      */
     public function authenticate(
@@ -664,9 +664,9 @@ class SMTP
      * Send an SMTP HELO or EHLO command.
      * Low-level implementation used by hello()
      * @access protected
-     * @see hello()
      * @param string $hello The HELO string
      * @param string $host The hostname to say we are
+     * @see hello()
      * @return boolean
      */
     protected function sendHello($hello, $host)
