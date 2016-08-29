@@ -2,17 +2,18 @@
 /**
  * PHPMailer RFC821 SMTP email transport class.
  * PHP Version 5.5
- * @package PHPMailer
- * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author Brent R. Matzelle (original founder)
+ *
+ * @package   PHPMailer
+ * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
+ * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2016 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @note This program is distributed in the hope that it will be useful - WITHOUT
+ * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @note      This program is distributed in the hope that it will be useful - WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
@@ -22,32 +23,37 @@ namespace PHPMailer\PHPMailer;
 /**
  * PHPMailer RFC821 SMTP email transport class.
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
+ *
  * @package PHPMailer
- * @author Chris Ryan
- * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author  Chris Ryan
+ * @author  Marcus Bointon <phpmailer@synchromedia.co.uk>
  */
 class SMTP
 {
     /**
      * The PHPMailer SMTP version number.
+     *
      * @var string
      */
     const VERSION = '6.0.0';
 
     /**
      * SMTP line break constant.
+     *
      * @var string
      */
     const LE = "\r\n";
 
     /**
      * The SMTP port to use if one is not specified.
+     *
      * @var integer
      */
     const DEFAULT_SMTP_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
+     *
      * @var integer
      */
     const MAX_LINE_LENGTH = 998;
@@ -85,6 +91,7 @@ class SMTP
      * * self::DEBUG_SERVER (`2`) Client commands and server responses
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
+     *
      * @var integer
      */
     public $do_debug = self::DEBUG_OFF;
@@ -100,12 +107,14 @@ class SMTP
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
+     *
      * @var string|callable
      */
     public $Debugoutput = 'echo';
 
     /**
      * Whether to use VERP.
+     *
      * @see http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @see http://www.postfix.org/VERP_README.html Info on VERP
      * @var boolean
@@ -116,6 +125,7 @@ class SMTP
      * The timeout value for connection, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
+     *
      * @see http://tools.ietf.org/html/rfc2821#section-4.5.3.2
      * @var integer
      */
@@ -124,18 +134,21 @@ class SMTP
     /**
      * How long to wait for commands to complete, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
+     *
      * @var integer
      */
     public $Timelimit = 300;
 
     /**
      * The socket for the server connection.
+     *
      * @var resource
      */
     protected $smtp_conn;
 
     /**
      * Error information, if any, for the last SMTP command.
+     *
      * @var array
      */
     protected $error = [
@@ -148,6 +161,7 @@ class SMTP
     /**
      * The reply the server sent to us for HELO.
      * If null, no HELO string has yet been received.
+     *
      * @var string|null
      */
     protected $helo_rply = null;
@@ -159,20 +173,23 @@ class SMTP
      * represents the server name. In case of HELO it is the only element of the array.
      * Other values can be boolean TRUE or an array containing extension options.
      * If null, no HELO/EHLO string has yet been received.
+     *
      * @var array|null
      */
     protected $server_caps = null;
 
     /**
      * The most recent reply received from the server.
+     *
      * @var string
      */
     protected $last_reply = '';
 
     /**
      * Output debugging info via a user-selected method.
-     * @see SMTP::$Debugoutput
-     * @see SMTP::$do_debug
+     *
+     * @see   SMTP::$Debugoutput
+     * @see   SMTP::$do_debug
      * @param string $str Debug string to output
      * @param integer $level The debug level of this message; see DEBUG_* constants
      */
@@ -214,10 +231,11 @@ class SMTP
 
     /**
      * Connect to an SMTP server.
-     * @param string $host SMTP server IP or host name
-     * @param integer $port The port number to connect to
-     * @param integer $timeout How long to wait for the connection to open
-     * @param array $options An array of options for stream_context_create()
+     *
+     * @param  string $host SMTP server IP or host name
+     * @param  integer $port The port number to connect to
+     * @param  integer $timeout How long to wait for the connection to open
+     * @param  array $options An array of options for stream_context_create()
      * @return boolean
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
@@ -304,6 +322,7 @@ class SMTP
 
     /**
      * Initiate a TLS (encrypted) session.
+     *
      * @return boolean
      */
     public function startTLS()
@@ -336,11 +355,12 @@ class SMTP
     /**
      * Perform SMTP authentication.
      * Must be run after hello().
-     * @see hello()
-     * @param string $username The user name
-     * @param string $password The password
-     * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
-     * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     *
+     * @see    hello()
+     * @param  string $username The user name
+     * @param  string $password The password
+     * @param  string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
+     * @param  OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
      * @return boolean True if successfully authenticated.
      */
     public function authenticate(
@@ -458,8 +478,9 @@ class SMTP
      * Calculate an MD5 HMAC hash.
      * Works like hash_hmac('md5', $data, $key)
      * in case that function is not available
-     * @param string $data The data to hash
-     * @param string $key  The key to hash with
+     *
+     * @param  string $data The data to hash
+     * @param  string $key  The key to hash with
      * @return string
      */
     protected function hmac($data, $key)
@@ -491,6 +512,7 @@ class SMTP
 
     /**
      * Check connection state.
+     *
      * @return boolean True if connected.
      */
     public function connected()
@@ -514,6 +536,7 @@ class SMTP
     /**
      * Close the socket and clean up the state of the class.
      * Don't use this function without first trying to use QUIT.
+     *
      * @see quit()
      */
     public function close()
@@ -537,7 +560,8 @@ class SMTP
      * on a single line followed by a <CRLF> with the message headers
      * and the message body being separated by an additional <CRLF>.
      * Implements RFC 821: DATA <CRLF>
-     * @param string $msg_data Message data to send
+     *
+     * @param  string $msg_data Message data to send
      * @return boolean
      */
     public function data($msg_data)
@@ -625,7 +649,8 @@ class SMTP
      * This makes sure that client and server are in a known state.
      * Implements RFC 821: HELO <SP> <domain> <CRLF>
      * and RFC 2821 EHLO.
-     * @param string $host The host name or IP to connect to
+     *
+     * @param  string $host The host name or IP to connect to
      * @return boolean
      */
     public function hello($host = '')
@@ -637,9 +662,10 @@ class SMTP
     /**
      * Send an SMTP HELO or EHLO command.
      * Low-level implementation used by hello()
-     * @see hello()
-     * @param string $hello The HELO string
-     * @param string $host The hostname to say we are
+     *
+     * @see    hello()
+     * @param  string $hello The HELO string
+     * @param  string $host The hostname to say we are
      * @return boolean
      */
     protected function sendHello($hello, $host)
@@ -657,6 +683,7 @@ class SMTP
     /**
      * Parse a reply to HELO/EHLO command to discover server extensions.
      * In case of HELO, the only parameter that can be discovered is a server name.
+     *
      * @param string $type - 'HELO' or 'EHLO'
      */
     protected function parseHelloFields($type)
@@ -702,7 +729,8 @@ class SMTP
      * the mail transaction is started and then one or more recipient
      * commands may be called followed by a data command.
      * Implements RFC 821: MAIL <SP> FROM:<reverse-path> <CRLF>
-     * @param string $from Source address of this message
+     *
+     * @param  string $from Source address of this message
      * @return boolean
      */
     public function mail($from)
@@ -719,7 +747,8 @@ class SMTP
      * Send an SMTP QUIT command.
      * Closes the socket if there is no error or the $close_on_error argument is true.
      * Implements from RFC 821: QUIT <CRLF>
-     * @param boolean $close_on_error Should the connection close if an error occurs?
+     *
+     * @param  boolean $close_on_error Should the connection close if an error occurs?
      * @return boolean
      */
     public function quit($close_on_error = true)
@@ -738,7 +767,8 @@ class SMTP
      * Sets the TO argument to $toaddr.
      * Returns true if the recipient was accepted false if it was rejected.
      * Implements from RFC 821: RCPT <SP> TO:<forward-path> <CRLF>
-     * @param string $address The address the message is being sent to
+     *
+     * @param  string $address The address the message is being sent to
      * @return boolean
      */
     public function recipient($address)
@@ -754,6 +784,7 @@ class SMTP
      * Send an SMTP RSET command.
      * Abort any transaction that is currently in progress.
      * Implements RFC 821: RSET <CRLF>
+     *
      * @return boolean True on success.
      */
     public function reset()
@@ -763,9 +794,10 @@ class SMTP
 
     /**
      * Send a command to an SMTP server and check its return code.
-     * @param string $command The command name - not sent to the server
-     * @param string $commandstring The actual command to send
-     * @param integer|array $expect One or more expected integer success codes
+     *
+     * @param  string $command The command name - not sent to the server
+     * @param  string $commandstring The actual command to send
+     * @param  integer|array $expect One or more expected integer success codes
      * @return boolean True on success.
      */
     protected function sendCommand($command, $commandstring, $expect)
@@ -829,7 +861,8 @@ class SMTP
      * will send the message to the users terminal if they are logged
      * in and send them an email.
      * Implements RFC 821: SAML <SP> FROM:<reverse-path> <CRLF>
-     * @param string $from The address the message is from
+     *
+     * @param  string $from The address the message is from
      * @return boolean
      */
     public function sendAndMail($from)
@@ -839,7 +872,8 @@ class SMTP
 
     /**
      * Send an SMTP VRFY command.
-     * @param string $name The name to verify
+     *
+     * @param  string $name The name to verify
      * @return boolean
      */
     public function verify($name)
@@ -850,6 +884,7 @@ class SMTP
     /**
      * Send an SMTP NOOP command.
      * Used to keep keep-alives alive, doesn't actually do anything
+     *
      * @return boolean
      */
     public function noop()
@@ -863,6 +898,7 @@ class SMTP
      * This method is here to make the RFC821 Definition complete for this class
      * and _may_ be implemented in future
      * Implements from RFC 821: TURN <CRLF>
+     *
      * @return boolean
      */
     public function turn()
@@ -874,7 +910,8 @@ class SMTP
 
     /**
      * Send raw data to the server.
-     * @param string $data The data to send
+     *
+     * @param  string $data The data to send
      * @return integer|boolean The number of bytes sent to the server or false on error
      */
     public function client_send($data)
@@ -885,6 +922,7 @@ class SMTP
 
     /**
      * Get the latest error.
+     *
      * @return array
      */
     public function getError()
@@ -894,6 +932,7 @@ class SMTP
 
     /**
      * Get SMTP extensions available on the server
+     *
      * @return array|null
      */
     public function getServerExtList()
@@ -917,7 +956,8 @@ class SMTP
      *  - null returned: handshake was not or we don't know about ext (refer to $this->error)
      *  - false returned: the requested feature exactly not exists
      *  - positive value returned: the requested feature exists
-     * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
+     *
+     * @param  string $name Name of SMTP extension or 'HELO'|'EHLO'
      * @return mixed
      */
     public function getServerExt($name)
@@ -944,6 +984,7 @@ class SMTP
 
     /**
      * Get the last reply from the server.
+     *
      * @return string
      */
     public function getLastReply()
@@ -957,6 +998,7 @@ class SMTP
      * With SMTP we can tell if we have more lines to read if the
      * 4th character is '-' symbol. If it is a space then we don't
      * need to read anything else.
+     *
      * @return string
      */
     protected function get_lines()
@@ -1004,6 +1046,7 @@ class SMTP
 
     /**
      * Enable or disable VERP address generation.
+     *
      * @param boolean $enabled
      */
     public function setVerp($enabled = false)
@@ -1013,6 +1056,7 @@ class SMTP
 
     /**
      * Get VERP address generation mode.
+     *
      * @return boolean
      */
     public function getVerp()
@@ -1022,6 +1066,7 @@ class SMTP
 
     /**
      * Set error messages and codes.
+     *
      * @param string $message The error message
      * @param string $detail Further detail on the error
      * @param string $smtp_code An associated SMTP error code
@@ -1039,6 +1084,7 @@ class SMTP
 
     /**
      * Set debug output method.
+     *
      * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it.
      */
     public function setDebugOutput($method = 'echo')
@@ -1048,6 +1094,7 @@ class SMTP
 
     /**
      * Get debug output method.
+     *
      * @return string
      */
     public function getDebugOutput()
@@ -1057,6 +1104,7 @@ class SMTP
 
     /**
      * Set debug output level.
+     *
      * @param integer $level
      */
     public function setDebugLevel($level = 0)
@@ -1066,6 +1114,7 @@ class SMTP
 
     /**
      * Get debug output level.
+     *
      * @return integer
      */
     public function getDebugLevel()
@@ -1075,6 +1124,7 @@ class SMTP
 
     /**
      * Set SMTP timeout.
+     *
      * @param integer $timeout
      */
     public function setTimeout($timeout = 0)
@@ -1084,6 +1134,7 @@ class SMTP
 
     /**
      * Get SMTP timeout.
+     *
      * @return integer
      */
     public function getTimeout()
