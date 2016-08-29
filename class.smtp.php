@@ -272,7 +272,7 @@ class SMTP
         $errstr = '';
         if ($streamok) {
             $socket_context = stream_context_create($options);
-            set_error_handler(array('self', 'errorHandler'));
+            set_error_handler(array($this, 'errorHandler'));
             $this->smtp_conn = stream_socket_client(
                 $host . ":" . $port,
                 $errno,
@@ -288,7 +288,7 @@ class SMTP
                 "Connection: stream_socket_client not available, falling back to fsockopen",
                 self::DEBUG_CONNECTION
             );
-            set_error_handler(array('self', 'errorHandler'));
+            set_error_handler(array($this, 'errorHandler'));
             $this->smtp_conn = fsockopen(
                 $host,
                 $port,
@@ -1198,7 +1198,7 @@ class SMTP
      * @param integer $errno The error number returned by PHP.
      * @param string $errmsg The error message returned by PHP.
      */
-    function errorHandler($errno, $errmsg)
+    protected function errorHandler($errno, $errmsg)
     {
         $notice = 'Connection: Failed to connect to server.';
         $this->setError(
