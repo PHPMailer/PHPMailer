@@ -188,10 +188,11 @@ class SMTP
     /**
      * Output debugging info via a user-selected method.
      *
-     * @see   SMTP::$Debugoutput
-     * @see   SMTP::$do_debug
      * @param string $str Debug string to output
      * @param integer $level The debug level of this message; see DEBUG_* constants
+     *
+     * @see SMTP::$Debugoutput
+     * @see SMTP::$do_debug
      */
     protected function edebug($str, $level = 0)
     {
@@ -232,10 +233,11 @@ class SMTP
     /**
      * Connect to an SMTP server.
      *
-     * @param  string $host SMTP server IP or host name
-     * @param  integer $port The port number to connect to
-     * @param  integer $timeout How long to wait for the connection to open
-     * @param  array $options An array of options for stream_context_create()
+     * @param string $host SMTP server IP or host name
+     * @param integer $port The port number to connect to
+     * @param integer $timeout How long to wait for the connection to open
+     * @param array $options An array of options for stream_context_create()
+     *
      * @return boolean
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
@@ -356,12 +358,13 @@ class SMTP
      * Perform SMTP authentication.
      * Must be run after hello().
      *
-     * @see    hello()
-     * @param  string $username The user name
-     * @param  string $password The password
-     * @param  string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
-     * @param  OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     * @param string $username The user name
+     * @param string $password The password
+     * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
+     * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
+     *
      * @return boolean True if successfully authenticated.
+     * @see    hello()
      */
     public function authenticate(
         $username,
@@ -479,8 +482,9 @@ class SMTP
      * Works like hash_hmac('md5', $data, $key)
      * in case that function is not available
      *
-     * @param  string $data The data to hash
-     * @param  string $key  The key to hash with
+     * @param string $data The data to hash
+     * @param string $key  The key to hash with
+     *
      * @return string
      */
     protected function hmac($data, $key)
@@ -561,7 +565,8 @@ class SMTP
      * and the message body being separated by an additional <CRLF>.
      * Implements RFC 821: DATA <CRLF>
      *
-     * @param  string $msg_data Message data to send
+     * @param string $msg_data Message data to send
+     *
      * @return boolean
      */
     public function data($msg_data)
@@ -650,7 +655,8 @@ class SMTP
      * Implements RFC 821: HELO <SP> <domain> <CRLF>
      * and RFC 2821 EHLO.
      *
-     * @param  string $host The host name or IP to connect to
+     * @param string $host The host name or IP to connect to
+     *
      * @return boolean
      */
     public function hello($host = '')
@@ -663,10 +669,11 @@ class SMTP
      * Send an SMTP HELO or EHLO command.
      * Low-level implementation used by hello()
      *
-     * @see    hello()
-     * @param  string $hello The HELO string
-     * @param  string $host The hostname to say we are
+     * @param string $hello The HELO string
+     * @param string $host The hostname to say we are
+     *
      * @return boolean
+     * @see    hello()
      */
     protected function sendHello($hello, $host)
     {
@@ -684,7 +691,7 @@ class SMTP
      * Parse a reply to HELO/EHLO command to discover server extensions.
      * In case of HELO, the only parameter that can be discovered is a server name.
      *
-     * @param string $type - 'HELO' or 'EHLO'
+     * @param string $type `HELO` or `EHLO`
      */
     protected function parseHelloFields($type)
     {
@@ -730,7 +737,8 @@ class SMTP
      * commands may be called followed by a data command.
      * Implements RFC 821: MAIL <SP> FROM:<reverse-path> <CRLF>
      *
-     * @param  string $from Source address of this message
+     * @param string $from Source address of this message
+     *
      * @return boolean
      */
     public function mail($from)
@@ -748,7 +756,8 @@ class SMTP
      * Closes the socket if there is no error or the $close_on_error argument is true.
      * Implements from RFC 821: QUIT <CRLF>
      *
-     * @param  boolean $close_on_error Should the connection close if an error occurs?
+     * @param boolean $close_on_error Should the connection close if an error occurs?
+     *
      * @return boolean
      */
     public function quit($close_on_error = true)
@@ -768,7 +777,8 @@ class SMTP
      * Returns true if the recipient was accepted false if it was rejected.
      * Implements from RFC 821: RCPT <SP> TO:<forward-path> <CRLF>
      *
-     * @param  string $address The address the message is being sent to
+     * @param string $address The address the message is being sent to
+     *
      * @return boolean
      */
     public function recipient($address)
@@ -795,9 +805,10 @@ class SMTP
     /**
      * Send a command to an SMTP server and check its return code.
      *
-     * @param  string $command The command name - not sent to the server
-     * @param  string $commandstring The actual command to send
-     * @param  integer|array $expect One or more expected integer success codes
+     * @param string $command The command name - not sent to the server
+     * @param string $commandstring The actual command to send
+     * @param integer|array $expect One or more expected integer success codes
+     *
      * @return boolean True on success.
      */
     protected function sendCommand($command, $commandstring, $expect)
@@ -862,7 +873,8 @@ class SMTP
      * in and send them an email.
      * Implements RFC 821: SAML <SP> FROM:<reverse-path> <CRLF>
      *
-     * @param  string $from The address the message is from
+     * @param string $from The address the message is from
+     *
      * @return boolean
      */
     public function sendAndMail($from)
@@ -873,7 +885,8 @@ class SMTP
     /**
      * Send an SMTP VRFY command.
      *
-     * @param  string $name The name to verify
+     * @param string $name The name to verify
+     *
      * @return boolean
      */
     public function verify($name)
@@ -911,7 +924,8 @@ class SMTP
     /**
      * Send raw data to the server.
      *
-     * @param  string $data The data to send
+     * @param string $data The data to send
+     *
      * @return integer|boolean The number of bytes sent to the server or false on error
      */
     public function client_send($data)
@@ -957,7 +971,8 @@ class SMTP
      *  - false returned: the requested feature exactly not exists
      *  - positive value returned: the requested feature exists
      *
-     * @param  string $name Name of SMTP extension or 'HELO'|'EHLO'
+     * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
+     *
      * @return mixed
      */
     public function getServerExt($name)

@@ -22,32 +22,28 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Holds the phpmailer instance.
      *
-     * @private
-     * @var     PHPMailer
+     * @var PHPMailer
      */
     public $Mail;
 
     /**
      * Holds the SMTP mail host.
      *
-     * @public
-     * @var    string
+     * @var string
      */
     public $Host = '';
 
     /**
      * Holds the change log.
      *
-     * @private
-     * @var     string[]
+     * @var string[]
      */
     public $ChangeLog = [];
 
     /**
      * Holds the note log.
      *
-     * @private
-     * @var     string[]
+     * @var string[]
      */
     public $NoteLog = [];
 
@@ -261,8 +257,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Adds a simple note to the message.
      *
-     * @public
-     * @param  string $sValue
+     * @param string $sValue
      */
     public function addNote($sValue)
     {
@@ -272,9 +267,10 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Adds all of the addresses
      *
-     * @param  string $sAddress
-     * @param  string $sName
-     * @param  string $sType
+     * @param string $sAddress
+     * @param string $sName
+     * @param string $sType
+     *
      * @return boolean
      */
     public function setAddress($sAddress, $sName = '', $sType = 'to')

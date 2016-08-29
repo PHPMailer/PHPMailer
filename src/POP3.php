@@ -134,12 +134,13 @@ class POP3
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      *
-     * @param  $host
-     * @param  integer|boolean $port The port number to connect to
-     * @param  integer|boolean $timeout The timeout value
-     * @param  string $username
-     * @param  string $password
-     * @param  integer $debug_level
+     * @param $host
+     * @param integer|boolean $port The port number to connect to
+     * @param integer|boolean $timeout The timeout value
+     * @param string $username
+     * @param string $password
+     * @param integer $debug_level
+     *
      * @return boolean
      */
     public static function popBeforeSmtp(
@@ -159,12 +160,13 @@ class POP3
      * A connect, login, disconnect sequence
      * appropriate for POP-before SMTP authorisation.
      *
-     * @param  string $host The hostname to connect to
-     * @param  integer|boolean $port The port number to connect to
-     * @param  integer|boolean $timeout The timeout value
-     * @param  string $username
-     * @param  string $password
-     * @param  integer $debug_level
+     * @param string $host The hostname to connect to
+     * @param integer|boolean $port The port number to connect to
+     * @param integer|boolean $timeout The timeout value
+     * @param string $username
+     * @param string $password
+     * @param integer $debug_level
+     *
      * @return boolean
      */
     public function authorise($host, $port = false, $timeout = false, $username = '', $password = '', $debug_level = 0)
@@ -204,9 +206,10 @@ class POP3
     /**
      * Connect to a POP3 server.
      *
-     * @param  string $host
-     * @param  integer|boolean $port
-     * @param  integer $tval
+     * @param string $host
+     * @param integer|boolean $port
+     * @param integer $tval
+     *
      * @return boolean
      */
     public function connect($host, $port = false, $tval = 30)
@@ -266,8 +269,9 @@ class POP3
      * Log in to the POP3 server.
      * Does not support APOP (RFC 2828, 4949).
      *
-     * @param  string $username
-     * @param  string $password
+     * @param string $username
+     * @param string $password
+     *
      * @return boolean
      */
     public function login($username = '', $password = '')
@@ -315,7 +319,8 @@ class POP3
      * Get a response from the POP3 server.
      * $size is the maximum number of bytes to retrieve
      *
-     * @param  integer $size
+     * @param integer $size
+     *
      * @return string
      */
     protected function getResponse($size = 128)
@@ -330,7 +335,8 @@ class POP3
     /**
      * Send raw data to the POP3 server.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return integer
      */
     protected function sendString($string)
@@ -348,7 +354,8 @@ class POP3
      * Checks the POP3 server response.
      * Looks for for +OK or -ERR.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return boolean
      */
     protected function checkResponse($string)
@@ -371,7 +378,7 @@ class POP3
      * Add an error to the internal error store.
      * Also display debug output if it's enabled.
      *
-     * @param $error
+     * @param string $error
      */
     protected function setError($error)
     {
