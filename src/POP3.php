@@ -3,7 +3,7 @@
  * PHPMailer POP-Before-SMTP Authentication Class.
  * PHP Version 5.5
  * @package PHPMailer
- * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
@@ -42,21 +42,18 @@ class POP3
     /**
      * The POP3 PHPMailer Version number.
      * @var string
-     * @access public
      */
     public $Version = '6.0.0';
 
     /**
      * Default POP3 port number.
      * @var integer
-     * @access public
      */
     public $POP3_PORT = 110;
 
     /**
      * Default timeout in seconds.
      * @var integer
-     * @access public
      */
     public $POP3_TIMEOUT = 30;
 
@@ -64,63 +61,54 @@ class POP3
      * Debug display level.
      * Options: 0 = no, 1+ = yes
      * @var integer
-     * @access public
      */
     public $do_debug = 0;
 
     /**
      * POP3 mail server hostname.
      * @var string
-     * @access public
      */
     public $host;
 
     /**
      * POP3 port number.
      * @var integer
-     * @access public
      */
     public $port;
 
     /**
      * POP3 Timeout Value in seconds.
      * @var integer
-     * @access public
      */
     public $tval;
 
     /**
      * POP3 username
      * @var string
-     * @access public
      */
     public $username;
 
     /**
      * POP3 password.
      * @var string
-     * @access public
      */
     public $password;
 
     /**
      * Resource handle for the POP3 connection socket.
      * @var resource
-     * @access protected
      */
     protected $pop_conn;
 
     /**
      * Are we connected?
      * @var boolean
-     * @access protected
      */
     protected $connected = false;
 
     /**
      * Error container.
      * @var array
-     * @access protected
      */
     protected $errors = [];
 
@@ -155,7 +143,6 @@ class POP3
      * Authenticate with a POP3 server.
      * A connect, login, disconnect sequence
      * appropriate for POP-before SMTP authorisation.
-     * @access public
      * @param string $host The hostname to connect to
      * @param integer|boolean $port The port number to connect to
      * @param integer|boolean $timeout The timeout value
@@ -200,7 +187,6 @@ class POP3
 
     /**
      * Connect to a POP3 server.
-     * @access public
      * @param string $host
      * @param integer|boolean $port
      * @param integer $tval
@@ -262,7 +248,6 @@ class POP3
     /**
      * Log in to the POP3 server.
      * Does not support APOP (RFC 2828, 4949).
-     * @access public
      * @param string $username
      * @param string $password
      * @return boolean
@@ -295,7 +280,6 @@ class POP3
 
     /**
      * Disconnect from the POP3 server.
-     * @access public
      */
     public function disconnect()
     {
@@ -314,7 +298,6 @@ class POP3
      * $size is the maximum number of bytes to retrieve
      * @param integer $size
      * @return string
-     * @access protected
      */
     protected function getResponse($size = 128)
     {
@@ -329,7 +312,6 @@ class POP3
      * Send raw data to the POP3 server.
      * @param string $string
      * @return integer
-     * @access protected
      */
     protected function sendString($string)
     {
@@ -347,7 +329,6 @@ class POP3
      * Looks for for +OK or -ERR.
      * @param string $string
      * @return boolean
-     * @access protected
      */
     protected function checkResponse($string)
     {
@@ -369,7 +350,6 @@ class POP3
      * Add an error to the internal error store.
      * Also display debug output if it's enabled.
      * @param $error
-     * @access protected
      */
     protected function setError($error)
     {
@@ -398,7 +378,6 @@ class POP3
      * @param string $errstr
      * @param string $errfile
      * @param integer $errline
-     * @access protected
      */
     protected function catchWarning($errno, $errstr, $errfile, $errline)
     {

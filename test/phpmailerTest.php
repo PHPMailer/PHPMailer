@@ -55,7 +55,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * PIDs of any processes we need to kill
      * @var array
-     * @access private
      */
     private $pids = [];
 
@@ -132,9 +131,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Build the body of the message in the appropriate format.
-     *
-     * @private
-     * @return void
      */
     public function buildBody()
     {
@@ -212,8 +208,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Check which default settings have been changed for the report.
-     * @private
-     * @return void
      */
     public function checkChanges()
     {
@@ -248,10 +242,8 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Add a changelog entry.
-     * @access private
      * @param string $sName
      * @param string $sNewValue
-     * @return void
      */
     public function addChange($sName, $sNewValue)
     {
@@ -262,7 +254,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * Adds a simple note to the message.
      * @public
      * @param string $sValue
-     * @return void
      */
     public function addNote($sValue)
     {
@@ -271,7 +262,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Adds all of the addresses
-     * @access public
      * @param string $sAddress
      * @param string $sName
      * @param string $sType
@@ -1345,7 +1335,7 @@ EOT;
 
     /**
      * Tests this denial of service attack:
-     * @link http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
+     * @see http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */
     public function testDenialOfServiceAttack()
     {
@@ -1358,7 +1348,7 @@ EOT;
 
     /**
      * Tests this denial of service attack:
-     * @link https://sourceforge.net/p/phpmailer/bugs/383/
+     * @see https://sourceforge.net/p/phpmailer/bugs/383/
      * According to the ticket, this should get stuck in a loop, though I can't make it happen.
      */
     public function testDenialOfServiceAttack2()
@@ -1747,7 +1737,7 @@ EOT;
 
     /**
      * DKIM body canonicalization tests.
-     * @link https://tools.ietf.org/html/rfc6376#section-3.4.4
+     * @see https://tools.ietf.org/html/rfc6376#section-3.4.4
      */
     public function testDKIMBodyCanonicalization()
     {
@@ -1765,7 +1755,7 @@ EOT;
 
     /**
      * DKIM header canonicalization tests.
-     * @link https://tools.ietf.org/html/rfc6376#section-3.4.2
+     * @see https://tools.ietf.org/html/rfc6376#section-3.4.2
      */
     public function testDKIMHeaderCanonicalization()
     {
