@@ -12,6 +12,7 @@ require '../vendor/autoload.php';
 if (array_key_exists('to', $_POST)) {
     $err = false;
     $msg = '';
+    $email = '';
     //Apply some basic validation and filtering to the subject
     if (array_key_exists('subject', $_POST)) {
         $subject = substr(strip_tags($_POST['subject']), 0, 255);
@@ -55,9 +56,9 @@ if (array_key_exists('to', $_POST)) {
         $mail->Host = 'localhost';
         $mail->Port = 2500;
         $mail->CharSet = 'utf-8';
-        //It's important not to use the submitter's address as the form address as it's forgery,
-        //which will cause our messages to fail SPF checks
-        //Use an address in your own domain here
+        //It's important not to use the submitter's address as the from address as it's forgery,
+        //which will cause your messages to fail SPF checks.
+        //Use an address in your own domain as the from address, put the submitter's address in a reply-to
         $mail->setFrom('contact@example.com', (empty($name)? 'Contact form': $name));
         $mail->addAddress($to);
         $mail->addReplyTo($email, $name);

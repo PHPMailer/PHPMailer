@@ -51,6 +51,7 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 <a href='?provider=Yahoo'>Yahoo</a><br/>
 <a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br/>
 </body>
+</html>
 <?php
 exit;
 }
@@ -71,11 +72,12 @@ if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
     exit('Only Google, Microsoft and Yahoo OAuth2 providers are currently supported in this script.');
 }
 
-//These details obtained are by setting up app in Google developer console.
+//These details are obtained by setting up an app in the Google developer console,
+//or whichever provider you're using.
 $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
-//If this automatic URL doesn't work, set it yourself manually
+//If this automatic URL doesn't work, set it yourself manually to the URL of this script
 $redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/PHPMailer/redirect';
 
@@ -87,6 +89,7 @@ $params = [
 ];
 
 $options = [];
+$provider = null;
 
 switch ($providerName) {
     case 'Google':
@@ -109,6 +112,11 @@ switch ($providerName) {
             ]
         ];
         break;
+}
+
+if (is_null($provider)) {
+    echo 'Provider missing';
+    exit;
 }
 
 if (!isset($_GET['code'])) {

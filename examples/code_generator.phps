@@ -91,10 +91,8 @@ try {
                 $example_code .= "\n\$mail->Host       = \"" . $_POST['smtp_server'] . "\";";
                 $example_code .= "\n\$mail->Port       = \"" . $_POST['smtp_port'] . "\";";
                 $example_code .= "\n\$mail->SMTPSecure = \"" . strtolower($_POST['smtp_secure']) . "\";";
-                $example_code .= "\n\$mail->SMTPAuth   = " . (array_key_exists(
-                        'smtp_authenticate',
-                        $_POST
-                    ) ? 'true' : 'false') . ";";
+                $example_code .= "\n\$mail->SMTPAuth   = " .
+                    (array_key_exists('smtp_authenticate', $_POST) ? 'true' : 'false') . ";";
                 if (array_key_exists('smtp_authenticate', $_POST)) {
                     $example_code .= "\n\$mail->Username   = \"" . $_POST['authenticate_username'] . "\";";
                     $example_code .= "\n\$mail->Password   = \"" . $_POST['authenticate_password'] . "\";";
