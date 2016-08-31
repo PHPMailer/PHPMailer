@@ -1241,7 +1241,6 @@ class PHPMailer
      * Uses the sending method specified by $Mailer.
      *
      * @return boolean false on error - See the ErrorInfo property for details of the error.
-
      * @throws Exception
      */
     public function send()
@@ -1264,9 +1263,8 @@ class PHPMailer
     /**
      * Prepare a message for sending.
      *
-     * @return boolean
-     *
      * @throws Exception
+     * @return boolean
      */
     public function preSend()
     {
@@ -1362,7 +1360,6 @@ class PHPMailer
      * Send the email via the selected mechanism
      *
      * @return boolean
-     *
      * @throws Exception
      */
     public function postSend()
