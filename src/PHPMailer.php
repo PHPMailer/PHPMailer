@@ -84,8 +84,10 @@ class PHPMailer
     public $FromName = 'Root User';
 
     /**
-     * The Sender email (Return-Path) of the message.
-     * If not empty, will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
+     * The envelope sender of the message.
+     * This will usually be turned into a Return-Path header by the receiver,
+     * and is the address that bounces will be sent to.
+     * If not empty, will be passed via `-f` to sendmail or as the 'MAIL FROM' value over SMTP.
      *
      * @var string
      */
@@ -119,7 +121,7 @@ class PHPMailer
     /**
      * An iCal message part body.
      * Only supported in simple alt or alt_inline message types
-     * To generate iCal events, use the bundled extras/EasyPeasyICS.php class or iCalcreator
+     * To generate iCal event structures, use classes like EasyPeasyICS or iCalcreator
      *
      * @see http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php/
      * @see http://kigkonsult.se/iCalcreator/
@@ -467,11 +469,12 @@ class PHPMailer
     /**
      * Which validator to use by default when validating email addresses.
      * May be a callable to inject your own validator, but there are several built-in validators.
+     * The default validator uses PHP's FILTER_VALIDATE_EMAIL filter_var option.
      *
      * @see PHPMailer::validateAddress()
      * @var string|callable
      */
-    public static $validator = 'auto';
+    public static $validator = 'php';
 
     /**
      * An instance of the SMTP sender class.
@@ -1117,26 +1120,20 @@ class PHPMailer
         if (strpos($address, "\n") !== false or strpos($address, "\r") !== false) {
             return false;
         }
-        if (!$patternselect or 'auto' == $patternselect) {
-            //Check this constant first so it works when extension_loaded() is disabled by safe mode
-            if (defined('PCRE_VERSION')) {
-                //This pattern can get stuck in a recursive loop in PCRE <= 8.0.2
-                if (version_compare(PCRE_VERSION, '8.0.3') >= 0) {
-                    $patternselect = 'pcre8';
-                } else {
-                    $patternselect = 'pcre';
-                }
-            } elseif (function_exists('extension_loaded') and extension_loaded('pcre')) {
-                //Fall back to older PCRE
-                $patternselect = 'pcre';
-            } else {
-                $patternselect = 'php';
-            }
-        }
         switch ($patternselect) {
+            case 'pcre': //Kept for BC
             case 'pcre8':
                 /**
-                 * Uses the same RFC5322 regex on which FILTER_VALIDATE_EMAIL is based, but allows dotless domains.
+                 * A more complex and more permissive version of the RFC5322 regex on which FILTER_VALIDATE_EMAIL
+                 * is based.
+                 * In addition to the addresses allowed by filter_var, also permits:
+                 *  * dotless domains: `a@b`
+                 *  * comments: `1234 @ local(blah) .machine .example`
+                 *  * quoted elements: `'"test blah"@example.org'`
+                 *  * numeric TLDs: `a@b.123`
+                 *  * unbracketed IPv4 literals: `a@192.168.0.1`
+                 *  * IPv6 literals: 'first.last@[IPv6:a1::]'
+                 * Not all of these will necessarily work for sending!
                  *
                  * @see       http://squiloople.com/2009/12/20/email-address-validation/
                  * @copyright 2009-2010 Michael Rushton
@@ -1154,21 +1151,6 @@ class PHPMailer
                     '|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD',
                     $address
                 );
-            case 'pcre':
-                //An older regex that doesn't need a recent PCRE
-                return (boolean)preg_match(
-                    '/^(?!(?>"?(?>\\\[ -~]|[^"])"?){255,})(?!(?>"?(?>\\\[ -~]|[^"])"?){65,}@)(?>' .
-                    '[!#-\'*+\/-9=?^-~-]+|"(?>(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\xFF]))*")' .
-                    '(?>\.(?>[!#-\'*+\/-9=?^-~-]+|"(?>(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\xFF]))*"))*' .
-                    '@(?>(?![a-z0-9-]{64,})(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>\.(?![a-z0-9-]{64,})' .
-                    '(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)){0,126}|\[(?:(?>IPv6:(?>(?>[a-f0-9]{1,4})(?>:' .
-                    '[a-f0-9]{1,4}){7}|(?!(?:.*[a-f0-9][:\]]){8,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?' .
-                    '::(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?))|(?>(?>IPv6:(?>[a-f0-9]{1,4}(?>:' .
-                    '[a-f0-9]{1,4}){5}:|(?!(?:.*[a-f0-9]:){6,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4})?' .
-                    '::(?>(?:[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4}):)?))?(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}' .
-                    '|[1-9]?[0-9])(?>\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\])$/isD',
-                    $address
-                );
             case 'html5':
                 /**
                  * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
@@ -1180,12 +1162,7 @@ class PHPMailer
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
                 );
-            case 'noregex':
-                //No PCRE! Do something _very_ approximate!
-                //Check the address is 3 chars or longer and contains an @ that's not the first or last char
-                return (strlen($address) >= 3
-                    and strpos($address, '@') >= 1
-                    and strpos($address, '@') != strlen($address) - 1);
+            case 'noregex': //Kept for BC
             case 'php':
             default:
                 return (boolean)filter_var($address, FILTER_VALIDATE_EMAIL);
