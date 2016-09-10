@@ -2715,7 +2715,7 @@ class PHPMailer
     }
 
     /**
-     * Encode a header string optimally.
+     * Encode a header value (not including its label) optimally.
      * Picks shortest of Q, B, quoted-printable or none.
      *
      * @param string $str
@@ -2916,7 +2916,8 @@ class PHPMailer
                 $encoded = str_replace($char, '=' . sprintf('%02X', ord($char)), $encoded);
             }
         }
-        // Replace every spaces to _ (more readable than =20)
+        // Replace spaces with _ (more readable than =20)
+        // RFC 2047 section 4.2(2)
         return str_replace(' ', '_', $encoded);
     }
 
