@@ -17,11 +17,11 @@ $mail->Password   = "your password";     // SMTP account password
 
 Setting the `SMTPDebug` property results in different amounts of output:
 
-`0`: Disable debugging (you can also leave this out completely, 0 is the default).
-`1`: Output messages sent by the client.
-`2`: as 1, plus responses received from the server (this is probably the most useful setting for debugging).
-`3`: as 2, plus more information about the initial connection.
-`4`: as 3, plus even lower-level information, very verbose.
+ * `0`: Disable debugging (you can also leave this out completely, 0 is the default).
+ * `1`: Output messages sent by the client.
+ * `2`: as 1, plus responses received from the server (this is probably the most useful setting for debugging).
+ * `3`: as 2, plus more information about the initial connection.
+ * `4`: as 3, plus even lower-level information, very verbose.
 
 You don't need to use levels above 2 unless you're having trouble connecting at all - it will just make output more verbose and more difficult to read.
 
