@@ -22,5 +22,5 @@ $PHPMAILER_LANG['recipients_failed']    = 'SMTP fel: Följande mottagare är fel
 $PHPMAILER_LANG['signing']              = 'Signerings fel: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() misslyckades.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP server fel: ';
-//$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+//$PHPMAILER_LANG['variable_set']         = 'Kunde inte definiera eller återställa variabel: ';
+//$PHPMAILER_LANG['extension_missing']    = 'Tillägg ej tillgängligt: ';
