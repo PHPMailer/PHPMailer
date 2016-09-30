@@ -102,13 +102,17 @@ class SMTP
      * * `echo` Output plain-text as-is, appropriate for CLI
      * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
-     *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
+     * Alternatively, you can pass in an instance of a PSR-3 compatible logger, though only `debug`
+     * level output is used:
+     * <code>
+     * $mail->Debugoutput = new myPsr3Logger;
+     * </code>
      *
-     * @var string|callable
+     * @var string|callable|Psr\Log\LoggerInterface
      */
     public $Debugoutput = 'echo';
 
@@ -197,6 +201,11 @@ class SMTP
     protected function edebug($str, $level = 0)
     {
         if ($level > $this->do_debug) {
+            return;
+        }
+        //Is this a PSR-3 logger?
+        if (is_a($this->Debugoutput, 'Psr\Log\LoggerInterface')) {
+            $this->Debugoutput->debug($str);
             return;
         }
         //Avoid clash with built-in function names

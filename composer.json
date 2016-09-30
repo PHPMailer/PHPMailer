@@ -27,6 +27,7 @@
         "phpunit/phpunit": "4.*"
     },
     "suggest": {
+        "psr/log": "For optional PSR-3 debug logging",
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
         "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
         "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication"

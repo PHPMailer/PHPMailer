@@ -342,8 +342,12 @@ class PHPMailer
      * <code>
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
-     *
-     * @var string|callable
+     * Alternatively, you can pass in an instance of a PSR-3 compatible logger, though only `debug`
+     * level output is used:
+     * <code>
+     * $mail->Debugoutput = new myPsr3Logger;
+     * </code>
+     * @var string|callable|Psr\Log\LoggerInterface
      * @see SMTP::$Debugoutput
      */
     public $Debugoutput = 'echo';
@@ -741,6 +745,11 @@ class PHPMailer
     protected function edebug($str)
     {
         if ($this->SMTPDebug <= 0) {
+            return;
+        }
+        //Is this a PSR-3 logger?
+        if (is_a($this->Debugoutput, 'Psr\Log\LoggerInterface')) {
+            $this->Debugoutput->debug($str);
             return;
         }
         //Avoid clash with built-in function names

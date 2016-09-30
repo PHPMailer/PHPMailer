@@ -5,8 +5,8 @@ This is a major update that breaks backwards compatibility.
 
 * **Requires PHP 5.5 or later**
 * Uses the `PHPMailer\PHPMailer` namespace
-* File structure simplified, classes live in the `src/` folder
-* The custom autoloader has been removed, now PSR-4 compatible: [**use composer**](https://getcomposer.org)!
+* File structure simplified and PSR-4 compatible, classes live in the `src/` folder
+* The custom autoloader has been removed: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
 * Complete RFC standardisation on CRLF (`\r\n`) line breaks by default:
@@ -36,8 +36,10 @@ This is a major update that breaks backwards compatibility.
 * `PHPMailer->SingleToArray` is now protected
 * Don't try to use an auth mechanism if it's not supported by the server
 * Reorder automatic AUTH mechanism selector to try most secure method first
-* `Extras` classes have been removed - use packages from [packagist.org](https://packagist.org) instead
+* `Extras` classes have been removed - use alternative packages from [packagist.org](https://packagist.org) instead
 * Better handling of automatic transfer encoding switch in the presence of long lines
+* Simplification of address validation - now uses PHP's filter_var by default, retains advanced options
+* `Debugoutput` now accepts a PSR-3 logger instance
 
 ## Version 5.2.16 (June 6th 2016)
 * Added DKIM example

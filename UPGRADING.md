@@ -1,6 +1,6 @@
 # Upgrading from PHPMailer 5.2 to 6.0
 
-PHPMailer 6.0 is a major update containing some backward-compatibility breaks.
+PHPMailer 6.0 is a major update, breaking backward compatibility.
 
 If you're in doubt about how you should be using PHPMailer 6, take a look at the examples as they have all been updated to work in a PHPMailer 6.0 style.
 
@@ -10,17 +10,17 @@ PHPMailer 6.0 requires PHP 5.5 or later, and is fully compatible with PHP 7.0. P
 
 ## Loading PHPMailer
  
-The single biggest change will be in the way that you load PHPMailer. In earlier versions you'll have done this:
+The single biggest change will be in the way that you load PHPMailer. In earlier versions you may have done this:
 
 ```php
-require 'class.phpmailer.php';
-require 'class.smtp.php';
+require 'PHPMailerAutoload.php';
 ```
 
 or
 
 ```php
-require 'PHPMailerAutoload.php';
+require 'class.phpmailer.php';
+require 'class.smtp.php';
 ```
 
 We recommend that you load PHPMailer via composer, using its standard autoloader, which you probably won't need to load if you're using it already, but in case you're not, you will need to do this instead:
@@ -60,6 +60,7 @@ The OAuth2 implementation has been completely redesigned using the [OAuth2 packa
 * Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.
 
 ##Other upgrade changes
+See the changelog for full details.
 * File structure simplified, classes live in the `src/` folder
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
 * Complete RFC standardisation on CRLF (`\r\n`) line breaks by default:
