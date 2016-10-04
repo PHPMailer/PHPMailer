@@ -201,6 +201,9 @@ class PHPMailer
     /**
      * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
+     * You can set your own, but it must be in the format "<id@domain>",
+     * as defined in RFC5322 section 3.6.4 or it will be ignored.
+     * @see https://tools.ietf.org/html/rfc5322#section-3.6.4
      * @var string
      */
     public $MessageID = '';
@@ -2017,6 +2020,8 @@ class PHPMailer
             $result .= $this->headerLine('Subject', $this->encodeHeader($this->secureHeader($this->Subject)));
         }
 
+        // Only allow a custom message ID if it conforms to RFC 5322 section 3.6.4
+        // https://tools.ietf.org/html/rfc5322#section-3.6.4
         if ('' != $this->MessageID and preg_match('/^<.*@.*>$/', $this->MessageID)) {
             $this->lastMessageID = $this->MessageID;
         } else {
