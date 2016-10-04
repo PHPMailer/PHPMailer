@@ -201,6 +201,9 @@ class PHPMailer
     /**
      * An ID to be used in the Message-ID header.
      * If empty, a unique id will be generated.
+     * You can set your own, but it must be in the format "<id@domain>",
+     * as defined in RFC5322 section 3.6.4 or it will be ignored.
+     * @see https://tools.ietf.org/html/rfc5322#section-3.6.4
      * @var string
      */
     public $MessageID = '';
@@ -2017,6 +2020,8 @@ class PHPMailer
             $result .= $this->headerLine('Subject', $this->encodeHeader($this->secureHeader($this->Subject)));
         }
 
+        // Only allow a custom message ID if it conforms to RFC 5322 section 3.6.4
+        // https://tools.ietf.org/html/rfc5322#section-3.6.4
         if ('' != $this->MessageID and preg_match('/^<.*@.*>$/', $this->MessageID)) {
             $this->lastMessageID = $this->MessageID;
         } else {
@@ -3313,16 +3318,18 @@ class PHPMailer
     }
 
     /**
-     * Create a message from an HTML string.
-     * Automatically makes modifications for inline images and backgrounds
-     * and creates a plain-text version by converting the HTML.
-     * Overwrites any existing values in $this->Body and $this->AltBody
+     * Create a message body from an HTML string.
+     * Automatically inlines images and creates a plain-text version by converting the HTML,
+     * overwriting any existing values in Body and AltBody.
+     * $basedir is used when handling relative image paths, e.g. <img src="images/a.png">
+     * will look for an image file in $basedir/images/a.png and convert it to inline.
+     * If you don't want to apply these transformations to your HTML, just set Body and AltBody yourself.
      * @access public
      * @param string $message HTML message string
-     * @param string $basedir baseline directory for path
+     * @param string $basedir base directory for relative paths to images
      * @param boolean|callable $advanced Whether to use the internal HTML to text converter
      *    or your own custom converter @see PHPMailer::html2text()
-     * @return string $message
+     * @return string $message The transformed message Body
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
@@ -3392,7 +3399,7 @@ class PHPMailer
      * Convert an HTML string into plain text.
      * This is used by msgHTML().
      * Note - older versions of this function used a bundled advanced converter
-     * which was been removed for license reasons in #232
+     * which was been removed for license reasons in #232.
      * Example usage:
      * <code>
      * // Use default conversion
