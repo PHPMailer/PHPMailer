@@ -1,7 +1,6 @@
 * text=auto
 
 /docs export-ignore
-/examples export-ignore
 /test export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
