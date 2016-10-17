@@ -511,7 +511,7 @@ function tln_unspace(&$attvalue)
  * @param array $add_attr_to_tag See description for tln_sanitize
  * @param string $trans_image_path
  * @param boolean $block_external_images
- * @return					Array with modified attributes.
+ * @return array with modified attributes.
  */
 function tln_fixatts(
     $tagname,
@@ -667,9 +667,7 @@ function tln_fixurl($attname, &$attvalue, $trans_image_path, $block_external_ima
 
 function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
 {
-    $me = 'tln_fixstyle';
     // workaround for </style> in between comments
-    $iCurrentPos = $pos;
     $content = '';
     $sToken = '';
     $bSucces = false;
@@ -796,7 +794,6 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
 
 function tln_body2div($attary, $trans_image_path)
 {
-    $me = 'tln_body2div';
     $divattary = array('class' => "'bodyclass'");
     $text = '#000000';
     $has_bgc_stl = $has_txt_stl = false;
