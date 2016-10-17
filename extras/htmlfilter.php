@@ -461,7 +461,6 @@ function tln_deent(&$attvalue, $regex, $hex = false)
  * checks on them.
  *
  * @param string $attvalue A string to run entity check against.
- * @return             Void, modifies a reference value.
  */
 function tln_defang(&$attvalue)
 {
@@ -488,7 +487,6 @@ function tln_defang(&$attvalue)
  * be funny to make "java[tab]script" be just as good as "javascript".
  *
  * @param string $attvalue     The attribute value before extraneous spaces removed.
- * @return     Void, modifies a reference value.
  */
 function tln_unspace(&$attvalue)
 {
@@ -737,8 +735,6 @@ function tln_fixstyle($body, $pos, $trans_image_path, $block_external_images)
      * and change it to .bodyclass so we can just assign it to a <div>
      */
     $content = preg_replace("|body(\s*\{.*?\})|si", ".bodyclass\\1", $content);
-
-    $trans_image_path = $trans_image_path;
 
     /**
     * Fix url('blah') declarations.
