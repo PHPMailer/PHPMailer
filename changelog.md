@@ -40,6 +40,7 @@ This is a major update that breaks backwards compatibility.
 * Better handling of automatic transfer encoding switch in the presence of long lines
 * Simplification of address validation - now uses PHP's filter_var by default, retains advanced options
 * `Debugoutput` now accepts a PSR-3 logger instance
+* To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 
 ## Version 5.2.16 (June 6th 2016)
 * Added DKIM example
