@@ -210,7 +210,7 @@ class SMTP
         }
         //Avoid clash with built-in function names
         if (!in_array($this->Debugoutput, ['error_log', 'html', 'echo']) and is_callable($this->Debugoutput)) {
-            call_user_func($this->Debugoutput, $str, $this->do_debug);
+            call_user_func($this->Debugoutput, $str, $level);
             return;
         }
         switch ($this->Debugoutput) {
