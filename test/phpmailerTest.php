@@ -1264,12 +1264,12 @@ EOT;
         //Only run if we have qmail installed
         if (file_exists('/var/qmail/bin/qmail-inject')) {
             $this->Mail->Body = 'Sending via qmail';
-            $this->BuildBody();
+            $this->buildBody();
             $subject = $this->Mail->Subject;
 
             $this->Mail->Subject = $subject . ': qmail';
-            $this->Mail->IsQmail();
-            $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
+            $this->Mail->isQmail();
+            $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         } else {
             $this->markTestSkipped('Qmail is not installed');
         }
