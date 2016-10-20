@@ -684,16 +684,20 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
+
         //Can't use additional_parameters in safe_mode
         //@link http://php.net/manual/en/function.mail.php
         if (ini_get('safe_mode') or !$this->UseSendmailOptions) {
             $result = @mail($to, $subject, $body, $header);
-        } else {
+        }
+        elseif($params == NULL) {
+            $result = @mail($to, $subject, $body, $header);
+        }
+        else {
             $result = @mail($to, $subject, $body, $header, $params);
         }
         return $result;
     }
-
     /**
      * Output debugging info via user-defined method.
      * Only generates output if SMTP debug output is enabled (@see SMTP::$do_debug).
