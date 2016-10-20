@@ -687,13 +687,9 @@ class PHPMailer
 
         //Can't use additional_parameters in safe_mode
         //@link http://php.net/manual/en/function.mail.php
-        if (ini_get('safe_mode') or !$this->UseSendmailOptions) {
+        if (ini_get('safe_mode') or !$this->UseSendmailOptions or is_null($params)) {
             $result = @mail($to, $subject, $body, $header);
-        }
-        elseif($params == NULL) {
-            $result = @mail($to, $subject, $body, $header);
-        }
-        else {
+        } else {
             $result = @mail($to, $subject, $body, $header, $params);
         }
         return $result;
