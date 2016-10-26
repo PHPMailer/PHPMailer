@@ -103,6 +103,7 @@ if(!$mail->send()) {
 } else {
     echo 'Message has been sent';
 }
+?>
 ```
 
 You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
