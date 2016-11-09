@@ -2128,6 +2128,14 @@ class PHPMailer
     }
 
     /**
+     * Create unique ID
+     * @return string
+     */
+    protected function generateId() {
+        return md5(uniqid(time()));
+    }
+
+    /**
      * Assemble the message body.
      * Returns an empty string on failure.
      * @access public
@@ -2138,7 +2146,7 @@ class PHPMailer
     {
         $body = '';
         //Create unique IDs and preset boundaries
-        $this->uniqueid = md5(uniqid(time()));
+        $this->uniqueid = $this->generateId();
         $this->boundary[1] = 'b1_' . $this->uniqueid;
         $this->boundary[2] = 'b2_' . $this->uniqueid;
         $this->boundary[3] = 'b3_' . $this->uniqueid;
