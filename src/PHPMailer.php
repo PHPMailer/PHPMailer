@@ -445,6 +445,14 @@ class PHPMailer
     public $DKIM_private = '';
 
     /**
+     * DKIM private key string.
+     *
+     * If set, takes precedence over `$DKIM_private`.
+     * @var string
+     */
+    public $DKIM_private_string = '';
+
+    /**
      * Callback Action function name.
      *
      * The function that handles the result of the send email action.
@@ -1326,7 +1334,7 @@ class PHPMailer
             if (!empty($this->DKIM_domain)
                 and !empty($this->DKIM_private)
                 and !empty($this->DKIM_selector)
-                and file_exists($this->DKIM_private)) {
+                and (!empty($this->DKIM_private_string) or file_exists($this->DKIM_private))) {
                 $header_dkim = $this->DKIM_Add(
                     $this->MIMEHeader . $this->mailHeader,
                     $this->encodeHeader($this->secureHeader($this->Subject)),
@@ -2179,6 +2187,16 @@ class PHPMailer
     }
 
     /**
+     * Create unique ID to use for boundaries.
+     *
+     * @return string
+     */
+    protected function generateId()
+    {
+        return md5(uniqid(time()));
+    }
+
+    /**
      * Assemble the message body.
      * Returns an empty string on failure.
      *
@@ -2189,7 +2207,7 @@ class PHPMailer
     {
         $body = '';
         //Create unique IDs and preset boundaries
-        $this->uniqueid = md5(uniqid(time()));
+        $this->uniqueid = $this->generateId();
         $this->boundary[1] = 'b1_' . $this->uniqueid;
         $this->boundary[2] = 'b2_' . $this->uniqueid;
         $this->boundary[3] = 'b3_' . $this->uniqueid;
@@ -3763,7 +3781,11 @@ class PHPMailer
             }
             return '';
         }
-        $privKeyStr = file_get_contents($this->DKIM_private);
+        $privKeyStr = (
+            !empty($this->DKIM_private_string) ?
+                $this->DKIM_private_string :
+                file_get_contents($this->DKIM_private)
+        );
         if ('' != $this->DKIM_passphrase) {
             $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
         } else {
