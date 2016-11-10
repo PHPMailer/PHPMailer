@@ -424,6 +424,13 @@ class PHPMailer
     public $DKIM_private = '';
 
     /**
+     * DKIM private key string.
+     * If set, takes precedence over `$DKIM_private`.
+     * @var string
+     */
+    public $DKIM_private_string = '';
+
+    /**
      * Callback Action function name.
      *
      * The function that handles the result of the send email action.
@@ -1289,7 +1296,7 @@ class PHPMailer
             if (!empty($this->DKIM_domain)
                 && !empty($this->DKIM_private)
                 && !empty($this->DKIM_selector)
-                && file_exists($this->DKIM_private)) {
+                && (!empty($this->DKIM_private_string) || file_exists($this->DKIM_private))) {
                 $header_dkim = $this->DKIM_Add(
                     $this->MIMEHeader . $this->mailHeader,
                     $this->encodeHeader($this->secureHeader($this->Subject)),
@@ -3717,7 +3724,7 @@ class PHPMailer
             }
             return '';
         }
-        $privKeyStr = file_get_contents($this->DKIM_private);
+        $privKeyStr = !empty($this->DKIM_private_string) ? $this->DKIM_private_string : file_get_contents($this->DKIM_private);
         if ('' != $this->DKIM_passphrase) {
             $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
         } else {
