@@ -1294,9 +1294,11 @@ class PHPMailer
 
             // Sign with DKIM if enabled
             if (!empty($this->DKIM_domain)
-                && !empty($this->DKIM_private)
                 && !empty($this->DKIM_selector)
-                && (!empty($this->DKIM_private_string) || file_exists($this->DKIM_private))) {
+                && (!empty($this->DKIM_private_string)
+                   || (!empty($this->DKIM_private) && file_exists($this->DKIM_private))
+                )
+            ) {
                 $header_dkim = $this->DKIM_Add(
                     $this->MIMEHeader . $this->mailHeader,
                     $this->encodeHeader($this->secureHeader($this->Subject)),
