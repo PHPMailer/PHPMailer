@@ -1211,4 +1211,29 @@ class SMTP
             self::DEBUG_CONNECTION
         );
     }
+
+	public function getLastMessageId() {
+		$reply = $this->getLastReply();
+
+		switch (true) {
+
+			// Exim
+			case preg_match("/[0-9]{3} OK id=(.*)/", $reply, $id):
+				return $id[1];
+			break;
+
+			// Sendmail
+			case preg_match("/[0-9]{3} 2.0.0 (.*) Message/", $reply, $id):
+				return $id[1];
+			break;
+
+			// Postfix
+			case preg_match("/[0-9]{3} 2.0.0 Ok: queued as (.*)/", $reply, $id):
+				return $id[1];
+			break;
+			default:
+				return false;
+			break;
+		}
+    }
 }
