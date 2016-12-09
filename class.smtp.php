@@ -30,7 +30,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @var string
      */
-    const VERSION = '5.2.16';
+    const VERSION = '5.2.17';
 
     /**
      * SMTP line break constant.
@@ -81,7 +81,7 @@ class SMTP
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.16';
+    public $Version = '5.2.17';
 
     /**
      * SMTP server port number.
@@ -149,6 +149,17 @@ class SMTP
      * @var integer
      */
     public $Timelimit = 300;
+
+	/**
+	 * @var array patterns to extract smtp transaction id from smtp reply
+	 * Only first capture group will be use, use non-capturing group to deal with it
+	 * Extend this class to override this property to fulfil your needs.
+	 */
+	protected $smtp_transaction_id_patterns = array(
+		'exim' => '/[0-9]{3} OK id=(.*)/',
+		'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
+		'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/'
+	);
 
     /**
      * The socket for the server connection.
@@ -1210,5 +1221,29 @@ class SMTP
             $notice . ' Error number ' . $errno . '. "Error notice: ' . $errmsg,
             self::DEBUG_CONNECTION
         );
+    }
+
+	/**
+	 * Will return the ID of the last smtp transaction based on a list of patterns provided
+	 * in SMTP::$smtp_transaction_id_patterns.
+	 * If no reply has been received yet, it will return null.
+	 * If no pattern has been matched, it will return false.
+	 * @return bool|null|string
+	 */
+	public function getLastTransactionID()
+	{
+		$reply = $this->getLastReply();
+
+		if (empty($reply)) {
+			return null;
+		}
+
+		foreach($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
+			if(preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
+				return $matches[1];
+			}
+		}
+
+		return false;
     }
 }
