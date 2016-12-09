@@ -4,7 +4,7 @@
 This is a major update that breaks backwards compatibility.
 
 * **Requires PHP 5.5 or later**
-* Uses the `PHPMailer\PHPMailer` namespace
+* **Uses the `PHPMailer\PHPMailer` namespace**
 * File structure simplified and PSR-4 compatible, classes live in the `src/` folder
 * The custom autoloader has been removed: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
@@ -17,15 +17,17 @@ This is a major update that breaks backwards compatibility.
 * Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Major cleanup of docs and examples
 * All elements previously marked as deprecated have been removed:
-  * `PHPMailer->Version`
+  * `PHPMailer->Version` (replaced with VERSION constant)
   * `PHPMailer->ReturnPath`
   * `PHPMailer->PluginDir`
   * `PHPMailer->encodeQPphp()`
-  * `SMTP->CRLF`
-  * `SMTP->Version`
-  * `SMTP->SMTP_PORT`
-  * `POP3->CRLF`
-  * `POP3->Version`
+  * `SMTP->CRLF` (replaced with LE constant)
+  * `SMTP->Version` (replaced with VERSION constant)
+  * `SMTP->SMTP_PORT` (replaced with DEFAULT_PORT constant)
+  * `POP3->CRLF` (replaced with LE constant)
+  * `POP3->Version` (replaced with VERSION constant)
+  * `POP3->POP3_PORT` (replaced with DEFAULT_PORT constant)
+  * `POP3->POP3_TIMEOUT` (replaced with DEFAULT_TIMEOUT constant)
 * NTLM authentication has been removed - it never worked anyway!
   * `PHPMailer->Workstation`
   * `PHPMailer->Realm`
@@ -38,8 +40,8 @@ This is a major update that breaks backwards compatibility.
 * Reorder automatic AUTH mechanism selector to try most secure method first
 * `Extras` classes have been removed - use alternative packages from [packagist.org](https://packagist.org) instead
 * Better handling of automatic transfer encoding switch in the presence of long lines
-* Simplification of address validation - now uses PHP's filter_var by default, retains advanced options
-* `Debugoutput` now accepts a PSR-3 logger instance
+* Simplification of address validation - now uses PHP's `FILTER_VALIDATE_EMAIL` pattern by default, retains advanced options
+* `Debugoutput` can accept a PSR-3 logger instance
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 
 ## Version 5.2.17 (December 9th 2016)

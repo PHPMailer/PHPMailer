@@ -46,21 +46,21 @@ class POP3
      *
      * @var string
      */
-    public $Version = '6.0.0';
+    const VERSION = '6.0.0';
 
     /**
      * Default POP3 port number.
      *
      * @var integer
      */
-    public $POP3_PORT = 110;
+    const DEFAULT_PORT = 110;
 
     /**
      * Default timeout in seconds.
      *
      * @var integer
      */
-    public $POP3_TIMEOUT = 30;
+    const DEFAULT_TIMEOUT = 30;
 
     /**
      * Debug display level.
@@ -174,13 +174,13 @@ class POP3
         $this->host = $host;
         // If no port value provided, use default
         if (false === $port) {
-            $this->port = $this->POP3_PORT;
+            $this->port = static::DEFAULT_PORT;
         } else {
             $this->port = (integer)$port;
         }
         // If no timeout value provided, use default
         if (false === $timeout) {
-            $this->tval = $this->POP3_TIMEOUT;
+            $this->tval = static::DEFAULT_TIMEOUT;
         } else {
             $this->tval = (integer)$timeout;
         }
@@ -224,7 +224,7 @@ class POP3
         set_error_handler([$this, 'catchWarning']);
 
         if (false === $port) {
-            $port = $this->POP3_PORT;
+            $port = static::DEFAULT_PORT;
         }
 
         //  connect to the POP3 server
