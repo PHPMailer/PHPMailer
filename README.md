@@ -147,7 +147,7 @@ PHPMailer versions prior to 5.2.14 (released November 2015) are vulnerable to [C
 
 PHPMailer versions prior to 5.2.10 (released May 2015) are vulnerable to [CVE-2008-5619](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2008-5619), a remote code execution vulnerability in the bundled html2text library. This file was removed in 5.2.10, so if you are using a version prior to that and make use of the html2text function, it's vitally important that you upgrade and remove this file.
 
-See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY) for older security issues.
+See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY.md) for older security issues.
 
 ## Contributing
 
