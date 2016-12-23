@@ -1,5 +1,10 @@
 # ChangeLog
 
+## Version 5.2.18 (December 23rd 2016)
+* **SECURITY** Critical security update for CVE-2016-10033 please update now! Thanks to [Dawid Golunski](https://legalhackers.com).
+* Better checking of sendmail path
+* Minor documentation tweaks
+
 ## Version 5.2.17 (December 9th 2016)
 * This is officially the last feature release of 5.2. Security fixes only from now on; use PHPMailer 6.0!
 * Added ability to extract SMTP transaction ID from successful submissions
