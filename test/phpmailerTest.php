@@ -12,7 +12,7 @@
  * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
-require '../vendor/autoload.php';
+
 require_once realpath('../PHPMailerAutoload.php');
 
 /**
