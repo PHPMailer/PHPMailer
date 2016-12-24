@@ -12,7 +12,7 @@
  * @copyright 2010 Marcus Bointon
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
-
+require '../vendor/autoload.php';
 require_once realpath('../PHPMailerAutoload.php');
 
 /**
@@ -1020,14 +1020,21 @@ EOT;
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->Subject .= ': HTML + Attachment';
         $this->Mail->isHTML(true);
+        $this->Mail->CharSet = 'UTF-8';
 
         if (!$this->Mail->addAttachment(
-            realpath(self::INCLUDE_DIR . 'examples/images/phpmailer_mini.png'), 'phpmailer_mini.png')
-        ) {
+            realpath(self::INCLUDE_DIR . 'examples/images/phpmailer_mini.png'),
+            'phpmailer_mini.png'
+        )) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
 
+        $this->Mail->addAttachment(
+            realpath(self::INCLUDE_DIR . 'examples/images/phpmailer_mini.png'),
+            'žasiukas.png'
+        );
+        $this->Mail->addStringAttachment('123', 'žasiukas.txt');
         //Make sure that trying to attach a nonexistent file fails
         $this->assertFalse($this->Mail->addAttachment(__FILE__ . md5(microtime()), 'nonexistent_file.txt'));
 
