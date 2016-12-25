@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.17';
+    public $Version = '5.2.18';
 
     /**
      * Email priority.
@@ -164,6 +164,7 @@ class PHPMailer
 
     /**
      * The path to the sendmail program.
+     * Must contain only a path to an executable, with no parameters or switches
      * @var string
      */
     public $Sendmail = '/usr/sbin/sendmail';
@@ -692,7 +693,7 @@ class PHPMailer
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
 
-        //Can't use additional_parameters in safe_mode
+        //Can't use additional_parameters in safe_mode, calling mail() with null params breaks
         //@link http://php.net/manual/en/function.mail.php
         if (ini_get('safe_mode') or !$this->UseSendmailOptions or is_null($params)) {
             $result = @mail($to, $subject, $body, $header);
@@ -1364,7 +1365,7 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        if ($this->Sender != '') {
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
@@ -1441,10 +1442,10 @@ class PHPMailer
 
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
-        if (!empty($this->Sender)) {
-            $params = sprintf('-f%s', $this->Sender);
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+            $params = sprintf('-f%s', escapeshellarg($this->Sender));
         }
-        if ($this->Sender != '' and !ini_get('safe_mode')) {
+        if (!empty($this->Sender) and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
@@ -1498,10 +1499,10 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new phpmailerException($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
-        if ('' == $this->Sender) {
-            $smtp_from = $this->From;
-        } else {
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             $smtp_from = $this->Sender;
+        } else {
+            $smtp_from = $this->From;
         }
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
