@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.18';
+    public $Version = '5.2.19';
 
     /**
      * Email priority.
@@ -164,7 +164,6 @@ class PHPMailer
 
     /**
      * The path to the sendmail program.
-     * Must contain only a path to an executable, with no parameters or switches
      * @var string
      */
     public $Sendmail = '/usr/sbin/sendmail';
@@ -1365,7 +1364,7 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+        if (!empty($this->Sender)) {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
