@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 5.2.19 (December 26th 2016)
+* Minor cleanup
+
 ## Version 5.2.18 (December 24th 2016)
 * **SECURITY** Critical security update for CVE-2016-10033 please update now! Thanks to [Dawid Golunski](https://legalhackers.com).
 * Add ability to extract the SMTP transaction ID from some common SMTP success messages
