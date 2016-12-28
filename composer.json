@@ -20,6 +20,7 @@
         }
     ],
     "require": {
+        "ext-ctype": "*",
         "php": ">=5.0.0"
     },
     "require-dev": {
