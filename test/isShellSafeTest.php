@@ -53,6 +53,10 @@ class isShellSafeTest extends PHPUnit_Framework_TestCase
         return array(
             array(''),
             array('a'),
+            array('@._-'),
+            array(static::charRange('a', 'z')),
+            array(static::charRange('A', 'Z')),
+            array(static::charRange('0', '9')),
         );
     }
 
@@ -64,8 +68,23 @@ class isShellSafeTest extends PHPUnit_Framework_TestCase
         return array(
             array(false),
             array(null),
+            array("'test\\\"test'@test.test"),
+            array('\\'),
+            array('/'),
         );
     }
+
+	private function charRange($a, $b) {
+		return self::byteRange(ord($a), ord($b));
+	}
+
+	private function byteRange($a, $b) {
+		$s = '';
+		foreach (range($a, $b) as $c) {
+			$s .= chr($c);
+		}
+		return $s;
+	}
 }
 
 /**
