@@ -1364,7 +1364,8 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        if (!empty($this->Sender)) {
+        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped by escapeshellcmd when popen is called due to safe mode.
+        if (!empty($this->Sender) || ini_get('safe_mode')) {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
@@ -1442,7 +1443,10 @@ class PHPMailer
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
-            $params = sprintf('-f%s', escapeshellarg($this->Sender));
+            // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+            if (escapeshellcmd($this->Sender) === $this->Sender && in_array(escapeshellarg($this->Sender), array("'$this->Sender'", "\"$this->Sender\""))) {
+                $params = sprintf('-f%s', escapeshellarg($this->Sender));
+            }
         }
         if (!empty($this->Sender) and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
             $old_from = ini_get('sendmail_from');
