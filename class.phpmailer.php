@@ -1444,7 +1444,7 @@ class PHPMailer
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-            if (escapeshellcmd($this->Sender) === $this->Sender) {
+            if (escapeshellcmd($this->Sender) === $this->Sender && in_array(escapeshellarg($this->Sender), array("'$this->Sender'", "\"$this->Sender\""))) {
                 $params = sprintf('-f%s', escapeshellarg($this->Sender));
             }
         }
