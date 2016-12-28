@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.19';
+    public $Version = '5.2.20';
 
     /**
      * Email priority.
@@ -1364,8 +1364,9 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped by escapeshellcmd when popen is called due to safe mode.
-        if (!empty($this->Sender) || ini_get('safe_mode')) {
+        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped
+        // by escapeshellcmd when popen is called due to safe mode.
+        if (!empty($this->Sender) && !ini_get('safe_mode')) {
             if ($this->Mailer == 'qmail') {
                 $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
             } else {
