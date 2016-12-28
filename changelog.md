@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 5.2.21 (December 28th 2016)
+* Fix missed number update in version file - no functional changes
+
 ## Version 5.2.20 (December 28th 2016)
 * **SECURITY** Critical security update for CVE-2016-10045 please update now! Thanks to [Dawid Golunski](https://legalhackers.com) and Paul Buonopane (@Zenexer).
 
