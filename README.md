@@ -147,7 +147,7 @@ PHPMailer versions prior to 5.2.20 (released December 28th 2016) are vulnerable 
 
 PHPMailer versions prior to 5.2.18 (released December 2016) are vulnerable to [CVE-2016-10033](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2016-10033) a critical remote code execution vulnerability, responsibly reported by [Dawid Golunski](http://legalhackers.com/advisories/PHPMailer-Exploit-Remote-Code-Exec-CVE-2016-10033-Vuln.html).
 
-See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY) for more detail on security issues.
+See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY.md) for more detail on security issues.
 
 ## Contributing
 
