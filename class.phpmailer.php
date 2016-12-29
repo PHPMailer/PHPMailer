@@ -1047,6 +1047,27 @@ class PHPMailer
     }
 
     /**
+     * Return a new Message-ID to be used for manually creating headers
+     * for Message-Id and Resent-Message-Id
+     * @return string
+     */
+    public function buildMessageID()
+    {
+        $this->uniqueid = md5(uniqid(time()));
+        return sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());
+    }
+
+    /**
+     * Return a new Message-Date to be used for manually creating headers
+     * for Resent-Message-Date
+     * @return string
+     */
+    public function buildMessageDate()
+    {
+        return self::rfcDate();
+    }
+
+    /**
      * Check that a string looks like an email address.
      * @param string $address The email address to check
      * @param string $patternselect A selector for the validation pattern to use :
@@ -2124,7 +2145,9 @@ class PHPMailer
     {
         $body = '';
         //Create unique IDs and preset boundaries
-        $this->uniqueid = md5(uniqid(time()));
+        if (empty($this->uniqueid)) {
+            $this->uniqueid = md5(uniqid(time()));
+        }
         $this->boundary[1] = 'b1_' . $this->uniqueid;
         $this->boundary[2] = 'b2_' . $this->uniqueid;
         $this->boundary[3] = 'b3_' . $this->uniqueid;
