@@ -1,12 +1,18 @@
 <?php
 /**
  * This example shows how to use POP-before-SMTP for authentication.
+ * POP-before-SMTP is a very old technology that is hardly used any more.
  */
 
-require '../PHPMailerAutoload.php';
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\POP3;
+
+require '../vendor/autoload.php';
 
 //Authenticate via POP3.
-//After this you should be allowed to submit messages over SMTP for a while.
+//After this you should be allowed to submit messages over SMTP for a few minutes.
 //Only applies if your host supports POP-before-SMTP.
 $pop = POP3::popBeforeSmtp('pop3.example.com', 110, 30, 'username', 'password', 1);
 
@@ -20,10 +26,8 @@ try {
     // 1 = client messages
     // 2 = client and server messages
     $mail->SMTPDebug = 2;
-    //Ask for HTML-friendly debug output
-    $mail->Debugoutput = 'html';
     //Set the hostname of the mail server
-    $mail->Host = "mail.example.com";
+    $mail->Host = 'mail.example.com';
     //Set the SMTP port number - likely to be 25, 465 or 587
     $mail->Port = 25;
     //Whether to use SMTP authentication
@@ -46,9 +50,9 @@ try {
     //send the message
     //Note that we don't need check the response from this because it will throw an exception if it has trouble
     $mail->send();
-    echo "Message sent!";
-} catch (phpmailerException $e) {
-    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+    echo 'Message sent!';
 } catch (Exception $e) {
+    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+} catch (\Exception $e) {
     echo $e->getMessage(); //Boring error messages from anything else!
 }

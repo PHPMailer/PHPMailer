@@ -4,11 +4,17 @@
  * authenticate, then disconnect
  */
 
+//Import the PHPMailer SMTP class into the global namespace
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
+
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
 
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new SMTP instance
 $smtp = new SMTP;

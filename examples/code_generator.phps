@@ -4,10 +4,14 @@
  * revised, updated and corrected 27/02/2013
  * by matt.sturdy@gmail.com
  */
-require '../PHPMailerAutoload.php';
+
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
 
 $CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
-$CFG['smtp_debugoutput'] = 'html';
 $CFG['smtp_server'] = 'localhost';
 $CFG['smtp_port'] = '25';
 $CFG['smtp_authenticate'] = false;
@@ -36,38 +40,34 @@ $authenticate_username = (isset($_POST['authenticate_username'])) ?
     $_POST['authenticate_username'] : $CFG['smtp_username'];
 
 // storing all status output from the script to be shown to the user later
-$results_messages = array();
+$results_messages = [];
 
 // $example_code represents the "final code" that we're using, and will
 // be shown to the user at the end.
-$example_code = "\nrequire_once '../PHPMailerAutoload.php';";
-$example_code .= "\n\n\$results_messages = array();";
+$example_code = "<?php\nuse PHPMailer\\PHPMailer\\PHPMailer;";
+$example_code .= "\nuse PHPMailer\\PHPMailer\\Exception;";
+$example_code .= "\nrequire_once 'vendor/autoload.php';";
+$example_code .= "\n\n\$results_messages = [];";
 
 $mail = new PHPMailer(true);  //PHPMailer instance with exceptions enabled
 $mail->CharSet = 'utf-8';
 ini_set('default_charset', 'UTF-8');
-$mail->Debugoutput = $CFG['smtp_debugoutput'];
 $example_code .= "\n\n\$mail = new PHPMailer(true);";
 $example_code .= "\n\$mail->CharSet = 'utf-8';";
 $example_code .= "\nini_set('default_charset', 'UTF-8');";
 
-class phpmailerAppException extends phpmailerException
-{
-}
-
-$example_code .= "\n\nclass phpmailerAppException extends phpmailerException {}";
 $example_code .= "\n\ntry {";
 
 try {
     if (isset($_POST["submit"]) && $_POST['submit'] == "Submit") {
         $to = $_POST['To_Email'];
         if (!PHPMailer::validateAddress($to)) {
-            throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
+            throw new Exception("Email address " . $to . " is invalid -- aborting!");
         }
 
         $example_code .= "\n\$to = '{$_POST['To_Email']}';";
         $example_code .= "\nif(!PHPMailer::validateAddress(\$to)) {";
-        $example_code .= "\n  throw new phpmailerAppException(\"Email address \" . " .
+        $example_code .= "\n  throw new Exception(\"Email address \" . " .
             "\$to . \" is invalid -- aborting!\");";
         $example_code .= "\n}";
 
@@ -91,10 +91,8 @@ try {
                 $example_code .= "\n\$mail->Host       = \"" . $_POST['smtp_server'] . "\";";
                 $example_code .= "\n\$mail->Port       = \"" . $_POST['smtp_port'] . "\";";
                 $example_code .= "\n\$mail->SMTPSecure = \"" . strtolower($_POST['smtp_secure']) . "\";";
-                $example_code .= "\n\$mail->SMTPAuth   = " . (array_key_exists(
-                    'smtp_authenticate',
-                    $_POST
-                ) ? 'true' : 'false') . ";";
+                $example_code .= "\n\$mail->SMTPAuth   = " .
+                    (array_key_exists('smtp_authenticate', $_POST) ? 'true' : 'false') . ";";
                 if (array_key_exists('smtp_authenticate', $_POST)) {
                     $example_code .= "\n\$mail->Username   = \"" . $_POST['authenticate_username'] . "\";";
                     $example_code .= "\n\$mail->Password   = \"" . $_POST['authenticate_password'] . "\";";
@@ -113,7 +111,7 @@ try {
                 $example_code .= "\n\$mail->isQmail();";
                 break;
             default:
-                throw new phpmailerAppException('Invalid test_type provided');
+                throw new Exception('Invalid test_type provided');
         }
 
         try {
@@ -157,8 +155,8 @@ try {
                     $example_code .= "\n\$mail->addCC(\"$value\");";
                 }
             }
-        } catch (phpmailerException $e) { //Catch all kinds of bad addressing
-            throw new phpmailerAppException($e->getMessage());
+        } catch (Exception $e) { //Catch all kinds of bad addressing
+            throw new Exception($e->getMessage());
         }
         $mail->Subject = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
         $example_code .= "\n\$mail->Subject  = \"" . $_POST['Subject'] .
@@ -189,22 +187,22 @@ try {
         $example_code .= "\n  \$results_messages[] = \"Message has been sent using " .
             strtoupper($_POST['test_type']) . "\";";
         $example_code .= "\n}";
-        $example_code .= "\ncatch (phpmailerException \$e) {";
-        $example_code .= "\n  throw new phpmailerAppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
+        $example_code .= "\ncatch (Exception \$e) {";
+        $example_code .= "\n  throw new \\Exception('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
         $example_code .= "\n}";
 
         try {
             $mail->send();
             $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
-        } catch (phpmailerException $e) {
-            throw new phpmailerAppException("Unable to send to: " . $to . ': ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new Exception("Unable to send to: " . $to . ': ' . $e->getMessage());
         }
     }
-} catch (phpmailerAppException $e) {
+} catch (Exception $e) {
     $results_messages[] = $e->errorMessage();
 }
 $example_code .= "\n}";
-$example_code .= "\ncatch (phpmailerAppException \$e) {";
+$example_code .= "\ncatch (Exception \$e) {";
 $example_code .= "\n  \$results_messages[] = \$e->errorMessage();";
 $example_code .= "\n}";
 $example_code .= "\n\nif (count(\$results_messages) > 0) {";
@@ -219,11 +217,7 @@ $example_code .= "\n}";
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>PHPMailer Test Page</title>
-    <script type="text/javascript" src="scripts/shCore.js"></script>
-    <script type="text/javascript" src="scripts/shBrushPhp.js"></script>
-    <link type="text/css" rel="stylesheet" href="styles/shCore.css">
-    <link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css">
+    <title>PHPMailer Code Generator</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -304,9 +298,6 @@ $example_code .= "\n}";
         }
     </style>
     <script>
-        SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
-        SyntaxHighlighter.all();
-
         function startAgain() {
             var post_params = {
                 "From_Name": "<?php echo $from_name; ?>",
@@ -356,9 +347,8 @@ $example_code .= "\n}";
 </head>
 <body>
 <?php
-if (version_compare(PHP_VERSION, '5.0.0', '<')) {
-    echo 'Current PHP version: ' . phpversion() . "<br>";
-    echo exit("ERROR: Wrong PHP version. Must be PHP 5 or above.");
+if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+    echo exit('ERROR: Your PHP version ' . phpversion() . 'is too old - PHPMailer requires PHP 5.5 or later.');
 }
 
 if (count($results_messages) > 0) {
@@ -373,7 +363,7 @@ if (count($results_messages) > 0) {
 if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
     echo "<button type=\"submit\" onclick=\"startAgain();\">Start Over</button><br>\n";
     echo "<br><span>Script:</span>\n";
-    echo "<pre class=\"brush: php;\">\n";
+    echo "<pre>\n";
     echo $example_code;
     echo "\n</pre>\n";
     echo "\n<hr style=\"margin: 3em;\">\n";
@@ -478,37 +468,35 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                                 <label for="radio-mail">Mail()</label>
                                 <input class="radio" type="radio" name="test_type" value="mail" id="radio-mail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'mail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'mail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-sendmail">Sendmail</label>
                                 <input class="radio" type="radio" name="test_type" value="sendmail" id="radio-sendmail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'sendmail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'sendmail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-qmail">Qmail</label>
                                 <input class="radio" type="radio" name="test_type" value="qmail" id="radio-qmail"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'qmail') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'qmail') ? 'checked' : ''; ?>
                                        required>
                             </div>
                             <div class="radio">
                                 <label for="radio-smtp">SMTP</label>
                                 <input class="radio" type="radio" name="test_type" value="smtp" id="radio-smtp"
                                        onclick="showHideDiv(this.value, 'smtp-options-table');"
-                                       <?php echo ($test_type == 'smtp') ? 'checked' : ''; ?>
+                                    <?php echo ($test_type == 'smtp') ? 'checked' : ''; ?>
                                        required>
                             </div>
                         </td>
                     </tr>
                 </table>
-                <div id="smtp-options-table" style="margin:1em 0 0 0;
-<?php if ($test_type != 'smtp') {
-    echo "display: none;";
-} ?>">
+                <div id="smtp-options-table"
+                     style="margin:1em 0 0 0;<?php echo ($test_type != 'smtp')?'display: none;':''; ?>">
                     <span style="margin:1.25em 0; display:block;"><strong>SMTP Specific Options:</strong></span>
                     <table border="1" class="column">
                         <tr>
@@ -557,9 +545,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colrite">
                                 <input type="checkbox" id="smtp-authenticate"
                                        name="smtp_authenticate"
-<?php if ($smtp_authenticate != '') {
-    echo "checked";
-} ?>
+                                    <?php echo ($smtp_authenticate != '') ? 'checked':''; ?>
                                        value="<?php echo $smtp_authenticate; ?>">
                             </td>
                         </tr>
