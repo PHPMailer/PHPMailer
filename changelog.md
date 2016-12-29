@@ -44,9 +44,22 @@ This is a major update that breaks backwards compatibility.
 * `Debugoutput` can accept a PSR-3 logger instance
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 
+## Version 5.2.21 (December 28th 2016)
+* Fix missed number update in version file - no functional changes
+
+## Version 5.2.20 (December 28th 2016)
+* **SECURITY** Critical security update for CVE-2016-10045 please update now! Thanks to [Dawid Golunski](https://legalhackers.com) and Paul Buonopane (@Zenexer).
+
+## Version 5.2.19 (December 26th 2016)
+* Minor cleanup
+
+## Version 5.2.18 (December 24th 2016)
+* **SECURITY** Critical security update for CVE-2016-10033 please update now! Thanks to [Dawid Golunski](https://legalhackers.com).
+* Add ability to extract the SMTP transaction ID from some common SMTP success messages
+* Minor documentation tweaks
+
 ## Version 5.2.17 (December 9th 2016)
 * This is officially the last feature release of 5.2. Security fixes only from now on; use PHPMailer 6.0!
-* Added ability to extract SMTP transaction ID from successful submissions
 * Allow DKIM private key to be provided as a string
 * Provide mechanism to allow overriding of boundary and message ID creation
 * Improve Brazilian Portuguese, Spanish, Swedish, Romanian, and German translations

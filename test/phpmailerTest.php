@@ -1021,6 +1021,7 @@ EOT;
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->Subject .= ': HTML + Attachment';
         $this->Mail->isHTML(true);
+        $this->Mail->CharSet = 'UTF-8';
 
         if (!$this->Mail->addAttachment(
             realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
@@ -1941,7 +1942,7 @@ EOT;
             'application/octet-stream',
             'Default MIME type not applied to unknown extension'
         );
-        
+
         //Line break normalization
         $eol = PHPMailer::LE;
         $b1 = "1\r2\r3\r";

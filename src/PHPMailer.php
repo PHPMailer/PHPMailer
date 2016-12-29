@@ -736,6 +736,7 @@ class PHPMailer
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
+        //Calling mail() with null params breaks
         if (!$this->UseSendmailOptions or is_null($params)) {
             $result = @mail($to, $subject, $body, $header);
         } else {
@@ -1404,19 +1405,24 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        if ('' != $this->Sender) {
+        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+        if (!empty($this->Sender) and self::isShellSafe($this->Sender)) {
             if ('qmail' == $this->Mailer) {
-                $sendmail = sprintf('%s -f%s', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+                $sendmailFmt = '%s -f%s';
             } else {
-                $sendmail = sprintf('%s -oi -f%s -t', escapeshellcmd($this->Sendmail), escapeshellarg($this->Sender));
+                $sendmailFmt = '%s -oi -f%s -t';
             }
         } else {
             if ('qmail' == $this->Mailer) {
-                $sendmail = sprintf('%s', escapeshellcmd($this->Sendmail));
+                $sendmailFmt = '%s';
             } else {
-                $sendmail = sprintf('%s -oi -t', escapeshellcmd($this->Sendmail));
+                $sendmailFmt = '%s -oi -t';
             }
         }
+
+        // TODO: If possible, this should be changed to escapeshellarg.  Needs thorough testing.
+        $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
+
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
                 if (!@$mail = popen($sendmail, 'w')) {
@@ -1463,6 +1469,40 @@ class PHPMailer
     }
 
     /**
+     * Fix CVE-2016-10033 and CVE-2016-10045 by disallowing potentially unsafe shell characters.
+     *
+     * Note that escapeshellarg and escapeshellcmd are inadequate for our purposes, especially on Windows.
+     * @param string $string The string to be validated
+     * @see https://github.com/PHPMailer/PHPMailer/issues/924 CVE-2016-10045 bug report
+     * @access protected
+     * @return boolean
+     */
+    protected static function isShellSafe($string)
+    {
+        // Future-proof
+        if (escapeshellcmd($string) !== $string
+            or !in_array(escapeshellarg($string), array("'$string'", "\"$string\""))
+        ) {
+            return false;
+        }
+
+        $length = strlen($string);
+
+        for ($i = 0; $i < $length; $i++) {
+            $c = $string[$i];
+
+            // All other characters have a special meaning in at least one common shell, including = and +.
+            // Full stop (.) has a special meaning in cmd.exe, but its impact should be negligible here.
+            // Note that this does permit non-Latin alphanumeric characters based on the current locale.
+            if (!ctype_alnum($c) && strpos('@_-.', $c) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Send mail using the PHP mail() function.
      *
      * @param string $header The message headers
@@ -1482,16 +1522,19 @@ class PHPMailer
 
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
-        if (!empty($this->Sender)) {
+        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             //A space after `-f` is optional, but there is a long history of its presence
             //causing problems, so we don't use one
             //Exim docs: http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
             //Sendmail docs: http://www.sendmail.org/~ca/email/man/sendmail.html
             //Qmail docs: http://www.qmail.org/man/man8/qmail-inject.html
             //Example problem: https://www.drupal.org/node/1057954
-            $params = sprintf('-f%s', $this->Sender);
+            // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+            if (self::isShellSafe($this->Sender)) {
+                $params = sprintf('-f%s', $this->Sender);
+            }
         }
-        if ('' != $this->Sender) {
+        if (!empty($this->Sender)and $this->validateAddress($this->Sender)) {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
@@ -1547,6 +1590,7 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
+        //Sender already validated in preSend()
         if ('' == $this->Sender) {
             $smtp_from = $this->From;
         } else {
