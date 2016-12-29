@@ -12,11 +12,6 @@
  * This script requires PHP 5.4 or later
  * PHP Version 5.4
  */
-/**
- * Added a new class for getting the Refresh Token with right scopes
- * as the OAuth-Client for Google from GitHub didnot provide setting the 
- * scope out of the box
- */
 
 namespace League\OAuth2\Client\Provider;
 
