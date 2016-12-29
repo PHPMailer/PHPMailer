@@ -1,5 +1,5 @@
 {
-    "name": "phpmailer/phpmailer",
+    "name": "kruisdraad/phpmailer",
     "type": "library",
     "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
     "authors": [
@@ -17,6 +17,9 @@
         },
         {
             "name": "Brent R. Matzelle"
+        },
+        {
+            "name": "Bart Vrancken"
         }
     ],
     "require": {
