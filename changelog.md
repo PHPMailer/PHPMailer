@@ -5,6 +5,7 @@
 
 ## Version 5.2.20 (December 28th 2016)
 * **SECURITY** Critical security update for CVE-2016-10045 please update now! Thanks to [Dawid Golunski](https://legalhackers.com) and Paul Buonopane (@Zenexer).
+* Note that this change will break VERP addresses in Sender if you're using mail() - workaround: use SMTP to localhost instead.
 
 ## Version 5.2.19 (December 26th 2016)
 * Minor cleanup
