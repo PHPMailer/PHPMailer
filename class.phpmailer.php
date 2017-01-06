@@ -31,7 +31,7 @@ class PHPMailer
      * The PHPMailer Version number.
      * @var string
      */
-    public $Version = '5.2.21';
+    public $Version = '5.2.22';
 
     /**
      * Email priority.
@@ -2492,6 +2492,7 @@ class PHPMailer
 
     /**
      * Add an attachment from a path on the filesystem.
+     * Never use a user-supplied path to a file!
      * Returns false if the file could not be found or read.
      * @param string $path Path to the attachment.
      * @param string $name Overrides the attachment name.
@@ -3017,6 +3018,7 @@ class PHPMailer
      * displayed inline with the message, not just attached for download.
      * This is used in HTML messages that embed the images
      * the HTML refers to using the $cid value.
+     * Never use a user-supplied path to a file!
      * @param string $path Path to the attachment.
      * @param string $cid Content ID of the attachment; Use this to reference
      *        the content when using an embedded image in HTML.
@@ -3380,12 +3382,14 @@ class PHPMailer
      * Create a message body from an HTML string.
      * Automatically inlines images and creates a plain-text version by converting the HTML,
      * overwriting any existing values in Body and AltBody.
-     * $basedir is used when handling relative image paths, e.g. <img src="images/a.png">
+     * Do not source $message content from user input!
+     * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.png"> and must not be empty
      * will look for an image file in $basedir/images/a.png and convert it to inline.
-     * If you don't want to apply these transformations to your HTML, just set Body and AltBody yourself.
+     * If you don't provide a $basedir, relative paths will be left untouched (and thus probably break in email)
+     * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
      * @access public
      * @param string $message HTML message string
-     * @param string $basedir base directory for relative paths to images
+     * @param string $basedir Absolute path to a base directory to prepend to relative paths to images
      * @param boolean|callable $advanced Whether to use the internal HTML to text converter
      *    or your own custom converter @see PHPMailer::html2text()
      * @return string $message The transformed message Body
@@ -3394,6 +3398,10 @@ class PHPMailer
     {
         preg_match_all('/(src|background)=["\'](.*)["\']/Ui', $message, $images);
         if (array_key_exists(2, $images)) {
+            if (strlen($basedir) > 1 && substr($basedir, -1) != '/') {
+                // Ensure $basedir has a trailing /
+                $basedir .= '/';
+            }
             foreach ($images[2] as $imgindex => $url) {
                 // Convert data URIs into embedded images
                 if (preg_match('#^data:(image[^;,]*)(;base64)?,#', $url, $match)) {
@@ -3411,18 +3419,24 @@ class PHPMailer
                             $message
                         );
                     }
-                } elseif (substr($url, 0, 4) !== 'cid:' && !preg_match('#^[a-z][a-z0-9+.-]*://#i', $url)) {
-                    // Do not change urls for absolute images (thanks to corvuscorax)
+                    continue;
+                }
+                if (
+                    // Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
+                    !empty($basedir)
+                    // Ignore URLs containing parent dir traversal (..)
+                    && (strpos($url, '..') === false)
                     // Do not change urls that are already inline images
+                    && substr($url, 0, 4) !== 'cid:'
+                    // Do not change absolute URLs, including anonymous protocol
+                    && !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)
+                ) {
                     $filename = basename($url);
                     $directory = dirname($url);
                     if ($directory == '.') {
                         $directory = '';
                     }
                     $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
-                    if (strlen($basedir) > 1 && substr($basedir, -1) != '/') {
-                        $basedir .= '/';
-                    }
                     if (strlen($directory) > 1 && substr($directory, -1) != '/') {
                         $directory .= '/';
                     }
