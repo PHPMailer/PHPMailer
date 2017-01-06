@@ -1,5 +1,10 @@
 # ChangeLog
 
+## Version 5.2.22 (January 5th 2017)
+* **SECURITY** Fix local file disclosure vulnerability if content passed to `msgHTML()` is sourced from unfiltered user input.
+* Add simple contact form example
+* Emoji in test content
+
 ## Version 5.2.21 (December 28th 2016)
 * Fix missed number update in version file - no functional changes
 

@@ -30,7 +30,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @var string
      */
-    const VERSION = '5.2.21';
+    const VERSION = '5.2.22';
 
     /**
      * SMTP line break constant.
@@ -81,7 +81,7 @@ class SMTP
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.21';
+    public $Version = '5.2.22';
 
     /**
      * SMTP server port number.
