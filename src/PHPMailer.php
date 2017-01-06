@@ -398,15 +398,6 @@ class PHPMailer
     public $AllowEmpty = false;
 
     /**
-     * The default line ending.
-     *
-     * @note The default remains "\n". We force LE where we know
-     *        it must be used via static::LE.
-     * @var  string
-     */
-    public $LE = "\n";
-
-    /**
      * DKIM selector.
      *
      * @var string
