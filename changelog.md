@@ -44,11 +44,17 @@ This is a major update that breaks backwards compatibility.
 * `Debugoutput` can accept a PSR-3 logger instance
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 
+## Version 5.2.22 (January 5th 2017)
+* **SECURITY** Fix local file disclosure vulnerability if content passed to `msgHTML()` is sourced from unfiltered user input.
+* Add simple contact form example
+* Emoji in test content
+
 ## Version 5.2.21 (December 28th 2016)
 * Fix missed number update in version file - no functional changes
 
 ## Version 5.2.20 (December 28th 2016)
 * **SECURITY** Critical security update for CVE-2016-10045 please update now! Thanks to [Dawid Golunski](https://legalhackers.com) and Paul Buonopane (@Zenexer).
+* Note that this change will break VERP addresses in Sender if you're using mail() - workaround: use SMTP to localhost instead.
 
 ## Version 5.2.19 (December 26th 2016)
 * Minor cleanup
