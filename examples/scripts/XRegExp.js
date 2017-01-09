@@ -259,7 +259,7 @@ if (XRegExp) {
 
 
     //---------------------------------
-    //  Overriden native methods
+    //  Overridden native methods
     //---------------------------------
 
     // Adds named capture support (with backreferences returned as `result.name`), and fixes two
