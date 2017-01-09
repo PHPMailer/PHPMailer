@@ -45,7 +45,7 @@ This is a major update that breaks backwards compatibility.
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 
 ## Version 5.2.22 (January 5th 2017)
-* **SECURITY** Fix local file disclosure vulnerability if content passed to `msgHTML()` is sourced from unfiltered user input.
+* **SECURITY** Fix [CVE-2017-5223](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-5223), local file disclosure vulnerability if content passed to `msgHTML()` is sourced from unfiltered user input. Reported by Yongxiang Li of Asiasecurity. The fix for this means that calls to `msgHTML()` without a `$basedir` will not import images with relative URLs, and relative URLs containing `..` will be ignored.
 * Add simple contact form example
 * Emoji in test content
 
