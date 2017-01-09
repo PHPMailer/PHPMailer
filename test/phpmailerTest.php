@@ -1016,10 +1016,10 @@ EOT;
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
         $this->assertTrue(strpos($this->Mail->Body, 'src="/etc/hostname"') !== false);
         //Test that local paths with a basedir are not ignored
-        $this->Mail->msgHTML('<img src="composer.json">test', realpath(self::INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
         $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
         //Test that local paths with parent traversal are ignored
-        $this->Mail->msgHTML('<img src="../composer.json">test', realpath(self::INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
         $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
