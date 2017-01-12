@@ -34,32 +34,69 @@ If you're not using composer, you can still load the classes manually, depending
 ```php
 require 'src/PHPMailer.php';
 require 'src/SMTP.php';
+require 'src/Exception.php';
 ```
 
 ## Namespace
-PHPMailer 6 uses a namespace of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You will need to import classes you're using explicitly into your own namespace, or the global namespace - all the examples show how to do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it!
+PHPMailer 6 uses a [namespace](http://php.net/manual/en/language.namespaces.rationale.php) of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You **must** import (with a `use` statement) classes you're using explicitly into your own namespace, or reference them absolutely in the global namespace - all the examples do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it! If you are using other PHPMailer classes explicitly (such as `SMTP` or `Exception`), you will need to import them into your namespace too.
 
-For example you might have a project like this:
+For example you might create an instance like this:
 
 ```php
 <?php
 namespace MyProject;
-
 use PHPMailer\PHPMailer\PHPMailer;
-
 require 'vendor/autoload.php';
-
 $mail = new PHPMailer;
 ...
 ```
 
-##OAuth2 Support
-The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of of extraordinary packages](http://thephpleague.com), and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
+or alternatively, using a fully qualified name:
 
-##Extras
+```php
+<?php
+namespace MyProject;
+require 'vendor/autoload.php';
+$mail = new PHPMailer\PHPMailer\PHPMailer;
+...
+```
+
+Note that `use` statements apply *only* to the file they appear in (they are local aliases), so if an included file contains `use` statements, it will not import the namespaced classes into the file you're including from.
+
+## Namespaced exceptions
+PHPMailer now uses its own namespaced `Exception` class, so if you were previously catching exceptions of type `phpmailerException` (or subclasses of that), you will need to update them to use the PHPMailer namespace, and make any existing `Exception` references use the global namespace, i.e. `\Exception`. If your original code was:
+
+```php
+try {
+...
+} catch (phpmailerException $e) {
+    echo $e->errorMessage();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+```
+
+Convert it to:
+
+```php
+use PHPMailer\PHPMailer\Exception;
+...
+try {
+...
+} catch (Exception $e) {
+    echo $e->errorMessage();
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+```
+
+## OAuth2 Support
+The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of of extraordinary packages](http://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
+
+## Extras
 * Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.
 
-##Other upgrade changes
+## Other upgrade changes
 See the changelog for full details.
 * File structure simplified, classes live in the `src/` folder
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
