@@ -22,4 +22,4 @@ $PHPMAILER_LANG['signing']              = 'Chyba přihlašování: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() selhal.';
 $PHPMAILER_LANG['smtp_error']           = 'Chyba SMTP serveru: ';
 $PHPMAILER_LANG['variable_set']         = 'Nelze nastavit nebo změnit proměnnou: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'Chybí rozšíření: ';
