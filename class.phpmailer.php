@@ -816,6 +816,11 @@ class PHPMailer
      */
     public function addAddress($address, $name = '')
     {
+	if (strpos($address, '<')) {
+		$addAndName = preg_split('/<|>/', $address);
+		$name = trim($addAndName[0]);
+		$address = trim($addAndName[1]);
+	}
         return $this->addOrEnqueueAnAddress('to', $address, $name);
     }
 
