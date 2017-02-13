@@ -673,7 +673,7 @@ class PHPMailer
      *
      * @var string
      */
-    const LE = "\r\n";
+    protected static $LE = "\r\n";
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
@@ -1258,6 +1258,17 @@ class PHPMailer
      */
     public function preSend()
     {
+        if ('smtp' == $this->Mailer or
+            ('mail' == $this->Mailer and stripos(PHP_OS, 'WIN') === 0)
+        ) {
+            //SMTP mandates RFC-compliant line endings
+            //and it's also used with mail() on Windows
+            static::setLE("\r\n");
+        } else {
+            //Maintain backward compatibility with legacy Linux command line mailers
+            static::setLE(PHP_EOL);
+        }
+
         try {
             $this->error_count = 0; // Reset errors
             $this->mailHeader = '';
@@ -1334,8 +1345,8 @@ class PHPMailer
                     $this->encodeHeader($this->secureHeader($this->Subject)),
                     $this->MIMEBody
                 );
-                $this->MIMEHeader = rtrim($this->MIMEHeader, "\r\n ") . static::LE .
-                    $this->fixEOL($header_dkim) . static::LE;
+                $this->MIMEHeader = rtrim($this->MIMEHeader, "\r\n ") . static::$LE .
+                    static::normalizeBreaks($header_dkim) . static::$LE;
             }
             return true;
         } catch (Exception $exc) {
@@ -1864,7 +1875,7 @@ class PHPMailer
         foreach ($addr as $address) {
             $addresses[] = $this->addrFormat($address);
         }
-        return $type . ': ' . implode(', ', $addresses) . static::LE;
+        return $type . ': ' . implode(', ', $addresses) . static::$LE;
     }
 
     /**
@@ -1901,24 +1912,24 @@ class PHPMailer
     public function wrapText($message, $length, $qp_mode = false)
     {
         if ($qp_mode) {
-            $soft_break = sprintf(' =%s', static::LE);
+            $soft_break = sprintf(' =%s', static::$LE);
         } else {
-            $soft_break = static::LE;
+            $soft_break = static::$LE;
         }
         // If utf-8 encoding is used, we will need to make sure we don't
         // split multibyte characters when we wrap
         $is_utf8 = (strtolower($this->CharSet) == 'utf-8');
-        $lelen = strlen(static::LE);
-        $crlflen = strlen(static::LE);
+        $lelen = strlen(static::$LE);
+        $crlflen = strlen(static::$LE);
 
-        $message = $this->fixEOL($message);
+        $message = static::normalizeBreaks($message);
         //Remove a trailing line break
-        if (substr($message, -$lelen) == static::LE) {
+        if (substr($message, -$lelen) == static::$LE) {
             $message = substr($message, 0, -$lelen);
         }
 
         //Split message into lines
-        $lines = explode(static::LE, $message);
+        $lines = explode(static::$LE, $message);
         //Message will be rebuilt in here
         $message = '';
         foreach ($lines as $line) {
@@ -1941,7 +1952,7 @@ class PHPMailer
                             $part = substr($word, 0, $len);
                             $word = substr($word, $len);
                             $buf .= ' ' . $part;
-                            $message .= $buf . sprintf('=%s', static::LE);
+                            $message .= $buf . sprintf('=%s', static::$LE);
                         } else {
                             $message .= $buf . $soft_break;
                         }
@@ -1963,7 +1974,7 @@ class PHPMailer
                         $word = substr($word, $len);
 
                         if (strlen($word) > 0) {
-                            $message .= $part . sprintf('=%s', static::LE);
+                            $message .= $part . sprintf('=%s', static::$LE);
                         } else {
                             $buf = $part;
                         }
@@ -1982,7 +1993,7 @@ class PHPMailer
                 }
                 $firstword = false;
             }
-            $message .= $buf . static::LE;
+            $message .= $buf . static::$LE;
         }
 
         return $message;
@@ -2204,7 +2215,7 @@ class PHPMailer
         }
 
         if ('mail' != $this->Mailer) {
-            $result .= static::LE;
+            $result .= static::$LE;
         }
 
         return $result;
@@ -2220,7 +2231,7 @@ class PHPMailer
      */
     public function getSentMIMEMessage()
     {
-        return rtrim($this->MIMEHeader . $this->mailHeader, "\n\r") . static::LE . static::LE . $this->MIMEBody;
+        return rtrim($this->MIMEHeader . $this->mailHeader, "\n\r") . static::$LE . static::$LE . $this->MIMEBody;
     }
 
     /**
@@ -2250,7 +2261,7 @@ class PHPMailer
         $this->boundary[3] = 'b3_' . $this->uniqueid;
 
         if ($this->sign_key_file) {
-            $body .= $this->getMailMIME() . static::LE;
+            $body .= $this->getMailMIME() . static::$LE;
         }
 
         $this->setWordWrap();
@@ -2283,20 +2294,20 @@ class PHPMailer
             $altBodyEncoding = 'quoted-printable';
         }
         //Use this as a preamble in all multipart message types
-        $mimepre = "This is a multi-part message in MIME format." . static::LE;
+        $mimepre = "This is a multi-part message in MIME format." . static::$LE;
         switch ($this->message_type) {
             case 'inline':
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('inline', $this->boundary[1]);
                 break;
             case 'attach':
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             case 'inline_attach':
@@ -2304,26 +2315,26 @@ class PHPMailer
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', 'multipart/related;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[2] . '"');
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, '', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('inline', $this->boundary[2]);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             case 'alt':
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[1], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 if (!empty($this->Ical)) {
                     $body .= $this->getBoundary($this->boundary[1], '', 'text/calendar; method=REQUEST', '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
-                    $body .= static::LE;
+                    $body .= static::$LE;
                 }
                 $body .= $this->endBoundary($this->boundary[1]);
                 break;
@@ -2331,16 +2342,16 @@ class PHPMailer
                 $body .= $mimepre;
                 $body .= $this->getBoundary($this->boundary[1], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', 'multipart/related;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[2] . '"');
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('inline', $this->boundary[2]);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->endBoundary($this->boundary[1]);
                 break;
             case 'alt_attach':
@@ -2348,15 +2359,15 @@ class PHPMailer
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', 'multipart/alternative;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[2] . '"');
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->endBoundary($this->boundary[2]);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             case 'alt_inline_attach':
@@ -2364,21 +2375,21 @@ class PHPMailer
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', 'multipart/alternative;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[2] . '"');
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $altBodyCharSet, 'text/plain', $altBodyEncoding);
                 $body .= $this->encodeString($this->AltBody, $altBodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->textLine('--' . $this->boundary[2]);
                 $body .= $this->headerLine('Content-Type', 'multipart/related;');
                 $body .= $this->textLine("\tboundary=\"" . $this->boundary[3] . '"');
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[3], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('inline', $this->boundary[3]);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->endBoundary($this->boundary[2]);
-                $body .= static::LE;
+                $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
             default:
@@ -2428,7 +2439,7 @@ class PHPMailer
                     @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
-                    $this->MIMEHeader .= $parts[0] . static::LE . static::LE;
+                    $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
                 } else {
                     @unlink($file);
@@ -2469,12 +2480,12 @@ class PHPMailer
         }
         $result .= $this->textLine('--' . $boundary);
         $result .= sprintf('Content-Type: %s; charset=%s', $contentType, $charSet);
-        $result .= static::LE;
+        $result .= static::$LE;
         // RFC1341 part 5 says 7bit is assumed if not specified
         if ('7bit' != $encoding) {
             $result .= $this->headerLine('Content-Transfer-Encoding', $encoding);
         }
-        $result .= static::LE;
+        $result .= static::$LE;
 
         return $result;
     }
@@ -2488,7 +2499,7 @@ class PHPMailer
      */
     protected function endBoundary($boundary)
     {
-        return static::LE . '--' . $boundary . '--' . static::LE;
+        return static::$LE . '--' . $boundary . '--' . static::$LE;
     }
 
     /**
@@ -2524,7 +2535,7 @@ class PHPMailer
      */
     public function headerLine($name, $value)
     {
-        return $name . ': ' . $value . static::LE;
+        return $name . ': ' . $value . static::$LE;
     }
 
     /**
@@ -2536,7 +2547,7 @@ class PHPMailer
      */
     public function textLine($value)
     {
-        return $value . static::LE;
+        return $value . static::$LE;
     }
 
     /**
@@ -2646,29 +2657,29 @@ class PHPMailer
                 }
                 $cidUniq[$cid] = true;
 
-                $mime[] = sprintf('--%s%s', $boundary, static::LE);
+                $mime[] = sprintf('--%s%s', $boundary, static::$LE);
                 //Only include a filename property if we have one
                 if (!empty($name)) {
                     $mime[] = sprintf(
                         'Content-Type: %s; name="%s"%s',
                         $type,
                         $this->encodeHeader($this->secureHeader($name)),
-                        static::LE
+                        static::$LE
                     );
                 } else {
                     $mime[] = sprintf(
                         'Content-Type: %s%s',
                         $type,
-                        static::LE
+                        static::$LE
                     );
                 }
                 // RFC1341 part 5 says 7bit is assumed if not specified
                 if ('7bit' != $encoding) {
-                    $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::LE);
+                    $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
                 if ('inline' == $disposition) {
-                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::LE);
+                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
@@ -2682,7 +2693,7 @@ class PHPMailer
                             'Content-Disposition: %s; filename="%s"%s',
                             $disposition,
                             $encoded_name,
-                            static::LE . static::LE
+                            static::$LE . static::$LE
                         );
                     } else {
                         if (!empty($encoded_name)) {
@@ -2690,18 +2701,18 @@ class PHPMailer
                                 'Content-Disposition: %s; filename=%s%s',
                                 $disposition,
                                 $encoded_name,
-                                static::LE . static::LE
+                                static::$LE . static::$LE
                             );
                         } else {
                             $mime[] = sprintf(
                                 'Content-Disposition: %s%s',
                                 $disposition,
-                                static::LE . static::LE
+                                static::$LE . static::$LE
                             );
                         }
                     }
                 } else {
-                    $mime[] = static::LE;
+                    $mime[] = static::$LE;
                 }
 
                 // Encode as string attachment
@@ -2710,18 +2721,18 @@ class PHPMailer
                     if ($this->isError()) {
                         return '';
                     }
-                    $mime[] = static::LE;
+                    $mime[] = static::$LE;
                 } else {
                     $mime[] = $this->encodeFile($path, $encoding);
                     if ($this->isError()) {
                         return '';
                     }
-                    $mime[] = static::LE;
+                    $mime[] = static::$LE;
                 }
             }
         }
 
-        $mime[] = sprintf('--%s--%s', $boundary, static::LE);
+        $mime[] = sprintf('--%s--%s', $boundary, static::$LE);
 
         return implode('', $mime);
     }
@@ -2765,14 +2776,14 @@ class PHPMailer
         $encoded = '';
         switch (strtolower($encoding)) {
             case 'base64':
-                $encoded = chunk_split(base64_encode($str), 76, static::LE);
+                $encoded = chunk_split(base64_encode($str), 76, static::$LE);
                 break;
             case '7bit':
             case '8bit':
-                $encoded = $this->fixEOL($str);
+                $encoded = static::normalizeBreaks($str);
                 // Make sure it ends with a line break
-                if (substr($encoded, -(strlen(static::LE))) != static::LE) {
-                    $encoded .= static::LE;
+                if (substr($encoded, -(strlen(static::$LE))) != static::$LE) {
+                    $encoded .= static::$LE;
                 }
                 break;
             case 'binary':
@@ -2849,11 +2860,11 @@ class PHPMailer
             $encoding = 'Q';
             $encoded = $this->encodeQ($str, $position);
             $encoded = $this->wrapText($encoded, $maxlen, true);
-            $encoded = str_replace('=' . static::LE, "\n", trim($encoded));
+            $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
         }
 
         $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
-        $encoded = trim(str_replace("\n", static::LE, $encoded));
+        $encoded = trim(str_replace("\n", static::$LE, $encoded));
 
         return $encoded;
     }
@@ -2903,7 +2914,7 @@ class PHPMailer
         $end = '?=';
         $encoded = '';
         if (is_null($linebreak)) {
-            $linebreak = static::LE;
+            $linebreak = static::$LE;
         }
 
         $mb_length = mb_strlen($str, $this->CharSet);
@@ -2940,7 +2951,7 @@ class PHPMailer
      */
     public function encodeQP($string)
     {
-        return quoted_printable_encode($string);
+        return static::normalizeBreaks(quoted_printable_encode($string));
     }
 
     /**
@@ -2964,12 +2975,12 @@ class PHPMailer
                 break;
             /**
              * RFC 2047 section 5.2.
-             * intentional fall-through - build the $pattern without including delimiters and []
-             *
-             * @noinspection PhpMissingBreakStatementInspection
+             * Build $pattern without including delimiters and []
              */
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
-                $pattern = '\(\)"';
+                 $pattern = '\(\)"';
+                /* Intentional fall through */
             case 'text':
             default:
                 // RFC 2047 section 5.1
@@ -3366,25 +3377,6 @@ class PHPMailer
     }
 
     /**
-     * Ensure consistent line endings in a string.
-     * Changes every end of line from LE, CR or LF to static::LE.
-     *
-     * @param string $str String to fixEOL
-     *
-     * @return string
-     */
-    public function fixEOL($str)
-    {
-        // Normalise to \n
-        $nstr = str_replace(["\r\n", "\r"], "\n", $str);
-        // Now convert LE as needed
-        if ("\n" !== static::LE) {
-            $nstr = str_replace("\n", static::LE, $nstr);
-        }
-        return $nstr;
-    }
-
-    /**
      * Add a custom header.
      * $name value can be overloaded to contain
      * both header name and value (name:value)
@@ -3511,7 +3503,7 @@ class PHPMailer
         $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
         if (!$this->alternativeExists()) {
             $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
-                . static::LE;
+                . static::$LE;
         }
         return $this->Body;
     }
@@ -3770,17 +3762,44 @@ class PHPMailer
 
     /**
      * Normalize line breaks in a string.
-     * Converts UNIX LF, Mac CR and Windows LE line breaks into a single line break format.
-     * Defaults to LE (for message bodies) and preserves consecutive breaks.
+     * Converts UNIX LF, Mac CR and Windows CRLF line breaks into a single line break format.
+     * Defaults to CRLF (for message bodies) and preserves consecutive breaks.
      *
      * @param string $text
-     * @param string $breaktype What kind of line break to use, defaults to LE
+     * @param string $breaktype What kind of line break to use; defaults to static::$LE.
      *
      * @return string
      */
-    public static function normalizeBreaks($text, $breaktype = "\r\n")
+    public static function normalizeBreaks($text, $breaktype = null)
     {
-        return preg_replace('/(\r\n|\r|\n)/ms', $breaktype, $text);
+        if (is_null($breaktype)) {
+            $breaktype = static::$LE;
+        }
+        // Normalise to \n
+        $text = str_replace(["\r\n", "\r"], "\n", $text);
+        // Now convert LE as needed
+        if ("\n" !== static::$LE) {
+            $text = str_replace("\n", $breaktype, $text);
+        }
+        return $text;
+    }
+
+    /**
+     * Return the current line break format string.
+     *
+     * @return string
+     */
+    public static function getLE()
+    {
+        return static::$LE;
+    }
+
+    /**
+     * Set the line break format string.
+     */
+    protected static function setLE($le)
+    {
+        static::$LE = $le;
     }
 
     /**
@@ -3890,7 +3909,7 @@ class PHPMailer
             //by elimination, the same applies to the field name
             $lines[$key] = trim($heading, " \t") . ':' . trim($value, " \t");
         }
-        $signHeader = implode("\r\n", $lines);
+        $signHeader = implode(static::$LE, $lines);
         return $signHeader;
     }
 
@@ -3906,13 +3925,12 @@ class PHPMailer
     public function DKIM_BodyC($body)
     {
         if (empty($body)) {
-            return "\r\n";
+            return static::$LE;
         }
         // Normalize line endings
-        $body = str_replace("\r\n", "\n", $body);
-        $body = str_replace("\n", "\r\n", $body);
+        $body = static::normalizeBreaks($body);
         //Reduce multiple trailing line breaks to a single one
-        return rtrim($body, "\r\n")."\r\n";
+        return rtrim($body, "\r\n") . static::$LE;
     }
 
     /**
@@ -3931,7 +3949,7 @@ class PHPMailer
         $DKIMquery = 'dns/txt'; // Query method
         $DKIMtime = time(); // Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
         $subject_header = "Subject: $subject";
-        $headers = explode(static::LE, $headers_line);
+        $headers = explode(static::$LE, $headers_line);
         $from_header = '';
         $to_header = '';
         $date_header = '';
@@ -3993,11 +4011,12 @@ class PHPMailer
             $dkimhdrs
         );
         $signed = $this->DKIM_Sign($toSign);
-        return $dkimhdrs . $signed . "\r\n";
+        return static::normalizeBreaks($dkimhdrs . $signed) . static::$LE;
     }
 
     /**
-     * Detect if a string contains a line longer than the maximum line length allowed.
+     * Detect if a string contains a line longer than the maximum line length
+     * allowed by RFC 2822 section 2.1.1.
      *
      * @param string $str
      *
@@ -4005,8 +4024,7 @@ class PHPMailer
      */
     public static function hasLineLongerThanMax($str)
     {
-        //+2 to include LE line break for a 1000 total
-        return (boolean)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + 2).',})/m', $str);
+        return (boolean)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + strlen(static::$LE)).',})/m', $str);
     }
 
     /**

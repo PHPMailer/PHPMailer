@@ -1991,14 +1991,14 @@ EOT;
         );
 
         //Line break normalization
-        $eol = PHPMailer::LE;
+        $eol = PHPMailer::getLE();
         $b1 = "1\r2\r3\r";
         $b2 = "1\n2\n3\n";
         $b3 = "1\r\n2\r3\n";
         $t1 = "1{$eol}2{$eol}3{$eol}";
-        $this->assertEquals($this->Mail->fixEOL($b1), $t1, 'Failed to normalize line breaks (1)');
-        $this->assertEquals($this->Mail->fixEOL($b2), $t1, 'Failed to normalize line breaks (2)');
-        $this->assertEquals($this->Mail->fixEOL($b3), $t1, 'Failed to normalize line breaks (3)');
+        $this->assertEquals(PHPMailer::normalizeBreaks($b1), $t1, 'Failed to normalize line breaks (1)');
+        $this->assertEquals(PHPMailer::normalizeBreaks($b2), $t1, 'Failed to normalize line breaks (2)');
+        $this->assertEquals(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
     }
 
     public function testBadSMTP()

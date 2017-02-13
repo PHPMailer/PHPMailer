@@ -9,25 +9,25 @@ This is a major update that breaks backwards compatibility.
 * The custom autoloader has been removed: [**use composer**](https://getcomposer.org)!
 * Classes & Exceptions renamed to make use of the namespace
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
-* Complete RFC standardisation on CRLF (`\r\n`) line breaks by default:
-  * `PHPMailer:$LE` removed
-  * `PHPMailer::CRLF` line ending constant renamed to `PHPMailer::LE`, defaults to "\r\n", used everywhere
-  * All uses of `PHPMailer::$LE` property converted to use `static:LE` constant for consistency and ease of overriding
+* Complete RFC standardisation on CRLF (`\r\n`) line breaks for SMTP by default:
+  * `PHPMailer:$LE` defaults to CRLF
+  * All uses of `PHPMailer::$LE` property converted to use `static::$LE` constant for consistency and ease of overriding
   * Similar changes to line break handling in SMTP and POP3 classes.
+  * Line break format for `mail()` transport is set automatically.
 * Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Major cleanup of docs and examples
 * All elements previously marked as deprecated have been removed:
-  * `PHPMailer->Version` (replaced with VERSION constant)
+  * `PHPMailer->Version` (replaced with `VERSION` constant)
   * `PHPMailer->ReturnPath`
   * `PHPMailer->PluginDir`
   * `PHPMailer->encodeQPphp()`
-  * `SMTP->CRLF` (replaced with LE constant)
-  * `SMTP->Version` (replaced with VERSION constant)
-  * `SMTP->SMTP_PORT` (replaced with DEFAULT_PORT constant)
-  * `POP3->CRLF` (replaced with LE constant)
-  * `POP3->Version` (replaced with VERSION constant)
-  * `POP3->POP3_PORT` (replaced with DEFAULT_PORT constant)
-  * `POP3->POP3_TIMEOUT` (replaced with DEFAULT_TIMEOUT constant)
+  * `SMTP->CRLF` (replaced with `LE` constant)
+  * `SMTP->Version` (replaced with `VERSION` constant)
+  * `SMTP->SMTP_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->CRLF` (replaced with `LE` constant)
+  * `POP3->Version` (replaced with `VERSION` constant)
+  * `POP3->POP3_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->POP3_TIMEOUT` (replaced with `DEFAULT_TIMEOUT` constant)
 * NTLM authentication has been removed - it never worked anyway!
   * `PHPMailer->Workstation`
   * `PHPMailer->Realm`
@@ -36,6 +36,7 @@ This is a major update that breaks backwards compatibility.
 * `validateAddress()` is now called statically from `parseAddresses()`
 * `idnSupported()` is now static and is called statically from `punyencodeAddress()`
 * `PHPMailer->SingleToArray` is now protected
+* `fixEOL()` method removed - it duplicates `PHPMailer::normalizeBreaks()`, so use that instead
 * Don't try to use an auth mechanism if it's not supported by the server
 * Reorder automatic AUTH mechanism selector to try most secure method first
 * `Extras` classes have been removed - use alternative packages from [packagist.org](https://packagist.org) instead
