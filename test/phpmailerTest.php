@@ -1312,11 +1312,11 @@ EOT;
      */
     public function testLongBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::LE, 2);
-        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::LE, 2);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
+        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::getLE(), 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
-            PHPMailer::LE . $oklen . $badlen . $oklen;
+            PHPMailer::getLE() . $oklen . $badlen . $oklen;
         $this->assertTrue(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
@@ -1340,10 +1340,10 @@ EOT;
      */
     public function testShortBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::LE, 10);
+        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 10);
 
         $this->Mail->Body = "This message does not contain lines that are too long.".
-            PHPMailer::LE . $oklen;
+            PHPMailer::getLE() . $oklen;
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
