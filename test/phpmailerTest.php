@@ -1313,7 +1313,7 @@ EOT;
     public function testLongBody()
     {
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
-        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . PHPMailer::getLE(), 2);
+        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 2) . PHPMailer::getLE(), 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
             PHPMailer::getLE() . $oklen . $badlen . $oklen;
