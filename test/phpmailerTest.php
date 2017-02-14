@@ -1313,6 +1313,7 @@ EOT;
     public function testLongBody()
     {
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
+        //Use +2 to ensure line length is over limit - LE may only be 1 char
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 2) . PHPMailer::getLE(), 2);
 
         $this->Mail->Body = "This message contains lines that are too long.".
@@ -1329,7 +1330,7 @@ EOT;
         $message = $this->Mail->getSentMIMEMessage();
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($message),
-            'Long line not corrected (Max: '.(PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())). ' chars). Message:'. $message
+            'Long line not corrected (Max: '.(PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())). ' chars)'
         );
         $this->assertContains(
             'Content-Transfer-Encoding: quoted-printable',
