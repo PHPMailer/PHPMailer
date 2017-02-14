@@ -1329,7 +1329,7 @@ EOT;
         $message = $this->Mail->getSentMIMEMessage();
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($message),
-            'Long line not corrected (Max: '.(PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())). ' chars).'
+            'Long line not corrected (Max: '.(PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())). ' chars). Message:'. $message
         );
         $this->assertContains(
             'Content-Transfer-Encoding: quoted-printable',
