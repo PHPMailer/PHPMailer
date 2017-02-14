@@ -1327,7 +1327,10 @@ EOT;
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
-        $this->assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
+        $this->assertFalse(
+            PHPMailer::hasLineLongerThanMax($message),
+            'Long line not corrected (Max: '.(PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())). ' chars).'
+        );
         $this->assertContains(
             'Content-Transfer-Encoding: quoted-printable',
             $message,
