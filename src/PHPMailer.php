@@ -3640,6 +3640,7 @@ class PHPMailer
             'rtf'   => 'text/rtf',
             'vcf'   => 'text/vcard',
             'vcard' => 'text/vcard',
+            'ics'   => 'text/calendar',
             'xml'   => 'text/xml',
             'xsl'   => 'text/xml',
             'mpeg'  => 'video/mpeg',
