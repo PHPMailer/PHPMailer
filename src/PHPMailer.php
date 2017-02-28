@@ -1268,6 +1268,22 @@ class PHPMailer
             //Maintain backward compatibility with legacy Linux command line mailers
             static::setLE(PHP_EOL);
         }
+        //Check for buggy PHP versions that add a header with an incorrect line break
+        if (ini_get('mail.add_x_header') == 1
+            and 'mail' == $this->Mailer
+            and stripos(PHP_OS, 'WIN') === 0
+            and ((version_compare(PHP_VERSION, '7.0.0', '>=')
+                    and version_compare(PHP_VERSION, '7.0.17', '<'))
+                or (version_compare(PHP_VERSION, '7.1.0', '>=')
+                    and version_compare(PHP_VERSION, '7.1.3', '<')))
+        ) {
+            trigger_error(
+                'Your version of PHP is affected by a bug that may result in corrupted messages.' .
+                ' To fix it, switch to sending using SMTP, disable the mail.add_x_header option in' .
+                ' your php.ini, switch to MacOS or Linux, or upgrade your PHP to version 7.0.17+ or 7.1.3+.',
+                E_USER_WARNING
+            );
+        }
 
         try {
             $this->error_count = 0; // Reset errors
