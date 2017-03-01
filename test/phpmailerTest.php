@@ -1794,7 +1794,8 @@ EOT;
         //Create a certificate signing request
         $csr = openssl_csr_new($certprops, $pk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, 'file://' . $cacertfile, $capk, 1);
+        $cacert = file_get_contents($cacertfile);
+        $cert = openssl_csr_sign($csr, $cacert, $capk, 1);
         //Save the cert
         openssl_x509_export($cert, $certout);
         file_put_contents($certfile, $certout);
