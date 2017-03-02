@@ -7,11 +7,6 @@ php:
   - 5.4
   - 5.3
   - hhvm
- 
-matrix:
-  allow_failures:
-    - php: hhvm
-
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
@@ -25,7 +20,12 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp fakesendmail.sh /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' >> /etc/hhvm/php.ini
+    else
+      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+    fi
 script:
   - phpunit --configuration ../travis.phpunit.xml.dist
 after_script:
