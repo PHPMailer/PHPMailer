@@ -362,14 +362,14 @@ class SMTP
         }
 
         // Begin encrypted connection
-        if (!stream_socket_enable_crypto(
+        set_error_handler(array($this, 'errorHandler'));
+        $crypto_ok = stream_socket_enable_crypto(
             $this->smtp_conn,
             true,
             $crypto_method
-        )) {
-            return false;
-        }
-        return true;
+        );
+        restore_error_handler();
+        return $crypto_ok;
     }
 
     /**
@@ -1208,42 +1208,44 @@ class SMTP
      * Reports an error number and string.
      * @param integer $errno The error number returned by PHP.
      * @param string $errmsg The error message returned by PHP.
+     * @param string $errfile The file the error occurred in
+     * @param integer $errline The line number the error occurred on
      */
-    protected function errorHandler($errno, $errmsg)
+    protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0)
     {
-        $notice = 'Connection: Failed to connect to server.';
+        $notice = 'Connection failed.';
         $this->setError(
             $notice,
             $errno,
             $errmsg
         );
         $this->edebug(
-            $notice . ' Error number ' . $errno . '. "Error notice: ' . $errmsg,
+            $notice . ' Error #' . $errno . ': ' . $errmsg . " [$errfile line $errline]",
             self::DEBUG_CONNECTION
         );
     }
 
-	/**
-	 * Will return the ID of the last smtp transaction based on a list of patterns provided
-	 * in SMTP::$smtp_transaction_id_patterns.
-	 * If no reply has been received yet, it will return null.
-	 * If no pattern has been matched, it will return false.
-	 * @return bool|null|string
-	 */
-	public function getLastTransactionID()
-	{
-		$reply = $this->getLastReply();
+    /**
+     * Will return the ID of the last smtp transaction based on a list of patterns provided
+     * in SMTP::$smtp_transaction_id_patterns.
+     * If no reply has been received yet, it will return null.
+     * If no pattern has been matched, it will return false.
+     * @return bool|null|string
+     */
+    public function getLastTransactionID()
+    {
+        $reply = $this->getLastReply();
 
-		if (empty($reply)) {
-			return null;
-		}
+        if (empty($reply)) {
+            return null;
+        }
 
-		foreach($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
-			if(preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
-				return $matches[1];
-			}
-		}
+        foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
+            if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
+                return $matches[1];
+            }
+        }
 
-		return false;
+        return false;
     }
 }
