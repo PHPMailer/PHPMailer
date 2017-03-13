@@ -14,7 +14,7 @@ This is a major update that breaks backwards compatibility.
   * All uses of `PHPMailer::$LE` property converted to use `static::$LE` constant for consistency and ease of overriding
   * Similar changes to line break handling in SMTP and POP3 classes.
   * Line break format for `mail()` transport is set automatically.
-  * Warnings emitted in debug output for buggy `mail()` in PHP versions 7.0.0 - 7.0.16 and 7.1.0 - 7.1.2; either upgrade or switch to SMTP.
+  * Warnings emitted for buggy `mail()` in PHP versions 7.0.0 - 7.0.16 and 7.1.0 - 7.1.2; either upgrade or switch to SMTP.
 * Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
 * Major cleanup of docs and examples
 * All elements previously marked as deprecated have been removed:
