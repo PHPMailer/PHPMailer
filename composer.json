@@ -23,7 +23,8 @@
         "php": ">=5.0.0"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "*",
+        "zendframework/zend-serializer": "2.5.*",
+        "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.8.*"
     },
     "suggest": {
