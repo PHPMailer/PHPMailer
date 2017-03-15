@@ -27,7 +27,7 @@ before_script:
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
     fi
 script:
-  - vendor/bin/phpunit --configuration ../travis.phpunit.xml.dist
+  - ../vendor/bin/phpunit --configuration ../travis.phpunit.xml.dist
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml
