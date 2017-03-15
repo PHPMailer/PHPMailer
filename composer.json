@@ -24,6 +24,8 @@
     },
     "require-dev": {
         "zendframework/zend-serializer": "2.5.*",
+        "zendframework/zend-eventmanager": "2.5.1",
+        "doctrine/annotations": "1.2.*",
         "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.8.*"
     },
