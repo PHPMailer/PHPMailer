@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "648ac436e640e888236320113a930864",
+    "content-hash": "2a3644524386dc18c5bbf60b303ab238",
     "packages": [],
     "packages-dev": [
         {
@@ -158,35 +158,35 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.4.0",
+            "version": "v1.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "54cacc9b81758b14e3ce750f205a393d52339e97"
+                "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/54cacc9b81758b14e3ce750f205a393d52339e97",
-                "reference": "54cacc9b81758b14e3ce750f205a393d52339e97",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
+                "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
                 "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
-                "php": "^5.6 || ^7.0"
+                "php": ">=5.3.2"
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
-                "phpunit/phpunit": "^5.7"
+                "phpunit/phpunit": "4.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
+                "psr-0": {
+                    "Doctrine\\Common\\Annotations\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -222,7 +222,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-02-24T16:22:25+00:00"
+            "time": "2015-08-31T12:32:49+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -3013,34 +3013,32 @@
         },
         {
             "name": "zendframework/zend-cache",
-            "version": "2.7.2",
+            "version": "2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-cache.git",
-                "reference": "c98331b96d3b9d9b24cf32d02660602edb34d039"
+                "reference": "7ff9d6b922ae29dbdc53f6a62b471fb6e58565df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-cache/zipball/c98331b96d3b9d9b24cf32d02660602edb34d039",
-                "reference": "c98331b96d3b9d9b24cf32d02660602edb34d039",
+                "url": "https://api.github.com/repos/zendframework/zend-cache/zipball/7ff9d6b922ae29dbdc53f6a62b471fb6e58565df",
+                "reference": "7ff9d6b922ae29dbdc53f6a62b471fb6e58565df",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5 || ^7.0",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+                "php": ">=5.5",
+                "zendframework/zend-eventmanager": "~2.5",
+                "zendframework/zend-servicemanager": "~2.5",
+                "zendframework/zend-stdlib": "~2.5"
             },
             "require-dev": {
-                "phpbench/phpbench": "^0.10.0",
-                "phpunit/phpunit": "^4.8",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-serializer": "^2.6",
-                "zendframework/zend-session": "^2.6.2"
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "~4.0",
+                "zendframework/zend-serializer": "~2.5",
+                "zendframework/zend-session": "~2.5"
             },
             "suggest": {
-                "ext-apc": "APC or compatible extension, to use the APC storage adapter",
-                "ext-apcu": "APCU >= 5.1.0, to use the APCu storage adapter",
+                "ext-apcu": "APCU, to use the APC storage adapter",
                 "ext-dba": "DBA, to use the DBA storage adapter",
                 "ext-memcache": "Memcache >= 2.0.0 to use the Memcache storage adapter",
                 "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
@@ -3055,12 +3053,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev",
-                    "dev-develop": "2.8-dev"
-                },
-                "zf": {
-                    "component": "Zend\\Cache",
-                    "config-provider": "Zend\\Cache\\ConfigProvider"
+                    "dev-master": "2.5-dev",
+                    "dev-develop": "2.6-dev"
                 }
             },
             "autoload": {
@@ -3078,7 +3072,7 @@
                 "cache",
                 "zf2"
             ],
-            "time": "2016-12-16T11:35:47+00:00"
+            "time": "2015-09-15T16:09:09+00:00"
         },
         {
             "name": "zendframework/zend-config",
@@ -3138,37 +3132,31 @@
         },
         {
             "name": "zendframework/zend-eventmanager",
-            "version": "3.1.0",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-eventmanager.git",
-                "reference": "c3bce7b7d47c54040b9ae51bc55491c72513b75d"
+                "reference": "d94a16039144936f107f906896349900fd634443"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/c3bce7b7d47c54040b9ae51bc55491c72513b75d",
-                "reference": "c3bce7b7d47c54040b9ae51bc55491c72513b75d",
+                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/d94a16039144936f107f906896349900fd634443",
+                "reference": "d94a16039144936f107f906896349900fd634443",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0"
+                "php": ">=5.3.23",
+                "zendframework/zend-stdlib": "~2.5"
             },
             "require-dev": {
-                "athletic/athletic": "^0.1",
-                "container-interop/container-interop": "^1.1.0",
-                "phpunit/phpunit": "^5.6",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-stdlib": "^2.7.3 || ^3.0"
-            },
-            "suggest": {
-                "container-interop/container-interop": "^1.1.0, to use the lazy listeners feature",
-                "zendframework/zend-stdlib": "^2.7.3 || ^3.0, to use the FilterChain feature"
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "~4.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev",
-                    "dev-develop": "3.2-dev"
+                    "dev-master": "2.5-dev",
+                    "dev-develop": "2.6-dev"
                 }
             },
             "autoload": {
@@ -3180,15 +3168,12 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Trigger and listen to events within a PHP application",
             "homepage": "https://github.com/zendframework/zend-eventmanager",
             "keywords": [
-                "event",
                 "eventmanager",
-                "events",
                 "zf2"
             ],
-            "time": "2016-12-19T21:47:12+00:00"
+            "time": "2015-06-03T15:32:01+00:00"
         },
         {
             "name": "zendframework/zend-filter",
