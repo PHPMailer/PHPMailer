@@ -25,6 +25,7 @@ before_script:
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' >> /etc/hhvm/php.ini
     else
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+    fi
 
 script:
   - vendor/phpunit/phpunit --configuration ../travis.phpunit.xml.dist
