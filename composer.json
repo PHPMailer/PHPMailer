@@ -40,7 +40,7 @@
         "zendframework/zend-math": "2.5.1",
         "zendframework/zend-serializer": "2.5.*",
         "zendframework/zend-servicemanager": "2.5.*",
-        "zendframework/zend-stdlib": "2.5.*"
+        "zendframework/zend-stdlib": "2.5.1"
     },
     "suggest": {
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
