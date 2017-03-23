@@ -959,7 +959,10 @@ class SMTP
     public function client_send($data)
     {
         $this->edebug("CLIENT -> SERVER: $data", self::DEBUG_CLIENT);
-        return fwrite($this->smtp_conn, $data);
+        set_error_handler(array($this, 'errorHandler'));
+        $result = fwrite($this->smtp_conn, $data);
+        restore_error_handler();
+        return $result;
     }
 
     /**
