@@ -1089,8 +1089,10 @@ class SMTP
             $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
             $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
             $data .= $str;
-            // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
-            if ((isset($str[3]) and $str[3] == ' ')) {
+            // If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
+            // or 4th character is a space, we are done reading, break the loop,
+            // string array access is a micro-optimisation over strlen
+            if (!isset($str[3]) or (isset($str[3]) and $str[3] == ' ')) {
                 break;
             }
             // Timed-out? Log and break
