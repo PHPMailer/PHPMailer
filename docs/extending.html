@@ -3,146 +3,126 @@
 <title>Examples using phpmailer</title>
 </head>
 
-<body bgcolor="#FFFFFF">
+<body>
 
-<h2>Examples using phpmailer</h2>
+<h2>Examples using PHPMailer</h2>
 
 <h3>1. Advanced Example</h3>
 <p>
 
-This demonstrates sending out multiple email messages with binary attachments
-from a MySQL database with multipart/alternative support.<p>
-<table cellpadding="4" border="1" width="80%">
-<tr>
-<td bgcolor="#CCCCCC">
+This demonstrates sending multiple email messages with binary attachments
+from a MySQL database using multipart/alternative messages.<p>
+
 <pre>
-require("class.phpmailer.php");
+require 'PHPMailerAutoload.php';
 
-$mail = new phpmailer();
+$mail = new PHPMailer();
 
-$mail->From     = "list@example.com";
-$mail->FromName = "List manager";
-$mail->Host     = "smtp1.example.com;smtp2.example.com";
-$mail->Mailer   = "smtp";
+$mail->setFrom('list@example.com', 'List manager');
+$mail->Host   = 'smtp1.example.com;smtp2.example.com';
+$mail->Mailer = 'smtp';
 
-@MYSQL_CONNECT("localhost","root","password");
-@mysql_select_db("my_company");
-$query  = "SELECT full_name, email, photo FROM employee WHERE id=$id";
-$result = @MYSQL_QUERY($query);
+@mysqli_connect('localhost','root','password');
+@mysqli_select_db("my_company");
+$query = "SELECT full_name, email, photo FROM employee";
+$result = @mysqli_query($query);
 
-while ($row = mysql_fetch_array ($result))
+while ($row = mysqli_fetch_assoc($result))
 {
     // HTML body
-    $body  = "Hello &lt;font size=\"4\"&gt;" . $row["full_name"] . "&lt;/font&gt;, &lt;p&gt;";
+    $body  = "Hello &lt;font size=\"4\"&gt;" . $row['full_name'] . "&lt;/font&gt;, &lt;p&gt;";
     $body .= "&lt;i&gt;Your&lt;/i&gt; personal photograph to this message.&lt;p&gt;";
     $body .= "Sincerely, &lt;br&gt;";
     $body .= "phpmailer List manager";
 
     // Plain text body (for mail clients that cannot read HTML)
-    $text_body  = "Hello " . $row["full_name"] . ", \n\n";
+    $text_body  = 'Hello ' . $row['full_name'] . ", \n\n";
     $text_body .= "Your personal photograph to this message.\n\n";
     $text_body .= "Sincerely, \n";
-    $text_body .= "phpmailer List manager";
+    $text_body .= 'phpmailer List manager';
 
     $mail->Body    = $body;
     $mail->AltBody = $text_body;
-    $mail->AddAddress($row["email"], $row["full_name"]);
-    $mail->AddStringAttachment($row["photo"], "YourPhoto.jpg");
+    $mail->addAddress($row['email'], $row['full_name']);
+    $mail->addStringAttachment($row['photo'], 'YourPhoto.jpg');
 
-    if(!$mail->Send())
-        echo "There has been a mail error sending to " . $row["email"] . "&lt;br&gt;";
+    if(!$mail->send())
+        echo "There has been a mail error sending to " . $row['email'] . "&lt;br&gt;";
 
     // Clear all addresses and attachments for next loop
-    $mail->ClearAddresses();
-    $mail->ClearAttachments();
+    $mail->clearAddresses();
+    $mail->clearAttachments();
 }
 </pre>
-</td>
-</tr>
-</table>
 <p>
 
-<h3>2. Extending phpmailer</h3>
+<h3>2. Extending PHPMailer</h3>
 <p>
 
 Extending classes with inheritance is one of the most
-powerful features of object-oriented
-programming.  It allows you to make changes to the
-original class for your
-own personal use without hacking the original
-classes.  Plus, it is very
-easy to do. I've provided an example:
+powerful features of object-oriented programming. It allows you to make changes to the
+original class for your own personal use without hacking the original
+classes, and it's very easy to do:
 
 <p>
 Here's a class that extends the phpmailer class and sets the defaults
 for the particular site:<br>
-PHP include file: <b>mail.inc.php</b>
+PHP include file: my_phpmailer.php
 <p>
 
-<table cellpadding="4" border="1" width="80%">
-<tr>
-<td bgcolor="#CCCCCC">
 <pre>
-require("class.phpmailer.php");
+require 'PHPMailerAutoload.php';
 
-class my_phpmailer extends phpmailer {
+class my_phpmailer extends PHPMailer {
     // Set default variables for all new objects
-    var $From     = "from@example.com";
-    var $FromName = "Mailer";
-    var $Host     = "smtp1.example.com;smtp2.example.com";
-    var $Mailer   = "smtp";                         // Alternative to IsSMTP()
-    var $WordWrap = 75;
+    public $From     = 'from@example.com';
+    public $FromName = 'Mailer';
+    public $Host     = 'smtp1.example.com;smtp2.example.com';
+    public $Mailer   = 'smtp';                         // Alternative to isSMTP()
+    public $WordWrap = 75;
 
-    // Replace the default error_handler
-    function error_handler($msg) {
-        print("My Site Error");
-        print("Description:");
-        printf("%s", $msg);
+    // Replace the default debug output function
+    protected function edebug($msg) {
+        print('My Site Error');
+        print('Description:');
+        printf('%s', $msg);
         exit;
     }
 
+    //Extend the send function
+    public function send() {
+        $this->Subject = '[Yay for me!] '.$this->Subject;
+        return parent::send()
+    }
+
     // Create an additional function
-    function do_something($something) {
+    public function do_something($something) {
         // Place your new code here
     }
 }
-</td>
-</tr>
-</table>
+</pre>
 <br>
+Now here's a normal PHP page in the site, which will have all the defaults set above:<br>
 
-Now here's a normal PHP page in the site, which will have all the defaults set
-above:<br>
-Normal PHP file: <b>mail_test.php</b>
-<p>
-
-<table cellpadding="4" border="1" width="80%">
-<tr>
-<td bgcolor="#CCCCCC">
 <pre>
-require("mail.inc.php");
+require 'my_phpmailer.php';
 
 // Instantiate your new class
 $mail = new my_phpmailer;
 
 // Now you only need to add the necessary stuff
-$mail->AddAddress("josh@example.com", "Josh Adams");
-$mail->Subject = "Here is the subject";
-$mail->Body    = "This is the message body";
-$mail->AddAttachment("c:/temp/11-10-00.zip", "new_name.zip");  // optional name
+$mail->addAddress('josh@example.com', 'Josh Adams');
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the message body';
+$mail->addAttachment('c:/temp/11-10-00.zip', 'new_name.zip');  // optional name
 
-if(!$mail->Send())
+if(!$mail->send())
 {
-   echo "There was an error sending the message";
+   echo 'There was an error sending the message';
    exit;
 }
 
-echo "Message was sent successfully";
+echo 'Message was sent successfully';
 </pre>
-</td>
-</tr>
-</table>
-</p>
-
 </body>
 </html>

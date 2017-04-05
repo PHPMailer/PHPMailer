@@ -1,26 +1,26 @@
 <?php
 /**
-* PHPMailer language file: refer to English translation for definitive list
-* Spanish version
-* Versión en español
-*/
+ * Spanish PHPMailer language file: refer to English translation for definitive list
+ * @package PHPMailer
+ * @author Matt Sturdy <matt.sturdy@gmail.com>
+ */
 
-$PHPMAILER_LANG['authenticate']         = 'Error SMTP: No se pudo autentificar.';
-$PHPMAILER_LANG['connect_host']         = 'Error SMTP: No puedo conectar al servidor SMTP.';
+$PHPMAILER_LANG['authenticate']         = 'Error SMTP: Imposible autentificar.';
+$PHPMAILER_LANG['connect_host']         = 'Error SMTP: Imposible conectar al servidor SMTP.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Error SMTP: Datos no aceptados.';
-//$PHPMAILER_LANG['empty_message']        = 'Message body empty';
+$PHPMAILER_LANG['empty_message']        = 'El cuerpo del mensaje está vacío';
 $PHPMAILER_LANG['encoding']             = 'Codificación desconocida: ';
-$PHPMAILER_LANG['execute']              = 'No puedo ejecutar: ';
-$PHPMAILER_LANG['file_access']          = 'No puedo acceder al archivo: ';
-$PHPMAILER_LANG['file_open']            = 'Error de Archivo: No puede abrir el archivo: ';
+$PHPMAILER_LANG['execute']              = 'Imposible ejecutar: ';
+$PHPMAILER_LANG['file_access']          = 'Imposible acceder al archivo: ';
+$PHPMAILER_LANG['file_open']            = 'Error de Archivo: Imposible abrir el archivo: ';
 $PHPMAILER_LANG['from_failed']          = 'La(s) siguiente(s) direcciones de remitente fallaron: ';
-$PHPMAILER_LANG['instantiate']          = 'No pude crear una instancia de la función Mail.';
-//$PHPMAILER_LANG['invalid_email']        = 'Not sending, email address is invalid: ';
+$PHPMAILER_LANG['instantiate']          = 'Imposible crear una instancia de la función Mail.';
+$PHPMAILER_LANG['invalid_address']      = 'Imposible enviar: dirección de email inválido: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer no está soportado.';
-$PHPMAILER_LANG['provide_address']      = 'Debe proveer al menos una dirección de email como destinatario.';
-$PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Los siguientes destinatarios fallaron: ';
+$PHPMAILER_LANG['provide_address']      = 'Debe proporcionar al menos una dirección de email de destino.';
+$PHPMAILER_LANG['recipients_failed']    = 'Error SMTP: Los siguientes destinos fallaron: ';
 $PHPMAILER_LANG['signing']              = 'Error al firmar: ';
-//$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
-//$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
-?>
+$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() falló.';
+$PHPMAILER_LANG['smtp_error']           = 'Error del servidor SMTP: ';
+$PHPMAILER_LANG['variable_set']         = 'No se pudo configurar la variable: ';
+$PHPMAILER_LANG['extension_missing']    = 'Extensión faltante: ';
