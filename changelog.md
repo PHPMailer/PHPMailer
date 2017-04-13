@@ -1,5 +1,7 @@
 # ChangeLog
 
+* Handle bare codes (an RFC contravention) in SMTP server responses
+
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
 * Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of teh version supplied by Travis-CI
