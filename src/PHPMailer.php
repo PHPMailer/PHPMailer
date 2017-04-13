@@ -2096,10 +2096,7 @@ class PHPMailer
     {
         $result = '';
 
-        if ('' == $this->MessageDate) {
-            $this->MessageDate = static::rfcDate();
-        }
-        $result .= $this->headerLine('Date', $this->MessageDate);
+        $result .= $this->headerLine('Date', $this->MessageDate == '' ? self::rfcDate() : $this->MessageDate);
 
         // To be created automatically by mail()
         if ($this->SingleTo) {

@@ -47,9 +47,12 @@ This is a major update that breaks backwards compatibility.
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 * Trap low-level errors in SMTP, reports via debug output
 
+* Handle bare codes (an RFC contravention) in SMTP server responses
+* Make message timestamps more dynamic - calculate the date separately for each message
+
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
-* Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of teh version supplied by Travis-CI
+* Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of the version supplied by Travis-CI
 * This forces pinning of some dev packages to older releases, but should make travis builds more reliable
 * Test suite now runs on HHVM, and thus so should PHPMailer in general
 * Improve Czech translations

@@ -46,6 +46,7 @@ $mail->SMTPAuth = true;
 $mail->AuthType = 'XOAUTH2';
 
 //Fill in authentication details here
+//Either the gmail account owner, or the user that gave consent
 $email = 'someone@gmail.com';
 $clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
