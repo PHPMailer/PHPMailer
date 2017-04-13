@@ -5,7 +5,7 @@
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
-* Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of teh version supplied by Travis-CI
+* Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of the version supplied by Travis-CI
 * This forces pinning of some dev packages to older releases, but should make travis builds more reliable
 * Test suite now runs on HHVM, and thus so should PHPMailer in general
 * Improve Czech translations
