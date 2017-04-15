@@ -755,6 +755,7 @@ class PHPMailer
             $this->ContentType = 'text/html';
         } else {
             $this->ContentType = 'text/plain';
+            $this->headerLine("format", "flowed"); // this should address https://github.com/PHPMailer/PHPMailer/issues/67
         }
     }
 
@@ -1262,6 +1263,7 @@ class PHPMailer
             // Set whether the message is multipart/alternative
             if ($this->alternativeExists()) {
                 $this->ContentType = 'multipart/alternative';
+                $this->headerLine("format", "flowed"); // this should address https://github.com/PHPMailer/PHPMailer/issues/67
             }
 
             $this->setMessageType();
