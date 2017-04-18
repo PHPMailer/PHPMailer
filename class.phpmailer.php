@@ -1657,6 +1657,13 @@ class PHPMailer
             if ($tport > 0 and $tport < 65536) {
                 $port = $tport;
             }
+            //Check for invalid combination of encryption algorithm and port
+            if('tls'===$secure && 465 === $port){
+				throw new phpmailerException($this->lang('tls can\t be used with port 465 '), self::STOP_CRITICAL);
+			}
+			if('ssl'===$secure && 587 === $port){
+				throw new phpmailerException($this->lang('ssl can\'t be used with port 587'), self::STOP_CRITICAL);
+			}
             if ($this->smtp->connect($prefix . $host, $port, $this->Timeout, $options)) {
                 try {
                     if ($this->Helo) {
