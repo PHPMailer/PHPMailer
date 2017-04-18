@@ -1,0 +1,17 @@
+require 'my_phpmailer.php';
+
+// Instantiate your new class
+$mail = new my_phpmailer;
+
+// Now you only need to add the necessary stuff
+$mail->addAddress('laura.mcnamee@millennium1solutions.com', 'Laura McNamee');
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the message body';
+
+if(!$mail->send())
+{
+   echo 'There was an error sending the message';
+   exit;
+}
+
+echo 'Message was sent successfully';
