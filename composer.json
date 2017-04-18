@@ -23,8 +23,24 @@
         "php": ">=5.0.0"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "*",
-        "phpunit/phpunit": "4.7.*"
+        "doctrine/annotations": "1.2.*",
+        "jms/serializer": "0.16.*",
+        "phpdocumentor/phpdocumentor": "2.*",
+        "phpunit/phpunit": "4.8.*",
+        "symfony/debug": "2.8.*",
+        "symfony/filesystem": "2.8.*",
+        "symfony/translation": "2.8.*",
+        "symfony/yaml": "2.8.*",
+        "zendframework/zend-cache": "2.5.1",
+        "zendframework/zend-config": "2.5.1",
+        "zendframework/zend-eventmanager": "2.5.1",
+        "zendframework/zend-filter": "2.5.1",
+        "zendframework/zend-i18n": "2.5.1",
+        "zendframework/zend-json": "2.5.1",
+        "zendframework/zend-math": "2.5.1",
+        "zendframework/zend-serializer": "2.5.*",
+        "zendframework/zend-servicemanager": "2.5.*",
+        "zendframework/zend-stdlib": "2.5.1"
     },
     "suggest": {
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
