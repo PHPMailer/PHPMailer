@@ -46,9 +46,10 @@ This is a major update that breaks backwards compatibility.
 * `Debugoutput` can accept a PSR-3 logger instance
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 * Trap low-level errors in SMTP, reports via debug output
-
 * Handle bare codes (an RFC contravention) in SMTP server responses
 * Make message timestamps more dynamic - calculate the date separately for each message
+* More thorough checks for reading attachments.
+* Throw an exception when trying to send a message with an empty body caused by an internal error.
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output

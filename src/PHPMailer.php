@@ -2415,6 +2415,9 @@ class PHPMailer
 
         if ($this->isError()) {
             $body = '';
+            if ($this->exceptions) {
+                throw new Exception($this->lang('empty_message'), self::STOP_CRITICAL);
+            }
         } elseif ($this->sign_key_file) {
             try {
                 if (!defined('PKCS7_TEXT')) {
@@ -2767,6 +2770,9 @@ class PHPMailer
                 throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
             $file_buffer = file_get_contents($path);
+            if (false === $file_buffer) {
+                throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+            }
             $file_buffer = $this->encodeString($file_buffer, $encoding);
             return $file_buffer;
         } catch (Exception $exc) {
