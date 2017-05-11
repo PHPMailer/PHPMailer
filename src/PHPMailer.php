@@ -3354,17 +3354,39 @@ class PHPMailer
      */
     protected function serverHostname()
     {
-        $result = 'localhost.localdomain';
+        $result = '';
         if (!empty($this->Hostname)) {
             $result = $this->Hostname;
-        } elseif (isset($_SERVER) and array_key_exists('SERVER_NAME', $_SERVER) and !empty($_SERVER['SERVER_NAME'])) {
+        } elseif (isset($_SERVER) and array_key_exists('SERVER_NAME', $_SERVER)) {
             $result = $_SERVER['SERVER_NAME'];
         } elseif (function_exists('gethostname') and gethostname() !== false) {
             $result = gethostname();
         } elseif (php_uname('n') !== false) {
             $result = php_uname('n');
         }
-        return $result;
+        if (!static::isValidHost($result)) {
+            return 'localhost.localdomain';
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Validate whether a string contains a valid value to use as a hostname or IP address.
+     *
+     * @param string $host The host name or IP address to check
+     * @return bool
+     */
+    public static function isValidHost($host)
+    {
+        return (boolean)(
+            !empty($host)
+            and strlen($host) < 256
+            and (
+                filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)
+                or filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)
+            )
+        );
     }
 
     /**
