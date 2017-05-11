@@ -20,7 +20,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=5.5.0",
+        "ext-ctype": "*"
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "2.*",

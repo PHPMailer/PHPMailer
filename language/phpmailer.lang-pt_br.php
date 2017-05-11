@@ -5,6 +5,7 @@
  * @author Paulo Henrique Garcia <paulo@controllerweb.com.br>
  * @author Lucas Guimarães <lucas@lucasguimaraes.com>
  * @author Phelipe Alves <phelipealvesdesouza@gmail.com>
+ * @author Fabio Beneditto <fabiobeneditto@gmail.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Erro de SMTP: Não foi possível autenticar.';
@@ -15,7 +16,7 @@ $PHPMAILER_LANG['encoding']             = 'Codificação desconhecida: ';
 $PHPMAILER_LANG['execute']              = 'Não foi possível executar: ';
 $PHPMAILER_LANG['file_access']          = 'Não foi possível acessar o arquivo: ';
 $PHPMAILER_LANG['file_open']            = 'Erro de Arquivo: Não foi possível abrir o arquivo: ';
-$PHPMAILER_LANG['from_failed']          = 'Os seguintes remententes falharam: ';
+$PHPMAILER_LANG['from_failed']          = 'Os seguintes remetentes falharam: ';
 $PHPMAILER_LANG['instantiate']          = 'Não foi possível instanciar a função mail.';
 $PHPMAILER_LANG['invalid_address']      = 'Endereço de e-mail inválido: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer não é suportado.';

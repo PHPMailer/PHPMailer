@@ -1692,7 +1692,8 @@ class PHPMailer
 
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
-            if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-]*):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
+            //@TODO improve this pattern
+            if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9:\[\]\.-]*):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
                 // Not a valid host entry
                 continue;
             }
