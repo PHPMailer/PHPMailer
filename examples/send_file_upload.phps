@@ -11,7 +11,7 @@ if (array_key_exists('userfile', $_FILES)) {
     // First handle the upload
     // Don't trust provided filename - same goes for MIME types
     // See http://php.net/manual/en/features.file-upload.php#114004 for more thorough upload validation
-    $uploadfile = tempnam(sys_get_temp_dir(), sha1($_FILES['userfile']['name']));
+    $uploadfile = tempnam(sys_get_temp_dir(), hash('sha256', $_FILES['userfile']['name']));
     if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
         // Upload handled successfully
         // Now create a message

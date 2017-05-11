@@ -1715,7 +1715,7 @@ class PHPMailer
                 $secure = 'tls';
             }
             //Do we need the OpenSSL extension?
-            $sslext = defined('OPENSSL_ALGO_SHA1');
+            $sslext = defined('OPENSSL_ALGO_SHA256');
             if ('tls' === $secure or 'ssl' === $secure) {
                 //Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
                 if (!$sslext) {
@@ -2249,13 +2249,21 @@ class PHPMailer
     }
 
     /**
-     * Create unique ID to use for boundaries.
+     * Create a unique ID to use for boundaries.
      *
      * @return string
      */
     protected function generateId()
     {
-        return md5(uniqid(time()));
+        $len = 23;
+        if (function_exists("random_bytes")) {
+            $bytes = random_bytes($len);
+        } elseif (function_exists("openssl_random_pseudo_bytes")) {
+            $bytes = openssl_random_pseudo_bytes($len);
+        } else {
+            $bytes = uniqid(mt_rand(), true);
+        }
+        return hash('sha256', $bytes);
     }
 
     /**
@@ -2659,7 +2667,7 @@ class PHPMailer
                     $path = $attachment[0];
                 }
 
-                $inclhash = md5(serialize($attachment));
+                $inclhash = hash('sha256', serialize($attachment));
                 if (in_array($inclhash, $incl)) {
                     continue;
                 }
@@ -3466,7 +3474,7 @@ class PHPMailer
                     }
                     //Hash the decoded data, not the URL so that the same data-URI image used in multiple places
                     //will only be embedded once, even if it used a different encoding
-                    $cid = md5($data) . '@phpmailer.0'; // RFC2392 S 2
+                    $cid = hash('sha256', $data) . '@phpmailer.0'; // RFC2392 S 2
 
                     if (!$this->cidExists($cid)) {
                         $this->addStringEmbeddedImage($data, $cid, 'embed' . $imgindex, 'base64', $match[1]);
@@ -3493,7 +3501,7 @@ class PHPMailer
                     if ('.' == $directory) {
                         $directory = '';
                     }
-                    $cid = md5($url) . '@phpmailer.0'; // RFC2392 S 2
+                    $cid = hash('sha256', $url) . '@phpmailer.0'; // RFC2392 S 2
                     if (strlen($basedir) > 1 and substr($basedir, -1) != '/') {
                         $basedir .= '/';
                     }

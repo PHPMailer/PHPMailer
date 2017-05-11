@@ -1079,7 +1079,7 @@ EOT;
 
         if (!$this->Mail->addStringEmbeddedImage(
             file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-            md5('phpmailer_mini.png').'@phpmailer.0',
+            hash('sha256', 'phpmailer_mini.png').'@phpmailer.0',
             '', //Intentionally empty name
             'base64',
             '', //Intentionally empty MIME type
@@ -1801,8 +1801,8 @@ EOT;
         $postbody = " C \r\nD \t E\r\n";
         $this->assertEquals($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
         $this->assertEquals(
-            base64_encode(sha1($this->Mail->DKIM_BodyC(''), true)),
-            'uoq1oCgLlTqpdDX/iUbLy7J1Wic=',
+            'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
+            base64_encode(hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
             'DKIM canonicalized empty body hash mismatch'
         );
         $this->assertEquals($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
@@ -1819,8 +1819,8 @@ EOT;
         $preheaders = "A: X\r\nB : Y\t\r\n\tZ  \r\n";
         $postheaders = "a:X\r\nb:Y Z\r\n";
         $this->assertEquals(
-            $this->Mail->DKIM_HeaderC($preheaders),
             $postheaders,
+            $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization incorrect'
         );
     }
@@ -1919,13 +1919,13 @@ EOT;
     public function testMessageID()
     {
         $this->Mail->Body = 'Test message ID.';
-        $id = md5(12345);
+        $id = hash('sha256', 12345);
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
         $this->assertNotEquals($lastid, $id, 'Invalid Message ID allowed');
-        $id = '<'.md5(12345).'@example.com>';
+        $id = '<'. hash('sha256', 12345).'@example.com>';
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();

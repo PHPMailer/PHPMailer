@@ -32,6 +32,7 @@ This is a major update that breaks backwards compatibility.
 * NTLM authentication has been removed - it never worked anyway!
   * `PHPMailer->Workstation`
   * `PHPMailer->Realm`
+* `SingleTo` functionality is deprecated; this belongs at a higher level - PHPMailer is not a mailing list system.
 * `SMTP::authenticate` method signature changed
 * `parseAddresses()` is now static
 * `validateAddress()` is now called statically from `parseAddresses()`
@@ -50,6 +51,7 @@ This is a major update that breaks backwards compatibility.
 * Make message timestamps more dynamic - calculate the date separately for each message
 * More thorough checks for reading attachments.
 * Throw an exception when trying to send a message with an empty body caused by an internal error.
+* Replaced all use of MD5 and SHA1 hash functions with SHA256.
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
