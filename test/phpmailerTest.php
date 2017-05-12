@@ -2021,7 +2021,9 @@ EOT;
             'example.com',
             'smtp.gmail.com',
             '127.0.0.1',
-            '[::1]'
+            trim(str_repeat('a0123456789.', 21), '.'),
+            '[::1]',
+            '[0:1234:dc0:41:216:3eff:fe67:3e01]'
         ];
         $bad = [
             null,
@@ -2033,7 +2035,9 @@ EOT;
             '999.0.0.0',
             '[1234]',
             '[1234:::1]',
-            str_repeat('0123456789', 26)
+            trim(str_repeat('a0123456789.', 22), '.'),
+            '0:1234:dc0:41:216:3eff:fe67:3e01',
+            '[012q:1234:dc0:41:216:3eff:fe67:3e01]'
         ];
         foreach ($good as $h) {
             $this->assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: '.$h);

@@ -3373,23 +3373,35 @@ class PHPMailer
 
     /**
      * Validate whether a string contains a valid value to use as a hostname or IP address.
+     * IPv6 addresses must include [], e.g. `[::1]`, not just `::1`.
      *
      * @param string $host The host name or IP address to check
      * @return bool
      */
     public static function isValidHost($host)
     {
-        return (boolean)(
-            !empty($host)
-            and is_string($host)
-            and strlen($host) < 256
-            and (
-                filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)
-                or (!is_numeric(str_replace('.', '', $host))
-                    and filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)
-                )
-            )
-        );
+        //Simple syntax limits
+        if (empty($host)
+            or !is_string($host)
+            or strlen($host) > 256
+        ) {
+            return false;
+        }
+        //Looks like a bracketed IPv6 address
+        if (trim($host, '[]') != $host) {
+            return (boolean)filter_var(trim($host, '[]'), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+        }
+        //If removing all the dots results in a numeric string, it must be an IPv4 address.
+        //Need to check this first because otherwise things like `999.0.0.0` are considered valid host names
+        if (is_numeric(str_replace('.', '', $host))) {
+            //Is it a valid IPv4 address?
+            return (boolean)filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+        }
+        if (filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+            //Is it a syntactically valid hostname?
+            return true;
+        }
+        return false;
     }
 
     /**
