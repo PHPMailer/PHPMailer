@@ -2006,6 +2006,7 @@ EOT;
         $this->assertEquals(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
     }
 
+
     public function testBadSMTP()
     {
         $this->Mail->smtpConnect();
@@ -2013,6 +2014,34 @@ EOT;
         $this->assertFalse($smtp->mail("somewhere\nbad"), 'Bad SMTP command containing breaks accepted');
     }
 
+    public function testHostValidation()
+    {
+        $good = [
+            'localhost',
+            'example.com',
+            'smtp.gmail.com',
+            '127.0.0.1',
+            '[::1]'
+        ];
+        $bad = [
+            null,
+            123,
+            1.5,
+            new \stdClass(),
+            [],
+            '',
+            '999.0.0.0',
+            '[1234]',
+            '[1234:::1]',
+            str_repeat('0123456789', 26)
+        ];
+        foreach ($good as $h) {
+            $this->assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: '.$h);
+        }
+        foreach ($bad as $h) {
+            $this->assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
+        }
+    }
     /**
      * Tests the Custom header getter
      */

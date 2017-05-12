@@ -3381,10 +3381,13 @@ class PHPMailer
     {
         return (boolean)(
             !empty($host)
+            and is_string($host)
             and strlen($host) < 256
             and (
                 filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)
-                or filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)
+                or (!is_numeric(str_replace('.', '', $host))
+                    and filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)
+                )
             )
         );
     }
