@@ -4,10 +4,10 @@ php:
   - 7.0
   - 5.6
   - 5.5
-  - hhvm
 matrix:
-  allow_failures:
-  - php: hhvm
+  include:
+    - php: hhvm
+      dist: trusty
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
