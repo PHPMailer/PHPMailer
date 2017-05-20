@@ -53,6 +53,7 @@ This is a major update that breaks backwards compatibility.
 * Throw an exception when trying to send a message with an empty body caused by an internal error.
 * Replaced all use of MD5 and SHA1 hash functions with SHA256.
 * Now checks for invalid host strings when sending via SMTP.
+* Include timestamps in HTML-format debug output
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
