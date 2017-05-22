@@ -1327,6 +1327,8 @@ class PHPMailer
                 throw new Exception($this->lang('empty_message'), self::STOP_CRITICAL);
             }
 
+            //Trim subject consistently
+            $this->Subject = trim($this->Subject);
             // Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEHeader = '';
             $this->MIMEBody = $this->createBody();
@@ -1345,7 +1347,7 @@ class PHPMailer
                 }
                 $this->mailHeader .= $this->headerLine(
                     'Subject',
-                    $this->encodeHeader($this->secureHeader(trim($this->Subject)))
+                    $this->encodeHeader($this->secureHeader($this->Subject))
                 );
             }
 
