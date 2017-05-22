@@ -839,6 +839,69 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test header encoding & folding.
+     */
+    public function testHeaderEncoding()
+    {
+        $this->Mail->CharSet = 'UTF-8';
+        //This should select B-encoding automatically and should fold
+        $bencode = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 1);
+        //This should select Q-encoding automatically and should fold
+        $qencode = str_repeat('e', PHPMailer::STD_LINE_LENGTH) . 'é';
+        //This should select B-encoding automatically and should not fold
+        $bencodenofold = str_repeat('é', 10);
+        //This should select Q-encoding automatically and should not fold
+        $qencodenofold = str_repeat('e', 9) . 'é';
+        //This should not encode, but just fold automatically
+        $justfold = str_repeat('e', PHPMailer::STD_LINE_LENGTH + 10);
+        //This should not change
+        $noencode = 'eeeeeeeeee';
+        $this->Mail->isMail();
+        //Expected results
+        $bencoderes = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?='.PHPMailer::getLE().
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' . PHPMailer::getLE() .
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' . PHPMailer::getLE() .
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=';
+        $qencoderes = '=?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=' . PHPMailer::getLE() .
+            ' =?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeee=C3=A9?=';
+        $bencodenofoldres = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6k=?=';
+        $qencodenofoldres = '=?UTF-8?Q?eeeeeeeee=C3=A9?=';
+        $justfoldres = 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'.
+            'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' . PHPMailer::getLE() . ' eeeeeeeeee';
+        $noencoderes = 'eeeeeeeeee';
+        $this->assertEquals(
+            $bencoderes,
+            $this->Mail->encodeHeader($bencode),
+            'Folded B-encoded header value incorrect'
+        );
+        $this->assertEquals(
+            $qencoderes,
+            $this->Mail->encodeHeader($qencode),
+            'Folded Q-encoded header value incorrect'
+        );
+        $this->assertEquals(
+            $bencodenofoldres,
+            $this->Mail->encodeHeader($bencodenofold),
+            'B-encoded header value incorrect'
+        );
+        $this->assertEquals(
+            $qencodenofoldres,
+            $this->Mail->encodeHeader($qencodenofold),
+            'Q-encoded header value incorrect'
+        );
+        $this->assertEquals(
+            $justfoldres,
+            $this->Mail->encodeHeader($justfold),
+            'Folded header value incorrect'
+        );
+        $this->assertEquals(
+            $noencoderes,
+            $this->Mail->encodeHeader($noencode),
+            'Unencoded header value incorrect'
+        );
+    }
+
+    /**
      * Send an HTML message.
      */
     public function testHtml()

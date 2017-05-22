@@ -153,6 +153,7 @@ class PHPMailer
     /**
      * Word-wrap the message body to this number of chars.
      * Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
+     * @see static::STD_LINE_LENGTH
      *
      * @var integer
      */
@@ -681,6 +682,13 @@ class PHPMailer
      * @var integer
      */
     const MAX_LINE_LENGTH = 998;
+
+    /**
+     * The lower maximum line length allowed by RFC 2822 section 2.1.1
+     *
+     * @var integer
+     */
+    const STD_LINE_LENGTH = 78;
 
     /**
      * Constructor.
@@ -2812,7 +2820,11 @@ class PHPMailer
         $encoded = '';
         switch (strtolower($encoding)) {
             case 'base64':
-                $encoded = chunk_split(base64_encode($str), 76, static::$LE);
+                $encoded = chunk_split(
+                    base64_encode($str),
+                    static::STD_LINE_LENGTH - strlen(static::$LE),
+                    static::$LE
+                );
                 break;
             case '7bit':
             case '8bit':
@@ -2837,7 +2849,7 @@ class PHPMailer
 
     /**
      * Encode a header value (not including its label) optimally.
-     * Picks shortest of Q, B, or none.
+     * Picks shortest of Q, B, or none. Result includes folding if needed.
      *
      * @param string $str The header value to encode.
      * @param string $position What context the string will be used in.
@@ -2874,16 +2886,20 @@ class PHPMailer
                 break;
         }
 
-        //There are no chars that need encoding
-        if (0 == $matchcount) {
-            return ($str);
-        }
-
-        $maxlen = 75 - 7 - strlen($this->CharSet);
+        //RFCs specify a maximum line length of 78 chars, however mail() will sometimes
+        //corrupt messages with headers longer than 65 chars. See #818
+        $lengthsub = ('mail' == $this->Mailer ? 13: 0);
+        $maxlen = static::STD_LINE_LENGTH - $lengthsub;
         // Try to select the encoding which should produce the shortest output
         if ($matchcount > strlen($str) / 3) {
             // More than a third of the content will need encoding, so B encoding will be most efficient
             $encoding = 'B';
+            //This calculation is:
+            // max line length
+            // - shorten to avoid mail() corruption
+            // - Q/B encoding char overhead ("` =?<charset>?[QB]?<content>?=`")
+            // - charset name length
+            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
             if ($this->hasMultiBytes($str)) {
                 // Use a custom function which correctly encodes and wraps long
                 // multibyte strings without breaking lines within a character
@@ -2893,17 +2909,31 @@ class PHPMailer
                 $maxlen -= $maxlen % 4;
                 $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
             }
-        } else {
+            $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
+        } elseif ($matchcount > 0) {
+            //1 or more chars need encoding, use Q-encode
             $encoding = 'Q';
+            //Recalc max line length for Q encoding - see comments on B encode
+            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
             $encoded = $this->encodeQ($str, $position);
             $encoded = $this->wrapText($encoded, $maxlen, true);
             $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
+            $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
+        } elseif (strlen($str) > $maxlen) {
+            //No chars need encoding, but line is too long, so fold it
+            $encoded = trim($this->wrapText($str, $maxlen, false));
+            if ($str == $encoded) {
+                //Wrapping nicely didn't work, wrap hard instead
+                $encoded = trim(chunk_split($str, static::STD_LINE_LENGTH, static::$LE));
+            }
+            $encoded = str_replace(static::$LE, "\n", trim($encoded));
+            $encoded = preg_replace('/^(.*)$/m', ' \\1', $encoded);
+        } else {
+            //No reformatting needed
+            return $str;
         }
 
-        //The leading space in the replacement pattern is critical
-        //as it is used to designate header folding
-        $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
-        $encoded = trim(str_replace("\n", static::$LE, $encoded));
+        $encoded = trim(static::normalizeBreaks($encoded));
 
         return $encoded;
     }
