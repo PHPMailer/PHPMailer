@@ -2131,7 +2131,7 @@ class PHPMailer
 
         // sendmail and mail() extract Bcc from the header before sending
         if ((
-                $this->Mailer == 'sendmail' or $this->Mailer == 'qmail' or $this->Mailer == 'mail'
+            'sendmail' == $this->Mailer or 'qmail' == $this->Mailer or 'mail' == $this->Mailer
             )
             and count($this->bcc) > 0
         ) {
