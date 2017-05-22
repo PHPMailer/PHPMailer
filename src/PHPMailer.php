@@ -2103,7 +2103,7 @@ class PHPMailer
     {
         $result = '';
 
-        $result .= $this->headerLine('Date', $this->MessageDate == '' ? self::rfcDate() : $this->MessageDate);
+        $result .= $this->headerLine('Date', '' == $this->MessageDate ? self::rfcDate() : $this->MessageDate);
 
         // To be created automatically by mail()
         if ($this->SingleTo) {
@@ -2835,10 +2835,11 @@ class PHPMailer
 
     /**
      * Encode a header value (not including its label) optimally.
-     * Picks shortest of Q, B, quoted-printable or none.
+     * Picks shortest of Q, B, or none.
      *
-     * @param string $str
-     * @param string $position
+     * @param string $str The header value to encode.
+     * @param string $position What context the string will be used in.
+     * See RFC822 definitions for phrase, comment and text.
      *
      * @return string
      */
@@ -2897,6 +2898,8 @@ class PHPMailer
             $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
         }
 
+        //The leading space in the replacement pattern is critical
+        //as it is used to designate header folding
         $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
         $encoded = trim(str_replace("\n", static::$LE, $encoded));
 
