@@ -52,7 +52,7 @@ class EasyPeasyICS
     public function addEvent($start, $end, $summary = '', $description = '', $url = '', $uid = '')
     {
         if (empty($uid)) {
-            $uid = md5(uniqid(mt_rand(), true)) . '@EasyPeasyICS';
+            $uid = (function_exists('random_bytes') ? bin2hex(random_bytes(16)) : md5(uniqid(mt_rand(), true))) . '@EasyPeasyICS';
         }
         $event = array(
             'start' => gmdate('Ymd', $start) . 'T' . gmdate('His', $start) . 'Z',
