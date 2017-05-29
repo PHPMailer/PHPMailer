@@ -1587,7 +1587,8 @@ class PHPMailer
 
     /**
      * Get an instance to use for SMTP operations.
-     * Override this function to load your own SMTP implementation
+     * Override this function to load your own SMTP implementation,
+     * or set one with setSMTPInstance.
      *
      * @return SMTP
      */
@@ -1596,6 +1597,18 @@ class PHPMailer
         if (!is_object($this->smtp)) {
             $this->smtp = new SMTP;
         }
+        return $this->smtp;
+    }
+
+    /**
+     * Provide an instance to use for SMTP operations.
+     *
+     * @param SMTP $smtp
+     * @return SMTP
+     */
+    public function setSMTPInstance(SMTP $smtp)
+    {
+        $this->smtp = $smtp;
         return $this->smtp;
     }
 
