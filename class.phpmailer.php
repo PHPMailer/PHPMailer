@@ -392,6 +392,7 @@ class PHPMailer
 
     /**
      * DKIM selector.
+     * Indicates your DKIM public key location.
      * @var string
      */
     public $DKIM_selector = '';
