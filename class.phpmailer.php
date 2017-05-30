@@ -345,6 +345,15 @@ class PHPMailer
     public $Debugoutput = 'echo';
 
     /**
+     * Array of domains which are allowed to receive email.
+     * Sending to any domain not on this list will trigger an error.
+     * If set to NULL, any domain is allowed.
+     * @var null|array
+     * @see PHPMailer::preSend
+     */
+    public $AllowedDomains = null;
+
+    /**
      * Whether to keep SMTP connection open after each message.
      * If this is set to true then to close the connection
      * requires an explicit call to smtpClose().
@@ -1256,6 +1265,25 @@ class PHPMailer
                         throw new phpmailerException($error_message);
                     }
                     return false;
+                }
+            }
+
+            // Validate allowed domains
+            if ($this->AllowedDomains !== null) {
+                foreach (array('to', 'cc', 'bcc') as $address_kind) {
+                    $addresses = $this->$address_kind;
+                    foreach ($addresses as $addr) {
+                        list($name, $domain) = explode('@', $addr[0]);
+                        if (!in_array($domain, $this->AllowedDomains)) {
+                            $error_message = $this->lang('invalid_address') . $addr[0];
+                            $this->setError($error_message);
+                            $this->edebug($error_message);
+                            if ($this->exceptions) {
+                                throw new phpmailerException($error_message);
+                            }
+                            return false;
+                        }
+                    }
                 }
             }
 
