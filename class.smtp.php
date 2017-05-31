@@ -30,7 +30,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      * @var string
      */
-    const VERSION = '5.2.22';
+    const VERSION = '5.2.23';
 
     /**
      * SMTP line break constant.
@@ -81,7 +81,7 @@ class SMTP
      * @deprecated Use the `VERSION` constant instead
      * @see SMTP::VERSION
      */
-    public $Version = '5.2.22';
+    public $Version = '5.2.23';
 
     /**
      * SMTP server port number.
@@ -227,7 +227,7 @@ class SMTP
                 break;
             case 'html':
                 //Cleans up output a bit for a better looking, HTML-safe output
-                echo htmlentities(
+                echo gmdate('Y-m-d H:i:s') . ' ' . htmlentities(
                     preg_replace('/[\r\n]+/', '', $str),
                     ENT_QUOTES,
                     'UTF-8'
@@ -989,7 +989,10 @@ class SMTP
     public function client_send($data)
     {
         $this->edebug("CLIENT -> SERVER: $data", self::DEBUG_CLIENT);
-        return fwrite($this->smtp_conn, $data);
+        set_error_handler(array($this, 'errorHandler'));
+        $result = fwrite($this->smtp_conn, $data);
+        restore_error_handler();
+        return $result;
     }
 
     /**
@@ -1089,8 +1092,10 @@ class SMTP
             $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
             $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
             $data .= $str;
-            // If 4th character is a space, we are done reading, break the loop, micro-optimisation over strlen
-            if ((isset($str[3]) and $str[3] == ' ')) {
+            // If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
+            // or 4th character is a space, we are done reading, break the loop,
+            // string array access is a micro-optimisation over strlen
+            if (!isset($str[3]) or (isset($str[3]) and $str[3] == ' ')) {
                 break;
             }
             // Timed-out? Log and break
