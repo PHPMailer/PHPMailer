@@ -2341,6 +2341,9 @@ class PHPMailer
 
         if ($this->isError()) {
             $body = '';
+            if ($this->exceptions) {
+                throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
+            }
         } elseif ($this->sign_key_file) {
             try {
                 if (!defined('PKCS7_TEXT')) {
@@ -2683,9 +2686,6 @@ class PHPMailer
     protected function encodeFile($path, $encoding = 'base64')
     {
         try {
-            if (!is_readable($path)) {
-                throw new phpmailerException($this->lang('file_open') . $path, self::STOP_CONTINUE);
-            }
             $magic_quotes = get_magic_quotes_runtime();
             if ($magic_quotes) {
                 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
@@ -2697,7 +2697,14 @@ class PHPMailer
                     ini_set('magic_quotes_runtime', false);
                 }
             }
+            // Just read the file and test the return code instead of doing
+            // is_readable() before: the latter could erroneously fail in
+            // some corner cases. For example:
+            // https://bugs.php.net/bug.php?id=70467
             $file_buffer = file_get_contents($path);
+            if ($file_buffer === false) {
+                throw new phpmailerException($this->lang('file_access') . $path, self::STOP_CONTINUE);
+            }
             $file_buffer = $this->encodeString($file_buffer, $encoding);
             if ($magic_quotes) {
                 if (version_compare(PHP_VERSION, '5.3.0', '<')) {
