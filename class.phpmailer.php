@@ -259,6 +259,34 @@ class PHPMailer
      */
     public $SMTPAutoTLS = true;
 
+     /**
+     * Whether certificate validation is required for SSL/TLS connections.
+     * null - not explicitly specified - will result in validation being
+     * performed if a trust store can be found, and no validation being
+     * performed if it cannot. true will result in the connection failing
+     * if validation fails or cannot be performed for some reason. If set
+     * null or true, self-signed certificates and certificates whose CN does
+     * not match the SMTP server hostname will be rejected regardless of
+     * whether a trust store is available.
+     * @type boolean|null
+     */
+    public $SMTPTLSRequireValidation = null;
+
+    /**
+     * The location of the SSL/TLS trust store to use. If set, should be either
+     * a directory of individual certificate files with c_rehash-generated
+     * hashes, or a single file bundle of certificates (a 'capath' or
+     * 'cafile' in OpenSSL terms). If not specified and SMTPTLSRequireValidation
+     * is not false, the system default trust store will be used if possible
+     * (PHP >= 5.6), or some common paths will be tried (PHP < 5.6). If
+     * SMTPTLSRequireValidation is true and the trust store cannot be found,
+     * secure connections will fail. If it is empty and no trust store can be
+     * found, either no certificate validation will be performed (PHP < 5.6) or
+     * secure connections will fail (PHP >= 5.6).
+     * @type string
+     */
+    public $SMTPTLSTrustStore = '';
+
     /**
      * Whether to use SMTP authentication.
      * Uses the Username and Password properties.
@@ -1651,6 +1679,52 @@ class PHPMailer
                     throw new phpmailerException($this->lang('extension_missing').'openssl', self::STOP_CRITICAL);
                 }
             }
+            // Handle server certificate verification. We set these options unconditionally so that
+            // if TLS gets auto-enabled later, they'll be set. For non-SSL/TLS connections they just
+            // seem to be safely ignored.
+            $tlsopts = array();
+            if ($this->SMTPTLSRequireValidation === false) {
+                // no longer default for PHP >= 5.6.0, so specify explicitly
+                $tlsopts['ssl']['verify_peer'] = false;
+                $tlsopts['ssl']['verify_peer_name'] = false;
+                $tlsopts['ssl']['allow_self_signed'] = true;
+            } else {
+                $tlsopts['ssl']['verify_peer'] = true;
+                $tlsopts['ssl']['allow_self_signed'] = false;
+                if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+                    // Deprecated in favour of peer_name in 5.6, peer_name is guessed from hostname
+                    // so no need to set it
+                    $tlsopts['ssl']['CN_match'] = $host;
+                }
+                if ($this->SMTPTLSTrustStore) {
+                    if (is_dir($this->SMTPTLSTrustStore)) {
+                        $tlsopts['ssl']['capath'] = $this->SMTPTLSTrustStore;
+                    } elseif (is_file($this->SMTPTLSTrustStore)) {
+                        $tlsopts['ssl']['cafile'] = $this->SMTPTLSTrustStore;
+                    } else {
+                        throw new phpmailerException($this->lang('invalid_store'));
+                    }
+                } elseif (version_compare(PHP_VERSION, '5.6.0', '<')) {
+                    // Prior to 5.6 PHP would not attempt to use the OpenSSL default trust store,
+                    // so we'll try and find it in a couple of common locations ourselves.
+                    if (is_file('/etc/pki/tls/certs/ca-bundle.crt')) {
+                        // RHEL / Fedora-style bundle file
+                        $tlsopts['ssl']['cafile'] = '/etc/pki/tls/certs/ca-bundle.crt';
+                    } elseif (is_dir('/etc/ssl/certs')) {
+                        // Debian-style hashed directory
+                        $tlsopts['ssl']['capath'] = '/etc/ssl/certs';
+                    } elseif ($this->SMTPTLSRequireValidation === true) {
+                        throw new phpmailerException($this->lang('store_not_found'));
+                    } else {
+                        // for BC, don't fail unless RequireValidation was explicitly set true,
+                        // though this is entirely insecure - see PR #197 discussion
+                        $this->edebug($this->lang('store_not_found'));
+                        $tlsopts['ssl']['verify_peer'] = false;
+                    }
+                } // Here, RequireValidation is null or true, PHP ver is >=5.6
+            }
+            // this merge order lets callers override the tlsopts stuff
+            $options = array_merge_recursive($tlsopts, $options);
             $host = $hostinfo[3];
             $port = $this->Port;
             $tport = (integer)$hostinfo[4];
