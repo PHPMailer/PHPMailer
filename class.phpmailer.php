@@ -3354,15 +3354,20 @@ class PHPMailer
      * @access public
      * @param string $name Custom header name
      * @param string $value Header value
+     * @param bool $overwrite Whether to overwrite if a header with name $name exists.
      * @return void
      */
-    public function addCustomHeader($name, $value = null)
+    public function addCustomHeader($name, $value = null, $overwrite = false)
     {
         if ($value === null) {
-            // Value passed in as name:value
-            $this->CustomHeader[] = explode(':', $name, 2);
-        } else {
-            $this->CustomHeader[] = array($name, $value);
+            $header = explode(':', $name, 2);
+            $name = $header[0];
+        }
+        if ($overwrite) {
+            $this->CustomHeader[$name] = isset($header) ? $header : array($name, $value);
+        }
+        else {
+            $this->CustomHeader[] = isset($header) ? $header : array($name, $value);
         }
     }
 
@@ -3372,7 +3377,7 @@ class PHPMailer
      */
     public function getCustomHeaders()
     {
-        return $this->CustomHeader;
+        return array_values($this->CustomHeader);
     }
 
     /**
