@@ -17,9 +17,12 @@ $mail->isSMTP();
 // 0 = off (for production use)
 // 1 = client messages
 // 2 = client and server messages
+// 3 = Enable verbose debug output
 $mail->SMTPDebug = 2;
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
+//Set smtp secure [ssl, tls]
+$mail->SMTPSecure = 'ssl';
 //Set the hostname of the mail server
 $mail->Host = "mail.example.com";
 //Set the SMTP port number - likely to be 25, 465 or 587
