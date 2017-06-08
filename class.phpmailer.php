@@ -812,11 +812,12 @@ class PHPMailer
      * Add a "To" address.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addAddress($address, $name = '')
+    public function addAddress($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('to', $address, $name);
+        return $this->addOrEnqueueAnAddress('to', $address, $name, $send);
     }
 
     /**
@@ -824,11 +825,12 @@ class PHPMailer
      * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addCC($address, $name = '')
+    public function addCC($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('cc', $address, $name);
+        return $this->addOrEnqueueAnAddress('cc', $address, $name, $send);
     }
 
     /**
@@ -836,22 +838,24 @@ class PHPMailer
      * @note: This function works with the SMTP mailer on win32, not with the "mail" mailer.
      * @param string $address The email address to send to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addBCC($address, $name = '')
+    public function addBCC($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('bcc', $address, $name);
+        return $this->addOrEnqueueAnAddress('bcc', $address, $name, $send);
     }
 
     /**
      * Add a "Reply-To" address.
      * @param string $address The email address to reply to
      * @param string $name
+     * @param boolean $send Whether to send to this address
      * @return boolean true on success, false if address already used or invalid in some way
      */
-    public function addReplyTo($address, $name = '')
+    public function addReplyTo($address, $name = '', $send = true)
     {
-        return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
+        return $this->addOrEnqueueAnAddress('Reply-To', $address, $name, $send);
     }
 
     /**
@@ -862,12 +866,17 @@ class PHPMailer
      * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
      * @param string $address The email address to send, resp. to reply to
      * @param string $name
+     * @param boolean $send Whether to actually send the email to this address
      * @throws phpmailerException
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
-    protected function addOrEnqueueAnAddress($kind, $address, $name)
+    protected function addOrEnqueueAnAddress($kind, $address, $name, $send)
     {
+        if ( !$send && $this->Mailer != 'smtp') {
+            throw new phpmailerException('Non-send recipients only supported for SMTP Mailer');
+        }
+
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (($pos = strrpos($address, '@')) === false) {
@@ -880,7 +889,7 @@ class PHPMailer
             }
             return false;
         }
-        $params = array($kind, $address, $name);
+        $params = array($kind, $address, $name, $send);
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
             if ($kind != 'Reply-To') {
@@ -910,7 +919,7 @@ class PHPMailer
      * @return boolean true on success, false if address already used or invalid in some way
      * @access protected
      */
-    protected function addAnAddress($kind, $address, $name = '')
+    protected function addAnAddress($kind, $address, $name = '', $send)
     {
         if (!in_array($kind, array('to', 'cc', 'bcc', 'Reply-To'))) {
             $error_message = $this->lang('Invalid recipient kind: ') . $kind;
@@ -933,7 +942,7 @@ class PHPMailer
         if ($kind != 'Reply-To') {
             if (!array_key_exists(strtolower($address), $this->all_recipients)) {
                 array_push($this->$kind, array($address, $name));
-                $this->all_recipients[strtolower($address)] = true;
+                $this->all_recipients[strtolower($address)] = $send;
                 return true;
             }
         } else {
@@ -1550,22 +1559,25 @@ class PHPMailer
             throw new phpmailerException($this->ErrorInfo, self::STOP_CRITICAL);
         }
 
-        // Attempt to send to all recipients
-        foreach (array($this->to, $this->cc, $this->bcc) as $togroup) {
-            foreach ($togroup as $to) {
-                if (!$this->smtp->recipient($to[0])) {
-                    $error = $this->smtp->getError();
-                    $bad_rcpt[] = array('to' => $to[0], 'error' => $error['detail']);
-                    $isSent = false;
-                } else {
-                    $isSent = true;
-                }
-                $this->doCallback($isSent, array($to[0]), array(), array(), $this->Subject, $body, $this->From);
+        // Attempt to send to all selected recipients
+        $nSent = 0;
+        foreach ($this->all_recipients as $to => $send) {
+            if (!$send) {
+                $isSent = false;
             }
+            else if (!$this->smtp->recipient($to)) {
+                $error = $this->smtp->getError();
+                $bad_rcpt[] = array('to' => $to, 'error' => $error['detail']);
+                $isSent = false;
+            } else {
+                $nSent++;
+                $isSent = true;
+            }
+            $this->doCallback($isSent, array($to), array(), array(), $this->Subject, $body, $this->From);
         }
 
         // Only send the DATA command if we have viable recipients
-        if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
+        if ($nSent > 0 and !$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
         if ($this->SMTPKeepAlive) {
@@ -2524,7 +2536,8 @@ class PHPMailer
                 4 => $type,
                 5 => false, // isStringAttachment
                 6 => $disposition,
-                7 => 0
+                7 => '',
+                8 => ''
             );
 
         } catch (phpmailerException $exc) {
@@ -2560,6 +2573,7 @@ class PHPMailer
         // Return text of body
         $mime = array();
         $cidUniq = array();
+        $locationUniq = array();
         $incl = array();
 
         // Add all attachments
@@ -2586,10 +2600,22 @@ class PHPMailer
                 $type = $attachment[4];
                 $disposition = $attachment[6];
                 $cid = $attachment[7];
-                if ($disposition == 'inline' && array_key_exists($cid, $cidUniq)) {
-                    continue;
+                $location = $attachment[8];
+
+                if ($disposition == 'inline') {
+                    if ( strlen($cid) > 0 ) {
+                        if (array_key_exists($cid, $cidUniq)) {
+                            continue;
+                        }
+                        $cidUniq[$cid] = true;
+                    }
+                    if ( strlen($location) > 0 ) {
+                        if (array_key_exists($location, $locationUniq)) {
+                            continue;
+                        }
+                        $locationUniq[$location] = true;
+                    }
                 }
-                $cidUniq[$cid] = true;
 
                 $mime[] = sprintf('--%s%s', $boundary, $this->LE);
                 //Only include a filename property if we have one
@@ -2613,7 +2639,12 @@ class PHPMailer
                 }
 
                 if ($disposition == 'inline') {
-                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, $this->LE);
+                    if (strlen($cid) > 0) {
+                        $mime[] = sprintf('Content-ID: <%s>%s', $cid, $this->LE);
+                    }
+                    if (strlen($location) > 0) {
+                        $mime[] = sprintf('Content-Location: %s%s', $this->encodeHeader($this->secureHeader($location)), $this->LE);
+                    }
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
@@ -3004,7 +3035,8 @@ class PHPMailer
             4 => $type,
             5 => true, // isStringAttachment
             6 => $disposition,
-            7 => 0
+            7 => '',
+            8 => ''
         );
     }
 
@@ -3023,9 +3055,10 @@ class PHPMailer
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type File MIME type.
      * @param string $disposition Disposition to use
+     * @param string $location Content Location URL to use
      * @return boolean True on successfully adding an attachment
      */
-    public function addEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '', $disposition = 'inline')
+    public function addEmbeddedImage($path, $cid = '', $name = '', $encoding = 'base64', $type = '', $disposition = 'inline', $location = '')
     {
         if (!@is_file($path)) {
             $this->setError($this->lang('file_access') . $path);
@@ -3042,6 +3075,10 @@ class PHPMailer
             $name = $filename;
         }
 
+        if ( $cid == '' && $location == '' ) {
+            throw new phpmailerException('Must specify either Content ID or Content Location for embedded image');
+        }
+
         // Append to $attachment array
         $this->attachment[] = array(
             0 => $path,
@@ -3051,7 +3088,8 @@ class PHPMailer
             4 => $type,
             5 => false, // isStringAttachment
             6 => $disposition,
-            7 => $cid
+            7 => $cid,
+            8 => $location
         );
         return true;
     }
@@ -3068,15 +3106,17 @@ class PHPMailer
      * @param string $encoding File encoding (see $Encoding).
      * @param string $type MIME type.
      * @param string $disposition Disposition to use
+     * @param string $location Content Location URL to use
      * @return boolean True on successfully adding an attachment
      */
     public function addStringEmbeddedImage(
         $string,
-        $cid,
+        $cid = '',
         $name = '',
         $encoding = 'base64',
         $type = '',
-        $disposition = 'inline'
+        $disposition = 'inline',
+        $location = ''
     ) {
         // If a MIME type is not specified, try to work it out from the name
         if ($type == '' and !empty($name)) {
@@ -3092,7 +3132,8 @@ class PHPMailer
             4 => $type,
             5 => true, // isStringAttachment
             6 => $disposition,
-            7 => $cid
+            7 => $cid,
+            8 => $location
         );
         return true;
     }
