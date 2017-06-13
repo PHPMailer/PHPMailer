@@ -440,9 +440,9 @@ class PHPMailer
      *
      * Parameters:
      *   boolean $result        result of the send action
-     *   string  $to            email address of the recipient
-     *   string  $cc            cc email addresses
-     *   string  $bcc           bcc email addresses
+     *   array   $to            email addresses of the recipients
+     *   array   $cc            cc email addresses
+     *   array   $bcc           bcc email addresses
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
