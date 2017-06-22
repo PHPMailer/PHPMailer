@@ -56,6 +56,7 @@ This is a major update that breaks backwards compatibility.
 * Include timestamps in HTML-format debug output
 * More reliable folding of message headers
 * Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+* Improve Turkish translations
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
