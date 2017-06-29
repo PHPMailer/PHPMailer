@@ -927,7 +927,8 @@ class PHPMailer
     {
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-        if (($pos = strrpos($address, '@')) === false) {
+        $pos = strrpos($address, '@');
+        if (false === $pos) {
             // At-sign is missing.
             $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
             $this->setError($error_message);
@@ -1075,7 +1076,8 @@ class PHPMailer
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Don't validate now addresses with IDN. Will be done in send().
-        if (($pos = strrpos($address, '@')) === false or
+        $pos = strrpos($address, '@');
+        if (false === $pos or
             (!$this->has8bitChars(substr($address, ++$pos)) or !$this->idnSupported()) and
             !static::validateAddress($address)) {
             $error_message = $this->lang('invalid_address') . " (setFrom) $address";
@@ -1216,9 +1218,10 @@ class PHPMailer
     public function punyencodeAddress($address)
     {
         // Verify we have required functions, CharSet, and at-sign.
+        $pos = strrpos($address, '@');
         if ($this->idnSupported() and
             !empty($this->CharSet) and
-            ($pos = strrpos($address, '@')) !== false
+            false !== $pos
         ) {
             $domain = substr($address, ++$pos);
             // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
@@ -3618,8 +3621,8 @@ class PHPMailer
         }
         $this->isHTML(true);
         // Convert all message body line breaks to LE, makes quoted-printable encoding work much better
-        $this->Body = $this->normalizeBreaks($message);
-        $this->AltBody = $this->normalizeBreaks($this->html2text($message, $advanced));
+        $this->Body = static::normalizeBreaks($message);
+        $this->AltBody = static::normalizeBreaks($this->html2text($message, $advanced));
         if (!$this->alternativeExists()) {
             $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
                 . static::$LE;
