@@ -1461,9 +1461,9 @@ class PHPMailer
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
-                fputs($mail, 'To: ' . $toAddr . "\n");
-                fputs($mail, $header);
-                fputs($mail, $body);
+                fwrite($mail, 'To: ' . $toAddr . "\n");
+                fwrite($mail, $header);
+                fwrite($mail, $body);
                 $result = pclose($mail);
                 $this->doCallback(
                     ($result == 0),
@@ -1483,8 +1483,8 @@ class PHPMailer
             if (!$mail) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
-            fputs($mail, $header);
-            fputs($mail, $body);
+            fwrite($mail, $header);
+            fwrite($mail, $body);
             $result = pclose($mail);
             $this->doCallback(
                 ($result == 0),
@@ -1515,7 +1515,7 @@ class PHPMailer
     {
         // Future-proof
         if (escapeshellcmd($string) !== $string
-            or !in_array(escapeshellarg($string), array("'$string'", "\"$string\""))
+            or !in_array(escapeshellarg($string), ["'$string'", "\"$string\""])
         ) {
             return false;
         }
@@ -1841,13 +1841,13 @@ class PHPMailer
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
         // Backwards compatibility for renamed language codes
-        $renamed_langcodes = array(
+        $renamed_langcodes = [
             'br' => 'pt_br',
             'cz' => 'cs',
             'dk' => 'da',
             'no' => 'nb',
             'se' => 'sv',
-        );
+        ];
 
         if (isset($renamed_langcodes[$langcode])) {
             $langcode = $renamed_langcodes[$langcode];

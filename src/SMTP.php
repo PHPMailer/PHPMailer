@@ -288,7 +288,7 @@ class SMTP
         $errstr = '';
         if ($streamok) {
             $socket_context = stream_context_create($options);
-            set_error_handler(array($this, 'errorHandler'));
+            set_error_handler([$this, 'errorHandler']);
             $this->smtp_conn = stream_socket_client(
                 $host . ":" . $port,
                 $errno,
@@ -304,7 +304,7 @@ class SMTP
                 "Connection: stream_socket_client not available, falling back to fsockopen",
                 self::DEBUG_CONNECTION
             );
-            set_error_handler(array($this, 'errorHandler'));
+            set_error_handler([$this, 'errorHandler']);
             $this->smtp_conn = fsockopen(
                 $host,
                 $port,
@@ -367,7 +367,7 @@ class SMTP
         }
 
         // Begin encrypted connection
-        set_error_handler(array($this, 'errorHandler'));
+        set_error_handler([$this, 'errorHandler']);
         $crypto_ok = stream_socket_enable_crypto(
             $this->smtp_conn,
             true,
@@ -424,7 +424,7 @@ class SMTP
             if (empty($authtype)) {
                 //If no auth mechanism is specified, attempt to use these, in this order
                 //Try CRAM-MD5 first as it's more secure than the others
-                foreach (array('CRAM-MD5', 'LOGIN', 'PLAIN', 'XOAUTH2') as $method) {
+                foreach (['CRAM-MD5', 'LOGIN', 'PLAIN', 'XOAUTH2'] as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
@@ -959,7 +959,7 @@ class SMTP
     public function client_send($data)
     {
         $this->edebug("CLIENT -> SERVER: $data", self::DEBUG_CLIENT);
-        set_error_handler(array($this, 'errorHandler'));
+        set_error_handler([$this, 'errorHandler']);
         $result = fwrite($this->smtp_conn, $data);
         restore_error_handler();
         return $result;
