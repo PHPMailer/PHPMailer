@@ -41,7 +41,7 @@ $mail->SMTPOptions = array (
         'verify_depth' => 3,
         'allow_self_signed' => true,
         'peer_name' => 'smtp.example.com',
-        'cafile' => '/etc/ssl/ca_cert.pem',
+        'cafile' => '/etc/ssl/ca_cert.pem'
     ]
 );
 

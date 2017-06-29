@@ -1846,7 +1846,7 @@ class PHPMailer
             'cz' => 'cs',
             'dk' => 'da',
             'no' => 'nb',
-            'se' => 'sv',
+            'se' => 'sv'
         ];
 
         if (isset($renamed_langcodes[$langcode])) {
