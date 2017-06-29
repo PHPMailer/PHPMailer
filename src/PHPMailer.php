@@ -1457,7 +1457,8 @@ class PHPMailer
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
-                if (!@$mail = popen($sendmail, 'w')) {
+                $mail = @popen($sendmail, 'w');
+                if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
                 fputs($mail, 'To: ' . $toAddr . "\n");
@@ -1478,7 +1479,8 @@ class PHPMailer
                 }
             }
         } else {
-            if (!@$mail = popen($sendmail, 'w')) {
+            $mail = @popen($sendmail, 'w');
+            if (!$mail) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
             fputs($mail, $header);
