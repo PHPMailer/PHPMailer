@@ -979,7 +979,7 @@ class PHPMailer
             }
             return false;
         }
-        if (!$this->validateAddress($address)) {
+        if (!static::validateAddress($address)) {
             $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
             $this->setError($error_message);
             $this->edebug($error_message);
@@ -1077,7 +1077,7 @@ class PHPMailer
         // Don't validate now addresses with IDN. Will be done in send().
         if (($pos = strrpos($address, '@')) === false or
             (!$this->has8bitChars(substr($address, ++$pos)) or !$this->idnSupported()) and
-            !$this->validateAddress($address)) {
+            !static::validateAddress($address)) {
             $error_message = $this->lang('invalid_address') . " (setFrom) $address";
             $this->setError($error_message);
             $this->edebug($error_message);
@@ -1131,7 +1131,7 @@ class PHPMailer
     public static function validateAddress($address, $patternselect = null)
     {
         if (is_null($patternselect)) {
-            $patternselect = self::$validator;
+            $patternselect = static::$validator;
         }
         if (is_callable($patternselect)) {
             return call_user_func($patternselect, $address);
@@ -1313,7 +1313,7 @@ class PHPMailer
                     continue;
                 }
                 $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
-                if (!$this->validateAddress($this->$address_kind)) {
+                if (!static::validateAddress($this->$address_kind)) {
                     $error_message = $this->lang('invalid_address') . ' (punyEncode) ' . $this->$address_kind;
                     $this->setError($error_message);
                     $this->edebug($error_message);
@@ -1550,7 +1550,7 @@ class PHPMailer
 
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
-        if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
+        if (!empty($this->Sender) and static::validateAddress($this->Sender)) {
             //A space after `-f` is optional, but there is a long history of its presence
             //causing problems, so we don't use one
             //Exim docs: http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
@@ -1562,7 +1562,7 @@ class PHPMailer
                 $params = sprintf('-f%s', $this->Sender);
             }
         }
-        if (!empty($this->Sender)and $this->validateAddress($this->Sender)) {
+        if (!empty($this->Sender)and static::validateAddress($this->Sender)) {
             $old_from = ini_get('sendmail_from');
             ini_set('sendmail_from', $this->Sender);
         }
