@@ -2947,9 +2947,7 @@ class PHPMailer
             return $str;
         }
 
-        $encoded = trim(static::normalizeBreaks($encoded));
-
-        return $encoded;
+        return trim(static::normalizeBreaks($encoded));
     }
 
     /**
