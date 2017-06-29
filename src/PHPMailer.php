@@ -1995,7 +1995,7 @@ class PHPMailer
                             if ($is_utf8) {
                                 $len = $this->utf8CharBoundary($word, $len);
                             } elseif (substr($word, $len - 1, 1) == '=') {
-                                $len--;
+                                --$len;
                             } elseif (substr($word, $len - 2, 1) == '=') {
                                 $len -= 2;
                             }
@@ -2491,8 +2491,8 @@ class PHPMailer
                         $this->sign_extracerts_file
                     );
                 }
+                @unlink($file);
                 if ($sign) {
-                    @unlink($file);
                     $body = file_get_contents($signed);
                     @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
@@ -2500,7 +2500,6 @@ class PHPMailer
                     $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
                 } else {
-                    @unlink($file);
                     @unlink($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
                 }
@@ -2776,17 +2775,13 @@ class PHPMailer
                 // Encode as string attachment
                 if ($bString) {
                     $mime[] = $this->encodeString($string, $encoding);
-                    if ($this->isError()) {
-                        return '';
-                    }
-                    $mime[] = static::$LE;
                 } else {
                     $mime[] = $this->encodeFile($path, $encoding);
-                    if ($this->isError()) {
-                        return '';
-                    }
-                    $mime[] = static::$LE;
                 }
+                if ($this->isError()) {
+                    return '';
+                }
+                $mime[] = static::$LE;
             }
         }
 
