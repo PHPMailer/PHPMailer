@@ -2076,13 +2076,13 @@ class PHPMailer
                     // If the encoded char was found at pos 0, it will fit
                     // otherwise reduce maxLength to start of the encoded char
                     if ($encodedCharPos > 0) {
-                        $maxLength = $maxLength - $lookBack - $encodedCharPos;
+                        $maxLength -= $lookBack - $encodedCharPos;
                     }
                     $foundSplitPos = true;
                 } elseif ($dec >= 192) {
                     // First byte of a multi byte character
                     // Reduce maxLength to split at start of character
-                    $maxLength = $maxLength - $lookBack - $encodedCharPos;
+                    $maxLength -= $lookBack - $encodedCharPos;
                     $foundSplitPos = true;
                 } elseif ($dec < 192) {
                     // Middle byte of a multi byte character, look further back
