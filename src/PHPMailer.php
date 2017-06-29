@@ -1520,7 +1520,7 @@ class PHPMailer
 
         $length = strlen($string);
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $c = $string[$i];
 
             // All other characters have a special meaning in at least one common shell, including = and +.
@@ -3017,7 +3017,7 @@ class PHPMailer
                 $offset = $avgLength - $lookBack;
                 $chunk = mb_substr($str, $i, $offset, $this->CharSet);
                 $chunk = base64_encode($chunk);
-                $lookBack++;
+                ++$lookBack;
             } while (strlen($chunk) > $length);
             $encoded .= $chunk . $linebreak;
         }
@@ -3372,7 +3372,7 @@ class PHPMailer
      */
     protected function setError($msg)
     {
-        $this->error_count++;
+        ++$this->error_count;
         if ('smtp' == $this->Mailer and !is_null($this->smtp)) {
             $lasterror = $this->smtp->getError();
             if (!empty($lasterror['error'])) {
@@ -3952,7 +3952,7 @@ class PHPMailer
     public function DKIM_QP($txt)
     {
         $line = '';
-        for ($i = 0; $i < strlen($txt); $i++) {
+        for ($i = 0; $i < strlen($txt); ++$i) {
             $ord = ord($txt[$i]);
             if (((0x21 <= $ord) and ($ord <= 0x3A)) or $ord == 0x3C or ((0x3E <= $ord) and ($ord <= 0x7E))) {
                 $line .= $txt[$i];
