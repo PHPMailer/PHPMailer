@@ -28,7 +28,8 @@
         "phpunit/phpunit": "4.*",
         "zendframework/zend-serializer": "2.7.*",
         "doctrine/annotations": "1.2.*",
-        "zendframework/zend-eventmanager": "3.0.*"
+        "zendframework/zend-eventmanager": "3.0.*",
+        "zendframework/zend-i18n": "2.7.3"
     },
     "suggest": {
         "psr/log": "For optional PSR-3 debug logging",
