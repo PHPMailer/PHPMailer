@@ -2092,7 +2092,7 @@ EOT;
             null,
             123,
             1.5,
-            new \stdClass(),
+            new \stdClass,
             [],
             '',
             '999.0.0.0',
