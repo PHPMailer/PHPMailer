@@ -29,11 +29,12 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
     $bcc = cleanEmails($bcc[0], 'cc');
     echo $result . "\tTo: " . $to['Name'] . "\tTo: " . $to['Email'] . "\tCc: " . $cc['Name'] .
         "\tCc: " . $cc['Email'] . "\tBcc: " . $bcc['Name'] . "\tBcc: " . $bcc['Email'] .
-        "\t" . $subject . "\n\n". $body . "\n";
+        "\t" . $subject . "\n\n" . $body . "\n";
     return true;
 }
 
 require_once '../PHPMailerAutoload.php';
+$mail = "";
 $mail = new PHPMailer();
 
 try {
@@ -76,6 +77,7 @@ function cleanEmails($str, $type)
     $addy['Email'] = str_replace('@', '&#64;', $addy['Email']);
     return $addy;
 }
+
 ?>
 </body>
 </html>
