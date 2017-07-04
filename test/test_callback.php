@@ -39,8 +39,8 @@ $mail = new PHPMailer();
 
 try {
     $mail->isMail();
-    $mail->setFrom('you@example.com', 'Your Name');
-    $mail->addAddress('another@example.com', 'John Doe');
+    $mail->setFrom('kishi.d@gmail.com', 'Kishore Kumar');
+    $mail->addAddress('kishi.d@gmail.com', 'Kishore');
     $mail->Subject = 'PHPMailer Test Subject';
     $mail->msgHTML(file_get_contents('../examples/contents.html'));
     // optional - msgHTML will create an alternate automatically
@@ -49,7 +49,8 @@ try {
     $mail->addAttachment('../examples/images/phpmailer_mini.png'); // attachment
     $mail->action_function = 'callbackAction';
     $mail->send();
-    echo "Message Sent OK</p>\n";
+    echo "Message Sent OK check your email</p>\n";
+
 } catch (phpmailerException $e) {
     echo $e->errorMessage(); //Pretty error messages from PHPMailer
 } catch (Exception $e) {
