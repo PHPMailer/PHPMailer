@@ -51,6 +51,8 @@ try {
     $mail->send();
     echo "Message Sent OK check your email</p>\n";
     echo "Message Sent OK check your email</p>\n";
+    echo "Message Sent OK check your email</p>\n";
+    echo "Message Sent OK check your email</p>\n";
 
 } catch (phpmailerException $e) {
     echo $e->errorMessage(); //Pretty error messages from PHPMailer
