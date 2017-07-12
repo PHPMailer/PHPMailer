@@ -625,6 +625,54 @@ class PHPMailer
     protected $uniqueid = '';
 
     /**
+     * Controls sendmail's delivery mode.
+     *
+     * @see http://sendmail.org/~ca/email/doc8.12/op-sh-4.html
+     * @see http://www.sendmail.org/~ca/email/man/sendmail.html
+     *
+     * DeliveryMode=x option described by sendmail's man:
+     * Set the delivery mode to x. Delivery modes are
+     * 'i' for interactive (synchronous) delivery,
+     * 'b' for background (asynchronous) delivery,
+     * 'q' for queue only - i.e., actual delivery is done
+     *     the next time the queue is run, and
+     * 'd' for deferred - the same as 'q' except that
+     *     database lookups (notably DNS and NIS lookups)
+     *     are avoided.
+     *
+     * See the corresponding class constants for available
+     * values.
+     *
+     * Set to NULL (default value) in order to use default
+     * behaviour.
+     *
+     * @var string|null
+     * @access protected
+     */
+    protected $sendmail_delivery_mode;
+
+    const SENDMAIL_DELIVERY_MODE_DEFAULT = null;
+    const SENDMAIL_DELIVERY_MODE_INTERACTIVE = 'i';
+    const SENDMAIL_DELIVERY_MODE_BACKGROUND = 'b';
+    const SENDMAIL_DELIVERY_MODE_QUEUE = 'q';
+    const SENDMAIL_DELIVERY_MODE_DEFERRED = 'd';
+
+    /**
+     * List of delivery modes that are enabled.
+     * $sendmail_delivery_mode will be validated
+     * against it.
+     * @var array
+     * @access protected
+     */
+    protected $enabled_sendmail_delivery_modes = array(
+        self::SENDMAIL_DELIVERY_MODE_DEFAULT,
+        self::SENDMAIL_DELIVERY_MODE_INTERACTIVE,
+        self::SENDMAIL_DELIVERY_MODE_BACKGROUND,
+        self::SENDMAIL_DELIVERY_MODE_QUEUE,
+        self::SENDMAIL_DELIVERY_MODE_DEFERRED,
+    );
+
+    /**
      * Error severity: message only, continue processing.
      */
     const STOP_MESSAGE = 0;
@@ -1364,23 +1412,31 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
+        $sendmail = $this->Sendmail;
+
         // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
         if (!empty($this->Sender) and self::isShellSafe($this->Sender)) {
             if ($this->Mailer == 'qmail') {
                 $sendmailFmt = '%s -f%s';
             } else {
                 $sendmailFmt = '%s -oi -f%s -t';
+                if (self::SENDMAIL_DELIVERY_MODE_DEFAULT !== $this->sendmail_delivery_mode) {
+                    $sendmail .= ' ' . $this->getSendmailDeliveryModeOptionString();
+                }
             }
         } else {
             if ($this->Mailer == 'qmail') {
                 $sendmailFmt = '%s';
             } else {
                 $sendmailFmt = '%s -oi -t';
+                if (self::SENDMAIL_DELIVERY_MODE_DEFAULT !== $this->sendmail_delivery_mode) {
+                    $sendmail .= ' ' . $this->getSendmailDeliveryModeOptionString();
+                }
             }
         }
 
         // TODO: If possible, this should be changed to escapeshellarg.  Needs thorough testing.
-        $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
+        $sendmail = sprintf($sendmailFmt, escapeshellcmd($sendmail), $this->Sender);
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1479,11 +1535,19 @@ class PHPMailer
         $to = implode(', ', $toArr);
 
         $params = null;
+        if (self::SENDMAIL_DELIVERY_MODE_DEFAULT !== $this->sendmail_delivery_mode) {
+            $params = $this->getSendmailDeliveryModeOptionString();
+        }
+
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
             if (self::isShellSafe($this->Sender)) {
-                $params = sprintf('-f%s', $this->Sender);
+                if (null === $params) {
+                    $params = sprintf('-f%s', $this->Sender);
+                } else {
+                    $params .= sprintf(' -f%s', $this->Sender);
+                }
             }
         }
         if (!empty($this->Sender) and !ini_get('safe_mode') and $this->validateAddress($this->Sender)) {
@@ -1768,7 +1832,8 @@ class PHPMailer
             'smtp_connect_failed' => 'SMTP connect() failed.',
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: ',
-            'extension_missing' => 'Extension missing: '
+            'extension_missing' => 'Extension missing: ',
+            'unsupported_sendmail_delivery_mode' => 'Unsupported Sendmail DeliveryMode.',
         );
         if (empty($lang_path)) {
             // Calculate an absolute path so it can work if CWD is not here
@@ -4015,6 +4080,62 @@ class PHPMailer
             $params = array($isSent, $to, $cc, $bcc, $subject, $body, $from);
             call_user_func_array($this->action_function, $params);
         }
+    }
+
+    /**
+     * Sets sendmail's delivery mode. (-O DeliveryMode=x).
+     *
+     * See $this->sendmail_delivery_mode property description for more on DeliveryMode option.
+     * See self::SENDMAIL_DELIVERY_MODE_* class constants for possible options.
+     * See $this->enabled_sendmail_delivery_modes for enabled values
+     *
+     * @param $delivery_mode
+     *
+     * @throws phpmailerException
+     */
+    public function setSendmailDeliveryMode($delivery_mode)
+    {
+        if (!$this->isEnabledSendmailDeliveryMode($delivery_mode)) {
+            throw new phpmailerException($this->lang('unsupported_sendmail_delivery_mode'));
+        }
+
+        $this->sendmail_delivery_mode = $delivery_mode;
+    }
+
+    /**
+     * Checks its parameter against the list of enabled delivery modes.
+     *
+     * @param string|null $delivery_mode
+     *
+     * @return bool
+     */
+    public function isEnabledSendmailDeliveryMode($delivery_mode)
+    {
+        return in_array($delivery_mode, $this->enabled_sendmail_delivery_modes, true);
+    }
+
+    /**
+     * Returns '-O DeliveryMode=x' code snippet with the value of
+     * $this->sendmail_delivery_mode if it isn't set to default.
+     * Returns an empty string otherwise.
+     *
+     * Throws exception if the set value is not enabled or is invalid.
+     *
+     * @return string
+     *
+     * @throws phpmailerException
+     */
+    protected function getSendmailDeliveryModeOptionString()
+    {
+        if (self::SENDMAIL_DELIVERY_MODE_DEFAULT === $this->sendmail_delivery_mode) {
+            return '';
+        }
+
+        if (!$this->isEnabledSendmailDeliveryMode($this->sendmail_delivery_mode)) {
+            throw new phpmailerException($this->lang('unsupported_sendmail_delivery_mode'));
+        }
+
+        return  '-O DeliveryMode=' . $this->sendmail_delivery_mode;
     }
 }
 

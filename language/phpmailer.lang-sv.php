@@ -24,3 +24,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() misslyckades.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP server fel: ';
 $PHPMAILER_LANG['variable_set']         = 'Kunde inte definiera eller återställa variabel: ';
 $PHPMAILER_LANG['extension_missing']    = 'Tillägg ej tillgängligt: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

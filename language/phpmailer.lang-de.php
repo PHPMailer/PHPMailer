@@ -23,3 +23,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'Verbindung zum SMTP-Server fehlgeschl
 $PHPMAILER_LANG['smtp_error']           = 'Fehler vom SMTP-Server: ';
 $PHPMAILER_LANG['variable_set']         = 'Kann Variable nicht setzen oder zurücksetzen: ';
 $PHPMAILER_LANG['extension_missing']    = 'Fehlende Erweiterung: ';
+$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Der eingestellte Sendmail DeliveryMode wird nicht unterstützt.';

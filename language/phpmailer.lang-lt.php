@@ -24,3 +24,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP susijungimo klaida';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP stoties klaida: ';
 $PHPMAILER_LANG['variable_set']         = 'Nepavyko priskirti reikšmės kintamajam: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

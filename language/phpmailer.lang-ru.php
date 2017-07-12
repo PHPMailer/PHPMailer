@@ -25,3 +25,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'Ошибка соединения с 
 $PHPMAILER_LANG['smtp_error']           = 'Ошибка SMTP-сервера: ';
 $PHPMAILER_LANG['variable_set']         = 'Невозможно установить или переустановить переменную: ';
 $PHPMAILER_LANG['extension_missing']    = 'Расширение отсутствует: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

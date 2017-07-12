@@ -25,3 +25,4 @@ $PHPMAILER_LANG['encoding']             = 'Tuntematon koodaustyyppi: ';
 //$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

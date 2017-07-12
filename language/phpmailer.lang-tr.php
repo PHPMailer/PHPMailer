@@ -28,3 +28,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP connect() fonksiyonu başarısı
 $PHPMAILER_LANG['smtp_error']           = 'SMTP sunucu hatası: ';
 $PHPMAILER_LANG['variable_set']         = 'Değişken ayarlanamadı ya da sıfırlanamadı: ';
 $PHPMAILER_LANG['extension_missing']    = 'Eklenti bulunamadı: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';
