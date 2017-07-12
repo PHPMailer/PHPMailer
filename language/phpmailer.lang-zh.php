@@ -26,3 +26,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP 連線失敗';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP 伺服器錯誤: ';
 $PHPMAILER_LANG['variable_set']         = '無法設定或重設變數: ';
 $PHPMAILER_LANG['extension_missing']    = '遺失模組 Extension: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

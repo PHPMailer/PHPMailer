@@ -24,3 +24,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP serverinə qoşulma uğursuz old
 $PHPMAILER_LANG['smtp_error']           = 'SMTP serveri xətası: ';
 $PHPMAILER_LANG['variable_set']         = 'Dəyişənin quraşdırılması uğursuz oldu: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

@@ -23,3 +23,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP connect() feilet.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP server feil: ';
 $PHPMAILER_LANG['variable_set']         = 'Kan ikke skrive eller omskrive variabel: ';
 $PHPMAILER_LANG['extension_missing']    = 'Utvidelse mangler: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';

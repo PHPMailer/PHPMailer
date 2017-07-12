@@ -24,3 +24,4 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() zlyhalo.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP chyba serveru: ';
 $PHPMAILER_LANG['variable_set']         = 'Nemožno nastaviť alebo resetovať premennú: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+//$PHPMAILER_LANG['unsupported_sendmail_delivery_mode'] = 'Unsupported Sendmail DeliveryMode.';
