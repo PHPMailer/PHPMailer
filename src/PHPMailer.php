@@ -1452,7 +1452,6 @@ class PHPMailer
             }
         }
 
-        // TODO: If possible, this should be changed to escapeshellarg.  Needs thorough testing.
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
 
         if ($this->SingleTo) {
@@ -2887,13 +2886,10 @@ class PHPMailer
                 }
                 $matchcount = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
                 break;
-            /**
-             * Intentional fall-through
-             *
-             * @noinspection PhpMissingBreakStatementInspection
-             */
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
                 $matchcount = preg_match_all('/[()"]/', $str, $matches);
+                //fallthrough
             case 'text':
             default:
                 $matchcount += preg_match_all('/[\000-\010\013\014\016-\037\177-\377]/', $str, $matches);
@@ -3576,8 +3572,7 @@ class PHPMailer
                     );
                     continue;
                 }
-                if (
-                    // Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
+                if (// Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
                     !empty($basedir)
                     // Ignore URLs containing parent dir traversal (..)
                     and (strpos($url, '..') === false)
@@ -3914,7 +3909,9 @@ class PHPMailer
     }
 
     /**
-     * Set the line break format string.
+     * Set the line break format string, e.g. "\r\n".
+     *
+     * @param string $le
      */
     protected static function setLE($le)
     {
