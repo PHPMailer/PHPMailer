@@ -2158,11 +2158,15 @@ EOT;
         $this->Mail->SMTPDebug = 4; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = "ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10";
-        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP bad multi-connect succeeded');
-        $this->Mail->smtpClose();
         $this->Mail->Host = "localhost:12345;10.10.10.10:54321;" . $_REQUEST['mail_host'];
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
+        $this->Mail->smtpClose();
+        $this->Mail->Host = "[::1]:" . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
+        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
+        $this->Mail->smtpClose();
+        //All these hosts are expected to fail
+        $this->Mail->Host = "xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10";
+        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP bad multi-connect succeeded');
         $this->Mail->smtpClose();
         $this->Mail->Host = " localhost:12345 ; " . $_REQUEST['mail_host'] . ' ';
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');

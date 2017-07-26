@@ -1,9 +1,14 @@
 # ChangeLog
 
+## Version 5.2.24 (July 26th 2017)
+* **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
 * Handle bare codes (an RFC contravention) in SMTP server responses
 * Make message timestamps more dynamic - calculate the date separately for each message
 * Include timestamps in HTML-format debug output
-* Improve Turkish translations
+* Improve Turkish, Norwegian, Serbian, Brazilian Portuguese & simplified Chinese translations
+* Correction of Serbian ISO language code from `sr` to `rs`
+* Fix matching of multiple entries in `Host` to match IPv6 literals without breaking port selection (see #1094, caused by a3b4f6b)
+* Better capture and reporting of SMTP connection errors
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output

@@ -58,46 +58,53 @@ class phpmailerAppException extends phpmailerException
 $example_code .= "\n\nclass phpmailerAppException extends phpmailerException {}";
 $example_code .= "\n\ntry {";
 
+// Convert a string to its JavaScript representation.
+function JSString($s) {
+  static $from = array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"');
+  static $to = array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\\"');
+  return is_null($s)? 'null': '"' . str_replace($from, $to, "$s") . '"';
+}
+
 try {
     if (isset($_POST["submit"]) && $_POST['submit'] == "Submit") {
-        $to = $_POST['To_Email'];
+        $to = $to_email;
         if (!PHPMailer::validateAddress($to)) {
             throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
         }
 
-        $example_code .= "\n\$to = '{$_POST['To_Email']}';";
+        $example_code .= "\n\$to = '" . addslashes($to_email) . "';";
         $example_code .= "\nif(!PHPMailer::validateAddress(\$to)) {";
         $example_code .= "\n  throw new phpmailerAppException(\"Email address \" . " .
             "\$to . \" is invalid -- aborting!\");";
         $example_code .= "\n}";
 
-        switch ($_POST['test_type']) {
+        switch ($test_type) {
             case 'smtp':
                 $mail->isSMTP(); // telling the class to use SMTP
-                $mail->SMTPDebug = (integer)$_POST['smtp_debug'];
-                $mail->Host = $_POST['smtp_server']; // SMTP server
-                $mail->Port = (integer)$_POST['smtp_port']; // set the SMTP port
-                if ($_POST['smtp_secure']) {
-                    $mail->SMTPSecure = strtolower($_POST['smtp_secure']);
+                $mail->SMTPDebug = (integer)$smtp_debug;
+                $mail->Host = $smtp_server; // SMTP server
+                $mail->Port = (integer)$smtp_port; // set the SMTP port
+                if ($smtp_secure) {
+                    $mail->SMTPSecure = strtolower($smtp_secure);
                 }
                 $mail->SMTPAuth = array_key_exists('smtp_authenticate', $_POST); // enable SMTP authentication?
                 if (array_key_exists('smtp_authenticate', $_POST)) {
-                    $mail->Username = $_POST['authenticate_username']; // SMTP account username
-                    $mail->Password = $_POST['authenticate_password']; // SMTP account password
+                    $mail->Username = $authenticate_username; // SMTP account username
+                    $mail->Password = $authenticate_password; // SMTP account password
                 }
 
                 $example_code .= "\n\$mail->isSMTP();";
-                $example_code .= "\n\$mail->SMTPDebug  = " . $_POST['smtp_debug'] . ";";
-                $example_code .= "\n\$mail->Host       = \"" . $_POST['smtp_server'] . "\";";
-                $example_code .= "\n\$mail->Port       = \"" . $_POST['smtp_port'] . "\";";
-                $example_code .= "\n\$mail->SMTPSecure = \"" . strtolower($_POST['smtp_secure']) . "\";";
+                $example_code .= "\n\$mail->SMTPDebug  = " . (integer) $smtp_debug . ";";
+                $example_code .= "\n\$mail->Host       = \"" . addslashes($smtp_server) . "\";";
+                $example_code .= "\n\$mail->Port       = \"" . addslashes($smtp_port) . "\";";
+                $example_code .= "\n\$mail->SMTPSecure = \"" . addslashes(strtolower($smtp_secure)) . "\";";
                 $example_code .= "\n\$mail->SMTPAuth   = " . (array_key_exists(
                     'smtp_authenticate',
                     $_POST
                 ) ? 'true' : 'false') . ";";
                 if (array_key_exists('smtp_authenticate', $_POST)) {
-                    $example_code .= "\n\$mail->Username   = \"" . $_POST['authenticate_username'] . "\";";
-                    $example_code .= "\n\$mail->Password   = \"" . $_POST['authenticate_password'] . "\";";
+                    $example_code .= "\n\$mail->Username   = \"" . addslashes($authenticate_username) . "\";";
+                    $example_code .= "\n\$mail->Password   = \"" . addslashes($authenticate_password) . "\";";
                 }
                 break;
             case 'mail':
@@ -118,59 +125,59 @@ try {
 
         try {
             if ($_POST['From_Name'] != '') {
-                $mail->addReplyTo($_POST['From_Email'], $_POST['From_Name']);
-                $mail->setFrom($_POST['From_Email'], $_POST['From_Name']);
+                $mail->addReplyTo($from_email, $from_name);
+                $mail->setFrom($from_email, $from_name);
 
                 $example_code .= "\n\$mail->addReplyTo(\"" .
-                    $_POST['From_Email'] . "\", \"" . $_POST['From_Name'] . "\");";
+                    addslashes($from_email) . "\", \"" . addslashes($from_name) . "\");";
                 $example_code .= "\n\$mail->setFrom(\"" .
-                    $_POST['From_Email'] . "\", \"" . $_POST['From_Name'] . "\");";
+                    addslashes($from_email) . "\", \"" . addslashes($from_name) . "\");";
             } else {
-                $mail->addReplyTo($_POST['From_Email']);
-                $mail->setFrom($_POST['From_Email'], $_POST['From_Email']);
+                $mail->addReplyTo($from_email);
+                $mail->setFrom($from_email, $from_email);
 
-                $example_code .= "\n\$mail->addReplyTo(\"" . $_POST['From_Email'] . "\");";
+                $example_code .= "\n\$mail->addReplyTo(\"" . addslashes($from_email) . "\");";
                 $example_code .= "\n\$mail->setFrom(\"" .
-                    $_POST['From_Email'] . "\", \"" . $_POST['From_Email'] . "\");";
+                    addslashes($from_email) . "\", \"" . addslashes($from_email) . "\");";
             }
 
             if ($_POST['To_Name'] != '') {
-                $mail->addAddress($to, $_POST['To_Name']);
-                $example_code .= "\n\$mail->addAddress(\"$to\", \"" . $_POST['To_Name'] . "\");";
+                $mail->addAddress($to, $to_name);
+                $example_code .= "\n\$mail->addAddress(\"$to\", \"" . addslashes($to_name) . "\");";
             } else {
                 $mail->addAddress($to);
                 $example_code .= "\n\$mail->addAddress(\"$to\");";
             }
 
             if ($_POST['bcc_Email'] != '') {
-                $indiBCC = explode(" ", $_POST['bcc_Email']);
+                $indiBCC = explode(" ", $bcc_email);
                 foreach ($indiBCC as $key => $value) {
                     $mail->addBCC($value);
-                    $example_code .= "\n\$mail->addBCC(\"$value\");";
+                    $example_code .= "\n\$mail->addBCC(\"" . addslashes($value) . "\");";
                 }
             }
 
             if ($_POST['cc_Email'] != '') {
-                $indiCC = explode(" ", $_POST['cc_Email']);
+                $indiCC = explode(" ", $cc_Email);
                 foreach ($indiCC as $key => $value) {
                     $mail->addCC($value);
-                    $example_code .= "\n\$mail->addCC(\"$value\");";
+                    $example_code .= "\n\$mail->addCC(\"" . addslashes($value) . "\");";
                 }
             }
         } catch (phpmailerException $e) { //Catch all kinds of bad addressing
             throw new phpmailerAppException($e->getMessage());
         }
-        $mail->Subject = $_POST['Subject'] . ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')';
-        $example_code .= "\n\$mail->Subject  = \"" . $_POST['Subject'] .
-            ' (PHPMailer test using ' . strtoupper($_POST['test_type']) . ')";';
+        $mail->Subject = $subject . ' (PHPMailer test using ' . strtoupper($test_type) . ')';
+        $example_code .= "\n\$mail->Subject  = \"" . addslashes($subject) .
+            ' (PHPMailer test using ' . addslashes(strtoupper($test_type)) . ')";';
 
         if ($_POST['Message'] == '') {
             $body = file_get_contents('contents.html');
         } else {
-            $body = $_POST['Message'];
+            $body = $message;
         }
 
-        $example_code .= "\n\$body = <<<'EOT'\n" . htmlentities($body) . "\nEOT;";
+        $example_code .= "\n\$body = <<<'EOT'\n$body\nEOT;";
 
         $mail->WordWrap = 78; // set word wrap to the RFC2822 limit
         $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images
@@ -187,7 +194,7 @@ try {
         $example_code .= "\n\ntry {";
         $example_code .= "\n  \$mail->send();";
         $example_code .= "\n  \$results_messages[] = \"Message has been sent using " .
-            strtoupper($_POST['test_type']) . "\";";
+            addslashes(strtoupper($test_type)) . "\";";
         $example_code .= "\n}";
         $example_code .= "\ncatch (phpmailerException \$e) {";
         $example_code .= "\n  throw new phpmailerAppException('Unable to send to: ' . \$to. ': '.\$e->getMessage());";
@@ -195,7 +202,7 @@ try {
 
         try {
             $mail->send();
-            $results_messages[] = "Message has been sent using " . strtoupper($_POST["test_type"]);
+            $results_messages[] = "Message has been sent using " . strtoupper($test_type);
         } catch (phpmailerException $e) {
             throw new phpmailerAppException("Unable to send to: " . $to . ': ' . $e->getMessage());
         }
@@ -309,22 +316,22 @@ $example_code .= "\n}";
 
         function startAgain() {
             var post_params = {
-                "From_Name": "<?php echo $from_name; ?>",
-                "From_Email": "<?php echo $from_email; ?>",
-                "To_Name": "<?php echo $to_name; ?>",
-                "To_Email": "<?php echo $to_email; ?>",
-                "cc_Email": "<?php echo $cc_email; ?>",
-                "bcc_Email": "<?php echo $bcc_email; ?>",
-                "Subject": "<?php echo $subject; ?>",
-                "Message": "<?php echo $message; ?>",
-                "test_type": "<?php echo $test_type; ?>",
-                "smtp_debug": "<?php echo $smtp_debug; ?>",
-                "smtp_server": "<?php echo $smtp_server; ?>",
-                "smtp_port": "<?php echo $smtp_port; ?>",
-                "smtp_secure": "<?php echo $smtp_secure; ?>",
-                "smtp_authenticate": "<?php echo $smtp_authenticate; ?>",
-                "authenticate_username": "<?php echo $authenticate_username; ?>",
-                "authenticate_password": "<?php echo $authenticate_password; ?>"
+                "From_Name": <?php echo JSString($from_name); ?>,
+                "From_Email": <?php echo JSString($from_email); ?>,
+                "To_Name": <?php echo JSString($to_name); ?>,
+                "To_Email": <?php echo JSString($to_email); ?>,
+                "cc_Email": <?php echo JSString($cc_email); ?>,
+                "bcc_Email": <?php echo JSString($bcc_email); ?>,
+                "Subject": <?php echo JSString($subject); ?>,
+                "Message": <?php echo JSString($message); ?>,
+                "test_type": <?php echo JSString($test_type); ?>,
+                "smtp_debug": <?php echo JSString($smtp_debug); ?>,
+                "smtp_server": <?php echo JSString($smtp_server); ?>,
+                "smtp_port": <?php echo JSString($smtp_port); ?>,
+                "smtp_secure": <?php echo JSString($smtp_secure); ?>,
+                "smtp_authenticate": <?php echo JSString($smtp_authenticate); ?>,
+                "authenticate_username": <?php echo JSString($authenticate_username); ?>,
+                "authenticate_password": <?php echo JSString($authenticate_password); ?>
             };
 
             var resetForm = document.createElement("form");
@@ -374,7 +381,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
     echo "<button type=\"submit\" onclick=\"startAgain();\">Start Over</button><br>\n";
     echo "<br><span>Script:</span>\n";
     echo "<pre class=\"brush: php;\">\n";
-    echo $example_code;
+    echo htmlentities($example_code);
     echo "\n</pre>\n";
     echo "\n<hr style=\"margin: 3em;\">\n";
 }
@@ -390,7 +397,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <label for="From_Name"><strong>From</strong> Name</label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="From_Name" name="From_Name" value="<?php echo $from_name; ?>"
+                            <input type="text" id="From_Name" name="From_Name" value="<?php echo htmlentities($from_name); ?>"
                                    style="width:95%;" autofocus placeholder="Your Name">
                         </td>
                     </tr>
@@ -399,7 +406,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <label for="From_Email"><strong>From</strong> Email Address</label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="From_Email" name="From_Email" value="<?php echo $from_email; ?>"
+                            <input type="text" id="From_Email" name="From_Email" value="<?php echo htmlentities($from_email); ?>"
                                    style="width:95%;" required placeholder="Your.Email@example.com">
                         </td>
                     </tr>
@@ -408,7 +415,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <label for="To_Name"><strong>To</strong> Name</label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="To_Name" name="To_Name" value="<?php echo $to_name; ?>"
+                            <input type="text" id="To_Name" name="To_Name" value="<?php echo htmlentities($to_name); ?>"
                                    style="width:95%;" placeholder="Recipient's Name">
                         </td>
                     </tr>
@@ -417,7 +424,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <label for="To_Email"><strong>To</strong> Email Address</label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="To_Email" name="To_Email" value="<?php echo $to_email; ?>"
+                            <input type="text" id="To_Email" name="To_Email" value="<?php echo htmlentities($to_email); ?>"
                                    style="width:95%;" required placeholder="Recipients.Email@example.com">
                         </td>
                     </tr>
@@ -428,7 +435,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             </label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="cc_Email" name="cc_Email" value="<?php echo $cc_email; ?>"
+                            <input type="text" id="cc_Email" name="cc_Email" value="<?php echo htmlentities($cc_email); ?>"
                                    style="width:95%;" placeholder="cc1@example.com, cc2@example.com">
                         </td>
                     </tr>
@@ -439,7 +446,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             </label>
                         </td>
                         <td class="colrite">
-                            <input type="text" id="bcc_Email" name="bcc_Email" value="<?php echo $bcc_email; ?>"
+                            <input type="text" id="bcc_Email" name="bcc_Email" value="<?php echo htmlentities($bcc_email); ?>"
                                    style="width:95%;" placeholder="bcc1@example.com, bcc2@example.com">
                         </td>
                     </tr>
@@ -448,7 +455,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <label for="Subject"><strong>Subject</strong></label>
                         </td>
                         <td class="colrite">
-                            <input type="text" name="Subject" id="Subject" value="<?php echo $subject; ?>"
+                            <input type="text" name="Subject" id="Subject" value="<?php echo htmlentities($subject); ?>"
                                    style="width:95%;" placeholder="Email Subject">
                         </td>
                     </tr>
@@ -460,7 +467,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                         </td>
                         <td class="colrite">
                             <textarea name="Message" id="Message" style="width:95%;height:5em;"
-                                      placeholder="Body of your email"><?php echo $message; ?></textarea>
+                                      placeholder="Body of your email"><?php echo htmlentities($message); ?></textarea>
                         </td>
                     </tr>
                 </table>
@@ -531,7 +538,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colleft"><label for="smtp_server">SMTP Server</label></td>
                             <td class="colrite">
                                 <input type="text" id="smtp_server" name="smtp_server"
-                                       value="<?php echo $smtp_server; ?>" style="width:95%;"
+                                       value="<?php echo htmlentities($smtp_server); ?>" style="width:95%;"
                                        placeholder="smtp.server.com">
                             </td>
                         </tr>
@@ -539,7 +546,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colleft" style="width: 5em;"><label for="smtp_port">SMTP Port</label></td>
                             <td class="colrite">
                                 <input type="text" name="smtp_port" id="smtp_port" size="3"
-                                       value="<?php echo $smtp_port; ?>" placeholder="Port">
+                                       value="<?php echo htmlentities($smtp_port); ?>" placeholder="Port">
                             </td>
                         </tr>
                         <tr>
@@ -560,14 +567,14 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
 <?php if ($smtp_authenticate != '') {
     echo "checked";
 } ?>
-                                       value="<?php echo $smtp_authenticate; ?>">
+                                       value="true">
                             </td>
                         </tr>
                         <tr>
                             <td class="colleft"><label for="authenticate_username">Authenticate Username</label></td>
                             <td class="colrite">
                                 <input type="text" id="authenticate_username" name="authenticate_username"
-                                       value="<?php echo $authenticate_username; ?>" style="width:95%;"
+                                       value="<?php echo htmlentities($authenticate_username); ?>" style="width:95%;"
                                        placeholder="SMTP Server Username">
                             </td>
                         </tr>
@@ -575,7 +582,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colleft"><label for="authenticate_password">Authenticate Password</label></td>
                             <td class="colrite">
                                 <input type="password" name="authenticate_password" id="authenticate_password"
-                                       value="<?php echo $authenticate_password; ?>" style="width:95%;"
+                                       value="<?php echo htmlentities($authenticate_password); ?>" style="width:95%;"
                                        placeholder="SMTP Server Password">
                             </td>
                         </tr>
