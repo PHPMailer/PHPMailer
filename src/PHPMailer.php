@@ -1721,7 +1721,7 @@ class PHPMailer
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
             if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-]*|\[[a-fA-F0-9:]+\]):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
-                static::edebug($this->lang('connect_host') . ' ' . $hostinfo[3]);
+                static::edebug($this->lang('connect_host') . ' ' . $hostentry);
                 // Not a valid host entry
                 continue;
             }
@@ -1733,7 +1733,7 @@ class PHPMailer
 
             //Check the host name is a valid name or IP address before trying to use it
             if (!static::isValidHost($hostinfo[3])) {
-                static::edebug($this->lang('connect_host'). ' ' . $hostinfo[3]);
+                static::edebug($this->lang('connect_host'). ' ' . $hostentry);
                 continue;
             }
             $prefix = '';
