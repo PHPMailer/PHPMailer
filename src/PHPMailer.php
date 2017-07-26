@@ -1720,7 +1720,7 @@ class PHPMailer
 
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
-            if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9:\[\]\.-]*):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
+            if (!preg_match('/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-]*|\[[a-fA-F0-9:]+\]):?([0-9]*)$/', trim($hostentry), $hostinfo)) {
                 static::edebug($this->lang('connect_host') . ' ' . $hostinfo[3]);
                 // Not a valid host entry
                 continue;
@@ -1845,7 +1845,8 @@ class PHPMailer
             'cz' => 'cs',
             'dk' => 'da',
             'no' => 'nb',
-            'se' => 'sv'
+            'se' => 'sv',
+            'sr' => 'rs'
         ];
 
         if (isset($renamed_langcodes[$langcode])) {

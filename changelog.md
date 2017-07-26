@@ -47,6 +47,11 @@ This is a major update that breaks backwards compatibility.
 * `Debugoutput` can accept a PSR-3 logger instance
 * To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
 * Trap low-level errors in SMTP, reports via debug output
+* More reliable folding of message headers
+* Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+
+## Version 5.2.24 (July 26th 2017)
+* **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
 * Handle bare codes (an RFC contravention) in SMTP server responses
 * Make message timestamps more dynamic - calculate the date separately for each message
 * More thorough checks for reading attachments.
@@ -54,9 +59,10 @@ This is a major update that breaks backwards compatibility.
 * Replaced all use of MD5 and SHA1 hash functions with SHA256.
 * Now checks for invalid host strings when sending via SMTP.
 * Include timestamps in HTML-format debug output
-* More reliable folding of message headers
-* Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
-* Improve Turkish translations
+* Improve Turkish, Norwegian, Serbian, Brazilian Portuguese & simplified Chinese translations
+* Correction of Serbian ISO language code from `sr` to `rs`
+* Fix matching of multiple entries in `Host` to match IPv6 literals without breaking port selection (see #1094, caused by a3b4f6b)
+* Better capture and reporting of SMTP connection errors
 
 ## Version 5.2.23 (March 15th 2017)
 * Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
