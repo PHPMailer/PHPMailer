@@ -35,7 +35,6 @@ class Exception extends \Exception
      */
     public function errorMessage()
     {
-        $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />\n";
-        return $errorMsg;
+        return '<strong>' . htmlspecialchars($this->getMessage()) . "</strong><br />\n";
     }
 }
