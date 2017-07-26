@@ -1742,6 +1742,7 @@ class PHPMailer
             'dk' => 'da',
             'no' => 'nb',
             'se' => 'sv',
+            'sr' => 'rs'
         );
 
         if (isset($renamed_langcodes[$langcode])) {
