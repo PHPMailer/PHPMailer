@@ -115,8 +115,7 @@ switch ($providerName) {
 }
 
 if (is_null($provider)) {
-    echo 'Provider missing';
-    exit;
+    exit('Provider missing');
 }
 
 if (!isset($_GET['code'])) {
