@@ -2017,7 +2017,7 @@ class PHPMailer
                         if ($is_utf8) {
                             $len = $this->utf8CharBoundary($word, $len);
                         } elseif (substr($word, $len - 1, 1) == '=') {
-                            $len--;
+                            --$len;
                         } elseif (substr($word, $len - 2, 1) == '=') {
                             $len -= 2;
                         }
