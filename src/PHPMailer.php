@@ -2422,6 +2422,10 @@ class PHPMailer
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, 'text/html', $bodyEncoding);
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
+                if (!empty($this->Ical)) {
+                    $body .= $this->getBoundary($this->boundary[2], '', 'text/calendar; method=REQUEST', '');
+                    $body .= $this->encodeString($this->Ical, $this->Encoding);
+                }
                 $body .= $this->endBoundary($this->boundary[2]);
                 $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
