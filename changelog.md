@@ -49,6 +49,7 @@ This is a major update that breaks backwards compatibility.
 * Trap low-level errors in SMTP, reports via debug output
 * More reliable folding of message headers
 * Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+* Ical support now works with attachments.
 
 ## Version 5.2.24 (July 26th 2017)
 * **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.

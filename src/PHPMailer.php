@@ -2235,11 +2235,23 @@ class PHPMailer
             case 'inline_attach':
             case 'alt_attach':
             case 'alt_inline_attach':
+                if (!empty($this->Ical)) {
+                    $result .= $this->headerLine(
+                        'Content-Class',
+                        'urn:content-classes:calendarmessage'
+                    );
+                }
                 $result .= $this->headerLine('Content-Type', 'multipart/mixed;');
                 $result .= $this->textLine("\tboundary=\"" . $this->boundary[1] . '"');
                 break;
             case 'alt':
             case 'alt_inline':
+                if (!empty($this->Ical)) {
+                    $result .= $this->headerLine(
+                        'Content-Class',
+                        'urn:content-classes:calendarmessage'
+                    );
+                }
                 $result .= $this->headerLine('Content-Type', 'multipart/alternative;');
                 $result .= $this->textLine("\tboundary=\"" . $this->boundary[1] . '"');
                 break;
@@ -2388,7 +2400,17 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[1], '', 'text/calendar; method=REQUEST', '');
+                    $body .= $this->getBoundary(
+                        $this->boundary[2],
+                        '',
+                        'text/calendar; method=REQUEST',
+                        '',
+                        //@link https://blogs.msdn.microsoft.com/webdav_101/2008/02/26/building-vcalendar-content-without-an-microsoft-api-is-not-supported-by-ms/
+                        $this->headerLine(
+                            'Content-Class',
+                            'urn:content-classes:calendarmessage'
+                        )
+                    );
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                     $body .= static::$LE;
                 }
@@ -2423,7 +2445,17 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[2], '', 'text/calendar; method=REQUEST', '');
+                    $body .= $this->getBoundary(
+                        $this->boundary[2],
+                        '',
+                        'text/calendar; method=REQUEST',
+                        '',
+                        //@link https://blogs.msdn.microsoft.com/webdav_101/2008/02/26/building-vcalendar-content-without-an-microsoft-api-is-not-supported-by-ms/
+                        $this->headerLine(
+                            'Content-Class',
+                            'urn:content-classes:calendarmessage'
+                        )
+                    );
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                 }
                 $body .= $this->endBoundary($this->boundary[2]);
@@ -2525,10 +2557,11 @@ class PHPMailer
      * @param string $charSet
      * @param string $contentType
      * @param string $encoding
+     * @param string $extraheaders Any additional headers for this MIME part
      *
      * @return string
      */
-    protected function getBoundary($boundary, $charSet, $contentType, $encoding)
+    protected function getBoundary($boundary, $charSet, $contentType, $encoding, $extraheaders = '')
     {
         $result = '';
         if ('' == $charSet) {
@@ -2546,6 +2579,9 @@ class PHPMailer
         // RFC1341 part 5 says 7bit is assumed if not specified
         if ('7bit' != $encoding) {
             $result .= $this->headerLine('Content-Transfer-Encoding', $encoding);
+        }
+        if (!empty($extraheaders)) {
+            $result .= trim($extraheaders) . static::$LE;
         }
         $result .= static::$LE;
 
