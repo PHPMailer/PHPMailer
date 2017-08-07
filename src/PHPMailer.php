@@ -3781,6 +3781,7 @@ class PHPMailer
             'png'   => 'image/png',
             'tiff'  => 'image/tiff',
             'tif'   => 'image/tiff',
+            'svg'   => 'image/svg+xml',
             'eml'   => 'message/rfc822',
             'css'   => 'text/css',
             'html'  => 'text/html',
@@ -3803,7 +3804,7 @@ class PHPMailer
             'qt'    => 'video/quicktime',
             'rv'    => 'video/vnd.rn-realvideo',
             'avi'   => 'video/x-msvideo',
-            'movie' => 'video/x-sgi-movie'
+            'movie' => 'video/x-sgi-movie',
         ];
         if (array_key_exists(strtolower($ext), $mimes)) {
             return $mimes[strtolower($ext)];
