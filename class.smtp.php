@@ -151,15 +151,20 @@ class SMTP
     public $Timelimit = 300;
 
     /**
-     * @var array patterns to extract smtp transaction id from smtp reply
-     * Only first capture group will be use, use non-capturing group to deal with it
-     * Extend this class to override this property to fulfil your needs.
+     * @var array Patterns to extract an SMTP transaction id from reply to a DATA command.
+     * The first capture group in each regex will be used as the ID.
      */
     protected $smtp_transaction_id_patterns = array(
         'exim' => '/[0-9]{3} OK id=(.*)/',
         'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
         'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/'
     );
+
+    /**
+     * @var string The last transaction ID issued in response to a DATA command,
+     * if one was detected
+     */
+    protected $last_smtp_transaction_id;
 
     /**
      * The socket for the server connection.
@@ -709,6 +714,7 @@ class SMTP
         $savetimelimit = $this->Timelimit;
         $this->Timelimit = $this->Timelimit * 2;
         $result = $this->sendCommand('DATA END', '.', 250);
+        $this->recordLastTransactionID();
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
         return $result;
@@ -1231,26 +1237,40 @@ class SMTP
     }
 
     /**
-     * Will return the ID of the last smtp transaction based on a list of patterns provided
-     * in SMTP::$smtp_transaction_id_patterns.
+     * Extract and return the ID of the last SMTP transaction based on
+     * a list of patterns provided in SMTP::$smtp_transaction_id_patterns.
+     * Relies on the host providing the ID in response to a DATA command.
      * If no reply has been received yet, it will return null.
-     * If no pattern has been matched, it will return false.
+     * If no pattern was matched, it will return false.
      * @return bool|null|string
      */
-    public function getLastTransactionID()
+    protected function recordLastTransactionID()
     {
         $reply = $this->getLastReply();
 
         if (empty($reply)) {
-            return null;
-        }
-
-        foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
-            if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
-                return $matches[1];
+            $this->last_smtp_transaction_id = null;
+        } else {
+            $this->last_smtp_transaction_id = false;
+            foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
+                if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
+                    $this->last_smtp_transaction_id = $matches[1];
+                }
             }
         }
 
-        return false;
+        return $this->last_smtp_transaction_id;
+    }
+
+    /**
+     * Get the queue/transaction ID of the last SMTP transaction
+     * If no reply has been received yet, it will return null.
+     * If no pattern was matched, it will return false.
+     * @return bool|null|string
+     * @see recordLastTransactionID()
+     */
+    public function getLastTransactionID()
+    {
+        return $this->last_smtp_transaction_id;
     }
 }
