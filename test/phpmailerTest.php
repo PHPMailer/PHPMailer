@@ -103,9 +103,9 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         if (strlen($this->Mail->Host) > 0) {
-            $this->Mail->Mailer = 'smtp';
+            $this->Mail->isSMTP();
         } else {
-            $this->Mail->Mailer = 'mail';
+            $this->Mail->isMail();
         }
         if (array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
