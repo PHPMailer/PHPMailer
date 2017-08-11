@@ -49,6 +49,7 @@ This is a major update that breaks backwards compatibility.
 * Trap low-level errors in SMTP, reports via debug output
 * More reliable folding of message headers
 * Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+* Make obtaining SMTP transaction ID more reliable
 * Ical support now works with attachments.
 
 ## Version 5.2.24 (July 26th 2017)
