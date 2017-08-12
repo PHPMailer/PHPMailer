@@ -50,7 +50,7 @@ or
 composer require phpmailer/phpmailer
 ```
 
-If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-client` package.
+If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-google` package.
 
 Alternatively, copy the contents of the PHPMailer folder into one of the `include_path` directories specified in your PHP configuration. If you don't speak git or just want a tarball, click the 'zip' button at the top of the page in GitHub.
 
