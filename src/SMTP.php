@@ -152,7 +152,7 @@ class SMTP
         'exim' => '/[0-9]{3} OK id=(.*)/',
         'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
         'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/',
-        'Microsoft_ESMTP' => '[0-9]{3} 2.[0-9].0 (.*)@(?:.*) Queued mail for delivery'
+        'Microsoft_ESMTP' => '/[0-9]{3} 2.[0-9].0 (.*)@(?:.*) Queued mail for delivery/'
     ];
 
     /**
