@@ -245,12 +245,19 @@ class SMTP
             case 'echo':
             default:
                 //Normalize line breaks
-                $str = preg_replace('/(\r\n|\r|\n)/ms', "\n", $str);
-                echo gmdate('Y-m-d H:i:s'), "\t", str_replace(
-                    "\n",
-                    "\n                   \t                  ",
-                    trim($str)
-                ), "\n";
+                $str = preg_replace('/\r\n|\r/ms', "\n", $str);
+                echo gmdate('Y-m-d H:i:s'),
+                    "\t",
+                    //Trim trailing space
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 
@@ -286,7 +293,7 @@ class SMTP
         // Connect to the SMTP server
         $this->edebug(
             "Connection: opening to $host:$port, timeout=$timeout, options=" .
-            var_export($options, true),
+            (count($options) > 0 ? var_export($options, true): 'array()'),
             self::DEBUG_CONNECTION
         );
         $errno = 0;
@@ -1065,10 +1072,20 @@ class SMTP
         if ($this->Timelimit > 0) {
             $endtime = time() + $this->Timelimit;
         }
+        $selR = [$this->smtp_conn];
+        $selW = null;
         while (is_resource($this->smtp_conn) and !feof($this->smtp_conn)) {
+            //Must pass vars in here as params are by reference
+            if (!stream_select($selR, $selW, $selW, $this->Timelimit)) {
+                $this->edebug(
+                    'SMTP -> get_lines(): timed-out (' . $this->Timeout . ' sec)',
+                    self::DEBUG_LOWLEVEL
+                );
+                break;
+            }
+            //Deliberate noise suppression - errors are handled afterwards
             $str = @fgets($this->smtp_conn, 515);
-            $this->edebug("SMTP -> get_lines(): \$data is \"$data\"", self::DEBUG_LOWLEVEL);
-            $this->edebug("SMTP -> get_lines(): \$str is  \"$str\"", self::DEBUG_LOWLEVEL);
+            $this->edebug("SMTP INBOUND: \"". trim($str).'"', self::DEBUG_LOWLEVEL);
             $data .= $str;
             // If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
             // or 4th character is a space, we are done reading, break the loop,

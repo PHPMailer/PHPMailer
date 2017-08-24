@@ -784,12 +784,19 @@ class PHPMailer
             case 'echo':
             default:
                 //Normalize line breaks
-                $str = preg_replace('/\r\n?/ms', "\n", $str);
-                echo gmdate('Y-m-d H:i:s'), "\t", str_replace(
-                    "\n",
-                    "\n                   \t                  ",
-                    trim($str)
-                ), "\n";
+                $str = preg_replace('/\r\n|\r/ms', "\n", $str);
+                echo gmdate('Y-m-d H:i:s'),
+                    "\t",
+                    //Trim trailing space
+                    trim(
+                        //Indent for readability, except for trailing break
+                        str_replace(
+                            "\n",
+                            "\n                   \t                  ",
+                            trim($str)
+                        )
+                    ),
+                    "\n";
         }
     }
 

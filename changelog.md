@@ -50,6 +50,8 @@ This is a major update that breaks backwards compatibility.
 * More reliable folding of message headers
 * Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
 * Make obtaining SMTP transaction ID more reliable
+* Better handling of unreliable PHP timeouts
+* Made `SMTPDebug = 4` slightly less noisy
 
 ## Version 5.2.24 (July 26th 2017)
 * **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
