@@ -1,1 +1,0 @@
-Non-security issues and pull requests are no longer being accepted for the legacy PHPMailer 5.2 branch. Migrate to PHPMailer 6.0 (or later) and report your issue there.
