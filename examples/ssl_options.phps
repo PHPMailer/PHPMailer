@@ -3,11 +3,14 @@
  * This example shows settings to use when sending over SMTP with TLS and custom connection options.
  */
 
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
 
-require '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer;
@@ -21,9 +24,6 @@ $mail->isSMTP();
 // 2 = client and server messages
 $mail->SMTPDebug = 2;
 
-//Ask for HTML-friendly debug output
-$mail->Debugoutput = 'html';
-
 //Set the hostname of the mail server
 $mail->Host = 'smtp.example.com';
 
@@ -34,24 +34,25 @@ $mail->Port = 587;
 $mail->SMTPSecure = 'tls';
 
 //Custom connection options
+//Note that these settings are INSECURE
 $mail->SMTPOptions = array (
-    'ssl' => array(
+    'ssl' => [
         'verify_peer'  => true,
         'verify_depth' => 3,
         'allow_self_signed' => true,
         'peer_name' => 'smtp.example.com',
-        'cafile' => '/etc/ssl/ca_cert.pem',
-    )
+        'cafile' => '/etc/ssl/ca_cert.pem'
+    ]
 );
 
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
 
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = "username@example.com";
+$mail->Username = 'username@example.com';
 
 //Password to use for SMTP authentication
-$mail->Password = "yourpassword";
+$mail->Password = 'yourpassword';
 
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
@@ -66,9 +67,9 @@ $mail->Subject = 'PHPMailer SMTP options test';
 //convert HTML into a basic plain-text alternative body
 $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
-//send the message, check for errors
+//Send the message, check for errors
 if (!$mail->send()) {
-    echo "Mailer Error: " . $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
-    echo "Message sent!";
+    echo 'Message sent!';
 }

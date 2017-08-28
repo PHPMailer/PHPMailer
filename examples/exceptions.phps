@@ -3,7 +3,11 @@
  * This example shows how to make use of PHPMailer's exceptions for error handling.
  */
 
-require '../PHPMailerAutoload.php';
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 //Passing true to the constructor enables the use of exceptions for error handling
@@ -27,9 +31,9 @@ try {
     //send the message
     //Note that we don't need check the response from this because it will throw an exception if it has trouble
     $mail->send();
-    echo "Message sent!";
-} catch (phpmailerException $e) {
-    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+    echo 'Message sent!';
 } catch (Exception $e) {
+    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+} catch (\Exception $e) { //The leading slash means the Global PHP Exception class will be caught
     echo $e->getMessage(); //Boring error messages from anything else!
 }
