@@ -53,7 +53,7 @@ This is a major update that breaks backwards compatibility.
 * Better handling of unreliable PHP timeouts
 * Made `SMTPDebug = 4` slightly less noisy
 
-## Version 5.2.25 (August 2th 2917)
+## Version 5.2.25 (August 28th 2017)
 * Make obtaining SMTP transaction ID more reliable
 * Add Bosnian translation
 * This is the last official release in the legacy PHPMailer 5.2 series; there may be future security patches (which will be found in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable)), but no further non-security PRs or issues will be accepted. Migrate to PHPMailer 6.0.
