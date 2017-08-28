@@ -876,8 +876,6 @@ class PHPMailer
     /**
      * Add a "CC" address.
      *
-     * This function works with the SMTP mailer on win32, not with the "mail" mailer.
-     *
      * @param string $address The email address to send to
      * @param string $name
      *
@@ -890,8 +888,6 @@ class PHPMailer
 
     /**
      * Add a "BCC" address.
-     *
-     * This function works with the SMTP mailer on win32, not with the "mail" mailer.
      *
      * @param string $address The email address to send to
      * @param string $name
