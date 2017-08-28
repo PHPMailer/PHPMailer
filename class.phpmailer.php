@@ -1365,7 +1365,7 @@ class PHPMailer
     protected function sendmailSend($header, $body)
     {
         // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-        if (!empty($this->Sender) and self::isShellSafe($this->Sender)) {
+        if (!empty($this->Sender) and $this->isShellSafe($this->Sender)) {
             if ($this->Mailer == 'qmail') {
                 $sendmailFmt = '%s -f%s';
             } else {
@@ -1436,7 +1436,7 @@ class PHPMailer
      * @access protected
      * @return boolean
      */
-    protected static function isShellSafe($string)
+    protected function isShellSafe($string)
     {
         // Future-proof
         if (escapeshellcmd($string) !== $string
@@ -1482,7 +1482,7 @@ class PHPMailer
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
         if (!empty($this->Sender) and $this->validateAddress($this->Sender)) {
             // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-            if (self::isShellSafe($this->Sender)) {
+            if ($this->isShellSafe($this->Sender)) {
                 $params = sprintf('-f%s', $this->Sender);
             }
         }
