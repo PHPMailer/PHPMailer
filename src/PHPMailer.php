@@ -351,7 +351,7 @@ class PHPMailer
      * <code>
      * $mail->Debugoutput = new myPsr3Logger;
      * </code>
-     * @var string|callable|Psr\Log\LoggerInterface
+     * @var string|callable|\Psr\Log\LoggerInterface
      * @see SMTP::$Debugoutput
      */
     public $Debugoutput = 'echo';
@@ -723,7 +723,7 @@ class PHPMailer
      * @param string $subject Subject
      * @param string $body Message Body
      * @param string $header Additional Header(s)
-     * @param string $params Params
+     * @param ?string $params Params
      *
      * @return boolean
      */
@@ -2298,7 +2298,7 @@ class PHPMailer
         } elseif (function_exists("openssl_random_pseudo_bytes")) {
             $bytes = openssl_random_pseudo_bytes($len);
         } else {
-            $bytes = uniqid(mt_rand(), true);
+            $bytes = uniqid((string)mt_rand(), true);
         }
         return hash('sha256', $bytes);
     }
@@ -2486,7 +2486,7 @@ class PHPMailer
                         $signed,
                         'file://' . realpath($this->sign_cert_file),
                         ['file://' . realpath($this->sign_key_file), $this->sign_key_pass],
-                        null
+                        []
                     );
                 } else {
                     $sign = @openssl_pkcs7_sign(
@@ -2494,7 +2494,7 @@ class PHPMailer
                         $signed,
                         'file://' . realpath($this->sign_cert_file),
                         ['file://' . realpath($this->sign_key_file), $this->sign_key_pass],
-                        null,
+                        [],
                         PKCS7_DETACHED,
                         $this->sign_extracerts_file
                     );
@@ -2594,7 +2594,7 @@ class PHPMailer
      * Format a header line.
      *
      * @param string $name
-     * @param string $value
+     * @param string|integer $value
      *
      * @return string
      */

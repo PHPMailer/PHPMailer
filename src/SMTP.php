@@ -112,7 +112,7 @@ class SMTP
      * $mail->Debugoutput = new myPsr3Logger;
      * </code>
      *
-     * @var string|callable|Psr\Log\LoggerInterface
+     * @var string|callable|\Psr\Log\LoggerInterface
      */
     public $Debugoutput = 'echo';
 
@@ -156,7 +156,7 @@ class SMTP
     ];
 
     /**
-     * @var string The last transaction ID issued in response to a DATA command,
+     * @var string|boolean|null The last transaction ID issued in response to a DATA command,
      * if one was detected
      */
     protected $last_smtp_transaction_id;
@@ -164,7 +164,7 @@ class SMTP
     /**
      * The socket for the server connection.
      *
-     * @var resource
+     * @var ?resource
      */
     protected $smtp_conn;
 
@@ -332,8 +332,9 @@ class SMTP
         if (!is_resource($this->smtp_conn)) {
             $this->setError(
                 'Failed to connect to server',
-                $errno,
-                $errstr
+                '',
+                (string)$errno,
+                (string)$errstr
             );
             $this->edebug(
                 'SMTP ERROR: ' . $this->error['error']
@@ -1228,11 +1229,11 @@ class SMTP
         $notice = 'Connection failed.';
         $this->setError(
             $notice,
-            $errno,
-            $errmsg
+            $errmsg,
+            (string)$errno
         );
         $this->edebug(
-            $notice . ' Error #' . $errno . ': ' . $errmsg . " [$errfile line $errline]",
+            "$notice Error #$errno: $errmsg [$errfile line $errline]",
             self::DEBUG_CONNECTION
         );
     }
