@@ -3,11 +3,14 @@
  * This example shows making an SMTP connection without using authentication.
  */
 
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
 
-require_once '../PHPMailerAutoload.php';
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer;
@@ -18,14 +21,12 @@ $mail->isSMTP();
 // 1 = client messages
 // 2 = client and server messages
 $mail->SMTPDebug = 2;
-//Ask for HTML-friendly debug output
-$mail->Debugoutput = 'html';
 //Set the hostname of the mail server
-$mail->Host = "mail.example.com";
+$mail->Host = 'mail.example.com';
 //Set the SMTP port number - likely to be 25, 465 or 587
 $mail->Port = 25;
-//Whether to use SMTP authentication
-$mail->SMTPAuth = false;
+//We don't need to set this as it's the default value
+//$mail->SMTPAuth = false;
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address

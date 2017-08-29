@@ -2,12 +2,14 @@
 /**
  * PHPMailer multiple files upload and send example
  */
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
-
+    require '../vendor/autoload.php';
     // Create a message
-    // This should be somewhere in your include_path
-    require '../PHPMailerAutoload.php';
     $mail = new PHPMailer;
     $mail->setFrom('from@example.com', 'First Last');
     $mail->addAddress('whoto@example.com', 'John Doe');
@@ -15,7 +17,7 @@ if (array_key_exists('userfile', $_FILES)) {
     $mail->Body = 'My message body';
     //Attach multiple files one by one
     for ($ct = 0; $ct < count($_FILES['userfile']['tmp_name']); $ct++) {
-        $uploadfile = tempnam(sys_get_temp_dir(), sha1($_FILES['userfile']['name'][$ct]));
+        $uploadfile = tempnam(sys_get_temp_dir(), hash('sha256', $_FILES['userfile']['name'][$ct]));
         $filename = $_FILES['userfile']['name'][$ct];
         if (move_uploaded_file($_FILES['userfile']['tmp_name'][$ct], $uploadfile)) {
             $mail->addAttachment($uploadfile, $filename);

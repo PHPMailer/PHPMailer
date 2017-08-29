@@ -1,12 +1,71 @@
-# ChangeLog
+# PHPMailer Change Log
 
+## Version 6.0
+This is a major update that breaks backwards compatibility.
+
+* **Requires PHP 5.5 or later**
+* **Uses the `PHPMailer\PHPMailer` namespace**
+* File structure simplified and PSR-4 compatible, classes live in the `src/` folder
+* The custom autoloader has been removed: [**use composer**](https://getcomposer.org)!
+* Classes & Exceptions renamed to make use of the namespace
+* Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
+* Complete RFC standardisation on CRLF (`\r\n`) line breaks for SMTP by default:
+  * `PHPMailer:$LE` defaults to CRLF
+  * All uses of `PHPMailer::$LE` property converted to use `static::$LE` constant for consistency and ease of overriding
+  * Similar changes to line break handling in SMTP and POP3 classes.
+  * Line break format for `mail()` transport is set automatically.
+  * Warnings emitted for buggy `mail()` in PHP versions 7.0.0 - 7.0.16 and 7.1.0 - 7.1.2; either upgrade or switch to SMTP.
+* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
+* Major cleanup of docs and examples
+* All elements previously marked as deprecated have been removed:
+  * `PHPMailer->Version` (replaced with `VERSION` constant)
+  * `PHPMailer->ReturnPath`
+  * `PHPMailer->PluginDir`
+  * `PHPMailer->encodeQPphp()`
+  * `SMTP->CRLF` (replaced with `LE` constant)
+  * `SMTP->Version` (replaced with `VERSION` constant)
+  * `SMTP->SMTP_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->CRLF` (replaced with `LE` constant)
+  * `POP3->Version` (replaced with `VERSION` constant)
+  * `POP3->POP3_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->POP3_TIMEOUT` (replaced with `DEFAULT_TIMEOUT` constant)
+* NTLM authentication has been removed - it never worked anyway!
+  * `PHPMailer->Workstation`
+  * `PHPMailer->Realm`
+* `SingleTo` functionality is deprecated; this belongs at a higher level - PHPMailer is not a mailing list system.
+* `SMTP::authenticate` method signature changed
+* `parseAddresses()` is now static
+* `validateAddress()` is now called statically from `parseAddresses()`
+* `idnSupported()` is now static and is called statically from `punyencodeAddress()`
+* `PHPMailer->SingleToArray` is now protected
+* `fixEOL()` method removed - it duplicates `PHPMailer::normalizeBreaks()`, so use that instead
+* Don't try to use an auth mechanism if it's not supported by the server
+* Reorder automatic AUTH mechanism selector to try most secure method first
+* `Extras` classes have been removed - use alternative packages from [packagist.org](https://packagist.org) instead
+* Better handling of automatic transfer encoding switch in the presence of long lines
+* Simplification of address validation - now uses PHP's `FILTER_VALIDATE_EMAIL` pattern by default, retains advanced options
+* `Debugoutput` can accept a PSR-3 logger instance
+* To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
+* Trap low-level errors in SMTP, reports via debug output
+* More reliable folding of message headers
+* Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+* Make obtaining SMTP transaction ID more reliable
+* Better handling of unreliable PHP timeouts
+* Made `SMTPDebug = 4` slightly less noisy
+
+## Version 5.2.25 (August 28th 2017)
 * Make obtaining SMTP transaction ID more reliable
 * Add Bosnian translation
+* This is the last official release in the legacy PHPMailer 5.2 series; there may be future security patches (which will be found in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable)), but no further non-security PRs or issues will be accepted. Migrate to PHPMailer 6.0.
 
 ## Version 5.2.24 (July 26th 2017)
 * **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
 * Handle bare codes (an RFC contravention) in SMTP server responses
 * Make message timestamps more dynamic - calculate the date separately for each message
+* More thorough checks for reading attachments.
+* Throw an exception when trying to send a message with an empty body caused by an internal error.
+* Replaced all use of MD5 and SHA1 hash functions with SHA256.
+* Now checks for invalid host strings when sending via SMTP.
 * Include timestamps in HTML-format debug output
 * Improve Turkish, Norwegian, Serbian, Brazilian Portuguese & simplified Chinese translations
 * Correction of Serbian ISO language code from `sr` to `rs`

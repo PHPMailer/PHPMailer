@@ -3,7 +3,10 @@
  * This example shows sending a message using a local sendmail binary.
  */
 
-require '../PHPMailerAutoload.php';
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
+require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer;

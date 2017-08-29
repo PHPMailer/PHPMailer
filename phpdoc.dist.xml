@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>PHPMailer</title>
+    <parser>
+        <target>docs</target>
+        <encoding>utf8</encoding>
+        <markers>
+            <item>TODO</item>
+        </markers>
+    </parser>
+    <transformer>
+        <target>docs</target>
+    </transformer>
+    <transformations>
+        <template name="clean"/>
+    </transformations>
+    <files>
+        <directory>src</directory>
+    </files>
+</phpdoc>
