@@ -36,4 +36,6 @@ return [
     ],
 
     'skip_slow_php_options_warning' => true,
+
+    'exclude_file_regex' => '@^vendor/.*/(tests|Tests)/@',
 ];
