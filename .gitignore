@@ -5,3 +5,4 @@ test/testbootstrap.php
 build/
 vendor/
 *.pem
+.php_cs.cache
