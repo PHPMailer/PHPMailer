@@ -10,6 +10,10 @@ matrix:
     - php: hhvm
       dist: trusty
 
+cache:
+  directories:
+    - $HOME/.composer
+
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
