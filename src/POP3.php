@@ -115,7 +115,7 @@ class POP3
     /**
      * Are we connected?
      *
-     * @var boolean
+     * @var bool
      */
     protected $connected = false;
 
@@ -135,13 +135,13 @@ class POP3
      * Simple static wrapper for all-in-one POP before SMTP
      *
      * @param string $host
-     * @param int|boolean $port The port number to connect to
-     * @param int|boolean $timeout The timeout value
+     * @param int|bool $port The port number to connect to
+     * @param int|bool $timeout The timeout value
      * @param string $username
      * @param string $password
      * @param int $debug_level
      *
-     * @return boolean
+     * @return bool
      */
     public static function popBeforeSmtp(
         $host,
@@ -161,13 +161,13 @@ class POP3
      * appropriate for POP-before SMTP authorisation.
      *
      * @param string $host The hostname to connect to
-     * @param int|boolean $port The port number to connect to
-     * @param int|boolean $timeout The timeout value
+     * @param int|bool $port The port number to connect to
+     * @param int|bool $timeout The timeout value
      * @param string $username
      * @param string $password
      * @param int $debug_level
      *
-     * @return boolean
+     * @return bool
      */
     public function authorise($host, $port = false, $timeout = false, $username = '', $password = '', $debug_level = 0)
     {
@@ -207,10 +207,10 @@ class POP3
      * Connect to a POP3 server.
      *
      * @param string $host
-     * @param int|boolean $port
+     * @param int|bool $port
      * @param int $tval
      *
-     * @return boolean
+     * @return bool
      */
     public function connect($host, $port = false, $tval = 30)
     {
@@ -268,7 +268,7 @@ class POP3
      * @param string $username
      * @param string $password
      *
-     * @return boolean
+     * @return bool
      */
     public function login($username = '', $password = '')
     {
@@ -352,7 +352,7 @@ class POP3
      *
      * @param string $string
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkResponse($string)
     {

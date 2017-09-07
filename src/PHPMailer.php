@@ -178,7 +178,7 @@ class PHPMailer
      * Whether mail() uses a fully sendmail-compatible MTA.
      * One which supports sendmail's "-oi -f" options.
      *
-     * @var boolean
+     * @var bool
      */
     public $UseSendmailOptions = true;
 
@@ -262,7 +262,7 @@ class PHPMailer
      * even if `SMTPSecure` is not set to 'tls'.
      * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
      *
-     * @var boolean
+     * @var bool
      */
     public $SMTPAutoTLS = true;
 
@@ -270,7 +270,7 @@ class PHPMailer
      * Whether to use SMTP authentication.
      * Uses the Username and Password properties.
      *
-     * @var boolean
+     * @var bool
      * @see PHPMailer::$Username
      * @see PHPMailer::$Password
      */
@@ -361,7 +361,7 @@ class PHPMailer
      * If this is set to true then to close the connection
      * requires an explicit call to smtpClose().
      *
-     * @var boolean
+     * @var bool
      */
     public $SMTPKeepAlive = false;
 
@@ -370,7 +370,7 @@ class PHPMailer
      * or send them all in one message.
      * Only supported in `mail` and `sendmail` transports, not in SMTP.
      *
-     * @var boolean
+     * @var bool
      */
     public $SingleTo = false;
 
@@ -387,14 +387,14 @@ class PHPMailer
      *
      * @see https://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @see http://www.postfix.org/VERP_README.html Postfix VERP info
-     * @var boolean
+     * @var bool
      */
     public $do_verp = false;
 
     /**
      * Whether to allow sending messages with an empty body.
      *
-     * @var boolean
+     * @var bool
      */
     public $AllowEmpty = false;
 
@@ -453,7 +453,7 @@ class PHPMailer
      * Value can be any php callable: http://www.php.net/is_callable
      *
      * Parameters:
-     *   boolean $result        result of the send action
+     *   bool $result        result of the send action
      *   array   $to            email addresses of the recipients
      *   array   $cc            cc email addresses
      *   array   $bcc           bcc email addresses
@@ -630,7 +630,7 @@ class PHPMailer
     /**
      * Whether to throw exceptions for errors.
      *
-     * @var boolean
+     * @var bool
      */
     protected $exceptions = false;
 
@@ -693,12 +693,12 @@ class PHPMailer
     /**
      * Constructor.
      *
-     * @param boolean $exceptions Should we throw external exceptions?
+     * @param bool $exceptions Should we throw external exceptions?
      */
     public function __construct($exceptions = null)
     {
         if (null !== $exceptions) {
-            $this->exceptions = (boolean)$exceptions;
+            $this->exceptions = (bool)$exceptions;
         }
         //Pick an appropriate debug output format automatically
         $this->Debugoutput = (strpos(PHP_SAPI, 'cli') !== false ? 'echo' : 'html');
@@ -725,7 +725,7 @@ class PHPMailer
      * @param string $header Additional Header(s)
      * @param ?string $params Params
      *
-     * @return boolean
+     * @return bool
      */
     private function mailPassthru($to, $subject, $body, $header, $params)
     {
@@ -803,7 +803,7 @@ class PHPMailer
     /**
      * Sets message type to HTML or plain.
      *
-     * @param boolean $isHtml True for HTML mode.
+     * @param bool $isHtml True for HTML mode.
      */
     public function isHTML($isHtml = true)
     {
@@ -866,7 +866,7 @@ class PHPMailer
      * @param string $address The email address to send to
      * @param string $name
      *
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     public function addAddress($address, $name = '')
     {
@@ -879,7 +879,7 @@ class PHPMailer
      * @param string $address The email address to send to
      * @param string $name
      *
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     public function addCC($address, $name = '')
     {
@@ -892,7 +892,7 @@ class PHPMailer
      * @param string $address The email address to send to
      * @param string $name
      *
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     public function addBCC($address, $name = '')
     {
@@ -905,7 +905,7 @@ class PHPMailer
      * @param string $address The email address to reply to
      * @param string $name
      *
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     public function addReplyTo($address, $name = '')
     {
@@ -923,7 +923,7 @@ class PHPMailer
      * @param string $name
      *
      * @throws Exception
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     protected function addOrEnqueueAnAddress($kind, $address, $name)
     {
@@ -969,7 +969,7 @@ class PHPMailer
      * @param string $name
      *
      * @throws Exception
-     * @return boolean true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way
      */
     protected function addAnAddress($kind, $address, $name = '')
     {
@@ -1013,7 +1013,7 @@ class PHPMailer
      * Note that quotes in the name part are removed.
      *
      * @param string $addrstr The address list string
-     * @param boolean $useimap Whether to use the IMAP extension to parse the list
+     * @param bool $useimap Whether to use the IMAP extension to parse the list
      *
      * @return array
      * @see    http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
@@ -1068,10 +1068,10 @@ class PHPMailer
      *
      * @param string $address
      * @param string $name
-     * @param boolean $auto Whether to also set the Sender address, defaults to true
+     * @param bool $auto Whether to also set the Sender address, defaults to true
      *
      * @throws Exception
-     * @return boolean
+     * @return bool
      */
     public function setFrom($address, $name = '', $auto = true)
     {
@@ -1130,7 +1130,7 @@ class PHPMailer
      * });
      * You can also set the PHPMailer::$validator static to a callable, allowing built-in methods to use your validator.
      *
-     * @return boolean
+     * @return bool
      */
     public static function validateAddress($address, $patternselect = null)
     {
@@ -1163,7 +1163,7 @@ class PHPMailer
                  * @copyright 2009-2010 Michael Rushton
                  * Feel free to use and redistribute this code. But please keep this copyright notice.
                  */
-                return (boolean)preg_match(
+                return (bool)preg_match(
                     '/^(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){255,})(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){65,}@)' .
                     '((?>(?>(?>((?>(?>(?>\x0D\x0A)?[\t ])+|(?>[\t ]*\x0D\x0A)?[\t ]+)?)(\((?>(?2)' .
                     '(?>[\x01-\x08\x0B\x0C\x0E-\'*-\[\]-\x7F]|\\\[\x00-\x7F]|(?3)))*(?2)\)))+(?2))|(?2))?)' .
@@ -1181,7 +1181,7 @@ class PHPMailer
                  *
                  * @see http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                  */
-                return (boolean)preg_match(
+                return (bool)preg_match(
                     '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
@@ -1189,7 +1189,7 @@ class PHPMailer
             case 'noregex': //Kept for BC
             case 'php':
             default:
-                return (boolean)filter_var($address, FILTER_VALIDATE_EMAIL);
+                return (bool)filter_var($address, FILTER_VALIDATE_EMAIL);
         }
     }
 
@@ -1197,7 +1197,7 @@ class PHPMailer
      * Tells whether IDNs (Internationalized Domain Names) are supported or not. This requires the
      * `intl` and `mbstring` PHP extensions.
      *
-     * @return boolean `true` if required functions for IDN support are present
+     * @return bool `true` if required functions for IDN support are present
      */
     public function idnSupported()
     {
@@ -1244,7 +1244,7 @@ class PHPMailer
      * Create a message and send it.
      * Uses the sending method specified by $Mailer.
      *
-     * @return boolean false on error - See the ErrorInfo property for details of the error.
+     * @return bool false on error - See the ErrorInfo property for details of the error.
      * @throws Exception
      */
     public function send()
@@ -1268,7 +1268,7 @@ class PHPMailer
      * Prepare a message for sending.
      *
      * @throws Exception
-     * @return boolean
+     * @return bool
      */
     public function preSend()
     {
@@ -1394,7 +1394,7 @@ class PHPMailer
      * Actually send a message.
      * Send the email via the selected mechanism
      *
-     * @return boolean
+     * @return bool
      * @throws Exception
      */
     public function postSend()
@@ -1435,7 +1435,7 @@ class PHPMailer
      *
      * @see    PHPMailer::$Sendmail
      * @throws Exception
-     * @return boolean
+     * @return bool
      */
     protected function sendmailSend($header, $body)
     {
@@ -1510,7 +1510,7 @@ class PHPMailer
      * @param string $string The string to be validated
      * @see https://github.com/PHPMailer/PHPMailer/issues/924 CVE-2016-10045 bug report
      * @access protected
-     * @return boolean
+     * @return bool
      */
     protected static function isShellSafe($string)
     {
@@ -1545,7 +1545,7 @@ class PHPMailer
      *
      * @see    http://www.php.net/manual/en/book.mail.php
      * @throws Exception
-     * @return boolean
+     * @return bool
      */
     protected function mailSend($header, $body)
     {
@@ -1630,7 +1630,7 @@ class PHPMailer
      * @see    PHPMailer::getSMTPInstance() to use a different class.
      * @throws Exception
      * @uses   SMTP
-     * @return boolean
+     * @return bool
      */
     protected function smtpSend($header, $body)
     {
@@ -1693,7 +1693,7 @@ class PHPMailer
      *
      * @param array $options An array of options compatible with stream_context_create()
      *
-     * @return boolean
+     * @return bool
      * @throws Exception
      * @uses   SMTP
      */
@@ -1837,7 +1837,7 @@ class PHPMailer
      * @param string $langcode ISO 639-1 2-character language code (e.g. French is "fr")
      * @param string $lang_path Path to the language file directory, with trailing separator (slash)
      *
-     * @return boolean
+     * @return bool
      */
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
@@ -1899,7 +1899,7 @@ class PHPMailer
             }
         }
         $this->language = $PHPMAILER_LANG;
-        return (boolean)$foundlang; // Returns false if language not found
+        return (bool)$foundlang; // Returns false if language not found
     }
 
     /**
@@ -1959,7 +1959,7 @@ class PHPMailer
      *
      * @param string $message The message to wrap
      * @param int $length The line length to wrap to
-     * @param boolean $qp_mode Whether to run in Quoted-Printable mode
+     * @param bool $qp_mode Whether to run in Quoted-Printable mode
      *
      * @return string
      */
@@ -2627,7 +2627,7 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @throws Exception
-     * @return boolean
+     * @return bool
      */
     public function addAttachment($path, $name = '', $encoding = 'base64', $type = '', $disposition = 'attachment')
     {
@@ -2958,7 +2958,7 @@ class PHPMailer
      *
      * @param string $str multi-byte text to wrap encode
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMultiBytes($str)
     {
@@ -2974,11 +2974,11 @@ class PHPMailer
      *
      * @param string $text
      *
-     * @return boolean
+     * @return bool
      */
     public function has8bitChars($text)
     {
-        return (boolean)preg_match('/[\x80-\xFF]/', $text);
+        return (bool)preg_match('/[\x80-\xFF]/', $text);
     }
 
     /**
@@ -3142,7 +3142,7 @@ class PHPMailer
      * @param string $type File MIME type.
      * @param string $disposition Disposition to use
      *
-     * @return boolean True on successfully adding an attachment
+     * @return bool True on successfully adding an attachment
      */
     public function addEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '', $disposition = 'inline')
     {
@@ -3189,7 +3189,7 @@ class PHPMailer
      * @param string $type MIME type.
      * @param string $disposition Disposition to use
      *
-     * @return boolean True on successfully adding an attachment
+     * @return bool True on successfully adding an attachment
      */
     public function addStringEmbeddedImage(
         $string,
@@ -3223,7 +3223,7 @@ class PHPMailer
      *
      * @param string $cid
      *
-     * @return boolean
+     * @return bool
      */
     protected function cidExists($cid)
     {
@@ -3238,7 +3238,7 @@ class PHPMailer
     /**
      * Check if an inline attachment is present.
      *
-     * @return boolean
+     * @return bool
      */
     public function inlineImageExists()
     {
@@ -3253,7 +3253,7 @@ class PHPMailer
     /**
      * Check if an attachment (non-inline) is present.
      *
-     * @return boolean
+     * @return bool
      */
     public function attachmentExists()
     {
@@ -3268,7 +3268,7 @@ class PHPMailer
     /**
      * Check if this message has an alternative body set.
      *
-     * @return boolean
+     * @return bool
      */
     public function alternativeExists()
     {
@@ -3445,13 +3445,13 @@ class PHPMailer
         }
         //Looks like a bracketed IPv6 address
         if (trim($host, '[]') != $host) {
-            return (boolean)filter_var(trim($host, '[]'), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+            return (bool)filter_var(trim($host, '[]'), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
         }
         //If removing all the dots results in a numeric string, it must be an IPv4 address.
         //Need to check this first because otherwise things like `999.0.0.0` are considered valid host names
         if (is_numeric(str_replace('.', '', $host))) {
             //Is it a valid IPv4 address?
-            return (boolean)filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+            return (bool)filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
         }
         if (filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
             //Is it a syntactically valid hostname?
@@ -3490,7 +3490,7 @@ class PHPMailer
     /**
      * Check if an error occurred.
      *
-     * @return boolean True if an error did occur.
+     * @return bool True if an error did occur.
      */
     public function isError()
     {
@@ -3539,7 +3539,7 @@ class PHPMailer
      * @access public
      * @param string $message HTML message string
      * @param string $basedir Absolute path to a base directory to prepend to relative paths to images
-     * @param boolean|callable $advanced Whether to use the internal HTML to text converter
+     * @param bool|callable $advanced Whether to use the internal HTML to text converter
      *    or your own custom converter @see PHPMailer::html2text()
      * @return string $message The transformed message Body
      *
@@ -3645,7 +3645,7 @@ class PHPMailer
      * </code>
      *
      * @param string $html The HTML text to convert
-     * @param boolean|callable $advanced Any boolean value to use the internal converter,
+     * @param bool|callable $advanced Any boolean value to use the internal converter,
      *   or provide your own callable for custom conversion.
      *
      * @return string
@@ -3856,7 +3856,7 @@ class PHPMailer
      * @param string $name The property name to set
      * @param mixed $value The value to set the property to
      *
-     * @return boolean
+     * @return bool
      */
     public function set($name, $value = '')
     {
@@ -4142,11 +4142,11 @@ class PHPMailer
      *
      * @param string $str
      *
-     * @return boolean
+     * @return bool
      */
     public static function hasLineLongerThanMax($str)
     {
-        return (boolean)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + strlen(static::$LE)).',})/m', $str);
+        return (bool)preg_match('/^(.{'.(self::MAX_LINE_LENGTH + strlen(static::$LE)).',})/m', $str);
     }
 
     /**
@@ -4212,7 +4212,7 @@ class PHPMailer
     /**
      * Perform a callback.
      *
-     * @param boolean $isSent
+     * @param bool $isSent
      * @param array $to
      * @param array $cc
      * @param array $bcc

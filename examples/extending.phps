@@ -20,7 +20,7 @@ class myPHPMailer extends PHPMailer
 {
     /**
      * myPHPMailer constructor.
-     * @param boolean|null $exceptions
+     * @param bool|null $exceptions
      * @param string $body A default HTML message body
      */
     public function __construct($exceptions, $body = '')

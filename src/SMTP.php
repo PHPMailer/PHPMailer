@@ -121,7 +121,7 @@ class SMTP
      *
      * @see http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @see http://www.postfix.org/VERP_README.html Info on VERP
-     * @var boolean
+     * @var bool
      */
     public $do_verp = false;
 
@@ -156,7 +156,7 @@ class SMTP
     ];
 
     /**
-     * @var string|boolean|null The last transaction ID issued in response to a DATA command,
+     * @var string|bool|null The last transaction ID issued in response to a DATA command,
      * if one was detected
      */
     protected $last_smtp_transaction_id;
@@ -271,7 +271,7 @@ class SMTP
      * @param int $timeout How long to wait for the connection to open
      * @param array $options An array of options for stream_context_create()
      *
-     * @return boolean
+     * @return bool
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
     {
@@ -363,7 +363,7 @@ class SMTP
     /**
      * Initiate a TLS (encrypted) session.
      *
-     * @return boolean
+     * @return bool
      */
     public function startTLS()
     {
@@ -389,7 +389,7 @@ class SMTP
             $crypto_method
         );
         restore_error_handler();
-        return (boolean)$crypto_ok;
+        return (bool)$crypto_ok;
     }
 
     /**
@@ -401,7 +401,7 @@ class SMTP
      * @param string $authtype The auth type (CRAM-MD5, PLAIN, LOGIN, XOAUTH2)
      * @param OAuth $OAuth An optional OAuth instance for XOAUTH2 authentication
      *
-     * @return boolean True if successfully authenticated.
+     * @return bool True if successfully authenticated.
      * @see    hello()
      */
     public function authenticate(
@@ -559,7 +559,7 @@ class SMTP
     /**
      * Check connection state.
      *
-     * @return boolean True if connected.
+     * @return bool True if connected.
      */
     public function connected()
     {
@@ -609,7 +609,7 @@ class SMTP
      *
      * @param string $msg_data Message data to send
      *
-     * @return boolean
+     * @return bool
      */
     public function data($msg_data)
     {
@@ -700,12 +700,12 @@ class SMTP
      *
      * @param string $host The host name or IP to connect to
      *
-     * @return boolean
+     * @return bool
      */
     public function hello($host = '')
     {
         //Try extended hello first (RFC 2821)
-        return (boolean)($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
+        return (bool)($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
     }
 
     /**
@@ -715,7 +715,7 @@ class SMTP
      * @param string $hello The HELO string
      * @param string $host The hostname to say we are
      *
-     * @return boolean
+     * @return bool
      * @see    hello()
      */
     protected function sendHello($hello, $host)
@@ -782,7 +782,7 @@ class SMTP
      *
      * @param string $from Source address of this message
      *
-     * @return boolean
+     * @return bool
      */
     public function mail($from)
     {
@@ -799,9 +799,9 @@ class SMTP
      * Closes the socket if there is no error or the $close_on_error argument is true.
      * Implements from RFC 821: QUIT <CRLF>
      *
-     * @param boolean $close_on_error Should the connection close if an error occurs?
+     * @param bool $close_on_error Should the connection close if an error occurs?
      *
-     * @return boolean
+     * @return bool
      */
     public function quit($close_on_error = true)
     {
@@ -822,7 +822,7 @@ class SMTP
      *
      * @param string $address The address the message is being sent to
      *
-     * @return boolean
+     * @return bool
      */
     public function recipient($address)
     {
@@ -838,7 +838,7 @@ class SMTP
      * Abort any transaction that is currently in progress.
      * Implements RFC 821: RSET <CRLF>
      *
-     * @return boolean True on success.
+     * @return bool True on success.
      */
     public function reset()
     {
@@ -852,7 +852,7 @@ class SMTP
      * @param string $commandstring The actual command to send
      * @param int|array $expect One or more expected integer success codes
      *
-     * @return boolean True on success.
+     * @return bool True on success.
      */
     protected function sendCommand($command, $commandstring, $expect)
     {
@@ -919,7 +919,7 @@ class SMTP
      *
      * @param string $from The address the message is from
      *
-     * @return boolean
+     * @return bool
      */
     public function sendAndMail($from)
     {
@@ -931,7 +931,7 @@ class SMTP
      *
      * @param string $name The name to verify
      *
-     * @return boolean
+     * @return bool
      */
     public function verify($name)
     {
@@ -942,7 +942,7 @@ class SMTP
      * Send an SMTP NOOP command.
      * Used to keep keep-alives alive, doesn't actually do anything
      *
-     * @return boolean
+     * @return bool
      */
     public function noop()
     {
@@ -956,7 +956,7 @@ class SMTP
      * and _may_ be implemented in future
      * Implements from RFC 821: TURN <CRLF>
      *
-     * @return boolean
+     * @return bool
      */
     public function turn()
     {
@@ -970,7 +970,7 @@ class SMTP
      *
      * @param string $data The data to send
      *
-     * @return int|boolean The number of bytes sent to the server or false on error
+     * @return int|bool The number of bytes sent to the server or false on error
      */
     public function client_send($data)
     {
@@ -1121,7 +1121,7 @@ class SMTP
     /**
      * Enable or disable VERP address generation.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
      */
     public function setVerp($enabled = false)
     {
@@ -1131,7 +1131,7 @@ class SMTP
     /**
      * Get VERP address generation mode.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVerp()
     {

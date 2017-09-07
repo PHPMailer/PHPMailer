@@ -271,7 +271,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * @param string $sName
      * @param string $sType
      *
-     * @return boolean
+     * @return bool
      */
     public function setAddress($sAddress, $sName = '', $sType = 'to')
     {
