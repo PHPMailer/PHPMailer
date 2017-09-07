@@ -124,7 +124,7 @@ class OAuth
     public function getOauth64()
     {
         // Get a new token if it's not available or has expired
-        if (is_null($this->oauthToken) or $this->oauthToken->hasExpired()) {
+        if (null === $this->oauthToken or $this->oauthToken->hasExpired()) {
             $this->oauthToken = $this->getToken();
         }
         return base64_encode(

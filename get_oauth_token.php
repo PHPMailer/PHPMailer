@@ -114,7 +114,7 @@ switch ($providerName) {
         break;
 }
 
-if (is_null($provider)) {
+if (null === $provider) {
     exit('Provider missing');
 }
 

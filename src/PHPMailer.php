@@ -697,7 +697,7 @@ class PHPMailer
      */
     public function __construct($exceptions = null)
     {
-        if (!is_null($exceptions)) {
+        if (null !== $exceptions) {
             $this->exceptions = (boolean)$exceptions;
         }
         //Pick an appropriate debug output format automatically
@@ -736,7 +736,7 @@ class PHPMailer
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
         //Calling mail() with null params breaks
-        if (!$this->UseSendmailOptions or is_null($params)) {
+        if (!$this->UseSendmailOptions or null === $params) {
             $result = @mail($to, $subject, $body, $header);
         } else {
             $result = @mail($to, $subject, $body, $header, $params);
@@ -1134,7 +1134,7 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = null)
     {
-        if (is_null($patternselect)) {
+        if (null === $patternselect) {
             $patternselect = static::$validator;
         }
         if (is_callable($patternselect)) {
@@ -1699,12 +1699,12 @@ class PHPMailer
      */
     public function smtpConnect($options = null)
     {
-        if (is_null($this->smtp)) {
+        if (null === $this->smtp) {
             $this->smtp = $this->getSMTPInstance();
         }
 
         //If no options are provided, use whatever is set in the instance
-        if (is_null($options)) {
+        if (null === $options) {
             $options = $this->SMTPOptions;
         }
 
@@ -1810,7 +1810,7 @@ class PHPMailer
         // If we get here, all connection attempts have failed, so close connection hard
         $this->smtp->close();
         // As we've caught all exceptions, just report whatever the last one was
-        if ($this->exceptions and !is_null($lastexception)) {
+        if ($this->exceptions and null !== $lastexception) {
             throw $lastexception;
         }
         return false;
@@ -1821,7 +1821,7 @@ class PHPMailer
      */
     public function smtpClose()
     {
-        if (!is_null($this->smtp)) {
+        if (null !== $this->smtp) {
             if ($this->smtp->connected()) {
                 $this->smtp->quit();
                 $this->smtp->close();
@@ -2186,7 +2186,7 @@ class PHPMailer
             $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());
         }
         $result .= $this->headerLine('Message-ID', $this->lastMessageID);
-        if (!is_null($this->Priority)) {
+        if (null !== $this->Priority) {
             $result .= $this->headerLine('X-Priority', $this->Priority);
         }
         if ('' == $this->XMailer) {
@@ -2997,7 +2997,7 @@ class PHPMailer
         $start = '=?' . $this->CharSet . '?B?';
         $end = '?=';
         $encoded = '';
-        if (is_null($linebreak)) {
+        if (null === $linebreak) {
             $linebreak = static::$LE;
         }
 
@@ -3371,7 +3371,7 @@ class PHPMailer
     protected function setError($msg)
     {
         ++$this->error_count;
-        if ('smtp' == $this->Mailer and !is_null($this->smtp)) {
+        if ('smtp' == $this->Mailer and null !== $this->smtp) {
             $lasterror = $this->smtp->getError();
             if (!empty($lasterror['error'])) {
                 $msg .= $this->lang('smtp_error') . $lasterror['error'];
@@ -3507,7 +3507,7 @@ class PHPMailer
      */
     public function addCustomHeader($name, $value = null)
     {
-        if (is_null($value)) {
+        if (null === $value) {
             // Value passed in as name:value
             $this->CustomHeader[] = explode(':', $name, 2);
         } else {
@@ -3893,7 +3893,7 @@ class PHPMailer
      */
     public static function normalizeBreaks($text, $breaktype = null)
     {
-        if (is_null($breaktype)) {
+        if (null === $breaktype) {
             $breaktype = static::$LE;
         }
         // Normalise to \n

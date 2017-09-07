@@ -278,7 +278,7 @@ class SMTP
         static $streamok;
         //This is enabled by default since 5.0.0 but some providers disable it
         //Check this once and cache the result
-        if (is_null($streamok)) {
+        if (null === $streamok) {
             $streamok = function_exists('stream_socket_client');
         }
         // Clear errors to avoid confusion
@@ -502,7 +502,7 @@ class SMTP
                 return $this->sendCommand('Username', base64_encode($response), 235);
             case 'XOAUTH2':
                 //The OAuth instance must be set up prior to requesting auth.
-                if (is_null($OAuth)) {
+                if (null === $OAuth) {
                     return false;
                 }
                 $oauth = $OAuth->getOauth64();
