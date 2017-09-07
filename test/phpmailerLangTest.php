@@ -1,13 +1,12 @@
 <?php
 /**
- * PHPMailer - language file tests
+ * PHPMailer - language file tests.
  *
- * PHP version 5.5
+ * PHP version 5.5.
  *
- * @package   PHPMailer
  * @author    Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @author    Andy Prevost
- * @copyright 2010 - 2016 Marcus Bointon
+ * @copyright 2010 - 2017 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
@@ -15,8 +14,7 @@
 namespace PHPMailer\PHPMailer;
 
 /**
- * PHPMailer - PHP email transport unit test class
- * Performs authentication tests
+ * Check language files for missing or excess translations.
  */
 class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +26,7 @@ class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
     public $Mail;
 
     /**
-     * Default include path
+     * Default include path.
      *
      * @var string
      */
@@ -39,12 +37,12 @@ class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->Mail = new PHPMailer;
+        $this->Mail = new PHPMailer();
     }
 
     /**
-     * Test language files for missing and excess translations
-     * All languages are compared with English
+     * Test language files for missing and excess translations.
+     * All languages are compared with English.
      *
      * @group languages
      */

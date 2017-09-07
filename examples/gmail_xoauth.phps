@@ -56,20 +56,24 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
 //Create a new OAuth2 provider instance
-$provider = new Google([
-    'clientId' => $clientId,
-    'clientSecret' => $clientSecret
-]);
+$provider = new Google(
+    [
+        'clientId' => $clientId,
+        'clientSecret' => $clientSecret,
+    ]
+);
 
 //Pass the OAuth provider instance to PHPMailer
 $mail->setOAuth(
-    new OAuth([
-        'provider' => $provider,
-        'clientId' => $clientId,
-        'clientSecret' => $clientSecret,
-        'refreshToken' => $refreshToken,
-        'userName' => $email
-    ])
+    new OAuth(
+        [
+            'provider' => $provider,
+            'clientId' => $clientId,
+            'clientSecret' => $clientSecret,
+            'refreshToken' => $refreshToken,
+            'userName' => $email,
+        ]
+    )
 );
 
 //Set who the message is to be sent from

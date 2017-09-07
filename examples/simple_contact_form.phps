@@ -38,8 +38,8 @@ if (array_key_exists('to', $_POST)) {
     //Validate to address
     //Never allow arbitrary input for the 'to' address as it will turn your form into a spam gateway!
     //Substitute appropriate addresses from your own domain, or simply use a single, fixed address
-    if (array_key_exists('to', $_POST) and in_array($_POST['to'], ['sales','support','accounts'])) {
-        $to = $_POST['to'].'@example.com';
+    if (array_key_exists('to', $_POST) and in_array($_POST['to'], ['sales', 'support', 'accounts'])) {
+        $to = $_POST['to'] . '@example.com';
     } else {
         $to = 'support@example.com';
     }
@@ -59,7 +59,7 @@ if (array_key_exists('to', $_POST)) {
         //It's important not to use the submitter's address as the from address as it's forgery,
         //which will cause your messages to fail SPF checks.
         //Use an address in your own domain as the from address, put the submitter's address in a reply-to
-        $mail->setFrom('contact@example.com', (empty($name)? 'Contact form': $name));
+        $mail->setFrom('contact@example.com', (empty($name) ? 'Contact form' : $name));
         $mail->addAddress($to);
         $mail->addReplyTo($email, $name);
         $mail->Subject = 'Contact form: ' . $subject;
@@ -70,7 +70,7 @@ if (array_key_exists('to', $_POST)) {
             $msg .= "Message sent!";
         }
     }
-}?>
+} ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -96,6 +96,6 @@ if (array_key_exists('to', $_POST)) {
     </form>
 <?php } else {
     echo $msg;
-}?>
+} ?>
 </body>
 </html>

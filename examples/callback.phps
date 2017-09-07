@@ -13,12 +13,13 @@ require '../vendor/autoload.php';
  * Example PHPMailer callback function.
  * This is a global function, but you can also pass a closure (or any other callable)
  * to the `action_function` property.
- * @param bool $result        result of the send action
- * @param array   $to            email address of the recipient
- * @param array   $cc            cc email addresses
- * @param array   $bcc           bcc email addresses
- * @param string  $subject       the subject
- * @param string  $body          the email body
+ *
+ * @param bool   $result  result of the send action
+ * @param array  $to      email address of the recipient
+ * @param array  $cc      cc email addresses
+ * @param array  $bcc     bcc email addresses
+ * @param string $subject the subject
+ * @param string $body    the email body
  */
 function callbackAction($result, $to, $cc, $bcc, $subject, $body)
 {

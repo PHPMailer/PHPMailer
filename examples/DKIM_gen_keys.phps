@@ -40,7 +40,7 @@ if (file_exists($privatekeyfile)) {
         [
             'digest_alg' => 'sha256',
             'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
         ]
     );
     //Save private key
@@ -71,7 +71,7 @@ $publickey = str_replace(["\r", "\n"], '', $publickey);
 $keyparts = str_split($publickey, 253); //Becomes 255 when quotes are included
 //Quote each chunk
 foreach ($keyparts as $keypart) {
-    $dnsvalue .= '"'.trim($keypart).'" ';
+    $dnsvalue .= '"' . trim($keypart) . '" ';
 }
 echo "\n\nDNS key:\n\n" . trim($dnskey);
 echo "\n\nDNS value:\n\n" . trim($dnsvalue);
