@@ -803,7 +803,7 @@ class PHPMailer
     /**
      * Sets message type to HTML or plain.
      *
-     * @param bool $isHtml True for HTML mode.
+     * @param bool $isHtml True for HTML mode
      */
     public function isHTML($isHtml = true)
     {
@@ -2620,10 +2620,10 @@ class PHPMailer
      * Never use a user-supplied path to a file!
      * Returns false if the file could not be found or read.
      *
-     * @param string $path Path to the attachment.
-     * @param string $name Overrides the attachment name.
-     * @param string $encoding File encoding (see $Encoding).
-     * @param string $type File extension (MIME) type.
+     * @param string $path Path to the attachment
+     * @param string $name Overrides the attachment name
+     * @param string $encoding File encoding (see $Encoding)
+     * @param string $type File extension (MIME) type
      * @param string $disposition Disposition to use
      *
      * @throws Exception
@@ -2871,9 +2871,9 @@ class PHPMailer
      * Encode a header value (not including its label) optimally.
      * Picks shortest of Q, B, or none. Result includes folding if needed.
      *
-     * @param string $str The header value to encode.
-     * @param string $position What context the string will be used in.
-     * See RFC822 definitions for phrase, comment and text.
+     * @param string $str The header value to encode
+     * @param string $position What context the string will be used in
+     * See RFC822 definitions for phrase, comment and text
      *
      * @return string
      */
@@ -3095,10 +3095,10 @@ class PHPMailer
      * This method can be used to attach ascii or binary data,
      * such as a BLOB record from a database.
      *
-     * @param string $string String attachment data.
-     * @param string $filename Name of the attachment.
-     * @param string $encoding File encoding (see $Encoding).
-     * @param string $type File extension (MIME) type.
+     * @param string $string String attachment data
+     * @param string $filename Name of the attachment
+     * @param string $encoding File encoding (see $Encoding)
+     * @param string $type File extension (MIME) type
      * @param string $disposition Disposition to use
      */
     public function addStringAttachment(
@@ -3134,12 +3134,12 @@ class PHPMailer
      * the HTML refers to using the $cid value.
      * Never use a user-supplied path to a file!
      *
-     * @param string $path Path to the attachment.
+     * @param string $path Path to the attachment
      * @param string $cid Content ID of the attachment; Use this to reference
-     *        the content when using an embedded image in HTML.
-     * @param string $name Overrides the attachment name.
-     * @param string $encoding File encoding (see $Encoding).
-     * @param string $type File MIME type.
+     *        the content when using an embedded image in HTML
+     * @param string $name Overrides the attachment name
+     * @param string $encoding File encoding (see $Encoding)
+     * @param string $type File MIME type
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
@@ -3181,12 +3181,12 @@ class PHPMailer
      * Be sure to set the $type to an image type for images:
      * JPEG images use 'image/jpeg', GIF uses 'image/gif', PNG uses 'image/png'.
      *
-     * @param string $string The attachment binary data.
+     * @param string $string The attachment binary data
      * @param string $cid Content ID of the attachment; Use this to reference
-     *        the content when using an embedded image in HTML.
+     *        the content when using an embedded image in HTML
      * @param string $name
-     * @param string $encoding File encoding (see $Encoding).
-     * @param string $type MIME type.
+     * @param string $encoding File encoding (see $Encoding)
+     * @param string $type MIME type
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
@@ -3887,7 +3887,7 @@ class PHPMailer
      * Defaults to CRLF (for message bodies) and preserves consecutive breaks.
      *
      * @param string $text
-     * @param string $breaktype What kind of line break to use; defaults to static::$LE.
+     * @param string $breaktype What kind of line break to use; defaults to static::$LE
      *
      * @return string
      */

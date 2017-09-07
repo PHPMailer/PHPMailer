@@ -177,7 +177,7 @@ class SMTP
         'error' => '',
         'detail' => '',
         'smtp_code' => '',
-        'smtp_code_ex' => ''
+        'smtp_code_ex' => '',
     ];
 
     /**
@@ -1159,7 +1159,7 @@ class SMTP
     /**
      * Set debug output method.
      *
-     * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it.
+     * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it
      */
     public function setDebugOutput($method = 'echo')
     {
@@ -1219,8 +1219,8 @@ class SMTP
     /**
      * Reports an error number and string.
      *
-     * @param int $errno The error number returned by PHP.
-     * @param string $errmsg The error message returned by PHP.
+     * @param int $errno The error number returned by PHP
+     * @param string $errmsg The error message returned by PHP
      * @param string $errfile The file the error occurred in
      * @param int $errline The line number the error occurred on
      */
