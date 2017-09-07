@@ -47,14 +47,14 @@ class SMTP
     /**
      * The SMTP port to use if one is not specified.
      *
-     * @var integer
+     * @var int
      */
     const DEFAULT_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
      *
-     * @var integer
+     * @var int
      */
     const MAX_LINE_LENGTH = 998;
 
@@ -92,7 +92,7 @@ class SMTP
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
      *
-     * @var integer
+     * @var int
      */
     public $do_debug = self::DEBUG_OFF;
 
@@ -131,7 +131,7 @@ class SMTP
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      *
      * @see http://tools.ietf.org/html/rfc2821#section-4.5.3.2
-     * @var integer
+     * @var int
      */
     public $Timeout = 300;
 
@@ -139,7 +139,7 @@ class SMTP
      * How long to wait for commands to complete, in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      *
-     * @var integer
+     * @var int
      */
     public $Timelimit = 300;
 
@@ -211,7 +211,7 @@ class SMTP
      * Output debugging info via a user-selected method.
      *
      * @param string $str Debug string to output
-     * @param integer $level The debug level of this message; see DEBUG_* constants
+     * @param int $level The debug level of this message; see DEBUG_* constants
      *
      * @see SMTP::$Debugoutput
      * @see SMTP::$do_debug
@@ -267,8 +267,8 @@ class SMTP
      * Connect to an SMTP server.
      *
      * @param string $host SMTP server IP or host name
-     * @param integer $port The port number to connect to
-     * @param integer $timeout How long to wait for the connection to open
+     * @param int $port The port number to connect to
+     * @param int $timeout How long to wait for the connection to open
      * @param array $options An array of options for stream_context_create()
      *
      * @return boolean
@@ -850,7 +850,7 @@ class SMTP
      *
      * @param string $command The command name - not sent to the server
      * @param string $commandstring The actual command to send
-     * @param integer|array $expect One or more expected integer success codes
+     * @param int|array $expect One or more expected integer success codes
      *
      * @return boolean True on success.
      */
@@ -970,7 +970,7 @@ class SMTP
      *
      * @param string $data The data to send
      *
-     * @return integer|boolean The number of bytes sent to the server or false on error
+     * @return int|boolean The number of bytes sent to the server or false on error
      */
     public function client_send($data)
     {
@@ -1179,7 +1179,7 @@ class SMTP
     /**
      * Set debug output level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setDebugLevel($level = 0)
     {
@@ -1189,7 +1189,7 @@ class SMTP
     /**
      * Get debug output level.
      *
-     * @return integer
+     * @return int
      */
     public function getDebugLevel()
     {
@@ -1199,7 +1199,7 @@ class SMTP
     /**
      * Set SMTP timeout.
      *
-     * @param integer $timeout
+     * @param int $timeout
      */
     public function setTimeout($timeout = 0)
     {
@@ -1209,7 +1209,7 @@ class SMTP
     /**
      * Get SMTP timeout.
      *
-     * @return integer
+     * @return int
      */
     public function getTimeout()
     {
@@ -1219,10 +1219,10 @@ class SMTP
     /**
      * Reports an error number and string.
      *
-     * @param integer $errno The error number returned by PHP.
+     * @param int $errno The error number returned by PHP.
      * @param string $errmsg The error message returned by PHP.
      * @param string $errfile The file the error occurred in
-     * @param integer $errline The line number the error occurred on
+     * @param int $errline The line number the error occurred on
      */
     protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0)
     {

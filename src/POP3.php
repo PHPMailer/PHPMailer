@@ -51,14 +51,14 @@ class POP3
     /**
      * Default POP3 port number.
      *
-     * @var integer
+     * @var int
      */
     const DEFAULT_PORT = 110;
 
     /**
      * Default timeout in seconds.
      *
-     * @var integer
+     * @var int
      */
     const DEFAULT_TIMEOUT = 30;
 
@@ -66,7 +66,7 @@ class POP3
      * Debug display level.
      * Options: 0 = no, 1+ = yes
      *
-     * @var integer
+     * @var int
      */
     public $do_debug = 0;
 
@@ -80,14 +80,14 @@ class POP3
     /**
      * POP3 port number.
      *
-     * @var integer
+     * @var int
      */
     public $port;
 
     /**
      * POP3 Timeout Value in seconds.
      *
-     * @var integer
+     * @var int
      */
     public $tval;
 
@@ -135,11 +135,11 @@ class POP3
      * Simple static wrapper for all-in-one POP before SMTP
      *
      * @param string $host
-     * @param integer|boolean $port The port number to connect to
-     * @param integer|boolean $timeout The timeout value
+     * @param int|boolean $port The port number to connect to
+     * @param int|boolean $timeout The timeout value
      * @param string $username
      * @param string $password
-     * @param integer $debug_level
+     * @param int $debug_level
      *
      * @return boolean
      */
@@ -161,11 +161,11 @@ class POP3
      * appropriate for POP-before SMTP authorisation.
      *
      * @param string $host The hostname to connect to
-     * @param integer|boolean $port The port number to connect to
-     * @param integer|boolean $timeout The timeout value
+     * @param int|boolean $port The port number to connect to
+     * @param int|boolean $timeout The timeout value
      * @param string $username
      * @param string $password
-     * @param integer $debug_level
+     * @param int $debug_level
      *
      * @return boolean
      */
@@ -207,8 +207,8 @@ class POP3
      * Connect to a POP3 server.
      *
      * @param string $host
-     * @param integer|boolean $port
-     * @param integer $tval
+     * @param int|boolean $port
+     * @param int $tval
      *
      * @return boolean
      */
@@ -315,7 +315,7 @@ class POP3
      * Get a response from the POP3 server.
      * $size is the maximum number of bytes to retrieve
      *
-     * @param integer $size
+     * @param int $size
      *
      * @return string
      */
@@ -333,7 +333,7 @@ class POP3
      *
      * @param string $string
      *
-     * @return integer
+     * @return int
      */
     protected function sendString($string)
     {
@@ -395,10 +395,10 @@ class POP3
     /**
      * POP3 connection error handler.
      *
-     * @param integer $errno
+     * @param int $errno
      * @param string $errstr
      * @param string $errfile
-     * @param integer $errline
+     * @param int $errline
      */
     protected function catchWarning($errno, $errstr, $errfile, $errline)
     {

@@ -36,7 +36,7 @@ class PHPMailer
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
      * When null, the header is not set at all.
      *
-     * @var integer
+     * @var int
      */
     public $Priority = null;
 
@@ -155,7 +155,7 @@ class PHPMailer
      * Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
      * @see static::STD_LINE_LENGTH
      *
-     * @var integer
+     * @var int
      */
     public $WordWrap = 0;
 
@@ -235,7 +235,7 @@ class PHPMailer
     /**
      * The default SMTP server port.
      *
-     * @var integer
+     * @var int
      */
     public $Port = 25;
 
@@ -316,7 +316,7 @@ class PHPMailer
      * The SMTP server timeout in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      *
-     * @var integer
+     * @var int
      */
     public $Timeout = 300;
 
@@ -330,7 +330,7 @@ class PHPMailer
      * * `3` As 2 plus connection status
      * * `4` Low-level data output
      *
-     * @var integer
+     * @var int
      * @see SMTP::$do_debug
      */
     public $SMTPDebug = 0;
@@ -594,7 +594,7 @@ class PHPMailer
     /**
      * The number of errors encountered.
      *
-     * @var integer
+     * @var int
      */
     protected $error_count = 0;
 
@@ -651,21 +651,21 @@ class PHPMailer
     /**
      * Error severity: message only, continue processing.
      *
-     * @var integer
+     * @var int
      */
     const STOP_MESSAGE = 0;
 
     /**
      * Error severity: message, likely ok to continue processing.
      *
-     * @var integer
+     * @var int
      */
     const STOP_CONTINUE = 1;
 
     /**
      * Error severity: message, plus full stop, critical error reached.
      *
-     * @var integer
+     * @var int
      */
     const STOP_CRITICAL = 2;
 
@@ -679,14 +679,14 @@ class PHPMailer
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
      *
-     * @var integer
+     * @var int
      */
     const MAX_LINE_LENGTH = 998;
 
     /**
      * The lower maximum line length allowed by RFC 2822 section 2.1.1
      *
-     * @var integer
+     * @var int
      */
     const STD_LINE_LENGTH = 78;
 
@@ -1958,7 +1958,7 @@ class PHPMailer
      * Original written by philippe.
      *
      * @param string $message The message to wrap
-     * @param integer $length The line length to wrap to
+     * @param int $length The line length to wrap to
      * @param boolean $qp_mode Whether to run in Quoted-Printable mode
      *
      * @return string
@@ -2059,9 +2059,9 @@ class PHPMailer
      * Original written by Colin Brown.
      *
      * @param string $encodedText utf-8 QP text
-     * @param integer $maxLength Find the last character boundary prior to this length
+     * @param int $maxLength Find the last character boundary prior to this length
      *
-     * @return integer
+     * @return int
      */
     public function utf8CharBoundary($encodedText, $maxLength)
     {
@@ -2594,7 +2594,7 @@ class PHPMailer
      * Format a header line.
      *
      * @param string $name
-     * @param string|integer $value
+     * @param string|int $value
      *
      * @return string
      */
@@ -3802,7 +3802,7 @@ class PHPMailer
      * Drop-in replacement for pathinfo(), but multibyte- and cross-platform-safe
      *
      * @param string $path A filename or path, does not need to exist as a file
-     * @param integer|string $options Either a PATHINFO_* constant,
+     * @param int|string $options Either a PATHINFO_* constant,
      *      or a string name to return only the specified piece
      *
      * @see    http://www.php.net/manual/en/function.pathinfo.php#107461
