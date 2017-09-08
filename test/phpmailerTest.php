@@ -129,7 +129,6 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * Build the body of the message in the appropriate format.
      */
@@ -2081,7 +2080,6 @@ EOT;
         $this->assertEquals(PHPMailer::normalizeBreaks($b2), $t1, 'Failed to normalize line breaks (2)');
         $this->assertEquals(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
     }
-
 
     public function testBadSMTP()
     {

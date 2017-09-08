@@ -4,6 +4,7 @@
  * PHP Version 5.5.
  *
  * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ *
  * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
@@ -101,14 +102,17 @@ class SMTP
      * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
-     * <code>
+     *
+     * ```php
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
-     * </code>
+     * ```
+     *
      * Alternatively, you can pass in an instance of a PSR-3 compatible logger, though only `debug`
      * level output is used:
-     * <code>
+     *
+     * ```php
      * $mail->Debugoutput = new myPsr3Logger;
-     * </code>
+     * ```
      *
      * @var string|callable|\Psr\Log\LoggerInterface
      */
@@ -144,9 +148,11 @@ class SMTP
     public $Timelimit = 300;
 
     /**
-     * @var array Patterns to extract an SMTP transaction id from reply to a DATA command.
+     * Patterns to extract an SMTP transaction id from reply to a DATA command.
      * The first capture group in each regex will be used as the ID.
      * MS ESMTP returns the message ID, which may not be correct for internal tracking.
+     *
+     * @var string[]
      */
     protected $smtp_transaction_id_patterns = [
         'exim' => '/[0-9]{3} OK id=(.*)/',
@@ -156,8 +162,10 @@ class SMTP
     ];
 
     /**
-     * @var string|bool|null The last transaction ID issued in response to a DATA command,
-     * if one was detected
+     * The last transaction ID issued in response to a DATA command,
+     * if one was detected.
+     *
+     * @var string|bool|null
      */
     protected $last_smtp_transaction_id;
 

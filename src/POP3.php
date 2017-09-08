@@ -133,7 +133,7 @@ class POP3
     /**
      * Simple static wrapper for all-in-one POP before SMTP.
      *
-     * @param string   $host
+     * @param string   $host    The hostname to connect to
      * @param int|bool $port    The port number to connect to
      * @param int|bool $timeout The timeout value
      * @param string   $username
