@@ -35,14 +35,14 @@ $mail->SMTPSecure = 'tls';
 
 //Custom connection options
 //Note that these settings are INSECURE
-$mail->SMTPOptions = array (
+$mail->SMTPOptions = array(
     'ssl' => [
-        'verify_peer'  => true,
+        'verify_peer' => true,
         'verify_depth' => 3,
         'allow_self_signed' => true,
         'peer_name' => 'smtp.example.com',
-        'cafile' => '/etc/ssl/ca_cert.pem'
-    ]
+        'cafile' => '/etc/ssl/ca_cert.pem',
+    ],
 );
 
 //Whether to use SMTP authentication

@@ -20,8 +20,9 @@ class myPHPMailer extends PHPMailer
 {
     /**
      * myPHPMailer constructor.
-     * @param boolean|null $exceptions
-     * @param string $body A default HTML message body
+     *
+     * @param bool|null $exceptions
+     * @param string    $body A default HTML message body
      */
     public function __construct($exceptions, $body = '')
     {
@@ -48,7 +49,8 @@ class myPHPMailer extends PHPMailer
     {
         $this->Subject = '[Yay for me!] ' . $this->Subject;
         $r = parent::send();
-        echo "I sent a message with subject ". $this->Subject;
+        echo "I sent a message with subject " . $this->Subject;
+
         return $r;
     }
 }
@@ -64,5 +66,5 @@ try {
     $mail->send(); //no need to check for errors - the exception handler will do it
 } catch (Exception $e) {
     //Note that this is catching the PHPMailer Exception class, not the global \Exception type!
-    echo "Caught a ".get_class($e).": " . $e->getMessage();
+    echo "Caught a " . get_class($e) . ": " . $e->getMessage();
 }
