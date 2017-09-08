@@ -1687,10 +1687,9 @@ class PHPMailer
     /**
      * Send mail via SMTP.
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
-     * Uses the PHPMailerSMTP class by default.
      *
-     * @see    PHPMailer::getSMTPInstance() to use a different class.
-     * @uses   SMTP
+     * @see PHPMailer::setSMTPInstance() to use a different class.
+     * @uses \PHPMailer\PHPMailer\SMTP
      *
      * @param string $header The message headers
      * @param string $body   The message body
