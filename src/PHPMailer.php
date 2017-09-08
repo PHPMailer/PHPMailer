@@ -348,14 +348,17 @@ class PHPMailer
      * * `error_log` Output to error log as configured in php.ini
      * By default PHPMailer will use `echo` if run from a `cli` or `cli-server` SAPI, `html` otherwise.
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
-     * <code>
+     *
+     * ```php
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
-     * </code>
+     * ```
+     *
      * Alternatively, you can pass in an instance of a PSR-3 compatible logger, though only `debug`
      * level output is used:
-     * <code>
+     *
+     * ```php
      * $mail->Debugoutput = new myPsr3Logger;
-     * </code>
+     * ```
      *
      * @see SMTP::$Debugoutput
      *
@@ -434,7 +437,7 @@ class PHPMailer
      *
      * @example 'example.com'
      *
-     * @var     string
+     * @var string
      */
     public $DKIM_domain = '';
 
@@ -737,11 +740,11 @@ class PHPMailer
      * claims to be sendmail), don't pass params (not a perfect fix,
      * but it will do).
      *
-     * @param string $to      To
-     * @param string $subject Subject
-     * @param string $body    Message Body
-     * @param string $header  Additional Header(s)
-     * @param ?string $params Params
+     * @param string      $to      To
+     * @param string      $subject Subject
+     * @param string      $body    Message Body
+     * @param string      $header  Additional Header(s)
+     * @param string|null $params  Params
      *
      * @return bool
      */
@@ -1161,11 +1164,13 @@ class PHPMailer
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
      * * `noregex` Don't use a regex: super fast, really dumb.
      * Alternatively you may pass in a callable to inject your own validator, for example:
-     * <code>
+     *
+     * ```php
      * PHPMailer::validateAddress('user@example.com', function($address) {
      *     return (strpos($address, '@') !== false);
      * });
-     * </code>
+     * ```
+     *
      * You can also set the PHPMailer::$validator static to a callable, allowing built-in methods to use your validator.
      *
      * @param string          $address       The email address to check
@@ -1682,10 +1687,9 @@ class PHPMailer
     /**
      * Send mail via SMTP.
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
-     * Uses the PHPMailerSMTP class by default.
      *
-     * @see    PHPMailer::getSMTPInstance() to use a different class.
-     * @uses   SMTP
+     * @see PHPMailer::setSMTPInstance() to use a different class.
+     * @uses \PHPMailer\PHPMailer\SMTP
      *
      * @param string $header The message headers
      * @param string $body   The message body
@@ -3599,8 +3603,8 @@ class PHPMailer
      * $name value can be overloaded to contain
      * both header name and value (name:value).
      *
-     * @param string $name Custom header name
-     * @param ?string $value Header value
+     * @param string      $name  Custom header name
+     * @param string|null $value Header value
      */
     public function addCustomHeader($name, $value = null)
     {
@@ -3636,7 +3640,7 @@ class PHPMailer
      * @param string        $message  HTML message string
      * @param string        $basedir  Absolute path to a base directory to prepend to relative paths to images
      * @param bool|callable $advanced Whether to use the internal HTML to text converter
-     *                                or your own custom converter @see PHPMailer::html2text().
+     *                                or your own custom converter @see PHPMailer::html2text()
      *
      * @return string $message The transformed message Body
      */
@@ -3730,7 +3734,8 @@ class PHPMailer
      * Note - older versions of this function used a bundled advanced converter
      * which was removed for license reasons in #232.
      * Example usage:
-     * <code>
+     *
+     * ```php
      * // Use default conversion
      * $plain = $mail->html2text($html);
      * // Use your own custom converter
@@ -3738,11 +3743,11 @@ class PHPMailer
      *     $converter = new MyHtml2text($html);
      *     return $converter->get_text();
      * });
-     * </code>
+     * ```
      *
      * @param string        $html     The HTML text to convert
      * @param bool|callable $advanced Any boolean value to use the internal converter,
-     *                                or provide your own callable for custom conversion.
+     *                                or provide your own callable for custom conversion
      *
      * @return string
      */
