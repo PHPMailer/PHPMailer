@@ -1106,7 +1106,7 @@ class PHPMailer
      *
      * @param string $address
      * @param string $name
-     * @param bool   $auto Whether to also set the Sender address, defaults to true
+     * @param bool   $auto    Whether to also set the Sender address, defaults to true
      *
      * @throws Exception
      *
@@ -1689,6 +1689,7 @@ class PHPMailer
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
      *
      * @see PHPMailer::setSMTPInstance() to use a different class.
+     *
      * @uses \PHPMailer\PHPMailer\SMTP
      *
      * @param string $header The message headers
