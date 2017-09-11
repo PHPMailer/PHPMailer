@@ -473,6 +473,8 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
+     *   string  $extra         extra information of possible use
+     *                          "smtp_transaction_id' => last smtp transaction id
      *
      * @var string
      */

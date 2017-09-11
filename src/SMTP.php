@@ -159,7 +159,8 @@ class SMTP
         'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
         'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/',
         'Microsoft_ESMTP' => '/[0-9]{3} 2.[0-9].0 (.*)@(?:.*) Queued mail for delivery/',
-    ];
+        'Amazon_SES' => '/[0-9]{3} Ok (.*)/']
+    ;
 
     /**
      * The last transaction ID issued in response to a DATA command,
@@ -1291,6 +1292,7 @@ class SMTP
             foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
                 if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
                     $this->last_smtp_transaction_id = $matches[1];
+                    break;
                 }
             }
         }
