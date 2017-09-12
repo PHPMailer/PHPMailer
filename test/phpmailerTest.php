@@ -1938,6 +1938,7 @@ EOT;
     {
         //May have been altered by earlier tests, can interfere with line break format
         $this->Mail->isSMTP();
+        $this->Mail->preSend();
         $unixsrc = "hello\nWorld\nAgain\n";
         $macsrc = "hello\rWorld\rAgain\r";
         $windowssrc = "hello\r\nWorld\r\nAgain\r\n";
@@ -1974,6 +1975,7 @@ EOT;
     {
         //May have been altered by earlier tests, can interfere with line break format
         $this->Mail->isSMTP();
+        $this->Mail->preSend();
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
