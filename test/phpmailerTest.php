@@ -1926,6 +1926,8 @@ EOT;
         $this->Mail->DKIM_selector = 'phpmailer';
         $this->Mail->DKIM_passphrase = ''; //key is not encrypted
         $this->assertTrue($this->Mail->send(), 'DKIM signed mail failed');
+        $this->Mail->isMail();
+        $this->assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
         unlink($privatekeyfile);
     }
 
