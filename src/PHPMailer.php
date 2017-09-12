@@ -1689,6 +1689,7 @@ class PHPMailer
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
      *
      * @see PHPMailer::setSMTPInstance() to use a different class.
+     *
      * @uses \PHPMailer\PHPMailer\SMTP
      *
      * @param string $header The message headers
@@ -1762,7 +1763,7 @@ class PHPMailer
      *
      * @throws Exception
      *
-     * @uses   SMTP
+     * @uses \PHPMailer\PHPMailer\SMTP
      *
      * @return bool
      */
