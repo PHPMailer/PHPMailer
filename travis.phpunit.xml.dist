@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+         bootstrap="vendor/autoload.php"
          verbose="false"
          stopOnError="false"
          stopOnFailure="false"
@@ -8,7 +9,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         colors="false"
+         colors="true"
          forceCoversAnnotation="false"
          processIsolation="false">
     <testsuites>
@@ -16,6 +17,9 @@
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+        <listener class="PHPMailer\Test\DebugLogTestListener" />
+    </listeners>
     <groups>
         <exclude>
             <group>languages</group>

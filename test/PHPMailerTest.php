@@ -70,6 +70,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         }
         $this->Mail = new PHPMailer();
         $this->Mail->SMTPDebug = 3; //Full debug output
+        $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';

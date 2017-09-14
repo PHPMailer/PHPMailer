@@ -40,7 +40,7 @@ before_script:
     fi
 
 script:
-  - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist --bootstrap ./vendor/autoload.php
+  - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
   - if [ "$CS_CHECK" = 1 ]; then ./vendor/bin/php-cs-fixer --diff --dry-run --verbose fix; fi
 
 after_script:
