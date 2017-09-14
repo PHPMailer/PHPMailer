@@ -2846,7 +2846,9 @@ class PHPMailer
                     $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
-                $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
+                if (!empty($cid)) {
+                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
+                }
 
                 // If a filename contains any of these chars, it should be quoted,
                 // but not otherwise: RFC2183 & RFC2045 5.1
