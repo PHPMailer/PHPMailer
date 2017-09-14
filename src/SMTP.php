@@ -159,7 +159,7 @@ class SMTP
         'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
         'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/',
         'Microsoft_ESMTP' => '/[0-9]{3} 2.[0-9].0 (.*)@(?:.*) Queued mail for delivery/',
-        'Amazon_SES' => '/[0-9]{3} Ok (.*)/'
+        'Amazon_SES' => '/[0-9]{3} Ok (.*)/',
     ];
 
     /**
