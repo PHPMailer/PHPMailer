@@ -2740,7 +2740,7 @@ class PHPMailer
                 4 => $type,
                 5 => false, // isStringAttachment
                 6 => $disposition,
-                7 => 0,
+                7 => $name,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -2831,9 +2831,7 @@ class PHPMailer
                     $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
-                if ('inline' == $disposition) {
-                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
-                }
+                $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
 
                 // If a filename contains any of these chars, it should be quoted,
                 // but not otherwise: RFC2183 & RFC2045 5.1
