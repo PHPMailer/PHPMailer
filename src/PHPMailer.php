@@ -2372,16 +2372,18 @@ class PHPMailer
      */
     protected function generateId()
     {
-        $len = 23;
+        $len = 32; //32 bytes = 256 bits
         if (function_exists('random_bytes')) {
             $bytes = random_bytes($len);
         } elseif (function_exists('openssl_random_pseudo_bytes')) {
             $bytes = openssl_random_pseudo_bytes($len);
         } else {
-            $bytes = uniqid((string) mt_rand(), true);
+            //Use a hash to force the length to the same as the other methods
+            $bytes = hash('sha256', uniqid((string) mt_rand(), true), true);
         }
 
-        return hash('sha256', $bytes);
+        //We don't care about messing up base64 format here, just want a random string
+        return str_replace(['=','+','/'], '', base64_encode(hash('sha256', $bytes, true)));
     }
 
     /**
