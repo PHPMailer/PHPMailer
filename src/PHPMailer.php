@@ -1106,7 +1106,7 @@ class PHPMailer
      *
      * @param string $address
      * @param string $name
-     * @param bool   $auto Whether to also set the Sender address, defaults to true
+     * @param bool   $auto    Whether to also set the Sender address, defaults to true
      *
      * @throws Exception
      *

@@ -24,6 +24,7 @@
         "ext-ctype": "*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.2",
         "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "4.*",
         "zendframework/zend-serializer": "2.7.*",
