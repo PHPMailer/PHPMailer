@@ -1,6 +1,17 @@
 # PHPMailer Change Log
 
-## Version 6.0
+## Version 6.0.1 (September 14th 2017)
+* Use shorter Message-ID headers (with more entropy) to avoid iCloud blackhole bug
+* Switch to Symfony code style (though it's not well defined)
+* CI builds now apply syntax & code style checks, so make your PRs tidy!
+* CI code coverage only applied on latest version of PHP to speed up builds (thanks to @Slamdunk for these CI changes)
+* Remove `composer.lock` - it's important that libraries break early; keeping it is for apps
+* Rename test scripts to PSR-4 spec
+* Make content-id values settable on attachments, not just embedded items
+* Add SMTP transaction IDs to callbacks & allow for future expansion
+* Expand test coverage
+
+## Version 6.0 (August 28th 2017)
 This is a major update that breaks backwards compatibility.
 
 * **Requires PHP 5.5 or later**
