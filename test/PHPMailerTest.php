@@ -10,47 +10,50 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\PHPMailer;
+namespace PHPMailer\Test;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
  */
-class PHPMailerTest extends \PHPUnit_Framework_TestCase
+final class PHPMailerTest extends TestCase
 {
     /**
      * Holds the PHPMailer instance.
      *
      * @var PHPMailer
      */
-    public $Mail;
+    private $Mail;
 
     /**
      * Holds the SMTP mail host.
      *
      * @var string
      */
-    public $Host = '';
+    private $Host = '';
 
     /**
      * Holds the change log.
      *
      * @var string[]
      */
-    public $ChangeLog = [];
+    private $ChangeLog = [];
 
     /**
      * Holds the note log.
      *
      * @var string[]
      */
-    public $NoteLog = [];
+    private $NoteLog = [];
 
     /**
      * Default include path.
      *
      * @var string
      */
-    public $INCLUDE_DIR = '..';
+    private $INCLUDE_DIR = '..';
 
     /**
      * PIDs of any processes we need to kill.
@@ -62,7 +65,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Run before each test is started.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
@@ -117,7 +120,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Run after each test is completed.
      */
-    public function tearDown()
+    protected function tearDown()
     {
         // Clean global variables
         $this->Mail = null;
@@ -133,7 +136,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Build the body of the message in the appropriate format.
      */
-    public function buildBody()
+    private function buildBody()
     {
         $this->checkChanges();
 
@@ -210,7 +213,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Check which default settings have been changed for the report.
      */
-    public function checkChanges()
+    private function checkChanges()
     {
         if (3 != $this->Mail->Priority) {
             $this->addChange('Priority', $this->Mail->Priority);
@@ -247,7 +250,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * @param string $sName
      * @param string $sNewValue
      */
-    public function addChange($sName, $sNewValue)
+    private function addChange($sName, $sNewValue)
     {
         $this->ChangeLog[] = [$sName, $sNewValue];
     }
@@ -257,7 +260,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $sValue
      */
-    public function addNote($sValue)
+    private function addNote($sValue)
     {
         $this->NoteLog[] = $sValue;
     }
@@ -271,7 +274,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      *
      * @return bool
      */
-    public function setAddress($sAddress, $sName = '', $sType = 'to')
+    private function setAddress($sAddress, $sName = '', $sType = 'to')
     {
         switch ($sType) {
             case 'to':
