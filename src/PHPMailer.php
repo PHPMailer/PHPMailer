@@ -473,6 +473,8 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
+     *   string  $extra         extra information of possible use
+     *                          "smtp_transaction_id' => last smtp transaction id
      *
      * @var string
      */
@@ -1530,7 +1532,8 @@ class PHPMailer
                     $this->bcc,
                     $this->Subject,
                     $body,
-                    $this->From
+                    $this->From,
+                    []
                 );
                 if (0 !== $result) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
@@ -1551,7 +1554,8 @@ class PHPMailer
                 $this->bcc,
                 $this->Subject,
                 $body,
-                $this->From
+                $this->From,
+                []
             );
             if (0 !== $result) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
@@ -1638,11 +1642,11 @@ class PHPMailer
         if ($this->SingleTo and count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
-                $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+                $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From,[]);
             }
         } else {
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
-            $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
+            $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From,[]);
         }
         if (isset($old_from)) {
             ini_set('sendmail_from', $old_from);
@@ -1726,7 +1730,8 @@ class PHPMailer
                 } else {
                     $isSent = true;
                 }
-                $this->doCallback($isSent, [$to[0]], [], [], $this->Subject, $body, $this->From);
+
+                $callbacks[] = ['issent'=>$isSent,'to'=>$to[0]];
             }
         }
 
@@ -1734,12 +1739,22 @@ class PHPMailer
         if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
             throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
+        
+        $smtp_transaction_id = $this->smtp->getLastTransactionID();
+        
         if ($this->SMTPKeepAlive) {
             $this->smtp->reset();
         } else {
             $this->smtp->quit();
             $this->smtp->close();
         }
+        
+        foreach ($callbacks as $cb)
+        {
+            $this->doCallback($cb['issent'],array($cb['to']),array(),array(),$this->Subject,$body,$this->From,
+                ["smtp_transaction_id"=>$smtp_transaction_id]);
+        }
+        
         //Create error message for any bad addresses
         if (count($bad_rcpt) > 0) {
             $errstr = '';
@@ -4331,11 +4346,12 @@ class PHPMailer
      * @param string $subject
      * @param string $body
      * @param string $from
+     * @param array  $extra
      */
-    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from)
+    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from, $extra)
     {
         if (!empty($this->action_function) and is_callable($this->action_function)) {
-            call_user_func_array($this->action_function, [$isSent, $to, $cc, $bcc, $subject, $body, $from]);
+            call_user_func_array($this->action_function, [$isSent, $to, $cc, $bcc, $subject, $body, $from, $extra]);
         }
     }
 
