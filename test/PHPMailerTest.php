@@ -39,7 +39,7 @@ final class PHPMailerTest extends TestCase
      *
      * @var string[]
      */
-    private $ChangeLog = [];
+    private $ChangeLog = array();
 
     /**
      * Holds the note log.
