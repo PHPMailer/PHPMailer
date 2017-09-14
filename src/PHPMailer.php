@@ -1732,7 +1732,7 @@ class PHPMailer
                     $isSent = true;
                 }
 
-                $callbacks[] = ['issent'=>$isSent,'to'=>$to[0]];
+                $callbacks[] = ['issent'=>$isSent, 'to'=>$to[0]];
             }
         }
 
@@ -1740,16 +1740,16 @@ class PHPMailer
         if ((count($this->all_recipients) > count($bad_rcpt)) and !$this->smtp->data($header . $body)) {
             throw new Exception($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
-        
+
         $smtp_transaction_id = $this->smtp->getLastTransactionID();
-        
+
         if ($this->SMTPKeepAlive) {
             $this->smtp->reset();
         } else {
             $this->smtp->quit();
             $this->smtp->close();
         }
-        
+
         foreach ($callbacks as $cb) {
             $this->doCallback(
                 $cb['issent'],
@@ -1762,7 +1762,7 @@ class PHPMailer
                 ['smtp_transaction_id' => $smtp_transaction_id]
             );
         }
-        
+
         //Create error message for any bad addresses
         if (count($bad_rcpt) > 0) {
             $errstr = '';
