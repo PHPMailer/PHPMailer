@@ -26,6 +26,11 @@
             <group>pop3</group>
         </exclude>
     </groups>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>

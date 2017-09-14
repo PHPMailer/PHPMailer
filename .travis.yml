@@ -54,5 +54,6 @@ jobs:
     - php: 7.0
     - php: 7.1
       env: CODE_COVERAGE=1
+    - php: 7.2
     - php: hhvm
       dist: trusty
