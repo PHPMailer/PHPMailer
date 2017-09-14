@@ -2383,7 +2383,7 @@ class PHPMailer
         }
 
         //We don't care about messing up base64 format here, just want a random string
-        return str_replace(['=','+','/'], '', base64_encode(hash('sha256', $bytes, true)));
+        return str_replace(['=', '+', '/'], '', base64_encode(hash('sha256', $bytes, true)));
     }
 
     /**

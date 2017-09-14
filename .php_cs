@@ -20,7 +20,6 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
-        'psr4' => false,
         'semicolon_after_instruction' => true,
         'simplified_null_return' => true,
     ])
