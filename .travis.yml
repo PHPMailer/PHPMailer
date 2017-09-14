@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get install -y -qq postfix
 
 install:
-  - if [ "$CS_CHECK" = 1 ]; then composer remove --no-update --no-scripts --dev phpunit/phpunit; fi
+  - REMOVE_PACKAGE="friendsofphp/php-cs-fixer"; if [ "$CS_CHECK" = 1 ]; then REMOVE_PACKAGE="phpunit/phpunit"; fi; composer remove --no-update --no-scripts --dev $REMOVE_PACKAGE
   - composer install
   - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
 
