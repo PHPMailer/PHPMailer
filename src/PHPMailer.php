@@ -1642,11 +1642,11 @@ class PHPMailer
         if ($this->SingleTo and count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
-                $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From,[]);
+                $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From, []);
             }
         } else {
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
-            $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From,[]);
+            $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From, []);
         }
         if (isset($old_from)) {
             ini_set('sendmail_from', $old_from);
@@ -1720,6 +1720,7 @@ class PHPMailer
             throw new Exception($this->ErrorInfo, self::STOP_CRITICAL);
         }
 
+        $callbacks = [];
         // Attempt to send to all recipients
         foreach ([$this->to, $this->cc, $this->bcc] as $togroup) {
             foreach ($togroup as $to) {
@@ -1749,10 +1750,17 @@ class PHPMailer
             $this->smtp->close();
         }
         
-        foreach ($callbacks as $cb)
-        {
-            $this->doCallback($cb['issent'],array($cb['to']),array(),array(),$this->Subject,$body,$this->From,
-                ["smtp_transaction_id"=>$smtp_transaction_id]);
+        foreach ($callbacks as $cb) {
+            $this->doCallback(
+                $cb['issent'],
+                [$cb['to']],
+                [],
+                [],
+                $this->Subject,
+                $body,
+                $this->From,
+                ['smtp_transaction_id' => $smtp_transaction_id]
+            );
         }
         
         //Create error message for any bad addresses
