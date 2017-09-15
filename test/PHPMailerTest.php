@@ -10,47 +10,50 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\PHPMailer;
+namespace PHPMailer\Test;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
  */
-class PHPMailerTest extends \PHPUnit_Framework_TestCase
+final class PHPMailerTest extends TestCase
 {
     /**
      * Holds the PHPMailer instance.
      *
      * @var PHPMailer
      */
-    public $Mail;
+    private $Mail;
 
     /**
      * Holds the SMTP mail host.
      *
      * @var string
      */
-    public $Host = '';
+    private $Host = '';
 
     /**
      * Holds the change log.
      *
      * @var string[]
      */
-    public $ChangeLog = [];
+    private $ChangeLog = [];
 
     /**
      * Holds the note log.
      *
      * @var string[]
      */
-    public $NoteLog = [];
+    private $NoteLog = [];
 
     /**
      * Default include path.
      *
      * @var string
      */
-    public $INCLUDE_DIR = '..';
+    private $INCLUDE_DIR = '..';
 
     /**
      * PIDs of any processes we need to kill.
@@ -62,7 +65,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Run before each test is started.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
@@ -70,6 +73,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
         }
         $this->Mail = new PHPMailer();
         $this->Mail->SMTPDebug = 3; //Full debug output
+        $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';
@@ -116,7 +120,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Run after each test is completed.
      */
-    public function tearDown()
+    protected function tearDown()
     {
         // Clean global variables
         $this->Mail = null;
@@ -132,7 +136,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Build the body of the message in the appropriate format.
      */
-    public function buildBody()
+    private function buildBody()
     {
         $this->checkChanges();
 
@@ -209,7 +213,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
     /**
      * Check which default settings have been changed for the report.
      */
-    public function checkChanges()
+    private function checkChanges()
     {
         if (3 != $this->Mail->Priority) {
             $this->addChange('Priority', $this->Mail->Priority);
@@ -246,7 +250,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      * @param string $sName
      * @param string $sNewValue
      */
-    public function addChange($sName, $sNewValue)
+    private function addChange($sName, $sNewValue)
     {
         $this->ChangeLog[] = [$sName, $sNewValue];
     }
@@ -256,7 +260,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $sValue
      */
-    public function addNote($sValue)
+    private function addNote($sValue)
     {
         $this->NoteLog[] = $sValue;
     }
@@ -270,7 +274,7 @@ class PHPMailerTest extends \PHPUnit_Framework_TestCase
      *
      * @return bool
      */
-    public function setAddress($sAddress, $sName = '', $sType = 'to')
+    private function setAddress($sAddress, $sName = '', $sType = 'to')
     {
         switch ($sType) {
             case 'to':
@@ -1926,6 +1930,8 @@ EOT;
         $this->Mail->DKIM_selector = 'phpmailer';
         $this->Mail->DKIM_passphrase = ''; //key is not encrypted
         $this->assertTrue($this->Mail->send(), 'DKIM signed mail failed');
+        $this->Mail->isMail();
+        $this->assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
         unlink($privatekeyfile);
     }
 
@@ -1934,6 +1940,9 @@ EOT;
      */
     public function testLineBreaks()
     {
+        //May have been altered by earlier tests, can interfere with line break format
+        $this->Mail->isSMTP();
+        $this->Mail->preSend();
         $unixsrc = "hello\nWorld\nAgain\n";
         $macsrc = "hello\rWorld\rAgain\r";
         $windowssrc = "hello\r\nWorld\r\nAgain\r\n";
@@ -1968,6 +1977,9 @@ EOT;
      */
     public function testLineLength()
     {
+        //May have been altered by earlier tests, can interfere with line break format
+        $this->Mail->isSMTP();
+        $this->Mail->preSend();
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');

@@ -11,31 +11,27 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\PHPMailer;
+namespace PHPMailer\Test;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Check language files for missing or excess translations.
  */
-class PHPMailerLangTest extends \PHPUnit_Framework_TestCase
+final class PHPMailerLangTest extends TestCase
 {
     /**
      * Holds a PHPMailer instance.
      *
      * @var PHPMailer
      */
-    public $Mail;
-
-    /**
-     * Default include path.
-     *
-     * @var string
-     */
-    public $INCLUDE_DIR = '../';
+    private $Mail;
 
     /**
      * Run before each test is started.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->Mail = new PHPMailer();
     }

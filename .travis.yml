@@ -1,18 +1,19 @@
 language: php
-php:
-  - 7.1
-  - 7.0
-  - 5.6
-  - 5.5
-matrix:
-  include:
-    - php: hhvm
-      dist: trusty
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
+
 install:
+  - REMOVE_PACKAGE="friendsofphp/php-cs-fixer"; if [ "$CS_CHECK" = 1 ]; then REMOVE_PACKAGE="phpunit/phpunit"; fi; composer remove --no-update --no-scripts --dev $REMOVE_PACKAGE
+  - composer remove --no-update --no-scripts --dev phpdocumentor/phpdocumentor
   - composer install
+  - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
+
 before_script:
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
@@ -28,8 +29,32 @@ before_script:
     else
       echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
     fi
-script:
-  - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist --bootstrap ./vendor/autoload.php
+
+script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml
+  - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
+
+stages:
+  - coding-standard
+  - test
+
+jobs:
+  include:
+    - stage: coding-standard
+      before_install:
+      before_script:
+      script: ./vendor/bin/php-cs-fixer --diff --dry-run --verbose fix
+      after_script:
+      php: 5.5
+      env: CS_CHECK=1
+    - stage: test
+      php: 5.5
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+      env: CODE_COVERAGE=1
+    - php: 7.2
+    - php: hhvm
+      dist: trusty
