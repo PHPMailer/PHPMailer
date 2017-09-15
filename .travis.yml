@@ -2,7 +2,7 @@ language: php
 
 cache:
   directories:
-    - $HOME/.composer
+    - $HOME/.composer/cache
 
 before_install:
   - sudo apt-get update -qq
