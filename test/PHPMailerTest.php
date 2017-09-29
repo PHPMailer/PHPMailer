@@ -862,16 +862,21 @@ final class PHPMailerTest extends TestCase
         $noencode = 'eeeeeeeeee';
         $this->Mail->isMail();
         //Expected results
-        $bencoderes = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' . PHPMailer::getLE() .
-            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' . PHPMailer::getLE() .
-            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' . PHPMailer::getLE() .
-            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=';
-        $qencoderes = '=?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=' . PHPMailer::getLE() .
+
+        $bencoderes = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+            PHPMailer::getLE() .
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+            PHPMailer::getLE() .
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+            PHPMailer::getLE() .
+            ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqQ==?=';
+        $qencoderes = '=?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=' .
+            PHPMailer::getLE() .
             ' =?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeee=C3=A9?=';
         $bencodenofoldres = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6k=?=';
         $qencodenofoldres = '=?UTF-8?Q?eeeeeeeee=C3=A9?=';
-        $justfoldres = 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' .
-            'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' . PHPMailer::getLE() . ' eeeeeeeeee';
+        $justfoldres = 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' .
+            PHPMailer::getLE() . ' eeeeeeeeee';
         $noencoderes = 'eeeeeeeeee';
         $this->assertEquals(
             $bencoderes,
