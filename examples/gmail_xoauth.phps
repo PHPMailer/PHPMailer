@@ -89,7 +89,7 @@ $mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 $mail->CharSet = 'utf-8';
-$mail->msgHTML(file_get_contents('contentsutf8.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contentsutf8.html'), __DIR__);
 
 //Replace the plain text body with one created manually
 $mail->AltBody = 'This is a plain-text message body';
