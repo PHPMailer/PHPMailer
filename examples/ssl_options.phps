@@ -65,7 +65,7 @@ $mail->Subject = 'PHPMailer SMTP options test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
-$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 
 //Send the message, check for errors
 if (!$mail->send()) {

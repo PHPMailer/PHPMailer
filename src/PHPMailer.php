@@ -708,10 +708,13 @@ class PHPMailer
 
     /**
      * The lower maximum line length allowed by RFC 2822 section 2.1.1.
+     * This length does NOT include the line break
+     * 76 means that lines will be 77 or 78 chars depending on whether
+     * the line break format is LF or CRLF; both are valid.
      *
      * @var int
      */
-    const STD_LINE_LENGTH = 78;
+    const STD_LINE_LENGTH = 76;
 
     /**
      * Constructor.
@@ -2956,7 +2959,7 @@ class PHPMailer
             case 'base64':
                 $encoded = chunk_split(
                     base64_encode($str),
-                    static::STD_LINE_LENGTH - strlen(static::$LE),
+                    static::STD_LINE_LENGTH,
                     static::$LE
                 );
                 break;

@@ -18,7 +18,7 @@ $mail = new PHPMailer;
 $mail->setFrom('from@example.com', 'First Last');
 $mail->addAddress('whoto@example.com', 'John Doe');
 $mail->Subject = 'PHPMailer mail() test';
-$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 
 //This should be the same as the domain of your From address
 $mail->DKIM_domain = 'example.com';
