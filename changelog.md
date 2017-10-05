@@ -1,5 +1,7 @@
 # PHPMailer Change Log
 
+* Don't make max line length depend on line break format
+
 ## Version 6.0.1 (September 14th 2017)
 * Use shorter Message-ID headers (with more entropy) to avoid iCloud blackhole bug
 * Switch to Symfony code style (though it's not well defined)
