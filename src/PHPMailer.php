@@ -3758,7 +3758,7 @@ class PHPMailer
             }
         }
 
-        return $this->Body;        
+        return $this->Body;
     }
 
     /**
