@@ -3745,24 +3745,20 @@ class PHPMailer
                 }
             }
         }
-         $this->isHTML(true);
-          // Convert all message body line breaks to LE, makes quoted-printable encoding work much better
+        $this->isHTML(true);
+        // Convert all message body line breaks to LE, makes quoted-printable encoding work much better
         $this->Body = static::normalizeBreaks($message);
-        if ( $this->alternativeExists() ) { // delete HTML in alt body
         if ($this->alternativeExists()) { // delete HTML in alt body
             $this->AltBody = static::normalizeBreaks($this->html2text($this->AltBody, $advanced));
         } else { // no alt body, convert html msg to plain text
             $this->AltBody = static::normalizeBreaks($this->html2text($message, $advanced));
-            if ( $this->AltBody == "" )
-            { // okay, all went wrong Fallback, dummy text
             if ('' === $this->AltBody) { // okay, all went wrong Fallback, dummy text
                 $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
-                . static::$LE;
                 .static::$LE;
             }
         }
 
-        return $this->Body;
+        return $this->Body;        
     }
 
     /**
