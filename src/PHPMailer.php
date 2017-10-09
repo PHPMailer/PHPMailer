@@ -2429,10 +2429,6 @@ class PHPMailer
         $this->boundary[2] = 'b2_' . $this->uniqueid;
         $this->boundary[3] = 'b3_' . $this->uniqueid;
 
-        if ($this->sign_key_file) {
-            $body .= $this->getMailMIME() . static::$LE;
-        }
-
         $this->setWordWrap();
 
         $bodyEncoding = $this->Encoding;
@@ -2462,6 +2458,18 @@ class PHPMailer
         if ('base64' != $altBodyEncoding and static::hasLineLongerThanMax($this->AltBody)) {
             $altBodyEncoding = 'quoted-printable';
         }
+        
+        if ( $this->Encoding != $bodyEncoding
+            and $altBodyEncoding == $bodyEncoding
+            and $this->Encoding == '8bit' )
+        {
+            $this->Encoding = $bodyEncoding;
+        }
+
+        if ($this->sign_key_file) {
+            $body .= $this->getMailMIME() . static::$LE;
+        }
+        
         //Use this as a preamble in all multipart message types
         $mimepre = 'This is a multi-part message in MIME format.' . static::$LE;
         switch ($this->message_type) {
@@ -3748,10 +3756,15 @@ class PHPMailer
         $this->isHTML(true);
         // Convert all message body line breaks to LE, makes quoted-printable encoding work much better
         $this->Body = static::normalizeBreaks($message);
-        $this->AltBody = static::normalizeBreaks($this->html2text($message, $advanced));
-        if (!$this->alternativeExists()) {
-            $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
+        if ( $this->alternativeExists() ) { // delete HTML in alt body
+            $this->AltBody = static::normalizeBreaks($this->html2text($this->AltBody, $advanced));
+        } else { // no alt body, convert html msg to plain text
+            $this->AltBody = static::normalizeBreaks($this->html2text($message, $advanced));
+            if ( $this->AltBody == "" )
+            { // okay, all went wrong Fallback, dummy text
+                $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
                 . static::$LE;
+            }
         }
 
         return $this->Body;
@@ -4388,3 +4401,4 @@ class PHPMailer
         $this->oauth = $oauth;
     }
 }
+
