@@ -3754,7 +3754,7 @@ class PHPMailer
             $this->AltBody = static::normalizeBreaks($this->html2text($message, $advanced));
             if ('' === $this->AltBody) { // okay, all went wrong Fallback, dummy text
                 $this->AltBody = 'This is an HTML-only message. To view it, activate HTML in your email application.'
-                .static::$LE;
+                . static::$LE;
             }
         }
 
