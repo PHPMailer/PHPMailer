@@ -2192,7 +2192,7 @@ EOT;
         );
 
         $this->Mail->ConfirmReadingTo = 'test@françois.ch';  //Address with IDN
-        if ($this->Mail->idnSupported()) {
+        if (PHPMailer::idnSupported()) {
             $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
             $this->assertEquals(
                 'test@xn--franois-xxa.ch',
@@ -2209,7 +2209,7 @@ EOT;
      */
     public function testConvertEncoding()
     {
-        if (!$this->Mail->idnSupported()) {
+        if (!PHPMailer::idnSupported()) {
             $this->markTestSkipped('intl and/or mbstring extensions are not available');
         }
 
@@ -2260,7 +2260,7 @@ EOT;
      */
     public function testDuplicateIDNRemoved()
     {
-        if (!$this->Mail->idnSupported()) {
+        if (!PHPMailer::idnSupported()) {
             $this->markTestSkipped('intl and/or mbstring extensions are not available');
         }
 
