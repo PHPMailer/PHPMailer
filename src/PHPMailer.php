@@ -973,7 +973,7 @@ class PHPMailer
         }
         $params = [$kind, $address, $name];
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
-        if ($this->has8bitChars(substr($address, ++$pos)) and $this->idnSupported()) {
+        if ($this->has8bitChars(substr($address, ++$pos)) and static::idnSupported()) {
             if ('Reply-To' != $kind) {
                 if (!array_key_exists($address, $this->RecipientsQueue)) {
                     $this->RecipientsQueue[$address] = $params;
@@ -1124,7 +1124,7 @@ class PHPMailer
         // Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
         if (false === $pos or
-            (!$this->has8bitChars(substr($address, ++$pos)) or !$this->idnSupported()) and
+            (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported()) and
             !static::validateAddress($address)) {
             $error_message = $this->lang('invalid_address') . " (setFrom) $address";
             $this->setError($error_message);
@@ -1249,7 +1249,7 @@ class PHPMailer
      *
      * @return bool `true` if required functions for IDN support are present
      */
-    public function idnSupported()
+    public static function idnSupported()
     {
         return function_exists('idn_to_ascii') and function_exists('mb_convert_encoding');
     }
@@ -1272,7 +1272,7 @@ class PHPMailer
     {
         // Verify we have required functions, CharSet, and at-sign.
         $pos = strrpos($address, '@');
-        if ($this->idnSupported() and
+        if (static::idnSupported() and
             !empty($this->CharSet) and
             false !== $pos
         ) {
