@@ -962,7 +962,10 @@ class PHPMailer
         $pos = strrpos($address, '@');
         if (false === $pos) {
             // At-sign is missing.
-            $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
+            $error_message = sprintf('%s (%s): %s',
+                $this->lang('invalid_address'),
+                $kind,
+                $address);
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1010,7 +1013,9 @@ class PHPMailer
     protected function addAnAddress($kind, $address, $name = '')
     {
         if (!in_array($kind, ['to', 'cc', 'bcc', 'Reply-To'])) {
-            $error_message = $this->lang('Invalid recipient kind: ') . $kind;
+            $error_message = sprintf('%s: %s',
+                $this->lang('Invalid recipient kind'),
+                $kind);
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1020,7 +1025,10 @@ class PHPMailer
             return false;
         }
         if (!static::validateAddress($address)) {
-            $error_message = $this->lang('invalid_address') . " (addAnAddress $kind): $address";
+            $error_message = sprintf('%s (%s): %s',
+                $this->lang('invalid_address'),
+                $kind,
+                $address);
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1126,7 +1134,9 @@ class PHPMailer
         if (false === $pos or
             (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported()) and
             !static::validateAddress($address)) {
-            $error_message = $this->lang('invalid_address') . " (setFrom) $address";
+            $error_message = sprintf('%s (From): %s',
+                $this->lang('invalid_address'),
+                $address);
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1376,7 +1386,10 @@ class PHPMailer
                 }
                 $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
                 if (!static::validateAddress($this->$address_kind)) {
-                    $error_message = $this->lang('invalid_address') . ' (punyEncode) ' . $this->$address_kind;
+                    $error_message = sprintf('%s (%s): %s',
+                        $this->lang('invalid_address'),
+                        $address_kind,
+                        $this->$address_kind);
                     $this->setError($error_message);
                     $this->edebug($error_message);
                     if ($this->exceptions) {
