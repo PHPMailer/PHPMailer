@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 5.2.26 (November 4th 2017)
+* Minor security backport from 6.0 - set Debugoutput in constructor according to SAPI in use, avoiding potential XSS in default debug output.
+
 ## Version 5.2.25 (August 28th 2017)
 * Make obtaining SMTP transaction ID more reliable
 * Add Bosnian translation

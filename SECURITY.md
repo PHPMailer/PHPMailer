@@ -2,6 +2,8 @@
 
 Please disclose any vulnerabilities found responsibly - report any security problems found to the maintainers privately.
 
+PHPMailer 5.2.25 and earlier default to using `echo` for output, which has a potential for XSS if debug output is left on in production. This was already fixed in 6.0, change added to 5.2.26. Thanks to Bankde Eakasit for spotting it.
+
 PHPMailer versions prior to 5.2.24 (released July 26th 2017) have an XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
 
 PHPMailer versions prior to 5.2.22 (released January 9th 2017) have a local file disclosure vulnerability, [CVE-2017-5223](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-5223). If content passed into `msgHTML()` is sourced from unfiltered user input, relative paths can map to absolute local file paths and added as attachments. Also note that `addAttachment` (just like `file_get_contents`, `passthru`, `unlink`, etc) should not be passed user-sourced params either! Reported by Yongxiang Li of Asiasecurity.
