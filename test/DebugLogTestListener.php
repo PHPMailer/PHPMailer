@@ -13,21 +13,26 @@
 
 namespace PHPMailer\Test;
 
-class DebugLogTestListener extends \PHPUnit_Framework_BaseTestListener
+use Exception;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\BaseTestListener;
+use PHPUnit\Framework\Test;
+
+class DebugLogTestListener extends BaseTestListener
 {
     private static $debugLog = '';
 
-    public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addError(Test $test, Exception $e, $time)
     {
         echo self::$debugLog;
     }
 
-    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, $time)
     {
         echo self::$debugLog;
     }
 
-    public function startTest(\PHPUnit_Framework_Test $test)
+    public function startTest(Test $test)
     {
         self::$debugLog = '';
     }
