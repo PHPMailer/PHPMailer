@@ -1039,7 +1039,7 @@ class PHPMailer
         }
         if ('Reply-To' != $kind) {
             if (!array_key_exists(strtolower($address), $this->all_recipients)) {
-                array_push($this->$kind, [$address, $name]);
+                $this->{$kind}[] = [$address, $name];
                 $this->all_recipients[strtolower($address)] = true;
 
                 return true;
