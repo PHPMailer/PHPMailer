@@ -94,17 +94,17 @@ try {
 The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of of extraordinary packages](http://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
 
 ## Extras
-* Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.
+Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.
 
 ## Other upgrade changes
 See the changelog for full details.
 * File structure simplified, classes live in the `src/` folder
 * Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
 * Complete RFC standardisation on CRLF (`\r\n`) line breaks by default:
-  * `PHPMailer:$LE` removed
-  * `PHPMailer::CRLF` line ending constant renamed to `PHPMailer::LE`, defaults to "\r\n", used everywhere
-  * All uses of `PHPMailer::$LE` property converted to use `static:LE` constant for consistency and ease of overriding
-  * Similar changes to line break handling in SMTP and POP3 classes.
+  * `PHPMailer::$LE` still exists, but all uses of it are changed to `static::$LE` for easier overriding. It may be changed to `\n` automatically when sending via `mail()` on UNIX-like OSs
+  * `PHPMailer::CRLF` line ending constant removed
+  * The length of the line break is no longer used in line length calculations
+  * Similar changes to line break handling in SMTP and POP3 classes
 * All elements previously marked as deprecated have been removed:
   * `PHPMailer->Version`
   * `PHPMailer->ReturnPath`
