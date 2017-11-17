@@ -4,6 +4,11 @@
 * Match SendGrid transaction IDs
 * `idnSupported()` now static, as previously documented
 * Improve Indonesian translation (thanks to @januridp)
+* Clean up git export ignore settings for production and zip bundles
+* Updated upgrading docs
+* Clarify addStringEmbeddedImage docs
+* Hide auth credentials in all but lowest level debug output, prevents leakage in bug reports
+* Code style cleanup
 
 ## Version 6.0.1 (September 14th 2017)
 * Use shorter Message-ID headers (with more entropy) to avoid iCloud blackhole bug

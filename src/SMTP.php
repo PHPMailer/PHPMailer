@@ -232,7 +232,7 @@ class SMTP
             return;
         }
         //Is this a PSR-3 logger?
-        if (is_a($this->Debugoutput, 'Psr\Log\LoggerInterface')) {
+        if ($this->Debugoutput instanceof \Psr\Log\LoggerInterface) {
             $this->Debugoutput->debug($str);
 
             return;
@@ -702,7 +702,7 @@ class SMTP
                 if (!empty($line_out) and $line_out[0] == '.') {
                     $line_out = '.' . $line_out;
                 }
-                $this->client_send($line_out . static::LE);
+                $this->client_send($line_out . static::LE, 'DATA');
             }
         }
 
@@ -898,7 +898,7 @@ class SMTP
 
             return false;
         }
-        $this->client_send($commandstring . static::LE);
+        $this->client_send($commandstring . static::LE, $command);
 
         $this->last_reply = $this->get_lines();
         // Fetch SMTP code and possible error code explanation
@@ -1004,13 +1004,21 @@ class SMTP
     /**
      * Send raw data to the server.
      *
-     * @param string $data The data to send
+     * @param string $data    The data to send
+     * @param string $command Optionally, the command this is part of, used only for controlling debug output
      *
      * @return int|bool The number of bytes sent to the server or false on error
      */
-    public function client_send($data)
+    public function client_send($data, $command = '')
     {
-        $this->edebug("CLIENT -> SERVER: $data", self::DEBUG_CLIENT);
+        //If SMTP transcripts are left enabled, or debug output is posted online
+        //it can leak credentials, so hide credentials in all but lowest level
+        if (self::DEBUG_LOWLEVEL > $this->do_debug and
+            in_array($command, ['User & Password', 'Username', 'Password'], true)) {
+            $this->edebug('CLIENT -> SERVER: <credentials hidden>', self::DEBUG_CLIENT);
+        } else {
+            $this->edebug('CLIENT -> SERVER: ' . $data, self::DEBUG_CLIENT);
+        }
         set_error_handler([$this, 'errorHandler']);
         $result = fwrite($this->smtp_conn, $data);
         restore_error_handler();
