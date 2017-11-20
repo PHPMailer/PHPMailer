@@ -2273,6 +2273,12 @@ class PHPMailer
 
         $result .= $this->addrAppend('From', [[trim($this->From), $this->FromName]]);
 
+        if ('' == $this->Sender || $this->From == $this->Sender) {
+            // Do not set Sender header
+        } else {
+            $result .= $this->addrAppend('Sender', [[$this->Sender, '']]);
+        }
+
         // sendmail and mail() extract Cc from the header before sending
         if (count($this->cc) > 0) {
             $result .= $this->addrAppend('Cc', $this->cc);
