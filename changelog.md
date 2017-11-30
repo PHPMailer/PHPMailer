@@ -1,12 +1,17 @@
 # PHPMailer Change Log
 
+## Version 6.0.2 (November 29th 2017)
 * Don't make max line length depend on line break format
+* Improve Travis-CI config - thanks to Filippo Tessarotto
 * Match SendGrid transaction IDs
 * `idnSupported()` now static, as previously documented
+* Improve error messages for invalid addresses
 * Improve Indonesian translation (thanks to @januridp)
+* Improve Esperanto translation (thanks to @dknacht)
 * Clean up git export ignore settings for production and zip bundles
+* Update license doc
 * Updated upgrading docs
-* Clarify addStringEmbeddedImage docs
+* Clarify `addStringEmbeddedImage` docs
 * Hide auth credentials in all but lowest level debug output, prevents leakage in bug reports
 * Code style cleanup
 

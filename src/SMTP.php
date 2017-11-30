@@ -34,7 +34,7 @@ class SMTP
      *
      * @var string
      */
-    const VERSION = '6.0.1';
+    const VERSION = '6.0.2';
 
     /**
      * SMTP line break constant.
