@@ -1261,12 +1261,12 @@ class PHPMailer
                 }
             }
 
+            $this->setMessageType();
             // Set whether the message is multipart/alternative
-            if ($this->alternativeExists()) {
+            if ($this->alternativeExists() && $this->ContentType !== 'text/plain') {
                 $this->ContentType = 'multipart/alternative';
             }
 
-            $this->setMessageType();
             // Refuse to send an empty message unless we are specifically allowing it
             if (!$this->AllowEmpty and empty($this->Body)) {
                 throw new phpmailerException($this->lang('empty_message'), self::STOP_CRITICAL);
@@ -2464,6 +2464,10 @@ class PHPMailer
         }
         if ($this->attachmentExists()) {
             $type[] = 'attach';
+        }
+        if ($this->alternativeExists() && $this->ContentType == 'text/plain') {
+            $this->message_type = 'plain';
+            return;
         }
         $this->message_type = implode('_', $type);
         if ($this->message_type == '') {
