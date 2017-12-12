@@ -4049,7 +4049,7 @@ class PHPMailer
         // Normalise to \n
         $text = str_replace(["\r\n", "\r"], "\n", $text);
         // Now convert LE as needed
-        if ("\n" !== static::$LE) {
+        if ("\n" !== $breaktype) {
             $text = str_replace("\n", $breaktype, $text);
         }
 
@@ -4154,6 +4154,7 @@ class PHPMailer
     /**
      * Generate a DKIM canonicalization header.
      * Uses the 'relaxed' algorithm from RFC6376 section 3.4.2.
+     * Canonicalized headers should *always* use CRLF, regardless of mailer setting.
      *
      * @see    https://tools.ietf.org/html/rfc6376#section-3.4.2
      *
@@ -4189,12 +4190,13 @@ class PHPMailer
             $lines[$key] = trim($heading, " \t") . ':' . trim($value, " \t");
         }
 
-        return implode(static::$LE, $lines);
+        return implode("\r\n", $lines);
     }
 
     /**
      * Generate a DKIM canonicalization body.
      * Uses the 'simple' algorithm from RFC6376 section 3.4.3.
+     * Canonicalized bodies should *always* use CRLF, regardless of mailer setting.
      *
      * @see    https://tools.ietf.org/html/rfc6376#section-3.4.3
      *
@@ -4205,13 +4207,13 @@ class PHPMailer
     public function DKIM_BodyC($body)
     {
         if (empty($body)) {
-            return static::$LE;
+            return "\r\n";
         }
-        // Normalize line endings
-        $body = static::normalizeBreaks($body);
+        // Normalize line endings to CRLF
+        $body = static::normalizeBreaks($body, "\r\n");
 
         //Reduce multiple trailing line breaks to a single one
-        return rtrim($body, "\r\n") . static::$LE;
+        return rtrim($body, "\r\n") . "\r\n";
     }
 
     /**

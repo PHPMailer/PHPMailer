@@ -1,5 +1,7 @@
 # PHPMailer Change Log
 
+* Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
+
 ## Version 6.0.2 (November 29th 2017)
 * Don't make max line length depend on line break format
 * Improve Travis-CI config - thanks to Filippo Tessarotto
