@@ -21,7 +21,8 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-filter": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.2",
