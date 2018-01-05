@@ -3918,8 +3918,9 @@ class PHPMailer
             'avi' => 'video/x-msvideo',
             'movie' => 'video/x-sgi-movie',
         ];
-        if (array_key_exists(strtolower($ext), $mimes)) {
-            return $mimes[strtolower($ext)];
+        $ext = strtolower($ext);
+        if (array_key_exists($ext, $mimes)) {
+            return $mimes[$ext];
         }
 
         return 'application/octet-stream';
