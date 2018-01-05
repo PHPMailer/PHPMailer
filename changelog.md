@@ -1,6 +1,8 @@
 # PHPMailer Change Log
 
+## Version 6.0.3 (January 5th 2018)
 * Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
+* Make dependence on ext-filter explicit in composer.json
 
 ## Version 6.0.2 (November 29th 2017)
 * Don't make max line length depend on line break format
