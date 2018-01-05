@@ -45,7 +45,7 @@ class POP3
      *
      * @var string
      */
-    const VERSION = '6.0.2';
+    const VERSION = '6.0.3';
 
     /**
      * Default POP3 port number.
