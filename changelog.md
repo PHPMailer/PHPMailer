@@ -1,5 +1,7 @@
 # PHPMailer Change Log
 
+* Add some modern MIME types
+
 ## Version 6.0.3 (January 5th 2018)
 * Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
 * Make dependence on ext-filter explicit in composer.json
