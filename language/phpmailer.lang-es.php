@@ -8,7 +8,7 @@
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: Imposible autentificar.';
 $PHPMAILER_LANG['connect_host']         = 'Error SMTP: Imposible conectar al servidor SMTP.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Error SMTP: Datos no aceptados.';
-$PHPMAILER_LANG['empty_message']        = 'El cuerpo del mensaje está vacío';
+$PHPMAILER_LANG['empty_message']        = 'El cuerpo del mensaje está vacío.';
 $PHPMAILER_LANG['encoding']             = 'Codificación desconocida: ';
 $PHPMAILER_LANG['execute']              = 'Imposible ejecutar: ';
 $PHPMAILER_LANG['file_access']          = 'Imposible acceder al archivo: ';
