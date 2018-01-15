@@ -23,4 +23,4 @@ $PHPMAILER_LANG['signing']              = 'साइनअप त्रुटि
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP का connect () फ़ंक्शन विफल हुआ। ';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP सर्वर त्रुटि। ';
 $PHPMAILER_LANG['variable_set']         = 'चर को बना या संशोधित नहीं किया जा सकता। ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'एक्सटेन्षन गायब है: ';
