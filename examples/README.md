@@ -1,4 +1,5 @@
-# PHPMailer code examples[![PHPMailer logo](images/phpmailer.png)](https://github.com/PHPMailer/PHPMailer)
+[![PHPMailer logo](images/phpmailer.png)](https://github.com/PHPMailer/PHPMailer)
+# PHPMailer code examples
 
 This folder contains a collection of examples of using [PHPMailer](https://github.com/PHPMailer/PHPMailer).
 
