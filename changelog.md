@@ -1,6 +1,7 @@
 # PHPMailer Change Log
 
 * Add some modern MIME types
+* Add Hindi translation (thanks to @dextel2)
 
 ## Version 6.0.3 (January 5th 2018)
 * Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
