@@ -9,18 +9,18 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 require '../vendor/autoload.php';
 
-if (array_key_exists('to', $_POST)) {
+if (!empty($_POST['to'])) {
     $err = false;
     $msg = '';
     $email = '';
     //Apply some basic validation and filtering to the subject
-    if (array_key_exists('subject', $_POST)) {
+    if (!empty($_POST['subject'])) {
         $subject = substr(strip_tags($_POST['subject']), 0, 255);
     } else {
         $subject = 'No subject given';
     }
     //Apply some basic validation and filtering to the query
-    if (array_key_exists('query', $_POST)) {
+    if (!empty($_POST['query'])) {
         //Limit length and strip HTML tags
         $query = substr(strip_tags($_POST['query']), 0, 16384);
     } else {
@@ -29,7 +29,7 @@ if (array_key_exists('to', $_POST)) {
         $err = true;
     }
     //Apply some basic validation and filtering to the name
-    if (array_key_exists('name', $_POST)) {
+    if (!empty($_POST['name'])) {
         //Limit length and strip HTML tags
         $name = substr(strip_tags($_POST['name']), 0, 255);
     } else {
@@ -38,13 +38,13 @@ if (array_key_exists('to', $_POST)) {
     //Validate to address
     //Never allow arbitrary input for the 'to' address as it will turn your form into a spam gateway!
     //Substitute appropriate addresses from your own domain, or simply use a single, fixed address
-    if (array_key_exists('to', $_POST) and in_array($_POST['to'], ['sales', 'support', 'accounts'])) {
+    if (!empty($_POST['to'])) and in_array($_POST['to'], ['sales', 'support', 'accounts'])) {
         $to = $_POST['to'] . '@example.com';
     } else {
         $to = 'support@example.com';
     }
     //Make sure the address they provided is valid before trying to use it
-    if (array_key_exists('email', $_POST) and PHPMailer::validateAddress($_POST['email'])) {
+    if (!empty($_POST['email']) and PHPMailer::validateAddress($_POST['email'])) {
         $email = $_POST['email'];
     } else {
         $msg .= "Error: invalid email address provided";
