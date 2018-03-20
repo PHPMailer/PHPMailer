@@ -1832,7 +1832,7 @@ class PHPMailer
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
             if (!preg_match(
-                '/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-]*|\[[a-fA-F0-9:]+\]):?([0-9]*)$/',
+                '/^((ssl|tls):\/\/)*([a-zA-Z0-9\.-_]*|\[[a-fA-F0-9:]+\]):?([0-9]*)$/',
                 trim($hostentry),
                 $hostinfo
             )) {
@@ -3596,7 +3596,7 @@ class PHPMailer
             //Is it a valid IPv4 address?
             return (bool) filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
         }
-        if (filter_var('http://' . $host, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)) {
+        if (! is_null(parse_url('http://' . $host, PHP_URL_HOST))) {
             //Is it a syntactically valid hostname?
             return true;
         }
