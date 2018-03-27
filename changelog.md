@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+## Version 6.0.4 (March 27th 2018)
 * Add some modern MIME types
 * Add Hindi translation (thanks to @dextel2)
 * Improve composer docs
