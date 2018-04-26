@@ -46,11 +46,6 @@ class PHPMailer
     const ENCODING_BINARY = 'binary';
     const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
 
-    // define default settings
-    const DEFAULT_CHARSET = self::CHARSET_ISO88591;
-    const DEFAULT_CONTENT_TYPE = self::CONTENT_TYPE_PLAINTEXT;
-    const DEFAULT_ENCODING = self::ENCODING_8BIT;
-
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
@@ -65,14 +60,14 @@ class PHPMailer
      *
      * @var string
      */
-    public $CharSet = self::DEFAULT_CHARSET;
+    public $CharSet = self::CHARSET_ISO88591;
 
     /**
      * The MIME Content-type of the message.
      *
      * @var string
      */
-    public $ContentType = self::DEFAULT_CONTENT_TYPE;
+    public $ContentType = self::CONTENT_TYPE_PLAINTEXT;
 
     /**
      * The message encoding.
@@ -80,7 +75,7 @@ class PHPMailer
      *
      * @var string
      */
-    public $Encoding = self::DEFAULT_ENCODING;
+    public $Encoding = self::ENCODING_8BIT;
 
     /**
      * Holds the most recent mailer error message.
