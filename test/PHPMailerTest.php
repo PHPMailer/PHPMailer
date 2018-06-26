@@ -1911,6 +1911,96 @@ EOT;
     }
 
     /**
+     * DKIM copied header fields tests.
+     *
+     * @group dkim
+     *
+     * @see https://tools.ietf.org/html/rfc6376#section-3.5
+     */
+    public function testDKIMOptionalHeaderFieldsCopy()
+    {
+        $privatekeyfile = 'dkim_private.pem';
+        $pk = openssl_pkey_new(
+            [
+                'private_key_bits' => 2048,
+                'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            ]
+        );
+        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        $this->Mail->DKIM_private = 'dkim_private.pem';
+
+        //Example from https://tools.ietf.org/html/rfc6376#section-3.5
+        $from = 'from@example.com';
+        $to = 'to@example.com';
+        $date = 'date';
+        $subject = 'example';
+
+        $headerLines = "From:$from\r\nTo:$to\r\nDate:$date\r\n";
+        $copyHeaderFields = "\tz=From:$from\r\n\t|To:$to\r\n\t|Date:$date\r\n\t|Subject:=20$subject;\r\n";
+
+        $this->Mail->DKIM_copyHeaderFields = true;
+        $this->assertContains(
+            $copyHeaderFields,
+            $this->Mail->DKIM_Add($headerLines, $subject, ''),
+            'DKIM header with copied header fields incorrect'
+        );
+
+        $this->Mail->DKIM_copyHeaderFields = false;
+        $this->assertNotContains(
+            $copyHeaderFields,
+            $this->Mail->DKIM_Add($headerLines, $subject, ''),
+            'DKIM header without copied header fields incorrect'
+        );
+
+        unlink($privatekeyfile);
+    }
+
+    /**
+     * DKIM signing extra headers tests.
+     *
+     * @group dkim
+     */
+    public function testDKIMExtraHeaders()
+    {
+        $privatekeyfile = 'dkim_private.pem';
+        $pk = openssl_pkey_new(
+            [
+                'private_key_bits' => 2048,
+                'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            ]
+        );
+        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        $this->Mail->DKIM_private = 'dkim_private.pem';
+
+        //Example from https://tools.ietf.org/html/rfc6376#section-3.5
+        $from = 'from@example.com';
+        $to = 'to@example.com';
+        $date = 'date';
+        $subject = 'example';
+        $anyHeader = 'foo';
+        $unsubscribeUrl = '<https://www.example.com/unsubscribe/?newsletterId=anytoken&amp;actionToken=anyToken' .
+                            '&otherParam=otherValue&anotherParam=anotherVeryVeryVeryLongValue>';
+
+        $this->Mail->addCustomHeader('X-AnyHeader', $anyHeader);
+        $this->Mail->addCustomHeader('Baz', 'bar');
+        $this->Mail->addCustomHeader('List-Unsubscribe', $unsubscribeUrl);
+
+        $this->Mail->DKIM_extraHeaders = ['Baz', 'List-Unsubscribe'];
+
+        $headerLines = "From:$from\r\nTo:$to\r\nDate:$date\r\n";
+        $headerLines .= "X-AnyHeader:$anyHeader\r\nBaz:bar\r\n";
+        $headerLines .= 'List-Unsubscribe:' . $this->Mail->encodeHeader($unsubscribeUrl) . "\r\n";
+
+        $headerFields = 'h=From:To:Date:Subject:Baz:List-Unsubscribe';
+
+        $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
+
+        $this->assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
+
+        unlink($privatekeyfile);
+    }
+
+    /**
      * DKIM Signing tests.
      *
      * @requires extension openssl

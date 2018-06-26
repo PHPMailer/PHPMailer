@@ -458,6 +458,22 @@ class PHPMailer
     public $DKIM_domain = '';
 
     /**
+     * DKIM Copy header field values for diagnostic use.
+     *
+     * @var bool
+     */
+    public $DKIM_copyHeaderFields = true;
+
+    /**
+     * DKIM Extra signing headers.
+     *
+     * @example ['List-Unsubscribe', 'List-Help']
+     *
+     * @var array
+     */
+    public $DKIM_extraHeaders = [];
+
+    /**
      * DKIM private key file path.
      *
      * @var string
@@ -4266,6 +4282,11 @@ class PHPMailer
         $to_header = '';
         $date_header = '';
         $current = '';
+        $copiedHeaderFields = '';
+        $foundExtraHeaders = [];
+        $extraHeaderKeys = '';
+        $extraHeaderValues = '';
+        $extraCopyHeaderFields = '';
         foreach ($headers as $header) {
             if (strpos($header, 'From:') === 0) {
                 $from_header = $header;
@@ -4276,6 +4297,23 @@ class PHPMailer
             } elseif (strpos($header, 'Date:') === 0) {
                 $date_header = $header;
                 $current = 'date_header';
+            } elseif (!empty($this->DKIM_extraHeaders)) {
+                foreach ($this->DKIM_extraHeaders as $extraHeader) {
+                    if (strpos($header, $extraHeader . ':') === 0) {
+                        $headerValue = $header;
+                        foreach ($this->CustomHeader as $customHeader) {
+                            if ($customHeader[0] === $extraHeader) {
+                                $headerValue = trim($customHeader[0]) .
+                                               ': ' .
+                                               $this->encodeHeader(trim($customHeader[1]));
+                                break;
+                            }
+                        }
+                        $foundExtraHeaders[$extraHeader] = $headerValue;
+                        $current = '';
+                        break;
+                    }
+                }
             } else {
                 if (!empty($$current) and strpos($header, ' =?') === 0) {
                     $$current .= $header;
@@ -4284,14 +4322,24 @@ class PHPMailer
                 }
             }
         }
-        $from = str_replace('|', '=7C', $this->DKIM_QP($from_header));
-        $to = str_replace('|', '=7C', $this->DKIM_QP($to_header));
-        $date = str_replace('|', '=7C', $this->DKIM_QP($date_header));
-        $subject = str_replace(
-            '|',
-            '=7C',
-            $this->DKIM_QP($subject_header)
-        ); // Copied header fields (dkim-quoted-printable)
+        foreach ($foundExtraHeaders as $key => $value) {
+            $extraHeaderKeys .= ':' . $key;
+            $extraHeaderValues .= $value . "\r\n";
+            if ($this->DKIM_copyHeaderFields) {
+                $extraCopyHeaderFields .= "\t|" . str_replace('|', '=7C', $this->DKIM_QP($value)) . ";\r\n";
+            }
+        }
+        if ($this->DKIM_copyHeaderFields) {
+            $from = str_replace('|', '=7C', $this->DKIM_QP($from_header));
+            $to = str_replace('|', '=7C', $this->DKIM_QP($to_header));
+            $date = str_replace('|', '=7C', $this->DKIM_QP($date_header));
+            $subject = str_replace('|', '=7C', $this->DKIM_QP($subject_header));
+            $copiedHeaderFields = "\tz=$from\r\n" .
+                                  "\t|$to\r\n" .
+                                  "\t|$date\r\n" .
+                                  "\t|$subject;\r\n" .
+                                  $extraCopyHeaderFields;
+        }
         $body = $this->DKIM_BodyC($body);
         $DKIMlen = strlen($body); // Length of body
         $DKIMb64 = base64_encode(pack('H*', hash('sha256', $body))); // Base64 of packed binary SHA-256 hash of body
@@ -4307,12 +4355,9 @@ class PHPMailer
             $this->DKIM_selector .
             ";\r\n" .
             "\tt=" . $DKIMtime . '; c=' . $DKIMcanonicalization . ";\r\n" .
-            "\th=From:To:Date:Subject;\r\n" .
+            "\th=From:To:Date:Subject" . $extraHeaderKeys . ";\r\n" .
             "\td=" . $this->DKIM_domain . ';' . $ident . "\r\n" .
-            "\tz=$from\r\n" .
-            "\t|$to\r\n" .
-            "\t|$date\r\n" .
-            "\t|$subject;\r\n" .
+            $copiedHeaderFields .
             "\tbh=" . $DKIMb64 . ";\r\n" .
             "\tb=";
         $toSign = $this->DKIM_HeaderC(
@@ -4320,6 +4365,7 @@ class PHPMailer
             $to_header . "\r\n" .
             $date_header . "\r\n" .
             $subject_header . "\r\n" .
+            $extraHeaderValues .
             $dkimhdrs
         );
         $signed = $this->DKIM_Sign($toSign);
