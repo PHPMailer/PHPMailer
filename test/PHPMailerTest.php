@@ -1951,6 +1951,8 @@ EOT;
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header without copied header fields incorrect'
         );
+
+        unlink($privatekeyfile);
     }
 
     /**
@@ -1977,7 +1979,7 @@ EOT;
         $subject = 'example';
         $anyHeader = 'foo';
         $unsubscribeUrl = '<https://www.example.com/unsubscribe/?newsletterId=anytoken&amp;actionToken=anyToken' .
-                            '&amp;otherParam=otherValue&amp;anotherParam=anotherVeryVeryVeryLongValue>';
+                            '&otherParam=otherValue&anotherParam=anotherVeryVeryVeryLongValue>';
 
         $this->Mail->addCustomHeader('X-AnyHeader', $anyHeader);
         $this->Mail->addCustomHeader('Baz', 'bar');
@@ -1994,6 +1996,8 @@ EOT;
         $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
 
         $this->assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
+
+        unlink($privatekeyfile);
     }
 
     /**
