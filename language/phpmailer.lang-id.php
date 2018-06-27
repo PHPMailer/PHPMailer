@@ -8,7 +8,7 @@
 
 $PHPMAILER_LANG['authenticate']         = 'Kesalahan SMTP: Tidak dapat mengotentikasi.';
 $PHPMAILER_LANG['connect_host']         = 'Kesalahan SMTP: Tidak dapat terhubung ke host SMTP.';
-$PHPMAILER_LANG['data_not_accepted']    = 'Kesalahan SMTP: data tidak diterima.';
+$PHPMAILER_LANG['data_not_accepted']    = 'Kesalahan SMTP: Data tidak diterima.';
 $PHPMAILER_LANG['empty_message']        = 'Isi pesan kosong';
 $PHPMAILER_LANG['encoding']             = 'Pengkodean karakter tidak dikenali: ';
 $PHPMAILER_LANG['execute']              = 'Tidak dapat menjalankan proses : ';
