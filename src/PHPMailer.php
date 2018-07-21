@@ -1412,16 +1412,16 @@ class PHPMailer
 
             // Validate From, Sender, and ConfirmReadingTo addresses
             foreach (['From', 'Sender', 'ConfirmReadingTo'] as $address_kind) {
-                $this->$address_kind = trim($this->$address_kind);
-                if (empty($this->$address_kind)) {
+                $address_kind = trim($address_kind);
+                if (empty($address_kind)) {
                     continue;
                 }
-                $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
-                if (!static::validateAddress($this->$address_kind)) {
+                $address_kind = $this->punyencodeAddress($address_kind);
+                if (!static::validateAddress($address_kind)) {
                     $error_message = sprintf('%s (%s): %s',
                         $this->lang('invalid_address'),
                         $address_kind,
-                        $this->$address_kind);
+                        $address_kind);
                     $this->setError($error_message);
                     $this->edebug($error_message);
                     if ($this->exceptions) {
