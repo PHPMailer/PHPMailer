@@ -924,14 +924,60 @@ class PHPMailer
     /**
      * Add a "To" address.
      *
-     * @param string $address The email address to send to
+     * @param string $address The email address to send to.  Can be comma seperated.
      * @param string $name
      *
-     * @return bool true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way.  If any address of comma seperated argument fails, return is false.
      */
     public function addAddress($address, $name = '')
     {
+        if (strpos($address, ',') !== false && $name == '') {
+            $state = true;
+            foreach (explode(',', $address) as $a) {
+                if ($this->addOrEnqueueAnAddress('to', $a, $name) == false) {
+                    $state = false;
+                }
+            }
+
+            return $state;
+        }
+
         return $this->addOrEnqueueAnAddress('to', $address, $name);
+    }
+
+    /**
+     * Add multiple "To" addresses.
+     *
+     * @param array $addresses An array of email addresses to send to.  Each element should be an array of ["address","name"]
+     *
+     * @return array of booleans, true on success, false if address already used or invalid in some way, position of boolean in return array corresponds to input array
+     */
+    public function addAddresses($addresses)
+    {
+        $states = [];
+
+        foreach ($addresses as $addressData) {
+            if (is_array($addressData)) {
+                $address = $addressData[0];
+                $name = '';
+                if (count($addressData) > 1) {
+                    $name = $addressData[1];
+                }
+            } else {
+                // The user sent an array with just an address and name, instead of an array of arrays.
+                $address=$addresses[0];
+                $name='';
+                if (count($addresses) > 1) {
+                    $name=$addresses[1];
+                }
+                $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
+
+                return $states;
+            }
+            $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
+        }
+
+        return $states;
     }
 
     /**
