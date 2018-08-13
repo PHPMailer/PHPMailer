@@ -931,7 +931,37 @@ class PHPMailer
      */
     public function addAddress($address, $name = '')
     {
+        if(strpos($address, ",") !== false && $name == ''){
+            $state = True;
+            foreach( explode(",",$address) as $a){
+                if($this->addOrEnqueueAnAddress('to', $address, $name) == False){
+                    $state = False;
+                }
+            }
+            return $state;
+        }
         return $this->addOrEnqueueAnAddress('to', $address, $name);
+    }
+
+    /**
+     * Add a "To" address.
+     *
+     * @param array $addresses An array of email addresses to send to.  Each element should be an array of ["address","name"]
+     *
+     * @return  Array of booleans, true on success, false if address already used or invalid in some way
+     */
+    public function addAddresses($addresses)
+    {
+        $states = array();
+        foreach($addresses as $addressData){
+            $address = $addressData[0];
+            $name = "";
+            if(count($addressData) > 1){
+                $name = $addressData[1];
+            }
+            $states[] = $this->addOrEnqueueAnAddress('to', $address, $name)            
+        }
+        return $states
     }
 
     /**
