@@ -931,15 +931,17 @@ class PHPMailer
      */
     public function addAddress($address, $name = '')
     {
-        if(strpos($address, ",") !== false && $name == ''){
-            $state = True;
-            foreach( explode(",",$address) as $a){
-                if($this->addOrEnqueueAnAddress('to', $a, $name) == False){
-                    $state = False;
+        if (strpos($address, ',') !== false && $name == '') {
+            $state = true;
+            foreach (explode(',', $address) as $a) {
+                if ($this->addOrEnqueueAnAddress('to', $a, $name) == false) {
+                    $state = false;
                 }
             }
+
             return $state;
         }
+
         return $this->addOrEnqueueAnAddress('to', $address, $name);
     }
 
@@ -948,32 +950,33 @@ class PHPMailer
      *
      * @param array $addresses An array of email addresses to send to.  Each element should be an array of ["address","name"]
      *
-     * @return  Array of booleans, true on success, false if address already used or invalid in some way, position of boolean in return array corresponds to input array.
+     * @return array of booleans, true on success, false if address already used or invalid in some way, position of boolean in return array corresponds to input array
      */
     public function addAddresses($addresses)
     {
-        $states = array();
+        $states = [];
 
-        foreach($addresses as $addressData){
-            
-            if(is_array($addressData)){
+        foreach ($addresses as $addressData) {
+            if (is_array($addressData)) {
                 $address = $addressData[0];
                 $name = '';
-                if(count($addressData) > 1){
+                if (count($addressData) > 1) {
                     $name = $addressData[1];
                 }
-            }else{
+            } else {
                 // The user sent an array with just an address and name, instead of an array of arrays.
                 $address=$addresses[0];
                 $name='';
-                if(count($addresses) > 1){
+                if (count($addresses) > 1) {
                     $name=$addresses[1];
                 }
                 $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
-                return $states;      
+
+                return $states;
             }
             $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
         }
+
         return $states;
     }
 
