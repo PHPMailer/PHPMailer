@@ -924,10 +924,10 @@ class PHPMailer
     /**
      * Add a "To" address.
      *
-     * @param string $address The email address to send to
+     * @param string $address The email address to send to.  Can be comma seperated.
      * @param string $name
      *
-     * @return bool true on success, false if address already used or invalid in some way
+     * @return bool true on success, false if address already used or invalid in some way.  If any address of comma seperated argument fails, return is false.
      */
     public function addAddress($address, $name = '')
     {
@@ -948,7 +948,7 @@ class PHPMailer
      *
      * @param array $addresses An array of email addresses to send to.  Each element should be an array of ["address","name"]
      *
-     * @return  Array of booleans, true on success, false if address already used or invalid in some way
+     * @return  Array of booleans, true on success, false if address already used or invalid in some way, position of boolean in return array corresponds to input array.
      */
     public function addAddresses($addresses)
     {
