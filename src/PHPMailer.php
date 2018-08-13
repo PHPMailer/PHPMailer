@@ -934,7 +934,7 @@ class PHPMailer
         if(strpos($address, ",") !== false && $name == ''){
             $state = True;
             foreach( explode(",",$address) as $a){
-                if($this->addOrEnqueueAnAddress('to', $address, $name) == False){
+                if($this->addOrEnqueueAnAddress('to', $a, $name) == False){
                     $state = False;
                 }
             }
@@ -944,7 +944,7 @@ class PHPMailer
     }
 
     /**
-     * Add a "To" address.
+     * Add multiple "To" addresses.
      *
      * @param array $addresses An array of email addresses to send to.  Each element should be an array of ["address","name"]
      *
@@ -953,15 +953,28 @@ class PHPMailer
     public function addAddresses($addresses)
     {
         $states = array();
+
         foreach($addresses as $addressData){
-            $address = $addressData[0];
-            $name = "";
-            if(count($addressData) > 1){
-                $name = $addressData[1];
+            
+            if(is_array($addressData)){
+                $address = $addressData[0];
+                $name = '';
+                if(count($addressData) > 1){
+                    $name = $addressData[1];
+                }
+            }else{
+                // The user sent an array with just an address and name, instead of an array of arrays.
+                $address=$addresses[0];
+                $name='';
+                if(count($addresses) > 1){
+                    $name=$addresses[1];
+                }
+                $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
+                return $states;      
             }
-            $states[] = $this->addOrEnqueueAnAddress('to', $address, $name)            
+            $states[] = $this->addOrEnqueueAnAddress('to', $address, $name);
         }
-        return $states
+        return $states;
     }
 
     /**
