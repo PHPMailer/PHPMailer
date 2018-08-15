@@ -33,9 +33,9 @@ $mail->DKIM_passphrase = '';
 //The identity you're signing as - usually your From address
 $mail->DKIM_identity = $mail->From;
 //Suppress listing signed header fields in signature, defaults to true for debugging purpose
-$this->mailer->DKIM_copyHeaderFields = false;
+$mail->DKIM_copyHeaderFields = false;
 //Optionally you can add extra headers for signing to meet special requirements
-$this->mailer->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
+$mail->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
 
 //When you send, the DKIM settings will be used to sign the message
 if (!$mail->send()) {
