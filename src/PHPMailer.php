@@ -788,8 +788,7 @@ class PHPMailer
     private function mailPassthru($to, $subject, $body, $header, $params)
     {
         //Check overloading of mail function to avoid double-encoding
-        //mbstring.func_overload was deprecated in PHP 7.2, so ignore if it's any later than that
-        if (PHP_VERSION_ID < 70200 && (ini_get('mbstring.func_overload') & 1)) {
+        if (ini_get('mbstring.func_overload') & 1) {
             $subject = $this->secureHeader($subject);
         } else {
             $subject = $this->encodeHeader($this->secureHeader($subject));
