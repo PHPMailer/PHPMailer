@@ -16,6 +16,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPUnit\Framework\TestCase;
 
+require('/var/www/html/vendor/autoload.php');
 /**
  * PHPMailer - PHP email transport unit test class.
  */
@@ -1334,6 +1335,7 @@ EOT;
 
         $this->Mail->Subject = $subject . ': sendmail';
         $this->Mail->isSendmail();
+
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1368,7 +1370,6 @@ EOT;
         }
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
-
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
         $this->Mail->isMail();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1676,10 +1677,15 @@ EOT;
      */
     public function testBCCAddressing()
     {
+        $this->Mail->isSMTP();
         $this->Mail->Subject .= ': BCC-only addressing';
         $this->buildBody();
         $this->Mail->clearAllRecipients();
+        $this->Mail->addAddress('foo@example.com', 'Foo');
+        $this->Mail->preSend();
+        $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
+        $this->assertTrue((strpos($b, 'To: Foo <foo@example.com>') !== false));
         $this->assertTrue($this->Mail->send(), 'send failed');
     }
 
@@ -1721,6 +1727,7 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
+        $this->assertRegExp("/".base64_encode('hello')."/",$this->Mail->encodeString('hello'));
     }
 
     /**
