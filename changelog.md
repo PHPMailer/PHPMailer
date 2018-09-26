@@ -1,6 +1,57 @@
 # PHPMailer Change Log
 
-## Version 6.0
+* Added Tagalog translation, thanks to @StoneArtz
+* Updated Hungarian translations
+* Updated Dutch translations
+* Updated Slovenian translation (@filips123)
+* Updated Italian translation (@sabas)
+* Updated Norwegian translation (@aleskr)
+* Updated Indonesian translation (@mylastof)
+* Add constants for common values, such as `text/html` and `quoted-printable`, and use them
+* Added support for copied headers in DKIM, helping with debugging, and an option to add extra headers to the DKIM signature. See DKIM_sign example for how to use them. Thanks to @gwi-mmuths.
+* Add Campaign Monitor transaction ID pattern matcher
+* Remove deprecated constant and ini values causing warnings in PHP 7.3.
+
+## Version 6.0.5 (March 27th 2018)
+* Re-roll of 6.0.4 to fix missed version file entry. No code changes.
+
+## Version 6.0.4 (March 27th 2018)
+* Add some modern MIME types
+* Add Hindi translation (thanks to @dextel2)
+* Improve composer docs
+* Fix generation of path to language files
+
+## Version 6.0.3 (January 5th 2018)
+* Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
+* Make dependence on ext-filter explicit in composer.json
+
+## Version 6.0.2 (November 29th 2017)
+* Don't make max line length depend on line break format
+* Improve Travis-CI config - thanks to Filippo Tessarotto
+* Match SendGrid transaction IDs
+* `idnSupported()` now static, as previously documented
+* Improve error messages for invalid addresses
+* Improve Indonesian translation (thanks to @januridp)
+* Improve Esperanto translation (thanks to @dknacht)
+* Clean up git export ignore settings for production and zip bundles
+* Update license doc
+* Updated upgrading docs
+* Clarify `addStringEmbeddedImage` docs
+* Hide auth credentials in all but lowest level debug output, prevents leakage in bug reports
+* Code style cleanup
+
+## Version 6.0.1 (September 14th 2017)
+* Use shorter Message-ID headers (with more entropy) to avoid iCloud blackhole bug
+* Switch to Symfony code style (though it's not well defined)
+* CI builds now apply syntax & code style checks, so make your PRs tidy!
+* CI code coverage only applied on latest version of PHP to speed up builds (thanks to @Slamdunk for these CI changes)
+* Remove `composer.lock` - it's important that libraries break early; keeping it is for apps
+* Rename test scripts to PSR-4 spec
+* Make content-id values settable on attachments, not just embedded items
+* Add SMTP transaction IDs to callbacks & allow for future expansion
+* Expand test coverage
+
+## Version 6.0 (August 28th 2017)
 This is a major update that breaks backwards compatibility.
 
 * **Requires PHP 5.5 or later**
@@ -53,7 +104,7 @@ This is a major update that breaks backwards compatibility.
 * Better handling of unreliable PHP timeouts
 * Made `SMTPDebug = 4` slightly less noisy
 
-## Version 5.2.25 (August 2th 2917)
+## Version 5.2.25 (August 28th 2017)
 * Make obtaining SMTP transaction ID more reliable
 * Add Bosnian translation
 * This is the last official release in the legacy PHPMailer 5.2 series; there may be future security patches (which will be found in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable)), but no further non-security PRs or issues will be accepted. Migrate to PHPMailer 6.0.

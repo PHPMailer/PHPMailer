@@ -104,6 +104,7 @@ class SMTPLowMemory extends SMTP
         $result = $this->sendCommand('DATA END', '.', 250);
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
+
         return $result;
     }
 }
@@ -123,6 +124,7 @@ class PHPMailerLowMemory extends PHPMailer
         if (!is_object($this->smtp)) {
             $this->smtp = new SMTPLowMemory;
         }
+
         return $this->smtp;
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-         verbose="false"
+         bootstrap="vendor/autoload.php"
+         verbose="true"
          stopOnError="false"
          stopOnFailure="false"
          stopOnIncomplete="false"
@@ -8,7 +9,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         colors="false"
+         colors="true"
          forceCoversAnnotation="false"
          processIsolation="false">
     <testsuites>
@@ -16,12 +17,20 @@
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+        <listener class="PHPMailer\Test\DebugLogTestListener" />
+    </listeners>
     <groups>
         <exclude>
             <group>languages</group>
             <group>pop3</group>
         </exclude>
     </groups>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>

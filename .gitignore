@@ -5,3 +5,5 @@ test/testbootstrap.php
 build/
 vendor/
 *.pem
+composer.lock
+.php_cs.cache

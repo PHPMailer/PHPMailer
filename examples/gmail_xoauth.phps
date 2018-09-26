@@ -56,20 +56,24 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
 //Create a new OAuth2 provider instance
-$provider = new Google([
-    'clientId' => $clientId,
-    'clientSecret' => $clientSecret
-]);
+$provider = new Google(
+    [
+        'clientId' => $clientId,
+        'clientSecret' => $clientSecret,
+    ]
+);
 
 //Pass the OAuth provider instance to PHPMailer
 $mail->setOAuth(
-    new OAuth([
-        'provider' => $provider,
-        'clientId' => $clientId,
-        'clientSecret' => $clientSecret,
-        'refreshToken' => $refreshToken,
-        'userName' => $email
-    ])
+    new OAuth(
+        [
+            'provider' => $provider,
+            'clientId' => $clientId,
+            'clientSecret' => $clientSecret,
+            'refreshToken' => $refreshToken,
+            'userName' => $email,
+        ]
+    )
 );
 
 //Set who the message is to be sent from
@@ -85,7 +89,7 @@ $mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 $mail->CharSet = 'utf-8';
-$mail->msgHTML(file_get_contents('contentsutf8.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contentsutf8.html'), __DIR__);
 
 //Replace the plain text body with one created manually
 $mail->AltBody = 'This is a plain-text message body';

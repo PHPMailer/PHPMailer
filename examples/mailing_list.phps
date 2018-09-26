@@ -39,7 +39,7 @@ $mail->AltBody = 'To view the message, please use an HTML compatible email viewe
 //You'll need to alter this to match your database
 $mysql = mysqli_connect('localhost', 'username', 'password');
 mysqli_select_db($mysql, 'mydb');
-$result = mysqli_query($mysql, 'SELECT full_name, email, photo FROM mailinglist WHERE sent = false');
+$result = mysqli_query($mysql, 'SELECT full_name, email, photo FROM mailinglist WHERE sent = FALSE');
 
 foreach ($result as $row) {
     $mail->addAddress($row['email'], $row['full_name']);
@@ -55,7 +55,7 @@ foreach ($result as $row) {
         //Mark it as sent in the DB
         mysqli_query(
             $mysql,
-            "UPDATE mailinglist SET sent = true WHERE email = '" .
+            "UPDATE mailinglist SET sent = TRUE WHERE email = '" .
             mysqli_real_escape_string($mysql, $row['email']) . "'"
         );
     }

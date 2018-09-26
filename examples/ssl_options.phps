@@ -35,14 +35,14 @@ $mail->SMTPSecure = 'tls';
 
 //Custom connection options
 //Note that these settings are INSECURE
-$mail->SMTPOptions = array (
+$mail->SMTPOptions = array(
     'ssl' => [
-        'verify_peer'  => true,
+        'verify_peer' => true,
         'verify_depth' => 3,
         'allow_self_signed' => true,
         'peer_name' => 'smtp.example.com',
-        'cafile' => '/etc/ssl/ca_cert.pem'
-    ]
+        'cafile' => '/etc/ssl/ca_cert.pem',
+    ],
 );
 
 //Whether to use SMTP authentication
@@ -65,7 +65,7 @@ $mail->Subject = 'PHPMailer SMTP options test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
-$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 
 //Send the message, check for errors
 if (!$mail->send()) {

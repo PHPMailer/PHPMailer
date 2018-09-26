@@ -3,10 +3,11 @@
  * Slovene PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
  * @author Klemen Tušar <techouse@gmail.com>
+ * @author Filip Š <projects@filips.si>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP napaka: Avtentikacija ni uspela.';
-$PHPMAILER_LANG['connect_host']         = 'SMTP napaka: Ne morem vzpostaviti povezave s SMTP gostiteljem.';
+$PHPMAILER_LANG['connect_host']         = 'SMTP napaka: Vzpostavljanje povezave s SMTP gostiteljem ni uspelo.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP napaka: Strežnik zavrača podatke.';
 $PHPMAILER_LANG['empty_message']        = 'E-poštno sporočilo nima vsebine.';
 $PHPMAILER_LANG['encoding']             = 'Nepoznan tip kodiranja: ';
@@ -23,4 +24,4 @@ $PHPMAILER_LANG['signing']              = 'Napaka pri podpisovanju: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Ne morem vzpostaviti povezave s SMTP strežnikom.';
 $PHPMAILER_LANG['smtp_error']           = 'Napaka SMTP strežnika: ';
 $PHPMAILER_LANG['variable_set']         = 'Ne morem nastaviti oz. ponastaviti spremenljivke: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'Manjkajoča razširitev: ';

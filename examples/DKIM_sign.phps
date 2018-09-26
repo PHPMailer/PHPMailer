@@ -18,7 +18,7 @@ $mail = new PHPMailer;
 $mail->setFrom('from@example.com', 'First Last');
 $mail->addAddress('whoto@example.com', 'John Doe');
 $mail->Subject = 'PHPMailer mail() test';
-$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+$mail->msgHTML(file_get_contents('contents.html'), __DIR__);
 
 //This should be the same as the domain of your From address
 $mail->DKIM_domain = 'example.com';
@@ -32,6 +32,10 @@ $mail->DKIM_selector = 'phpmailer';
 $mail->DKIM_passphrase = '';
 //The identity you're signing as - usually your From address
 $mail->DKIM_identity = $mail->From;
+//Suppress listing signed header fields in signature, defaults to true for debugging purpose
+$this->mailer->DKIM_copyHeaderFields = false;
+//Optionally you can add extra headers for signing to meet special requirements
+$this->mailer->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
 
 //When you send, the DKIM settings will be used to sign the message
 if (!$mail->send()) {

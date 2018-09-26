@@ -3,12 +3,15 @@
  * This example shows how to handle a simple contact form.
  */
 
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 $msg = '';
 //Don't run this unless we're handling a form submission
 if (array_key_exists('email', $_POST)) {
     date_default_timezone_set('Etc/UTC');
 
-    require '../PHPMailerAutoload.php';
+    require '../vendor/autoload.php';
 
     //Create a new PHPMailer instance
     $mail = new PHPMailer;
