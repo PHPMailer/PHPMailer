@@ -1996,6 +1996,7 @@ class PHPMailer
             'no' => 'nb',
             'se' => 'sv',
             'sr' => 'rs',
+            'tg' => 'tl',
         ];
 
         if (isset($renamed_langcodes[$langcode])) {
