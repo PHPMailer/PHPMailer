@@ -853,16 +853,37 @@ class SMTP
      * Implements from RFC 821: RCPT <SP> TO:<forward-path> <CRLF>.
      *
      * @param string $address The address the message is being sent to
+     * @param string $dsn Comma separated list of DSN notifications. NEVER, SUCCESS, FAILURE
+     *                    or DELAY. If you specify NEVER all other notifications are ignored.
      *
+     * @access public
      * @return bool
      */
-    public function recipient($address)
+    public function recipient($address, $dsn = '')
     {
-        return $this->sendCommand(
-            'RCPT TO',
-            'RCPT TO:<' . $address . '>',
-            [250, 251]
-        );
+        if (empty($dsn)) {
+           $rcpt = 'RCPT TO:<' . $address . '>';
+        } else {
+            $dsn = strtoupper($dsn);
+            $notify = [];
+
+            if (strpos($dsn, 'NEVER') !== FALSE) {
+                $notify[] = 'NEVER';
+            } else {
+                foreach(['SUCCESS','FAILURE','DELAY'] as $value) {
+                    if (strpos($dsn, $value) !== FALSE)
+                       $notify[] = $value;
+                }
+            }
+
+            $rcpt = 'RCPT TO:<' . $address . '> NOTIFY='.implode(',', $notify);
+       }
+
+       return $this->sendCommand(
+           'RCPT TO',
+           $rcpt,
+           [250, 251]
+       );
     }
 
     /**
