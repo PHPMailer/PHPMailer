@@ -16,7 +16,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPUnit\Framework\TestCase;
 
-
+require('/var/www/html/vendor/autoload.php');
 /**
  * PHPMailer - PHP email transport unit test class.
  */
@@ -1371,7 +1371,20 @@ EOT;
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
-        $this->Mail->isMail();
+        $this->setAddress('totestmailsend@example.com','totest');
+        $this->setAddress('cctestmailsend@example.com','cctest',$sType = 'cc');
+        $this->setAddress('bcctestmailsend@example.com','bcctest',$sType = 'bcc');
+        $this->Mail->addReplyTo('replytotestmailsend@example.com','replytotest');
+        $this->assertContains('totestmailsend@example.com',$this->Mail->getToAddresses()[0]);
+        $this->assertContains('cctestmailsend@example.com',$this->Mail->getCcAddresses()[0]);
+        $this->assertContains('bcctestmailsend@example.com',$this->Mail->getBccAddresses()[0]);
+        $this->assertContains('replytotestmailsend@example.com',$this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['totestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
+
+        $this->Mail->createHeader();
+        $this->Mail->isMail();               
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
         $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
