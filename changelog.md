@@ -3,9 +3,14 @@
 * Added Tagalog translation, thanks to @StoneArtz
 * Updated Hungarian translations
 * Updated Dutch translations
+* Updated Slovenian translation (@filips123)
+* Updated Italian translation (@sabas)
+* Updated Norwegian translation (@aleskr)
+* Updated Indonesian translation (@mylastof)
 * Add constants for common values, such as `text/html` and `quoted-printable`, and use them
 * Added support for copied headers in DKIM, helping with debugging, and an option to add extra headers to the DKIM signature. See DKIM_sign example for how to use them. Thanks to @gwi-mmuths.
 * Add Campaign Monitor transaction ID pattern matcher
+* Remove deprecated constant and ini values causing warnings in PHP 7.3.
 
 ## Version 6.0.5 (March 27th 2018)
 * Re-roll of 6.0.4 to fix missed version file entry. No code changes.
