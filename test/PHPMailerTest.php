@@ -1665,6 +1665,15 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !== false));
+        
+        $this->Mail->Subject .= ': Address escaping invalid';
+        $this->Mail->clearAddresses();
+        $this->Mail->addAddress('foo@example.com', 'Tim "The Book" O\'Reilly');
+        $this->Mail->addAddress('invalidaddressexample.com', 'invalidaddress');
+        $this->Mail->Body = 'invalid address';
+        $this->buildBody();
+        $this->Mail->preSend();
+        $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
     }
 
     /**
@@ -2503,7 +2512,6 @@ EOT;
 
     }
 }
-
 /*
  * This is a sample form for setting appropriate test values through a browser
  * These values can also be set using a file called testbootstrap.php (not in repo) in the same folder as this script
