@@ -2507,9 +2507,10 @@ EOT;
         $this->assertFalse($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
 
         $this->Smtp = $this->Mail->getSMTPInstance();
+        $this->assertInstanceOf( get_class($this->Smtp) , $this->Mail->setSMTPInstance($this->Smtp));
         $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
+        $this->assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
-
     }
 }
 /*
