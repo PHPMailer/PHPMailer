@@ -1,6 +1,7 @@
 # PHPMailer Change Log
 
 * Added Tagalog translation, thanks to @StoneArtz
+* Added Malagache translation, thanks to @Hackinet
 * Updated Hungarian translations
 * Updated Dutch translations
 * Updated Slovenian translation (@filips123)
