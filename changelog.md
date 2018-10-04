@@ -5,6 +5,7 @@
 * Updated Hungarian translations
 * Updated Dutch translations
 * Updated Slovenian translation (@filips123)
+* Updated Slovak translation (@pcmanik)
 * Updated Italian translation (@sabas)
 * Updated Norwegian translation (@aleskr)
 * Updated Indonesian translation (@mylastof)
