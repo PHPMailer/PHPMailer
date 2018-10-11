@@ -942,6 +942,36 @@ EOT;
     }
 
     /**
+     * createBody test of switch case  
+     */
+    public function testCreateBody(){
+        $PHPMailer = new PHPMailer();
+        $reflection = new \ReflectionClass($PHPMailer);
+        $property = $reflection->getProperty('message_type');
+        $property->setAccessible(true);
+        $property->setValue($PHPMailer, 'inline');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'attach');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'inline_attach');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_inline');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_attach');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_inline_attach');
+        $this->assertInternalType('string',$PHPMailer->createBody());
+    }
+
+    /**
      * Send a message containing ISO-8859-1 text.
      */
     public function testHtmlIso8859()
@@ -1386,7 +1416,7 @@ EOT;
         
         // $this->Mail->createHeader();
         // $this->Mail->isMail();               
-        // $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        // $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
         // $msg = $this->Mail->getSentMIMEMessage();
         // $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
