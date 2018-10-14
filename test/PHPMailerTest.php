@@ -1711,6 +1711,16 @@ EOT;
         $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
         $this->assertTrue($this->Mail->attachmentExists());
         
+        $PHPMailer = new PHPMailer();
+        $reflection = new \ReflectionClass($PHPMailer);
+        $property = $reflection->getProperty('message_type');
+        $property->setAccessible(true);
+        $property->setValue($PHPMailer, 'inline');
+        $this->assertInternalType('string',$PHPMailer->getMailMIME());
+        $property->setValue($PHPMailer, 'alt_inline_attach');
+        $this->assertInternalType('string',$PHPMailer->getMailMIME());
+        $property->setValue($PHPMailer, 'alt_inline');
+        $this->assertInternalType('string',$PHPMailer->getMailMIME());
 
     }
 
