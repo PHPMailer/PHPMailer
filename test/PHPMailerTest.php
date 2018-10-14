@@ -17,7 +17,6 @@ use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\OAuth;
 use PHPUnit\Framework\TestCase;
 
-require('/var/www/html/vendor/autoload.php');
 /**
  * PHPMailer - PHP email transport unit test class.
  */
@@ -1721,7 +1720,6 @@ EOT;
         $this->assertInternalType('string',$PHPMailer->getMailMIME());
         $property->setValue($PHPMailer, 'alt_inline');
         $this->assertInternalType('string',$PHPMailer->getMailMIME());
-
     }
 
     /**
