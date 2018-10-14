@@ -661,6 +661,8 @@ final class PHPMailerTest extends TestCase
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre8'));
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre8'));
+        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'html5'));
+        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'html5'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
@@ -2359,10 +2361,6 @@ EOT;
      */
     public function testConvertEncoding()
     {
-        if (!PHPMailer::idnSupported()) {
-            $this->markTestSkipped('intl and/or mbstring extensions are not available');
-        }
-
         $this->Mail->clearAllRecipients();
         $this->Mail->clearReplyTos();
 
@@ -2381,7 +2379,7 @@ EOT;
 
         // Clear queued BCC recipient.
         $this->Mail->clearBCCs();
-
+        
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
