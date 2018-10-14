@@ -1707,6 +1707,11 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
+        
+        $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
+        $this->assertTrue($this->Mail->attachmentExists());
+        
+
     }
 
     /**
