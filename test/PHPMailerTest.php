@@ -12,9 +12,9 @@
 
 namespace PHPMailer\Test;
 
+use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
-use PHPMailer\PHPMailer\OAuth;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -945,31 +945,32 @@ EOT;
     /**
      * createBody test of switch case  
      */
-    public function testCreateBody(){
+    public function testCreateBody()
+    {
         $PHPMailer = new PHPMailer();
         $reflection = new \ReflectionClass($PHPMailer);
         $property = $reflection->getProperty('message_type');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'attach');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'inline_attach');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_attach');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline_attach');
-        $this->assertInternalType('string',$PHPMailer->createBody());
+        $this->assertInternalType('string', $PHPMailer->createBody());
     }
 
     /**
@@ -1403,14 +1404,14 @@ EOT;
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
-        $this->setAddress('totestmailsend@example.com','totest');
-        $this->setAddress('cctestmailsend@example.com','cctest',$sType = 'cc');
-        $this->setAddress('bcctestmailsend@example.com','bcctest',$sType = 'bcc');
-        $this->Mail->addReplyTo('replytotestmailsend@example.com','replytotest');
-        $this->assertContains('totestmailsend@example.com',$this->Mail->getToAddresses()[0]);
-        $this->assertContains('cctestmailsend@example.com',$this->Mail->getCcAddresses()[0]);
-        $this->assertContains('bcctestmailsend@example.com',$this->Mail->getBccAddresses()[0]);
-        $this->assertContains('replytotestmailsend@example.com',$this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
+        $this->setAddress('totestmailsend@example.com', 'totest');
+        $this->setAddress('cctestmailsend@example.com', 'cctest',$sType = 'cc');
+        $this->setAddress('bcctestmailsend@example.com', 'bcctest',$sType = 'bcc');
+        $this->Mail->addReplyTo('replytotestmailsend@example.com', 'replytotest');
+        $this->assertContains('totestmailsend@example.com', $this->Mail->getToAddresses()[0]);
+        $this->assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
+        $this->assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
+        $this->assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['totestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
@@ -1717,7 +1718,7 @@ EOT;
         $property->setValue($PHPMailer, 'inline');
         $this->assertInternalType('string', $PHPMailer->getMailMIME());
         $property->setValue($PHPMailer, 'alt_inline_attach');
-        $this->assertInternalType('string',$PHPMailer->getMailMIME());
+        $this->assertInternalType('string', $PHPMailer->getMailMIME());
         $property->setValue($PHPMailer, 'alt_inline');
         $this->assertInternalType('string', $PHPMailer->getMailMIME());
     }
@@ -2374,6 +2375,10 @@ EOT;
      */
     public function testConvertEncoding()
     {
+        if (!PHPMailer::idnSupported()) {
+            $this->markTestSkipped('intl and/or mbstring extensions are not available');	
+        }
+        
         $this->Mail->clearAllRecipients();
         $this->Mail->clearReplyTos();
 
@@ -2525,7 +2530,7 @@ EOT;
     public function testSmtpConnect()
     {
         $this->Mail->SMTPDebug = 4; //Show connection-level errors
-        $this->assertFalse($this->Mail->smtpConnect(),'SMTP single connect failed');
+        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
         // $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
@@ -2541,7 +2546,7 @@ EOT;
         // $this->Mail->smtpClose();
 
         $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
-        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
+        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
 
         // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
@@ -2549,7 +2554,7 @@ EOT;
         $this->assertFalse($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
         
         $this->Smtp = $this->Mail->getSMTPInstance();
-        $this->assertInstanceOf( get_class($this->Smtp) , $this->Mail->setSMTPInstance($this->Smtp));
+        $this->assertInstanceOf(get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
         $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
         $this->assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
@@ -2567,21 +2572,21 @@ EOT;
         $property->setValue($PHPMailer, true);
         $this->assertTrue($PHPMailer->getOAuth());
         
-        $options =array(
+        $options =[
             'provider' => 'dummyprovider',
             'userName' => 'dummyusername',
             'clientSecret' => 'dummyclientsecret',
             'clientId' => 'dummyclientid',
-            'refreshToken' => 'dummyrefreshtoken'
-        );
+            'refreshToken' => 'dummyrefreshtoken',
+        ];
         
         $oauth = new OAuth($options);
         $this->assertInstanceOf(OAuth::class, $oauth);
         $subject = $PHPMailer->setOAuth($oauth);
         $this->assertNull($subject);
-        $this->assertInstanceOf(OAuth::class,$PHPMailer->getOAuth());
+        $this->assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
     }
-    
+
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
