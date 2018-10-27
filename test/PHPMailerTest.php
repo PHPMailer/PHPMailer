@@ -1415,7 +1415,7 @@ EOT;
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['totestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
-        
+
         $this->Mail->createHeader();
         $this->Mail->isMail();
         $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
@@ -1698,7 +1698,7 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !== false));
-        
+
         $this->Mail->Subject .= ': Address escaping invalid';
         $this->Mail->clearAddresses();
         $this->Mail->addAddress('foo@example.com', 'Tim "The Book" O\'Reilly');
@@ -1707,10 +1707,10 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
-        
+
         $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
         $this->assertTrue($this->Mail->attachmentExists());
-        
+
         $PHPMailer = new PHPMailer();
         $reflection = new \ReflectionClass($PHPMailer);
         $property = $reflection->getProperty('message_type');
@@ -2552,7 +2552,7 @@ EOT;
         // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->Mail->Host = $_REQUEST['mail_host'];
         $this->assertFalse($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
-        
+
         $this->Smtp = $this->Mail->getSMTPInstance();
         $this->assertInstanceOf(get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
         $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
@@ -2571,7 +2571,7 @@ EOT;
         $property->setAccessible(true);
         $property->setValue($PHPMailer, true);
         $this->assertTrue($PHPMailer->getOAuth());
-        
+
         $options =[
             'provider' => 'dummyprovider',
             'userName' => 'dummyusername',
@@ -2579,7 +2579,7 @@ EOT;
             'clientId' => 'dummyclientid',
             'refreshToken' => 'dummyrefreshtoken',
         ];
-        
+
         $oauth = new OAuth($options);
         $this->assertInstanceOf(OAuth::class, $oauth);
         $subject = $PHPMailer->setOAuth($oauth);
