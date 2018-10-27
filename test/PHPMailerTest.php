@@ -943,7 +943,7 @@ EOT;
     }
 
     /**
-     * createBody test of switch case  
+     * createBody test of switch case
      */
     public function testCreateBody()
     {
@@ -1417,7 +1417,7 @@ EOT;
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
         
         $this->Mail->createHeader();
-        $this->Mail->isMail();               
+        $this->Mail->isMail();
         $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
         $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
@@ -1796,7 +1796,7 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        $this->assertRegExp("/" . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
+        $this->assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
     }
 
     /**
@@ -2376,7 +2376,7 @@ EOT;
     public function testConvertEncoding()
     {
         if (!PHPMailer::idnSupported()) {
-            $this->markTestSkipped('intl and/or mbstring extensions are not available');	
+            $this->markTestSkipped('intl and/or mbstring extensions are not available');
         }
         
         $this->Mail->clearAllRecipients();
@@ -2561,7 +2561,7 @@ EOT;
     }
 
     /**
-     * Test OAuth method 
+     * Test OAuth method
      */
     public function testOAuth()
     {
