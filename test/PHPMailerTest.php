@@ -1415,11 +1415,11 @@ EOT;
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
         
-        // $this->Mail->createHeader();
-        // $this->Mail->isMail();               
-        // $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
-        // $msg = $this->Mail->getSentMIMEMessage();
-        // $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        $this->Mail->createHeader();
+        $this->Mail->isMail();               
+        $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
+        $msg = $this->Mail->getSentMIMEMessage();
+        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1715,11 +1715,11 @@ EOT;
         $property = $reflection->getProperty('message_type');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
-        $this->assertInternalType('string',$PHPMailer->getMailMIME());
+        $this->assertInternalType('string', $PHPMailer->getMailMIME());
         $property->setValue($PHPMailer, 'alt_inline_attach');
         $this->assertInternalType('string',$PHPMailer->getMailMIME());
         $property->setValue($PHPMailer, 'alt_inline');
-        $this->assertInternalType('string',$PHPMailer->getMailMIME());
+        $this->assertInternalType('string', $PHPMailer->getMailMIME());
     }
 
     /**
@@ -2554,6 +2554,10 @@ EOT;
         $this->assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
     }
+
+    /**
+     * Test OAuth method 
+     */
     public function testOAuth()
     {
         $PHPMailer = new PHPMailer();
@@ -2577,6 +2581,7 @@ EOT;
         $this->assertNull($subject);
         $this->assertInstanceOf(OAuth::class,$PHPMailer->getOAuth());
     }
+    
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
