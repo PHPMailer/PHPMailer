@@ -2662,7 +2662,6 @@ class PHPMailer
                     $parts = explode("\n\n", $body, 2);
                     $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
-                                        
                 } else {
                     fclose($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
