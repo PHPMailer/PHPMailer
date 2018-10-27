@@ -1405,8 +1405,8 @@ EOT;
         $this->buildBody();
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
         $this->setAddress('totestmailsend@example.com', 'totest');
-        $this->setAddress('cctestmailsend@example.com', 'cctest',$sType = 'cc');
-        $this->setAddress('bcctestmailsend@example.com', 'bcctest',$sType = 'bcc');
+        $this->setAddress('cctestmailsend@example.com', 'cctest', $sType = 'cc');
+        $this->setAddress('bcctestmailsend@example.com', 'bcctest', $sType = 'bcc');
         $this->Mail->addReplyTo('replytotestmailsend@example.com', 'replytotest');
         $this->assertContains('totestmailsend@example.com', $this->Mail->getToAddresses()[0]);
         $this->assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
@@ -1796,7 +1796,7 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        $this->assertRegExp("/".base64_encode('hello')."/",$this->Mail->encodeString('hello'));
+        $this->assertRegExp("/" . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
     }
 
     /**
