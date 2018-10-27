@@ -1418,7 +1418,7 @@ EOT;
 
         $this->Mail->createHeader();
         $this->Mail->isMail();
-        $this->assertTrue($tphis->Mail->send(), $this->Mail->ErrorInfo);
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
         $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
