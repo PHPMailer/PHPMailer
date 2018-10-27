@@ -2378,7 +2378,7 @@ EOT;
         if (!PHPMailer::idnSupported()) {
             $this->markTestSkipped('intl and/or mbstring extensions are not available');
         }
-        
+
         $this->Mail->clearAllRecipients();
         $this->Mail->clearReplyTos();
 
@@ -2397,7 +2397,7 @@ EOT;
 
         // Clear queued BCC recipient.
         $this->Mail->clearBCCs();
-        
+
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
@@ -2586,7 +2586,6 @@ EOT;
         $this->assertNull($subject);
         $this->assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
     }
-
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
