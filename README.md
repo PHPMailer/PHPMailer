@@ -1,5 +1,6 @@
 ![PHPMailer](https://raw.github.com/PHPMailer/PHPMailer/master/examples/images/phpmailer.png)
 
+
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
 Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](https://travis-ci.org/PHPMailer/PHPMailer)
@@ -173,6 +174,7 @@ PHPMailer versions prior to 5.2.18 (released December 2016) are vulnerable to [C
 See [SECURITY](https://github.com/PHPMailer/PHPMailer/tree/master/SECURITY.md) for more detail on security issues.
 
 ## Contributing
+
 Please submit bug reports, suggestions and pull requests to the [GitHub issue tracker](https://github.com/PHPMailer/PHPMailer/issues).
 
 We're particularly interested in fixing edge-cases, expanding test coverage and updating translations.
@@ -214,3 +216,5 @@ See [changelog](changelog.md).
 - Additional languages and language strings.
 - CRAM-MD5 authentication support.
 - Preserves full repo history of authors, commits and branches from the original SourceForge project.
+
+
