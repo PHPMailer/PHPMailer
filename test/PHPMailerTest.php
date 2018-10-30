@@ -16,7 +16,6 @@ use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPUnit\Framework\TestCase;
-require('/var/www/html/vendor/autoload.php');
 /**
  * PHPMailer - PHP email transport unit test class.
  */
