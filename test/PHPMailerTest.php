@@ -16,7 +16,7 @@ use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPUnit\Framework\TestCase;
-
+require('/var/www/html/vendor/autoload.php');
 /**
  * PHPMailer - PHP email transport unit test class.
  */
@@ -69,7 +69,7 @@ final class PHPMailerTest extends TestCase
      */
     protected function setUp()
     {
-        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
+        $this->INCLUDE_DIR = \dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
@@ -106,7 +106,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Password = '';
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-        if (strlen($this->Mail->Host) > 0) {
+        if (\strlen($this->Mail->Host) > 0) {
             $this->Mail->isSMTP();
         } else {
             $this->Mail->isMail();
@@ -114,7 +114,7 @@ final class PHPMailerTest extends TestCase
         if (array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
         }
-        if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
+        if (array_key_exists('mail_cc', $_REQUEST) and \strlen($_REQUEST['mail_cc']) > 0) {
             $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
@@ -143,7 +143,7 @@ final class PHPMailerTest extends TestCase
         $this->checkChanges();
 
         // Determine line endings for message
-        if ('text/html' == $this->Mail->ContentType || strlen($this->Mail->AltBody) > 0) {
+        if ('text/html' == $this->Mail->ContentType || \strlen($this->Mail->AltBody) > 0) {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
@@ -166,13 +166,13 @@ final class PHPMailerTest extends TestCase
         $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
         $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
 
-        if (strlen($this->Mail->Host) > 0) {
+        if (\strlen($this->Mail->Host) > 0) {
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
         }
 
         // If attachments then create an attachment list
         $attachments = $this->Mail->getAttachments();
-        if (count($attachments) > 0) {
+        if (\count($attachments) > 0) {
             $ReportBody .= 'Attachments:' . $eol;
             $ReportBody .= $list_start;
             foreach ($attachments as $attachment) {
@@ -184,12 +184,12 @@ final class PHPMailerTest extends TestCase
         }
 
         // If there are changes then list them
-        if (count($this->ChangeLog) > 0) {
+        if (\count($this->ChangeLog) > 0) {
             $ReportBody .= 'Changes' . $eol;
             $ReportBody .= '-------' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->ChangeLog); ++$i) {
+            for ($i = 0; $i < \count($this->ChangeLog); ++$i) {
                 $ReportBody .= $bullet_start . $this->ChangeLog[$i][0] . ' was changed to [' .
                     $this->ChangeLog[$i][1] . ']' . $bullet_end;
             }
@@ -197,12 +197,12 @@ final class PHPMailerTest extends TestCase
         }
 
         // If there are notes then list them
-        if (count($this->NoteLog) > 0) {
+        if (\count($this->NoteLog) > 0) {
             $ReportBody .= 'Notes' . $eol;
             $ReportBody .= '-----' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->NoteLog); ++$i) {
+            for ($i = 0; $i < \count($this->NoteLog); ++$i) {
                 $ReportBody .= $bullet_start . $this->NoteLog[$i] . $bullet_end;
             }
             $ReportBody .= $list_end;
@@ -583,8 +583,8 @@ final class PHPMailerTest extends TestCase
             '-@a..com',
             'invalid@about.museum-',
             'test@...........com',
-            '"Unicode NULL' . chr(0) . '"@char.com',
-            'Unicode NULL' . chr(0) . '@char.com',
+            '"Unicode NULL' . \chr(0) . '"@char.com',
+            'Unicode NULL' . \chr(0) . '@char.com',
             'first.last@[IPv6::]',
             'first.last@[IPv6::::]',
             'first.last@[IPv6::b4]',
@@ -641,11 +641,11 @@ final class PHPMailerTest extends TestCase
             }
         }
         $err = '';
-        if (count($goodfails) > 0) {
+        if (\count($goodfails) > 0) {
             $err .= "Good addresses that failed validation:\n";
             $err .= implode("\n", $goodfails);
         }
-        if (count($badpasses) > 0) {
+        if (\count($badpasses) > 0) {
             if (!empty($err)) {
                 $err .= "\n\n";
             }
@@ -678,7 +678,7 @@ final class PHPMailerTest extends TestCase
             PHPMailer::validateAddress(
                 'user@example.com',
                 function ($address) {
-                    return strpos($address, '@') !== false;
+                    return false !== strpos($address, '@');
                 }
             ),
             'Custom validator false negative'
@@ -687,7 +687,7 @@ final class PHPMailerTest extends TestCase
             PHPMailer::validateAddress(
                 'userexample.com',
                 function ($address) {
-                    return strpos($address, '@') !== false;
+                    return false !== strpos($address, '@');
                 }
             ),
             'Custom validator false positive'
@@ -727,7 +727,7 @@ final class PHPMailerTest extends TestCase
             '40 characters.  Make sure that it is. ',
             10
         );
-        $nBodyLen = strlen($my_body);
+        $nBodyLen = \strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
         $this->Mail->Body = $my_body;
@@ -749,7 +749,7 @@ final class PHPMailerTest extends TestCase
             '飛兒樂 團光茫飛兒樂 團飛兒樂 團光茫光茫飛兒樂 團光茫. ',
             10
         );
-        $nBodyLen = strlen($my_body);
+        $nBodyLen = \strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
         $this->Mail->Body = $my_body;
@@ -998,7 +998,7 @@ EOT;
         );
         $this->buildBody();
         $this->assertTrue(
-            strpos($this->Mail->Body, $check) !== false,
+            false !== strpos($this->Mail->Body, $check),
             'ISO message body does not contain expected text'
         );
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1121,34 +1121,34 @@ EOT;
 
         //Test that local paths without a basedir are ignored
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
-        $this->assertTrue(strpos($this->Mail->Body, 'src="/etc/hostname"') !== false);
+        $this->assertTrue(false !== strpos($this->Mail->Body, 'src="/etc/hostname"'));
         //Test that local paths with a basedir are not ignored
         $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertTrue(false === strpos($this->Mail->Body, 'src="composer.json"'));
         //Test that local paths with parent traversal are ignored
         $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertTrue(false === strpos($this->Mail->Body, 'src="composer.json"'));
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
         $this->assertTrue(
-            strpos($this->Mail->Body, 'src="cid:5d41402abc4b2a76b9719d911017c592"') !== false
+            false !== strpos($this->Mail->Body, 'src="cid:5d41402abc4b2a76b9719d911017c592"')
         );
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
         $this->assertTrue(
-            strpos(
+            false !== strpos(
                 $this->Mail->Body,
                 'src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            ) !== false
+            )
         );
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
         $this->assertTrue(
-            strpos(
+            false !== strpos(
                 $this->Mail->Body,
                 'src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            ) !== false
+            )
         );
     }
 
@@ -1398,24 +1398,24 @@ EOT;
     {
         $sendmail = ini_get('sendmail_path');
         //No path in sendmail_path
-        if (strpos($sendmail, '/') === false) {
+        if (false === strpos($sendmail, '/')) {
             ini_set('sendmail_path', '/usr/sbin/sendmail -t -i ');
         }
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
-        $this->setAddress('totestmailsend@example.com', 'totest');
+        $this->setAddress('testmailsend@example.com', 'totest');
         $this->setAddress('cctestmailsend@example.com', 'cctest', $sType = 'cc');
         $this->setAddress('bcctestmailsend@example.com', 'bcctest', $sType = 'bcc');
         $this->Mail->addReplyTo('replytotestmailsend@example.com', 'replytotest');
-        $this->assertContains('totestmailsend@example.com', $this->Mail->getToAddresses()[0]);
+        $this->assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0]);
         $this->assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
         $this->assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
         $this->assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
-        $this->assertTrue($this->Mail->getAllRecipientAddresses()['totestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['testmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
         $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
-
+        
         $this->Mail->createHeader();
         $this->Mail->isMail();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1461,7 +1461,7 @@ EOT;
         $message = $this->Mail->getSentMIMEMessage();
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($message),
-            'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())) . ' chars)'
+            'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + \strlen(PHPMailer::getLE())) . ' chars)'
         );
         $this->assertContains(
             'Content-Transfer-Encoding: quoted-printable',
@@ -1549,8 +1549,8 @@ EOT;
         $this->Mail->Subject .= ': Error handling test - this should be sent ok';
         $this->buildBody();
         $this->Mail->clearAllRecipients(); // no addresses should cause an error
-        $this->assertTrue($this->Mail->isError() == false, 'Error found');
-        $this->assertTrue($this->Mail->send() == false, 'send succeeded');
+        $this->assertTrue(false == $this->Mail->isError(), 'Error found');
+        $this->assertTrue(false == $this->Mail->send(), 'send succeeded');
         $this->assertTrue($this->Mail->isError(), 'No error found');
         $this->assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
         $this->Mail->addAddress($_REQUEST['mail_to']);
@@ -1697,7 +1697,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !== false));
+        $this->assertTrue((false !== strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>')));
 
         $this->Mail->Subject .= ': Address escaping invalid';
         $this->Mail->clearAddresses();
@@ -1754,7 +1754,7 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
-        $this->assertTrue((strpos($b, 'To: Foo <foo@example.com>') !== false));
+        $this->assertTrue((false !== strpos($b, 'To: Foo <foo@example.com>')));
         $this->assertTrue($this->Mail->send(), 'send failed');
     }
 
@@ -2457,12 +2457,12 @@ EOT;
         // There should be only one "To" address and one "Reply-To" address.
         $this->assertEquals(
             1,
-            count($this->Mail->getToAddresses()),
+            \count($this->Mail->getToAddresses()),
             'Bad count of "to" recipients'
         );
         $this->assertEquals(
             1,
-            count($this->Mail->getReplyToAddresses()),
+            \count($this->Mail->getReplyToAddresses()),
             'Bad count of "reply-to" addresses'
         );
     }
@@ -2554,7 +2554,7 @@ EOT;
         $this->assertFalse($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
 
         $this->Smtp = $this->Mail->getSMTPInstance();
-        $this->assertInstanceOf(get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
+        $this->assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
         $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
         $this->assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
