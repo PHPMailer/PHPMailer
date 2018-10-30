@@ -24,4 +24,4 @@ $PHPMAILER_LANG['signing']              = 'Помилка підпису: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Помилка з\'єднання із SMTP-сервером';
 $PHPMAILER_LANG['smtp_error']           = 'Помилка SMTP-сервера: ';
 $PHPMAILER_LANG['variable_set']         = 'Неможливо встановити або перевстановити змінну: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'Не знайдено розширення: ';
