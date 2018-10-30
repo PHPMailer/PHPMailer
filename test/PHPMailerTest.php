@@ -2546,7 +2546,7 @@ EOT;
         // $this->Mail->smtpClose();
 
         $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
-        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
+        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
 
         // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
