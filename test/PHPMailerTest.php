@@ -2547,8 +2547,8 @@ EOT;
 
         $this->Smtp = $this->Mail->getSMTPInstance();
         $this->assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
-        $this->assertTrue($this->Smtp->startTLS(), 'SMTP connect with options failed');
-        $this->assertTrue($this->Mail->SMTPAuth);
+        $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
+        $this->assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
     }
 
