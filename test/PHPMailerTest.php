@@ -2522,7 +2522,7 @@ EOT;
     public function testSmtpConnect()
     {
         $this->Mail->SMTPDebug = 4; //Show connection-level errors
-        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP single connect failed');
+        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
         // $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
