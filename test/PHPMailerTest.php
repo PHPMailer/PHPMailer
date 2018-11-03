@@ -2543,12 +2543,12 @@ EOT;
 
         // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->Mail->Host = $_REQUEST['mail_host'];
-        $this->assertFalse($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
+        $this->assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
 
         $this->Smtp = $this->Mail->getSMTPInstance();
         $this->assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
-        $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
-        $this->assertFalse($this->Mail->SMTPAuth);
+        $this->assertTrue($this->Smtp->startTLS(), 'SMTP connect with options failed');
+        $this->assertTrue($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
     }
 
