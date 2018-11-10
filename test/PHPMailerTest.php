@@ -997,10 +997,7 @@ EOT;
             realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
-        $this->assertTrue(
-            strpos($this->Mail->Body, $check) !== false,
-            'ISO message body does not contain expected text'
-        );
+        $this->assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1121,35 +1118,23 @@ EOT;
 
         //Test that local paths without a basedir are ignored
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
-        $this->assertTrue(strpos($this->Mail->Body, 'src="/etc/hostname"') !== false);
+        $this->assertContains('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
         $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
         $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
-        $this->assertTrue(
-            strpos($this->Mail->Body, 'src="cid:5d41402abc4b2a76b9719d911017c592"') !== false
-        );
+        $this->assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertTrue(
-            false !== strpos(
-                $this->Mail->Body,
-                'src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            )
-        );
+        $this->assertContains('src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertTrue(
-            strpos(
-                $this->Mail->Body,
-                'src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            ) !== false
-        );
+        $this->assertContains('src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
     }
 
     /**
@@ -1700,7 +1685,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        $this->assertTrue((false !== strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>')));
+        $this->assertContains('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
 
         $this->Mail->Subject .= ': Address escaping invalid';
         $this->Mail->clearAddresses();
@@ -1746,7 +1731,7 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
-        $this->assertTrue((false !== strpos($b, 'To: Foo <foo@example.com>')));
+        $this->assertContains('To: Foo <foo@example.com>', $b);
         $this->assertTrue($this->Mail->send(), 'send failed');
     }
 
