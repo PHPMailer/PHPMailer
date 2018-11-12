@@ -733,7 +733,7 @@ class SMTP
     public function hello($host = '')
     {
         //Try extended hello first (RFC 2821)
-        return (bool) ($this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host));
+        return $this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host);
     }
 
     /**
