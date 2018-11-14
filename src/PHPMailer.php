@@ -1995,7 +1995,7 @@ class PHPMailer
             'dk' => 'da',
             'no' => 'nb',
             'se' => 'sv',
-            'sr' => 'rs',
+            'rs' => 'sr',
             'tg' => 'tl',
         ];
 
