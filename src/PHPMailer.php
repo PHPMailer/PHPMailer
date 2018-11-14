@@ -3310,6 +3310,7 @@ class PHPMailer
             5 => true, // isStringAttachment
             6 => $disposition,
             7 => 0,
+            8 => '', // description
         ];
     }
 
@@ -3360,6 +3361,7 @@ class PHPMailer
             5 => false, // isStringAttachment
             6 => $disposition,
             7 => $cid,
+            8 => '', // description
         ];
 
         return true;
@@ -3405,6 +3407,7 @@ class PHPMailer
             5 => true, // isStringAttachment
             6 => $disposition,
             7 => $cid,
+            8 => '', // description
         ];
 
         return true;
