@@ -426,6 +426,13 @@ class PHPMailer
     public $AllowEmpty = false;
 
     /**
+     * Whether to allow sending attachment without any filename.
+     *
+     * @var bool
+     */
+    public $AllowEmptyName = false;
+
+    /**
      * DKIM selector.
      *
      * @var string
@@ -2386,6 +2393,7 @@ class PHPMailer
                 $result .= $this->textLine("\tboundary=\"" . $this->boundary[1] . '"');
                 break;
             case 'attach':
+            case 'attach_one':
             case 'inline_attach':
             case 'alt_attach':
             case 'alt_inline_attach':
@@ -2611,6 +2619,9 @@ class PHPMailer
                 $body .= static::$LE;
                 $body .= $this->attachAll('attachment', $this->boundary[1]);
                 break;
+            case 'attach_one':
+                $body .= $this->attachAll('attach_one', $this->boundary[1]);
+                break;
             default:
                 // Catch case 'plain' and case '', applies to simple `text/plain` and `text/html` body content types
                 //Reset the `Encoding` property in case we changed it for line length reasons
@@ -2740,6 +2751,9 @@ class PHPMailer
         if ($this->attachmentExists()) {
             $type[] = 'attach';
         }
+        if ($this->oneattachmentExists()) {
+            $type[] = 'attach_one';
+        }
         $this->message_type = implode('_', $type);
         if ('' == $this->message_type) {
             //The 'plain' message_type refers to the message having a single body element, not that it is plain-text
@@ -2782,12 +2796,13 @@ class PHPMailer
      * @param string $encoding    File encoding (see $Encoding)
      * @param string $type        File extension (MIME) type
      * @param string $disposition Disposition to use
+     * @param string $description Description string to include
      *
      * @throws Exception
      *
      * @return bool
      */
-    public function addAttachment($path, $name = '', $encoding = self::ENCODING_BASE64, $type = '', $disposition = 'attachment')
+    public function addAttachment($path, $name = '', $encoding = self::ENCODING_BASE64, $type = '', $disposition = 'attachment', $description = '')
     {
         try {
             if (!@is_file($path)) {
@@ -2800,7 +2815,7 @@ class PHPMailer
             }
 
             $filename = basename($path);
-            if ('' == $name) {
+            if ((!$this->AllowEmptyName) && ('' == $name)) {
                 $name = $filename;
             }
 
@@ -2813,6 +2828,7 @@ class PHPMailer
                 5 => false, // isStringAttachment
                 6 => $disposition,
                 7 => $name,
+                8 => $description,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -2877,6 +2893,7 @@ class PHPMailer
                 $type = $attachment[4];
                 $disposition = $attachment[6];
                 $cid = $attachment[7];
+                $cdesc = $attachment[8];
                 if ('inline' == $disposition and array_key_exists($cid, $cidUniq)) {
                     continue;
                 }
@@ -2907,11 +2924,15 @@ class PHPMailer
                     $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
                 }
 
+                if (!empty($cdesc)) {
+                    $mime[] = sprintf('Content-Description: %s%s', $cdesc, static::$LE);
+                }
+
                 // If a filename contains any of these chars, it should be quoted,
                 // but not otherwise: RFC2183 & RFC2045 5.1
                 // Fixes a warning in IETF's msglint MIME checker
                 // Allow for bypassing the Content-Disposition header totally
-                if (!(empty($disposition))) {
+                if (!(empty($disposition)) && ($disposition != "attach_one")) {
                     $encoded_name = $this->encodeHeader($this->secureHeader($name));
                     if (preg_match('/[ \(\)<>@,;:\\"\/\[\]\?=]/', $encoded_name)) {
                         $mime[] = sprintf(
@@ -3432,6 +3453,22 @@ class PHPMailer
     {
         foreach ($this->attachment as $attachment) {
             if ('attachment' == $attachment[6]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a one attachment (non-inline) is present.
+     *
+     * @return bool
+     */
+    public function oneattachmentExists()
+    {
+        foreach ($this->attachment as $attachment) {
+            if ('attach_one' == $attachment[6]) {
                 return true;
             }
         }
