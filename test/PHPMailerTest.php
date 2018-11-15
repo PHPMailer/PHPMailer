@@ -14,6 +14,7 @@ namespace PHPMailer\Test;
 
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\POP3;
 use PHPUnit\Framework\TestCase;
 
@@ -74,7 +75,7 @@ final class PHPMailerTest extends TestCase
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer();
-        $this->Mail->SMTPDebug = 3; //Full debug output
+        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
@@ -2522,7 +2523,7 @@ EOT;
      */
     public function testSmtpConnect()
     {
-        $this->Mail->SMTPDebug = 4; //Show connection-level errors
+        $this->Mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
