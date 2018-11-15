@@ -1,7 +1,11 @@
 # PHPMailer Change Log
 
+## Version 6.0.6 (November 14th 2018)
+* **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
 * Added Tagalog translation, thanks to @StoneArtz
 * Added Malagache translation, thanks to @Hackinet
+* Updated Serbian translation, fixed incorrect language code, thanks to @mmilanovic4
+* Updated Arabic translations (@MicroDroid)
 * Updated Hungarian translations
 * Updated Dutch translations
 * Updated Slovenian translation (@filips123)
@@ -12,7 +16,12 @@
 * Add constants for common values, such as `text/html` and `quoted-printable`, and use them
 * Added support for copied headers in DKIM, helping with debugging, and an option to add extra headers to the DKIM signature. See DKIM_sign example for how to use them. Thanks to @gwi-mmuths.
 * Add Campaign Monitor transaction ID pattern matcher
-* Remove deprecated constant and ini values causing warnings in PHP 7.3.
+* Remove deprecated constant and ini values causing warnings in PHP 7.3, added PHP 7.3 build to Travis config.
+* Expanded test coverage
+
+## Version 5.2.27 (November 14th 2018)
+* **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
+* Note that the 5.2 branch is now deprecated and will not receive security updates after 31st December 2018.
 
 ## Version 6.0.5 (March 27th 2018)
 * Re-roll of 6.0.4 to fix missed version file entry. No code changes.
