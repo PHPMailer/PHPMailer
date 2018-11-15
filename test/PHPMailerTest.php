@@ -799,6 +799,22 @@ final class PHPMailerTest extends TestCase
     }
 
     /**
+     * Rejection of non-local file attachments test.
+     */
+    public function testRejectNonLocalFileAttachment()
+    {
+        $this->assertFalse(
+            $this->Mail->addAttachment('https://github.com/PHPMailer/PHPMailer/raw/master/README.md'),
+            'addAttachment should reject remote URLs'
+        );
+
+        $this->assertFalse(
+            $this->Mail->addAttachment('phar://phar.php'),
+            'addAttachment should reject phar resources'
+        );
+    }
+
+    /**
      * Simple plain string attachment test.
      */
     public function testPlainStringAttachment()
