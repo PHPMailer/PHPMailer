@@ -15,6 +15,7 @@ namespace PHPMailer\Test;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
+use PHPMailer\PHPMailer\SMTP;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -74,7 +75,7 @@ final class PHPMailerTest extends TestCase
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer();
-        $this->Mail->SMTPDebug = 3; //Full debug output
+        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
@@ -796,6 +797,22 @@ final class PHPMailerTest extends TestCase
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
+     * Rejection of non-local file attachments test.
+     */
+    public function testRejectNonLocalFileAttachment()
+    {
+        $this->assertFalse(
+            $this->Mail->addAttachment('https://github.com/PHPMailer/PHPMailer/raw/master/README.md'),
+            'addAttachment should reject remote URLs'
+        );
+
+        $this->assertFalse(
+            $this->Mail->addAttachment('phar://phar.php'),
+            'addAttachment should reject phar resources'
+        );
     }
 
     /**
@@ -2506,7 +2523,7 @@ EOT;
      */
     public function testSmtpConnect()
     {
-        $this->Mail->SMTPDebug = 4; //Show connection-level errors
+        $this->Mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
