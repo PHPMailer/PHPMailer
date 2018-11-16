@@ -1656,7 +1656,7 @@ class PHPMailer
      * Used to reject URLs and phar files from functions that access local file paths,
      * such as addAttachment.
      *
-     * @param string $path A relative or absolute path to a file.
+     * @param string $path A relative or absolute path to a file
      *
      * @return bool
      */
