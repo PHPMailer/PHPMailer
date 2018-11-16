@@ -14,8 +14,8 @@ namespace PHPMailer\Test;
 
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\POP3;
+use PHPMailer\PHPMailer\SMTP;
 use PHPUnit\Framework\TestCase;
 
 /**
