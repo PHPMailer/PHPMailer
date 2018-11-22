@@ -348,6 +348,8 @@ class PHPMailer
      * 'FAILURE' will arrive if an error occurred during delivery.
      * 'DELAY' will notify you if there is an unusual delay in delivery, but the actual 
      *         delivery's outcome (success or failure) is not yet decided.
+     *
+     * @link https://tools.ietf.org/html/rfc3461 See section 4.1 for more information about NOTIFY 
      */
     public $dsn = '';
 
