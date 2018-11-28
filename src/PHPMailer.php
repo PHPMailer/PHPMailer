@@ -795,9 +795,9 @@ class PHPMailer
         }
         //Calling mail() with null params breaks
         if (!$this->UseSendmailOptions or null === $params) {
-            $result = @mail($to, $subject, $body, $header);
+            $result = mail($to, $subject, $body, $header);
         } else {
-            $result = @mail($to, $subject, $body, $header, $params);
+            $result = mail($to, $subject, $body, $header, $params);
         }
 
         return $result;
