@@ -1320,7 +1320,7 @@ class PHPMailer
         ) {
             $domain = substr($address, ++$pos);
             // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
-            if ($this->has8bitChars($domain) and @mb_check_encoding($domain, $this->CharSet)) {
+            if ($this->has8bitChars($domain) and mb_check_encoding($domain, $this->CharSet)) {
                 $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
                 //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 $errorcode = 0;
@@ -1568,7 +1568,7 @@ class PHPMailer
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
-                $mail = @popen($sendmail, 'w');
+                $mail = popen($sendmail, 'w');
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
@@ -1591,7 +1591,7 @@ class PHPMailer
                 }
             }
         } else {
-            $mail = @popen($sendmail, 'w');
+            $mail = popen($sendmail, 'w');
             if (!$mail) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
@@ -2654,7 +2654,7 @@ class PHPMailer
                 $signed = tempnam(sys_get_temp_dir(), 'signed');
                 //Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
                 if (empty($this->sign_extracerts_file)) {
-                    $sign = @openssl_pkcs7_sign(
+                    $sign = openssl_pkcs7_sign(
                         $file,
                         $signed,
                         'file://' . realpath($this->sign_cert_file),
@@ -2662,7 +2662,7 @@ class PHPMailer
                         []
                     );
                 } else {
-                    $sign = @openssl_pkcs7_sign(
+                    $sign = openssl_pkcs7_sign(
                         $file,
                         $signed,
                         'file://' . realpath($this->sign_cert_file),
@@ -2672,16 +2672,16 @@ class PHPMailer
                         $this->sign_extracerts_file
                     );
                 }
-                @unlink($file);
+                unlink($file);
                 if ($sign) {
                     $body = file_get_contents($signed);
-                    @unlink($signed);
+                    unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
                     $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
                 } else {
-                    @unlink($signed);
+                    unlink($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
                 }
             } catch (Exception $exc) {
@@ -2809,7 +2809,7 @@ class PHPMailer
     public function addAttachment($path, $name = '', $encoding = self::ENCODING_BASE64, $type = '', $disposition = 'attachment')
     {
         try {
-            if (!static::isPermittedPath($path) || !@is_file($path)) {
+            if (!static::isPermittedPath($path) || !is_file($path)) {
                 throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
@@ -3332,7 +3332,7 @@ class PHPMailer
      */
     public function addEmbeddedImage($path, $cid, $name = '', $encoding = self::ENCODING_BASE64, $type = '', $disposition = 'inline')
     {
-        if (!static::isPermittedPath($path) || !@is_file($path)) {
+        if (!static::isPermittedPath($path) || !is_file($path)) {
             $this->setError($this->lang('file_access') . $path);
 
             return false;
