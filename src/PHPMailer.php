@@ -3591,7 +3591,7 @@ class PHPMailer
     {
         // Set the time zone to whatever the default is to avoid 500 errors
         // Will default to UTC if it's not set properly in php.ini
-        date_default_timezone_set(@date_default_timezone_get());
+        date_default_timezone_set(date_default_timezone_get());
 
         return date('D, j M Y H:i:s O');
     }
