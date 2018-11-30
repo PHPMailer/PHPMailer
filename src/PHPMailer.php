@@ -683,6 +683,20 @@ class PHPMailer
     protected $sign_key_pass = '';
 
     /**
+     * An array of public PEM encoded certificates for each recipient
+     * @var array
+     * @access protected
+     */
+    protected $encrypt_recipcerts = array();
+
+    /**
+     * Used if body should be S/MIME encrypted
+     * @var bool
+     * @access protected
+     */
+    protected $encrypt_body = false;
+
+    /**
      * Whether to throw exceptions for errors.
      *
      * @var bool
@@ -2684,6 +2698,33 @@ class PHPMailer
                     @unlink($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
                 }
+
+                if($this->encrypt_body) {
+
+                  // Write out the encrypted message
+                  $file = tempnam(sys_get_temp_dir(), "mail");
+                  if (false === file_put_contents($file, $this->MIMEHeader . static::$LE . static::$LE . $body)) {
+                    throw new phpmailerException($this->lang('encrypting') . ' Could not write temp file');
+                  }
+                  $encrypted = tempnam(sys_get_temp_dir(), 'encrypted');
+
+                  $encrypt = openssl_pkcs7_encrypt($file, $encrypted, $this->encrypt_recipcerts, array());
+                  if ($encrypt) {
+                    @unlink($file);
+                    $body = file_get_contents($encrypted);
+                    // As with signing, the headers get rewriting after encrypting
+                    $parts = explode("\n\n", $body, 2);
+                    $this->MIMEHeader = $parts[0] . static::$LE . static::$LE;
+                    $body = $parts[1];
+                    @unlink($encrypted);
+                  } else {
+                    @unlink($file);
+                    @unlink($encrypted);
+                    throw new phpmailerException($this->lang('encrypting') . openssl_error_string());
+                  }
+
+                }
+
             } catch (Exception $exc) {
                 $body = '';
                 if ($this->exceptions) {
@@ -4155,6 +4196,17 @@ class PHPMailer
         $this->sign_key_file = $key_filename;
         $this->sign_key_pass = $key_pass;
         $this->sign_extracerts_file = $extracerts_filename;
+    }
+
+    /**
+     * Set the certificates, keys and passwords to encrypt via S/MIME
+     * @param array $recipcerts Array of certificates used for recipients in PEM format
+     */
+    public function add_encryption($recipcert_file)
+    {
+       $this->encrypt_body = true;
+       $cert = file_get_contents($recipcert_file);
+       array_push($this->encrypt_recipcerts, $cert);
     }
 
     /**
