@@ -1,6 +1,9 @@
-docs/phpdoc/
+docs/*
+!docs/README.md
 test/message.txt
 test/testbootstrap.php
-test/*.pem
 build/
 vendor/
+*.pem
+composer.lock
+.php_cs.cache

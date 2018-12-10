@@ -20,25 +20,36 @@
         }
     ],
     "require": {
-        "php": ">=5.0.0"
+        "php": ">=5.5.0",
+        "ext-ctype": "*",
+        "ext-filter": "*"
     },
     "require-dev": {
-        "phpdocumentor/phpdocumentor": "*",
-        "phpunit/phpunit": "4.7.*"
+        "friendsofphp/php-cs-fixer": "^2.2",
+        "phpdocumentor/phpdocumentor": "2.*",
+        "phpunit/phpunit": "^4.8 || ^5.7",
+        "zendframework/zend-serializer": "2.7.*",
+        "doctrine/annotations": "1.2.*",
+        "zendframework/zend-eventmanager": "3.0.*",
+        "zendframework/zend-i18n": "2.7.3"
     },
     "suggest": {
-        "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+        "psr/log": "For optional PSR-3 debug logging",
+        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
+        "ext-mbstring": "Needed to send email in multibyte encoding charset",
+        "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
     },
     "autoload": {
-        "classmap": [
-            "class.phpmailer.php",
-            "class.phpmaileroauth.php",
-            "class.phpmaileroauthgoogle.php",
-            "class.smtp.php",
-            "class.pop3.php",
-            "extras/EasyPeasyICS.php",
-            "extras/ntlm_sasl_client.php"
-        ]
+        "psr-4": {
+            "PHPMailer\\PHPMailer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPMailer\\Test\\": "test/"
+        }
     },
     "license": "LGPL-2.1"
 }
