@@ -12,8 +12,10 @@
 
 namespace PHPMailer\Test;
 
+use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
+use PHPMailer\PHPMailer\SMTP;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,7 +75,7 @@ final class PHPMailerTest extends TestCase
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer();
-        $this->Mail->SMTPDebug = 3; //Full debug output
+        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
@@ -659,6 +661,8 @@ final class PHPMailerTest extends TestCase
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre8'));
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre8'));
+        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'html5'));
+        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'html5'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
         $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
         $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
@@ -793,6 +797,22 @@ final class PHPMailerTest extends TestCase
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
+     * Rejection of non-local file attachments test.
+     */
+    public function testRejectNonLocalFileAttachment()
+    {
+        $this->assertFalse(
+            $this->Mail->addAttachment('https://github.com/PHPMailer/PHPMailer/raw/master/README.md'),
+            'addAttachment should reject remote URLs'
+        );
+
+        $this->assertFalse(
+            $this->Mail->addAttachment('phar://phar.php'),
+            'addAttachment should reject phar resources'
+        );
     }
 
     /**
@@ -966,6 +986,37 @@ EOT;
     }
 
     /**
+     * createBody test of switch case
+     */
+    public function testCreateBody()
+    {
+        $PHPMailer = new PHPMailer();
+        $reflection = new \ReflectionClass($PHPMailer);
+        $property = $reflection->getProperty('message_type');
+        $property->setAccessible(true);
+        $property->setValue($PHPMailer, 'inline');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'attach');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'inline_attach');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_inline');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_attach');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+
+        $property->setValue($PHPMailer, 'alt_inline_attach');
+        $this->assertInternalType('string', $PHPMailer->createBody());
+    }
+
+    /**
      * Send a message containing ISO-8859-1 text.
      */
     public function testHtmlIso8859()
@@ -989,10 +1040,7 @@ EOT;
             realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
-        $this->assertTrue(
-            strpos($this->Mail->Body, $check) !== false,
-            'ISO message body does not contain expected text'
-        );
+        $this->assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1113,35 +1161,23 @@ EOT;
 
         //Test that local paths without a basedir are ignored
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
-        $this->assertTrue(strpos($this->Mail->Body, 'src="/etc/hostname"') !== false);
+        $this->assertContains('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
         $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
         $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertTrue(strpos($this->Mail->Body, 'src="composer.json"') === false);
+        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
-        $this->assertTrue(
-            strpos($this->Mail->Body, 'src="cid:5d41402abc4b2a76b9719d911017c592"') !== false
-        );
+        $this->assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertTrue(
-            strpos(
-                $this->Mail->Body,
-                'src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            ) !== false
-        );
+        $this->assertContains('src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertTrue(
-            strpos(
-                $this->Mail->Body,
-                'src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"'
-            ) !== false
-        );
+        $this->assertContains('src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
     }
 
     /**
@@ -1360,6 +1396,7 @@ EOT;
 
         $this->Mail->Subject = $subject . ': sendmail';
         $this->Mail->isSendmail();
+
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1394,8 +1431,23 @@ EOT;
         }
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
-
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
+        $this->Mail->clearAddresses();
+        $this->Mail->clearCCs();
+        $this->Mail->clearBCCs();
+        $this->setAddress('testmailsend@example.com', 'totest');
+        $this->setAddress('cctestmailsend@example.com', 'cctest', $sType = 'cc');
+        $this->setAddress('bcctestmailsend@example.com', 'bcctest', $sType = 'bcc');
+        $this->Mail->addReplyTo('replytotestmailsend@example.com', 'replytotest');
+        $this->assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0]);
+        $this->assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
+        $this->assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
+        $this->assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['testmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
+        $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
+
+        $this->Mail->createHeader();
         $this->Mail->isMail();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
@@ -1676,7 +1728,19 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        $this->assertTrue((strpos($b, 'To: "Tim \"The Book\" O\'Reilly" <foo@example.com>') !== false));
+        $this->assertContains('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
+
+        $this->Mail->Subject .= ': Address escaping invalid';
+        $this->Mail->clearAddresses();
+        $this->Mail->addAddress('foo@example.com', 'Tim "The Book" O\'Reilly');
+        $this->Mail->addAddress('invalidaddressexample.com', 'invalidaddress');
+        $this->Mail->Body = 'invalid address';
+        $this->buildBody();
+        $this->Mail->preSend();
+        $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
+
+        $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
+        $this->assertTrue($this->Mail->attachmentExists());
     }
 
     /**
@@ -1702,10 +1766,15 @@ EOT;
      */
     public function testBCCAddressing()
     {
+        $this->Mail->isSMTP();
         $this->Mail->Subject .= ': BCC-only addressing';
         $this->buildBody();
         $this->Mail->clearAllRecipients();
+        $this->Mail->addAddress('foo@example.com', 'Foo');
+        $this->Mail->preSend();
+        $b = $this->Mail->getSentMIMEMessage();
         $this->assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
+        $this->assertContains('To: Foo <foo@example.com>', $b);
         $this->assertTrue($this->Mail->send(), 'send failed');
     }
 
@@ -1747,6 +1816,7 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
+        $this->assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
     }
 
     /**
@@ -2407,12 +2477,12 @@ EOT;
         // There should be only one "To" address and one "Reply-To" address.
         $this->assertEquals(
             1,
-            count($this->Mail->getToAddresses()),
+            \count($this->Mail->getToAddresses()),
             'Bad count of "to" recipients'
         );
         $this->assertEquals(
             1,
-            count($this->Mail->getReplyToAddresses()),
+            \count($this->Mail->getReplyToAddresses()),
             'Bad count of "reply-to" addresses'
         );
     }
@@ -2479,31 +2549,64 @@ EOT;
      */
     public function testSmtpConnect()
     {
-        $this->Mail->SMTPDebug = 4; //Show connection-level errors
+        $this->Mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL; //Show connection-level errors
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
-        $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
-        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
-        $this->Mail->smtpClose();
-        $this->Mail->Host = '[::1]:' . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
-        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
-        $this->Mail->smtpClose();
-        //All these hosts are expected to fail
-        $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10';
-        $this->assertFalse($this->Mail->smtpConnect(), 'SMTP bad multi-connect succeeded');
-        $this->Mail->smtpClose();
+
+        // $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
+        // $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
+        // $this->Mail->smtpClose();
+        // $this->Mail->Host = '[::1]:' . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
+        // $this->assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
+        // $this->Mail->smtpClose();
+
+        // All these hosts are expected to fail
+        // $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
+        // $this->assertFalse($this->Mail->smtpConnect());
+        // $this->Mail->smtpClose();
+
         $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
         $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
+
+        // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->Mail->Host = $_REQUEST['mail_host'];
-        //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
-        $this->assertTrue(
-            $this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]),
-            'SMTP connect with options failed'
-        );
+        $this->assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
+
+        $this->Smtp = $this->Mail->getSMTPInstance();
+        $this->assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
+        $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
+        $this->assertFalse($this->Mail->SMTPAuth);
+        $this->Mail->smtpClose();
+    }
+
+    /**
+     * Test OAuth method
+     */
+    public function testOAuth()
+    {
+        $PHPMailer = new PHPMailer();
+        $reflection = new \ReflectionClass($PHPMailer);
+        $property = $reflection->getProperty('oauth');
+        $property->setAccessible(true);
+        $property->setValue($PHPMailer, true);
+        $this->assertTrue($PHPMailer->getOAuth());
+
+        $options =[
+            'provider' => 'dummyprovider',
+            'userName' => 'dummyusername',
+            'clientSecret' => 'dummyclientsecret',
+            'clientId' => 'dummyclientid',
+            'refreshToken' => 'dummyrefreshtoken',
+        ];
+
+        $oauth = new OAuth($options);
+        $this->assertInstanceOf(OAuth::class, $oauth);
+        $subject = $PHPMailer->setOAuth($oauth);
+        $this->assertNull($subject);
+        $this->assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
     }
 }
-
 /*
  * This is a sample form for setting appropriate test values through a browser
  * These values can also be set using a file called testbootstrap.php (not in repo) in the same folder as this script
