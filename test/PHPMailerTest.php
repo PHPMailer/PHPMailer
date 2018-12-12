@@ -958,12 +958,13 @@ EOT;
 </html>
 EOT;
         $this->buildBody();
-	$this->Mail->dsn = 'SUCCESS,FAILURE';
+        $this->Mail->dsn = 'SUCCESS,FAILURE';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-	// Sends the same mail, but sets the DSN notification to NEVER
-	$this->Mail->dsn = 'NEVER';
+        //Sends the same mail, but sets the DSN notification to NEVER
+        $this->Mail->dsn = 'NEVER';
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
+
     /**
      * Send a message containing ISO-8859-1 text.
      */
