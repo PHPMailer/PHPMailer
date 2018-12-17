@@ -91,7 +91,7 @@ try {
 ```
 
 ## OAuth2 Support
-The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of of extraordinary packages](http://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
+The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of extraordinary packages](http://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
 
 ## Extras
 Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.
