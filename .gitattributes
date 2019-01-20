@@ -8,7 +8,6 @@
 /.scrutinizer.yml export-ignore
 /.travis.yml export-ignore
 /changelog.md export-ignore
-/composer.json export-ignore
 /docs export-ignore
 /examples export-ignore
 /phpdoc.dist.xml export-ignore
