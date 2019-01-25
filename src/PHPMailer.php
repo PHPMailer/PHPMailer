@@ -146,6 +146,21 @@ class PHPMailer
     public $Ical = '';
 
     /**
+     *
+     * If MIME type equals 'text/calendar' it should allow method=REQUEST and method=CANCEL in the content-type header.
+     * filtering these and disallowing them to be injected into the header appears to prevent Outlook from processing the calendar invites and cancellations correctly.
+     *
+     * Outlook ICS file header for an invite request:
+     * Content-Type: text/calendar; charset="utf-8"; method=REQUEST
+     *
+     * Outlook ICS file header for an cancellation request:
+     * Content-Type: text/calendar; charset="utf-8"; method=CANCEL
+     * Options: "REQUEST", "CANCEL".
+     *
+     */
+    public $IcalMethod = 'REQUEST';
+
+    /**
      * The complete compiled MIME message body.
      *
      * @var string
@@ -2564,7 +2579,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=REQUEST', '');
+                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                     $body .= static::$LE;
                 }
@@ -2599,7 +2614,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=REQUEST', '');
+                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                 }
                 $body .= $this->endBoundary($this->boundary[2]);
