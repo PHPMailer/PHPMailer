@@ -46,9 +46,6 @@ class PHPMailer
     const ENCODING_BINARY = 'binary';
     const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
 
-    const ICAL_REQUEST = 'REQUEST';
-    const ICAL_CANCEL = 'CANCEL';
-
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
@@ -147,18 +144,6 @@ class PHPMailer
      * @var string
      */
     public $Ical = '';
-
-    /**
-     * If MIME type equals 'text/calendar' it should allow method=REQUEST and method=CANCEL in the content-type header.
-     * filtering these and disallowing them to be injected into the header appears to prevent Outlook from processing the calendar invites and cancellations correctly.
-     *
-     * Outlook ICS file header for an invite request:
-     * Content-Type: text/calendar; charset="utf-8"; method=REQUEST
-     *
-     * Outlook ICS file header for an cancellation request:
-     * Content-Type: text/calendar; charset="utf-8"; method=CANCEL
-     */
-    public $IcalMethod = self::ICAL_REQUEST;
 
     /**
      * The complete compiled MIME message body.
@@ -2579,7 +2564,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=' . $this->IcalMethod, '');
+                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=' . $this->getIcalMethod(), '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                     $body .= static::$LE;
                 }
@@ -2614,7 +2599,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=' . $this->IcalMethod, '');
+                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=' . $this->getIcalMethod(), '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                 }
                 $body .= $this->endBoundary($this->boundary[2]);
@@ -4516,21 +4501,19 @@ class PHPMailer
     }
 
     /**
-     * Set Ical method header
+     * Get Ical method header
      *
-     * @param PHPMailer::ICAL_REQUEST | PHPMailer::ICAL_CANCEL $method [required]
-     *
-     * @throws Exception
+     * @return string
      */
-    public function setIcalMethod($method)
+    public function getIcalMethod()
     {
-        switch ($method) {
-            case self::ICAL_REQUEST:
-            case self::ICAL_CANCEL:
-                $this->IcalMethod = $method;
-                break;
-            default:
-                throw new Exception('Wrong Ical method header');
+        $method = 'REQUEST';
+        preg_match('/METHOD:\s?\w*/', $this->Ical, $matches);
+        var_dump($matches);
+        if (count($matches) > 0) {
+            $method = trim(substr($matches[0], strlen('METHOD:')));
         }
+
+        return $method;
     }
 }
