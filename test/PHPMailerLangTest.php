@@ -47,7 +47,7 @@ final class PHPMailerLangTest extends TestCase
         $this->Mail->setLanguage('en');
         $definedStrings = $this->Mail->getTranslations();
         $err = '';
-        foreach (new \DirectoryIterator('../language') as $fileInfo) {
+        foreach (new \DirectoryIterator(__DIR__ . '/../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }
