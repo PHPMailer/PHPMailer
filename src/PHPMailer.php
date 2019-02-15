@@ -2646,12 +2646,11 @@ class PHPMailer
                 if (!defined('PKCS7_TEXT')) {
                     throw new Exception($this->lang('extension_missing') . 'openssl');
                 }
-                // @TODO would be nice to use php://temp streams here
-                $file = tempnam(sys_get_temp_dir(), 'mail');
-                if (false === file_put_contents($file, $body)) {
-                    throw new Exception($this->lang('signing') . ' Could not write temp file');
-                }
-                $signed = tempnam(sys_get_temp_dir(), 'signed');
+                
+                $file = fopen('php://temp', 'r+'); //create php://temp streams for file
+                $signed = fopen('php://temp', 'r+'); //create php://temp streams for signed output
+                fwrite($file, $body);
+                
                 //Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
                 if (empty($this->sign_extracerts_file)) {
                     $sign = @openssl_pkcs7_sign(
@@ -2672,16 +2671,16 @@ class PHPMailer
                         $this->sign_extracerts_file
                     );
                 }
-                @unlink($file);
+                fclose($file);
                 if ($sign) {
                     $body = file_get_contents($signed);
-                    @unlink($signed);
+                    fclose($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
                     $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
                 } else {
-                    @unlink($signed);
+                    fclose($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
                 }
             } catch (Exception $exc) {
