@@ -60,3 +60,8 @@ jobs:
     - php: nightly
     - php: hhvm
       dist: trusty
+
+matrix:
+  allow_failures:
+    - php: nightly
+    - php: hhvm
