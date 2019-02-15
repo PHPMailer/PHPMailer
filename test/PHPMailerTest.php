@@ -960,6 +960,32 @@ EOT;
     }
 
     /**
+     * Send an HTML message specifiying the DSN notifications we expect.
+     */
+    public function testDsn()
+    {
+        $this->Mail->isHTML(true);
+        $this->Mail->Subject .= ': HTML only';
+
+        $this->Mail->Body = <<<'EOT'
+<html>
+    <head>
+        <title>HTML email test</title>
+    </head>
+    <body>
+        <p>PHPMailer</p>
+    </body>
+</html>
+EOT;
+        $this->buildBody();
+        $this->Mail->dsn = 'SUCCESS,FAILURE';
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        //Sends the same mail, but sets the DSN notification to NEVER
+        $this->Mail->dsn = 'NEVER';
+        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
      * createBody test of switch case
      */
     public function testCreateBody()
