@@ -2646,11 +2646,10 @@ class PHPMailer
                 if (!defined('PKCS7_TEXT')) {
                     throw new Exception($this->lang('extension_missing') . 'openssl');
                 }
-                
-                $file = fopen('php://temp', 'r+'); //create php://temp streams for file
-                $signed = fopen('php://temp', 'r+'); //create php://temp streams for signed output
+                $file = fopen('php://temp', 'rb+');
+                $signed = fopen('php://temp', 'rb+');
                 fwrite($file, $body);
-                
+
                 //Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
                 if (empty($this->sign_extracerts_file)) {
                     $sign = @openssl_pkcs7_sign(
