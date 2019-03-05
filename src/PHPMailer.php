@@ -940,6 +940,8 @@ class PHPMailer
      * @param string $address The email address to send to
      * @param string $name
      *
+     * @throws Exception
+     *
      * @return bool true on success, false if address already used or invalid in some way
      */
     public function addAddress($address, $name = '')
@@ -952,6 +954,8 @@ class PHPMailer
      *
      * @param string $address The email address to send to
      * @param string $name
+     *
+     * @throws Exception
      *
      * @return bool true on success, false if address already used or invalid in some way
      */
@@ -966,6 +970,8 @@ class PHPMailer
      * @param string $address The email address to send to
      * @param string $name
      *
+     * @throws Exception
+     *
      * @return bool true on success, false if address already used or invalid in some way
      */
     public function addBCC($address, $name = '')
@@ -978,6 +984,8 @@ class PHPMailer
      *
      * @param string $address The email address to reply to
      * @param string $name
+     *
+     * @throws Exception
      *
      * @return bool true on success, false if address already used or invalid in some way
      */
