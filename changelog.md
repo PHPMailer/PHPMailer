@@ -1,5 +1,12 @@
 # PHPMailer Change Log
 
+* Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
+* Add support for RFC3461 DSN messages
+* IMAP example code fixed
+* Use PHP temp streams instead of temp files
+* Allow for longer SMTP error codes
+* Updated Brazilian Portuguese translation
+
 ## Version 6.0.7 (February 1st 2019)
 * Include RedHat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
 * Don't exclude composer.json from git exports as it breaks composer updates in projects that use PHPMailer
