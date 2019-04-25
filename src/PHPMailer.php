@@ -1015,10 +1015,12 @@ class PHPMailer
         $pos = strrpos($address, '@');
         if (false === $pos) {
             // At-sign is missing.
-            $error_message = sprintf('%s (%s): %s',
+            $error_message = sprintf(
+                '%s (%s): %s',
                 $this->lang('invalid_address'),
                 $kind,
-                $address);
+                $address
+            );
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -2945,14 +2947,18 @@ class PHPMailer
                 }
 
                 if (!empty($cid)) {
-                    $mime[] = sprintf('Content-ID: <%s>%s', $cid, static::$LE);
+                    $mime[] = sprintf(
+                        'Content-ID: <%s>%s',
+                        $this->encodeHeader($this->secureHeader($cid)),
+                        static::$LE
+                    );
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
                 // but not otherwise: RFC2183 & RFC2045 5.1
                 // Fixes a warning in IETF's msglint MIME checker
                 // Allow for bypassing the Content-Disposition header totally
-                if (!(empty($disposition))) {
+                if (!empty($disposition)) {
                     $encoded_name = $this->encodeHeader($this->secureHeader($name));
                     if (preg_match('/[ \(\)<>@,;:\\"\/\[\]\?=]/', $encoded_name)) {
                         $mime[] = sprintf(
