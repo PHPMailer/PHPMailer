@@ -1620,6 +1620,18 @@ EOT;
     }
 
     /**
+     * Test addressing.
+     */
+    public function testAddressing2()
+    {
+        $this->buildBody();
+        $this->Mail->setFrom('bob@example.com', '"Bob\'s Burgers" (Bob\'s "Burgers")', true);
+        $this->Mail->isSMTP();
+        $this->Mail->Subject .= ': quotes in from name';
+        $this->assertTrue($this->Mail->send(), 'send failed');
+    }
+
+    /**
      * Test RFC822 address splitting.
      */
     public function testAddressSplitting()
