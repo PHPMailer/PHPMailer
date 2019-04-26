@@ -4304,7 +4304,8 @@ class PHPMailer
         }
         // Normalize line endings to CRLF
         $body = static::normalizeBreaks($body, "\r\n");
-
+        // Remove TABS from boundary
+        $body=preg_replace('/\t+boundary/', ' boundary', $body);
         //Reduce multiple trailing line breaks to a single one
         return rtrim($body, "\r\n") . "\r\n";
     }
