@@ -1,6 +1,8 @@
 # PHPMailer Change Log
 
 * Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
+* Change header folding and param separation to use spaces instead of tabs
+* Use ; to separate multiple MIME header params
 * Add support for RFC3461 DSN messages
 * IMAP example code fixed
 * Use PHP temp streams instead of temp files

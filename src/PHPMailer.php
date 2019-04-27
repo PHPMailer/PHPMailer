@@ -2569,7 +2569,7 @@ class PHPMailer
                 $body .= $mimepre;
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', static::CONTENT_TYPE_MULTIPART_RELATED . ';');
-                $body .= $this->textLine(' boundary="' . $this->boundary[2] . '"');
+                $body .= $this->textLine(' boundary="' . $this->boundary[2] . '";');
                 $body .= $this->textLine(' type="' . static::CONTENT_TYPE_TEXT_HTML . '"');
                 $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, '', $bodyEncoding);
@@ -2601,7 +2601,7 @@ class PHPMailer
                 $body .= static::$LE;
                 $body .= $this->textLine('--' . $this->boundary[1]);
                 $body .= $this->headerLine('Content-Type', static::CONTENT_TYPE_MULTIPART_RELATED . ';');
-                $body .= $this->textLine(' boundary="' . $this->boundary[2] . '"');
+                $body .= $this->textLine(' boundary="' . $this->boundary[2] . '";');
                 $body .= $this->textLine(' type="' . static::CONTENT_TYPE_TEXT_HTML . '"');
                 $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[2], $bodyCharSet, static::CONTENT_TYPE_TEXT_HTML, $bodyEncoding);
@@ -2642,7 +2642,7 @@ class PHPMailer
                 $body .= static::$LE;
                 $body .= $this->textLine('--' . $this->boundary[2]);
                 $body .= $this->headerLine('Content-Type', static::CONTENT_TYPE_MULTIPART_RELATED . ';');
-                $body .= $this->textLine(' boundary="' . $this->boundary[3] . '"');
+                $body .= $this->textLine(' boundary="' . $this->boundary[3] . '";');
                 $body .= $this->textLine(' type="' . static::CONTENT_TYPE_TEXT_HTML . '"');
                 $body .= static::$LE;
                 $body .= $this->getBoundary($this->boundary[3], $bodyCharSet, static::CONTENT_TYPE_TEXT_HTML, $bodyEncoding);
