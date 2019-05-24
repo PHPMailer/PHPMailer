@@ -1832,6 +1832,16 @@ EOT;
     }
 
     /**
+     * Expect exceptions on bad encoding
+     * @expectedException PHPMailer\PHPMailer\Exception
+     */
+    public function testEncodingException()
+    {
+        $mail = new PHPMailer(true);
+        $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
+    }
+
+    /**
      * Test base-64 encoding.
      */
     public function testBase64()

@@ -3318,6 +3318,9 @@ class PHPMailer
      * @param string $encoding    File encoding (see $Encoding)
      * @param string $type        File extension (MIME) type
      * @param string $disposition Disposition to use
+     *
+     * @return bool True on successfully adding an attachment
+     * @throws Exception
      */
     public function addStringAttachment(
         $string,
@@ -3330,6 +3333,15 @@ class PHPMailer
         if ('' == $type) {
             $type = static::filenameToType($filename);
         }
+
+        if (!$this->validateEncoding($encoding)) {
+            if ($this->exceptions) {
+                throw new Exception($this->lang('encoding') . $encoding);
+            }
+
+            return false;
+        }
+
         // Append to $attachment array
         $this->attachment[] = [
             0 => $string,
@@ -3341,6 +3353,8 @@ class PHPMailer
             6 => $disposition,
             7 => 0,
         ];
+
+        return true;
     }
 
     /**
@@ -3361,8 +3375,16 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
+     * @throws Exception
      */
-    public function addEmbeddedImage($path, $cid, $name = '', $encoding = self::ENCODING_BASE64, $type = '', $disposition = 'inline')
+    public function addEmbeddedImage(
+        $path,
+        $cid,
+        $name = '',
+        $encoding = self::ENCODING_BASE64,
+        $type = '',
+        $disposition = 'inline'
+    )
     {
         if (!static::isPermittedPath($path) || !@is_file($path)) {
             $this->setError($this->lang('file_access') . $path);
@@ -3373,6 +3395,14 @@ class PHPMailer
         // If a MIME type is not specified, try to work it out from the file name
         if ('' == $type) {
             $type = static::filenameToType($path);
+        }
+
+        if (!$this->validateEncoding($encoding)) {
+            if ($this->exceptions) {
+                throw new Exception($this->lang('encoding') . $encoding);
+            }
+
+            return false;
         }
 
         $filename = basename($path);
@@ -3411,6 +3441,7 @@ class PHPMailer
      * @param string $disposition Disposition to use
      *
      * @return bool True on successfully adding an attachment
+     * @throws Exception
      */
     public function addStringEmbeddedImage(
         $string,
@@ -3423,6 +3454,14 @@ class PHPMailer
         // If a MIME type is not specified, try to work it out from the name
         if ('' == $type and !empty($name)) {
             $type = static::filenameToType($name);
+        }
+
+        if (!$this->validateEncoding($encoding)) {
+            if ($this->exceptions) {
+                throw new Exception($this->lang('encoding') . $encoding);
+            }
+
+            return false;
         }
 
         // Append to $attachment array
@@ -3438,6 +3477,28 @@ class PHPMailer
         ];
 
         return true;
+    }
+
+    /**
+     * Validate encodings.
+     *
+     * @param $encoding
+     *
+     * @return bool
+     */
+    protected function validateEncoding($encoding)
+    {
+        return in_array(
+            $encoding,
+            [
+                self::ENCODING_7BIT,
+                self::ENCODING_QUOTED_PRINTABLE,
+                self::ENCODING_BASE64,
+                self::ENCODING_8BIT,
+                self::ENCODING_BINARY,
+            ],
+            true
+        );
     }
 
     /**
