@@ -3044,6 +3044,7 @@ class PHPMailer
      * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
      *
      * @return string
+     * @throws Exception
      */
     public function encodeString($str, $encoding = self::ENCODING_BASE64)
     {
@@ -3072,6 +3073,9 @@ class PHPMailer
                 break;
             default:
                 $this->setError($this->lang('encoding') . $encoding);
+                if ($this->exceptions) {
+                    throw new Exception($this->lang('encoding') . $encoding);
+                }
                 break;
         }
 
