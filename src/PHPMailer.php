@@ -2720,6 +2720,19 @@ class PHPMailer
     }
 
     /**
+     * Unicode safe and non-latin charset compatible version of basename(). Strips both Unix and Windows-style pathes, leaving a filename only.
+     * by utilmind
+     *
+     * @param string $fn
+     *
+     * @return string
+     */
+    protected function safeBasename($fn)
+    {
+        return (($p = strrpos($fn, '/')) === false) && (($p = strrpos($fn, '\\')) === false) ? $fn : substr($fn, $p+1);
+    }
+
+    /**
      * Return the start of a message boundary.
      *
      * @param string $boundary
@@ -2842,7 +2855,7 @@ class PHPMailer
                 $type = static::filenameToType($path);
             }
 
-            $filename = basename($path);
+            $filename = $this->safeBasename($path);
             if ('' == $name) {
                 $name = $filename;
             }
@@ -3346,7 +3359,7 @@ class PHPMailer
         $this->attachment[] = [
             0 => $string,
             1 => $filename,
-            2 => basename($filename),
+            2 => $this->safeBasename($filename),
             3 => $encoding,
             4 => $type,
             5 => true, // isStringAttachment
@@ -3405,7 +3418,7 @@ class PHPMailer
             return false;
         }
 
-        $filename = basename($path);
+        $filename = $this->safeBasename($path);
         if ('' == $name) {
             $name = $filename;
         }
@@ -3876,7 +3889,7 @@ class PHPMailer
                     // Do not change absolute URLs, including anonymous protocol
                     and !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)
                 ) {
-                    $filename = basename($url);
+                    $filename = $this->safeBasename($url);
                     $directory = dirname($url);
                     if ('.' == $directory) {
                         $directory = '';
