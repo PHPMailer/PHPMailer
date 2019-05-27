@@ -3052,8 +3052,9 @@ class PHPMailer
      * @param string $str      The text to encode
      * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function encodeString($str, $encoding = self::ENCODING_BASE64)
     {
@@ -3353,7 +3354,7 @@ class PHPMailer
             $this->attachment[] = [
                 0 => $string,
                 1 => $filename,
-                2 => basename($filename),
+                2 => static::mb_pathinfo($filename, PATHINFO_EXTENSION),
                 3 => $encoding,
                 4 => $type,
                 5 => true, // isStringAttachment
