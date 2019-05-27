@@ -1835,10 +1835,40 @@ EOT;
      * Expect exceptions on bad encoding
      * @expectedException PHPMailer\PHPMailer\Exception
      */
-    public function testEncodingException()
+    public function testAddAttachmentEncodingException()
+    {
+        $mail = new PHPMailer(true);
+        $mail->addAttachment(__FILE__, 'test.txt', 'invalidencoding');
+    }
+
+    /**
+     * Expect exceptions on bad encoding
+     * @expectedException PHPMailer\PHPMailer\Exception
+     */
+    public function testStringAttachmentEncodingException()
     {
         $mail = new PHPMailer(true);
         $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
+    }
+
+    /**
+     * Expect exceptions on bad encoding
+     * @expectedException PHPMailer\PHPMailer\Exception
+     */
+    public function testEmbeddedImageEncodingException()
+    {
+        $mail = new PHPMailer(true);
+        $mail->addEmbeddedImage(__FILE__, 'cid', 'test.png', 'invalidencoding');
+    }
+
+    /**
+     * Expect exceptions on bad encoding
+     * @expectedException PHPMailer\PHPMailer\Exception
+     */
+    public function testStringEmbeddedImageEncodingException()
+    {
+        $mail = new PHPMailer(true);
+        $mail->addStringEmbeddedImage('hello', 'cid', 'test.png', 'invalidencoding');
     }
 
     /**
