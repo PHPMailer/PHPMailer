@@ -1833,6 +1833,7 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
+     *
      * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testAddAttachmentEncodingException()
@@ -1843,6 +1844,7 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
+     *
      * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringAttachmentEncodingException()
@@ -1853,6 +1855,7 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
+     *
      * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testEmbeddedImageEncodingException()
@@ -1863,6 +1866,7 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
+     *
      * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringEmbeddedImageEncodingException()
