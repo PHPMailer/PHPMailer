@@ -2847,7 +2847,7 @@ class PHPMailer
                 $type = static::filenameToType($path);
             }
 
-            $filename = basename($path);
+            $filename = static::mb_pathinfo($path, PATHINFO_BASENAME);
             if ('' == $name) {
                 $name = $filename;
             }
@@ -3417,7 +3417,7 @@ class PHPMailer
                 throw new Exception($this->lang('encoding') . $encoding);
             }
 
-            $filename = basename($path);
+            $filename = static::mb_pathinfo($path, PATHINFO_BASENAME);
             if ('' == $name) {
                 $name = $filename;
             }
@@ -3904,7 +3904,7 @@ class PHPMailer
                     // Do not change absolute URLs, including anonymous protocol
                     and !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)
                 ) {
-                    $filename = basename($url);
+                    $filename = static::mb_pathinfo($url, PATHINFO_BASENAME);
                     $directory = dirname($url);
                     if ('.' == $directory) {
                         $directory = '';
