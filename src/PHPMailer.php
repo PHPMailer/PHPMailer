@@ -3354,7 +3354,7 @@ class PHPMailer
             $this->attachment[] = [
                 0 => $string,
                 1 => $filename,
-                2 => static::mb_pathinfo($filename, PATHINFO_EXTENSION),
+                2 => static::mb_pathinfo($filename, PATHINFO_BASENAME),
                 3 => $encoding,
                 4 => $type,
                 5 => true, // isStringAttachment
