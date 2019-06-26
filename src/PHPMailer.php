@@ -527,9 +527,9 @@ class PHPMailer
 
     /**
      * What to put in the X-Mailer header.
-     * Options: An empty string for PHPMailer default, whitespace for none, or a string to use.
+     * Options: An empty string for PHPMailer default, whitespace/null for none, or a string to use.
      *
-     * @var string
+     * @var string|null
      */
     public $XMailer = '';
 
@@ -2380,7 +2380,7 @@ class PHPMailer
         if (null !== $this->Priority) {
             $result .= $this->headerLine('X-Priority', $this->Priority);
         }
-        if ('' == $this->XMailer) {
+        if ('' === $this->XMailer) {
             $result .= $this->headerLine(
                 'X-Mailer',
                 'PHPMailer ' . self::VERSION . ' (https://github.com/PHPMailer/PHPMailer)'
