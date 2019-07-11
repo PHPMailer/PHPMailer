@@ -2133,7 +2133,7 @@ class PHPMailer
     public function addrFormat($addr)
     {
         if (empty($addr[1])) { // No name provided
-            return $this->secureHeader($addr[0]);
+            return '<' . $this->secureHeader($addr[0]) . '>';
         }
 
         return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . ' <' . $this->secureHeader(
