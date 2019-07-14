@@ -57,6 +57,7 @@ jobs:
     - php: 7.2
     - php: 7.3
       env: CODE_COVERAGE=1
+    - php: 7.4snapshot
     - php: nightly
     - php: hhvm
       dist: trusty
