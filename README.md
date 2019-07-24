@@ -133,7 +133,7 @@ try {
 
 You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
 
-If you are re-using the instance (e.g. setting up a mailing list), you will need to clear the recipient list. See the [mailing list](https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps) example for further guidance.
+If you are re-using the instance (e.g. when sending to a mailing list), you may need to clear the recipient list to avoid sending duplicate messages. See [the mailing list example](https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps) for further guidance.
 
 That's it. You should now be ready to use PHPMailer!
 
