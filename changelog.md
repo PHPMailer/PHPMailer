@@ -10,6 +10,9 @@
 * Updated Brazilian Portuguese translation
 * Throw exceptions on invalid encoding values
 * Add Afrikaans translation, thanks to @Donno191
+* Add PHP 7.4 to test config
+* Remove some ambiguity about setting XMailer property
+* Improve error checking in mailing list example
 
 ## Version 6.0.7 (February 1st 2019)
 * Include RedHat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
