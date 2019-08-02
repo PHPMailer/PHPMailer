@@ -47,10 +47,9 @@ jobs:
       before_script:
       script: ./vendor/bin/php-cs-fixer --diff --dry-run --verbose fix
       after_script:
-      php: 5.5
+      php: 5.6
       env: CS_CHECK=1
     - stage: test
-      php: 5.5
     - php: 5.6
     - php: 7.0
     - php: 7.1
