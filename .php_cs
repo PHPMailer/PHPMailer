@@ -21,7 +21,9 @@ return PhpCsFixer\Config::create()
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
         'semicolon_after_instruction' => true,
-        'simplified_null_return' => true
+        'simplified_null_return' => true,
+        'native_function_invocation' => false,
+        'yoda_style' +> false
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
