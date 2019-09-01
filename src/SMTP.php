@@ -1310,7 +1310,7 @@ class SMTP
      * If no reply has been received yet, it will return null.
      * If no pattern was matched, it will return false.
      *
-     * @return bool|null|string
+     * @return bool|string|null
      */
     protected function recordLastTransactionID()
     {
@@ -1336,7 +1336,7 @@ class SMTP
      * If no reply has been received yet, it will return null.
      * If no pattern was matched, it will return false.
      *
-     * @return bool|null|string
+     * @return bool|string|null
      *
      * @see recordLastTransactionID()
      */
