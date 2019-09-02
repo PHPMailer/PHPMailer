@@ -4350,12 +4350,14 @@ class PHPMailer
      */
     public function DKIM_HeaderC($signHeader)
     {
-        //Unfold all header continuation lines
-        //Also collapses folded whitespace.
         //Note PCRE \s is too broad a definition of whitespace; RFC5322 defines it as `[ \t]`
         //@see https://tools.ietf.org/html/rfc5322#section-2.2
         //That means this may break if you do something daft like put vertical tabs in your headers.
-        $signHeader = preg_replace('/\r\n[ \t]+/', ' ', $signHeader);
+        //Unfold header lines
+        $signHeader = preg_replace('/\r\n[ \t]+/m', '', $signHeader);
+        //Collapse internal whitespace to a single space
+//        $signHeader = preg_replace('/[ \t]+/', ' ', $signHeader);
+        //Break headers out into an array
         $lines = explode("\r\n", $signHeader);
         foreach ($lines as $key => $line) {
             //If the header is missing a :, skip it as it's invalid
@@ -4367,12 +4369,12 @@ class PHPMailer
             list($heading, $value) = explode(':', $line, 2);
             //Lower-case header name
             $heading = strtolower($heading);
-            //Collapse white space within the value
-            $value = preg_replace('/[ \t]{2,}/', ' ', $value);
+            //Collapse white space within the value, also convert WSP to space
+            $value = preg_replace('/[ \t]+/', ' ', $value);
             //RFC6376 is slightly unclear here - it says to delete space at the *end* of each value
             //But then says to delete space before and after the colon.
             //Net result is the same as trimming both ends of the value.
-            //by elimination, the same applies to the field name
+            //By elimination, the same applies to the field name
             $lines[$key] = trim($heading, " \t") . ':' . trim($value, " \t");
         }
 
