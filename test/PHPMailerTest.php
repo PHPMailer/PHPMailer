@@ -2061,13 +2061,13 @@ EOT;
             'DKIM header canonicalization incorrect'
         );
         //Check that long folded lines with runs of spaces are canonicalised properly
-        $preheaders = "Long-Header-1: <https://example.com/somescript.php?".
-            "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234".
-            "\r\nLong-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    ".
+        $preheaders = 'Long-Header-1: <https://example.com/somescript.php?' .
+            "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234" .
+            "\r\nLong-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    " .
             "\r\n and   is   folded   onto   2   lines";
-        $postheaders = "long-header-1:<https://example.com/somescript.php?id=1234567890&".
-            "name=Abcdefghijklmnopquestuvwxyz&hash=abc1234\r\nlong-header-2:This is a long".
-            " header value that contains runs of spaces and trailing and is folded onto 2 lines";
+        $postheaders = 'long-header-1:<https://example.com/somescript.php?id=1234567890&' .
+            "name=Abcdefghijklmnopquestuvwxyz&hash=abc1234\r\nlong-header-2:This is a long" .
+            ' header value that contains runs of spaces and trailing and is folded onto 2 lines';
         $this->assertEquals(
             $postheaders,
             $this->Mail->DKIM_HeaderC($preheaders),
