@@ -421,6 +421,17 @@ class PHPMailer
     protected $SingleToArray = [];
 
     /**
+     * Whether to send the same message to each receiver
+     * with small changes in mail content.
+     * Use a lookup table to reduce attachment encoding.
+     *
+     * Storage for attachment encoding.
+     *
+     * @var array
+     */
+    public $MIMECache = false;
+
+    /**
      * Whether to generate VERP addresses on send.
      * Only applicable when sending via SMTP.
      *
@@ -3028,14 +3039,32 @@ class PHPMailer
     protected function encodeFile($path, $encoding = self::ENCODING_BASE64)
     {
         try {
-            if (!static::isPermittedPath($path) || !file_exists($path)) {
-                throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+            $file_buffer = '';
+            if ($this->MIMECache !== false) {
+                $cache_key = $path . "\t" . $encoding;
+                if (array_key_exists($cache_key, $this->MIMECache)) {
+                    $file_buffer = &$this->MIMECache[$cache_key];
+                } else {
+                    if (!static::isPermittedPath($path) || !file_exists($path)) {
+                        throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+                    }
+                    $file_buffer = file_get_contents($path);
+                    if (false === $file_buffer) {
+                        throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+                    }
+                    $file_buffer = $this->encodeString($file_buffer, $encoding);
+                    $this->MIMECache[$cache_key] = $file_buffer;
+                }
+            } else {
+                if (!static::isPermittedPath($path) || !file_exists($path)) {
+                    throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+                }
+                $file_buffer = file_get_contents($path);
+                if (false === $file_buffer) {
+                    throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
+                }
+                $file_buffer = $this->encodeString($file_buffer, $encoding);
             }
-            $file_buffer = file_get_contents($path);
-            if (false === $file_buffer) {
-                throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
-            }
-            $file_buffer = $this->encodeString($file_buffer, $encoding);
 
             return $file_buffer;
         } catch (Exception $exc) {
