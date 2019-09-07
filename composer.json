@@ -22,7 +22,8 @@
     "require": {
         "php": ">=5.5.0",
         "ext-ctype": "*",
-        "ext-filter": "*"
+        "ext-filter": "*",
+        "psr/simple-cache": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.2",

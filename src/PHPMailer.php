@@ -423,11 +423,11 @@ class PHPMailer
     /**
      * Whether to send the same message to each receiver
      * with small changes in mail content.
-     * Use a lookup table to reduce attachment encoding.
+     * Use a SimpleCache to reduce attachment encoding.
      *
      * Storage for attachment encoding.
      *
-     * @var array
+     * @var Psr\SimpleCache\CacheInterface
      */
     public $MIMECache = false;
 
@@ -3040,11 +3040,9 @@ class PHPMailer
     {
         try {
             $file_buffer = '';
-            if ($this->MIMECache !== false) {
+            if ($this->MIMECache) {
                 $cache_key = $path . "\t" . $encoding;
-                if (array_key_exists($cache_key, $this->MIMECache)) {
-                    $file_buffer = &$this->MIMECache[$cache_key];
-                } else {
+                if (($file_buffer = $this->MIMECache->get($cache_key)) == null) {
                     if (!static::isPermittedPath($path) || !file_exists($path)) {
                         throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
                     }
@@ -3053,7 +3051,7 @@ class PHPMailer
                         throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
                     }
                     $file_buffer = $this->encodeString($file_buffer, $encoding);
-                    $this->MIMECache[$cache_key] = $file_buffer;
+                    $this->MIMECache->set($cache_key, $file_buffer);
                 }
             } else {
                 if (!static::isPermittedPath($path) || !file_exists($path)) {

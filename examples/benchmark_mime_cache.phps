@@ -18,7 +18,6 @@ require '../vendor/autoload.php';
 // $ curl https://sample-videos.com/img/Sample-jpg-image-200kb.jpg > /tmp/200kb.jpg
 // $ curl https://sample-videos.com/img/Sample-jpg-image-100kb.jpg > /tmp/100kb.jpg
 // $ curl https://sample-videos.com/img/Sample-jpg-image-50kb.jpg > /tmp/50kb.jpg
-//
 $image_files = array(
     '1.8kb' => 'phpmailer_mini.png',
     '5.7kb' => 'images/phpmailer.png',
@@ -102,7 +101,7 @@ echo "Sending $receiver_count mails with only one PHPMailer instance: \n";
             $mail->addReplyTo('replyto@example.com', 'First Last');
 
             foreach ($receiver_list as $receiver) {
-                       $mail->clearAddresses();
+                $mail->clearAddresses();
                 $mail->addAddress($receiver);
                 $mail->Subject = 'Hi '.$receiver.'!';
                 $mail->msgHTML(str_replace( '<h1>This is a test of PHPMailer.</h1>', '<h1>Hi '.$receiver.'</h1>', file_get_contents('contents.html')), __DIR__);
@@ -127,6 +126,46 @@ echo "Sending $receiver_count mails with only one PHPMailer instance: \n";
     }
 }
 
+class MyCacheHelper implements Psr\SimpleCache\CacheInterface {
+    protected $cacheStore = [];
+    public function get($key, $default = null) {
+        if (array_key_exists($key, $this->cacheStore)) {
+            return $this->cacheStore[$key];
+        }
+
+        return $default;
+    }
+
+    public function set($key, $value, $ttl = null) {
+        $this->cacheStore[$key] = $value;
+    }
+
+    public function delete($key) {
+        usset($this->cacheStore[$key]);
+    }
+
+    public function clear() {
+        usset($this->cacheStore);
+        $this->cacheStore = [];
+    }
+
+    public function has($key) {
+        return array_key_exists($key, $this->cacheStore);
+    }
+
+    public function getMultiple($keys, $default = null) {
+
+    }
+
+    public function setMultiple($values, $ttl = null) {
+
+    }
+
+    public function deleteMultiple($keys) {
+
+    }
+}
+
 echo "Sending $receiver_count mails with creating a new PHPMailer instance and MIMECache: \n";
 {
     foreach ($image_files as $filesize => $image_file) {
@@ -135,7 +174,7 @@ echo "Sending $receiver_count mails with creating a new PHPMailer instance and M
         for ($i=1; $i<=$test_count_per_run ; ++$i) {
             //echo "\t\tRun $i: ";
             $start = microtime(true);
-            $cacheLookupTable = [];
+            $cacheLookupTable = new MyCacheHelper;
             foreach ($receiver_list as $receiver) {
                 $mail = new PHPMailer;
                 $mail->isSMTP();
@@ -182,7 +221,7 @@ echo "Sending $receiver_count mails with only one PHPMailer instance and MIMECac
         for ($i=1; $i<=$test_count_per_run ; ++$i) {
             //echo "\t\tRun $i: ";
             $start = microtime(true);
-            $cacheLookupTable = [];
+            $cacheLookupTable = new MyCacheHelper;
 
             $mail = new PHPMailer;
             $mail->isSMTP();
@@ -196,7 +235,7 @@ echo "Sending $receiver_count mails with only one PHPMailer instance and MIMECac
             $mail->addReplyTo('replyto@example.com', 'First Last');
 
             foreach ($receiver_list as $receiver) {
-                       $mail->clearAddresses();
+                $mail->clearAddresses();
                 $mail->addAddress($receiver);
                 $mail->Subject = 'Hi '.$receiver.'!';
                 $mail->msgHTML(str_replace( '<h1>This is a test of PHPMailer.</h1>', '<h1>Hi '.$receiver.'</h1>', file_get_contents('contents.html')), __DIR__);

@@ -123,10 +123,54 @@ echo $cost . " sec\n";
 //
 // ---
 //
+
+class MyCacheHelper implements Psr\SimpleCache\CacheInterface {
+    protected $cacheStore = [];
+    public function get($key, $default = null) {
+        if (array_key_exists($key, $this->cacheStore)) {
+            return $this->cacheStore[$key];
+        }
+
+        return $default;
+    }
+
+    public function set($key, $value, $ttl = null) {
+        $this->cacheStore[$key] = $value;
+    }
+
+    public function delete($key) {
+        usset($this->cacheStore[$key]);
+    }
+
+    public function clear() {
+        usset($this->cacheStore);
+        $this->cacheStore = [];
+    }
+
+    public function has($key) {
+        return array_key_exists($key, $this->cacheStore);
+    }
+
+    public function getMultiple($keys, $default = null) {
+
+    }
+
+    public function setMultiple($values, $ttl = null) {
+
+    }
+
+    public function deleteMultiple($keys) {
+
+    }
+}
+
+
+
 echo "Sending $receiver_count mails with creating a new PHPMailer instance and MIMECache: ";
 
 $start = microtime(true);
-$cacheLookupTable = [];
+//$cacheLookupTable = [];
+$cacheLookupTable = new MyCacheHelper;
 foreach ($receiver_list as $receiver) {
     //Create a new PHPMailer instance
     $mail = new PHPMailer;
@@ -179,7 +223,8 @@ echo $cost . " sec\n";
 echo "Sending $receiver_count mails with only one PHPMailer instance and MIMECache: ";
 
 $start = microtime(true);
-$cacheLookupTable = [];
+//$cacheLookupTable = [];
+$cacheLookupTable = new MyCacheHelper;
 {
     //Create a new PHPMailer instance
     $mail = new PHPMailer;
