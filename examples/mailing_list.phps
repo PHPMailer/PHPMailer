@@ -6,18 +6,18 @@
 //Import the PHPMailer class into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
 error_reporting(E_STRICT | E_ALL);
 
+/**
+* Set default time & date
+*/
 date_default_timezone_set('Etc/UTC');
 
 require '../vendor/autoload.php';
 
 //Passing `true` enables PHPMailer exceptions
 $mail = new PHPMailer(true);
-
 $body = file_get_contents('contents.html');
-
 $mail->isSMTP();
 $mail->Host = 'smtp.example.com';
 $mail->SMTPAuth = true;
@@ -27,7 +27,6 @@ $mail->Username = 'yourname@example.com';
 $mail->Password = 'yourpassword';
 $mail->setFrom('list@example.com', 'List manager');
 $mail->addReplyTo('list@example.com', 'List manager');
-
 $mail->Subject = 'PHPMailer Simple database mailing list test';
 
 //Same body for all messages, so set this before the sending loop
