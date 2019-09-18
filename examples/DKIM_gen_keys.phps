@@ -1,6 +1,6 @@
 <?php
 /**
- * This shows how to make a new public/private key pair suitable for use with DKIM.
+ * This example shows how to make a new public/private key pair suitable for use with DKIM.
  * You should only need to do this once, and the public key (**not** the private key!)
  * you generate should be inserted in your DNS matching the selector you want.
  *
