@@ -7,7 +7,6 @@
 //Import the PHPMailer SMTP class into the global namespace
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
 require '../vendor/autoload.php';
 
 //SMTP needs accurate times, and the PHP time zone MUST be set

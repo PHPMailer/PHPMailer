@@ -49,7 +49,6 @@
 
 //Import the PHPMailer class into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
-
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
@@ -89,10 +88,3 @@ if (!$mail->send()) {
 } else {
     echo "Message sent!";
 }
-/*
- * REMARKS:
- * If your email client does not support S/MIME it will most likely just show an attachment smime.p7s,
- * which is the signature contained in the email.
- * Other clients, such as Thunderbird support S/MIME natively and will validate the signature
- * automatically and report the result in some way.
- */

@@ -4,7 +4,6 @@
  */
 
 namespace PHPMailer\PHPMailer;
-
 require '../vendor/autoload.php';
 
 /**
