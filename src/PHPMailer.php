@@ -2672,9 +2672,10 @@ class PHPMailer
                 if (!defined('PKCS7_TEXT')) {
                     throw new Exception($this->lang('extension_missing') . 'openssl');
                 }
-                $file = fopen('php://temp', 'rb+');
-                $signed = fopen('php://temp', 'rb+');
-                fwrite($file, $body);
+
+                $file = tempnam(sys_get_temp_dir(), 'srcsign');
+                $signed = tempnam(sys_get_temp_dir(), 'mailsign');
+                file_put_contents($file, $body);
 
                 //Workaround for PHP bug https://bugs.php.net/bug.php?id=69197
                 if (empty($this->sign_extracerts_file)) {
@@ -2696,16 +2697,17 @@ class PHPMailer
                         $this->sign_extracerts_file
                     );
                 }
-                fclose($file);
+
+                @unlink($file);
                 if ($sign) {
                     $body = file_get_contents($signed);
-                    fclose($signed);
+                    @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
                     $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
                     $body = $parts[1];
                 } else {
-                    fclose($signed);
+                    @unlink($signed);
                     throw new Exception($this->lang('signing') . openssl_error_string());
                 }
             } catch (Exception $exc) {
