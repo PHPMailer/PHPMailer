@@ -1,58 +1,22 @@
 <?php
-/**
- * PHPMailer - PHP email creation and transport class.
- * PHP Version 5.5.
- *
- * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
- *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author    Brent R. Matzelle (original founder)
- * @copyright 2012 - 2017 Marcus Bointon
- * @copyright 2010 - 2012 Jim Jagielski
- * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @note      This program is distributed in the hope that it will be useful - WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.
- */
-
 namespace PHPMailer\PHPMailer;
 
-/**
- * PHPMailer - PHP email creation and transport class.
- *
- * @author  Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author  Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author  Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author  Brent R. Matzelle (original founder)
- */
 class PHPMailer
 {
     const CHARSET_ISO88591 = 'iso-8859-1';
     const CHARSET_UTF8 = 'utf-8';
-
     const CONTENT_TYPE_PLAINTEXT = 'text/plain';
     const CONTENT_TYPE_TEXT_CALENDAR = 'text/calendar';
     const CONTENT_TYPE_TEXT_HTML = 'text/html';
     const CONTENT_TYPE_MULTIPART_ALTERNATIVE = 'multipart/alternative';
     const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
     const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
-
     const ENCODING_7BIT = '7bit';
     const ENCODING_8BIT = '8bit';
     const ENCODING_BASE64 = 'base64';
     const ENCODING_BINARY = 'binary';
     const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
 
-    /**
-     * Email priority.
-     * Options: null (default), 1 = High, 3 = Normal, 5 = low.
-     * When null, the header is not set at all.
-     *
-     * @var int
-     */
     public $Priority;
 
     /**
