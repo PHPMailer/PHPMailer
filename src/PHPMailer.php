@@ -30,6 +30,7 @@ namespace PHPMailer\PHPMailer;
  */
 class PHPMailer
 {
+    const CHARSET_ASCII = 'us-ascii';
     const CHARSET_ISO88591 = 'iso-8859-1';
     const CHARSET_UTF8 = 'utf-8';
 
@@ -2527,7 +2528,7 @@ class PHPMailer
         if (static::ENCODING_8BIT == $bodyEncoding and !$this->has8bitChars($this->Body)) {
             $bodyEncoding = static::ENCODING_7BIT;
             //All ISO 8859, Windows codepage and UTF-8 charsets are ascii compatible up to 7-bit
-            $bodyCharSet = 'us-ascii';
+            $bodyCharSet = static::CHARSET_ASCII;
         }
         //If lines are too long, and we're not already using an encoding that will shorten them,
         //change to quoted-printable transfer encoding for the body part only
@@ -2541,7 +2542,7 @@ class PHPMailer
         if (static::ENCODING_8BIT == $altBodyEncoding and !$this->has8bitChars($this->AltBody)) {
             $altBodyEncoding = static::ENCODING_7BIT;
             //All ISO 8859, Windows codepage and UTF-8 charsets are ascii compatible up to 7-bit
-            $altBodyCharSet = 'us-ascii';
+            $altBodyCharSet = static::CHARSET_ASCII;
         }
         //If lines are too long, and we're not already using an encoding that will shorten them,
         //change to quoted-printable transfer encoding for the alt body part only
@@ -3157,12 +3158,17 @@ class PHPMailer
         } elseif ($matchcount > 0 || strlen($str) > $maxlen) {
             // 1 or more chars need encoding or header exceeds max line length, use Q-encode
             $encoding = 'Q';
+            if ($this->has8bitChars($str)) {
+                $charset = $this->CharSet;
+            } else {
+                $charset = static::CHARSET_ASCII;
+            }
             //Recalc max line length for Q encoding - see comments on B encode
-            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
+            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
             $encoded = $this->encodeQ($str, $position);
             $encoded = $this->wrapText($encoded, $maxlen, true);
             $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
-            $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
+            $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
         } else {
             //No reformatting needed
             return $str;

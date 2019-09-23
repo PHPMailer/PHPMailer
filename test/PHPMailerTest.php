@@ -877,8 +877,10 @@ final class PHPMailerTest extends TestCase
         $bencodenofold = str_repeat('é', 10);
         //This should select Q-encoding automatically and should not fold
         $qencodenofold = str_repeat('e', 9) . 'é';
-        //This should Q-encode and fold (previously, this did not encode)
+        //This should Q-encode as ASCII and fold (previously, this did not encode)
         $longheader = str_repeat('e', PHPMailer::STD_LINE_LENGTH + 10);
+        //This should Q-encode as UTF-8 and fold
+        $longutf8 = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 10);
         //This should not change
         $noencode = 'eeeeeeeeee';
         $this->Mail->isMail();
@@ -896,8 +898,12 @@ final class PHPMailerTest extends TestCase
             ' =?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeee=C3=A9?=';
         $bencodenofoldres = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6k=?=';
         $qencodenofoldres = '=?UTF-8?Q?eeeeeeeee=C3=A9?=';
-        $longheaderres = '=?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=' .
-            PHPMailer::getLE() . ' =?UTF-8?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=';
+        $longheaderres = '=?us-ascii?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=' .
+            PHPMailer::getLE() . ' =?us-ascii?Q?eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?=';
+        $longutf8res = '=?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+             PHPMailer::getLE() . ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+             PHPMailer::getLE() . ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
+             PHPMailer::getLE() . ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqQ==?=';
         $noencoderes = 'eeeeeeeeee';
         $this->assertEquals(
             $bencoderes,
@@ -923,6 +929,11 @@ final class PHPMailerTest extends TestCase
             $longheaderres,
             $this->Mail->encodeHeader($longheader),
             'Long header value incorrect'
+        );
+        $this->assertEquals(
+            $longutf8res,
+            $this->Mail->encodeHeader($longutf8),
+            'Long UTF-8 header value incorrect'
         );
         $this->assertEquals(
             $noencoderes,
