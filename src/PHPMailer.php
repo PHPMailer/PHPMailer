@@ -3136,6 +3136,12 @@ class PHPMailer
         $lengthsub = 'mail' == $this->Mailer ? 13 : 0;
         $maxlen = static::STD_LINE_LENGTH - $lengthsub;
 
+        if ($this->has8bitChars($str)) {
+            $charset = $this->CharSet;
+        } else {
+            $charset = static::CHARSET_ASCII;
+        }
+
         // Select the encoding that produces the shortest output and/or prevents corruption.
         if ($matchcount > strlen($str) / 3) {
             // More than 1/3 of the content needs encoding, use B-encode.
@@ -3158,7 +3164,7 @@ class PHPMailer
                 // - shorten to avoid mail() corruption
                 // - Q/B encoding char overhead ("` =?<charset>?[QB]?<content>?=`")
                 // - charset name length
-                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
+                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
                 if ($this->hasMultiBytes($str)) {
                     // Use a custom function which correctly encodes and wraps long
                     // multibyte strings without breaking lines within a character
@@ -3168,14 +3174,9 @@ class PHPMailer
                     $maxlen -= $maxlen % 4;
                     $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
                 }
-                $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
+                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
                 break;
             case 'Q':
-                if ($this->has8bitChars($str)) {
-                    $charset = $this->CharSet;
-                } else {
-                    $charset = static::CHARSET_ASCII;
-                }
                 //Recalc max line length for Q encoding - see comments on B encode
                 $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
                 $encoded = $this->encodeQ($str, $position);
