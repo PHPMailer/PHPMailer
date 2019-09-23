@@ -1,4 +1,10 @@
 <?php
+
+/**
+* This is modified version of original PHPMailer package.
+* Project owner/leader: apple-macfan-pl
+*/
+
 namespace PHPMailer\PHPMailer;
 
 class PHPMailer
@@ -16,7 +22,6 @@ class PHPMailer
     const ENCODING_BASE64 = 'base64';
     const ENCODING_BINARY = 'binary';
     const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
-
     public $Priority;
 
     /**
