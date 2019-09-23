@@ -1,32 +1,6 @@
 <?php
-/**
- * PHPMailer RFC821 SMTP email transport class.
- * PHP Version 5.5.
- *
- * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
- *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author    Brent R. Matzelle (original founder)
- * @copyright 2012 - 2017 Marcus Bointon
- * @copyright 2010 - 2012 Jim Jagielski
- * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @note      This program is distributed in the hope that it will be useful - WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.
- */
-
 namespace PHPMailer\PHPMailer;
 
-/**
- * PHPMailer RFC821 SMTP email transport class.
- * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
- *
- * @author  Chris Ryan
- * @author  Marcus Bointon <phpmailer@synchromedia.co.uk>
- */
 class SMTP
 {
     /**
@@ -82,17 +56,6 @@ class SMTP
      */
     const DEBUG_LOWLEVEL = 4;
 
-    /**
-     * Debug output level.
-     * Options:
-     * * self::DEBUG_OFF (`0`) No debug output, default
-     * * self::DEBUG_CLIENT (`1`) Client commands
-     * * self::DEBUG_SERVER (`2`) Client commands and server responses
-     * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
-     * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages.
-     *
-     * @var int
-     */
     public $do_debug = self::DEBUG_OFF;
 
     /**
@@ -283,7 +246,6 @@ class SMTP
      * @param int    $port    The port number to connect to
      * @param int    $timeout How long to wait for the connection to open
      * @param array  $options An array of options for stream_context_create()
-     *
      * @return bool
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
@@ -544,13 +506,6 @@ class SMTP
     }
 
     /**
-     * Calculate an MD5 HMAC hash.
-     * Works like hash_hmac('md5', $data, $key)
-     * in case that function is not available.
-     *
-     * @param string $data The data to hash
-     * @param string $key  The key to hash with
-     *
      * @return string
      */
     protected function hmac($data, $key)

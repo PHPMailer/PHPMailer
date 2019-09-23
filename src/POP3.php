@@ -139,9 +139,8 @@ class POP3
      * @param string   $username
      * @param string   $password
      * @param int      $debug_level
-     *
-     * @return bool
      */
+
     public static function popBeforeSmtp(
         $host,
         $port = false,
@@ -151,7 +150,6 @@ class POP3
         $debug_level = 0
     ) {
         $pop = new self();
-
         return $pop->authorise($host, $port, $timeout, $username, $password, $debug_level);
     }
 
@@ -321,7 +319,6 @@ class POP3
      * Get a response from the POP3 server.
      *
      * @param int $size The maximum number of bytes to retrieve
-     *
      * @return string
      */
     protected function getResponse($size = 128)
@@ -330,7 +327,6 @@ class POP3
         if ($this->do_debug >= 1) {
             echo 'Server -> Client: ', $response;
         }
-
         return $response;
     }
 
@@ -338,7 +334,6 @@ class POP3
      * Send raw data to the POP3 server.
      *
      * @param string $string
-     *
      * @return int
      */
     protected function sendString($string)
@@ -347,29 +342,21 @@ class POP3
             if ($this->do_debug >= 2) { //Show client messages when debug >= 2
                 echo 'Client -> Server: ', $string;
             }
-
             return fwrite($this->pop_conn, $string, strlen($string));
         }
-
         return 0;
     }
 
     /**
-     * Checks the POP3 server response.
-     * Looks for for +OK or -ERR.
-     *
      * @param string $string
-     *
      * @return bool
      */
     protected function checkResponse($string)
     {
         if (substr($string, 0, 3) !== '+OK') {
             $this->setError("Server reported an error: $string");
-
             return false;
         }
-
         return true;
     }
 
