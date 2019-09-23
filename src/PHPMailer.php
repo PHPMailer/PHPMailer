@@ -3135,43 +3135,56 @@ class PHPMailer
         //corrupt messages with headers longer than 65 chars. See #818
         $lengthsub = 'mail' == $this->Mailer ? 13 : 0;
         $maxlen = static::STD_LINE_LENGTH - $lengthsub;
-        // Try to select the encoding which should produce the shortest output
+
+        // Select the encoding that produces the shortest output and/or prevents corruption.
         if ($matchcount > strlen($str) / 3) {
-            // More than a third of the content will need encoding, so B encoding will be most efficient
+            // More than 1/3 of the content needs encoding, use B-encode.
             $encoding = 'B';
-            //This calculation is:
-            // max line length
-            // - shorten to avoid mail() corruption
-            // - Q/B encoding char overhead ("` =?<charset>?[QB]?<content>?=`")
-            // - charset name length
-            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
-            if ($this->hasMultiBytes($str)) {
-                // Use a custom function which correctly encodes and wraps long
-                // multibyte strings without breaking lines within a character
-                $encoded = $this->base64EncodeWrapMB($str, "\n");
-            } else {
-                $encoded = base64_encode($str);
-                $maxlen -= $maxlen % 4;
-                $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
-            }
-            $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
-        } elseif ($matchcount > 0 || strlen($str) > $maxlen) {
-            // 1 or more chars need encoding or header exceeds max line length, use Q-encode
+        } elseif ($matchcount > 0) {
+            // Less than 1/3 of the content needs encoding, use Q-encode.
             $encoding = 'Q';
-            if ($this->has8bitChars($str)) {
-                $charset = $this->CharSet;
-            } else {
-                $charset = static::CHARSET_ASCII;
-            }
-            //Recalc max line length for Q encoding - see comments on B encode
-            $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
-            $encoded = $this->encodeQ($str, $position);
-            $encoded = $this->wrapText($encoded, $maxlen, true);
-            $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
-            $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
+        } elseif (strlen($str) > $maxlen) {
+            // No encoding needed, but value exceeds max line length, use Q-encode to prevent corruption.
+            $encoding = 'Q';
         } else {
-            //No reformatting needed
-            return $str;
+            // No reformatting needed
+            $encoding = false;
+        }
+
+        switch ($encoding) {
+            case 'B':
+                //This calculation is:
+                // max line length
+                // - shorten to avoid mail() corruption
+                // - Q/B encoding char overhead ("` =?<charset>?[QB]?<content>?=`")
+                // - charset name length
+                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
+                if ($this->hasMultiBytes($str)) {
+                    // Use a custom function which correctly encodes and wraps long
+                    // multibyte strings without breaking lines within a character
+                    $encoded = $this->base64EncodeWrapMB($str, "\n");
+                } else {
+                    $encoded = base64_encode($str);
+                    $maxlen -= $maxlen % 4;
+                    $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
+                }
+                $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
+                break;
+            case 'Q':
+                if ($this->has8bitChars($str)) {
+                    $charset = $this->CharSet;
+                } else {
+                    $charset = static::CHARSET_ASCII;
+                }
+                //Recalc max line length for Q encoding - see comments on B encode
+                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
+                $encoded = $this->encodeQ($str, $position);
+                $encoded = $this->wrapText($encoded, $maxlen, true);
+                $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
+                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
+                break;
+            default:
+                return $str;
         }
 
         return trim(static::normalizeBreaks($encoded));
