@@ -3154,8 +3154,8 @@ class PHPMailer
                 $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
             }
             $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
-        } elseif ($matchcount > 0) {
-            //1 or more chars need encoding, use Q-encode
+        } elseif ($matchcount > 0 || strlen($str) > $maxlen) {
+            // 1 or more chars need encoding or header exceeds max line length, use Q-encode
             $encoding = 'Q';
             //Recalc max line length for Q encoding - see comments on B encode
             $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($this->CharSet);
@@ -3163,15 +3163,6 @@ class PHPMailer
             $encoded = $this->wrapText($encoded, $maxlen, true);
             $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
             $encoded = preg_replace('/^(.*)$/m', ' =?' . $this->CharSet . "?$encoding?\\1?=", $encoded);
-        } elseif (strlen($str) > $maxlen) {
-            //No chars need encoding, but line is too long, so fold it
-            $encoded = trim($this->wrapText($str, $maxlen, false));
-            if ($str == $encoded) {
-                //Wrapping nicely didn't work, wrap hard instead
-                $encoded = trim(chunk_split($str, static::STD_LINE_LENGTH, static::$LE));
-            }
-            $encoded = str_replace(static::$LE, "\n", trim($encoded));
-            $encoded = preg_replace('/^(.*)$/m', ' \\1', $encoded);
         } else {
             //No reformatting needed
             return $str;
