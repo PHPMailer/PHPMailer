@@ -273,7 +273,7 @@ class PHPMailer
 
     /**
      * What kind of encryption to use on the SMTP connection.
-     * Options: '', 'ssl' or 'tls'.
+     * Options: '', static::ENCRYPTION_STARTTLS, or static::ENCRYPTION_SMTPS.
      *
      * @var string
      */
@@ -1928,19 +1928,19 @@ class PHPMailer
             }
             $prefix = '';
             $secure = $this->SMTPSecure;
-            $tls = ('tls' == $this->SMTPSecure);
-            if ('ssl' == $hostinfo[2] or ('' == $hostinfo[2] and 'ssl' == $this->SMTPSecure)) {
+            $tls = (static::ENCRYPTION_STARTTLS == $this->SMTPSecure);
+            if ('ssl' == $hostinfo[2] or ('' == $hostinfo[2] and static::ENCRYPTION_SMTPS == $this->SMTPSecure)) {
                 $prefix = 'ssl://';
                 $tls = false; // Can't have SSL and TLS at the same time
-                $secure = 'ssl';
+                $secure = static::ENCRYPTION_SMTPS;
             } elseif ('tls' == $hostinfo[2]) {
                 $tls = true;
                 // tls doesn't use a prefix
-                $secure = 'tls';
+                $secure = static::ENCRYPTION_STARTTLS;
             }
             //Do we need the OpenSSL extension?
             $sslext = defined('OPENSSL_ALGO_SHA256');
-            if ('tls' === $secure or 'ssl' === $secure) {
+            if (static::ENCRYPTION_STARTTLS === $secure or static::ENCRYPTION_SMTPS === $secure) {
                 //Check for an OpenSSL constant rather than using extension_loaded, which is sometimes disabled
                 if (!$sslext) {
                     throw new Exception($this->lang('extension_missing') . 'openssl', self::STOP_CRITICAL);
@@ -4189,9 +4189,9 @@ class PHPMailer
      * You should avoid this function - it's more verbose, less efficient, more error-prone and
      * harder to debug than setting properties directly.
      * Usage Example:
-     * `$mail->set('SMTPSecure', 'tls');`
+     * `$mail->set('SMTPSecure', static::ENCRYPTION_STARTTLS);`
      *   is the same as:
-     * `$mail->SMTPSecure = 'tls';`.
+     * `$mail->SMTPSecure = static::ENCRYPTION_STARTTLS;`.
      *
      * @param string $name  The property name to set
      * @param mixed  $value The value to set the property to

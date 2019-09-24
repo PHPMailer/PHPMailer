@@ -79,7 +79,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
-        $this->Mail->CharSet = 'iso-8859-1';
+        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
         if (array_key_exists('mail_from', $_REQUEST)) {
             $this->Mail->From = $_REQUEST['mail_from'];
         } else {
@@ -221,10 +221,10 @@ final class PHPMailerTest extends TestCase
         if (3 != $this->Mail->Priority) {
             $this->addChange('Priority', $this->Mail->Priority);
         }
-        if ('8bit' != $this->Mail->Encoding) {
+        if (PHPMailer::ENCODING_8BIT != $this->Mail->Encoding) {
             $this->addChange('Encoding', $this->Mail->Encoding);
         }
-        if ('iso-8859-1' != $this->Mail->CharSet) {
+        if (PHPMailer::CHARSET_ISO88591 != $this->Mail->CharSet) {
             $this->addChange('CharSet', $this->Mail->CharSet);
         }
         if ('' != $this->Mail->Sender) {
@@ -312,7 +312,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Host = 'hostname';
         $this->Mail->Port = 587;
         $this->Mail->SMTPAuth = true;
-        $this->Mail->SMTPSecure = 'tls';
+        $this->Mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $this->Mail->AuthType = 'CRAM-MD5';
         $this->Mail->Username = 'username';
         $this->Mail->Password = 'password';
@@ -1023,7 +1023,7 @@ EOT;
     {
         $this->Mail->isHTML(true);
         $this->Mail->Subject .= ': ISO-8859-1 HTML';
-        $this->Mail->CharSet = 'iso-8859-1';
+        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
@@ -1135,7 +1135,7 @@ EOT;
     public function testMsgHTML()
     {
         $message = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
-        $this->Mail->CharSet = 'utf-8';
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
@@ -1795,7 +1795,7 @@ EOT;
      */
     public function testEncodings()
     {
-        $this->Mail->CharSet = 'iso-8859-1';
+        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
         $this->assertEquals(
             '=A1Hola!_Se=F1or!',
             $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'text'),
@@ -2432,7 +2432,7 @@ EOT;
      */
     public function testConfirmReadingTo()
     {
-        $this->Mail->CharSet = 'utf-8';
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->buildBody();
 
         $this->Mail->ConfirmReadingTo = 'test@example..com';  //Invalid address
@@ -2522,7 +2522,7 @@ EOT;
         $this->Mail->clearAllRecipients();
         $this->Mail->clearReplyTos();
 
-        $this->Mail->CharSet = 'utf-8';
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
 
         $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
         $this->assertFalse($this->Mail->addAddress('test@françois.ch'));

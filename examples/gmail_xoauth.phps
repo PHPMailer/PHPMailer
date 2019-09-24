@@ -36,8 +36,8 @@ $mail->Host = 'smtp.gmail.com';
 //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
 $mail->Port = 587;
 
-//Set the encryption system to use - ssl (deprecated) or tls
-$mail->SMTPSecure = 'tls';
+//Set the encryption mechanism to use - STARTTLS or SMTPS
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 
 //Whether to use SMTP authentication
 $mail->SMTPAuth = true;
@@ -88,7 +88,7 @@ $mail->Subject = 'PHPMailer GMail XOAUTH2 SMTP test';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
-$mail->CharSet = 'utf-8';
+$mail->CharSet = PHPMailer::CHARSET_UTF8;
 $mail->msgHTML(file_get_contents('contentsutf8.html'), __DIR__);
 
 //Replace the plain text body with one created manually
