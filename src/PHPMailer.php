@@ -46,6 +46,9 @@ class PHPMailer
     const ENCODING_BINARY = 'binary';
     const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
 
+    const ENCRYPTION_STARTTLS = 'tls';
+    const ENCRYPTION_SMTPS = 'ssl';
+
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
