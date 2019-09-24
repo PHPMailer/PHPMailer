@@ -746,6 +746,16 @@ class PHPMailer
     protected static $LE = "\r\n";
 
     /**
+     * The maximum line length supported by mail().
+     *
+     * Background: mail() will sometimes corrupt messages
+     * with headers headers longer than 65 chars, see #818.
+     *
+     * @var int
+     */
+    const MAIL_MAX_LINE_LENGTH = 63;
+
+    /**
      * The maximum line length allowed by RFC 2822 section 2.1.1.
      *
      * @var int
@@ -3131,15 +3141,19 @@ class PHPMailer
                 break;
         }
 
-        //RFCs specify a maximum line length of 78 chars, however mail() will sometimes
-        //corrupt messages with headers longer than 65 chars. See #818
-        $lengthsub = 'mail' == $this->Mailer ? 13 : 0;
-        $maxlen = static::STD_LINE_LENGTH - $lengthsub;
-
         if ($this->has8bitChars($str)) {
             $charset = $this->CharSet;
         } else {
             $charset = static::CHARSET_ASCII;
+        }
+
+        // Q/B encoding adds 8 chars and the charset ("` =?<charset>?[QB]?<content>?=`").
+        $overhead = 8 + strlen($charset);
+
+        if ('mail' == $this->Mailer) {
+            $maxlen = static::MAIL_MAX_LINE_LENGTH - $overhead;
+        } else {
+            $maxlen = static::STD_LINE_LENGTH - $overhead;
         }
 
         // Select the encoding that produces the shortest output and/or prevents corruption.
@@ -3159,12 +3173,6 @@ class PHPMailer
 
         switch ($encoding) {
             case 'B':
-                //This calculation is:
-                // max line length
-                // - shorten to avoid mail() corruption
-                // - Q/B encoding char overhead ("` =?<charset>?[QB]?<content>?=`")
-                // - charset name length
-                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
                 if ($this->hasMultiBytes($str)) {
                     // Use a custom function which correctly encodes and wraps long
                     // multibyte strings without breaking lines within a character
@@ -3177,8 +3185,6 @@ class PHPMailer
                 $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
                 break;
             case 'Q':
-                //Recalc max line length for Q encoding - see comments on B encode
-                $maxlen = static::STD_LINE_LENGTH - $lengthsub - 8 - strlen($charset);
                 $encoded = $this->encodeQ($str, $position);
                 $encoded = $this->wrapText($encoded, $maxlen, true);
                 $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
