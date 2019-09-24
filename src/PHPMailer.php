@@ -49,6 +49,15 @@ class PHPMailer
     const ENCRYPTION_STARTTLS = 'tls';
     const ENCRYPTION_SMTPS = 'ssl';
 
+    const ICAL_METHOD_REQUEST = "REQUEST";
+    const ICAL_METHOD_PUBLISH = "PUBLISH";
+    const ICAL_METHOD_REPLY = "REPLY";
+    const ICAL_METHOD_ADD = "ADD";
+    const ICAL_METHOD_CANCEL = "CANCEL";
+    const ICAL_METHOD_REFRESH = "REFRESH";
+    const ICAL_METHOD_COUNTER = "COUNTER";
+    const ICAL_METHOD_DECLINECOUNTER = "DECLINECOUNTER";
+
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
@@ -147,6 +156,13 @@ class PHPMailer
      * @var string
      */
     public $Ical = '';
+
+    /**
+     * Value of "method" in Contenttype header "text/calendar"
+     *
+     * @var string
+     */
+    public $IcalMethod = self::ICAL_METHOD_REQUEST;
 
     /**
      * The complete compiled MIME message body.
@@ -2591,7 +2607,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=REQUEST', '');
+                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                     $body .= static::$LE;
                 }
@@ -2627,7 +2643,7 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method=REQUEST', '');
+                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                 }
                 $body .= $this->endBoundary($this->boundary[2]);
