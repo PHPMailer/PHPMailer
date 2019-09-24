@@ -16,6 +16,8 @@
 * Improve error checking in mailing list example
 * Drop PHP 5.5 from CI config as it's no longer supported by Travis-CI
 * Fix S/MIME signing
+* Add constants for encryption type
+* More consistent use of constants for encryption, charset, encoding
 
 ## Version 6.0.7 (February 1st 2019)
 * Include RedHat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
