@@ -49,14 +49,14 @@ class PHPMailer
     const ENCRYPTION_STARTTLS = 'tls';
     const ENCRYPTION_SMTPS = 'ssl';
 
-    const ICAL_METHOD_REQUEST = "REQUEST";
-    const ICAL_METHOD_PUBLISH = "PUBLISH";
-    const ICAL_METHOD_REPLY = "REPLY";
-    const ICAL_METHOD_ADD = "ADD";
-    const ICAL_METHOD_CANCEL = "CANCEL";
-    const ICAL_METHOD_REFRESH = "REFRESH";
-    const ICAL_METHOD_COUNTER = "COUNTER";
-    const ICAL_METHOD_DECLINECOUNTER = "DECLINECOUNTER";
+    const ICAL_METHOD_REQUEST = 'REQUEST';
+    const ICAL_METHOD_PUBLISH = 'PUBLISH';
+    const ICAL_METHOD_REPLY = 'REPLY';
+    const ICAL_METHOD_ADD = 'ADD';
+    const ICAL_METHOD_CANCEL = 'CANCEL';
+    const ICAL_METHOD_REFRESH = 'REFRESH';
+    const ICAL_METHOD_COUNTER = 'COUNTER';
+    const ICAL_METHOD_DECLINECOUNTER = 'DECLINECOUNTER';
 
     /**
      * Email priority.
@@ -158,11 +158,20 @@ class PHPMailer
     public $Ical = '';
 
     /**
-     * Value of "method" in Contenttype header "text/calendar"
+     * Value-array of "method" in Contenttype header "text/calendar"
      *
-     * @var string
+     * @var string[]
      */
-    public $IcalMethod = self::ICAL_METHOD_REQUEST;
+    private static $IcalMethod = [
+        self::ICAL_METHOD_REQUEST,
+        self::ICAL_METHOD_PUBLISH,
+        self::ICAL_METHOD_REPLY,
+        self::ICAL_METHOD_ADD,
+        self::ICAL_METHOD_CANCEL,
+        self::ICAL_METHOD_REFRESH,
+        self::ICAL_METHOD_COUNTER,
+        self::ICAL_METHOD_DECLINECOUNTER
+    ];
 
     /**
      * The complete compiled MIME message body.
@@ -2607,7 +2616,14 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
+                    $method = static::ICAL_METHOD_REQUEST;
+                    foreach (static::$IcalMethod as $imethod) {
+                        if (stripos($this->Ical, 'METHOD:'.$imethod) !== false) {
+                            $method = $imethod;
+                            break;
+                        }
+                    }
+                    $body .= $this->getBoundary($this->boundary[1], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$method, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                     $body .= static::$LE;
                 }
@@ -2643,7 +2659,14 @@ class PHPMailer
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
-                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$this->IcalMethod, '');
+                    $method = static::ICAL_METHOD_REQUEST;
+                    foreach (static::$IcalMethod as $imethod) {
+                        if (stripos($this->Ical, 'METHOD:'.$imethod) !== false) {
+                            $method = $imethod;
+                            break;
+                        }
+                    }
+                    $body .= $this->getBoundary($this->boundary[2], '', static::CONTENT_TYPE_TEXT_CALENDAR . '; method='.$method, '');
                     $body .= $this->encodeString($this->Ical, $this->Encoding);
                 }
                 $body .= $this->endBoundary($this->boundary[2]);
