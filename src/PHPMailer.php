@@ -216,6 +216,8 @@ class PHPMailer
      * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
      * 'localhost.localdomain'.
      *
+     * @see PHPMailer::$Helo
+     *
      * @var string
      */
     public $Hostname = '';
@@ -262,7 +264,7 @@ class PHPMailer
     public $Port = 25;
 
     /**
-     * The SMTP HELO of the message.
+     * The SMTP HELO/EHLO name used for the SMTP connection.
      * Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
      * one with the same method described above for $Hostname.
      *
