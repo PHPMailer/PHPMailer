@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+* Multiple bug fixes for folding of long header lines, thanks to @caugner
 * Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
 * Change header folding and param separation to use spaces instead of tabs
 * Use ; to separate multiple MIME header params
@@ -10,7 +11,7 @@
 * Updated Brazilian Portuguese translation
 * Throw exceptions on invalid encoding values
 * Add Afrikaans translation, thanks to @Donno191
-* Updated Farsi translation
+* Updated Farsi/Persian translation
 * Add PHP 7.4 to test config
 * Remove some ambiguity about setting XMailer property
 * Improve error checking in mailing list example
