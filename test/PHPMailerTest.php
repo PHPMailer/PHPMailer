@@ -2684,7 +2684,7 @@ EOT;
         $this->Mail->Subject .= ': ICal method';
         $this->Mail->Body = '<h3>ICal method test.</h3>';
         $this->Mail->AltBody = 'ICal method test.';
-        $this->Mail->Ical = "BEGIN:VCALENDAR"
+        $this->Mail->Ical = 'BEGIN:VCALENDAR'
             . "\r\nVERSION:2.0"
             . "\r\nPRODID:-//PHPMailer//PHPMailer Calendar Plugin 1.0//EN"
             . "\r\nMETHOD:CANCEL"
@@ -2726,7 +2726,7 @@ EOT;
         $this->Mail->Subject .= ': ICal method';
         $this->Mail->Body = '<h3>ICal method test.</h3>';
         $this->Mail->AltBody = 'ICal method test.';
-        $this->Mail->Ical = "BEGIN:VCALENDAR"
+        $this->Mail->Ical = 'BEGIN:VCALENDAR'
             . "\r\nVERSION:2.0"
             . "\r\nPRODID:-//PHPMailer//PHPMailer Calendar Plugin 1.0//EN"
             . "\r\nMETHOD:INVALID"
@@ -2768,7 +2768,7 @@ EOT;
         $this->Mail->Subject .= ': ICal method';
         $this->Mail->Body = '<h3>ICal method test.</h3>';
         $this->Mail->AltBody = 'ICal method test.';
-        $this->Mail->Ical = "BEGIN:VCALENDAR"
+        $this->Mail->Ical = 'BEGIN:VCALENDAR'
             . "\r\nVERSION:2.0"
             . "\r\nPRODID:-//PHPMailer//PHPMailer Calendar Plugin 1.0//EN"
             . "\r\nCALSCALE:GREGORIAN"
