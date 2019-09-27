@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## Version 6.1.1 (September 27th 2019)
+* Fix misordered version tag
+
 ## Version 6.1.0 (September 27th 2019)
 * Multiple bug fixes for folding of long header lines, thanks to @caugner
 * Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
