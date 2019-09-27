@@ -9,6 +9,7 @@
 
 //Import PHPMailer classes into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php';
@@ -37,7 +38,7 @@ class myPHPMailer extends PHPMailer
         //Set an HTML and plain-text body, import relative image references
         $this->msgHTML($body, './images/');
         //Show debug output
-        $this->SMTPDebug = 2;
+        $this->SMTPDebug = SMTP::DEBUG_SERVER;
         //Inject a new debug output handler
         $this->Debugoutput = function ($str, $level) {
             echo "Debug level $level; message: $str\n";

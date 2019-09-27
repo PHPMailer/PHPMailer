@@ -8,6 +8,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\POP3;
+use PHPMailer\PHPMailer\SMTP;
 
 require '../vendor/autoload.php';
 
@@ -22,10 +23,10 @@ $mail = new PHPMailer(true);
 try {
     $mail->isSMTP();
     //Enable SMTP debugging
-    // 0 = off (for production use)
-    // 1 = client messages
-    // 2 = client and server messages
-    $mail->SMTPDebug = 2;
+    // SMTP::DEBUG_OFF = off (for production use)
+    // SMTP::DEBUG_CLIENT = client messages
+    // SMTP::DEBUG_SERVER = client and server messages
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
     //Set the hostname of the mail server
     $mail->Host = 'mail.example.com';
     //Set the SMTP port number - likely to be 25, 465 or 587

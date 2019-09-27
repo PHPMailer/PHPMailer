@@ -3,7 +3,7 @@
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.5.
  *
- * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
+ * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
  * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
@@ -23,10 +23,10 @@ namespace PHPMailer\PHPMailer;
 /**
  * PHPMailer - PHP email creation and transport class.
  *
- * @author  Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author  Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author  Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author  Brent R. Matzelle (original founder)
+ * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
+ * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
+ * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author Brent R. Matzelle (original founder)
  */
 class PHPMailer
 {
@@ -388,11 +388,11 @@ class PHPMailer
      * SMTP class debug output mode.
      * Debug output level.
      * Options:
-     * * `0` No output
-     * * `1` Commands
-     * * `2` Data and commands
-     * * `3` As 2 plus connection status
-     * * `4` Low-level data output.
+     * * SMTP::DEBUG_OFF: No output
+     * * SMTP::DEBUG_CLIENT: Client messages
+     * * SMTP::DEBUG_SERVER: Client and server messages
+     * * SMTP::DEBUG_CONNECTION: As SERVER plus connection status
+     * * SMTP::DEBUG_LOWLEVEL: Noisy, low-level data output, rarely needed
      *
      * @see SMTP::$do_debug
      *
@@ -1109,9 +1109,11 @@ class PHPMailer
     protected function addAnAddress($kind, $address, $name = '')
     {
         if (!in_array($kind, ['to', 'cc', 'bcc', 'Reply-To'])) {
-            $error_message = sprintf('%s: %s',
+            $error_message = sprintf(
+                '%s: %s',
                 $this->lang('Invalid recipient kind'),
-                $kind);
+                $kind
+            );
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1121,10 +1123,12 @@ class PHPMailer
             return false;
         }
         if (!static::validateAddress($address)) {
-            $error_message = sprintf('%s (%s): %s',
+            $error_message = sprintf(
+                '%s (%s): %s',
                 $this->lang('invalid_address'),
                 $kind,
-                $address);
+                $address
+            );
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1157,7 +1161,7 @@ class PHPMailer
      * Uses the imap_rfc822_parse_adrlist function if the IMAP extension is available.
      * Note that quotes in the name part are removed.
      *
-     * @see    http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
+     * @see http://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      *
      * @param string $addrstr The address list string
      * @param bool   $useimap Whether to use the IMAP extension to parse the list
@@ -1227,12 +1231,15 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
-        if (false === $pos or
-            (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported()) and
-            !static::validateAddress($address)) {
-            $error_message = sprintf('%s (From): %s',
+        if (false === $pos 
+            or (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported()) 
+            and !static::validateAddress($address)
+        ) {
+            $error_message = sprintf(
+                '%s (From): %s',
                 $this->lang('invalid_address'),
-                $address);
+                $address
+            );
             $this->setError($error_message);
             $this->edebug($error_message);
             if ($this->exceptions) {
@@ -1368,7 +1375,7 @@ class PHPMailer
      * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
      *   or fails for any reason (e.g. domain contains characters not allowed in an IDN).
      *
-     * @see    PHPMailer::$CharSet
+     * @see PHPMailer::$CharSet
      *
      * @param string $address The email address to convert
      *
@@ -1434,8 +1441,8 @@ class PHPMailer
      */
     public function preSend()
     {
-        if ('smtp' == $this->Mailer or
-            ('mail' == $this->Mailer and stripos(PHP_OS, 'WIN') === 0)
+        if ('smtp' == $this->Mailer
+            or ('mail' == $this->Mailer and stripos(PHP_OS, 'WIN') === 0)
         ) {
             //SMTP mandates RFC-compliant line endings
             //and it's also used with mail() on Windows
@@ -1482,10 +1489,12 @@ class PHPMailer
                 }
                 $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
                 if (!static::validateAddress($this->$address_kind)) {
-                    $error_message = sprintf('%s (%s): %s',
+                    $error_message = sprintf(
+                        '%s (%s): %s',
                         $this->lang('invalid_address'),
                         $address_kind,
-                        $this->$address_kind);
+                        $this->$address_kind
+                    );
                     $this->setError($error_message);
                     $this->edebug($error_message);
                     if ($this->exceptions) {
@@ -1602,7 +1611,7 @@ class PHPMailer
     /**
      * Send mail using the $Sendmail program.
      *
-     * @see    PHPMailer::$Sendmail
+     * @see PHPMailer::$Sendmail
      *
      * @param string $header The message headers
      * @param string $body   The message body
@@ -1732,7 +1741,7 @@ class PHPMailer
     /**
      * Send mail using the PHP mail() function.
      *
-     * @see    http://www.php.net/manual/en/book.mail.php
+     * @see http://www.php.net/manual/en/book.mail.php
      *
      * @param string $header The message headers
      * @param string $body   The message body
@@ -2178,8 +2187,8 @@ class PHPMailer
         }
 
         return $this->encodeHeader($this->secureHeader($addr[1]), 'phrase') . ' <' . $this->secureHeader(
-                $addr[0]
-            ) . '>';
+            $addr[0]
+        ) . '>';
     }
 
     /**
@@ -4198,7 +4207,7 @@ class PHPMailer
      * Multi-byte-safe pathinfo replacement.
      * Drop-in replacement for pathinfo(), but multibyte- and cross-platform-safe.
      *
-     * @see    http://www.php.net/manual/en/function.pathinfo.php#107461
+     * @see http://www.php.net/manual/en/function.pathinfo.php#107461
      *
      * @param string     $path    A filename or path, does not need to exist as a file
      * @param int|string $options Either a PATHINFO_* constant,
@@ -4405,7 +4414,7 @@ class PHPMailer
      * Uses the 'relaxed' algorithm from RFC6376 section 3.4.2.
      * Canonicalized headers should *always* use CRLF, regardless of mailer setting.
      *
-     * @see    https://tools.ietf.org/html/rfc6376#section-3.4.2
+     * @see https://tools.ietf.org/html/rfc6376#section-3.4.2
      *
      * @param string $signHeader Header
      *
@@ -4449,7 +4458,7 @@ class PHPMailer
      * Uses the 'simple' algorithm from RFC6376 section 3.4.3.
      * Canonicalized bodies should *always* use CRLF, regardless of mailer setting.
      *
-     * @see    https://tools.ietf.org/html/rfc6376#section-3.4.3
+     * @see https://tools.ietf.org/html/rfc6376#section-3.4.3
      *
      * @param string $body Message Body
      *

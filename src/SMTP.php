@@ -24,8 +24,8 @@ namespace PHPMailer\PHPMailer;
  * PHPMailer RFC821 SMTP email transport class.
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
  *
- * @author  Chris Ryan
- * @author  Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Chris Ryan
+ * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  */
 class SMTP
 {
@@ -59,26 +59,36 @@ class SMTP
 
     /**
      * Debug level for no output.
+     *
+     * @var int
      */
     const DEBUG_OFF = 0;
 
     /**
      * Debug level to show client -> server messages.
+     *
+     * @var int
      */
     const DEBUG_CLIENT = 1;
 
     /**
      * Debug level to show client -> server and server -> client messages.
+     *
+     * @var int
      */
     const DEBUG_SERVER = 2;
 
     /**
      * Debug level to show connection status, client -> server and server -> client messages.
+     *
+     * @var int
      */
     const DEBUG_CONNECTION = 3;
 
     /**
      * Debug level to show all messages.
+     *
+     * @var int
      */
     const DEBUG_LOWLEVEL = 4;
 
@@ -745,7 +755,7 @@ class SMTP
      *
      * @return bool
      *
-     * @see    hello()
+     * @see hello()
      */
     protected function sendHello($hello, $host)
     {
@@ -880,10 +890,10 @@ class SMTP
         }
 
         return $this->sendCommand(
-           'RCPT TO',
-           $rcpt,
-           [250, 251]
-       );
+            'RCPT TO',
+            $rcpt,
+            [250, 251]
+        );
     }
 
     /**
