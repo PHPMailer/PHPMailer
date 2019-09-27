@@ -1231,8 +1231,8 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
-        if (false === $pos 
-            or (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported()) 
+        if (false === $pos
+            or (!$this->has8bitChars(substr($address, ++$pos)) or !static::idnSupported())
             and !static::validateAddress($address)
         ) {
             $error_message = sprintf(
