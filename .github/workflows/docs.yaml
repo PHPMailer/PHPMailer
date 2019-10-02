@@ -22,7 +22,7 @@ jobs:
 
   publish:
     name: Publish Docs
-    needs: Build Docs
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download file artifacts
