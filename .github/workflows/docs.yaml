@@ -4,8 +4,8 @@ on:
     branches:
       - master
 jobs:
-  build:
-    name: Build Docs
+  build_and_publish:
+    name: Build and publish Docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -14,21 +14,6 @@ jobs:
           fetch-depth: 1
       - name: Build Docs
         uses: ./.github/actions/build-docs
-      - name: Upload file artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: docs
-          path: docs
-
-  publish:
-    name: Publish Docs
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download file artifacts
-        uses: actions/download-artifact@v1
-        with:
-          name: docs
       - name: Publish Docs to gh-pages
         uses: maxheld83/ghpages@v0.2.1
         env:
