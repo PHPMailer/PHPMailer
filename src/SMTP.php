@@ -480,7 +480,7 @@ class SMTP
 
                     return false;
                 }
-                self::edebug('Auth method selected: ' . $authtype, self::DEBUG_LOWLEVEL);
+                $this->edebug('Auth method selected: ' . $authtype, self::DEBUG_LOWLEVEL);
             }
 
             if (!in_array($authtype, $this->server_caps['AUTH'])) {
