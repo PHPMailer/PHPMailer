@@ -3927,20 +3927,21 @@ class PHPMailer
      * Converts data-uri images into embedded attachments.
      * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
      *
-     * @param string        $message  HTML message string
-     * @param string        $basedir  Absolute path to a base directory to prepend to relative paths to images
-     * @param bool|callable $advanced Whether to use the internal HTML to text converter
-     *                                or your own custom converter @see PHPMailer::html2text()
+     * @param string          $message       HTML message string
+     * @param string|callable $imageResolver Absolute path to a base directory to prepend to relative paths to images
+     *                                       or a custom resolver, returning a object with data, name and type of the image
+     * @param bool|callable   $advanced      Whether to use the internal HTML to text converter
+     *                                       or your own custom converter @see PHPMailer::html2text()
      *
      * @return string $message The transformed message Body
      */
-    public function msgHTML($message, $basedir = '', $advanced = false)
+    public function msgHTML($message, $imageResolver = '', $advanced = false)
     {
         preg_match_all('/(src|background)=["\'](.*)["\']/Ui', $message, $images);
         if (array_key_exists(2, $images)) {
-            if (strlen($basedir) > 1 && '/' != substr($basedir, -1)) {
-                // Ensure $basedir has a trailing /
-                $basedir .= '/';
+            if (is_string($imageResolver) && strlen($imageResolver) > 1 && '/' != substr($imageResolver, -1)) {
+                // Ensure $imageResolver has a trailing /
+                $imageResolver .= '/';
             }
             foreach ($images[2] as $imgindex => $url) {
                 // Convert data URIs into embedded images
@@ -3968,35 +3969,46 @@ class PHPMailer
                     );
                     continue;
                 }
-                if (// Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
-                    !empty($basedir)
-                    // Ignore URLs containing parent dir traversal (..)
-                    and (strpos($url, '..') === false)
+                if (// Ignore URLs containing parent dir traversal (..)
+                    (strpos($url, '..') === false)
                     // Do not change urls that are already inline images
                     and 0 !== strpos($url, 'cid:')
                     // Do not change absolute URLs, including anonymous protocol
                     and !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)
                 ) {
-                    $filename = static::mb_pathinfo($url, PATHINFO_BASENAME);
-                    $directory = dirname($url);
-                    if ('.' == $directory) {
-                        $directory = '';
-                    }
                     $cid = hash('sha256', $url) . '@phpmailer.0'; // RFC2392 S 2
-                    if (strlen($basedir) > 1 and '/' != substr($basedir, -1)) {
-                        $basedir .= '/';
+                    $added = false;
+
+                    // Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
+                    if (is_string($imageResolver) && !empty($imageResolver)) {
+                        $filename = static::mb_pathinfo($url, PATHINFO_BASENAME);
+                        $directory = dirname($url);
+                        if ('.' == $directory) {
+                            $directory = '';
+                        }
+                        if (strlen($directory) > 1 and '/' != substr($directory, -1)) {
+                            $directory .= '/';
+                        }
+                        $added = $this->addEmbeddedImage(
+                            $imageResolver . $directory . $filename,
+                            $cid,
+                            $filename,
+                            static::ENCODING_BASE64,
+                            static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_EXTENSION))
+                        );
+                    } elseif (is_callable($imageResolver)) {
+                        $object = $imageResolver($url);
+
+                        $added = $this->addStringEmbeddedImage(
+                            $object['data'],
+                            $cid,
+                            $object['name'],
+                            'base64',
+                            $object['type']
+                        );
                     }
-                    if (strlen($directory) > 1 and '/' != substr($directory, -1)) {
-                        $directory .= '/';
-                    }
-                    if ($this->addEmbeddedImage(
-                        $basedir . $directory . $filename,
-                        $cid,
-                        $filename,
-                        static::ENCODING_BASE64,
-                        static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_EXTENSION))
-                    )
-                    ) {
+
+                    if ($added) {
                         $message = preg_replace(
                             '/' . $images[1][$imgindex] . '=["\']' . preg_quote($url, '/') . '["\']/Ui',
                             $images[1][$imgindex] . '="cid:' . $cid . '"',
