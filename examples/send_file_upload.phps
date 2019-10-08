@@ -24,9 +24,9 @@ if (array_key_exists('userfile', $_FILES)) {
         // Attach the uploaded file
         $mail->addAttachment($uploadfile, 'My uploaded file');
         if (!$mail->send()) {
-            $msg .= "Mailer Error: " . $mail->ErrorInfo;
+            $msg .= 'Mailer Error: '. $mail->ErrorInfo;
         } else {
-            $msg .= "Message sent!";
+            $msg .= 'Message sent!';
         }
     } else {
         $msg .= 'Failed to move file to ' . $uploadfile;

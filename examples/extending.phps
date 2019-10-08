@@ -40,7 +40,7 @@ class myPHPMailer extends PHPMailer
         //Show debug output
         $this->SMTPDebug = SMTP::DEBUG_SERVER;
         //Inject a new debug output handler
-        $this->Debugoutput = function ($str, $level) {
+        $this->Debugoutput = static function ($str, $level) {
             echo "Debug level $level; message: $str\n";
         };
     }
@@ -50,7 +50,7 @@ class myPHPMailer extends PHPMailer
     {
         $this->Subject = '[Yay for me!] ' . $this->Subject;
         $r = parent::send();
-        echo "I sent a message with subject " . $this->Subject;
+        echo 'I sent a message with subject '. $this->Subject;
 
         return $r;
     }
@@ -67,5 +67,5 @@ try {
     $mail->send(); //no need to check for errors - the exception handler will do it
 } catch (Exception $e) {
     //Note that this is catching the PHPMailer Exception class, not the global \Exception type!
-    echo "Caught a " . get_class($e) . ": " . $e->getMessage();
+    echo 'Caught a '. get_class($e) .': '. $e->getMessage();
 }

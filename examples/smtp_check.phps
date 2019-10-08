@@ -47,7 +47,7 @@ try {
     //If server supports authentication, do it (even if no encryption)
     if (is_array($e) && array_key_exists('AUTH', $e)) {
         if ($smtp->authenticate('username', 'password')) {
-            echo "Connected ok!";
+            echo 'Connected ok!';
         } else {
             throw new Exception('Authentication failed: ' . $smtp->getError()['error']);
         }
@@ -56,4 +56,4 @@ try {
     echo 'SMTP error: ' . $e->getMessage(), "\n";
 }
 //Whatever happened, close the connection.
-$smtp->quit(true);
+$smtp->quit();

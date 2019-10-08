@@ -62,7 +62,7 @@ try {
 
 //Alternative approach using a closure
 try {
-    $mail->action_function = function ($result, $to, $cc, $bcc, $subject, $body) {
+    $mail->action_function = static function ($result, $to, $cc, $bcc, $subject, $body) {
         if ($result) {
             echo "Message sent successfully\n";
         } else {
