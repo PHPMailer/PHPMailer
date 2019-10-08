@@ -1958,7 +1958,7 @@ class PHPMailer
                 trim($hostentry),
                 $hostinfo
             )) {
-                static::edebug($this->lang('connect_host') . ' ' . $hostentry);
+                $this->edebug($this->lang('connect_host') . ' ' . $hostentry);
                 // Not a valid host entry
                 continue;
             }
@@ -1970,7 +1970,7 @@ class PHPMailer
 
             //Check the host name is a valid name or IP address before trying to use it
             if (!static::isValidHost($hostinfo[3])) {
-                static::edebug($this->lang('connect_host') . ' ' . $hostentry);
+                $this->edebug($this->lang('connect_host') . ' ' . $hostentry);
                 continue;
             }
             $prefix = '';
@@ -3308,6 +3308,7 @@ class PHPMailer
         // Base64 has a 4:3 ratio
         $avgLength = floor($length * $ratio * .75);
 
+        $offset = 0;
         for ($i = 0; $i < $mb_length; $i += $offset) {
             $lookBack = 0;
             do {
@@ -3582,7 +3583,7 @@ class PHPMailer
     /**
      * Validate encodings.
      *
-     * @param $encoding
+     * @param string $encoding
      *
      * @return bool
      */
