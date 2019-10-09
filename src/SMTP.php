@@ -1093,14 +1093,14 @@ class SMTP
      *
      * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
      *
-     * @return null|string|bool
+     * @return string|bool|null
      */
     public function getServerExt($name)
     {
         if (!$this->server_caps) {
             $this->setError('No HELO/EHLO was sent');
 
-            return null;
+            return;
         }
 
         if (!array_key_exists($name, $this->server_caps)) {
@@ -1112,7 +1112,7 @@ class SMTP
             }
             $this->setError('HELO handshake was used; No information about server extensions available');
 
-            return null;
+            return;
         }
 
         return $this->server_caps[$name];
