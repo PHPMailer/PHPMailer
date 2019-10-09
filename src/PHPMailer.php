@@ -1172,7 +1172,7 @@ class PHPMailer
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             foreach ($list as $address) {
                 if (('.SYNTAX-ERROR.' !== $address->host) && static::validateAddress(
-                    $address->mailbox.'@'.$address->host
+                    $address->mailbox . '@' . $address->host
                 )) {
                     $addresses[] = [
                         'name' => (property_exists($address, 'personal') ? $address->personal : ''),
@@ -3000,8 +3000,9 @@ class PHPMailer
      * @param string $disposition_type
      * @param string $boundary
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     protected function attachAll($disposition_type, $boundary)
     {
@@ -3967,8 +3968,8 @@ class PHPMailer
      *                                or your own custom converter @return string $message The transformed message Body
      *
      * @throws Exception
-     * @see PHPMailer::html2text()
      *
+     * @see PHPMailer::html2text()
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
@@ -4524,8 +4525,9 @@ class PHPMailer
      * @param string $subject      Subject
      * @param string $body         Body
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function DKIM_Add($headers_line, $subject, $body)
     {
