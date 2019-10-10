@@ -4594,9 +4594,9 @@ class PHPMailer
                 foreach ($this->CustomHeader as $customHeader) {
                     if ($customHeader[0] === $header['label']) {
                         $headersToSignKeys[] = $header['label'];
-                        $headersToSign[] = $header['label'].': '.$header['value'];
+                        $headersToSign[] = $header['label'] . ': ' . $header['value'];
                         if ($this->DKIM_copyHeaderFields) {
-                            $copiedHeaders[] = $header['label'].':'.
+                            $copiedHeaders[] = $header['label'] . ':' .
                                 str_replace('|', '=7C', $this->DKIM_QP($header['value']));
                         }
                         //Skip straight to the next header
@@ -4617,9 +4617,9 @@ class PHPMailer
                 //Fold long values
                 if (strlen($copiedHeader) > self::STD_LINE_LENGTH - 3) {
                     $copiedHeaderFields .= substr(
-                        chunk_split($copiedHeader, self::STD_LINE_LENGTH - 3, static::$LE.' '),
+                        chunk_split($copiedHeader, self::STD_LINE_LENGTH - 3, static::$LE . ' '),
                         0,
-                        -strlen(static::$LE.' ')
+                        -strlen(static::$LE . ' ')
                     );
                 } else {
                     $copiedHeaderFields .= $copiedHeader;
