@@ -2071,7 +2071,7 @@ EOT;
             $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization incorrect'
         );
-        //Check that long folded lines with runs of spaces are canonicalised properly
+        //Check that long folded lines with runs of spaces are canonicalized properly
         $preheaders = 'Long-Header-1: <https://example.com/somescript.php?' .
             "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234" .
             "\r\nLong-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    " .
@@ -2112,7 +2112,7 @@ EOT;
         $subject = 'example';
 
         $headerLines = "From:$from\r\nTo:$to\r\nDate:$date\r\n";
-        $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:=20$subject;\r\n";
+        $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:$subject;\r\n";
 
         $this->Mail->DKIM_copyHeaderFields = true;
         $this->assertContains(
