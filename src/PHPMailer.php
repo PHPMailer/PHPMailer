@@ -2487,7 +2487,7 @@ class PHPMailer
         }
 
         if ('mail' !== $this->Mailer) {
-            $result .= static::$LE;
+//            $result .= static::$LE;
         }
 
         return $result;
@@ -4470,7 +4470,7 @@ class PHPMailer
         //@see https://tools.ietf.org/html/rfc5322#section-2.2
         //That means this may break if you do something daft like put vertical tabs in your headers.
         //Unfold header lines
-        $signHeader = preg_replace('/\r\n([ \t])+/', '', $signHeader);
+        $signHeader = preg_replace('/\r\n[ \t]+/', ' ', $signHeader);
         //Break headers out into an array
         $lines = explode("\r\n", $signHeader);
         foreach ($lines as $key => $line) {
@@ -4548,7 +4548,7 @@ class PHPMailer
             'Mime-Version',
             'X-Mailer',
         ];
-        if (!stripos('Subject', $headers_line) !== false) {
+        if (stripos($headers_line, 'Subject') === false) {
             $headers_line .= 'Subject: ' . $subject . static::$LE;
         }
         $headerLines = explode(static::$LE, $headers_line);
