@@ -4567,8 +4567,8 @@ class PHPMailer
                 $currentHeaderLabel = $matches[1];
                 $currentHeaderValue = $matches[2];
             } elseif (preg_match('/^[ \t]+(.*)$/', $headerLine, $matches)) {
-                //This is a folded continuation of the current header
-                $currentHeaderValue .= $matches[1];
+                //This is a folded continuation of the current header, so unfold it
+                $currentHeaderValue .= ' ' . $matches[1];
             }
             ++$headerLineIndex;
             if ($headerLineIndex >= $headerLineCount) {
@@ -4585,7 +4585,7 @@ class PHPMailer
                 $headersToSignKeys[] = $header['label'];
                 $headersToSign[] = $header['label'] . ': ' . $header['value'];
                 if ($this->DKIM_copyHeaderFields) {
-                    $copiedHeaders[] = $header['label'] . ':' .
+                    $copiedHeaders[] = $header['label'] . ':' . //Note no space after this, as per RFC
                         str_replace('|', '=7C', $this->DKIM_QP($header['value']));
                 }
                 continue;
@@ -4598,7 +4598,7 @@ class PHPMailer
                         $headersToSignKeys[] = $header['label'];
                         $headersToSign[] = $header['label'] . ': ' . $header['value'];
                         if ($this->DKIM_copyHeaderFields) {
-                            $copiedHeaders[] = $header['label'] . ':' .
+                            $copiedHeaders[] = $header['label'] . ':' . //Note no space after this, as per RFC
                                 str_replace('|', '=7C', $this->DKIM_QP($header['value']));
                         }
                         //Skip straight to the next header
