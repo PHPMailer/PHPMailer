@@ -3062,11 +3062,7 @@ class PHPMailer
                 }
 
                 if (!empty($cid)) {
-                    $mime[] = sprintf(
-                        'Content-ID: <%s>%s',
-                        $this->encodeHeader($this->secureHeader($cid)),
-                        static::$LE
-                    );
+                    $mime[] = 'Content-ID: ' . $this->encodeHeader('<' . $this->secureHeader($cid) . '>') . static::$LE;
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
