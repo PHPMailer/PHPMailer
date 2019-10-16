@@ -33,7 +33,7 @@ if (array_key_exists('userfile', $_FILES)) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Upload</title>
