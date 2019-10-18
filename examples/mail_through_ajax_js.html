@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact form</title>
+    <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+</head>
+
+<body>
+<h1>Contact us</h1>
+
+<form >
+    <label for="name">Name: <input type="text" name="name" id="name"></label><br>
+    <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
+    <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
+    <input type="submit" value="Send" id="send">
+</form>
+<h2 id="status"></h2>
+<script>
+    $(document).on("click","#send",function(e){
+        e.preventDefault();
+        let name = $("#name").val();
+        let email = $("#email").val();
+        let message = $("#message").val();
+        $.ajax({
+            type:"POST",
+        	url:"mail_through_ajax_js.php",
+        	data:{"name":name,"email":email,"message":message},
+        	success: function(data) {
+                $("#status").text(data);
+            }
+        });
+    });
+</script>
+</body>
+</html>
