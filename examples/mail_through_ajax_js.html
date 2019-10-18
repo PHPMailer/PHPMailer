@@ -22,15 +22,19 @@
 <script>
     $(document).on("click","#send",function(e){
         e.preventDefault();
+
+        //get data from the fields
         let name = $("#name").val();
         let email = $("#email").val();
         let message = $("#message").val();
+
+        //ajax request
         $.ajax({
-            type:"POST",
-        	url:"mail_through_ajax_js.php",
+            type:"POST",// POST or GET
+        	url:"mail_through_ajax_js.php",//url of the php file
         	data:{"name":name,"email":email,"message":message},
         	success: function(data) {
-                $("#status").text(data);
+                $("#status").text(data);// to print error message on the page
             }
         });
     });
