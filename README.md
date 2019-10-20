@@ -12,7 +12,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 - Probably the world's most popular code for sending email from PHP!
 - Used by many open-source projects: WordPress, Drupal, 1CRM, SugarCRM, Yii, Joomla! and many more
 - Integrated SMTP support - send without a local mail server
-- Send emails with multiple To, CC, BCC and Reply-to addresses
+- Send emails with multiple To, CC, BCC, and Reply-to addresses
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Add attachments, including inline
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
@@ -34,7 +34,7 @@ Formatting email correctly is surprisingly difficult. There are myriad overlappi
 The PHP `mail()` function usually sends via a local mail server, typically fronted by a `sendmail` binary on Linux, BSD, and macOS platforms, however, Windows usually doesn't include a local mail server; PHPMailer's integrated SMTP implementation allows email sending on Windows platforms without a local mail server.
 
 ## License
-This software is distributed under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html) license, along with the [GPL Cooperation Commitment](https://gplcc.github.io/gplcc/). Please read LICENSE for information on the software availability and distribution.
+This software is distributed under the [LGPL 2.1](http://www.gnu.org/licenses/lgpl-2.1.html) license, along with the [GPL Cooperation Commitment](https://gplcc.github.io/gplcc/). Please read LICENSE for information on software availability and distribution.
 
 ## Installation & loading
 PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via [Composer](https://getcomposer.org) is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
@@ -130,7 +130,7 @@ try {
 }
 ```
 
-You'll find plenty more to play with in the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
+You'll find plenty more to play within the [examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) folder.
 
 If you are re-using the instance (e.g. when sending to a mailing list), you may need to clear the recipient list to avoid sending duplicate messages. See [the mailing list example](https://github.com/PHPMailer/PHPMailer/blob/master/examples/mailing_list.phps) for further guidance.
 
@@ -171,7 +171,7 @@ Please disclose any vulnerabilities found responsibly - report any security prob
 
 PHPMailer versions prior to 5.2.22 (released January 9th 2017) have a local file disclosure vulnerability, [CVE-2017-5223](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-5223). If content passed into `msgHTML()` is sourced from unfiltered user input, relative paths can map to absolute local file paths and added as attachments. Also note that `addAttachment` (just like `file_get_contents`, `passthru`, `unlink`, etc) should not be passed user-sourced params either! Reported by Yongxiang Li of Asiasecurity.
 
-PHPMailer versions prior to 5.2.20 (released December 28th 2016) are vulnerable to [CVE-2016-10045](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2016-10045) a remote code execution vulnerability, responsibly reported by [Dawid Golunski](https://legalhackers.com/advisories/PHPMailer-Exploit-Remote-Code-Exec-CVE-2016-10045-Vuln-Patch-Bypass.html), and patched by Paul Buonopane (@Zenexer).
+PHPMailer versions prior to 5.2.20 (released December 28th, 2016) are vulnerable to [CVE-2016-10045](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2016-10045) a remote code execution vulnerability, responsibly reported by [Dawid Golunski](https://legalhackers.com/advisories/PHPMailer-Exploit-Remote-Code-Exec-CVE-2016-10045-Vuln-Patch-Bypass.html), and patched by Paul Buonopane (@Zenexer).
 
 PHPMailer versions prior to 5.2.18 (released December 2016) are vulnerable to [CVE-2016-10033](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2016-10033) a critical remote code execution vulnerability, responsibly reported by [Dawid Golunski](http://legalhackers.com/advisories/PHPMailer-Exploit-Remote-Code-Exec-CVE-2016-10033-Vuln.html).
 
@@ -184,20 +184,20 @@ We're particularly interested in fixing edge-cases, expanding test coverage and 
 
 If you found a mistake in the docs, or want to add something, go ahead and amend the wiki - anyone can edit it.
 
-If you have git clones from prior to the move to the PHPMailer GitHub organisation, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
+If you have git clones from prior to the move to the PHPMailer GitHub organization, you'll need to update any remote URLs referencing the old GitHub location with a command like this from within your clone:
 
 ```sh
 git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
 ```
 
-Please *don't* use the SourceForge or Google Code projects any more; they are obsolete and no longer maintained.
+Please *don't* use the SourceForge or Google Code projects anymore; they are obsolete and no longer maintained.
 
 ## Sponsorship
 Development time and resources for PHPMailer are provided by [Smartmessages.net](https://info.smartmessages.net/), a powerful email marketing system.
 
 <a href="https://info.smartmessages.net/"><img src="https://www.smartmessages.net/img/smartmessages-logo.svg" width="250" height="28" alt="Smartmessages email marketing"></a>
 
-Other contributions are gladly received, whether in beer 🍺, T-shirts 👕, Amazon wishlist raids, or cold, hard cash 💰. If you'd like to donate to say "thank you" to maintainers or contributors, please contact them through individual profile pages via [the contributors page](https://github.com/PHPMailer/PHPMailer/graphs/contributors).
+Other contributions are gladly received, whether in beer 🍺, T-shirts 👕, Amazon wishlist raids, or cold, hard cash 💰. If you'd like to donate to say "thank you" to maintainers or contributors, please contact them through individual profile pages via [the contributor's page](https://github.com/PHPMailer/PHPMailer/graphs/contributors).
 
 ## Changelog
 See [changelog](changelog.md).
@@ -208,7 +208,7 @@ See [changelog](changelog.md).
 - Became an Apache incubator project on Google Code in 2010, managed by Jim Jagielski.
 - Marcus created his fork on [GitHub](https://github.com/Synchro/PHPMailer) in 2008.
 - Jim and Marcus decide to join forces and use GitHub as the canonical and official repo for PHPMailer in 2013.
-- PHPMailer moves to the [PHPMailer organisation](https://github.com/PHPMailer) on GitHub in 2013.
+- PHPMailer moves to the [PHPMailer organization](https://github.com/PHPMailer) on GitHub in 2013.
 
 ### What's changed since moving from SourceForge?
 - Official successor to the SourceForge and Google Code projects.
