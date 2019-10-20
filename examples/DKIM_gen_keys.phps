@@ -25,10 +25,10 @@
 $domain = 'example.com';
 $selector = 'phpmailer';
 
-//Path to your private key:
-$privatekeyfile = 'dkim_private.pem';
-//Path to your public key:
-$publickeyfile = 'dkim_public.pem';
+//Private key filename for this selector
+$privatekeyfile = $selector . '_dkim_private.pem';
+//Public key filename for this selector
+$publickeyfile = $selector . '_dkim_public.pem';
 
 if (file_exists($privatekeyfile)) {
     echo "Using existing keys - if you want to generate new keys, delete old key files first.\n\n";
@@ -57,8 +57,9 @@ echo "\n\nPublic key:\n\n" . $publickey;
 //Prep public key for DNS, e.g.
 //phpmailer._domainkey.example.com IN TXT "v=DKIM1; h=sha256; t=s; p=" "MIIBIjANBg...oXlwIDAQAB"...
 $dnskey = "$selector._domainkey.$domain IN TXT";
+$dnsvalue = '"v=DKIM1; h=sha256; t=s; p=" ';
 //Some DNS server don't like ; chars unless backslash-escaped
-$dnsvalue = '"v=DKIM1\; h=sha256\; t=s\; p=" ';
+$dnsvalue2 = '"v=DKIM1\; h=sha256\; t=s\; p=" ';
 
 //Strip and split the key into smaller parts and format for DNS
 //Many DNS systems don't like long TXT entries
@@ -72,6 +73,8 @@ $keyparts = str_split($publickey, 253); //Becomes 255 when quotes are included
 //Quote each chunk
 foreach ($keyparts as $keypart) {
     $dnsvalue .= '"' . trim($keypart) . '" ';
+    $dnsvalue2 .= '"' . trim($keypart) . '" ';
 }
 echo "\n\nDNS key:\n\n" . trim($dnskey);
 echo "\n\nDNS value:\n\n" . trim($dnsvalue);
+echo "\n\nDNS value (with escaping):\n\n" . trim($dnsvalue2);

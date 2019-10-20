@@ -2089,13 +2089,13 @@ EOT;
             $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization incorrect'
         );
-        //Check that long folded lines with runs of spaces are canonicalised properly
+        //Check that long folded lines with runs of spaces are canonicalized properly
         $preheaders = 'Long-Header-1: <https://example.com/somescript.php?' .
-            "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234" .
-            "\r\nLong-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    " .
-            "\r\n and   is   folded   onto   2   lines";
+            "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234\r\n" .
+            "Long-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    \r\n" .
+            ' and   is   folded   onto   2   lines';
         $postheaders = 'long-header-1:<https://example.com/somescript.php?id=1234567890&' .
-            "name=Abcdefghijklmnopquestuvwxyz&hash=abc1234\r\nlong-header-2:This is a long" .
+            "name=Abcdefghijklmnopquestuvwxyz&hash= abc1234\r\nlong-header-2:This is a long" .
             ' header value that contains runs of spaces and trailing and is folded onto 2 lines';
         $this->assertEquals(
             $postheaders,
@@ -2130,7 +2130,7 @@ EOT;
         $subject = 'example';
 
         $headerLines = "From:$from\r\nTo:$to\r\nDate:$date\r\n";
-        $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:=20$subject;\r\n";
+        $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:$subject;\r\n";
 
         $this->Mail->DKIM_copyHeaderFields = true;
         $this->assertContains(
@@ -2185,7 +2185,7 @@ EOT;
         $headerLines .= "X-AnyHeader:$anyHeader\r\nBaz:bar\r\n";
         $headerLines .= 'List-Unsubscribe:' . $this->Mail->encodeHeader($unsubscribeUrl) . "\r\n";
 
-        $headerFields = 'h=From:To:Date:Subject:Baz:List-Unsubscribe';
+        $headerFields = 'h=From:To:Date:Baz:List-Unsubscribe:Subject';
 
         $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
 
