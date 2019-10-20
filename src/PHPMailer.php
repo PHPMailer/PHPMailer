@@ -4022,7 +4022,8 @@ class PHPMailer
                     if ('.' === $directory) {
                         $directory = '';
                     }
-                    $cid = hash('sha256', $url) . '@phpmailer.0'; // RFC2392 S 2
+                    // RFC2392 S 2
+                    $cid = substr(hash('sha256', $data), 0, 32) . '@phpmailer.0';
                     if (strlen($basedir) > 1 && '/' !== substr($basedir, -1)) {
                         $basedir .= '/';
                     }
