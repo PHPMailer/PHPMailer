@@ -1,5 +1,12 @@
 # PHPMailer Change Log
 
+* Substantial revision of DKIM header generation
+* Use shorter hashes for auto-generated CID values
+* Fix format of content-id headers, and only use them on inline attachments
+* Remove all use of XHTML
+* Lots of coding standards cleanup
+* API docs are now auto-updated via GitHub actions
+
 ## Version 6.1.1 (September 27th 2019)
 * Fix misordered version tag
 
