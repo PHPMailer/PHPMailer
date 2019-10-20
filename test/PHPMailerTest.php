@@ -1094,7 +1094,8 @@ EOT;
         $this->Mail->CharSet = 'UTF-8';
 
         $this->Mail->Body = <<<'EOT'
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>HTML email test</title>
@@ -1104,13 +1105,13 @@ EOT;
         <p>Russian text: Пустое тело сообщения</p>
         <p>Armenian text: Հաղորդագրությունը դատարկ է</p>
         <p>Czech text: Prázdné tělo zprávy</p>
-        Embedded Image: <img alt="phpmailer" src="cid:my-attach">
+        Embedded Image: <img alt="phpmailer" src="cid:bäck">
     </body>
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
             realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
-            'my-attach',
+            'bäck',
             'phpmailer.png',
             'base64',
             'image/png'
@@ -1304,8 +1305,8 @@ EOT;
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $this->Mail->clearAttachments();
-        $this->Mail->msgHTML('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+        $this->Mail->msgHTML('<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>E-Mail Inline Image Test</title>

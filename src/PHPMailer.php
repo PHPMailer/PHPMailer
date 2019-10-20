@@ -3061,7 +3061,8 @@ class PHPMailer
                     $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
-                if (!empty($cid)) {
+                //Only set Content-IDs on inline attachments
+                if ($cid !== '' && $disposition === 'inline') {
                     $mime[] = 'Content-ID: ' . $this->encodeHeader('<' . $this->secureHeader($cid) . '>') . static::$LE;
                 }
 

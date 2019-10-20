@@ -72,7 +72,7 @@ if (array_key_exists('to', $_POST)) {
     }
 } ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Contact Form</title>
