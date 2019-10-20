@@ -3062,8 +3062,8 @@ class PHPMailer
                 }
 
                 //Only set Content-IDs on inline attachments
-                if ($cid !== '' && $disposition === 'inline') {
-                    $mime[] = 'Content-ID: ' . $this->encodeHeader('<' . $this->secureHeader($cid) . '>') . static::$LE;
+                if ((string) $cid !== '' && $disposition === 'inline') {
+                    $mime[] = 'Content-ID: <' . $this->encodeHeader($this->secureHeader($cid)) . '>' . static::$LE;
                 }
 
                 // If a filename contains any of these chars, it should be quoted,
