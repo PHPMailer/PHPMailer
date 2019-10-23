@@ -1614,6 +1614,8 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
+        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
+
         // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
         if (!empty($this->Sender) && self::isShellSafe($this->Sender)) {
             if ('qmail' === $this->Mailer) {
@@ -1742,6 +1744,8 @@ class PHPMailer
      */
     protected function mailSend($header, $body)
     {
+        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
+
         $toArr = [];
         foreach ($this->to as $toaddr) {
             $toArr[] = $this->addrFormat($toaddr);
@@ -1831,6 +1835,7 @@ class PHPMailer
      */
     protected function smtpSend($header, $body)
     {
+        $header = rtrim($header, "\r\n ") . static::$LE . static::$LE;
         $bad_rcpt = [];
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
