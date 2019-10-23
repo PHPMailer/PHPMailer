@@ -2438,7 +2438,7 @@ class PHPMailer
             $result .= $this->getMailMIME();
         }
 
-        return $result . static::$LE;
+        return $result;
     }
 
     /**
