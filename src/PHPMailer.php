@@ -3975,7 +3975,7 @@ class PHPMailer
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
-        preg_match_all('/\s(src|background)=["\'](.*)["\']/Ui', $message, $images);
+        preg_match_all('/(?<!-)(src|background)=["\'](.*)["\']/Ui', $message, $images);
         if (array_key_exists(2, $images)) {
             if (strlen($basedir) > 1 && '/' !== substr($basedir, -1)) {
                 // Ensure $basedir has a trailing /
