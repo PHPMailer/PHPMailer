@@ -7,6 +7,7 @@
 * Lots of coding standards cleanup
 * API docs are now auto-updated via GitHub actions
 * Fix header separation bug created in 6.1.1
+* Fix misidentification of background attributes in SVG images in msgHTML
 
 ## Version 6.1.1 (September 27th 2019)
 * Fix misordered version tag
