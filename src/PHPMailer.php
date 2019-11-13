@@ -1807,8 +1807,6 @@ class PHPMailer
     /**
      * Provide an instance to use for SMTP operations.
      *
-     * @param SMTP $smtp
-     *
      * @return SMTP
      */
     public function setSMTPInstance(SMTP $smtp)
@@ -1900,10 +1898,7 @@ class PHPMailer
             foreach ($bad_rcpt as $bad) {
                 $errstr .= $bad['to'] . ': ' . $bad['error'];
             }
-            throw new Exception(
-                $this->lang('recipients_failed') . $errstr,
-                self::STOP_CONTINUE
-            );
+            throw new Exception($this->lang('recipients_failed') . $errstr, self::STOP_CONTINUE);
         }
 
         return true;
@@ -4767,8 +4762,6 @@ class PHPMailer
 
     /**
      * Set an OAuth instance.
-     *
-     * @param OAuth $oauth
      */
     public function setOAuth(OAuth $oauth)
     {
