@@ -372,7 +372,7 @@ class SMTP
         // SMTP server can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
         if (strpos(PHP_OS, 'WIN') !== 0) {
-            $max = ini_get('max_execution_time');
+            $max = (int) ini_get('max_execution_time');
             // Don't bother if unlimited
             if (0 !== $max && $timeout > $max) {
                 @set_time_limit($timeout);
