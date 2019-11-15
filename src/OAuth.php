@@ -127,7 +127,7 @@ class OAuth
             $this->oauthToken = $this->getToken();
         }
 
-        return base64_encode(
+        return \base64_encode(
             'user=' .
             $this->oauthUserEmail .
             "\001auth=Bearer " .

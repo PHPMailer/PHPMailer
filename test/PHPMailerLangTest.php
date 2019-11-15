@@ -53,17 +53,17 @@ final class PHPMailerLangTest extends TestCase
             }
             $matches = [];
             //Only look at language files, ignore anything else in there
-            if (preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
+            if (\preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
                 $lang = $matches[1]; //Extract language code
                 $PHPMAILER_LANG = []; //Language strings get put in here
                 include $fileInfo->getPathname(); //Get language strings
-                $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
-                $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
+                $missing = \array_diff(\array_keys($definedStrings), \array_keys($PHPMAILER_LANG));
+                $extra = \array_diff(\array_keys($PHPMAILER_LANG), \array_keys($definedStrings));
                 if (!empty($missing)) {
-                    $err .= "\nMissing translations in $lang: " . implode(', ', $missing);
+                    $err .= "\nMissing translations in $lang: " . \implode(', ', $missing);
                 }
                 if (!empty($extra)) {
-                    $err .= "\nExtra translations in $lang: " . implode(', ', $extra);
+                    $err .= "\nExtra translations in $lang: " . \implode(', ', $extra);
                 }
             }
         }

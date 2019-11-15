@@ -223,14 +223,14 @@ class POP3
 
         //On Windows this will raise a PHP Warning error if the hostname doesn't exist.
         //Rather than suppress it with @fsockopen, capture it cleanly instead
-        set_error_handler([$this, 'catchWarning']);
+        \set_error_handler([$this, 'catchWarning']);
 
         if (false === $port) {
             $port = static::DEFAULT_PORT;
         }
 
         //  connect to the POP3 server
-        $this->pop_conn = fsockopen(
+        $this->pop_conn = \fsockopen(
             $host, //  POP3 Host
             $port, //  Port #
             $errno, //  Error Number
@@ -238,7 +238,7 @@ class POP3
             $tval
         ); //  Timeout (seconds)
         //  Restore the error handler
-        restore_error_handler();
+        \restore_error_handler();
 
         //  Did we connect?
         if (false === $this->pop_conn) {
@@ -251,7 +251,7 @@ class POP3
         }
 
         //  Increase the stream time-out
-        stream_set_timeout($this->pop_conn, $tval, 0);
+        \stream_set_timeout($this->pop_conn, $tval, 0);
 
         //  Get the POP3 server response
         $pop3_response = $this->getResponse();
@@ -311,7 +311,7 @@ class POP3
         //The QUIT command may cause the daemon to exit, which will kill our connection
         //So ignore errors here
         try {
-            @fclose($this->pop_conn);
+            @\fclose($this->pop_conn);
         } catch (Exception $e) {
             //Do nothing
         }
@@ -326,7 +326,7 @@ class POP3
      */
     protected function getResponse($size = 128)
     {
-        $response = fgets($this->pop_conn, $size);
+        $response = \fgets($this->pop_conn, $size);
         if ($this->do_debug >= 1) {
             echo 'Server -> Client: ', $response;
         }
@@ -348,7 +348,7 @@ class POP3
                 echo 'Client -> Server: ', $string;
             }
 
-            return fwrite($this->pop_conn, $string, strlen($string));
+            return \fwrite($this->pop_conn, $string, \strlen($string));
         }
 
         return 0;
@@ -364,7 +364,7 @@ class POP3
      */
     protected function checkResponse($string)
     {
-        if (strpos($string, '+OK') !== 0) {
+        if (\strpos($string, '+OK') !== 0) {
             $this->setError("Server reported an error: $string");
 
             return false;
@@ -385,7 +385,7 @@ class POP3
         if ($this->do_debug >= 1) {
             echo '<pre>';
             foreach ($this->errors as $e) {
-                print_r($e);
+                \print_r($e);
             }
             echo '</pre>';
         }

@@ -70,8 +70,8 @@ final class PHPMailerTest extends TestCase
      */
     protected function setUp()
     {
-        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
-        if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
+        $this->INCLUDE_DIR = \dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
+        if (\file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
             include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer();
@@ -80,7 +80,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        if (array_key_exists('mail_from', $_REQUEST)) {
+        if (\array_key_exists('mail_from', $_REQUEST)) {
             $this->Mail->From = $_REQUEST['mail_from'];
         } else {
             $this->Mail->From = 'unit_test@phpmailer.example.com';
@@ -91,12 +91,12 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         $this->Mail->WordWrap = 0;
-        if (array_key_exists('mail_host', $_REQUEST)) {
+        if (\array_key_exists('mail_host', $_REQUEST)) {
             $this->Mail->Host = $_REQUEST['mail_host'];
         } else {
             $this->Mail->Host = 'mail.example.com';
         }
-        if (array_key_exists('mail_port', $_REQUEST)) {
+        if (\array_key_exists('mail_port', $_REQUEST)) {
             $this->Mail->Port = $_REQUEST['mail_port'];
         } else {
             $this->Mail->Port = 25;
@@ -107,15 +107,15 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Password = '';
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-        if (strlen($this->Mail->Host) > 0) {
+        if (\strlen($this->Mail->Host) > 0) {
             $this->Mail->isSMTP();
         } else {
             $this->Mail->isMail();
         }
-        if (array_key_exists('mail_to', $_REQUEST)) {
+        if (\array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
         }
-        if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
+        if (\array_key_exists('mail_cc', $_REQUEST) and \strlen($_REQUEST['mail_cc']) > 0) {
             $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
@@ -131,8 +131,8 @@ final class PHPMailerTest extends TestCase
         $this->NoteLog = [];
 
         foreach ($this->pids as $pid) {
-            $p = escapeshellarg($pid);
-            shell_exec("ps $p && kill -TERM $p");
+            $p = \escapeshellarg($pid);
+            \shell_exec("ps $p && kill -TERM $p");
         }
     }
 
@@ -144,7 +144,7 @@ final class PHPMailerTest extends TestCase
         $this->checkChanges();
 
         // Determine line endings for message
-        if ('text/html' == $this->Mail->ContentType || strlen($this->Mail->AltBody) > 0) {
+        if ('text/html' == $this->Mail->ContentType || \strlen($this->Mail->AltBody) > 0) {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
@@ -167,13 +167,13 @@ final class PHPMailerTest extends TestCase
         $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
         $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
 
-        if (strlen($this->Mail->Host) > 0) {
+        if (\strlen($this->Mail->Host) > 0) {
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
         }
 
         // If attachments then create an attachment list
         $attachments = $this->Mail->getAttachments();
-        if (count($attachments) > 0) {
+        if (\count($attachments) > 0) {
             $ReportBody .= 'Attachments:' . $eol;
             $ReportBody .= $list_start;
             foreach ($attachments as $attachment) {
@@ -185,12 +185,12 @@ final class PHPMailerTest extends TestCase
         }
 
         // If there are changes then list them
-        if (count($this->ChangeLog) > 0) {
+        if (\count($this->ChangeLog) > 0) {
             $ReportBody .= 'Changes' . $eol;
             $ReportBody .= '-------' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->ChangeLog); ++$i) {
+            for ($i = 0; $i < \count($this->ChangeLog); ++$i) {
                 $ReportBody .= $bullet_start . $this->ChangeLog[$i][0] . ' was changed to [' .
                     $this->ChangeLog[$i][1] . ']' . $bullet_end;
             }
@@ -198,12 +198,12 @@ final class PHPMailerTest extends TestCase
         }
 
         // If there are notes then list them
-        if (count($this->NoteLog) > 0) {
+        if (\count($this->NoteLog) > 0) {
             $ReportBody .= 'Notes' . $eol;
             $ReportBody .= '-----' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->NoteLog); ++$i) {
+            for ($i = 0; $i < \count($this->NoteLog); ++$i) {
                 $ReportBody .= $bullet_start . $this->NoteLog[$i] . $bullet_end;
             }
             $ReportBody .= $list_end;
@@ -584,8 +584,8 @@ final class PHPMailerTest extends TestCase
             '-@a..com',
             'invalid@about.museum-',
             'test@...........com',
-            '"Unicode NULL' . chr(0) . '"@char.com',
-            'Unicode NULL' . chr(0) . '@char.com',
+            '"Unicode NULL' . \chr(0) . '"@char.com',
+            'Unicode NULL' . \chr(0) . '@char.com',
             'first.last@[IPv6::]',
             'first.last@[IPv6::::]',
             'first.last@[IPv6::b4]',
@@ -630,28 +630,28 @@ final class PHPMailerTest extends TestCase
             'first.last@xn--phplst-6va.com',
         ];
         $goodfails = [];
-        foreach (array_merge($validaddresses, $asciiaddresses) as $address) {
+        foreach (\array_merge($validaddresses, $asciiaddresses) as $address) {
             if (!PHPMailer::validateAddress($address)) {
                 $goodfails[] = $address;
             }
         }
         $badpasses = [];
-        foreach (array_merge($invalidaddresses, $unicodeaddresses) as $address) {
+        foreach (\array_merge($invalidaddresses, $unicodeaddresses) as $address) {
             if (PHPMailer::validateAddress($address)) {
                 $badpasses[] = $address;
             }
         }
         $err = '';
-        if (count($goodfails) > 0) {
+        if (\count($goodfails) > 0) {
             $err .= "Good addresses that failed validation:\n";
-            $err .= implode("\n", $goodfails);
+            $err .= \implode("\n", $goodfails);
         }
-        if (count($badpasses) > 0) {
+        if (\count($badpasses) > 0) {
             if (!empty($err)) {
                 $err .= "\n\n";
             }
             $err .= "Bad addresses that passed validation:\n";
-            $err .= implode("\n", $badpasses);
+            $err .= \implode("\n", $badpasses);
         }
         $this->assertEmpty($err, $err);
         //For coverage
@@ -679,7 +679,7 @@ final class PHPMailerTest extends TestCase
             PHPMailer::validateAddress(
                 'user@example.com',
                 function ($address) {
-                    return strpos($address, '@') !== false;
+                    return \strpos($address, '@') !== false;
                 }
             ),
             'Custom validator false negative'
@@ -688,7 +688,7 @@ final class PHPMailerTest extends TestCase
             PHPMailer::validateAddress(
                 'userexample.com',
                 function ($address) {
-                    return strpos($address, '@') !== false;
+                    return \strpos($address, '@') !== false;
                 }
             ),
             'Custom validator false positive'
@@ -722,13 +722,13 @@ final class PHPMailerTest extends TestCase
     public function testWordWrap()
     {
         $this->Mail->WordWrap = 40;
-        $my_body = str_repeat(
+        $my_body = \str_repeat(
             'Here is the main body of this message.  It should ' .
             'be quite a few lines.  It should be wrapped at ' .
             '40 characters.  Make sure that it is. ',
             10
         );
-        $nBodyLen = strlen($my_body);
+        $nBodyLen = \strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
         $this->Mail->Body = $my_body;
@@ -744,13 +744,13 @@ final class PHPMailerTest extends TestCase
     public function testWordWrapMultibyte()
     {
         $this->Mail->WordWrap = 40;
-        $my_body = str_repeat(
+        $my_body = \str_repeat(
             '飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 ' .
             '飛飛兒樂 團光茫兒樂 團光茫飛兒樂 團光飛兒樂 團光茫飛兒樂 團光茫兒樂 團光茫 ' .
             '飛兒樂 團光茫飛兒樂 團飛兒樂 團光茫光茫飛兒樂 團光茫. ',
             10
         );
-        $nBodyLen = strlen($my_body);
+        $nBodyLen = \strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
 
         $this->Mail->Body = $my_body;
@@ -783,7 +783,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
+        if (!$this->Mail->addAttachment(\realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
@@ -846,19 +846,19 @@ final class PHPMailerTest extends TestCase
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         //Check that a quoted printable encode and decode results in the same as went in
-        $t = file_get_contents(__FILE__); //Use this file as test content
+        $t = \file_get_contents(__FILE__); //Use this file as test content
         //Force line breaks to UNIX-style
-        $t = str_replace(["\r\n", "\r"], "\n", $t);
+        $t = \str_replace(["\r\n", "\r"], "\n", $t);
         $this->assertEquals(
             $t,
-            quoted_printable_decode($this->Mail->encodeQP($t)),
+            \quoted_printable_decode($this->Mail->encodeQP($t)),
             'Quoted-Printable encoding round-trip failed'
         );
         //Force line breaks to Windows-style
-        $t = str_replace("\n", "\r\n", $t);
+        $t = \str_replace("\n", "\r\n", $t);
         $this->assertEquals(
             $t,
-            quoted_printable_decode($this->Mail->encodeQP($t)),
+            \quoted_printable_decode($this->Mail->encodeQP($t)),
             'Quoted-Printable encoding round-trip failed (Windows line breaks)'
         );
     }
@@ -870,17 +870,17 @@ final class PHPMailerTest extends TestCase
     {
         $this->Mail->CharSet = 'UTF-8';
         //This should select B-encoding automatically and should fold
-        $bencode = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 1);
+        $bencode = \str_repeat('é', PHPMailer::STD_LINE_LENGTH + 1);
         //This should select Q-encoding automatically and should fold
-        $qencode = str_repeat('e', PHPMailer::STD_LINE_LENGTH) . 'é';
+        $qencode = \str_repeat('e', PHPMailer::STD_LINE_LENGTH) . 'é';
         //This should select B-encoding automatically and should not fold
-        $bencodenofold = str_repeat('é', 10);
+        $bencodenofold = \str_repeat('é', 10);
         //This should select Q-encoding automatically and should not fold
-        $qencodenofold = str_repeat('e', 9) . 'é';
+        $qencodenofold = \str_repeat('e', 9) . 'é';
         //This should Q-encode as ASCII and fold (previously, this did not encode)
-        $longheader = str_repeat('e', PHPMailer::STD_LINE_LENGTH + 10);
+        $longheader = \str_repeat('e', PHPMailer::STD_LINE_LENGTH + 10);
         //This should Q-encode as UTF-8 and fold
-        $longutf8 = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 10);
+        $longutf8 = \str_repeat('é', PHPMailer::STD_LINE_LENGTH + 10);
         //This should not change
         $noencode = 'eeeeeeeeee';
         $this->Mail->isMail();
@@ -1038,17 +1038,17 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contents.html'));
+        $content = \file_get_contents(\realpath($this->INCLUDE_DIR . '/examples/contents.html'));
         // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
-        $check = base64_decode('6eju/OfF8ebf');
+        $check = \base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
         $this->Mail->msgHTML(
-            mb_convert_encoding(
+            \mb_convert_encoding(
                 $content,
                 'ISO-8859-1',
-                mb_detect_encoding($content, 'UTF-8, ISO-8859-1, ISO-8859-15', true)
+                \mb_detect_encoding($content, 'UTF-8, ISO-8859-1, ISO-8859-15', true)
             ),
-            realpath($this->INCLUDE_DIR . '/examples')
+            \realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
         $this->assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
@@ -1110,7 +1110,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'bäck',
             'phpmailer.png',
             'base64',
@@ -1146,12 +1146,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
+        $message = \file_get_contents(\realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . '/examples'));
+        $this->Mail->msgHTML($message, \realpath($this->INCLUDE_DIR . '/examples'));
         $sub = $this->Mail->Subject . ': msgHTML';
         $this->Mail->Subject .= $sub;
 
@@ -1163,9 +1163,9 @@ EOT;
         $this->Mail->AltBody = '';
         $this->Mail->msgHTML(
             $message,
-            realpath($this->INCLUDE_DIR . '/examples'),
+            \realpath($this->INCLUDE_DIR . '/examples'),
             function ($html) {
-                return strtoupper(strip_tags($html));
+                return \strtoupper(\strip_tags($html));
             }
         );
         $this->Mail->Subject = $sub . ' + custom html2text';
@@ -1175,10 +1175,10 @@ EOT;
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
         $this->assertContains('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
-        $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="composer.json">test', \realpath($this->INCLUDE_DIR));
         $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
-        $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="../composer.json">test', \realpath($this->INCLUDE_DIR));
         $this->assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
@@ -1203,7 +1203,7 @@ EOT;
         $this->Mail->CharSet = 'UTF-8';
 
         if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
         )
         ) {
@@ -1213,7 +1213,7 @@ EOT;
         }
 
         //Make sure that trying to attach a nonexistent file fails
-        $this->assertFalse($this->Mail->addAttachment(__FILE__ . md5(microtime()), 'nonexistent_file.txt'));
+        $this->assertFalse($this->Mail->addAttachment(__FILE__ . \md5(\microtime()), 'nonexistent_file.txt'));
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1229,8 +1229,8 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-            hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
+            \file_get_contents(\realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
+            \hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
             '', //Intentionally empty name
             'base64',
             '', //Intentionally empty MIME type
@@ -1255,7 +1255,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
         )
         ) {
@@ -1265,7 +1265,7 @@ EOT;
         }
 
         if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'phpmailer.png'
         )
         ) {
@@ -1290,7 +1290,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1338,7 +1338,7 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            \realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -1435,7 +1435,7 @@ EOT;
     public function testQmailSend()
     {
         //Only run if we have qmail installed
-        if (file_exists('/var/qmail/bin/qmail-inject')) {
+        if (\file_exists('/var/qmail/bin/qmail-inject')) {
             $this->Mail->Body = 'Sending via qmail';
             $this->buildBody();
             $subject = $this->Mail->Subject;
@@ -1453,10 +1453,10 @@ EOT;
      */
     public function testMailSend()
     {
-        $sendmail = ini_get('sendmail_path');
+        $sendmail = \ini_get('sendmail_path');
         //No path in sendmail_path
-        if (strpos($sendmail, '/') === false) {
-            ini_set('sendmail_path', '/usr/sbin/sendmail -t -i ');
+        if (\strpos($sendmail, '/') === false) {
+            \ini_set('sendmail_path', '/usr/sbin/sendmail -t -i ');
         }
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
@@ -1503,9 +1503,9 @@ EOT;
      */
     public function testLongBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
+        $oklen = \str_repeat(\str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
         //Use +2 to ensure line length is over limit - LE may only be 1 char
-        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 2) . PHPMailer::getLE(), 2);
+        $badlen = \str_repeat(\str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 2) . PHPMailer::getLE(), 2);
 
         $this->Mail->Body = 'This message contains lines that are too long.' .
             PHPMailer::getLE() . $oklen . $badlen . $oklen;
@@ -1521,7 +1521,7 @@ EOT;
         $message = $this->Mail->getSentMIMEMessage();
         $this->assertFalse(
             PHPMailer::hasLineLongerThanMax($message),
-            'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())) . ' chars)'
+            'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + \strlen(PHPMailer::getLE())) . ' chars)'
         );
         $this->assertContains(
             'Content-Transfer-Encoding: quoted-printable',
@@ -1535,7 +1535,7 @@ EOT;
      */
     public function testShortBody()
     {
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 10);
+        $oklen = \str_repeat(\str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 10);
 
         $this->Mail->Body = 'This message does not contain lines that are too long.' .
             PHPMailer::getLE() . $oklen;
@@ -1583,7 +1583,7 @@ EOT;
         $this->Mail->Body = 'This should no longer cause a denial of service.';
         $this->buildBody();
 
-        $this->Mail->Subject = substr(str_repeat('0123456789', 100), 0, 998);
+        $this->Mail->Subject = \substr(\str_repeat('0123456789', 100), 0, 998);
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1598,7 +1598,7 @@ EOT;
         //Encoding name longer than 68 chars
         $this->Mail->Encoding = '1234567890123456789012345678901234567890123456789012345678901234567890';
         //Call wrapText with a zero length value
-        $this->Mail->wrapText(str_repeat('This should no longer cause a denial of service. ', 30), 0);
+        $this->Mail->wrapText(\str_repeat('This should no longer cause a denial of service. ', 30), 0);
     }
 
     /**
@@ -1780,7 +1780,7 @@ EOT;
         $this->Mail->preSend();
         $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
 
-        $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
+        $this->Mail->addAttachment(\realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
         $this->assertTrue($this->Mail->attachmentExists());
     }
 
@@ -1857,7 +1857,7 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        $this->assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
+        $this->assertRegExp('/' . \base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
     }
 
     /**
@@ -1945,17 +1945,17 @@ EOT;
         $keyfile = 'keyfile.pem';
 
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = \openssl_pkey_new($keyconfig);
         //Create a certificate signing request
-        $csr = openssl_csr_new($dn, $pk);
+        $csr = \openssl_csr_new($dn, $pk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $pk, 1);
+        $cert = \openssl_csr_sign($csr, null, $pk, 1);
         //Save the cert
-        openssl_x509_export($cert, $certout);
-        file_put_contents($certfile, $certout);
+        \openssl_x509_export($cert, $certout);
+        \file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
-        file_put_contents($keyfile, $pkeyout);
+        \openssl_pkey_export($pk, $pkeyout, $password);
+        \file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
             $certfile,
@@ -1966,8 +1966,8 @@ EOT;
 
         $msg = $this->Mail->getSentMIMEMessage();
         $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
-        unlink($certfile);
-        unlink($keyfile);
+        \unlink($certfile);
+        \unlink($keyfile);
     }
 
     /**
@@ -2015,32 +2015,32 @@ EOT;
 
         //Create a CA cert
         //Make a new key pair
-        $capk = openssl_pkey_new($keyconfig);
+        $capk = \openssl_pkey_new($keyconfig);
         //Create a certificate signing request
-        $csr = openssl_csr_new($cacertprops, $capk);
+        $csr = \openssl_csr_new($cacertprops, $capk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $capk, 1);
+        $cert = \openssl_csr_sign($csr, null, $capk, 1);
         //Save the CA cert
-        openssl_x509_export($cert, $certout);
-        file_put_contents($cacertfile, $certout);
+        \openssl_x509_export($cert, $certout);
+        \file_put_contents($cacertfile, $certout);
         //Save the CA key
-        openssl_pkey_export($capk, $pkeyout, $password);
-        file_put_contents($cakeyfile, $pkeyout);
+        \openssl_pkey_export($capk, $pkeyout, $password);
+        \file_put_contents($cakeyfile, $pkeyout);
 
         //Create a cert signed by our CA
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = \openssl_pkey_new($keyconfig);
         //Create a certificate signing request
-        $csr = openssl_csr_new($certprops, $pk);
+        $csr = \openssl_csr_new($certprops, $pk);
         //Create a self-signed cert
-        $cacert = file_get_contents($cacertfile);
-        $cert = openssl_csr_sign($csr, $cacert, $capk, 1);
+        $cacert = \file_get_contents($cacertfile);
+        $cert = \openssl_csr_sign($csr, $cacert, $capk, 1);
         //Save the cert
-        openssl_x509_export($cert, $certout);
-        file_put_contents($certfile, $certout);
+        \openssl_x509_export($cert, $certout);
+        \file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
-        file_put_contents($keyfile, $pkeyout);
+        \openssl_pkey_export($pk, $pkeyout, $password);
+        \file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
             $certfile,
@@ -2049,10 +2049,10 @@ EOT;
             $cacertfile
         );
         $this->assertTrue($this->Mail->send(), 'S/MIME signing with CA failed');
-        unlink($cacertfile);
-        unlink($cakeyfile);
-        unlink($certfile);
-        unlink($keyfile);
+        \unlink($cacertfile);
+        \unlink($cakeyfile);
+        \unlink($certfile);
+        \unlink($keyfile);
     }
 
     /**
@@ -2068,7 +2068,7 @@ EOT;
         $this->assertEquals($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
         $this->assertEquals(
             'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
-            base64_encode(hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
+            \base64_encode(\hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
             'DKIM canonicalized empty body hash mismatch'
         );
         $this->assertEquals($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
@@ -2114,13 +2114,13 @@ EOT;
     public function testDKIMOptionalHeaderFieldsCopy()
     {
         $privatekeyfile = 'dkim_private.pem';
-        $pk = openssl_pkey_new(
+        $pk = \openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        \openssl_pkey_export_to_file($pk, $privatekeyfile);
         $this->Mail->DKIM_private = 'dkim_private.pem';
 
         //Example from https://tools.ietf.org/html/rfc6376#section-3.5
@@ -2146,7 +2146,7 @@ EOT;
             'DKIM header without copied header fields incorrect'
         );
 
-        unlink($privatekeyfile);
+        \unlink($privatekeyfile);
     }
 
     /**
@@ -2157,13 +2157,13 @@ EOT;
     public function testDKIMExtraHeaders()
     {
         $privatekeyfile = 'dkim_private.pem';
-        $pk = openssl_pkey_new(
+        $pk = \openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        \openssl_pkey_export_to_file($pk, $privatekeyfile);
         $this->Mail->DKIM_private = 'dkim_private.pem';
 
         //Example from https://tools.ietf.org/html/rfc6376#section-3.5
@@ -2191,7 +2191,7 @@ EOT;
 
         $this->assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
 
-        unlink($privatekeyfile);
+        \unlink($privatekeyfile);
     }
 
     /**
@@ -2208,13 +2208,13 @@ EOT;
         //Make a new key pair
         //(2048 bits is the recommended minimum key length -
         //gmail won't accept less than 1024 bits)
-        $pk = openssl_pkey_new(
+        $pk = \openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        \openssl_pkey_export_to_file($pk, $privatekeyfile);
         $this->Mail->DKIM_domain = 'example.com';
         $this->Mail->DKIM_private = $privatekeyfile;
         $this->Mail->DKIM_selector = 'phpmailer';
@@ -2222,7 +2222,7 @@ EOT;
         $this->assertTrue($this->Mail->send(), 'DKIM signed mail failed');
         $this->Mail->isMail();
         $this->assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
-        unlink($privatekeyfile);
+        \unlink($privatekeyfile);
     }
 
     /**
@@ -2270,8 +2270,8 @@ EOT;
         //May have been altered by earlier tests, can interfere with line break format
         $this->Mail->isSMTP();
         $this->Mail->preSend();
-        $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
-        $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
+        $oklen = \str_repeat(\str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
+        $badlen = \str_repeat(\str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
         $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen . $oklen), 'Long line not detected (last)');
@@ -2296,13 +2296,13 @@ EOT;
     public function testMessageID()
     {
         $this->Mail->Body = 'Test message ID.';
-        $id = hash('sha256', 12345);
+        $id = \hash('sha256', 12345);
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
         $this->assertNotEquals($lastid, $id, 'Invalid Message ID allowed');
-        $id = '<' . hash('sha256', 12345) . '@example.com>';
+        $id = '<' . \hash('sha256', 12345) . '@example.com>';
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
@@ -2397,7 +2397,7 @@ EOT;
             'example.com',
             'smtp.gmail.com',
             '127.0.0.1',
-            trim(str_repeat('a0123456789.', 21), '.'),
+            \trim(\str_repeat('a0123456789.', 21), '.'),
             '[::1]',
             '[0:1234:dc0:41:216:3eff:fe67:3e01]',
         ];
@@ -2411,7 +2411,7 @@ EOT;
             '999.0.0.0',
             '[1234]',
             '[1234:::1]',
-            trim(str_repeat('a0123456789.', 22), '.'),
+            \trim(\str_repeat('a0123456789.', 22), '.'),
             '0:1234:dc0:41:216:3eff:fe67:3e01',
             '[012q:1234:dc0:41:216:3eff:fe67:3e01]',
         ];
@@ -2419,7 +2419,7 @@ EOT;
             $this->assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
         }
         foreach ($bad as $h) {
-            $this->assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
+            $this->assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . \var_export($h, true));
         }
     }
 
@@ -2501,7 +2501,7 @@ EOT;
         $this->Mail->clearReplyTos();
 
         // This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
-        $domain = '@' . mb_convert_encoding('françois.ch', 'ISO-8859-1', 'UTF-8');
+        $domain = '@' . \mb_convert_encoding('françois.ch', 'ISO-8859-1', 'UTF-8');
         $this->Mail->addAddress('test' . $domain);
         $this->Mail->addCC('test+cc' . $domain);
         $this->Mail->addBCC('test+bcc' . $domain);
@@ -2593,22 +2593,22 @@ EOT;
     public function testPopBeforeSmtpGood()
     {
         //Start a fake POP server
-        $pid = shell_exec(
+        $pid = \shell_exec(
             '/usr/bin/nohup ' .
             $this->INCLUDE_DIR .
             '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
 
-        sleep(1);
+        \sleep(1);
         //Test a known-good login
         $this->assertTrue(
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
         );
         //Kill the fake server, don't care if it fails
-        @shell_exec('kill -TERM ' . escapeshellarg($pid));
-        sleep(2);
+        @\shell_exec('kill -TERM ' . \escapeshellarg($pid));
+        \sleep(2);
     }
 
     /**
@@ -2621,22 +2621,22 @@ EOT;
     {
         //Start a fake POP server on a different port
         //so we don't inadvertently connect to the previous instance
-        $pid = shell_exec(
+        $pid = \shell_exec(
             '/usr/bin/nohup ' .
             $this->INCLUDE_DIR .
             '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
 
-        sleep(2);
+        \sleep(2);
         //Test a known-bad login
         $this->assertFalse(
             POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
             'POP before SMTP should have failed'
         );
         //Kill the fake server, don't care if it fails
-        @shell_exec('kill -TERM ' . escapeshellarg($pid));
-        sleep(2);
+        @\shell_exec('kill -TERM ' . \escapeshellarg($pid));
+        \sleep(2);
     }
 
     /**
