@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+* Fix an issue preventing injected debug handlers from working
+* Fix an issue relating to connection timeout
+* Add `SMTP::MAX_REPLY_LENGTH` constant
+
 ## Version 6.1.2 (November 13th, 2019) 
 * Substantial revision of DKIM header generation
 * Use shorter hashes for auto-generated CID values
