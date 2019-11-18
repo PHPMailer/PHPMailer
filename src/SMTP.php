@@ -58,6 +58,15 @@ class SMTP
     const MAX_LINE_LENGTH = 998;
 
     /**
+     * The maximum line length allowed for replies in RFC 5321 section 4.5.3.1.5,
+     * *including* a trailing CRLF line break.
+     * @see https://tools.ietf.org/html/rfc5321#section-4.5.3.1.5
+     *
+     * @var int
+     */
+    const MAX_REPLY_LENGTH = 512;
+
+    /**
      * Debug level for no output.
      *
      * @var int
@@ -1161,7 +1170,7 @@ class SMTP
                 break;
             }
             //Deliberate noise suppression - errors are handled afterwards
-            $str = @fgets($this->smtp_conn, 515);
+            $str = @fgets($this->smtp_conn, self::MAX_REPLY_LENGTH);
             $this->edebug('SMTP INBOUND: "' . trim($str) . '"', self::DEBUG_LOWLEVEL);
             $data .= $str;
             // If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
