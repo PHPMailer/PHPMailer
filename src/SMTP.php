@@ -53,6 +53,7 @@ class SMTP
     /**
      * The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
      * *excluding* a trailing CRLF break.
+     *
      * @see https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6
      *
      * @var int
@@ -62,6 +63,7 @@ class SMTP
     /**
      * The maximum line length allowed for replies in RFC 5321 section 4.5.3.1.5,
      * *including* a trailing CRLF line break.
+     *
      * @see https://tools.ietf.org/html/rfc5321#section-4.5.3.1.5
      *
      * @var int
