@@ -26,12 +26,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.2",
-        "phpdocumentor/phpdocumentor": "2.*",
         "phpunit/phpunit": "^4.8 || ^5.7",
-        "zendframework/zend-serializer": "2.7.*",
-        "doctrine/annotations": "1.2.*",
-        "zendframework/zend-eventmanager": "3.0.*",
-        "zendframework/zend-i18n": "2.7.3"
+        "doctrine/annotations": "^1.2"
     },
     "suggest": {
         "psr/log": "For optional PSR-3 debug logging",
