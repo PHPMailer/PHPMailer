@@ -11,7 +11,6 @@ before_install:
 
 install:
   - REMOVE_PACKAGE="friendsofphp/php-cs-fixer"; if [ "$CS_CHECK" = 1 ]; then REMOVE_PACKAGE="phpunit/phpunit"; fi; composer remove --no-update --no-scripts --dev $REMOVE_PACKAGE
-  - composer remove --no-update --no-scripts --dev phpdocumentor/phpdocumentor
   - composer install
   - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
 
