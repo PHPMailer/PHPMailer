@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+## Version 6.1.3 (November 21st, 2019) 
 * Fix an issue preventing injected debug handlers from working
 * Fix an issue relating to connection timeout
 * Add `SMTP::MAX_REPLY_LENGTH` constant
