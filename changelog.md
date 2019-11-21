@@ -4,6 +4,7 @@
 * Fix an issue relating to connection timeout
 * Add `SMTP::MAX_REPLY_LENGTH` constant
 * Remove some dev dependencies; phpdoc no longer included
+* Fix an issue where non-compliant servers returning bare codes caused an SMTP hang
 
 ## Version 6.1.2 (November 13th, 2019) 
 * Substantial revision of DKIM header generation
