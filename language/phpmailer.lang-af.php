@@ -6,9 +6,9 @@
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP-fout: kon nie geverifieer word nie.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP-fout: kon nie aan SMTP-verbind nie.';
-$PHPMAILER_LANG['data_not_accepted']    = 'SMTP-fout: data nie aanvaar nie.';
-$PHPMAILER_LANG['empty_message']        = 'Boodskapliggaam leeg.';
-$PHPMAILER_LANG['encoding']             = 'Onbekende kodering: ';
+            $PHPMAILER_LANG['data_not_accepted']    = 'SMTP-fout: data nie aanvaar nie.';
+ $PHPMAILER_LANG['empty_message']        = 'Boodskapliggaam leeg.';
+            $PHPMAILER_LANG['encoding']             = 'Onbekende kodering: ';
 $PHPMAILER_LANG['execute']              = 'Kon nie uitvoer nie: ';
 $PHPMAILER_LANG['file_access']          = 'Kon nie lêer oopmaak nie: ';
 $PHPMAILER_LANG['file_open']            = 'Lêerfout: Kon nie lêer oopmaak nie: ';

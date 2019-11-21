@@ -20,7 +20,7 @@
 
 namespace PHPMailer\PHPMailer;
 
-use League\OAuth2\Client\Grant\RefreshToken;
+use  League\OAuth2\Client\Grant\RefreshToken;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 
@@ -40,7 +40,6 @@ class OAuth
      * @var AbstractProvider
      */
     protected $provider;
-
     /**
      * The current OAuth access token.
      *
