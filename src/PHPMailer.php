@@ -1942,7 +1942,7 @@ class PHPMailer
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
             if (!preg_match(
-                '/^((ssl|tls):\/\/)*([a-zA-Z\d.-]*|\[[a-fA-F\d:]+]):?(\d*)$/',
+                '/^(?:(ssl|tls):\/\/)?(.+?)(?::(\d+))?$/',
                 trim($hostentry),
                 $hostinfo
             )) {
@@ -1950,25 +1950,25 @@ class PHPMailer
                 // Not a valid host entry
                 continue;
             }
-            // $hostinfo[2]: optional ssl or tls prefix
-            // $hostinfo[3]: the hostname
-            // $hostinfo[4]: optional port number
+            // $hostinfo[1]: optional ssl or tls prefix
+            // $hostinfo[2]: the hostname
+            // $hostinfo[3]: optional port number
             // The host string prefix can temporarily override the current setting for SMTPSecure
             // If it's not specified, the default value is used
 
             //Check the host name is a valid name or IP address before trying to use it
-            if (!static::isValidHost($hostinfo[3])) {
+            if (!static::isValidHost($hostinfo[2])) {
                 $this->edebug($this->lang('connect_host') . ' ' . $hostentry);
                 continue;
             }
             $prefix = '';
             $secure = $this->SMTPSecure;
             $tls = (static::ENCRYPTION_STARTTLS === $this->SMTPSecure);
-            if ('ssl' === $hostinfo[2] || ('' === $hostinfo[2] && static::ENCRYPTION_SMTPS === $this->SMTPSecure)) {
+            if ('ssl' === $hostinfo[1] || ('' === $hostinfo[1] && static::ENCRYPTION_SMTPS === $this->SMTPSecure)) {
                 $prefix = 'ssl://';
                 $tls = false; // Can't have SSL and TLS at the same time
                 $secure = static::ENCRYPTION_SMTPS;
-            } elseif ('tls' === $hostinfo[2]) {
+            } elseif ('tls' === $hostinfo[1]) {
                 $tls = true;
                 // tls doesn't use a prefix
                 $secure = static::ENCRYPTION_STARTTLS;
@@ -1981,11 +1981,10 @@ class PHPMailer
                     throw new Exception($this->lang('extension_missing') . 'openssl', self::STOP_CRITICAL);
                 }
             }
-            $host = $hostinfo[3];
+            $host = $hostinfo[2];
             $port = $this->Port;
-            $tport = (int) $hostinfo[4];
-            if ($tport > 0 && $tport < 65536) {
-                $port = $tport;
+            if (array_key_exists(3, $hostinfo) && is_numeric($hostinfo[3]) && $hostinfo[3] > 0 && $hostinfo[3] < 65536) {
+                $port = (int) $hostinfo[3];
             }
             if ($this->smtp->connect($prefix . $host, $port, $this->Timeout, $options)) {
                 try {
@@ -3861,6 +3860,7 @@ class PHPMailer
         if (empty($host)
             || !is_string($host)
             || strlen($host) > 256
+            || !preg_match('/^([a-zA-Z\d.-]*|\[[a-fA-F\d:]+])$/', $host)
         ) {
             return false;
         }
