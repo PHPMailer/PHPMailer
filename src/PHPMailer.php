@@ -1946,7 +1946,7 @@ class PHPMailer
                 trim($hostentry),
                 $hostinfo
             )) {
-                $this->edebug($this->lang('connect_host') . ' ' . $hostentry);
+                $this->edebug($this->lang('invalid_hostentry') . ' ' . trim($hostentry));
                 // Not a valid host entry
                 continue;
             }
@@ -1958,7 +1958,7 @@ class PHPMailer
 
             //Check the host name is a valid name or IP address before trying to use it
             if (!static::isValidHost($hostinfo[2])) {
-                $this->edebug($this->lang('connect_host') . ' ' . $hostentry);
+                $this->edebug($this->lang('invalid_host') . ' ' . $hostinfo[2]);
                 continue;
             }
             $prefix = '';
@@ -2088,6 +2088,8 @@ class PHPMailer
             'from_failed' => 'The following From address failed: ',
             'instantiate' => 'Could not instantiate mail function.',
             'invalid_address' => 'Invalid address: ',
+            'invalid_hostentry' => 'Invalid hostentry: ',
+            'invalid_host' => 'Invalid host: ',
             'mailer_not_supported' => ' mailer is not supported.',
             'provide_address' => 'You must provide at least one recipient email address.',
             'recipients_failed' => 'SMTP Error: The following recipients failed: ',
