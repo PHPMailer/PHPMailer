@@ -2414,6 +2414,7 @@ EOT;
             trim(str_repeat('a0123456789.', 22), '.'),
             '0:1234:dc0:41:216:3eff:fe67:3e01',
             '[012q:1234:dc0:41:216:3eff:fe67:3e01]',
+            '[[::1]]',
         ];
         foreach ($good as $h) {
             $this->assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
