@@ -3239,7 +3239,7 @@ class PHPMailer
         if ('mail' === $this->Mailer) {
             $maxlen = static::MAIL_MAX_LINE_LENGTH - $overhead;
         } else {
-            $maxlen = static::STD_LINE_LENGTH - $overhead;
+            $maxlen = static::MAX_LINE_LENGTH - $overhead;
         }
 
         // Select the encoding that produces the shortest output and/or prevents corruption.
