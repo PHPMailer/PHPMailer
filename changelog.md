@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+* Avoid IDN error on older PHP versions, prep for PHP 8.0
+* Don't force RFC2047 folding unnecessarily
+* Enable tests on full release of PHP 7.4
+
 ## Version 6.1.3 (November 21st, 2019) 
 * Fix an issue preventing injected debug handlers from working
 * Fix an issue relating to connection timeout
