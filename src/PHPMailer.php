@@ -1389,7 +1389,13 @@ class PHPMailer
                 $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
                 //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 $errorcode = 0;
-                $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_UTS46);
+                if (defined('INTL_IDNA_VARIANT_UTS46')) {
+                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_UTS46);
+                } elseif (defined('INTL_IDNA_VARIANT_2003')) {
+                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_2003);
+                } else {
+                    $punycode = idn_to_ascii($domain, $errorcode);
+                }
                 if (false !== $punycode) {
                     return substr($address, 0, $pos) . $punycode;
                 }
