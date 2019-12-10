@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+## Version 6.1.4 (December 10th, 2019)
 * Clean up hostname handling
 * Avoid IDN error on older PHP versions, prep for PHP 8.0
 * Don't force RFC2047 folding unnecessarily
