@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+* Clean up hostname handling
 * Avoid IDN error on older PHP versions, prep for PHP 8.0
 * Don't force RFC2047 folding unnecessarily
 * Enable tests on full release of PHP 7.4
