@@ -837,6 +837,7 @@ class PHPMailer
         if (null !== $exceptions) {
             $this->exceptions = (bool) $exceptions;
         }
+
         return $this->exceptions;
     }
 
