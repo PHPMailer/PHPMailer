@@ -826,6 +826,21 @@ class PHPMailer
     }
 
     /**
+     * Whether to throw exceptions for errors.
+     *
+     * @param bool $exceptions Should we throw external exceptions?
+     *
+     * @return bool
+     */
+    public function throwExceptions($exceptions = null)
+    {
+        if (null !== $exceptions) {
+            $this->exceptions = (bool) $exceptions;
+        }
+        return $this->exceptions;
+    }
+
+    /**
      * Call mail() in a safe_mode-aware fashion.
      * Also, unless sendmail_path points to sendmail (or something that
      * claims to be sendmail), don't pass params (not a perfect fix,
