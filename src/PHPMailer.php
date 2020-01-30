@@ -26,7 +26,7 @@ namespace PHPMailer\PHPMailer;
  * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author Brent R. Matzelle (original founder)
+ * @author Brent R. Matzelle (original founder) teste
  */
 class PHPMailer
 {
