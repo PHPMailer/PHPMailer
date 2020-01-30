@@ -22,7 +22,10 @@
     "require": {
         "php": ">=5.5.0",
         "ext-ctype": "*",
-        "ext-filter": "*"
+        "ext-filter": "*",
+        "league/oauth2-google": "*",
+        "hayageek/oauth2-yahoo": "*",
+        "stevenmaguire/oauth2-microsoft": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.2",
@@ -31,9 +34,6 @@
     },
     "suggest": {
         "psr/log": "For optional PSR-3 debug logging",
-        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
-        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
-        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
         "ext-mbstring": "Needed to send email in multibyte encoding charset",
         "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
     },
