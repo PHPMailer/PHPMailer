@@ -1554,7 +1554,7 @@ class PHPMailer
                     $this->MIMEBody
                 );
                 $this->MIMEHeader = rtrim($this->MIMEHeader, "\r\n ") . static::$LE .
-                    static::normalizeBreaks($header_dkim) . static::$LE;
+                    static::normalizeBreaks($header_dkim);
             }
 
             return true;
@@ -4476,9 +4476,11 @@ class PHPMailer
         //@see https://tools.ietf.org/html/rfc5322#section-2.2
         //That means this may break if you do something daft like put vertical tabs in your headers.
         //Unfold header lines
-        $signHeader = preg_replace('/\r\n[ \t]+/', ' ', $signHeader);
+        $signHeader = str_replace(["\r\n","\r"], ["\n","\n"], $signHeader);
+        $signHeader = preg_replace('/\n[ \t]+/', ' ', $signHeader);
+        
         //Break headers out into an array
-        $lines = explode("\r\n", $signHeader);
+        $lines = explode("\n", $signHeader);
         foreach ($lines as $key => $line) {
             //If the header is missing a :, skip it as it's invalid
             //This is likely to happen because the explode() above will also split
