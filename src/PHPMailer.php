@@ -4377,7 +4377,7 @@ class PHPMailer
     }
 
     /**
-     * Remove trailing breaks from a string
+     * Remove trailing breaks from a string.
      *
      * @param string $text
      *
