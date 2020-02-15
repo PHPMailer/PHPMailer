@@ -4496,13 +4496,15 @@ class PHPMailer
      */
     public function DKIM_HeaderC($signHeader)
     {
+        //Normalize breaks to CRLF (regardless of the mailer)
+        $signHeader = static::normalizeBreaks($signHeader, self::CRLF);
+        //Unfold header lines
         //Note PCRE \s is too broad a definition of whitespace; RFC5322 defines it as `[ \t]`
         //@see https://tools.ietf.org/html/rfc5322#section-2.2
         //That means this may break if you do something daft like put vertical tabs in your headers.
-        //Unfold header lines
         $signHeader = preg_replace('/\r\n[ \t]+/', ' ', $signHeader);
         //Break headers out into an array
-        $lines = explode(self::CRLF, static::normalizeBreaks($signHeader, self::CRLF));
+        $lines = explode(self::CRLF, $signHeader);
         foreach ($lines as $key => $line) {
             //If the header is missing a :, skip it as it's invalid
             //This is likely to happen because the explode() above will also split
