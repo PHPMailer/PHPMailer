@@ -4381,7 +4381,7 @@ class PHPMailer
      *
      * @param string $text
      *
-     * @return string The text to remove breaks from.
+     * @return string The text to remove breaks from
      */
     public static function stripTrailingWSP($text)
     {
