@@ -4693,7 +4693,7 @@ class PHPMailer
         $signature = $this->DKIM_Sign($canonicalizedHeaders);
         $signature = trim(chunk_split($signature, self::STD_LINE_LENGTH - 3, static::$LE . self::FWS));
 
-        return static::normalizeBreaks($dkimSignatureHeader . $signature) . static::$LE;
+        return static::normalizeBreaks($dkimSignatureHeader . $signature);
     }
 
     /**
