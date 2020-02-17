@@ -1,5 +1,11 @@
 # PHPMailer Change Log
 
+* Various fixes for DKIM issues, especially when using `mail()` transport
+* Drop the `l=` length tag from DKIM signatures; it's a mild security risk
+* Ensure CRLF is used explicitly when needed, rather than `static::$LE`
+* Add a method for trimming header content consistently
+* Some minor tweaks to resolve static analyser complaints.
+
 ## Version 6.1.4 (December 10th, 2019)
 * Clean up hostname handling
 * Avoid IDN error on older PHP versions, prep for PHP 8.0
