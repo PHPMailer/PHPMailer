@@ -230,6 +230,8 @@ class POP3
         }
 
         //  connect to the POP3 server
+        $errno = 0;
+        $errstr = '';
         $this->pop_conn = fsockopen(
             $host, //  POP3 Host
             $port, //  Port #
