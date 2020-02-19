@@ -4571,16 +4571,16 @@ class PHPMailer
         //Always sign these headers without being asked
         //Recommended list from https://tools.ietf.org/html/rfc6376#section-5.4.1
         $autoSignHeaders = [
-            'From',
-            'To',
-            'CC',
-            'Date',
-            'Subject',
-            'Reply-To',
-            'Message-ID',
-            'Content-Type',
-            'Mime-Version',
-            'X-Mailer',
+            'from',
+            'to',
+            'cc',
+            'date',
+            'subject',
+            'reply-to',
+            'nessage-id',
+            'content-type',
+            'mime-version',
+            'x-mailer',
         ];
         if (stripos($headers_line, 'Subject') === false) {
             $headers_line .= 'Subject: ' . $subject . static::$LE;
@@ -4615,7 +4615,7 @@ class PHPMailer
         $headersToSign = [];
         foreach ($parsedHeaders as $header) {
             //Is this header one that must be included in the DKIM signature?
-            if (in_array($header['label'], $autoSignHeaders, true)) {
+            if (in_array(strtolower($header['label']), $autoSignHeaders, true)) {
                 $headersToSignKeys[] = $header['label'];
                 $headersToSign[] = $header['label'] . ': ' . $header['value'];
                 if ($this->DKIM_copyHeaderFields) {
