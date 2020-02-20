@@ -12,6 +12,7 @@
 
 namespace PHPMailer\Test;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
@@ -2316,13 +2317,32 @@ EOT;
     }
 
     /**
+     * Check whether setting a bad custom header throws exceptions.
+     * @throws Exception
+     */
+    public function testHeaderException()
+    {
+        $this->expectException(Exception::class);
+        $mail = new PHPMailer(true);
+        $mail->addCustomHeader('SomeHeader', "Some\n Value");
+    }
+
+    /**
      * Miscellaneous calls to improve test coverage and some small tests.
      */
     public function testMiscellaneous()
     {
         $this->assertEquals('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
         $this->Mail->addCustomHeader('SomeHeader: Some Value');
+        $headers = $this->Mail->getCustomHeaders();
+        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
         $this->Mail->clearCustomHeaders();
+        $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
+        $headers = $this->Mail->getCustomHeaders();
+        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
+        $this->Mail->clearCustomHeaders();
+        $this->assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
+        $this->assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
         $this->Mail->clearAttachments();
         $this->Mail->isHTML(false);
         $this->Mail->isSMTP();

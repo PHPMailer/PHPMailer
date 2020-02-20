@@ -3952,10 +3952,19 @@ class PHPMailer
     {
         if (null === $value) {
             // Value passed in as name:value
-            $this->CustomHeader[] = explode(':', $name, 2);
-        } else {
-            $this->CustomHeader[] = [$name, $value];
+            list($name, $value) = explode(':', $name, 2);
         }
+        $name = trim($name);
+        $value = trim($value);
+        //Ensure name and value are not empty, and that neither contain line breaks
+        if (empty($name) || empty($value) || strpbrk($name . $value, "\r\n") !== false) {
+            if ($this->exceptions) {
+                throw new Exception('Invalid header name or value');
+            }
+            return false;
+        }
+        $this->CustomHeader[] = [$name, $value];
+        return true;
     }
 
     /**

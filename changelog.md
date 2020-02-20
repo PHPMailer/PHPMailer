@@ -1,5 +1,6 @@
 # PHPMailer Change Log
 
+* Reject invalid custom headers that are empty or contain breaks
 * Various fixes for DKIM issues, especially when using `mail()` transport
 * Drop the `l=` length tag from DKIM signatures; it's a mild security risk
 * Ensure CRLF is used explicitly when needed, rather than `static::$LE`
