@@ -3952,14 +3952,14 @@ class PHPMailer
      */
     public function addCustomHeader($name, $value = null)
     {
-        if (null === $value) {
+        if (null === $value && strpos($name, ':') !== false) {
             // Value passed in as name:value
             list($name, $value) = explode(':', $name, 2);
         }
         $name = trim($name);
         $value = trim($value);
-        //Ensure name and value are not empty, and that neither contain line breaks
-        if (empty($name) || empty($value) || strpbrk($name . $value, "\r\n") !== false) {
+        //Ensure name is not empty, and that neither name nor value contain line breaks
+        if (empty($name) || strpbrk($name . $value, "\r\n") !== false) {
             if ($this->exceptions) {
                 throw new Exception('Invalid header name or value');
             }

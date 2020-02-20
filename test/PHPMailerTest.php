@@ -2334,16 +2334,6 @@ EOT;
     public function testMiscellaneous()
     {
         $this->assertEquals('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
-        $this->Mail->addCustomHeader('SomeHeader: Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
-        $this->Mail->clearCustomHeaders();
-        $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
-        $this->Mail->clearCustomHeaders();
-        $this->assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
-        $this->assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
         $this->Mail->clearAttachments();
         $this->Mail->isHTML(false);
         $this->Mail->isSMTP();
@@ -2466,16 +2456,27 @@ EOT;
         $this->assertEmpty($this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('yux');
-        $this->assertEquals([['yux']], $this->Mail->getCustomHeaders());
+        $this->assertEquals([['yux', '']], $this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('Content-Type: application/json');
         $this->assertEquals(
             [
-                ['yux'],
-                ['Content-Type', ' application/json'],
+                ['yux', ''],
+                ['Content-Type', 'application/json'],
             ],
             $this->Mail->getCustomHeaders()
         );
+        $this->Mail->clearCustomHeaders();
+        $this->Mail->addCustomHeader('SomeHeader: Some Value');
+        $headers = $this->Mail->getCustomHeaders();
+        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
+        $this->Mail->clearCustomHeaders();
+        $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
+        $headers = $this->Mail->getCustomHeaders();
+        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
+        $this->Mail->clearCustomHeaders();
+        $this->assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
+        $this->assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
     }
 
     /**
