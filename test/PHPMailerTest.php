@@ -2318,6 +2318,7 @@ EOT;
 
     /**
      * Check whether setting a bad custom header throws exceptions.
+     *
      * @throws Exception
      */
     public function testHeaderException()

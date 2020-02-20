@@ -3963,9 +3963,11 @@ class PHPMailer
             if ($this->exceptions) {
                 throw new Exception('Invalid header name or value');
             }
+
             return false;
         }
         $this->CustomHeader[] = [$name, $value];
+
         return true;
     }
 
