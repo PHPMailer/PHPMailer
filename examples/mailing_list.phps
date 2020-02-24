@@ -68,7 +68,7 @@ foreach ($result as $row) {
         echo 'Mailer Error (' . htmlspecialchars($row['email']) . ') ' . $mail->ErrorInfo . '<br>';
         //Reset the connection to abort sending this message
         //The loop will continue trying to send to the rest of the list
-        $mail->smtp->reset();
+        $mail->getSMTPInstance()->reset();
     }
     //Clear all addresses and attachments for the next iteration
     $mail->clearAddresses();
