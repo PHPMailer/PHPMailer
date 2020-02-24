@@ -1214,7 +1214,14 @@ EOT;
         }
 
         //Make sure that trying to attach a nonexistent file fails
-        $this->assertFalse($this->Mail->addAttachment(__FILE__ . md5(microtime()), 'nonexistent_file.txt'));
+        $filename = __FILE__ . md5(microtime()). 'nonexistent_file.txt';
+        $this->assertFalse($this->Mail->addAttachment($filename));
+        //Make sure that trying to attach an existing but unreadable file fails
+        touch($filename);
+        chmod($filename, 0200);
+        $this->assertFalse($this->Mail->addAttachment($filename));
+        chmod($filename, 0644);
+        unlink($filename);
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -1870,6 +1877,34 @@ EOT;
     {
         $mail = new PHPMailer(true);
         $mail->addAttachment(__FILE__, 'test.txt', 'invalidencoding');
+    }
+
+    /**
+     * Expect exceptions on sending after deleting a previously successfully attached file
+     *
+     * @expectedException PHPMailer\PHPMailer\Exception
+     */
+    public function testDeletedAttachmentException()
+    {
+        $filename = __FILE__ . md5(microtime()) . 'test.txt';
+        touch($filename);
+        $this->Mail = new PHPMailer(true);
+        $this->Mail->addAttachment($filename);
+        unlink($filename);
+        $this->Mail->send();
+    }
+
+    /**
+     * Expect error on sending after deleting a previously successfully attached file
+     */
+    public function testDeletedAttachmentError()
+    {
+        $filename = __FILE__ . md5(microtime()) . 'test.txt';
+        touch($filename);
+        $this->Mail = new PHPMailer();
+        $this->Mail->addAttachment($filename);
+        unlink($filename);
+        $this->assertFalse($this->Mail->send());
     }
 
     /**

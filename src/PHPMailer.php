@@ -2961,7 +2961,7 @@ class PHPMailer
         $disposition = 'attachment'
     ) {
         try {
-            if (!static::isPermittedPath($path) || !@is_file($path)) {
+            if (!static::isPermittedPath($path) || !@is_file($path) || !is_readable($path)) {
                 throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
@@ -3146,7 +3146,7 @@ class PHPMailer
     protected function encodeFile($path, $encoding = self::ENCODING_BASE64)
     {
         try {
-            if (!static::isPermittedPath($path) || !file_exists($path)) {
+            if (!static::isPermittedPath($path) || !file_exists($path) || !is_readable($path)) {
                 throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
             $file_buffer = file_get_contents($path);
@@ -3158,7 +3158,10 @@ class PHPMailer
             return $file_buffer;
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
-
+            $this->edebug($exc->getMessage());
+            if ($this->exceptions) {
+                throw $exc;
+            }
             return '';
         }
     }
@@ -3528,7 +3531,7 @@ class PHPMailer
         $disposition = 'inline'
     ) {
         try {
-            if (!static::isPermittedPath($path) || !@is_file($path)) {
+            if (!static::isPermittedPath($path) || !@is_file($path) || !is_readable($path)) {
                 throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
