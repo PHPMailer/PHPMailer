@@ -6,6 +6,7 @@
 * Ensure CRLF is used explicitly when needed, rather than `static::$LE`
 * Add a method for trimming header content consistently
 * Some minor tweaks to resolve static analyser complaints.
+* Check that attachment files are readable both when adding and when sending
 
 ## Version 6.1.4 (December 10th, 2019)
 * Clean up hostname handling
