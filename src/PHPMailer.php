@@ -502,6 +502,13 @@ class PHPMailer
     public $DKIM_domain = '';
 
     /**
+     * DKIM canonicalization to use.
+     *
+     * @var string
+     */
+    public $DKIM_canonicalization = 'relaxed/simple';
+
+    /**
      * DKIM Copy header field values for diagnostic use.
      *
      * @var bool
@@ -4581,7 +4588,7 @@ class PHPMailer
     public function DKIM_Add($headers_line, $subject, $body)
     {
         $DKIMsignatureType = 'rsa-sha256'; // Signature & hash algorithms
-        $DKIMcanonicalization = 'relaxed/simple'; // Canonicalization methods of header & body
+        $DKIMcanonicalization = $this->DKIM_canonicalization; // Canonicalization methods of header & body
         $DKIMquery = 'dns/txt'; // Query method
         $DKIMtime = time();
         //Always sign these headers without being asked
