@@ -64,7 +64,7 @@ class PHPMailer
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
      * When null, the header is not set at all.
      *
-     * @var int
+     * @var int|null
      */
     public $Priority;
 
