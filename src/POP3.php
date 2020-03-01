@@ -19,6 +19,7 @@
  */
 
 namespace PHPMailer\PHPMailer;
+require_once "languages/stringController.php";
 
 /**
  * PHPMailer POP-Before-SMTP Authentication Class.
@@ -244,7 +245,7 @@ class POP3
         if (false === $this->pop_conn) {
             //  It would appear not...
             $this->setError(
-                "Failed to connect to server $host on port $port. errno: $errno; errstr: $errstr"
+                sprintf(failServerConnect, $host, $port, $errno, $errstr)
             );
 
             return false;
@@ -278,7 +279,7 @@ class POP3
     public function login($username = '', $password = '')
     {
         if (!$this->connected) {
-            $this->setError('Not connected to POP3 server');
+            $this->setError(POP3ConFail);
         }
         if (empty($username)) {
             $username = $this->username;
@@ -365,7 +366,7 @@ class POP3
     protected function checkResponse($string)
     {
         if (strpos($string, '+OK') !== 0) {
-            $this->setError("Server reported an error: $string");
+            $this->setError(sprintf(serverErrorInfo, $string));
 
             return false;
         }
@@ -412,7 +413,7 @@ class POP3
     protected function catchWarning($errno, $errstr, $errfile, $errline)
     {
         $this->setError(
-            'Connecting to the POP3 server raised a PHP warning:' .
+            POP3Warning .
             "errno: $errno errstr: $errstr; errfile: $errfile; errline: $errline"
         );
     }

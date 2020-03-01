@@ -19,6 +19,7 @@
  */
 
 namespace PHPMailer\PHPMailer;
+require_once "languages/stringController.php";
 
 /**
  * PHPMailer RFC821 SMTP email transport class.
@@ -242,6 +243,13 @@ class SMTP
     protected $last_reply = '';
 
     /**
+     * Language Controller
+     *
+     *
+     */
+    private $lang_strings;
+
+    /**
      * Output debugging info via a user-selected method.
      *
      * @param string $str   Debug string to output
@@ -311,6 +319,7 @@ class SMTP
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
     {
+        $this->lang_strings = new \stringController();
         static $streamok;
         //This is enabled by default since 5.0.0 but some providers disable it
         //Check this once and cache the result
@@ -322,7 +331,7 @@ class SMTP
         // Make sure we are __not__ connected
         if ($this->connected()) {
             // Already connected, generate error
-            $this->setError('Already connected to a server');
+            $this->setError(alreadyConnected);
 
             return false;
         }
@@ -331,7 +340,7 @@ class SMTP
         }
         // Connect to the SMTP server
         $this->edebug(
-            "Connection: opening to $host:$port, timeout=$timeout, options=" .
+            connectionOpeningTo . "$host:$port, timeout=$timeout, options=" .
             (count($options) > 0 ? var_export($options, true) : 'array()'),
             self::DEBUG_CONNECTION
         );
@@ -352,7 +361,7 @@ class SMTP
         } else {
             //Fall back to fsockopen which should work in more places, but is missing some features
             $this->edebug(
-                'Connection: stream_socket_client not available, falling back to fsockopen',
+                eDebugError,
                 self::DEBUG_CONNECTION
             );
             set_error_handler([$this, 'errorHandler']);
@@ -368,7 +377,7 @@ class SMTP
         // Verify we connected properly
         if (!is_resource($this->smtp_conn)) {
             $this->setError(
-                'Failed to connect to server',
+                serverConError,
                 '',
                 (string) $errno,
                 $errstr
@@ -381,7 +390,7 @@ class SMTP
 
             return false;
         }
-        $this->edebug('Connection: opened', self::DEBUG_CONNECTION);
+        $this->edebug(connectionOpened, self::DEBUG_CONNECTION);
         // SMTP server can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
         if (strpos(PHP_OS, 'WIN') !== 0) {
@@ -445,14 +454,9 @@ class SMTP
      *
      * @return bool True if successfully authenticated
      */
-    public function authenticate(
-        $username,
-        $password,
-        $authtype = null,
-        $OAuth = null
-    ) {
+    public function authenticate($username, $password, $authtype = null, $OAuth = null) {
         if (!$this->server_caps) {
-            $this->setError('Authentication is not allowed before HELO/EHLO');
+            $this->setError(noAllowedAuthBeforeHELO);
 
             return false;
         }
@@ -460,22 +464,22 @@ class SMTP
         if (array_key_exists('EHLO', $this->server_caps)) {
             // SMTP extensions are available; try to find a proper authentication method
             if (!array_key_exists('AUTH', $this->server_caps)) {
-                $this->setError('Authentication is not allowed at this stage');
+                $this->setError(noAllowedAuthInThisStage);
                 // 'at this stage' means that auth may be allowed after the stage changes
                 // e.g. after STARTTLS
 
                 return false;
             }
 
-            $this->edebug('Auth method requested: ' . ($authtype ?: 'UNSPECIFIED'), self::DEBUG_LOWLEVEL);
+            $this->edebug(authMethodRequested . ($authtype ?: UNSPECIFIED), self::DEBUG_LOWLEVEL);
             $this->edebug(
-                'Auth methods available on the server: ' . implode(',', $this->server_caps['AUTH']),
+                authAvailableInServer . ' ' . implode(',', $this->server_caps['AUTH']),
                 self::DEBUG_LOWLEVEL
             );
 
             //If we have requested a specific auth type, check the server supports it before trying others
             if (null !== $authtype && !in_array($authtype, $this->server_caps['AUTH'], true)) {
-                $this->edebug('Requested auth method not available: ' . $authtype, self::DEBUG_LOWLEVEL);
+                $this->edebug(authRequestNoAvailable . ' ' . $authtype, self::DEBUG_LOWLEVEL);
                 $authtype = null;
             }
 
@@ -489,15 +493,15 @@ class SMTP
                     }
                 }
                 if (empty($authtype)) {
-                    $this->setError('No supported authentication methods found');
+                    $this->setError(authMethodsNotFound);
 
                     return false;
                 }
-                $this->edebug('Auth method selected: ' . $authtype, self::DEBUG_LOWLEVEL);
+                $this->edebug(authMethodSelected . ' ' . $authtype, self::DEBUG_LOWLEVEL);
             }
 
             if (!in_array($authtype, $this->server_caps['AUTH'], true)) {
-                $this->setError("The requested authentication method \"$authtype\" is not supported by the server");
+                $this->setError(sprintf(requestedAuthMethod, $authtype));
 
                 return false;
             }
@@ -558,7 +562,7 @@ class SMTP
                 }
                 break;
             default:
-                $this->setError("Authentication method \"$authtype\" is not supported");
+                $this->setError(sprintf(authMethodNotSupported, $authtype));
 
                 return false;
         }
@@ -615,7 +619,7 @@ class SMTP
             if ($sock_status['eof']) {
                 // The socket is valid but we are not connected
                 $this->edebug(
-                    'SMTP NOTICE: EOF caught while checking if connected',
+                    EOFNotice,
                     self::DEBUG_CLIENT
                 );
                 $this->close();
@@ -644,7 +648,7 @@ class SMTP
             // close the connection and cleanup
             fclose($this->smtp_conn);
             $this->smtp_conn = null; //Makes for cleaner serialization
-            $this->edebug('Connection: closed', self::DEBUG_CONNECTION);
+            $this->edebug(conClosed, self::DEBUG_CONNECTION);
         }
     }
 
@@ -933,13 +937,13 @@ class SMTP
     protected function sendCommand($command, $commandstring, $expect)
     {
         if (!$this->connected()) {
-            $this->setError("Called $command without being connected");
+            $this->setError(sprintf(sendWithoutConnect, $command));
 
             return false;
         }
         //Reject line breaks in all commands
         if ((strpos($commandstring, "\n") !== false) || (strpos($commandstring, "\r") !== false)) {
-            $this->setError("Command '$command' contained line breaks");
+            $this->setError(sprintf(commandWithLineBreaks, $command));
 
             return false;
         }
@@ -969,7 +973,7 @@ class SMTP
 
         if (!in_array($code, (array) $expect, true)) {
             $this->setError(
-                "$command command failed",
+                sprintf(commandFail, $command),
                 $detail,
                 $code,
                 $code_ex
@@ -1040,7 +1044,7 @@ class SMTP
      */
     public function turn()
     {
-        $this->setError('The SMTP TURN command is not implemented');
+        $this->setError(SMTP_TURNError);
         $this->edebug('SMTP NOTICE: ' . $this->error['error'], self::DEBUG_CLIENT);
 
         return false;
@@ -1111,7 +1115,7 @@ class SMTP
     public function getServerExt($name)
     {
         if (!$this->server_caps) {
-            $this->setError('No HELO/EHLO was sent');
+            $this->setError(noHELOSend);
 
             return null;
         }
@@ -1123,7 +1127,7 @@ class SMTP
             if ('EHLO' === $name || array_key_exists('EHLO', $this->server_caps)) {
                 return false;
             }
-            $this->setError('HELO handshake was used; No information about server extensions available');
+            $this->setError(HELONoExtensions);
 
             return null;
         }
@@ -1314,7 +1318,7 @@ class SMTP
      */
     protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0)
     {
-        $notice = 'Connection failed.';
+        $notice = conFail;
         $this->setError(
             $notice,
             $errmsg,
