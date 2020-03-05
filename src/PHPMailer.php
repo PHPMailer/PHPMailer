@@ -4593,7 +4593,7 @@ class PHPMailer
             'date',
             'subject',
             'reply-to',
-            'nessage-id',
+            'message-id',
             'content-type',
             'mime-version',
             'x-mailer',
