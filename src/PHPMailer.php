@@ -2606,7 +2606,7 @@ class PHPMailer
             $altBodyEncoding = static::ENCODING_QUOTED_PRINTABLE;
         }
         //Use this as a preamble in all multipart message types
-        $mimepre = 'This is a multi-part message in MIME format.' . static::$LE;
+        $mimepre = 'This is a multi-part message in MIME format.' . static::$LE  . static::$LE;
         switch ($this->message_type) {
             case 'inline':
                 $body .= $mimepre;
