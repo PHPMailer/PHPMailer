@@ -1,12 +1,15 @@
 # PHPMailer Change Log
 
+## Version 6.1.5 (March 14th, 2020
 * Reject invalid custom headers that are empty or contain breaks
 * Various fixes for DKIM issues, especially when using `mail()` transport
 * Drop the `l=` length tag from DKIM signatures; it's a mild security risk
 * Ensure CRLF is used explicitly when needed, rather than `static::$LE`
 * Add a method for trimming header content consistently
-* Some minor tweaks to resolve static analyser complaints.
-* Check that attachment files are readable both when adding and when sending
+* Some minor tweaks to resolve static analyser complaints
+* Check that attachment files are readable both when adding *and* when sending
+* Work around Outlook bug in mishandling MIME preamble
+* Danish translation improvements
 
 ## Version 6.1.4 (December 10th, 2019)
 * Clean up hostname handling
