@@ -1,5 +1,8 @@
 # ChangeLog
 
+## Version 5.2.28 (March 19th, 2020)
+* Avoid deprecation notices in recent PHP versions
+
 ## Version 5.2.27 (November 15th 2018)
 * **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
 * Note that **the 5.2 branch is now deprecated** and will not receive security updates after 31st December 2018.
