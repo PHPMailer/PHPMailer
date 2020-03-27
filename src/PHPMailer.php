@@ -99,6 +99,13 @@ class PHPMailer
     public $ErrorInfo = '';
 
     /**
+    * Holds an array with the STMP send errors
+    *
+    */
+
+    public $ErrorDetails = [];
+
+    /**
      * The From email address for the message.
      *
      * @var string
@@ -3844,6 +3851,7 @@ class PHPMailer
         ++$this->error_count;
         if ('smtp' === $this->Mailer && null !== $this->smtp) {
             $lasterror = $this->smtp->getError();
+            $this->ErrorDetails = $lasterror;
             if (!empty($lasterror['error'])) {
                 $msg .= $this->lang('smtp_error') . $lasterror['error'];
                 if (!empty($lasterror['detail'])) {
