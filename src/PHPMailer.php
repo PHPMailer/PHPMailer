@@ -4596,7 +4596,6 @@ class PHPMailer
             'message-id',
             'content-type',
             'mime-version',
-            'x-mailer',
         ];
         if (stripos($headers_line, 'Subject') === false) {
             $headers_line .= 'Subject: ' . $subject . static::$LE;
