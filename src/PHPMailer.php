@@ -2086,6 +2086,7 @@ class PHPMailer
             'se' => 'sv',
             'rs' => 'sr',
             'tg' => 'tl',
+            'am' => 'hy',
         ];
 
         if (isset($renamed_langcodes[$langcode])) {
