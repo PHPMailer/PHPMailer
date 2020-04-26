@@ -972,7 +972,7 @@ EOT;
     }
 
     /**
-     * Send an HTML message specifiying the DSN notifications we expect.
+     * Send an HTML message specifying the DSN notifications we expect.
      */
     public function testDsn()
     {
