@@ -19,6 +19,12 @@
             "name": "Brent R. Matzelle"
         }
     ],
+    "funding": [
+        {
+            "url": "https://github.com/synchro",
+            "type": "github"
+        }
+    ],
     "require": {
         "php": ">=5.5.0",
         "ext-ctype": "*",
