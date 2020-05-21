@@ -4814,7 +4814,7 @@ class PHPMailer
     /**
      * Set an OAuth instance.
      */
-    public function setOAuth(OAuth $oauth)
+    public function setOAuth($oauth)
     {
         $this->oauth = $oauth;
     }
