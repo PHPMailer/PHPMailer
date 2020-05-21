@@ -59,6 +59,9 @@ class PHPMailer
     const ICAL_METHOD_COUNTER = 'COUNTER';
     const ICAL_METHOD_DECLINECOUNTER = 'DECLINECOUNTER';
 
+    const CONTENT_ID = 'Content-ID';
+    const CONTENT_LOCATION = 'Content-Location';
+
     /**
      * Email priority.
      * Options: null (default), 1 = High, 3 = Normal, 5 = low.
@@ -2989,6 +2992,7 @@ class PHPMailer
                 5 => false, // isStringAttachment
                 6 => $disposition,
                 7 => $name,
+                8 => static::CONTENT_ID,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -3055,6 +3059,7 @@ class PHPMailer
                 $type = $attachment[4];
                 $disposition = $attachment[6];
                 $cid = $attachment[7];
+                $cidType = $attachment[8];
                 if ('inline' === $disposition && array_key_exists($cid, $cidUniq)) {
                     continue;
                 }
@@ -3081,9 +3086,13 @@ class PHPMailer
                     $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
-                //Only set Content-IDs on inline attachments
-                if ((string) $cid !== '' && $disposition === 'inline') {
-                    $mime[] = 'Content-ID: <' . $this->encodeHeader($this->secureHeader($cid)) . '>' . static::$LE;
+                //Only set Content-ID/Content-Location headers on inline attachments
+                if ((string) $cid !== '' && $disposition === 'inline' && in_array($cidType, [static::CONTENT_ID, static::CONTENT_LOCATION], true)) {
+                    $encodedCid = $this->encodeHeader($this->secureHeader($cid));
+                    if ($cidType === static::CONTENT_ID) {
+                        $encodedCid = '<' . $encodedCid . '>';
+                    }
+                    $mime[] = $cidType . ': ' . $encodedCid . static::$LE;
                 }
 
                 // Allow for bypassing the Content-Disposition header
@@ -3479,6 +3488,7 @@ class PHPMailer
                 5 => true, // isStringAttachment
                 6 => $disposition,
                 7 => 0,
+                8 => '',
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -3509,6 +3519,7 @@ class PHPMailer
      * @param string $encoding    File encoding (see $Encoding)
      * @param string $type        File MIME type
      * @param string $disposition Disposition to use
+     * @param string $cidType     static::CONTENT_ID (default) or static::CONTENT_LOCATION
      *
      * @throws Exception
      *
@@ -3520,7 +3531,8 @@ class PHPMailer
         $name = '',
         $encoding = self::ENCODING_BASE64,
         $type = '',
-        $disposition = 'inline'
+        $disposition = 'inline',
+        $cidType = self::CONTENT_ID
     ) {
         try {
             if (!static::isPermittedPath($path) || !@is_file($path) || !is_readable($path)) {
@@ -3551,6 +3563,7 @@ class PHPMailer
                 5 => false, // isStringAttachment
                 6 => $disposition,
                 7 => $cid,
+                8 => $cidType,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
@@ -3579,6 +3592,7 @@ class PHPMailer
      * @param string $encoding    File encoding (see $Encoding), defaults to 'base64'
      * @param string $type        MIME type - will be used in preference to any automatically derived type
      * @param string $disposition Disposition to use
+     * @param string $cidType     static::CONTENT_ID (default) or static::CONTENT_LOCATION
      *
      * @throws Exception
      *
@@ -3590,7 +3604,8 @@ class PHPMailer
         $name = '',
         $encoding = self::ENCODING_BASE64,
         $type = '',
-        $disposition = 'inline'
+        $disposition = 'inline',
+        $cidType = self::CONTENT_ID
     ) {
         try {
             // If a MIME type is not specified, try to work it out from the name
@@ -3612,6 +3627,7 @@ class PHPMailer
                 5 => true, // isStringAttachment
                 6 => $disposition,
                 7 => $cid,
+                8 => $cidType,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
