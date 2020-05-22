@@ -3487,7 +3487,7 @@ class PHPMailer
                 4 => $type,
                 5 => true, // isStringAttachment
                 6 => $disposition,
-                7 => 0,
+                7 => $filename,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
