@@ -1214,7 +1214,7 @@ EOT;
         }
 
         //Make sure that trying to attach a nonexistent file fails
-        $filename = __FILE__ . md5(microtime()). 'nonexistent_file.txt';
+        $filename = __FILE__ . md5(microtime()) . 'nonexistent_file.txt';
         $this->assertFalse($this->Mail->addAttachment($filename));
         //Make sure that trying to attach an existing but unreadable file fails
         touch($filename);
@@ -1225,6 +1225,62 @@ EOT;
 
         $this->buildBody();
         $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
+     * Attachment naming test.
+     */
+    public function testAttachmentNaming()
+    {
+        $this->Mail->Body = 'Attachments.';
+        $this->Mail->Subject .= ': Attachments';
+        $this->Mail->isHTML(true);
+        $this->Mail->CharSet = 'UTF-8';
+        $this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            'phpmailer_mini.png";.jpg'
+        );
+        $this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            'phpmailer.png'
+        );
+        $this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
+            'PHPMailer card logo.png'
+        );
+        $this->buildBody();
+        $this->Mail->preSend();
+        $message = $this->Mail->getSentMIMEMessage();
+        $this->assertContains(
+            'Content-Type: image/png; name="phpmailer_mini.png\";.jpg"',
+            $message,
+            'Name containing double quote should be escaped in Content-Type'
+        );
+        $this->assertContains(
+            'Content-Disposition: attachment; filename="phpmailer_mini.png\";.jpg"',
+            $message,
+            'Filename containing double quote should be escaped in Content-Disposition'
+        );
+        $this->assertContains(
+            'Content-Type: image/png; name=phpmailer.png',
+            $message,
+            'Name without special chars should not be quoted in Content-Type'
+        );
+        $this->assertContains(
+            'Content-Disposition: attachment; filename=phpmailer.png',
+            $message,
+            'Filename without special chars should not be quoted in Content-Disposition'
+        );
+        $this->assertContains(
+            'Content-Type: image/png; name="PHPMailer card logo.png"',
+            $message,
+            'Name with spaces should be quoted in Content-Type'
+        );
+        $this->assertContains(
+            'Content-Disposition: attachment; filename="PHPMailer card logo.png"',
+            $message,
+            'Filename with spaces should be quoted in Content-Disposition'
+        );
     }
 
     /**
@@ -1687,7 +1743,7 @@ EOT;
                 ['name' => 'Jill User', 'address' => 'jill@example.net'],
                 ['name' => '', 'address' => 'frank@example.com'],
             ],
-            $this->Mail->parseAddresses(
+            PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>,'
                 . 'Jill User <jill@example.net>,'
                 . 'frank@example.com,'
