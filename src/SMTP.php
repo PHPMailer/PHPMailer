@@ -311,12 +311,6 @@ class SMTP
      */
     public function connect($host, $port = null, $timeout = 30, $options = [])
     {
-        static $streamok;
-        //This is enabled by default since 5.0.0 but some providers disable it
-        //Check this once and cache the result
-        if (null === $streamok) {
-            $streamok = function_exists('stream_socket_client');
-        }
         // Clear errors to avoid confusion
         $this->setError('');
         // Make sure we are __not__ connected
@@ -335,52 +329,9 @@ class SMTP
             (count($options) > 0 ? var_export($options, true) : 'array()'),
             self::DEBUG_CONNECTION
         );
-        $errno = 0;
-        $errstr = '';
-        if ($streamok) {
-            $socket_context = stream_context_create($options);
-            set_error_handler([$this, 'errorHandler']);
-            $this->smtp_conn = stream_socket_client(
-                $host . ':' . $port,
-                $errno,
-                $errstr,
-                $timeout,
-                STREAM_CLIENT_CONNECT,
-                $socket_context
-            );
-            restore_error_handler();
-        } else {
-            //Fall back to fsockopen which should work in more places, but is missing some features
-            $this->edebug(
-                'Connection: stream_socket_client not available, falling back to fsockopen',
-                self::DEBUG_CONNECTION
-            );
-            set_error_handler([$this, 'errorHandler']);
-            $this->smtp_conn = fsockopen(
-                $host,
-                $port,
-                $errno,
-                $errstr,
-                $timeout
-            );
-            restore_error_handler();
-        }
-        // Verify we connected properly
-        if (!is_resource($this->smtp_conn)) {
-            $this->setError(
-                'Failed to connect to server',
-                '',
-                (string) $errno,
-                $errstr
-            );
-            $this->edebug(
-                'SMTP ERROR: ' . $this->error['error']
-                . ": $errstr ($errno)",
-                self::DEBUG_CLIENT
-            );
 
-            return false;
-        }
+        $this->smtp_conn = $this->getSMTPConnection($host, $port, $timeout, $options);
+
         $this->edebug('Connection: opened', self::DEBUG_CONNECTION);
         // SMTP server can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
@@ -397,6 +348,76 @@ class SMTP
         $this->edebug('SERVER -> CLIENT: ' . $announce, self::DEBUG_SERVER);
 
         return true;
+    }
+
+    /**
+     * Create connection to the SMTP server.
+     *
+     * @param string $host    SMTP server IP or host name
+     * @param int    $port    The port number to connect to
+     * @param int    $timeout How long to wait for the connection to open
+     * @param array  $options An array of options for stream_context_create()
+     *
+     * @return false|resource
+     */
+    protected function getSMTPConnection($host, $port = null, $timeout = 30, $options = [])
+    {
+        static $streamok;
+        //This is enabled by default since 5.0.0 but some providers disable it
+        //Check this once and cache the result
+        if (null === $streamok) {
+            $streamok = function_exists('stream_socket_client');
+        }
+
+        $errno = 0;
+        $errstr = '';
+        if ($streamok) {
+            $socket_context = stream_context_create($options);
+            set_error_handler([$this, 'errorHandler']);
+            $connection = stream_socket_client(
+                $host . ':' . $port,
+                $errno,
+                $errstr,
+                $timeout,
+                STREAM_CLIENT_CONNECT,
+                $socket_context
+            );
+            restore_error_handler();
+        } else {
+            //Fall back to fsockopen which should work in more places, but is missing some features
+            $this->edebug(
+                'Connection: stream_socket_client not available, falling back to fsockopen',
+                self::DEBUG_CONNECTION
+            );
+            set_error_handler([$this, 'errorHandler']);
+            $connection = fsockopen(
+                $host,
+                $port,
+                $errno,
+                $errstr,
+                $timeout
+            );
+            restore_error_handler();
+        }
+
+        // Verify we connected properly
+        if (!is_resource($connection)) {
+            $this->setError(
+                'Failed to connect to server',
+                '',
+                (string) $errno,
+                $errstr
+            );
+            $this->edebug(
+                'SMTP ERROR: ' . $this->error['error']
+                . ": $errstr ($errno)",
+                self::DEBUG_CLIENT
+            );
+
+            return false;
+        }
+
+        return $connection;
     }
 
     /**
