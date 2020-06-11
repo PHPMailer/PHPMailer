@@ -441,6 +441,8 @@ class PHPMailer
      * Only supported in `mail` and `sendmail` transports, not in SMTP.
      *
      * @var bool
+     *
+     * @deprecated 6.0.0 PHPMailer isn't a mailing list manager!
      */
     public $SingleTo = false;
 
