@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Split SMTP connection into two separate methods
+
 ## Version 6.1.6 (May 27th, 2020)
 * **SECURITY** Fix insufficient output escaping bug in file attachment names. CVE-2020-13625. Reported by Elar Lang of Clarified Security.
 * Correct Armenian ISO language code from `am` to `hy`, add mapping for fallback
