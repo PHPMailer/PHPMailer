@@ -340,8 +340,8 @@ class SMTP
         $this->edebug('Connection: opened', self::DEBUG_CONNECTION);
 
         // Get any announcement
-        $announce = $this->get_lines();
-        $this->edebug('SERVER -> CLIENT: ' . $announce, self::DEBUG_SERVER);
+        $this->last_reply = $this->get_lines();
+        $this->edebug('SERVER -> CLIENT: ' . $this->last_reply, self::DEBUG_SERVER);
 
         return true;
     }
