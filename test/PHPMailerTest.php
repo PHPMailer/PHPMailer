@@ -1917,7 +1917,11 @@ EOT;
             'Q Encoding (text) failed 2'
         );
 
-        $this->assertEquals($this->Mail->encodeString('hello', 'binary'), 'hello', 'Binary encoding changed input');
+        $this->assertEquals(
+            'hello',
+            $this->Mail->encodeString('hello', 'binary'),
+            'Binary encoding changed input'
+        );
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
