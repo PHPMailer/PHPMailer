@@ -2,6 +2,7 @@
 
 ## WIP
 * Split SMTP connection into two separate methods
+* Undo BC break in PHP vesions 5.2.3 - 7.0.0 introduced in 6.1.2 when injecting callables for address validation and HTML to text conversion
 
 ## Version 6.1.6 (May 27th, 2020)
 * **SECURITY** Fix insufficient output escaping bug in file attachment names. CVE-2020-13625. Reported by Elar Lang of Clarified Security.

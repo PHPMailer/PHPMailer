@@ -1309,7 +1309,7 @@ class PHPMailer
             $patternselect = static::$validator;
         }
         if (is_callable($patternselect)) {
-            return $patternselect($address);
+            return call_user_func($patternselect, $address);
         }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
         if (strpos($address, "\n") !== false || strpos($address, "\r") !== false) {
@@ -4116,7 +4116,7 @@ class PHPMailer
     public function html2text($html, $advanced = false)
     {
         if (is_callable($advanced)) {
-            return $advanced($html);
+            return call_user_func($advanced, $html);
         }
 
         return html_entity_decode(
