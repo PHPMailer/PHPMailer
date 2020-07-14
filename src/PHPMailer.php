@@ -2977,7 +2977,6 @@ class PHPMailer
             if ('' === $name) {
                 $name = $filename;
             }
-
             if (!$this->validateEncoding($encoding)) {
                 throw new Exception($this->lang('encoding') . $encoding);
             }
