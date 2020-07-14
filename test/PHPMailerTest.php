@@ -298,7 +298,7 @@ final class PHPMailerTest extends TestCase
      */
     public function testBootstrap()
     {
-        $this->assertFileExists(
+        self::assertFileExists(
             $this->INCLUDE_DIR . '/test/testbootstrap.php',
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
@@ -323,7 +323,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Sender = 'from@example.com';
         $this->Mail->clearAllRecipients();
         $this->Mail->addAddress('user@example.com');
-        //$this->assertTrue($this->mail->send(), $this->mail->ErrorInfo);
+        //self::assertTrue($this->mail->send(), $this->mail->ErrorInfo);
     }
 
     /**
@@ -654,20 +654,20 @@ final class PHPMailerTest extends TestCase
             $err .= "Bad addresses that passed validation:\n";
             $err .= implode("\n", $badpasses);
         }
-        $this->assertEmpty($err, $err);
+        self::assertEmpty($err, $err);
         //For coverage
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'auto'));
-        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'auto'));
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre'));
-        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre'));
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre8'));
-        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre8'));
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'html5'));
-        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'html5'));
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
-        $this->assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
-        $this->assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
-        $this->assertFalse(PHPMailer::validateAddress('bad', 'noregex'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'auto'));
+        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'auto'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre'));
+        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre8'));
+        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre8'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'html5'));
+        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'html5'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
+        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
+        self::assertFalse(PHPMailer::validateAddress('bad', 'noregex'));
     }
 
     /**
@@ -676,7 +676,7 @@ final class PHPMailerTest extends TestCase
     public function testCustomValidator()
     {
         //Inject a one-off custom validator
-        $this->assertTrue(
+        self::assertTrue(
             PHPMailer::validateAddress(
                 'user@example.com',
                 function ($address) {
@@ -685,7 +685,7 @@ final class PHPMailerTest extends TestCase
             ),
             'Custom validator false negative'
         );
-        $this->assertFalse(
+        self::assertFalse(
             PHPMailer::validateAddress(
                 'userexample.com',
                 function ($address) {
@@ -698,11 +698,11 @@ final class PHPMailerTest extends TestCase
         PHPMailer::$validator = function ($address) {
             return 'user@example.com' === $address;
         };
-        $this->assertTrue(
+        self::assertTrue(
             $this->Mail->addAddress('user@example.com'),
             'Custom default validator false negative'
         );
-        $this->assertFalse(
+        self::assertFalse(
         //Need to pick a failing value which would pass all other validators
         //to be sure we're using our custom one
             $this->Mail->addAddress('bananas@example.com'),
@@ -710,7 +710,7 @@ final class PHPMailerTest extends TestCase
         );
         //Set default validator to PHP built-in
         PHPMailer::$validator = 'php';
-        $this->assertFalse(
+        self::assertFalse(
         //This is a valid address that FILTER_VALIDATE_EMAIL thinks is invalid
             $this->Mail->addAddress('first.last@example.123'),
             'PHP validator not behaving as expected'
@@ -736,7 +736,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Subject .= ': Wordwrap';
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -758,7 +758,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Subject .= ': Wordwrap multibyte';
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -773,7 +773,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->addReplyTo('nobody@nobody.com', 'Nobody (Unit Test)');
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -785,19 +785,19 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
         if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -805,12 +805,12 @@ final class PHPMailerTest extends TestCase
      */
     public function testRejectNonLocalFileAttachment()
     {
-        $this->assertFalse(
+        self::assertFalse(
             $this->Mail->addAttachment('https://github.com/PHPMailer/PHPMailer/raw/master/README.md'),
             'addAttachment should reject remote URLs'
         );
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->Mail->addAttachment('phar://phar.php'),
             'addAttachment should reject phar resources'
         );
@@ -831,7 +831,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->addStringAttachment($sAttachment, 'string_attach.txt');
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -844,20 +844,20 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Encoding = 'quoted-printable';
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         //Check that a quoted printable encode and decode results in the same as went in
         $t = file_get_contents(__FILE__); //Use this file as test content
         //Force line breaks to UNIX-style
         $t = str_replace(["\r\n", "\r"], "\n", $t);
-        $this->assertEquals(
+        self::assertEquals(
             $t,
             quoted_printable_decode($this->Mail->encodeQP($t)),
             'Quoted-Printable encoding round-trip failed'
         );
         //Force line breaks to Windows-style
         $t = str_replace("\n", "\r\n", $t);
-        $this->assertEquals(
+        self::assertEquals(
             $t,
             quoted_printable_decode($this->Mail->encodeQP($t)),
             'Quoted-Printable encoding round-trip failed (Windows line breaks)'
@@ -906,37 +906,37 @@ final class PHPMailerTest extends TestCase
              PHPMailer::getLE() . ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
              PHPMailer::getLE() . ' =?UTF-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqQ==?=';
         $noencoderes = 'eeeeeeeeee';
-        $this->assertEquals(
+        self::assertEquals(
             $bencoderes,
             $this->Mail->encodeHeader($bencode),
             'Folded B-encoded header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $qencoderes,
             $this->Mail->encodeHeader($qencode),
             'Folded Q-encoded header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $bencodenofoldres,
             $this->Mail->encodeHeader($bencodenofold),
             'B-encoded header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $qencodenofoldres,
             $this->Mail->encodeHeader($qencodenofold),
             'Q-encoded header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $longheaderres,
             $this->Mail->encodeHeader($longheader),
             'Long header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $longutf8res,
             $this->Mail->encodeHeader($longutf8),
             'Long UTF-8 header value incorrect'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $noencoderes,
             $this->Mail->encodeHeader($noencode),
             'Unencoded header value incorrect'
@@ -966,9 +966,9 @@ final class PHPMailerTest extends TestCase
 </html>
 EOT;
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -991,10 +991,10 @@ EOT;
 EOT;
         $this->buildBody();
         $this->Mail->dsn = 'SUCCESS,FAILURE';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         //Sends the same mail, but sets the DSN notification to NEVER
         $this->Mail->dsn = 'NEVER';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1007,25 +1007,25 @@ EOT;
         $property = $reflection->getProperty('message_type');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'attach');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'inline_attach');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_attach');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline_attach');
-        $this->assertInternalType('string', $PHPMailer->createBody());
+        self::assertInternalType('string', $PHPMailer->createBody());
     }
 
     /**
@@ -1052,8 +1052,8 @@ EOT;
             realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
-        $this->assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1080,9 +1080,9 @@ EOT;
 </html>
 EOT;
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1118,7 +1118,7 @@ EOT;
             'image/png'
         );
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1137,9 +1137,9 @@ Armenian text: Հաղորդագրությունը դատարկ է
 Czech text: Prázdné tělo zprávy
 EOT;
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1156,9 +1156,9 @@ EOT;
         $sub = $this->Mail->Subject . ': msgHTML';
         $this->Mail->Subject .= $sub;
 
-        $this->assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
-        $this->assertNotEmpty($this->Mail->AltBody, 'AltBody not set by msgHTML');
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertNotEmpty($this->Mail->Body, 'Body not set by msgHTML');
+        self::assertNotEmpty($this->Mail->AltBody, 'AltBody not set by msgHTML');
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         //Again, using a custom HTML to text converter
         $this->Mail->AltBody = '';
@@ -1170,27 +1170,27 @@ EOT;
             }
         );
         $this->Mail->Subject = $sub . ' + custom html2text';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         //Test that local paths without a basedir are ignored
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
-        $this->assertContains('src="/etc/hostname"', $this->Mail->Body);
+        self::assertContains('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
         $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
+        self::assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
         $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
-        $this->assertNotContains('src="composer.json"', $this->Mail->Body);
+        self::assertNotContains('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
-        $this->assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
+        self::assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertContains('src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
+        self::assertContains('src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        $this->assertContains('src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
+        self::assertContains('src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
     }
 
     /**
@@ -1208,23 +1208,23 @@ EOT;
             'phpmailer_mini.png'
         )
         ) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         //Make sure that trying to attach a nonexistent file fails
         $filename = __FILE__ . md5(microtime()) . 'nonexistent_file.txt';
-        $this->assertFalse($this->Mail->addAttachment($filename));
+        self::assertFalse($this->Mail->addAttachment($filename));
         //Make sure that trying to attach an existing but unreadable file fails
         touch($filename);
         chmod($filename, 0200);
-        $this->assertFalse($this->Mail->addAttachment($filename));
+        self::assertFalse($this->Mail->addAttachment($filename));
         chmod($filename, 0644);
         unlink($filename);
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1248,35 +1248,39 @@ EOT;
             realpath($this->INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
             'PHPMailer card logo.png'
         );
+        $this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            'phpmailer_mini.png\\\";.jpg'
+        );
         $this->buildBody();
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
-        $this->assertContains(
+        self::assertContains(
             'Content-Type: image/png; name="phpmailer_mini.png\";.jpg"',
             $message,
             'Name containing double quote should be escaped in Content-Type'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Disposition: attachment; filename="phpmailer_mini.png\";.jpg"',
             $message,
             'Filename containing double quote should be escaped in Content-Disposition'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Type: image/png; name=phpmailer.png',
             $message,
             'Name without special chars should not be quoted in Content-Type'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Disposition: attachment; filename=phpmailer.png',
             $message,
             'Filename without special chars should not be quoted in Content-Disposition'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Type: image/png; name="PHPMailer card logo.png"',
             $message,
             'Name with spaces should be quoted in Content-Type'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Disposition: attachment; filename="PHPMailer card logo.png"',
             $message,
             'Filename with spaces should be quoted in Content-Disposition'
@@ -1300,13 +1304,13 @@ EOT;
             '', //Intentionally empty MIME type
             'inline'
         )) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1323,7 +1327,7 @@ EOT;
             'phpmailer_mini.png'
         )
         ) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
@@ -1333,13 +1337,13 @@ EOT;
             'phpmailer.png'
         )
         ) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1361,13 +1365,13 @@ EOT;
             'image/png'
         )
         ) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $this->Mail->clearAttachments();
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
@@ -1380,7 +1384,7 @@ EOT;
   </body>
 </html>');
         $this->Mail->preSend();
-        $this->assertContains(
+        self::assertContains(
             'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@phpmailer.0>',
             $this->Mail->getSentMIMEMessage(),
             'Embedded image header encoding incorrect.'
@@ -1409,19 +1413,19 @@ EOT;
             'image/png'
         )
         ) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1438,7 +1442,7 @@ EOT;
         $this->Mail->Subject .= ': AltBody + Word Wrap';
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1452,13 +1456,13 @@ EOT;
         $this->Mail->isHTML(true);
 
         if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
-            $this->assertTrue(false, $this->Mail->ErrorInfo);
+            self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1471,11 +1475,11 @@ EOT;
         $subject = $this->Mail->Subject;
 
         $this->Mail->Subject = $subject . ': SMTP 1';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         $this->Mail->Subject = $subject . ': SMTP 2';
         $this->Mail->Sender = 'blah@example.com';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1490,7 +1494,7 @@ EOT;
         $this->Mail->Subject = $subject . ': sendmail';
         $this->Mail->isSendmail();
 
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1506,7 +1510,7 @@ EOT;
 
             $this->Mail->Subject = $subject . ': qmail';
             $this->Mail->isQmail();
-            $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+            self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         } else {
             $this->markTestSkipped('Qmail is not installed');
         }
@@ -1532,19 +1536,19 @@ EOT;
         $this->setAddress('cctestmailsend@example.com', 'cctest', $sType = 'cc');
         $this->setAddress('bcctestmailsend@example.com', 'bcctest', $sType = 'bcc');
         $this->Mail->addReplyTo('replytotestmailsend@example.com', 'replytotest');
-        $this->assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0]);
-        $this->assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
-        $this->assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
-        $this->assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
-        $this->assertTrue($this->Mail->getAllRecipientAddresses()['testmailsend@example.com']);
-        $this->assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
-        $this->assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
+        self::assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0]);
+        self::assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
+        self::assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
+        self::assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
+        self::assertTrue($this->Mail->getAllRecipientAddresses()['testmailsend@example.com']);
+        self::assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
+        self::assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
 
         $this->Mail->createHeader();
         $this->Mail->isMail();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1557,9 +1561,9 @@ EOT;
         $this->Mail->Subject = $this->Mail->Subject . ': Empty Body';
         $this->Mail->isMail();
         $this->Mail->AllowEmpty = true;
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $this->Mail->AllowEmpty = false;
-        $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1573,7 +1577,7 @@ EOT;
 
         $this->Mail->Body = 'This message contains lines that are too long.' .
             PHPMailer::getLE() . $oklen . $badlen . $oklen;
-        $this->assertTrue(
+        self::assertTrue(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
         );
@@ -1583,11 +1587,11 @@ EOT;
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
-        $this->assertFalse(
+        self::assertFalse(
             PHPMailer::hasLineLongerThanMax($message),
             'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())) . ' chars)'
         );
-        $this->assertContains(
+        self::assertContains(
             'Content-Transfer-Encoding: quoted-printable',
             $message,
             'Long line did not cause transfer encoding switch.'
@@ -1603,7 +1607,7 @@ EOT;
 
         $this->Mail->Body = 'This message does not contain lines that are too long.' .
             PHPMailer::getLE() . $oklen;
-        $this->assertFalse(
+        self::assertFalse(
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
         );
@@ -1611,8 +1615,8 @@ EOT;
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
-        $this->assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
-        $this->assertNotContains(
+        self::assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
+        self::assertNotContains(
             'Content-Transfer-Encoding: quoted-printable',
             $message,
             'Short line caused transfer encoding switch.'
@@ -1630,10 +1634,10 @@ EOT;
 
         $this->Mail->SMTPKeepAlive = true;
         $this->Mail->Subject = $subject . ': SMTP keep-alive 1';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         $this->Mail->Subject = $subject . ': SMTP keep-alive 2';
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $this->Mail->smtpClose();
     }
 
@@ -1648,7 +1652,7 @@ EOT;
         $this->buildBody();
 
         $this->Mail->Subject = substr(str_repeat('0123456789', 100), 0, 998);
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -1673,12 +1677,12 @@ EOT;
         $this->Mail->Subject .= ': Error handling test - this should be sent ok';
         $this->buildBody();
         $this->Mail->clearAllRecipients(); // no addresses should cause an error
-        $this->assertTrue($this->Mail->isError() == false, 'Error found');
-        $this->assertTrue($this->Mail->send() == false, 'send succeeded');
-        $this->assertTrue($this->Mail->isError(), 'No error found');
-        $this->assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->isError() == false, 'Error found');
+        self::assertTrue($this->Mail->send() == false, 'send succeeded');
+        self::assertTrue($this->Mail->isError(), 'No error found');
+        self::assertEquals('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
         $this->Mail->addAddress($_REQUEST['mail_to']);
-        $this->assertTrue($this->Mail->send(), 'send failed');
+        self::assertTrue($this->Mail->send(), 'send failed');
     }
 
     /**
@@ -1686,27 +1690,27 @@ EOT;
      */
     public function testAddressing()
     {
-        $this->assertFalse($this->Mail->addAddress(''), 'Empty address accepted');
-        $this->assertFalse($this->Mail->addAddress('', 'Nobody'), 'Empty address with name accepted');
-        $this->assertFalse($this->Mail->addAddress('a@example..com'), 'Invalid address accepted');
-        $this->assertTrue($this->Mail->addAddress('a@example.com'), 'Addressing failed');
-        $this->assertFalse($this->Mail->addAddress('a@example.com'), 'Duplicate addressing failed');
-        $this->assertTrue($this->Mail->addCC('b@example.com'), 'CC addressing failed');
-        $this->assertFalse($this->Mail->addCC('b@example.com'), 'CC duplicate addressing failed');
-        $this->assertFalse($this->Mail->addCC('a@example.com'), 'CC duplicate addressing failed (2)');
-        $this->assertTrue($this->Mail->addBCC('c@example.com'), 'BCC addressing failed');
-        $this->assertFalse($this->Mail->addBCC('c@example.com'), 'BCC duplicate addressing failed');
-        $this->assertFalse($this->Mail->addBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
-        $this->assertTrue($this->Mail->addReplyTo('a@example.com'), 'Replyto Addressing failed');
-        $this->assertFalse($this->Mail->addReplyTo('a@example..com'), 'Invalid Replyto address accepted');
-        $this->assertTrue($this->Mail->setFrom('a@example.com', 'some name'), 'setFrom failed');
-        $this->assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
+        self::assertFalse($this->Mail->addAddress(''), 'Empty address accepted');
+        self::assertFalse($this->Mail->addAddress('', 'Nobody'), 'Empty address with name accepted');
+        self::assertFalse($this->Mail->addAddress('a@example..com'), 'Invalid address accepted');
+        self::assertTrue($this->Mail->addAddress('a@example.com'), 'Addressing failed');
+        self::assertFalse($this->Mail->addAddress('a@example.com'), 'Duplicate addressing failed');
+        self::assertTrue($this->Mail->addCC('b@example.com'), 'CC addressing failed');
+        self::assertFalse($this->Mail->addCC('b@example.com'), 'CC duplicate addressing failed');
+        self::assertFalse($this->Mail->addCC('a@example.com'), 'CC duplicate addressing failed (2)');
+        self::assertTrue($this->Mail->addBCC('c@example.com'), 'BCC addressing failed');
+        self::assertFalse($this->Mail->addBCC('c@example.com'), 'BCC duplicate addressing failed');
+        self::assertFalse($this->Mail->addBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
+        self::assertTrue($this->Mail->addReplyTo('a@example.com'), 'Replyto Addressing failed');
+        self::assertFalse($this->Mail->addReplyTo('a@example..com'), 'Invalid Replyto address accepted');
+        self::assertTrue($this->Mail->setFrom('a@example.com', 'some name'), 'setFrom failed');
+        self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
         $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', true);
-        $this->assertEquals($this->Mail->Sender, 'a@example.com', 'setFrom failed to set sender');
+        self::assertEquals($this->Mail->Sender, 'a@example.com', 'setFrom failed to set sender');
         $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', false);
-        $this->assertEquals($this->Mail->Sender, '', 'setFrom should not have set sender');
+        self::assertEquals($this->Mail->Sender, '', 'setFrom should not have set sender');
         $this->Mail->clearCCs();
         $this->Mail->clearBCCs();
         $this->Mail->clearReplyTos();
@@ -1721,7 +1725,7 @@ EOT;
         $this->Mail->setFrom('bob@example.com', '"Bob\'s Burgers" (Bob\'s "Burgers")', true);
         $this->Mail->isSMTP();
         $this->Mail->Subject .= ': quotes in from name';
-        $this->assertTrue($this->Mail->send(), 'send failed');
+        self::assertTrue($this->Mail->send(), 'send failed');
     }
 
     /**
@@ -1730,14 +1734,14 @@ EOT;
     public function testAddressSplitting()
     {
         //Test built-in address parser
-        $this->assertCount(
+        self::assertCount(
             2,
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>, Jill User <jill@example.net>'
             ),
             'Failed to recognise address list (IMAP parser)'
         );
-        $this->assertEquals(
+        self::assertEquals(
             [
                 ['name' => 'Joe User', 'address' => 'joe@example.com'],
                 ['name' => 'Jill User', 'address' => 'jill@example.net'],
@@ -1751,7 +1755,7 @@ EOT;
             'Parsed addresses'
         );
         //Test simple address parser
-        $this->assertCount(
+        self::assertCount(
             2,
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>, Jill User <jill@example.net>',
@@ -1760,7 +1764,7 @@ EOT;
             'Failed to recognise address list'
         );
         //Test single address
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>',
                 false
@@ -1768,14 +1772,14 @@ EOT;
             'Failed to recognise single address'
         );
         //Test quoted name IMAP
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'Tim "The Book" O\'Reilly <foo@example.com>'
             ),
             'Failed to recognise quoted name (IMAP)'
         );
         //Test quoted name
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'Tim "The Book" O\'Reilly <foo@example.com>',
                 false
@@ -1783,14 +1787,14 @@ EOT;
             'Failed to recognise quoted name'
         );
         //Test single address IMAP
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com>'
             ),
             'Failed to recognise single address (IMAP)'
         );
         //Test unnamed address
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'joe@example.com',
                 false
@@ -1798,21 +1802,21 @@ EOT;
             'Failed to recognise unnamed address'
         );
         //Test unnamed address IMAP
-        $this->assertNotEmpty(
+        self::assertNotEmpty(
             PHPMailer::parseAddresses(
                 'joe@example.com'
             ),
             'Failed to recognise unnamed address (IMAP)'
         );
         //Test invalid addresses
-        $this->assertEmpty(
+        self::assertEmpty(
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com.>, Jill User <jill.@example.net>'
             ),
             'Failed to recognise invalid addresses (IMAP)'
         );
         //Test invalid addresses
-        $this->assertEmpty(
+        self::assertEmpty(
             PHPMailer::parseAddresses(
                 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
                 false
@@ -1833,7 +1837,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        $this->assertContains('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
+        self::assertContains('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
 
         $this->Mail->Subject .= ': Address escaping invalid';
         $this->Mail->clearAddresses();
@@ -1842,10 +1846,10 @@ EOT;
         $this->Mail->Body = 'invalid address';
         $this->buildBody();
         $this->Mail->preSend();
-        $this->assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
+        self::assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
 
         $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
-        $this->assertTrue($this->Mail->attachmentExists());
+        self::assertTrue($this->Mail->attachmentExists());
     }
 
     /**
@@ -1858,7 +1862,7 @@ EOT;
         $this->Mail->AltBody = 'MIME structure test.';
         $this->buildBody();
         $this->Mail->preSend();
-        $this->assertRegExp(
+        self::assertRegExp(
             "/Content-Transfer-Encoding: 8bit\r\n\r\n" .
             'This is a multi-part message in MIME format./',
             $this->Mail->getSentMIMEMessage(),
@@ -1878,9 +1882,9 @@ EOT;
         $this->Mail->addAddress('foo@example.com', 'Foo');
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        $this->assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
-        $this->assertContains('To: Foo <foo@example.com>', $b);
-        $this->assertTrue($this->Mail->send(), 'send failed');
+        self::assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
+        self::assertContains('To: Foo <foo@example.com>', $b);
+        self::assertTrue($this->Mail->send(), 'send failed');
     }
 
     /**
@@ -1889,43 +1893,43 @@ EOT;
     public function testEncodings()
     {
         $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        $this->assertEquals(
+        self::assertEquals(
             '=A1Hola!_Se=F1or!',
             $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'text'),
             'Q Encoding (text) failed'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '=A1Hola!_Se=F1or!',
             $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'comment'),
             'Q Encoding (comment) failed'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '=A1Hola!_Se=F1or!',
             $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'phrase'),
             'Q Encoding (phrase) failed'
         );
         $this->Mail->CharSet = 'UTF-8';
-        $this->assertEquals(
+        self::assertEquals(
             '=C2=A1Hola!_Se=C3=B1or!',
             $this->Mail->encodeQ("\xc2\xa1Hola! Se\xc3\xb1or!", 'text'),
             'Q Encoding (text) failed'
         );
         //Strings containing '=' are a special case
-        $this->assertEquals(
+        self::assertEquals(
             'Nov=C3=A1=3D',
             $this->Mail->encodeQ("Nov\xc3\xa1=", 'text'),
             'Q Encoding (text) failed 2'
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             'hello',
             $this->Mail->encodeString('hello', 'binary'),
             'Binary encoding changed input'
         );
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
-        $this->assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        $this->assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
+        self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
+        self::assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
     }
 
     /**
@@ -1964,7 +1968,7 @@ EOT;
         $this->Mail = new PHPMailer();
         $this->Mail->addAttachment($filename);
         unlink($filename);
-        $this->assertFalse($this->Mail->send());
+        self::assertFalse($this->Mail->send());
     }
 
     /**
@@ -2008,7 +2012,7 @@ EOT;
         $this->Mail->Subject .= ': Base-64 encoding';
         $this->Mail->Encoding = 'base64';
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), 'Base64 encoding failed');
+        self::assertTrue($this->Mail->send(), 'Base64 encoding failed');
     }
 
     /**
@@ -2058,10 +2062,10 @@ EOT;
             $keyfile,
             $password
         );
-        $this->assertTrue($this->Mail->send(), 'S/MIME signing failed');
+        self::assertTrue($this->Mail->send(), 'S/MIME signing failed');
 
         $msg = $this->Mail->getSentMIMEMessage();
-        $this->assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
         unlink($certfile);
         unlink($keyfile);
     }
@@ -2144,7 +2148,7 @@ EOT;
             $password,
             $cacertfile
         );
-        $this->assertTrue($this->Mail->send(), 'S/MIME signing with CA failed');
+        self::assertTrue($this->Mail->send(), 'S/MIME signing with CA failed');
         unlink($cacertfile);
         unlink($cakeyfile);
         unlink($certfile);
@@ -2161,13 +2165,13 @@ EOT;
         //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
         $prebody = " C \r\nD \t E\r\n\r\n\r\n";
         $postbody = " C \r\nD \t E\r\n";
-        $this->assertEquals($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
-        $this->assertEquals(
+        self::assertEquals($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
+        self::assertEquals(
             'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
             base64_encode(hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
             'DKIM canonicalized empty body hash mismatch'
         );
-        $this->assertEquals($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
+        self::assertEquals($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
     }
 
     /**
@@ -2180,7 +2184,7 @@ EOT;
         //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
         $preheaders = "A: X\r\nB : Y\t\r\n\tZ  \r\n";
         $postheaders = "a:X\r\nb:Y Z\r\n";
-        $this->assertEquals(
+        self::assertEquals(
             $postheaders,
             $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization incorrect'
@@ -2193,7 +2197,7 @@ EOT;
         $postheaders = 'long-header-1:<https://example.com/somescript.php?id=1234567890&' .
             "name=Abcdefghijklmnopquestuvwxyz&hash= abc1234\r\nlong-header-2:This is a long" .
             ' header value that contains runs of spaces and trailing and is folded onto 2 lines';
-        $this->assertEquals(
+        self::assertEquals(
             $postheaders,
             $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization of long lines incorrect'
@@ -2229,14 +2233,14 @@ EOT;
         $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:$subject;\r\n";
 
         $this->Mail->DKIM_copyHeaderFields = true;
-        $this->assertContains(
+        self::assertContains(
             $copyHeaderFields,
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header with copied header fields incorrect'
         );
 
         $this->Mail->DKIM_copyHeaderFields = false;
-        $this->assertNotContains(
+        self::assertNotContains(
             $copyHeaderFields,
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header without copied header fields incorrect'
@@ -2285,7 +2289,7 @@ EOT;
 
         $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
 
-        $this->assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
+        self::assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
 
         unlink($privatekeyfile);
     }
@@ -2315,9 +2319,9 @@ EOT;
         $this->Mail->DKIM_private = $privatekeyfile;
         $this->Mail->DKIM_selector = 'phpmailer';
         $this->Mail->DKIM_passphrase = ''; //key is not encrypted
-        $this->assertTrue($this->Mail->send(), 'DKIM signed mail failed');
+        self::assertTrue($this->Mail->send(), 'DKIM signed mail failed');
         $this->Mail->isMail();
-        $this->assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
+        self::assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
         unlink($privatekeyfile);
     }
 
@@ -2334,28 +2338,28 @@ EOT;
         $windowssrc = "hello\r\nWorld\r\nAgain\r\n";
         $mixedsrc = "hello\nWorld\rAgain\r\n";
         $target = "hello\r\nWorld\r\nAgain\r\n";
-        $this->assertEquals($target, PHPMailer::normalizeBreaks($unixsrc), 'UNIX break reformatting failed');
-        $this->assertEquals($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
-        $this->assertEquals($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
-        $this->assertEquals($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+        self::assertEquals($target, PHPMailer::normalizeBreaks($unixsrc), 'UNIX break reformatting failed');
+        self::assertEquals($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
+        self::assertEquals($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
+        self::assertEquals($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
 
         //To see accurate results when using postfix, set `sendmail_fix_line_endings = never` in main.cf
         $this->Mail->Subject = 'PHPMailer DOS line breaks';
         $this->Mail->Body = "This message\r\ncontains\r\nDOS-format\r\nCRLF line breaks.";
-        $this->assertTrue($this->Mail->send());
+        self::assertTrue($this->Mail->send());
 
         $this->Mail->Subject = 'PHPMailer UNIX line breaks';
         $this->Mail->Body = "This message\ncontains\nUNIX-format\nLF line breaks.";
-        $this->assertTrue($this->Mail->send());
+        self::assertTrue($this->Mail->send());
 
         $this->Mail->Encoding = 'quoted-printable';
         $this->Mail->Subject = 'PHPMailer DOS line breaks, QP';
         $this->Mail->Body = "This message\r\ncontains\r\nDOS-format\r\nCRLF line breaks.";
-        $this->assertTrue($this->Mail->send());
+        self::assertTrue($this->Mail->send());
 
         $this->Mail->Subject = 'PHPMailer UNIX line breaks, QP';
         $this->Mail->Body = "This message\ncontains\nUNIX-format\nLF line breaks.";
-        $this->assertTrue($this->Mail->send());
+        self::assertTrue($this->Mail->send());
     }
 
     /**
@@ -2368,22 +2372,22 @@ EOT;
         $this->Mail->preSend();
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 1) . "\r\n", 2);
-        $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
-        $this->assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
-        $this->assertTrue(PHPMailer::hasLineLongerThanMax($badlen . $oklen), 'Long line not detected (last)');
-        $this->assertTrue(
+        self::assertTrue(PHPMailer::hasLineLongerThanMax($badlen), 'Long line not detected (only)');
+        self::assertTrue(PHPMailer::hasLineLongerThanMax($oklen . $badlen), 'Long line not detected (first)');
+        self::assertTrue(PHPMailer::hasLineLongerThanMax($badlen . $oklen), 'Long line not detected (last)');
+        self::assertTrue(
             PHPMailer::hasLineLongerThanMax($oklen . $badlen . $oklen),
             'Long line not detected (middle)'
         );
-        $this->assertFalse(PHPMailer::hasLineLongerThanMax($oklen), 'Long line false positive');
+        self::assertFalse(PHPMailer::hasLineLongerThanMax($oklen), 'Long line false positive');
         $this->Mail->isHTML(false);
         $this->Mail->Subject .= ': Line length test';
         $this->Mail->CharSet = 'UTF-8';
         $this->Mail->Encoding = '8bit';
         $this->Mail->Body = $oklen . $badlen . $oklen . $badlen;
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        $this->assertEquals('quoted-printable', $this->Mail->Encoding, 'Long line did not override transfer encoding');
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertEquals('quoted-printable', $this->Mail->Encoding, 'Long line did not override transfer encoding');
     }
 
     /**
@@ -2397,18 +2401,18 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        $this->assertNotEquals($lastid, $id, 'Invalid Message ID allowed');
+        self::assertNotEquals($lastid, $id, 'Invalid Message ID allowed');
         $id = '<' . hash('sha256', 12345) . '@example.com>';
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        $this->assertEquals($lastid, $id, 'Custom Message ID not used');
+        self::assertEquals($lastid, $id, 'Custom Message ID not used');
         $this->Mail->MessageID = '';
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        $this->assertRegExp('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
+        self::assertRegExp('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
     }
 
     /**
@@ -2428,7 +2432,7 @@ EOT;
      */
     public function testMiscellaneous()
     {
-        $this->assertEquals('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
+        self::assertEquals('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
         $this->Mail->clearAttachments();
         $this->Mail->isHTML(false);
         $this->Mail->isSMTP();
@@ -2438,41 +2442,41 @@ EOT;
         $this->Mail->setLanguage('fr');
         $this->Mail->Sender = '';
         $this->Mail->createHeader();
-        $this->assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
-        $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
-        $this->assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
-        $this->assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
+        self::assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
+        self::assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+        self::assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
+        self::assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
         //Test pathinfo
         $a = '/mnt/files/飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
-        $this->assertEquals($q['dirname'], '/mnt/files', 'UNIX dirname not matched');
-        $this->assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'UNIX basename not matched');
-        $this->assertEquals($q['extension'], 'mp3', 'UNIX extension not matched');
-        $this->assertEquals($q['filename'], '飛兒樂 團光茫', 'UNIX filename not matched');
-        $this->assertEquals(
+        self::assertEquals($q['dirname'], '/mnt/files', 'UNIX dirname not matched');
+        self::assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'UNIX basename not matched');
+        self::assertEquals($q['extension'], 'mp3', 'UNIX extension not matched');
+        self::assertEquals($q['filename'], '飛兒樂 團光茫', 'UNIX filename not matched');
+        self::assertEquals(
             PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME),
             '/mnt/files',
             'Dirname path element not matched'
         );
-        $this->assertEquals(
+        self::assertEquals(
             PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
             '飛兒樂 團光茫.mp3',
             'Basename path element not matched'
         );
-        $this->assertEquals(PHPMailer::mb_pathinfo($a, 'filename'), '飛兒樂 團光茫', 'Filename path element not matched');
+        self::assertEquals(PHPMailer::mb_pathinfo($a, 'filename'), '飛兒樂 團光茫', 'Filename path element not matched');
         $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
-        $this->assertEquals($q['dirname'], 'c:\mnt\files', 'Windows dirname not matched');
-        $this->assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'Windows basename not matched');
-        $this->assertEquals($q['extension'], 'mp3', 'Windows extension not matched');
-        $this->assertEquals($q['filename'], '飛兒樂 團光茫', 'Windows filename not matched');
+        self::assertEquals($q['dirname'], 'c:\mnt\files', 'Windows dirname not matched');
+        self::assertEquals($q['basename'], '飛兒樂 團光茫.mp3', 'Windows basename not matched');
+        self::assertEquals($q['extension'], 'mp3', 'Windows extension not matched');
+        self::assertEquals($q['filename'], '飛兒樂 團光茫', 'Windows filename not matched');
 
-        $this->assertEquals(
+        self::assertEquals(
             PHPMailer::filenameToType('abc.jpg?xyz=1'),
             'image/jpeg',
             'Query string not ignored in filename'
         );
-        $this->assertEquals(
+        self::assertEquals(
             PHPMailer::filenameToType('abc.xyzpdq'),
             'application/octet-stream',
             'Default MIME type not applied to unknown extension'
@@ -2484,16 +2488,16 @@ EOT;
         $b2 = "1\n2\n3\n";
         $b3 = "1\r\n2\r3\n";
         $t1 = "1{$eol}2{$eol}3{$eol}";
-        $this->assertEquals(PHPMailer::normalizeBreaks($b1), $t1, 'Failed to normalize line breaks (1)');
-        $this->assertEquals(PHPMailer::normalizeBreaks($b2), $t1, 'Failed to normalize line breaks (2)');
-        $this->assertEquals(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
+        self::assertEquals(PHPMailer::normalizeBreaks($b1), $t1, 'Failed to normalize line breaks (1)');
+        self::assertEquals(PHPMailer::normalizeBreaks($b2), $t1, 'Failed to normalize line breaks (2)');
+        self::assertEquals(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
     }
 
     public function testBadSMTP()
     {
         $this->Mail->smtpConnect();
         $smtp = $this->Mail->getSMTPInstance();
-        $this->assertFalse($smtp->mail("somewhere\nbad"), 'Bad SMTP command containing breaks accepted');
+        self::assertFalse($smtp->mail("somewhere\nbad"), 'Bad SMTP command containing breaks accepted');
     }
 
     public function testHostValidation()
@@ -2523,10 +2527,10 @@ EOT;
             '[[::1]]',
         ];
         foreach ($good as $h) {
-            $this->assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
+            self::assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
         }
         foreach ($bad as $h) {
-            $this->assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
+            self::assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
         }
     }
 
@@ -2536,10 +2540,10 @@ EOT;
     public function testCustomHeaderGetter()
     {
         $this->Mail->addCustomHeader('foo', 'bar');
-        $this->assertEquals([['foo', 'bar']], $this->Mail->getCustomHeaders());
+        self::assertEquals([['foo', 'bar']], $this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('foo', 'baz');
-        $this->assertEquals(
+        self::assertEquals(
             [
                 ['foo', 'bar'],
                 ['foo', 'baz'],
@@ -2548,13 +2552,13 @@ EOT;
         );
 
         $this->Mail->clearCustomHeaders();
-        $this->assertEmpty($this->Mail->getCustomHeaders());
+        self::assertEmpty($this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('yux');
-        $this->assertEquals([['yux', '']], $this->Mail->getCustomHeaders());
+        self::assertEquals([['yux', '']], $this->Mail->getCustomHeaders());
 
         $this->Mail->addCustomHeader('Content-Type: application/json');
-        $this->assertEquals(
+        self::assertEquals(
             [
                 ['yux', ''],
                 ['Content-Type', 'application/json'],
@@ -2564,14 +2568,14 @@ EOT;
         $this->Mail->clearCustomHeaders();
         $this->Mail->addCustomHeader('SomeHeader: Some Value');
         $headers = $this->Mail->getCustomHeaders();
-        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
+        self::assertEquals($headers[0], ['SomeHeader', 'Some Value']);
         $this->Mail->clearCustomHeaders();
         $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
         $headers = $this->Mail->getCustomHeaders();
-        $this->assertEquals($headers[0], ['SomeHeader', 'Some Value']);
+        self::assertEquals($headers[0], ['SomeHeader', 'Some Value']);
         $this->Mail->clearCustomHeaders();
-        $this->assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
-        $this->assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
+        self::assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
+        self::assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
     }
 
     /**
@@ -2583,11 +2587,11 @@ EOT;
         $this->buildBody();
 
         $this->Mail->ConfirmReadingTo = 'test@example..com';  //Invalid address
-        $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
 
         $this->Mail->ConfirmReadingTo = ' test@example.com';  //Extra space to trim
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        $this->assertEquals(
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertEquals(
             'test@example.com',
             $this->Mail->ConfirmReadingTo,
             'Unexpected read receipt address'
@@ -2595,14 +2599,14 @@ EOT;
 
         $this->Mail->ConfirmReadingTo = 'test@françois.ch';  //Address with IDN
         if (PHPMailer::idnSupported()) {
-            $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-            $this->assertEquals(
+            self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+            self::assertEquals(
                 'test@xn--franois-xxa.ch',
                 $this->Mail->ConfirmReadingTo,
                 'IDN address not converted to punycode'
             );
         } else {
-            $this->assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
+            self::assertFalse($this->Mail->send(), $this->Mail->ErrorInfo);
         }
     }
 
@@ -2626,31 +2630,31 @@ EOT;
         $this->Mail->addReplyTo('test+replyto' . $domain);
 
         // Queued addresses are not returned by get*Addresses() before send() call.
-        $this->assertEmpty($this->Mail->getToAddresses(), 'Bad "to" recipients');
-        $this->assertEmpty($this->Mail->getCcAddresses(), 'Bad "cc" recipients');
-        $this->assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
-        $this->assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
+        self::assertEmpty($this->Mail->getToAddresses(), 'Bad "to" recipients');
+        self::assertEmpty($this->Mail->getCcAddresses(), 'Bad "cc" recipients');
+        self::assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
+        self::assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
 
         // Clear queued BCC recipient.
         $this->Mail->clearBCCs();
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         // Addresses with IDN are returned by get*Addresses() after send() call.
         $domain = $this->Mail->punyencodeAddress($domain);
-        $this->assertEquals(
+        self::assertEquals(
             [['test' . $domain, '']],
             $this->Mail->getToAddresses(),
             'Bad "to" recipients'
         );
-        $this->assertEquals(
+        self::assertEquals(
             [['test+cc' . $domain, '']],
             $this->Mail->getCcAddresses(),
             'Bad "cc" recipients'
         );
-        $this->assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
-        $this->assertEquals(
+        self::assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
+        self::assertEquals(
             ['test+replyto' . $domain => ['test+replyto' . $domain, '']],
             $this->Mail->getReplyToAddresses(),
             'Bad "reply-to" addresses'
@@ -2671,32 +2675,32 @@ EOT;
 
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
 
-        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
-        $this->assertFalse($this->Mail->addAddress('test@françois.ch'));
-        $this->assertTrue($this->Mail->addAddress('test@FRANÇOIS.CH'));
-        $this->assertFalse($this->Mail->addAddress('test@FRANÇOIS.CH'));
-        $this->assertTrue($this->Mail->addAddress('test@xn--franois-xxa.ch'));
-        $this->assertFalse($this->Mail->addAddress('test@xn--franois-xxa.ch'));
-        $this->assertFalse($this->Mail->addAddress('test@XN--FRANOIS-XXA.CH'));
+        self::assertTrue($this->Mail->addAddress('test@françois.ch'));
+        self::assertFalse($this->Mail->addAddress('test@françois.ch'));
+        self::assertTrue($this->Mail->addAddress('test@FRANÇOIS.CH'));
+        self::assertFalse($this->Mail->addAddress('test@FRANÇOIS.CH'));
+        self::assertTrue($this->Mail->addAddress('test@xn--franois-xxa.ch'));
+        self::assertFalse($this->Mail->addAddress('test@xn--franois-xxa.ch'));
+        self::assertFalse($this->Mail->addAddress('test@XN--FRANOIS-XXA.CH'));
 
-        $this->assertTrue($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        $this->assertFalse($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        $this->assertTrue($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        $this->assertFalse($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        $this->assertTrue($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        $this->assertFalse($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        $this->assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
+        self::assertTrue($this->Mail->addReplyTo('test+replyto@françois.ch'));
+        self::assertFalse($this->Mail->addReplyTo('test+replyto@françois.ch'));
+        self::assertTrue($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
+        self::assertFalse($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
+        self::assertTrue($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
+        self::assertFalse($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
+        self::assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
 
         $this->buildBody();
-        $this->assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         // There should be only one "To" address and one "Reply-To" address.
-        $this->assertEquals(
+        self::assertEquals(
             1,
             \count($this->Mail->getToAddresses()),
             'Bad count of "to" recipients'
         );
-        $this->assertEquals(
+        self::assertEquals(
             1,
             \count($this->Mail->getReplyToAddresses()),
             'Bad count of "reply-to" addresses'
@@ -2720,7 +2724,7 @@ EOT;
 
         sleep(1);
         //Test a known-good login
-        $this->assertTrue(
+        self::assertTrue(
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
         );
@@ -2748,7 +2752,7 @@ EOT;
 
         sleep(2);
         //Test a known-bad login
-        $this->assertFalse(
+        self::assertFalse(
             POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
             'POP before SMTP should have failed'
         );
@@ -2766,33 +2770,33 @@ EOT;
     public function testSmtpConnect()
     {
         $this->Mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL; //Show connection-level errors
-        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
+        self::assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
         // $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
-        // $this->assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
+        // self::assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
         // $this->Mail->smtpClose();
         // $this->Mail->Host = '[::1]:' . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
-        // $this->assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
+        // self::assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
         // $this->Mail->smtpClose();
 
         // All these hosts are expected to fail
         // $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
-        // $this->assertFalse($this->Mail->smtpConnect());
+        // self::assertFalse($this->Mail->smtpConnect());
         // $this->Mail->smtpClose();
 
         $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
-        $this->assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
+        self::assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
 
         // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->Mail->Host = $_REQUEST['mail_host'];
-        $this->assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
+        self::assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
 
         $this->Smtp = $this->Mail->getSMTPInstance();
-        $this->assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
-        $this->assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
-        $this->assertFalse($this->Mail->SMTPAuth);
+        self::assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
+        self::assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
+        self::assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
     }
 
@@ -2806,7 +2810,7 @@ EOT;
         $property = $reflection->getProperty('oauth');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, true);
-        $this->assertTrue($PHPMailer->getOAuth());
+        self::assertTrue($PHPMailer->getOAuth());
 
         $options =[
             'provider' => 'dummyprovider',
@@ -2817,10 +2821,10 @@ EOT;
         ];
 
         $oauth = new OAuth($options);
-        $this->assertInstanceOf(OAuth::class, $oauth);
+        self::assertInstanceOf(OAuth::class, $oauth);
         $subject = $PHPMailer->setOAuth($oauth);
-        $this->assertNull($subject);
-        $this->assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
+        self::assertNull($subject);
+        self::assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
     }
 
     /**
@@ -2858,7 +2862,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        $this->assertRegExp(
+        self::assertRegExp(
             '/Content-Type: text\/calendar; method=CANCEL;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2900,7 +2904,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        $this->assertRegExp(
+        self::assertRegExp(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2941,7 +2945,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        $this->assertRegExp(
+        self::assertRegExp(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
