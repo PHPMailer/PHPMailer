@@ -108,7 +108,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Password = '';
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-        if (strlen($this->Mail->Host) > 0) {
+        if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
         } else {
             $this->Mail->isMail();
@@ -116,7 +116,7 @@ final class PHPMailerTest extends TestCase
         if (array_key_exists('mail_to', $_REQUEST)) {
             $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
         }
-        if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
+        if (array_key_exists('mail_cc', $_REQUEST) && $_REQUEST['mail_cc'] !== '') {
             $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
@@ -145,7 +145,7 @@ final class PHPMailerTest extends TestCase
         $this->checkChanges();
 
         // Determine line endings for message
-        if ('text/html' == $this->Mail->ContentType || strlen($this->Mail->AltBody) > 0) {
+        if ('text/html' === $this->Mail->ContentType || $this->Mail->AltBody !== '') {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
             $bullet_end = "</li>\r\n";
@@ -168,7 +168,7 @@ final class PHPMailerTest extends TestCase
         $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
         $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
 
-        if (strlen($this->Mail->Host) > 0) {
+        if ($this->Mail->Host !== '') {
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
         }
 
@@ -191,9 +191,9 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= '-------' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->ChangeLog); ++$i) {
-                $ReportBody .= $bullet_start . $this->ChangeLog[$i][0] . ' was changed to [' .
-                    $this->ChangeLog[$i][1] . ']' . $bullet_end;
+            foreach ($this->ChangeLog as $iValue) {
+                $ReportBody .= $bullet_start . $iValue[0] . ' was changed to [' .
+                    $iValue[1] . ']' . $bullet_end;
             }
             $ReportBody .= $list_end . $eol . $eol;
         }
@@ -204,8 +204,8 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= '-----' . $eol;
 
             $ReportBody .= $list_start;
-            for ($i = 0; $i < count($this->NoteLog); ++$i) {
-                $ReportBody .= $bullet_start . $this->NoteLog[$i] . $bullet_end;
+            foreach ($this->NoteLog as $iValue) {
+                $ReportBody .= $bullet_start . $iValue . $bullet_end;
             }
             $ReportBody .= $list_end;
         }
@@ -222,10 +222,10 @@ final class PHPMailerTest extends TestCase
         if (3 != $this->Mail->Priority) {
             $this->addChange('Priority', $this->Mail->Priority);
         }
-        if (PHPMailer::ENCODING_8BIT != $this->Mail->Encoding) {
+        if (PHPMailer::ENCODING_8BIT !== $this->Mail->Encoding) {
             $this->addChange('Encoding', $this->Mail->Encoding);
         }
-        if (PHPMailer::CHARSET_ISO88591 != $this->Mail->CharSet) {
+        if (PHPMailer::CHARSET_ISO88591 !== $this->Mail->CharSet) {
             $this->addChange('CharSet', $this->Mail->CharSet);
         }
         if ('' != $this->Mail->Sender) {
@@ -234,13 +234,13 @@ final class PHPMailerTest extends TestCase
         if (0 != $this->Mail->WordWrap) {
             $this->addChange('WordWrap', $this->Mail->WordWrap);
         }
-        if ('mail' != $this->Mail->Mailer) {
+        if ('mail' !== $this->Mail->Mailer) {
             $this->addChange('Mailer', $this->Mail->Mailer);
         }
         if (25 != $this->Mail->Port) {
             $this->addChange('Port', $this->Mail->Port);
         }
-        if ('localhost.localdomain' != $this->Mail->Helo) {
+        if ('localhost.localdomain' !== $this->Mail->Helo) {
             $this->addChange('Helo', $this->Mail->Helo);
         }
         if ($this->Mail->SMTPAuth) {
@@ -952,7 +952,8 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Subject .= ': HTML only';
 
         $this->Mail->Body = <<<'EOT'
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>HTML email test</title>
     </head>
@@ -980,7 +981,8 @@ EOT;
         $this->Mail->Subject .= ': HTML only';
 
         $this->Mail->Body = <<<'EOT'
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>HTML email test</title>
     </head>
@@ -1066,7 +1068,8 @@ EOT;
         $this->Mail->CharSet = 'UTF-8';
 
         $this->Mail->Body = <<<'EOT'
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>HTML email test</title>
@@ -1186,7 +1189,10 @@ EOT;
         self::assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        self::assertContains('src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
+        self::assertContains(
+            'src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"',
+            $this->Mail->Body
+        );
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
@@ -1512,7 +1518,7 @@ EOT;
             $this->Mail->isQmail();
             self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         } else {
-            $this->markTestSkipped('Qmail is not installed');
+            self::markTestSkipped('Qmail is not installed');
         }
     }
 
@@ -1539,7 +1545,10 @@ EOT;
         self::assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0]);
         self::assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0]);
         self::assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0]);
-        self::assertContains('replytotestmailsend@example.com', $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']);
+        self::assertContains(
+            'replytotestmailsend@example.com',
+            $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com']
+        );
         self::assertTrue($this->Mail->getAllRecipientAddresses()['testmailsend@example.com']);
         self::assertTrue($this->Mail->getAllRecipientAddresses()['cctestmailsend@example.com']);
         self::assertTrue($this->Mail->getAllRecipientAddresses()['bcctestmailsend@example.com']);
@@ -1846,9 +1855,12 @@ EOT;
         $this->Mail->Body = 'invalid address';
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertEquals($this->Mail->ErrorInfo, 'Invalid address:  (to): invalidaddressexample.com');
+        self::assertEquals('Invalid address:  (to): invalidaddressexample.com', $this->Mail->ErrorInfo);
 
-        $this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'), 'phpmailer_mini.png');
+        $this->Mail->addAttachment(
+            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            'phpmailer_mini.png'
+        );
         self::assertTrue($this->Mail->attachmentExists());
     }
 
@@ -2616,7 +2628,7 @@ EOT;
     public function testConvertEncoding()
     {
         if (!PHPMailer::idnSupported()) {
-            $this->markTestSkipped('intl and/or mbstring extensions are not available');
+            self::markTestSkipped('intl and/or mbstring extensions are not available');
         }
 
         $this->Mail->clearAllRecipients();
@@ -2667,7 +2679,7 @@ EOT;
     public function testDuplicateIDNRemoved()
     {
         if (!PHPMailer::idnSupported()) {
-            $this->markTestSkipped('intl and/or mbstring extensions are not available');
+            self::markTestSkipped('intl and/or mbstring extensions are not available');
         }
 
         $this->Mail->clearAllRecipients();
@@ -2695,14 +2707,14 @@ EOT;
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
         // There should be only one "To" address and one "Reply-To" address.
-        self::assertEquals(
+        self::assertCount(
             1,
-            \count($this->Mail->getToAddresses()),
+            $this->Mail->getToAddresses(),
             'Bad count of "to" recipients'
         );
-        self::assertEquals(
+        self::assertCount(
             1,
-            \count($this->Mail->getReplyToAddresses()),
+            $this->Mail->getReplyToAddresses(),
             'Bad count of "reply-to" addresses'
         );
     }
