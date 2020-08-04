@@ -106,6 +106,15 @@ final class PHPMailerTest extends TestCase
         $this->Mail->SMTPAuth = false;
         $this->Mail->Username = '';
         $this->Mail->Password = '';
+        if (array_key_exists('mail_useauth', $_REQUEST)) {
+            $this->Mail->SMTPAuth = $_REQUEST['mail_useauth'];
+        }
+        if (array_key_exists('mail_username', $_REQUEST)) {
+            $this->Mail->Username = $_REQUEST['mail_username'];
+        }
+        if (array_key_exists('mail_userpass', $_REQUEST)) {
+            $this->Mail->Password = $_REQUEST['mail_userpass'];
+        }
         $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         if ($this->Mail->Host != '') {
