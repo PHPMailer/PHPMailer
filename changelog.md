@@ -1,5 +1,11 @@
 # PHPMailer Change Log
 
+## WIP
+* Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
+* Make file upload examples safer
+* Update links to SMTP testing servers
+* Avoid errors when set_time_limit is disabled (you need better hosting!)
+
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
 * Undo BC break in PHP vesions 5.2.3 - 7.0.0 introduced in 6.1.2 when injecting callables for address validation and HTML to text conversion
