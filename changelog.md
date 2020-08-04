@@ -8,7 +8,7 @@
 
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
-* Undo BC break in PHP vesions 5.2.3 - 7.0.0 introduced in 6.1.2 when injecting callables for address validation and HTML to text conversion
+* Undo BC break in PHP versions 5.2.3 - 7.0.0 introduced in 6.1.2 when injecting callables for address validation and HTML to text conversion
 * Save response to SMTP welcome banner as other responses are saved
 * Retry stream_select if interrupted by a signal
 
