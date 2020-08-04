@@ -5,6 +5,7 @@
 * Make file upload examples safer
 * Update links to SMTP testing servers
 * Avoid errors when set_time_limit is disabled (you need better hosting!)
+* Allow overriding auth settings for local tests; makes it easy to run tests using HELO
 
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
