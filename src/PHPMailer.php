@@ -899,6 +899,7 @@ class PHPMailer
         switch ($this->Debugoutput) {
             case 'error_log':
                 //Don't output, just log
+                /** @noinspection ForgottenDebugOutputInspection */
                 error_log($str);
                 break;
             case 'html':
@@ -2002,7 +2003,12 @@ class PHPMailer
             }
             $host = $hostinfo[2];
             $port = $this->Port;
-            if (array_key_exists(3, $hostinfo) && is_numeric($hostinfo[3]) && $hostinfo[3] > 0 && $hostinfo[3] < 65536) {
+            if (
+                array_key_exists(3, $hostinfo) &&
+                is_numeric($hostinfo[3]) &&
+                $hostinfo[3] > 0 &&
+                $hostinfo[3] < 65536
+            ) {
                 $port = (int) $hostinfo[3];
             }
             if ($this->smtp->connect($prefix . $host, $port, $this->Timeout, $options)) {
