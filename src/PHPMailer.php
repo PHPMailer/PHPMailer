@@ -1350,7 +1350,7 @@ class PHPMailer
                 /*
                  * This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
                  *
-                 * @see http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
+                 * @see https://html.spec.whatwg.org/#e-mail-state-(type=email)
                  */
                 return (bool) preg_match(
                     '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
