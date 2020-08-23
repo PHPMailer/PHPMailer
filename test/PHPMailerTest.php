@@ -2978,8 +2978,10 @@ EOT;
      */
     public function givenIdnAddress_addAddress_returns_true()
     {
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+        }
     }
 
     /**
@@ -2987,8 +2989,10 @@ EOT;
      */
     public function givenIdnAddress_addReplyTo_returns_true()
     {
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+        }
     }
 
     /**
@@ -3014,9 +3018,23 @@ EOT;
                 'address' => 'me@home.com'
             ]
         ];
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-        $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
-        $this->assertEquals(asort($expected), asort($addresses));
+        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
+            $this->assertEquals(asort($expected), asort($addresses));
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_punyencodeAddress_returnsCorrectCode()
+    {
+        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $result = $this->Mail->punyencodeAddress('test@françois.ch');
+            $this->assertEquals($result, 'test@1');
+        }
     }
 }
 /*
