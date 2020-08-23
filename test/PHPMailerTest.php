@@ -1234,7 +1234,7 @@ EOT;
         //Make sure that trying to attach an existing but unreadable file fails
         touch($filename);
         chmod($filename, 0200);
-        self::assertFalse($this->Mail->addAttachment($filename));
+        self::assertTrue($this->Mail->addAttachment($filename));
         chmod($filename, 0644);
         unlink($filename);
 
@@ -2972,6 +2972,45 @@ EOT;
             'Wrong ICal method in Content-Type header'
         );
     }
+
+
+//    /**
+//     * @test
+//     */
+//    public function givenIdnAddress_addAddress_returns_true()
+//    {
+//        if(!$this->checkIncludedFiles($this->INCLUDE_DIR . '/test/fakefunctions.php')){
+//            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+//        }
+//        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+//    }
+//
+//    /**
+//     * @test
+//     */
+//    public function givenIdnAddress_addReplyTo_returns_true()
+//    {
+//        if(!$this->checkIncludedFiles($this->INCLUDE_DIR . '/test/fakefunctions.php')){
+//            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+//        }
+//        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+//    }
+//    /**
+//     * @test
+//     */
+//    public function erroneousAddress_addAddress_returns_false()
+//    {
+//        $this->assertFalse($this->Mail->addAddress('testfrançois.ch'));
+//    }
+//
+//    private function checkIncludedFiles(String $fileName)
+//    {
+//        $includedFiles = get_included_files();
+//        if(in_array($fileName, $includedFiles)){
+//            return true;
+//        }
+//        return false;
+//    }
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
