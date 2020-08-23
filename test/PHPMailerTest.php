@@ -2998,6 +2998,26 @@ EOT;
     {
         $this->assertFalse($this->Mail->addAddress('mehome.com'));
     }
+
+    /**
+     * @test
+     */
+    public function imapParsedAddressList_parseAddress_returnsAddressArray()
+    {
+        $expected = [
+            [
+                'name' => 'joe',
+                'address' => 'joe@example.com'
+            ],
+            [
+                'name' => 'me',
+                'address' => 'me@home.com'
+            ]
+        ];
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
+        $this->assertEquals(asort($expected), asort($addresses));
+    }
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
