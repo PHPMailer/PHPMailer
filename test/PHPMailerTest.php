@@ -3033,8 +3033,21 @@ EOT;
         if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $result = $this->Mail->punyencodeAddress('test@françois.ch');
-            $this->assertEquals($result, 'test@1');
+            $this->assertEquals('test@1', $result);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function veryLongWordInMessage_wrapText_returnsWrappedText()
+    {
+        $expected = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=
+eddiamnonumy
+';
+        $encodedMessage = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
+        $result = $this->Mail->wrapText($encodedMessage, 50, true);
+        $this->assertEquals($result, $expected);
     }
 }
 /*
