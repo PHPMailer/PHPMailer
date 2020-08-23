@@ -2972,6 +2972,32 @@ EOT;
             'Wrong ICal method in Content-Type header'
         );
     }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_addAddress_returns_true()
+    {
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+    }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_addReplyTo_returns_true()
+    {
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+    }
+
+    /**
+     * @test
+     */
+    public function erroneousAddress_addAddress_returns_false()
+    {
+        $this->assertFalse($this->Mail->addAddress('mehome.com'));
+    }
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
