@@ -3049,6 +3049,14 @@ eddiamnonumy
         $result = $this->Mail->wrapText($encodedMessage, 50, true);
         $this->assertEquals($result, $expected);
     }
+
+    /**
+     * @test
+     */
+    public function encodedText_utf8CharBoundary_returnsCorrectMaxLength(){
+        $encodedText = 'H=E4tten';
+        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedText, 3));
+    }
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
