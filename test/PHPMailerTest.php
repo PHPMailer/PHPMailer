@@ -3011,12 +3011,12 @@ EOT;
         $expected = [
             [
                 'name' => 'joe',
-                'address' => 'joe@example.com'
+                'address' => 'joe@example.com',
             ],
             [
                 'name' => 'me',
-                'address' => 'me@home.com'
-            ]
+                'address' => 'me@home.com',
+            ],
         ];
         if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
