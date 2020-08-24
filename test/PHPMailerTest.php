@@ -2978,7 +2978,7 @@ EOT;
      */
     public function givenIdnAddress_addAddress_returns_true()
     {
-        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
         }
@@ -2989,7 +2989,7 @@ EOT;
      */
     public function givenIdnAddress_addReplyTo_returns_true()
     {
-        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
         }
@@ -3018,7 +3018,7 @@ EOT;
                 'address' => 'me@home.com'
             ]
         ];
-        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
             $this->assertEquals(asort($expected), asort($addresses));
@@ -3030,7 +3030,7 @@ EOT;
      */
     public function givenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
-        if(file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $result = $this->Mail->punyencodeAddress('test@françois.ch');
             $this->assertEquals('test@1', $result);
@@ -3053,14 +3053,15 @@ eddiamnonumy
     /**
      * @test
      */
-    public function encodedText_utf8CharBoundary_returnsCorrectMaxLength(){
+    public function encodedText_utf8CharBoundary_returnsCorrectMaxLength()
+    {
         $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
         $encodedSingleByteCharacter = '=0C';
         $encodedWordWithMultiByteCharMiddletByte = 'L=C3=B6rem';
 
         $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharFirstByte, 3));
         $this->assertEquals(3, $this->Mail->utf8CharBoundary($encodedSingleByteCharacter, 3));
-        $this->assertEquals(1,$this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
+        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
     }
 }
 /*
