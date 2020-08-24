@@ -3054,8 +3054,13 @@ eddiamnonumy
      * @test
      */
     public function encodedText_utf8CharBoundary_returnsCorrectMaxLength(){
-        $encodedText = 'H=E4tten';
-        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedText, 3));
+        $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
+        $encodedSingleByteCharacter = '=0C';
+        $encodedWordWithMultiByteCharMiddletByte = 'L=C3=B6rem';
+
+        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharFirstByte, 3));
+        $this->assertEquals(3, $this->Mail->utf8CharBoundary($encodedSingleByteCharacter, 3));
+        $this->assertEquals(1,$this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
     }
 }
 /*
