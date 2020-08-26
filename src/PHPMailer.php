@@ -1527,7 +1527,7 @@ class PHPMailer
             if (!$this->AllowEmpty && empty($this->Body)) {
                 throw new Exception($this->lang('empty_message'), self::STOP_CRITICAL);
             }
-
+            
             //Trim subject consistently
             $this->Subject = trim($this->Subject);
             // Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
@@ -1537,7 +1537,7 @@ class PHPMailer
             $tempheaders = $this->MIMEHeader;
             $this->MIMEHeader = $this->createHeader();
             $this->MIMEHeader .= $tempheaders;
-
+            
             // To capture the complete message when using mail(), create
             // an extra header list which createHeader() doesn't fold in
             if ('mail' === $this->Mailer) {
@@ -1551,29 +1551,30 @@ class PHPMailer
                     $this->encodeHeader($this->secureHeader($this->Subject))
                 );
             }
-
+            
             // Sign with DKIM if enabled
             if (!empty($this->DKIM_domain)
                 && !empty($this->DKIM_selector)
                 && (!empty($this->DKIM_private_string)
-                    || (!empty($this->DKIM_private)
-                        && static::isPermittedPath($this->DKIM_private)
-                        && file_exists($this->DKIM_private)
+                    || (!empty($this->DKIM_private))
                     )
-                )
-            ) {
-                $header_dkim = $this->DKIM_Add(
-                    $this->MIMEHeader . $this->mailHeader,
-                    $this->encodeHeader($this->secureHeader($this->Subject)),
-                    $this->MIMEBody
-                );
-                $this->MIMEHeader = static::stripTrailingWSP($this->MIMEHeader) . static::$LE .
-                    static::normalizeBreaks($header_dkim) . static::$LE;
-            }
-
-            return true;
-        } catch (Exception $exc) {
-            $this->setError($exc->getMessage());
+                    ) {
+                        if (!static::isPermittedPath($this->DKIM_private)
+                            || !file_exists($this->DKIM_private)) {
+                            throw new Exception($this->lang('file_open') . $this->DKIM_private, self::STOP_CRITICAL);
+                        }
+                        $header_dkim = $this->DKIM_Add(
+                            $this->MIMEHeader . $this->mailHeader,
+                            $this->encodeHeader($this->secureHeader($this->Subject)),
+                            $this->MIMEBody
+                        );
+                        $this->MIMEHeader = static::stripTrailingWSP($this->MIMEHeader) . static::$LE .
+                        static::normalizeBreaks($header_dkim) . static::$LE;
+                    }
+                    
+                    return true;
+                } catch (Exception $exc) {
+                    $this->setError($exc->getMessage());
             if ($this->exceptions) {
                 throw $exc;
             }
