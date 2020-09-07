@@ -2386,21 +2386,18 @@ class PHPMailer
 
         $result .= $this->headerLine('Date', '' === $this->MessageDate ? self::rfcDate() : $this->MessageDate);
 
-        // To be created automatically by mail()
-        if ($this->SingleTo) {
-            if ('mail' !== $this->Mailer) {
+        // The To header is created automatically by mail(), so needs to be omitted here
+        if ('mail' !== $this->Mailer) {
+            if ($this->SingleTo) {
                 foreach ($this->to as $toaddr) {
                     $this->SingleToArray[] = $this->addrFormat($toaddr);
                 }
-            }
-        } elseif (count($this->to) > 0) {
-            if ('mail' !== $this->Mailer) {
+            } elseif (count($this->to) > 0) {
                 $result .= $this->addrAppend('To', $this->to);
+            } elseif (count($this->cc) === 0) {
+                $result .= $this->headerLine('To', 'undisclosed-recipients:;');
             }
-        } elseif (count($this->cc) === 0) {
-            $result .= $this->headerLine('To', 'undisclosed-recipients:;');
         }
-
         $result .= $this->addrAppend('From', [[trim($this->From), $this->FromName]]);
 
         // sendmail and mail() extract Cc from the header before sending
