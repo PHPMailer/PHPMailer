@@ -1610,6 +1610,9 @@ class PHPMailer
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
             }
         } catch (Exception $exc) {
+            if ($this->Mailer === 'smtp' && $this->SMTPKeepAlive == true) {
+              $this->smtp->reset();
+            }
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
             if ($this->exceptions) {
