@@ -6,6 +6,9 @@
 * Update links to SMTP testing servers
 * Avoid errors when set_time_limit is disabled (you need better hosting!)
 * Allow overriding auth settings for local tests; makes it easy to run tests using HELO
+* Recover gracefully from errors during keepalive sessions
+* Add AVIF MIME type mapping
+* Prevent duplicate `To` headers in BCC-only messages when using `mail()`
 
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
