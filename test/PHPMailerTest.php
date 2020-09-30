@@ -2975,6 +2975,97 @@ EOT;
             'Wrong ICal method in Content-Type header'
         );
     }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_addAddress_returns_true()
+    {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_addReplyTo_returns_true()
+    {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function erroneousAddress_addAddress_returns_false()
+    {
+        $this->assertFalse($this->Mail->addAddress('mehome.com'));
+    }
+
+    /**
+     * @test
+     */
+    public function imapParsedAddressList_parseAddress_returnsAddressArray()
+    {
+        $expected = [
+            [
+                'name' => 'joe',
+                'address' => 'joe@example.com',
+            ],
+            [
+                'name' => 'me',
+                'address' => 'me@home.com',
+            ],
+        ];
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
+            $this->assertEquals(asort($expected), asort($addresses));
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function givenIdnAddress_punyencodeAddress_returnsCorrectCode()
+    {
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
+            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+            $result = $this->Mail->punyencodeAddress('test@françois.ch');
+            $this->assertEquals('test@1', $result);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function veryLongWordInMessage_wrapText_returnsWrappedText()
+    {
+        $expected = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=
+eddiamnonumy
+';
+        $encodedMessage = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
+        $result = $this->Mail->wrapText($encodedMessage, 50, true);
+        $this->assertEquals($result, $expected);
+    }
+
+    /**
+     * @test
+     */
+    public function encodedText_utf8CharBoundary_returnsCorrectMaxLength()
+    {
+        $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
+        $encodedSingleByteCharacter = '=0C';
+        $encodedWordWithMultiByteCharMiddletByte = 'L=C3=B6rem';
+
+        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharFirstByte, 3));
+        $this->assertEquals(3, $this->Mail->utf8CharBoundary($encodedSingleByteCharacter, 3));
+        $this->assertEquals(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
+    }
 }
 /*
  * This is a sample form for setting appropriate test values through a browser
