@@ -1754,6 +1754,23 @@ class PHPMailer
     }
 
     /**
+     * Check whether a file path is safe, accessible, and readable.
+     *
+     * @param string $path A relative or absolute path to a file
+     *
+     * @return bool
+     */
+    protected static function fileIsAccessible($path)
+    {
+        $readable = file_exists($path);
+        //If not a UNC path (expected to start with \\), check read permission, see #2069
+        if (strpos($path, '\\\\') !== 0) {
+            $readable = $readable && is_readable($path);
+        }
+        return static::isPermittedPath($path) && $readable;
+    }
+
+    /**
      * Send mail using the PHP mail() function.
      *
      * @see http://www.php.net/manual/en/book.mail.php
@@ -2141,7 +2158,7 @@ class PHPMailer
         // There is no English translation file
         if ('en' !== $langcode) {
             // Make sure language file path is readable
-            if (!static::isPermittedPath($lang_file) || !file_exists($lang_file)) {
+            if (!static::fileIsAccessible($lang_file)) {
                 $foundlang = false;
             } else {
                 // Overwrite language-specific strings.
@@ -2970,7 +2987,7 @@ class PHPMailer
         $disposition = 'attachment'
     ) {
         try {
-            if (!static::isPermittedPath($path) || !@is_file($path) || !is_readable($path)) {
+            if (!static::fileIsAccessible($path)) {
                 throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
@@ -3144,7 +3161,7 @@ class PHPMailer
     protected function encodeFile($path, $encoding = self::ENCODING_BASE64)
     {
         try {
-            if (!static::isPermittedPath($path) || !file_exists($path) || !is_readable($path)) {
+            if (!static::fileIsAccessible($path)) {
                 throw new Exception($this->lang('file_open') . $path, self::STOP_CONTINUE);
             }
             $file_buffer = file_get_contents($path);
@@ -3530,7 +3547,7 @@ class PHPMailer
         $disposition = 'inline'
     ) {
         try {
-            if (!static::isPermittedPath($path) || !@is_file($path) || !is_readable($path)) {
+            if (!static::fileIsAccessible($path)) {
                 throw new Exception($this->lang('file_access') . $path, self::STOP_CONTINUE);
             }
 
