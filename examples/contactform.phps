@@ -1,6 +1,6 @@
 <?php
 /**
- * This example shows how to handle a simple contact form.
+ * This example shows how to handle a simple contact form lets begin.
  */
 
 //Import PHPMailer classes into the global namespace
