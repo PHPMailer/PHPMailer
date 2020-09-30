@@ -1,9 +1,9 @@
 <?php
 /**
- * This example shows how to handle a simple contact form.
+ * This example shows how to handle a simple contact form safely.
  */
 
-//Import PHPMailer classes into the global namespace
+//Import PHPMailer class into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 
 $msg = '';
@@ -14,9 +14,9 @@ if (array_key_exists('email', $_POST)) {
     require '../vendor/autoload.php';
 
     //Create a new PHPMailer instance
-    $mail = new PHPMailer;
-    //Tell PHPMailer to use SMTP - requires a local mail server
-    //Faster and safer than using mail()
+    $mail = new PHPMailer();
+    //Send using SMTP to localhost (faster and safer than using mail()) – requires a local mail server
+    //See other examples for how to use a remote server such as gmail
     $mail->isSMTP();
     $mail->Host = 'localhost';
     $mail->Port = 25;
@@ -25,8 +25,22 @@ if (array_key_exists('email', $_POST)) {
     //**DO NOT** use the submitter's address here as it will be forgery
     //and will cause your messages to fail SPF checks
     $mail->setFrom('from@example.com', 'First Last');
-    //Send the message to yourself, or whoever should receive contact for submissions
-    $mail->addAddress('whoto@example.com', 'John Doe');
+    //Choose who the message should be sent to
+    //You don't have to use a <select> like in this example, you can simply use a fixed address
+    //the important thing is *not* to trust an email address submitted from the form directly,
+    //as an attacker can substitute their own and try to use your form to send spam
+    $addresses = [
+        'sales' => 'sales@example.com',
+        'support' => 'support@example.com',
+        'accounts' => 'accounts@example.com',
+    ];
+    //Validate address selection before trying to use it
+    if (array_key_exists('dept', $_POST) && array_key_exists($_POST['dept'], $addresses)) {
+        $mail->addAddress($addresses[$_POST['dept']]);
+    } else {
+        //Fall back to a fixed address if dept selection is invalid or missing
+        $mail->addAddress('support@example.com');
+    }
     //Put the submitter's address in a reply-to header
     //This will fail if the address provided is invalid,
     //in which case we should ignore the whole request
@@ -43,7 +57,7 @@ EOT;
         //Send the message, check for errors
         if (!$mail->send()) {
             //The reason for failing to send will be in $mail->ErrorInfo
-            //but you shouldn't display errors to users - process the error, log it on your server.
+            //but it's unsafe to display errors directly to users - process the error, log it on your server.
             $msg = 'Sorry, something went wrong. Please try again later.';
         } else {
             $msg = 'Message sent! Thanks for contacting us.';
@@ -68,6 +82,12 @@ EOT;
     <label for="name">Name: <input type="text" name="name" id="name"></label><br>
     <label for="email">Email address: <input type="email" name="email" id="email"></label><br>
     <label for="message">Message: <textarea name="message" id="message" rows="8" cols="20"></textarea></label><br>
+    <label for="dept">Send query to department:</label>
+    <select name="dept" id="dept">
+        <option value="sales">Sales</option>
+        <option value="support" selected>Technical support</option>
+        <option value="accounts">Accounts</option>
+    </select><br>
     <input type="submit" value="Send">
 </form>
 </body>
