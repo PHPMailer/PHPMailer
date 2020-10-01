@@ -25,6 +25,6 @@ jobs:
       # version
       version: # default is Scan from Github job: ${{ github.run_id }}
       # vid
-      vid: 
+      vid: ${{ secrets.VERACODE_API_ID }}
       # vkey
-      vkey:  
+      vkey: ${{ secrets.VERACODE_API_KEY }} 
