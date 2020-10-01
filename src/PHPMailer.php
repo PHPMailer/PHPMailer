@@ -1068,8 +1068,9 @@ class PHPMailer
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         $pos = strrpos($address, '@');
-        if (false === $pos) {
-            // At-sign is missing.
+        // Allow custom validators to stop an email from being invalid just because
+        // a missing @ (See PR <placeholder>)
+        if (!static::validateAddress($address) && $pos === false) {
             $error_message = sprintf(
                 '%s (%s): %s',
                 $this->lang('invalid_address'),
@@ -1085,8 +1086,9 @@ class PHPMailer
             return false;
         }
         $params = [$kind, $address, $name];
+        // Only run if a @ second part of the E-Mail is present
         // Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
-        if (static::idnSupported() && $this->has8bitChars(substr($address, ++$pos))) {
+        if (static::idnSupported() && $pos !== false && $this->has8bitChars(substr($address, ++$pos))) {
             if ('Reply-To' !== $kind) {
                 if (!array_key_exists($address, $this->RecipientsQueue)) {
                     $this->RecipientsQueue[$address] = $params;
