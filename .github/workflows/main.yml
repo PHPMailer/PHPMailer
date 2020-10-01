@@ -1,5 +1,5 @@
 name: Create Archive and Scan
-on: [push]
+on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
