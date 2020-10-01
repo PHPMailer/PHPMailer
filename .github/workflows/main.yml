@@ -16,15 +16,14 @@ jobs:
       # uses: veracode/veracode-uploadandscan-action@c3c0b78bddb42d5f6b10d70562f692215a410d7b
       uses: veracode/veracode-uploadandscan-action@v1.0
       with:
-      # appname
-      appname: PHPMailer
+            appname: PHPMailer
       # createprofile
-      createprofile: true
+            createprofile: true
       # filepath
-      filepath: 
+            filepath: veracode.zip
       # version
-      version: ${{ github.run_id }}
+            version: ${{ github.run_id }}
       # vid
-      vid: ${{ secrets.VERACODE_API_ID }}
+            vid: ${{ secrets.VERACODE_API_ID }}
       # vkey
-      vkey: ${{ secrets.VERACODE_API_KEY }} 
+            vkey: ${{ secrets.VERACODE_API_KEY }} 
