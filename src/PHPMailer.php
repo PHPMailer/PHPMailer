@@ -1069,7 +1069,7 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         $pos = strrpos($address, '@');
         // Allow custom validators to stop an email from being invalid just because
-        // a missing @ (See PR <placeholder>)
+        // a missing @ (See PR 2147)
         if (!static::validateAddress($address) && $pos === false) {
             $error_message = sprintf(
                 '%s (%s): %s',
