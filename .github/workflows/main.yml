@@ -12,4 +12,4 @@ jobs:
         exclusions: '*.git* /*node_modules/* .editorconfig'
         
     - name: Veracode Scan
-      run:  .scripts/VeracodeScan.sh           
+      run:  .scripts/VeracodeScan.sh $VERACODE_API_ID $VERACODE_API_KEY "PHPMailer" "veracode.zip" "Test scan"          
