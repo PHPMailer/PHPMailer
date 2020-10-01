@@ -10,6 +10,6 @@ jobs:
       with:
         filename: 'veracode.zip'
         exclusions: '*.git* /*node_modules/* .editorconfig'
-
-
-                
+        
+    - name: Veracode Scan
+      run:  .scripts/VeracodeScan.sh           
