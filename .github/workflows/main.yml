@@ -1,5 +1,5 @@
-name: Create Archive
-on: [push]
+name: Create Archive and Scan
+on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,3 +10,5 @@ jobs:
       with:
         filename: 'release.zip'
         exclusions: '*.git* /*node_modules/* .editorconfig'
+
+                
