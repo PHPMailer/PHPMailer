@@ -862,16 +862,18 @@ class SMTP
      * Implements RFC 821: MAIL <SP> FROM:<reverse-path> <CRLF>.
      *
      * @param string $from Source address of this message
+     * @param string $ret  DSN argument
      *
      * @return bool
      */
-    public function mail($from)
+    public function mail($from, $ret = '')
     {
         $useVerp = ($this->do_verp ? ' XVERP' : '');
+        $useRet = (!empty($ret) ? ' ' . $ret : '');
 
         return $this->sendCommand(
             'MAIL FROM',
-            'MAIL FROM:<' . $from . '>' . $useVerp,
+            'MAIL FROM:<' . $from . '>' . $useVerp . $useRet,
             250
         );
     }
