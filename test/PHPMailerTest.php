@@ -3036,7 +3036,7 @@ EOT;
         if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             $result = $this->Mail->punyencodeAddress('test@françois.ch');
-            $this->assertEquals('test@1', $result);
+            $this->assertEquals('test@xn--franois-bja35c.ch', $result);
         }
     }
 
@@ -3045,12 +3045,15 @@ EOT;
      */
     public function veryLongWordInMessage_wrapText_returnsWrappedText()
     {
-        $expected = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=
-eddiamnonumy
-';
-        $encodedMessage = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
-        $result = $this->Mail->wrapText($encodedMessage, 50, true);
-        $this->assertEquals($result, $expected);
+        $message = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
+        $expected = 'Lorem' . PHPMailer::getLE() .
+            'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE();
+        $expectedqp = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' .
+            PHPMailer::getLE() . 'eddiamnonumy' . PHPMailer::getLE();
+        $r = $this->Mail->wrapText($messageutf8, 50, false);
+        $s = $this->Mail->wrapText($messageutf8, 50, true);
+        $this->assertEquals($this->Mail->wrapText($message, 50, true), $expectedqp);
+        $this->assertEquals($this->Mail->wrapText($message, 50, false), $expected);
     }
 
     /**
