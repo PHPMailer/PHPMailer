@@ -3050,8 +3050,6 @@ EOT;
             'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE();
         $expectedqp = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' .
             PHPMailer::getLE() . 'eddiamnonumy' . PHPMailer::getLE();
-        $r = $this->Mail->wrapText($messageutf8, 50, false);
-        $s = $this->Mail->wrapText($messageutf8, 50, true);
         $this->assertEquals($this->Mail->wrapText($message, 50, true), $expectedqp);
         $this->assertEquals($this->Mail->wrapText($message, 50, false), $expected);
     }
