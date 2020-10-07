@@ -947,7 +947,7 @@ class SMTP
         $useVerp = ($this->do_verp ? ' XVERP' : '');
 
         $useRet = '';
-        if (!empty($ret)) {
+        if ($this->getServerExt('DSN') && !empty($ret)) {
             $useRet = self::dsnize($ret);
 	    if (!is_string($useRet))
                 $useRet = ''; # bad one
