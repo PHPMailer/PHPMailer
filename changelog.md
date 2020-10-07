@@ -9,6 +9,9 @@
 * Recover gracefully from errors during keepalive sessions
 * Add AVIF MIME type mapping
 * Prevent duplicate `To` headers in BCC-only messages when using `mail()`
+* Avoid file function problems when attaching files from Windows UNC paths
+* Improve German Indonesian, Filipino translations
+* Add Javascript-based example
 
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
