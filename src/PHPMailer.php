@@ -4623,7 +4623,7 @@ class PHPMailer
         $currentHeaderLabel = '';
         $currentHeaderValue = '';
         $parsedHeaders = [];
-        $headerLineIndex = 0;
+        $headerLineIndex = 1;
         $headerLineCount = count($headerLines);
         foreach ($headerLines as $headerLine) {
             $matches = [];
