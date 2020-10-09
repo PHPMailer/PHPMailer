@@ -4,11 +4,15 @@
  * authenticate, then disconnect
  */
 
+//Import the PHPMailer SMTP class into the global namespace
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
+
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
 date_default_timezone_set('Etc/UTC');
-
-require '../PHPMailerAutoload.php';
 
 //Create a new SMTP instance
 $smtp = new SMTP;
@@ -43,7 +47,7 @@ try {
     //If server supports authentication, do it (even if no encryption)
     if (is_array($e) && array_key_exists('AUTH', $e)) {
         if ($smtp->authenticate('username', 'password')) {
-            echo "Connected ok!";
+            echo 'Connected ok!';
         } else {
             throw new Exception('Authentication failed: ' . $smtp->getError()['error']);
         }
@@ -52,4 +56,4 @@ try {
     echo 'SMTP error: ' . $e->getMessage(), "\n";
 }
 //Whatever happened, close the connection.
-$smtp->quit(true);
+$smtp->quit();

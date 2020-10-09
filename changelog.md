@@ -1,4 +1,270 @@
-# ChangeLog
+# PHPMailer Change Log
+
+## Version 6.1.8 (October 9th, 2020)
+* Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
+* Make file upload examples safer
+* Update links to SMTP testing servers
+* Avoid errors when set_time_limit is disabled (you need better hosting!)
+* Allow overriding auth settings for local tests; makes it easy to run tests using HELO
+* Recover gracefully from errors during keepalive sessions
+* Add AVIF MIME type mapping
+* Prevent duplicate `To` headers in BCC-only messages when using `mail()`
+* Avoid file function problems when attaching files from Windows UNC paths
+* Improve German, Bahasa Indonesian, Filipino translations
+* Add Javascript-based example
+* Increased test coverage
+
+## Version 6.1.7 (July 14th, 2020)
+* Split SMTP connection into two separate methods
+* Undo BC break in PHP versions 5.2.3 - 7.0.0 introduced in 6.1.2 when injecting callables for address validation and HTML to text conversion
+* Save response to SMTP welcome banner as other responses are saved
+* Retry stream_select if interrupted by a signal
+
+## Version 6.1.6 (May 27th, 2020)
+* **SECURITY** Fix insufficient output escaping bug in file attachment names. CVE-2020-13625. Reported by Elar Lang of Clarified Security.
+* Correct Armenian ISO language code from `am` to `hy`, add mapping for fallback
+* Use correct timeout property in debug output
+
+## Version 6.1.5 (March 14th, 2020)
+* Reject invalid custom headers that are empty or contain breaks
+* Various fixes for DKIM issues, especially when using `mail()` transport
+* Drop the `l=` length tag from DKIM signatures; it's a mild security risk
+* Ensure CRLF is used explicitly when needed, rather than `static::$LE`
+* Add a method for trimming header content consistently
+* Some minor tweaks to resolve static analyser complaints
+* Check that attachment files are readable both when adding *and* when sending
+* Work around Outlook bug in mishandling MIME preamble
+* Danish translation improvements
+
+## Version 6.1.4 (December 10th, 2019)
+* Clean up hostname handling
+* Avoid IDN error on older PHP versions, prep for PHP 8.0
+* Don't force RFC2047 folding unnecessarily
+* Enable tests on full release of PHP 7.4
+
+## Version 6.1.3 (November 21st, 2019) 
+* Fix an issue preventing injected debug handlers from working
+* Fix an issue relating to connection timeout
+* Add `SMTP::MAX_REPLY_LENGTH` constant
+* Remove some dev dependencies; phpdoc no longer included
+* Fix an issue where non-compliant servers returning bare codes caused an SMTP hang
+
+## Version 6.1.2 (November 13th, 2019) 
+* Substantial revision of DKIM header generation
+* Use shorter hashes for auto-generated CID values
+* Fix format of content-id headers, and only use them for inline attachments
+* Remove all use of XHTML
+* Lots of coding standards cleanup
+* API docs are now auto-updated via GitHub actions
+* Fix header separation bug created in 6.1.1
+* Fix misidentification of background attributes in SVG images in msgHTML
+
+## Version 6.1.1 (September 27th 2019)
+* Fix misordered version tag
+
+## Version 6.1.0 (September 27th 2019)
+* Multiple bug fixes for folding of long header lines, thanks to @caugner
+* Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
+* Support for Ical event methods other than `REQUEST`, thanks to @puhr-mde
+* Change header folding and param separation to use spaces instead of tabs
+* Use ; to separate multiple MIME header params
+* Add support for RFC3461 DSN messages
+* IMAP example code fixed
+* Use PHP temp streams instead of temp files
+* Allow for longer SMTP error codes
+* Updated Brazilian Portuguese translation
+* Throw exceptions on invalid encoding values
+* Add Afrikaans translation, thanks to @Donno191
+* Updated Farsi/Persian translation
+* Add PHP 7.4 to test config
+* Remove some ambiguity about setting XMailer property
+* Improve error checking in mailing list example
+* Drop PHP 5.5 from CI config as it's no longer supported by Travis-CI
+* Fix S/MIME signing
+* Add constants for encryption type
+* More consistent use of constants for encryption, charset, encoding
+* Add PHPMailer logo images
+
+## Version 6.0.7 (February 1st 2019)
+* Include RedHat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
+* Don't exclude composer.json from git exports as it breaks composer updates in projects that use PHPMailer
+* Updated Malay translation
+* Fix language tests
+
+## Version 6.0.6 (November 14th 2018)
+* **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
+* Added Tagalog translation, thanks to @StoneArtz
+* Added Malagache translation, thanks to @Hackinet
+* Updated Serbian translation, fixed incorrect language code, thanks to @mmilanovic4
+* Updated Arabic translations (@MicroDroid)
+* Updated Hungarian translations
+* Updated Dutch translations
+* Updated Slovenian translation (@filips123)
+* Updated Slovak translation (@pcmanik)
+* Updated Italian translation (@sabas)
+* Updated Norwegian translation (@aleskr)
+* Updated Indonesian translation (@mylastof)
+* Add constants for common values, such as `text/html` and `quoted-printable`, and use them
+* Added support for copied headers in DKIM, helping with debugging, and an option to add extra headers to the DKIM signature. See DKIM_sign example for how to use them. Thanks to @gwi-mmuths.
+* Add Campaign Monitor transaction ID pattern matcher
+* Remove deprecated constant and ini values causing warnings in PHP 7.3, added PHP 7.3 build to Travis config.
+* Expanded test coverage
+
+## Version 5.2.27 (November 14th 2018)
+* **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
+* Note that the 5.2 branch is now deprecated and will not receive security updates after 31st December 2018.
+
+## Version 6.0.5 (March 27th 2018)
+* Re-roll of 6.0.4 to fix missed version file entry. No code changes.
+
+## Version 6.0.4 (March 27th 2018)
+* Add some modern MIME types
+* Add Hindi translation (thanks to @dextel2)
+* Improve composer docs
+* Fix generation of path to language files
+
+## Version 6.0.3 (January 5th 2018)
+* Correct DKIM canonicalization of line breaks for header & body - thanks to @themichaelhall
+* Make dependence on ext-filter explicit in composer.json
+
+## Version 6.0.2 (November 29th 2017)
+* Don't make max line length depend on line break format
+* Improve Travis-CI config - thanks to Filippo Tessarotto
+* Match SendGrid transaction IDs
+* `idnSupported()` now static, as previously documented
+* Improve error messages for invalid addresses
+* Improve Indonesian translation (thanks to @januridp)
+* Improve Esperanto translation (thanks to @dknacht)
+* Clean up git export ignore settings for production and zip bundles
+* Update license doc
+* Updated upgrading docs
+* Clarify `addStringEmbeddedImage` docs
+* Hide auth credentials in all but lowest level debug output, prevents leakage in bug reports
+* Code style cleanup
+
+## Version 6.0.1 (September 14th 2017)
+* Use shorter Message-ID headers (with more entropy) to avoid iCloud blackhole bug
+* Switch to Symfony code style (though it's not well defined)
+* CI builds now apply syntax & code style checks, so make your PRs tidy!
+* CI code coverage only applied on latest version of PHP to speed up builds (thanks to @Slamdunk for these CI changes)
+* Remove `composer.lock` - it's important that libraries break early; keeping it is for apps
+* Rename test scripts to PSR-4 spec
+* Make content-id values settable on attachments, not just embedded items
+* Add SMTP transaction IDs to callbacks & allow for future expansion
+* Expand test coverage
+
+## Version 6.0 (August 28th 2017)
+This is a major update that breaks backwards compatibility.
+
+* **Requires PHP 5.5 or later**
+* **Uses the `PHPMailer\PHPMailer` namespace**
+* File structure simplified and PSR-4 compatible, classes live in the `src/` folder
+* The custom autoloader has been removed: [**use composer**](https://getcomposer.org)!
+* Classes & Exceptions renamed to make use of the namespace
+* Most statically called functions now use the `static` keyword instead of `self`, so it's possible to override static internal functions in subclasses, for example `validateAddress()`
+* Complete RFC standardisation on CRLF (`\r\n`) line breaks for SMTP by default:
+  * `PHPMailer:$LE` defaults to CRLF
+  * All uses of `PHPMailer::$LE` property converted to use `static::$LE` constant for consistency and ease of overriding
+  * Similar changes to line break handling in SMTP and POP3 classes.
+  * Line break format for `mail()` transport is set automatically.
+  * Warnings emitted for buggy `mail()` in PHP versions 7.0.0 - 7.0.16 and 7.1.0 - 7.1.2; either upgrade or switch to SMTP.
+* Extensive reworking of XOAUTH2, adding support for Google, Yahoo and Microsoft providers, thanks to @sherryl4george
+* Major cleanup of docs and examples
+* All elements previously marked as deprecated have been removed:
+  * `PHPMailer->Version` (replaced with `VERSION` constant)
+  * `PHPMailer->ReturnPath`
+  * `PHPMailer->PluginDir`
+  * `PHPMailer->encodeQPphp()`
+  * `SMTP->CRLF` (replaced with `LE` constant)
+  * `SMTP->Version` (replaced with `VERSION` constant)
+  * `SMTP->SMTP_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->CRLF` (replaced with `LE` constant)
+  * `POP3->Version` (replaced with `VERSION` constant)
+  * `POP3->POP3_PORT` (replaced with `DEFAULT_PORT` constant)
+  * `POP3->POP3_TIMEOUT` (replaced with `DEFAULT_TIMEOUT` constant)
+* NTLM authentication has been removed - it never worked anyway!
+  * `PHPMailer->Workstation`
+  * `PHPMailer->Realm`
+* `SingleTo` functionality is deprecated; this belongs at a higher level - PHPMailer is not a mailing list system.
+* `SMTP::authenticate` method signature changed
+* `parseAddresses()` is now static
+* `validateAddress()` is now called statically from `parseAddresses()`
+* `idnSupported()` is now static and is called statically from `punyencodeAddress()`
+* `PHPMailer->SingleToArray` is now protected
+* `fixEOL()` method removed - it duplicates `PHPMailer::normalizeBreaks()`, so use that instead
+* Don't try to use an auth mechanism if it's not supported by the server
+* Reorder automatic AUTH mechanism selector to try most secure method first
+* `Extras` classes have been removed - use alternative packages from [packagist.org](https://packagist.org) instead
+* Better handling of automatic transfer encoding switch in the presence of long lines
+* Simplification of address validation - now uses PHP's `FILTER_VALIDATE_EMAIL` pattern by default, retains advanced options
+* `Debugoutput` can accept a PSR-3 logger instance
+* To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
+* Trap low-level errors in SMTP, reports via debug output
+* More reliable folding of message headers
+* Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
+* Make obtaining SMTP transaction ID more reliable
+* Better handling of unreliable PHP timeouts
+* Made `SMTPDebug = 4` slightly less noisy
+
+## Version 5.2.25 (August 28th 2017)
+* Make obtaining SMTP transaction ID more reliable
+* Add Bosnian translation
+* This is the last official release in the legacy PHPMailer 5.2 series; there may be future security patches (which will be found in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable)), but no further non-security PRs or issues will be accepted. Migrate to PHPMailer 6.0.
+
+## Version 5.2.24 (July 26th 2017)
+* **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
+* Handle bare codes (an RFC contravention) in SMTP server responses
+* Make message timestamps more dynamic - calculate the date separately for each message
+* More thorough checks for reading attachments.
+* Throw an exception when trying to send a message with an empty body caused by an internal error.
+* Replaced all use of MD5 and SHA1 hash functions with SHA256.
+* Now checks for invalid host strings when sending via SMTP.
+* Include timestamps in HTML-format debug output
+* Improve Turkish, Norwegian, Serbian, Brazilian Portuguese & simplified Chinese translations
+* Correction of Serbian ISO language code from `sr` to `rs`
+* Fix matching of multiple entries in `Host` to match IPv6 literals without breaking port selection (see #1094, caused by a3b4f6b)
+* Better capture and reporting of SMTP connection errors
+
+## Version 5.2.23 (March 15th 2017)
+* Improve trapping of TLS errors during connection so that they don't cause warnings, and are reported better in debug output
+* Amend test suite so it uses PHPUnit version 4.8, compatible with older versions of PHP, instead of the version supplied by Travis-CI
+* This forces pinning of some dev packages to older releases, but should make travis builds more reliable
+* Test suite now runs on HHVM, and thus so should PHPMailer in general
+* Improve Czech translations
+* Add links to CVE-2017-5223 resources
+
+## Version 5.2.22 (January 5th 2017)
+* **SECURITY** Fix [CVE-2017-5223](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-5223), local file disclosure vulnerability if content passed to `msgHTML()` is sourced from unfiltered user input. Reported by Yongxiang Li of Asiasecurity. The fix for this means that calls to `msgHTML()` without a `$basedir` will not import images with relative URLs, and relative URLs containing `..` will be ignored.
+* Add simple contact form example
+* Emoji in test content
+
+## Version 5.2.21 (December 28th 2016)
+* Fix missed number update in version file - no functional changes
+
+## Version 5.2.20 (December 28th 2016)
+* **SECURITY** Critical security update for CVE-2016-10045 please update now! Thanks to [Dawid Golunski](https://legalhackers.com) and Paul Buonopane (@Zenexer).
+* Note that this change will break VERP addresses in Sender if you're using mail() - workaround: use SMTP to localhost instead.
+
+## Version 5.2.19 (December 26th 2016)
+* Minor cleanup
+
+## Version 5.2.18 (December 24th 2016)
+* **SECURITY** Critical security update for CVE-2016-10033 please update now! Thanks to [Dawid Golunski](https://legalhackers.com).
+* Add ability to extract the SMTP transaction ID from some common SMTP success messages
+* Minor documentation tweaks
+
+## Version 5.2.17 (December 9th 2016)
+* This is officially the last feature release of 5.2. Security fixes only from now on; use PHPMailer 6.0!
+* Allow DKIM private key to be provided as a string
+* Provide mechanism to allow overriding of boundary and message ID creation
+* Improve Brazilian Portuguese, Spanish, Swedish, Romanian, and German translations
+* PHP 7.1 support for Travis-CI
+* Fix some language codes
+* Add security notices
+* Improve DKIM compatibility in older PHP versions
+* Improve trapping and capture of SMTP connection errors
+* Improve passthrough of error levels for debug output
+* PHPDoc cleanup
 
 ## Version 5.2.16 (June 6th 2016)
 * Added DKIM example

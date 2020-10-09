@@ -1,6 +1,6 @@
 <?php
 /**
- * Dutch PHPMailer language file: refer to class.phpmailer.php for definitive list.
+ * Dutch PHPMailer language file: refer to PHPMailer.php for definitive list.
  * @package PHPMailer
  * @author Tuxion <team@tuxion.nl>
  */
@@ -16,6 +16,8 @@ $PHPMAILER_LANG['file_open']            = 'Bestandsfout: kon bestand niet openen
 $PHPMAILER_LANG['from_failed']          = 'Het volgende afzendersadres is mislukt: ';
 $PHPMAILER_LANG['instantiate']          = 'Kon mailfunctie niet initialiseren.';
 $PHPMAILER_LANG['invalid_address']      = 'Ongeldig adres: ';
+$PHPMAILER_LANG['invalid_hostentry']    = 'Ongeldige hostentry: ';
+$PHPMAILER_LANG['invalid_host']         = 'Ongeldige host: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer wordt niet ondersteund.';
 $PHPMAILER_LANG['provide_address']      = 'Er moet minstens één ontvanger worden opgegeven.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP-fout: de volgende ontvangers zijn mislukt: ';
@@ -23,4 +25,4 @@ $PHPMAILER_LANG['signing']              = 'Signeerfout: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Verbinding mislukt.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP-serverfout: ';
 $PHPMAILER_LANG['variable_set']         = 'Kan de volgende variabele niet instellen of resetten: ';
-//$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';
+$PHPMAILER_LANG['extension_missing']    = 'Extensie afwezig: ';

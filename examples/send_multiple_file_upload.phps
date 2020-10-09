@@ -2,36 +2,40 @@
 /**
  * PHPMailer multiple files upload and send example
  */
+
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+
 $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
-
+    require '../vendor/autoload.php';
     // Create a message
-    // This should be somewhere in your include_path
-    require '../PHPMailerAutoload.php';
     $mail = new PHPMailer;
     $mail->setFrom('from@example.com', 'First Last');
     $mail->addAddress('whoto@example.com', 'John Doe');
     $mail->Subject = 'PHPMailer file sender';
-    $mail->msgHTML('My message body');
+    $mail->Body = 'My message body';
     //Attach multiple files one by one
-    for ($ct = 0; $ct < count($_FILES['userfile']['tmp_name']); $ct++) {
-        $uploadfile = tempnam(sys_get_temp_dir(), sha1($_FILES['userfile']['name'][$ct]));
+    for ($ct = 0, $ctMax = count($_FILES['userfile']['tmp_name']); $ct < $ctMax; $ct++) {
+        $uploadfile = tempnam(sys_get_temp_dir(), hash('sha256', $_FILES['userfile']['name'][$ct]));
         $filename = $_FILES['userfile']['name'][$ct];
         if (move_uploaded_file($_FILES['userfile']['tmp_name'][$ct], $uploadfile)) {
-            $mail->addAttachment($uploadfile, $filename);
+            if (!$mail->addAttachment($uploadfile, $filename)) {
+                $msg .= 'Failed to attach file ' . $filename;
+            }
         } else {
             $msg .= 'Failed to move file to ' . $uploadfile;
         }
     }
     if (!$mail->send()) {
-        $msg .= "Mailer Error: " . $mail->ErrorInfo;
+        $msg .= 'Mailer Error: '. $mail->ErrorInfo;
     } else {
-        $msg .= "Message sent!";
+        $msg .= 'Message sent!';
     }
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Upload</title>
@@ -45,7 +49,7 @@ if (array_key_exists('userfile', $_FILES)) {
         <input type="submit" value="Send Files">
     </form>
 <?php } else {
-    echo $msg;
+    echo htmlspecialchars($msg);
 } ?>
 </body>
 </html>

@@ -1,0 +1,21 @@
+name: Docs
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build_and_publish:
+    name: Build and publish Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Build Docs
+        uses: ./.github/actions/build-docs
+      - name: Publish Docs to gh-pages
+        uses: maxheld83/ghpages@v0.2.1
+        env:
+          BUILD_DIR: docs/
+          GH_PAT: ${{ secrets.GH_PAT }}
