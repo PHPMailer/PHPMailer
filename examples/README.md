@@ -11,7 +11,7 @@ When working on email sending code you'll find yourself worrying about what migh
 *   [smtp-sink](http://www.postfix.org/smtp-sink.1.html), part of the Postfix mail server, so you may have this installed already. This is used in the Travis-CI configuration to run PHPMailer's unit tests.
 *   [smtp4dev](https://github.com/rnwood/smtp4dev), a dummy SMTP server for Windows and Linux.
 *   [fakesendmail.sh](https://github.com/PHPMailer/PHPMailer/blob/master/test/fakesendmail.sh), part of PHPMailer's test setup, this is a shell script that emulates sendmail for testing 'mail' or 'sendmail' methods in PHPMailer.
-*   [HELO](https://usehelo.com), a very nice (commercial) mail server desktop app from BeyondCode.
+*   [HELO](https://usehelo.com), a very nice (commercial) mail server desktop app from BeyondCode, and [how to set it up for local testing](https://usehelo.com/blog/how-to-use-helo-with-phps-mail-function).
 *   [msglint](http://tools.ietf.org/tools/msglint/), not a mail server, the IETF's MIME structure analyser checks the formatting of your messages.
 *   [MailHog](https://github.com/les-enovateurs/mailhog-examples), a Go-based email testing tool for developers with a web interface. You can use it with Docker and GitHub Actions to test your mails. The repository also contains a small part of PHPMailer's setup.
 

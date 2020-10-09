@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.1.8 (October 9th, 2020)
 * Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
 * Make file upload examples safer
 * Update links to SMTP testing servers
@@ -10,8 +10,9 @@
 * Add AVIF MIME type mapping
 * Prevent duplicate `To` headers in BCC-only messages when using `mail()`
 * Avoid file function problems when attaching files from Windows UNC paths
-* Improve German Indonesian, Filipino translations
+* Improve German, Bahasa Indonesian, Filipino translations
 * Add Javascript-based example
+* Increased test coverage
 
 ## Version 6.1.7 (July 14th, 2020)
 * Split SMTP connection into two separate methods
