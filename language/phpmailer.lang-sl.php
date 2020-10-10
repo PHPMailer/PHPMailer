@@ -4,6 +4,7 @@
  * @package PHPMailer
  * @author Klemen Tušar <techouse@gmail.com>
  * @author Filip Š <projects@filips.si>
+ * @author Blaž Oražem <blaz@orazem.si>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP napaka: Avtentikacija ni uspela.';
@@ -17,8 +18,10 @@ $PHPMAILER_LANG['file_open']            = 'Ne morem odpreti datoteke: ';
 $PHPMAILER_LANG['from_failed']          = 'Neveljaven e-naslov pošiljatelja: ';
 $PHPMAILER_LANG['instantiate']          = 'Ne morem inicializirati mail funkcije.';
 $PHPMAILER_LANG['invalid_address']      = 'E-poštno sporočilo ni bilo poslano. E-naslov je neveljaven: ';
+$PHPMAILER_LANG['invalid_hostentry']    = 'Neveljaven vnos gostitelja: ',
+$PHPMAILER_LANG['invalid_host']         = 'Neveljaven gostitelj: ',
 $PHPMAILER_LANG['mailer_not_supported'] = ' mailer ni podprt.';
-$PHPMAILER_LANG['provide_address']      = 'Prosim vnesite vsaj enega naslovnika.';
+$PHPMAILER_LANG['provide_address']      = 'Prosimo, vnesite vsaj enega naslovnika.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP napaka: Sledeči naslovniki so neveljavni: ';
 $PHPMAILER_LANG['signing']              = 'Napaka pri podpisovanju: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Ne morem vzpostaviti povezave s SMTP strežnikom.';
