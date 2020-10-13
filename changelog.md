@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Switch from PHP CS Fixer to PHP CodeSniffer for coding standards
+
 ## Version 6.1.8 (October 9th, 2020)
 * Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
 * Make file upload examples safer
