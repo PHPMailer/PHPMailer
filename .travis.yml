@@ -1,12 +1,5 @@
 language: php
-php:
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
-  - 7.3
-  - 7.4
-  - nightly
+php: 5.6
 
 cache:
   directories:
@@ -35,17 +28,27 @@ after_script:
   - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
 
+stages:
+  - coding-standard
+  - test
+
 jobs:
   include:
     - stage: coding-standard
+      before_install:
+      before_script:
       script: ./vendor/bin/phpcs -s
-      php: 7.4
+      after_script:
+      php: 5.6
+      env: CS_CHECK=1
     - stage: test
-      script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
-    - stage: coverage
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+    - php: 7.4
       env: CODE_COVERAGE=1
-      script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
-      php: 7.4
+    - php: nightly
 
 matrix:
   allow_failures:
