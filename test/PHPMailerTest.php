@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer - PHP email transport unit tests.
  * PHP version 5.5.
@@ -1218,10 +1219,11 @@ EOT;
         $this->Mail->isHTML(true);
         $this->Mail->CharSet = 'UTF-8';
 
-        if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
-            'phpmailer_mini.png'
-        )
+        if (
+            !$this->Mail->addAttachment(
+                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                'phpmailer_mini.png'
+            )
         ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
@@ -1311,14 +1313,16 @@ EOT;
         $this->Mail->Subject .= ': HTML + unnamed embedded image';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addStringEmbeddedImage(
-            file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-            hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
-            '', //Intentionally empty name
-            'base64',
-            '', //Intentionally empty MIME type
-            'inline'
-        )) {
+        if (
+            !$this->Mail->addStringEmbeddedImage(
+                file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
+                hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
+                '', //Intentionally empty name
+                'base64',
+                '', //Intentionally empty MIME type
+                'inline'
+            )
+        ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
@@ -1337,20 +1341,22 @@ EOT;
         $this->Mail->Subject .= ': HTML + multiple Attachment';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
-            'phpmailer_mini.png'
-        )
+        if (
+            !$this->Mail->addAttachment(
+                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                'phpmailer_mini.png'
+            )
         ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
         }
 
-        if (!$this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
-            'phpmailer.png'
-        )
+        if (
+            !$this->Mail->addAttachment(
+                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                'phpmailer.png'
+            )
         ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
@@ -1372,13 +1378,14 @@ EOT;
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
-            'my-attach',
-            'phpmailer.png',
-            'base64',
-            'image/png'
-        )
+        if (
+            !$this->Mail->addEmbeddedImage(
+                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                'my-attach',
+                'phpmailer.png',
+                'base64',
+                'image/png'
+            )
         ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
@@ -1420,13 +1427,14 @@ EOT;
         $this->Mail->Subject .= ': Embedded Image + Attachment';
         $this->Mail->isHTML(true);
 
-        if (!$this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
-            'my-attach',
-            'phpmailer.png',
-            'base64',
-            'image/png'
-        )
+        if (
+            !$this->Mail->addEmbeddedImage(
+                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                'my-attach',
+                'phpmailer.png',
+                'base64',
+                'image/png'
+            )
         ) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
@@ -2805,7 +2813,8 @@ EOT;
         // $this->Mail->smtpClose();
 
         // All these hosts are expected to fail
-        // $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
+        // $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;
+        // tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
         // self::assertFalse($this->Mail->smtpConnect());
         // $this->Mail->smtpClose();
 
@@ -2836,7 +2845,7 @@ EOT;
         $property->setValue($PHPMailer, true);
         self::assertTrue($PHPMailer->getOAuth());
 
-        $options =[
+        $options = [
             'provider' => 'dummyprovider',
             'userName' => 'dummyusername',
             'clientSecret' => 'dummyclientsecret',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SMTP low memory example.
  */
@@ -122,7 +123,7 @@ class PHPMailerLowMemory extends PHPMailer
     public function getSMTPInstance()
     {
         if (!is_object($this->smtp)) {
-            $this->smtp = new SMTPLowMemory;
+            $this->smtp = new SMTPLowMemory();
         }
 
         return $this->smtp;

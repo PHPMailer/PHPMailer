@@ -10,7 +10,6 @@ before_install:
   - sudo apt-get install -y -qq postfix
 
 install:
-  - REMOVE_PACKAGE="friendsofphp/php-cs-fixer"; if [ "$CS_CHECK" = 1 ]; then REMOVE_PACKAGE="phpunit/phpunit"; fi; composer remove --no-update --no-scripts --dev $REMOVE_PACKAGE
   - composer install
   - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
 
@@ -23,12 +22,7 @@ before_script:
   - sudo mkdir -p /var/qmail/bin
   - sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
   - sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-  - |
-    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
-      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' >> /etc/hhvm/php.ini
-    else
-      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
-    fi
+  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 
 script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
 
@@ -43,12 +37,8 @@ stages:
 jobs:
   include:
     - stage: coding-standard
-      before_install:
-      before_script:
-      script: ./vendor/bin/php-cs-fixer --diff --dry-run --verbose fix
-      after_script:
-      php: 5.6
-      env: CS_CHECK=1
+      script: ./vendor/bin/phpcs -s
+      php: 7.4
     - stage: test
     - php: 7.0
     - php: 7.1
@@ -57,10 +47,8 @@ jobs:
     - php: 7.4
       env: CODE_COVERAGE=1
     - php: nightly
-    - php: hhvm
       dist: trusty
 
 matrix:
   allow_failures:
     - php: nightly
-    - php: hhvm

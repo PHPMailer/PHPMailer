@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows how to send via Google's Gmail servers using XOAUTH2 authentication.
  */
@@ -7,7 +8,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
-
 // Alias the League Google OAuth2 provider class
 use League\OAuth2\Client\Provider\Google;
 
@@ -20,7 +20,7 @@ date_default_timezone_set('Etc/UTC');
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();
@@ -100,7 +100,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

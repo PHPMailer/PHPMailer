@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows settings to use when sending over SMTP with TLS and custom connection options.
  */
@@ -14,7 +15,7 @@ date_default_timezone_set('Etc/UTC');
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();

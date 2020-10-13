@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer simple file upload and send example.
  */
@@ -16,7 +17,7 @@ if (array_key_exists('userfile', $_FILES)) {
         // Upload handled successfully
         // Now create a message
         require '../vendor/autoload.php';
-        $mail = new PHPMailer;
+        $mail = new PHPMailer();
         $mail->setFrom('from@example.com', 'First Last');
         $mail->addAddress('whoto@example.com', 'John Doe');
         $mail->Subject = 'PHPMailer file sender';
@@ -26,7 +27,7 @@ if (array_key_exists('userfile', $_FILES)) {
             $msg .= 'Failed to attach file ' . $_FILES['userfile']['name'];
         }
         if (!$mail->send()) {
-            $msg .= 'Mailer Error: '. $mail->ErrorInfo;
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
             $msg .= 'Message sent!';
         }

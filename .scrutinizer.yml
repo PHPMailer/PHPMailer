@@ -1,6 +1,6 @@
 build:
     environment:
-        php: '5.6.0'
+        php: '7.4.0'
 
 before_commands:
     - "composer install --prefer-source"
@@ -48,19 +48,6 @@ tools:
             - extras
             - test
             - vendor
-
-    # PHP CS Fixer (http://http://cs.sensiolabs.org/).
-    php_cs_fixer:
-        enabled:              true
-        config:
-            level:            psr2
-        filter:
-            excluded_paths:
-                - 'docs/*'
-                - 'examples/*'
-                - 'extras/*'
-                - 'test/*'
-                - 'vendor/*'
 
     # Analyzes the size and structure of a PHP project.
     php_loc:

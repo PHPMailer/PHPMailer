@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.5.
@@ -1185,9 +1186,11 @@ class PHPMailer
             //Use this built-in parser if it's available
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             foreach ($list as $address) {
-                if (('.SYNTAX-ERROR.' !== $address->host) && static::validateAddress(
-                    $address->mailbox . '@' . $address->host
-                )) {
+                if (
+                    ('.SYNTAX-ERROR.' !== $address->host) && static::validateAddress(
+                        $address->mailbox . '@' . $address->host
+                    )
+                ) {
                     $addresses[] = [
                         'name' => (property_exists($address, 'personal') ? $address->personal : ''),
                         'address' => $address->mailbox . '@' . $address->host,
@@ -1241,7 +1244,8 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
-        if ((false === $pos)
+        if (
+            (false === $pos)
             || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
             && !static::validateAddress($address))
         ) {
@@ -1393,7 +1397,8 @@ class PHPMailer
     {
         // Verify we have required functions, CharSet, and at-sign.
         $pos = strrpos($address, '@');
-        if (!empty($this->CharSet) &&
+        if (
+            !empty($this->CharSet) &&
             false !== $pos &&
             static::idnSupported()
         ) {
@@ -1455,7 +1460,8 @@ class PHPMailer
      */
     public function preSend()
     {
-        if ('smtp' === $this->Mailer
+        if (
+            'smtp' === $this->Mailer
             || ('mail' === $this->Mailer && stripos(PHP_OS, 'WIN') === 0)
         ) {
             //SMTP mandates RFC-compliant line endings
@@ -1466,7 +1472,8 @@ class PHPMailer
             static::setLE(PHP_EOL);
         }
         //Check for buggy PHP versions that add a header with an incorrect line break
-        if ('mail' === $this->Mailer
+        if (
+            'mail' === $this->Mailer
             && ((PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70017)
                 || (PHP_VERSION_ID >= 70100 && PHP_VERSION_ID < 70103))
             && ini_get('mail.add_x_header') === '1'
@@ -1553,7 +1560,8 @@ class PHPMailer
             }
 
             // Sign with DKIM if enabled
-            if (!empty($this->DKIM_domain)
+            if (
+                !empty($this->DKIM_domain)
                 && !empty($this->DKIM_selector)
                 && (!empty($this->DKIM_private_string)
                     || (!empty($this->DKIM_private)
@@ -1611,7 +1619,7 @@ class PHPMailer
             }
         } catch (Exception $exc) {
             if ($this->Mailer === 'smtp' && $this->SMTPKeepAlive == true) {
-              $this->smtp->reset();
+                $this->smtp->reset();
             }
             $this->setError($exc->getMessage());
             $this->edebug($exc->getMessage());
@@ -1717,7 +1725,8 @@ class PHPMailer
     protected static function isShellSafe($string)
     {
         // Future-proof
-        if (escapeshellcmd($string) !== $string
+        if (
+            escapeshellcmd($string) !== $string
             || !in_array(escapeshellarg($string), ["'$string'", "\"$string\""])
         ) {
             return false;
@@ -1901,7 +1910,7 @@ class PHPMailer
                     $isSent = true;
                 }
 
-                $callbacks[] = ['issent'=>$isSent, 'to'=>$to[0]];
+                $callbacks[] = ['issent' => $isSent, 'to' => $to[0]];
             }
         }
 
@@ -1981,11 +1990,13 @@ class PHPMailer
 
         foreach ($hosts as $hostentry) {
             $hostinfo = [];
-            if (!preg_match(
-                '/^(?:(ssl|tls):\/\/)?(.+?)(?::(\d+))?$/',
-                trim($hostentry),
-                $hostinfo
-            )) {
+            if (
+                !preg_match(
+                    '/^(?:(ssl|tls):\/\/)?(.+?)(?::(\d+))?$/',
+                    trim($hostentry),
+                    $hostinfo
+                )
+            ) {
                 $this->edebug($this->lang('invalid_hostentry') . ' ' . trim($hostentry));
                 // Not a valid host entry
                 continue;
@@ -2054,12 +2065,14 @@ class PHPMailer
                         // We must resend EHLO after TLS negotiation
                         $this->smtp->hello($hello);
                     }
-                    if ($this->SMTPAuth && !$this->smtp->authenticate(
-                        $this->Username,
-                        $this->Password,
-                        $this->AuthType,
-                        $this->oauth
-                    )) {
+                    if (
+                        $this->SMTPAuth && !$this->smtp->authenticate(
+                            $this->Username,
+                            $this->Password,
+                            $this->AuthType,
+                            $this->oauth
+                        )
+                    ) {
                         throw new Exception($this->lang('authenticate'));
                     }
 
@@ -2426,7 +2439,8 @@ class PHPMailer
         }
 
         // sendmail and mail() extract Bcc from the header before sending
-        if ((
+        if (
+            (
                 'sendmail' === $this->Mailer || 'qmail' === $this->Mailer || 'mail' === $this->Mailer
             )
             && count($this->bcc) > 0
@@ -3896,7 +3910,8 @@ class PHPMailer
     public static function isValidHost($host)
     {
         //Simple syntax limits
-        if (empty($host)
+        if (
+            empty($host)
             || !is_string($host)
             || strlen($host) > 256
             || !preg_match('/^([a-zA-Z\d.-]*|\[[a-fA-F\d:]+])$/', $host)
@@ -4062,7 +4077,8 @@ class PHPMailer
                     );
                     continue;
                 }
-                if (// Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
+                if (
+// Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
                     !empty($basedir)
                     // Ignore URLs containing parent dir traversal (..)
                     && (strpos($url, '..') === false)
@@ -4084,13 +4100,14 @@ class PHPMailer
                     if (strlen($directory) > 1 && '/' !== substr($directory, -1)) {
                         $directory .= '/';
                     }
-                    if ($this->addEmbeddedImage(
-                        $basedir . $directory . $filename,
-                        $cid,
-                        $filename,
-                        static::ENCODING_BASE64,
-                        static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_EXTENSION))
-                    )
+                    if (
+                        $this->addEmbeddedImage(
+                            $basedir . $directory . $filename,
+                            $cid,
+                            $filename,
+                            static::ENCODING_BASE64,
+                            static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_EXTENSION))
+                        )
                     ) {
                         $message = preg_replace(
                             '/' . $images[1][$imgindex] . '=["\']' . preg_quote($url, '/') . '["\']/Ui',

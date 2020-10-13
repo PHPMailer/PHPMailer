@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This shows how to make a new public/private key pair suitable for use with DKIM.
  * You should only need to do this once, and the public key (**not** the private key!)

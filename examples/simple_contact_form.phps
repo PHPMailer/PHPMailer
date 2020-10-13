@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer simple contact form example.
  * If you want to accept and send uploads in your form, look at the send_file_upload example.
@@ -51,7 +52,7 @@ if (array_key_exists('to', $_POST)) {
         $err = true;
     }
     if (!$err) {
-        $mail = new PHPMailer;
+        $mail = new PHPMailer();
         $mail->isSMTP();
         $mail->Host = 'localhost';
         $mail->Port = 25;
@@ -65,7 +66,7 @@ if (array_key_exists('to', $_POST)) {
         $mail->Subject = 'Contact form: ' . $subject;
         $mail->Body = "Contact form submission\n\n" . $query;
         if (!$mail->send()) {
-            $msg .= 'Mailer Error: '. $mail->ErrorInfo;
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
             $msg .= 'Message sent!';
         }

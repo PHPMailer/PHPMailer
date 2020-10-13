@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows how to handle a simple contact form safely.
  */
@@ -10,7 +11,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 if (array_key_exists('email', $_POST)) {
     date_default_timezone_set('Etc/UTC');
     require '../vendor/autoload.php';
-    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 
     //Create a new PHPMailer instance
     $mail = new PHPMailer();
@@ -58,8 +60,9 @@ EOT;
         if (!$mail->send()) {
             //The reason for failing to send will be in $mail->ErrorInfo
             //but it's unsafe to display errors directly to users - process the error, log it on your server.
-            if ($isAjax)
+            if ($isAjax) {
                 http_response_code(500);
+            }
 
             $response = [
                 "status" => false,
@@ -93,7 +96,9 @@ EOT;
 </head>
 <body>
 <h1>Contact us</h1>
-<h2 id="status-message"><?php if (isset($response)) { echo $response['message']; }?></h2>
+<h2 id="status-message"><?php if (isset($response)) {
+    echo $response['message'];
+                        }?></h2>
 <form method="POST" id="contact-form">
     <label for="name">Name: <input type="text" name="name" id="name"></label><br>
     <label for="email">Email address: <input type="email" name="email" id="email"></label><br>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer Exception class.
  * PHP Version 5.5.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This PHPMailer example shows S/MIME signing a message and then sending.
  *
@@ -53,7 +54,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 //Set who the message is to be sent from
 //IMPORTANT: This must match the email address of your certificate.
 //Although the certificate will be valid, an error will be thrown since it cannot be verified
@@ -85,7 +86,7 @@ $mail->sign(
 
 //Send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows how to handle a simple contact form safely.
  */

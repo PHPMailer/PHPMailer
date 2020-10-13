@@ -32,9 +32,12 @@
         "ext-hash": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.2",
+        "squizlabs/php_codesniffer": "3.5.6",
+        "phpcompatibility/php-compatibility": "9.3.5",
         "phpunit/phpunit": "^4.8 || ^5.7",
-        "doctrine/annotations": "^1.2"
+        "doctrine/annotations": "^1.2",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "roave/security-advisories": "dev-latest"
     },
     "suggest": {
         "psr/log": "For optional PSR-3 debug logging",

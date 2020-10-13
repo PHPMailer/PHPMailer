@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows sending a message using PHP's mail() function.
  */
@@ -9,7 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address
@@ -28,7 +29,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

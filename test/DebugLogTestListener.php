@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer - language file tests.
  *

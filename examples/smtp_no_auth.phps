@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows making an SMTP connection without using authentication.
  */
@@ -14,7 +15,7 @@ date_default_timezone_set('Etc/UTC');
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();
 //Enable SMTP debugging
@@ -46,7 +47,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

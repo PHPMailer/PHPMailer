@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows making an SMTP connection with authentication.
  */
@@ -14,7 +15,7 @@ date_default_timezone_set('Etc/UTC');
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();
 //Enable SMTP debugging

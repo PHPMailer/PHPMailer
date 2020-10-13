@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows sending a DKIM-signed message with PHPMailer.
  * More info about DKIM can be found here: http://www.dkim.org/info/dkim-faq.html
@@ -14,7 +15,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 //Usual setup
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 $mail->setFrom('from@example.com', 'First Last');
 $mail->addAddress('whoto@example.com', 'John Doe');
 $mail->Subject = 'PHPMailer mail() test';
@@ -39,7 +40,7 @@ $mail->DKIM_extraHeaders = ['List-Unsubscribe', 'List-Help'];
 
 //When you send, the DKIM settings will be used to sign the message
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

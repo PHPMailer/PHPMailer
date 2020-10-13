@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows how to make use of PHPMailer's exceptions for error handling.
  */

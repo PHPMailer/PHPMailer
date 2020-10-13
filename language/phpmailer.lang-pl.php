@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Polish PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
@@ -14,7 +15,7 @@ $PHPMAILER_LANG['file_access']          = 'Brak dostępu do pliku: ';
 $PHPMAILER_LANG['file_open']            = 'Nie można otworzyć pliku: ';
 $PHPMAILER_LANG['from_failed']          = 'Następujący adres Nadawcy jest nieprawidłowy: ';
 $PHPMAILER_LANG['instantiate']          = 'Nie można wywołać funkcji mail(). Sprawdź konfigurację serwera.';
-$PHPMAILER_LANG['invalid_address']      = 'Nie można wysłać wiadomości, '.
+$PHPMAILER_LANG['invalid_address']      = 'Nie można wysłać wiadomości, ' .
     'następujący adres Odbiorcy jest nieprawidłowy: ';
 $PHPMAILER_LANG['provide_address']      = 'Należy podać prawidłowy adres email Odbiorcy.';
 $PHPMAILER_LANG['mailer_not_supported'] = 'Wybrana metoda wysyłki wiadomości nie jest obsługiwana.';

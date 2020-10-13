@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows settings to use when sending via Google's Gmail servers.
  * This uses traditional id & password authentication - look at the gmail_xoauth.phps
@@ -13,7 +14,7 @@ use PHPMailer\PHPMailer\SMTP;
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 
 //Tell PHPMailer to use SMTP
 $mail->isSMTP();
@@ -69,7 +70,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
     //Section 2: IMAP

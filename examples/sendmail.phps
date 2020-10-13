@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows sending a message using a local sendmail binary.
  */
@@ -9,7 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
-$mail = new PHPMailer;
+$mail = new PHPMailer();
 // Set PHPMailer to use the sendmail transport
 $mail->isSendmail();
 //Set who the message is to be sent from
@@ -30,7 +31,7 @@ $mail->addAttachment('images/phpmailer_mini.png');
 
 //send the message, check for errors
 if (!$mail->send()) {
-    echo 'Mailer Error: '. $mail->ErrorInfo;
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message sent!';
 }

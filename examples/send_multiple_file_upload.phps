@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer multiple files upload and send example
  */
@@ -10,7 +11,7 @@ $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
     require '../vendor/autoload.php';
     // Create a message
-    $mail = new PHPMailer;
+    $mail = new PHPMailer();
     $mail->setFrom('from@example.com', 'First Last');
     $mail->addAddress('whoto@example.com', 'John Doe');
     $mail->Subject = 'PHPMailer file sender';
@@ -28,7 +29,7 @@ if (array_key_exists('userfile', $_FILES)) {
         }
     }
     if (!$mail->send()) {
-        $msg .= 'Mailer Error: '. $mail->ErrorInfo;
+        $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
     } else {
         $msg .= 'Message sent!';
     }

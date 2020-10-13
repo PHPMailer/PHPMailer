@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+    <config name="testVersion" value="5.5-"/>
+
+    <arg name="basepath" value="."/>
+    <arg name="cache" value=".phpcs-cache"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php,phps"/>
+    <arg name="parallel" value="10"/>
+    <!-- Show progress -->
+    <arg value="p"/>
+
+    <file>src</file>
+    <file>test</file>
+    <file>examples</file>
+    <file>language</file>
+
+    <rule ref="PSR12">
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses"/>
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+        <exclude name="PSR1.Methods.CamelCapsMethodName"/>
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
+    </rule>
+    <rule ref="PHPCompatibility">
+        <exclude name="PHPCompatibility.Constants.NewConstants.stream_crypto_method_tlsv1_1_clientFound"/>
+        <exclude name="PHPCompatibility.Constants.NewConstants.stream_crypto_method_tlsv1_2_clientFound"/>
+        <exclude name="PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003Deprecated"/>
+        <exclude name="PHPCompatibility.FunctionUse.NewFunctions.random_bytesFound"/>
+        <exclude name="PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated"/>
+        <exclude name="PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet"/>
+    </rule>
+
+</ruleset>

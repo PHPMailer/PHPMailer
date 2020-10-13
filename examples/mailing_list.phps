@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This example shows how to send a message to a whole list of recipients efficiently.
  */
@@ -57,7 +58,8 @@ foreach ($result as $row) {
 
     try {
         $mail->send();
-        echo 'Message sent to :' . htmlspecialchars($row['full_name']) . ' (' . htmlspecialchars($row['email']) . ')<br>';
+        echo 'Message sent to :' . htmlspecialchars($row['full_name']) . ' (' .
+            htmlspecialchars($row['email']) . ')<br>';
         //Mark it as sent in the DB
         mysqli_query(
             $mysql,

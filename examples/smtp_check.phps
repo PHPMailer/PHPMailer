@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This uses the SMTP class alone to check that a connection can be made to an SMTP server,
  * authenticate, then disconnect
@@ -15,7 +16,7 @@ require '../vendor/autoload.php';
 date_default_timezone_set('Etc/UTC');
 
 //Create a new SMTP instance
-$smtp = new SMTP;
+$smtp = new SMTP();
 
 //Enable connection-level debug output
 $smtp->do_debug = SMTP::DEBUG_CONNECTION;
