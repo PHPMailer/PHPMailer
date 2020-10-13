@@ -17,7 +17,7 @@ before_install:
   - sudo apt-get install -y -qq postfix
 
 install:
-  - composer install
+  - composer install --no-interaction
   - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
 
 before_script:
@@ -31,15 +31,9 @@ before_script:
   - sudo cp test/fakesendmail.sh /usr/sbin/sendmail
   - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 
-
 after_script:
   - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
-
-stages:
-  - coding-standard
-  - test
-  - coverage
 
 jobs:
   include:
