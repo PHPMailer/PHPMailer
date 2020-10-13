@@ -1,5 +1,12 @@
 language: php
-php: '5.6'
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4
+  - nightly
 
 cache:
   directories:
@@ -24,7 +31,6 @@ before_script:
   - sudo cp test/fakesendmail.sh /usr/sbin/sendmail
   - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 
-script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
 
 after_script:
   - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
@@ -33,6 +39,7 @@ after_script:
 stages:
   - coding-standard
   - test
+  - coverage
 
 jobs:
   include:
@@ -40,14 +47,11 @@ jobs:
       script: ./vendor/bin/phpcs -s
       php: 7.4
     - stage: test
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
+      script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+    - stage: coverage
       env: CODE_COVERAGE=1
-    - php: nightly
-      dist: trusty
+      script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+      php: 7.4
 
 matrix:
   allow_failures:
