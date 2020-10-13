@@ -2117,7 +2117,7 @@ class PHPMailer
             'am' => 'hy',
         ];
 
-        if (isset($renamed_langcodes[$langcode])) {
+        if (array_key_exists($langcode, $renamed_langcodes)) {
             $langcode = $renamed_langcodes[$langcode];
         }
 
