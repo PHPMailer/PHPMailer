@@ -21,7 +21,7 @@
     ],
     "funding": [
         {
-            "url": "https://github.com/synchro",
+            "url": "https://github.com/Synchro",
             "type": "github"
         }
     ],
@@ -32,19 +32,19 @@
         "ext-hash": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "3.5.6",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "doctrine/annotations": "^1.2",
         "phpcompatibility/php-compatibility": "9.3.5",
         "phpunit/phpunit": "^4.8 || ^5.7",
-        "doctrine/annotations": "^1.2",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "squizlabs/php_codesniffer": "3.5.6"
     },
     "suggest": {
-        "psr/log": "For optional PSR-3 debug logging",
-        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
-        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
-        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
         "ext-mbstring": "Needed to send email in multibyte encoding charset",
+        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+        "psr/log": "For optional PSR-3 debug logging",
+        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
         "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
     },
     "autoload": {
