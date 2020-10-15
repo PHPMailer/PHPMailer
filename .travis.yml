@@ -1,4 +1,6 @@
 language: php
+dist: xenial
+os: linux
 php:
   - 5.6
   - 7.0
@@ -42,6 +44,8 @@ stages:
   - test
 
 jobs:
+  allow_failures:
+    - php: nightly
   include:
     - stage: coding-standard
       before_install:
@@ -57,8 +61,4 @@ jobs:
     - php: 7.3
     - php: 7.4
       env: CODE_COVERAGE=1
-    - php: nightly
-
-matrix:
-  allow_failures:
     - php: nightly
