@@ -1,4 +1,6 @@
 language: php
+dist: xenial
+os: linux
 php:
   - 5.6
   - 7.0
