@@ -389,11 +389,11 @@ class PHPMailer
      * SMTP class debug output mode.
      * Debug output level.
      * Options:
-     * * SMTP::DEBUG_OFF: No output
-     * * SMTP::DEBUG_CLIENT: Client messages
-     * * SMTP::DEBUG_SERVER: Client and server messages
-     * * SMTP::DEBUG_CONNECTION: As SERVER plus connection status
-     * * SMTP::DEBUG_LOWLEVEL: Noisy, low-level data output, rarely needed
+     * @see SMTP::DEBUG_OFF: No output
+     * @see SMTP::DEBUG_CLIENT: Client messages
+     * @see SMTP::DEBUG_SERVER: Client and server messages
+     * @see SMTP::DEBUG_CONNECTION: As SERVER plus connection status
+     * @see SMTP::DEBUG_LOWLEVEL: Noisy, low-level data output, rarely needed
      *
      * @see SMTP::$do_debug
      *
