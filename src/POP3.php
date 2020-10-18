@@ -431,26 +431,6 @@ class POP3
     }
 
     /**
-     * Set debug output level.
-     *
-     * @param int $level
-     */
-    public function setDebugLevel($level = 0)
-    {
-        $this->do_debug = $level;
-    }
-
-    /**
-     * Get debug output level.
-     *
-     * @return int
-     */
-    public function getDebugLevel()
-    {
-        return $this->do_debug;
-    }
-
-    /**
      * POP3 connection error handler.
      *
      * @param int    $errno
