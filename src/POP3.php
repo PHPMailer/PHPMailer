@@ -63,12 +63,16 @@ class POP3
     const DEFAULT_TIMEOUT = 30;
 
     /**
-     * Debug display level.
-     * Options: 0 = no, 1+ = yes.
+     * POP3 class debug output mode.
+     * Debug output level.
+     * Options:
+     * @see POP3::DEBUG_OFF: No output
+     * @see POP3::DEBUG_SERVER: Server messages, connection/server errors
+     * @see POP3::DEBUG_CLIENT: Client and Server messages, connection/server errors
      *
      * @var int
      */
-    public $do_debug = 0;
+    public $do_debug = self::DEBUG_OFF;
 
     /**
      * POP3 mail server hostname.
@@ -130,6 +134,28 @@ class POP3
      * Line break constant.
      */
     const LE = "\r\n";
+
+    /**
+     * Debug level for no output.
+     *
+     * @var int
+     */
+    const DEBUG_OFF = 0;
+
+    /**
+     * Debug level to show server -> client messages
+     * also shows clients connection errors or errors from server
+     *
+     * @var int
+     */
+    const DEBUG_SERVER = 1;
+
+    /**
+     * Debug level to show client -> server and server -> client messages.
+     *
+     * @var int
+     */
+    const DEBUG_CLIENT = 2;
 
     /**
      * Simple static wrapper for all-in-one POP before SMTP.
@@ -330,7 +356,7 @@ class POP3
     protected function getResponse($size = 128)
     {
         $response = fgets($this->pop_conn, $size);
-        if ($this->do_debug >= 1) {
+        if ($this->do_debug >= self::DEBUG_SERVER) {
             echo 'Server -> Client: ', $response;
         }
 
@@ -347,7 +373,7 @@ class POP3
     protected function sendString($string)
     {
         if ($this->pop_conn) {
-            if ($this->do_debug >= 2) { //Show client messages when debug >= 2
+            if ($this->do_debug >= self::DEBUG_CLIENT) { //Show client messages when debug >= 2
                 echo 'Client -> Server: ', $string;
             }
 
@@ -385,7 +411,7 @@ class POP3
     protected function setError($error)
     {
         $this->errors[] = $error;
-        if ($this->do_debug >= 1) {
+        if ($this->do_debug >= self::DEBUG_SERVER) {
             echo '<pre>';
             foreach ($this->errors as $e) {
                 print_r($e);
