@@ -4526,11 +4526,15 @@ class PHPMailer
             $privKey = openssl_pkey_get_private($privKeyStr);
         }
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
-            openssl_pkey_free($privKey);
+            if (PHP_MAJOR_VERSION < 8) {
+                openssl_pkey_free($privKey);
+            }
 
             return base64_encode($signature);
         }
-        openssl_pkey_free($privKey);
+        if (PHP_MAJOR_VERSION < 8) {
+            openssl_pkey_free($privKey);
+        }
 
         return '';
     }
