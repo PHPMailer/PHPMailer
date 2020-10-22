@@ -18,7 +18,7 @@ use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
-use PHPUnit\Framework\TestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
@@ -70,7 +70,7 @@ final class PHPMailerTest extends TestCase
     /**
      * Run before each test is started.
      */
-    protected function setUp()
+    protected function set_up()
     {
         $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
@@ -134,7 +134,7 @@ final class PHPMailerTest extends TestCase
     /**
      * Run after each test is completed.
      */
-    protected function tearDown()
+    protected function tear_down()
     {
         // Clean global variables
         $this->Mail = null;

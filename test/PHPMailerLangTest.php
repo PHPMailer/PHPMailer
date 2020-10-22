@@ -15,7 +15,7 @@
 namespace PHPMailer\Test;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPUnit\Framework\TestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Check language files for missing or excess translations.
@@ -32,7 +32,7 @@ final class PHPMailerLangTest extends TestCase
     /**
      * Run before each test is started.
      */
-    protected function setUp()
+    protected function set_up()
     {
         $this->Mail = new PHPMailer();
     }
