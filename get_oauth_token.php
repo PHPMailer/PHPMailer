@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.5
@@ -16,6 +17,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
+
 /**
  * Get an OAuth2 token from an OAuth2 provider.
  * * Install this script on your server so that it's accessible
@@ -44,7 +46,7 @@ use Hayageek\OAuth2\Client\Provider\Yahoo;
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
-?>
+    ?>
 <html>
 <body>Select Provider:<br/>
 <a href='?provider=Google'>Google</a><br/>
@@ -52,8 +54,8 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
 <a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br/>
 </body>
 </html>
-<?php
-exit;
+    <?php
+    exit;
 }
 
 require 'vendor/autoload.php';
