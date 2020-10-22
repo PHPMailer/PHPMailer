@@ -10,6 +10,7 @@
 /changelog.md export-ignore
 /docs export-ignore
 /examples export-ignore
+/phpcs.xml.dist export-ignore
 /phpdoc.dist.xml export-ignore
 /test export-ignore
 /travis.phpunit.xml.dist export-ignore
