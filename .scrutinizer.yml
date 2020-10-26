@@ -9,6 +9,7 @@ tools:
     external_code_coverage:
         enabled: true
         timeout: 300
+        runs: 2
         filter:
             excluded_paths:
                 - 'docs/*'
@@ -19,13 +20,6 @@ tools:
 
     php_code_coverage:
         enabled:              false
-        filter:
-            excluded_paths:
-                - 'docs/*'
-                - 'examples/*'
-                - 'extras/*'
-                - 'test/*'
-                - 'vendor/*'
 
     php_code_sniffer:
         enabled:              true

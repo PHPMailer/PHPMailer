@@ -1,26 +1,51 @@
 language: php
 dist: xenial
 os: linux
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+# PHP 5.5 and 7.4 (lowest/highest supported) are run in a separate stage with code coverage. See jobs.
 php:
   - 5.6
   - 7.0
   - 7.1
   - 7.2
   - 7.3
-  - 7.4
   - nightly
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+stages:
+  - coding-standard
+  - test
+  - coverage
+
+jobs:
+  allow_failures:
+    - php: nightly
+  include:
+    ## SNIFF STAGE ##
+    - stage: coding-standard
+      php: 7.4
+      before_install:
+      before_script:
+      script: ./vendor/bin/phpcs -s
+      after_script:
+
+    ## COVERAGE STAGE ##
+    # Extra builds generating code coverage on top of the standard test runs defined via the "php:" key.
+    - stage: coverage
+      php: 7.4
+    - php: 5.5
+      dist: trusty
 
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
 
 install:
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" != "Coverage" ]]; then phpenv config-rm xdebug.ini || true; fi
   - composer install --no-interaction
-  - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
 
 before_script:
   - sudo service postfix stop
@@ -33,32 +58,9 @@ before_script:
   - sudo cp test/fakesendmail.sh /usr/sbin/sendmail
   - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 
-script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+script:
+  - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
 
 after_script:
-  - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
-
-stages:
-  - coding-standard
-  - test
-
-jobs:
-  allow_failures:
-    - php: nightly
-  include:
-    - stage: coding-standard
-      before_install:
-      before_script:
-      script: ./vendor/bin/phpcs -s
-      after_script:
-      php: 7.4
-      env: CS_CHECK=1
-    - stage: test
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
-      env: CODE_COVERAGE=1
-    - php: nightly
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Coverage" ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Coverage" ]]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
