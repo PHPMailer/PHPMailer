@@ -1019,25 +1019,25 @@ EOT;
         $property = $reflection->getProperty('message_type');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'inline_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
     }
 
     /**
