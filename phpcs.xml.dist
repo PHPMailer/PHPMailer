@@ -12,6 +12,7 @@
     <!-- Show progress -->
     <arg value="p"/>
 
+    <file>get_oauth_token.php</file>
     <file>src</file>
     <file>test</file>
     <file>examples</file>

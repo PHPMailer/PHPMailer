@@ -5,7 +5,7 @@
  * @package PHPMailer
  * @author Hrayr Grigoryan <hrayr@bits.am>
  */
- 
+
 $PHPMAILER_LANG['authenticate']         = 'SMTP -ի սխալ: չհաջողվեց ստուգել իսկությունը.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP -ի սխալ: չհաջողվեց կապ հաստատել SMTP սերվերի հետ.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP -ի սխալ: տվյալները ընդունված չեն.';
