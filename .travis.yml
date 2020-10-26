@@ -30,7 +30,6 @@ jobs:
       before_script:
       script: ./vendor/bin/phpcs -s
       after_script:
-      env: CS_CHECK=1
 
     ## TEST STAGE ##
     - stage: test
