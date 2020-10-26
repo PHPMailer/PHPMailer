@@ -6,6 +6,7 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+# PHP 5.5 and 7.4 (lowest/highest supported) are run in a separate stage with code coverage. See jobs.
 php:
   - 5.6
   - 7.0
@@ -17,6 +18,7 @@ php:
 stages:
   - coding-standard
   - test
+  - coverage
 
 jobs:
   allow_failures:
@@ -30,11 +32,10 @@ jobs:
       script: ./vendor/bin/phpcs -s
       after_script:
 
-    ## TEST STAGE ##
-    # Extra builds on top of those defined via the "php:" key.
-    - stage: test
+    ## COVERAGE STAGE ##
+    # Extra builds generating code coverage on top of the standard test runs defined via the "php:" key.
+    - stage: coverage
       php: 7.4
-      env: CODE_COVERAGE=1
     - php: 5.5
       dist: trusty
 
@@ -43,7 +44,7 @@ before_install:
   - sudo apt-get install -y -qq postfix
 
 install:
-  - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" != "Coverage" ]]; then phpenv config-rm xdebug.ini || true; fi
   - composer install --no-interaction
 
 before_script:
@@ -61,5 +62,5 @@ script:
   - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
 
 after_script:
-  - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Coverage" ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ "${TRAVIS_BUILD_STAGE_NAME^}" == "Coverage" ]]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
