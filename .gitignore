@@ -8,3 +8,4 @@ vendor/
 composer.lock
 .phpcs.xml
 phpcs.xml
+.phpcs-cache

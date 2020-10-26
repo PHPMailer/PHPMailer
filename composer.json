@@ -34,10 +34,10 @@
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "doctrine/annotations": "^1.2",
-        "phpcompatibility/php-compatibility": "9.3.5",
+        "phpcompatibility/php-compatibility": "^9.3.5",
         "phpunit/phpunit": "^4.8 || ^5.7",
         "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "3.5.6"
+        "squizlabs/php_codesniffer": "^3.5.6"
     },
     "suggest": {
         "ext-mbstring": "Needed to send email in multibyte encoding charset",

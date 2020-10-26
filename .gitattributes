@@ -4,7 +4,6 @@
 /.github export-ignore
 /.gitignore export-ignore
 /.phan export-ignore
-/.php_cs export-ignore
 /.scrutinizer.yml export-ignore
 /.travis.yml export-ignore
 /changelog.md export-ignore
