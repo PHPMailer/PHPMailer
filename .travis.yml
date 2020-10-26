@@ -1,6 +1,11 @@
 language: php
 dist: xenial
 os: linux
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 php:
   - 5.6
   - 7.0
@@ -10,9 +15,32 @@ php:
   - 7.4
   - nightly
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+stages:
+  - coding-standard
+  - test
+
+jobs:
+  allow_failures:
+    - php: nightly
+  include:
+    ## SNIFF STAGE ##
+    - stage: coding-standard
+      php: 7.4
+      before_install:
+      before_script:
+      script: ./vendor/bin/phpcs -s
+      after_script:
+      env: CS_CHECK=1
+
+    ## TEST STAGE ##
+    - stage: test
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
+    - php: 7.3
+    - php: 7.4
+      env: CODE_COVERAGE=1
+    - php: nightly
 
 before_install:
   - sudo apt-get update -qq
@@ -33,32 +61,9 @@ before_script:
   - sudo cp test/fakesendmail.sh /usr/sbin/sendmail
   - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
 
-script: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+script:
+  - ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
 
 after_script:
   - if [ "$CODE_COVERAGE" = 1 ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$CODE_COVERAGE" = 1 ]; then php ocular.phar code-coverage:upload --format=php-clover ../build/logs/clover.xml; fi
-
-stages:
-  - coding-standard
-  - test
-
-jobs:
-  allow_failures:
-    - php: nightly
-  include:
-    - stage: coding-standard
-      before_install:
-      before_script:
-      script: ./vendor/bin/phpcs -s
-      after_script:
-      php: 7.4
-      env: CS_CHECK=1
-    - stage: test
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
-      env: CODE_COVERAGE=1
-    - php: nightly
