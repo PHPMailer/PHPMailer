@@ -46,8 +46,8 @@ before_install:
   - sudo apt-get install -y -qq postfix
 
 install:
-  - composer install --no-interaction
   - if [ "$CODE_COVERAGE" != 1 ]; then phpenv config-rm xdebug.ini || true; fi
+  - composer install --no-interaction
 
 before_script:
   - sudo service postfix stop
