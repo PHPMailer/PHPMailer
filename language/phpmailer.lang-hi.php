@@ -5,7 +5,7 @@
  * @package PHPMailer
  * @author Yash Karanke <mr.karanke@gmail.com>
  */
- 
+
 $PHPMAILER_LANG['authenticate']         = 'SMTP त्रुटि: प्रामाणिकता की जांच नहीं हो सका। ';
 $PHPMAILER_LANG['connect_host']         = 'SMTP त्रुटि: SMTP सर्वर से कनेक्ट नहीं हो सका। ';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP त्रुटि: डेटा स्वीकार नहीं किया जाता है। ';
