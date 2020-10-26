@@ -2450,11 +2450,12 @@ EOT;
     /**
      * Check whether setting a bad custom header throws exceptions.
      *
+     * @expectedException PHPMailer\PHPMailer\Exception
+     *
      * @throws Exception
      */
     public function testHeaderException()
     {
-        $this->expectException(Exception::class);
         $mail = new PHPMailer(true);
         $mail->addCustomHeader('SomeHeader', "Some\n Value");
     }
