@@ -35,6 +35,8 @@ jobs:
     - stage: test
       php: 7.4
       env: CODE_COVERAGE=1
+    - php: 5.5
+      dist: trusty
 
 before_install:
   - sudo apt-get update -qq
