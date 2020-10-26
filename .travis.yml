@@ -12,7 +12,6 @@ php:
   - 7.1
   - 7.2
   - 7.3
-  - 7.4
   - nightly
 
 stages:
@@ -32,14 +31,10 @@ jobs:
       after_script:
 
     ## TEST STAGE ##
+    # Extra builds on top of those defined via the "php:" key.
     - stage: test
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
+      php: 7.4
       env: CODE_COVERAGE=1
-    - php: nightly
 
 before_install:
   - sudo apt-get update -qq
