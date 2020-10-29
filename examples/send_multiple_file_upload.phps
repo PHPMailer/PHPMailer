@@ -7,9 +7,10 @@
 //Import the PHPMailer class into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 
+require '../vendor/autoload.php';
+
 $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
-    require '../vendor/autoload.php';
     // Create a message
     $mail = new PHPMailer();
     $mail->setFrom('from@example.com', 'First Last');
