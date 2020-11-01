@@ -1897,7 +1897,7 @@ EOT;
         $this->Mail->AltBody = 'MIME structure test.';
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             "/Content-Transfer-Encoding: 8bit\r\n\r\n" .
             'This is a multi-part message in MIME format./',
             $this->Mail->getSentMIMEMessage(),
@@ -1964,7 +1964,10 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        self::assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
+        self::assertMatchesRegularExpression(
+            '/' . base64_encode('hello') . '/',
+            $this->Mail->encodeString('hello')
+        );
     }
 
     /**
@@ -2447,7 +2450,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        self::assertRegExp('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
+        self::assertMatchesRegularExpression('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
     }
 
     /**
@@ -2899,7 +2902,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=CANCEL;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2941,7 +2944,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2982,7 +2985,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
