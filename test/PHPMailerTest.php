@@ -320,6 +320,10 @@ final class PHPMailerTest extends TestCase
      */
     public function testAuthCRAMMD5()
     {
+        $this->markTestIncomplete(
+            'Test needs a connection to a server supporting the CRAMMD5 auth mechanism.'
+        );
+
         $this->Mail->Host = 'hostname';
         $this->Mail->Port = 587;
         $this->Mail->SMTPAuth = true;
