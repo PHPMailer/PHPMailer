@@ -1969,22 +1969,22 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testAddAttachmentEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addAttachment(__FILE__, 'test.txt', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on sending after deleting a previously successfully attached file
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testDeletedAttachmentException()
     {
+        $this->expectException(Exception::class);
+
         $filename = __FILE__ . md5(microtime()) . 'test.txt';
         touch($filename);
         $this->Mail = new PHPMailer(true);
@@ -2008,33 +2008,33 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringAttachmentEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testEmbeddedImageEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addEmbeddedImage(__FILE__, 'cid', 'test.png', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringEmbeddedImageEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addStringEmbeddedImage('hello', 'cid', 'test.png', 'invalidencoding');
     }
@@ -2453,12 +2453,12 @@ EOT;
     /**
      * Check whether setting a bad custom header throws exceptions.
      *
-     * @expectedException PHPMailer\PHPMailer\Exception
-     *
      * @throws Exception
      */
     public function testHeaderException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addCustomHeader('SomeHeader', "Some\n Value");
     }
