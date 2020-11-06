@@ -1462,7 +1462,7 @@ class PHPMailer
     {
         if (
             'smtp' === $this->Mailer
-            || ('mail' === $this->Mailer && stripos(PHP_OS, 'WIN') === 0)
+            || ('mail' === $this->Mailer && (PHP_VERSION_ID >= 80000 || stripos(PHP_OS, 'WIN') === 0))
         ) {
             //SMTP mandates RFC-compliant line endings
             //and it's also used with mail() on Windows
