@@ -4,6 +4,8 @@
 * Switch from PHP CS Fixer to PHP CodeSniffer for coding standards
 * Create class constants for the debug levels in the POP3 class
 * Improve French, Slovenian, and Ukrainian translations
+* Improve file upload examples
+* Resolve PHP 8 line break issues due to a very old PHP bug being fixed
 
 ## Version 6.1.8 (October 9th, 2020)
 * Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
