@@ -22,10 +22,6 @@ Before running these examples in a web server, you'll need to rename them with '
 
 Similarly, don't leave your passwords in these files as they will be visible to the world!
 
-## [code_generator.phps](code_generator.phps)
-
-This script is a simple code generator - fill in the form and hit submit, and it will use what you entered to email you a message, and will also generate PHP code using your settings that you can copy and paste to use in your own apps.
-
 ## [mail.phps](mail.phps)
 
 This is a basic example which creates an email message from an external HTML file, creates a plain text body, sets various addresses, adds an attachment and sends the message. It uses PHP's built-in mail() function which is the simplest to use, but relies on the presence of a local mail server, something which is not usually available on Windows. If you find yourself in that situation, either install a local mail server, or use a remote one and send using SMTP instead.
