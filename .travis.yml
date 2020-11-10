@@ -1,4 +1,9 @@
 language: php
+
+arch:
+ - amd64
+ - ppc64le
+ 
 dist: xenial
 os: linux
 
