@@ -4078,7 +4078,7 @@ class PHPMailer
                     continue;
                 }
                 if (
-// Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
+                    // Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
                     !empty($basedir)
                     // Ignore URLs containing parent dir traversal (..)
                     && (strpos($url, '..') === false)
