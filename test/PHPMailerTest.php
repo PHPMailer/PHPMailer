@@ -1694,8 +1694,10 @@ EOT;
     /**
      * Tests this denial of service attack.
      *
-     * @see https://sourceforge.net/p/phpmailer/bugs/383/
      * According to the ticket, this should get stuck in a loop, though I can't make it happen.
+     * @see https://sourceforge.net/p/phpmailer/bugs/383/
+     *
+     * @doesNotPerformAssertions
      */
     public function testDenialOfServiceAttack2()
     {
