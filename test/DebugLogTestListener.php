@@ -7,28 +7,35 @@
  *
  * @author    Marcus Bointon <phpmailer@synchromedia.co.uk>
  * @author    Andy Prevost
+ * @author    Juliette Reinders Folmer
  * @copyright 2010 - 2020 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
+ * @copyright 2020 Juliette Reinders Folmer
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
 namespace PHPMailer\Test;
 
-class DebugLogTestListener extends \PHPUnit_Framework_BaseTestListener
+use PHPUnit\Framework\TestListener;
+use Yoast\PHPUnitPolyfills\TestListeners\TestListenerDefaultImplementation;
+
+class DebugLogTestListener implements TestListener
 {
+    use TestListenerDefaultImplementation;
+
     private static $debugLog = '';
 
-    public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function add_error($test, $e, $time)
     {
         echo self::$debugLog;
     }
 
-    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function add_failure($test, $e, $time)
     {
         echo self::$debugLog;
     }
 
-    public function startTest(\PHPUnit_Framework_Test $test)
+    public function start_test($test)
     {
         self::$debugLog = '';
     }
