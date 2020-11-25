@@ -1462,7 +1462,7 @@ class PHPMailer
     {
         if (
             'smtp' === $this->Mailer
-            || ('mail' === $this->Mailer && (PHP_VERSION_ID >= 80000 || stripos(PHP_OS, 'WIN') === 0))
+            || ('mail' === $this->Mailer && (\PHP_VERSION_ID >= 80000 || stripos(PHP_OS, 'WIN') === 0))
         ) {
             //SMTP mandates RFC-compliant line endings
             //and it's also used with mail() on Windows
@@ -1474,8 +1474,8 @@ class PHPMailer
         //Check for buggy PHP versions that add a header with an incorrect line break
         if (
             'mail' === $this->Mailer
-            && ((PHP_VERSION_ID >= 70000 && PHP_VERSION_ID < 70017)
-                || (PHP_VERSION_ID >= 70100 && PHP_VERSION_ID < 70103))
+            && ((\PHP_VERSION_ID >= 70000 && \PHP_VERSION_ID < 70017)
+                || (\PHP_VERSION_ID >= 70100 && \PHP_VERSION_ID < 70103))
             && ini_get('mail.add_x_header') === '1'
             && stripos(PHP_OS, 'WIN') === 0
         ) {
@@ -4526,13 +4526,13 @@ class PHPMailer
             $privKey = openssl_pkey_get_private($privKeyStr);
         }
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
-            if (PHP_MAJOR_VERSION < 8) {
+            if (\PHP_MAJOR_VERSION < 8) {
                 openssl_pkey_free($privKey);
             }
 
             return base64_encode($signature);
         }
-        if (PHP_MAJOR_VERSION < 8) {
+        if (\PHP_MAJOR_VERSION < 8) {
             openssl_pkey_free($privKey);
         }
 
