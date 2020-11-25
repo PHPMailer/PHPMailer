@@ -1,11 +1,14 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.2.0
+* PHP 8.0 compatibility, many thanks to @jrf_nl!
 * Switch from PHP CS Fixer to PHP CodeSniffer for coding standards
 * Create class constants for the debug levels in the POP3 class
 * Improve French, Slovenian, and Ukrainian translations
-* Improve file upload examples
+* Improve file upload examples so file extensions are retained
 * Resolve PHP 8 line break issues due to a very old PHP bug being fixed
+* Avoid warnings when using old openssl functions
+* Improve Travis-CI build configuration
 
 ## Version 6.1.8 (October 9th, 2020)
 * Mark `ext-hash` as required in composer.json. This has long been required, but now it will cause an error at install time rather than runtime, making it easier to diagnose
