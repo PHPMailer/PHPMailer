@@ -12,3 +12,4 @@ phpcs.xml
 /.rnd
 test/PHPMailerTest.php*nonexistent_file.txt
 phpunit.xml
+/.phpunit.result.cache
