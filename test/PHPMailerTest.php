@@ -18,7 +18,7 @@ use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
-use PHPUnit\Framework\TestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
@@ -70,7 +70,7 @@ final class PHPMailerTest extends TestCase
     /**
      * Run before each test is started.
      */
-    protected function setUp()
+    protected function set_up()
     {
         $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
         if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
@@ -134,7 +134,7 @@ final class PHPMailerTest extends TestCase
     /**
      * Run after each test is completed.
      */
-    protected function tearDown()
+    protected function tear_down()
     {
         // Clean global variables
         $this->Mail = null;
@@ -320,6 +320,10 @@ final class PHPMailerTest extends TestCase
      */
     public function testAuthCRAMMD5()
     {
+        $this->markTestIncomplete(
+            'Test needs a connection to a server supporting the CRAMMD5 auth mechanism.'
+        );
+
         $this->Mail->Host = 'hostname';
         $this->Mail->Port = 587;
         $this->Mail->SMTPAuth = true;
@@ -979,7 +983,7 @@ EOT;
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1019,25 +1023,25 @@ EOT;
         $property = $reflection->getProperty('message_type');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'inline_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
 
         $property->setValue($PHPMailer, 'alt_inline_attach');
-        self::assertInternalType('string', $PHPMailer->createBody());
+        self::assertIsString($PHPMailer->createBody());
     }
 
     /**
@@ -1064,7 +1068,7 @@ EOT;
             realpath($this->INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
-        self::assertContains($check, $this->Mail->Body, 'ISO message body does not contain expected text');
+        self::assertStringContainsString($check, $this->Mail->Body, 'ISO message body does not contain expected text');
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 
@@ -1095,7 +1099,7 @@ EOT;
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1152,7 +1156,7 @@ EOT;
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1187,26 +1191,29 @@ EOT;
 
         //Test that local paths without a basedir are ignored
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
-        self::assertContains('src="/etc/hostname"', $this->Mail->Body);
+        self::assertStringContainsString('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
         $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
-        self::assertNotContains('src="composer.json"', $this->Mail->Body);
+        self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
         $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
-        self::assertNotContains('src="composer.json"', $this->Mail->Body);
+        self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
-        self::assertContains('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
+        self::assertStringContainsString('src="cid:5d41402abc4b2a76b9719d911017c592"', $this->Mail->Body);
         //Test that absolute URLs are ignored
         $this->Mail->msgHTML('<img src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        self::assertContains(
+        self::assertStringContainsString(
             'src="https://github.com/PHPMailer/PHPMailer/blob/master/composer.json"',
             $this->Mail->Body
         );
         //Test that absolute URLs with anonymous/relative protocol are ignored
         //Note that such URLs will not work in email anyway because they have no protocol to be relative to
         $this->Mail->msgHTML('<img src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json">test');
-        self::assertContains('src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"', $this->Mail->Body);
+        self::assertStringContainsString(
+            'src="//github.com/PHPMailer/PHPMailer/blob/master/composer.json"',
+            $this->Mail->Body
+        );
     }
 
     /**
@@ -1272,32 +1279,32 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Type: image/png; name="phpmailer_mini.png\";.jpg"',
             $message,
             'Name containing double quote should be escaped in Content-Type'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Disposition: attachment; filename="phpmailer_mini.png\";.jpg"',
             $message,
             'Filename containing double quote should be escaped in Content-Disposition'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Type: image/png; name=phpmailer.png',
             $message,
             'Name without special chars should not be quoted in Content-Type'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Disposition: attachment; filename=phpmailer.png',
             $message,
             'Filename without special chars should not be quoted in Content-Disposition'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Type: image/png; name="PHPMailer card logo.png"',
             $message,
             'Name with spaces should be quoted in Content-Type'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Disposition: attachment; filename="PHPMailer card logo.png"',
             $message,
             'Filename with spaces should be quoted in Content-Disposition'
@@ -1406,7 +1413,7 @@ EOT;
   </body>
 </html>');
         $this->Mail->preSend();
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@phpmailer.0>',
             $this->Mail->getSentMIMEMessage(),
             'Embedded image header encoding incorrect.'
@@ -1577,7 +1584,7 @@ EOT;
         $this->Mail->isMail();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
         $msg = $this->Mail->getSentMIMEMessage();
-        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
     /**
@@ -1620,7 +1627,7 @@ EOT;
             PHPMailer::hasLineLongerThanMax($message),
             'Long line not corrected (Max: ' . (PHPMailer::MAX_LINE_LENGTH + strlen(PHPMailer::getLE())) . ' chars)'
         );
-        self::assertContains(
+        self::assertStringContainsString(
             'Content-Transfer-Encoding: quoted-printable',
             $message,
             'Long line did not cause transfer encoding switch.'
@@ -1645,7 +1652,7 @@ EOT;
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
         self::assertFalse(PHPMailer::hasLineLongerThanMax($message), 'Long line not corrected.');
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'Content-Transfer-Encoding: quoted-printable',
             $message,
             'Short line caused transfer encoding switch.'
@@ -1687,8 +1694,10 @@ EOT;
     /**
      * Tests this denial of service attack.
      *
-     * @see https://sourceforge.net/p/phpmailer/bugs/383/
      * According to the ticket, this should get stuck in a loop, though I can't make it happen.
+     * @see https://sourceforge.net/p/phpmailer/bugs/383/
+     *
+     * @doesNotPerformAssertions
      */
     public function testDenialOfServiceAttack2()
     {
@@ -1866,7 +1875,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
-        self::assertContains('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
+        self::assertStringContainsString('To: "Tim \"The Book\" O\'Reilly" <foo@example.com>', $b);
 
         $this->Mail->Subject .= ': Address escaping invalid';
         $this->Mail->clearAddresses();
@@ -1894,7 +1903,7 @@ EOT;
         $this->Mail->AltBody = 'MIME structure test.';
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             "/Content-Transfer-Encoding: 8bit\r\n\r\n" .
             'This is a multi-part message in MIME format./',
             $this->Mail->getSentMIMEMessage(),
@@ -1915,7 +1924,7 @@ EOT;
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         self::assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
-        self::assertContains('To: Foo <foo@example.com>', $b);
+        self::assertStringContainsString('To: Foo <foo@example.com>', $b);
         self::assertTrue($this->Mail->send(), 'send failed');
     }
 
@@ -1961,27 +1970,30 @@ EOT;
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        self::assertRegExp('/' . base64_encode('hello') . '/', $this->Mail->encodeString('hello'));
+        self::assertMatchesRegularExpression(
+            '/' . base64_encode('hello') . '/',
+            $this->Mail->encodeString('hello')
+        );
     }
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testAddAttachmentEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addAttachment(__FILE__, 'test.txt', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on sending after deleting a previously successfully attached file
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testDeletedAttachmentException()
     {
+        $this->expectException(Exception::class);
+
         $filename = __FILE__ . md5(microtime()) . 'test.txt';
         touch($filename);
         $this->Mail = new PHPMailer(true);
@@ -2005,33 +2017,33 @@ EOT;
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringAttachmentEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testEmbeddedImageEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addEmbeddedImage(__FILE__, 'cid', 'test.png', 'invalidencoding');
     }
 
     /**
      * Expect exceptions on bad encoding
-     *
-     * @expectedException PHPMailer\PHPMailer\Exception
      */
     public function testStringEmbeddedImageEncodingException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addStringEmbeddedImage('hello', 'cid', 'test.png', 'invalidencoding');
     }
@@ -2097,7 +2109,7 @@ EOT;
         self::assertTrue($this->Mail->send(), 'S/MIME signing failed');
 
         $msg = $this->Mail->getSentMIMEMessage();
-        self::assertNotContains("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
         unlink($certfile);
         unlink($keyfile);
     }
@@ -2265,14 +2277,14 @@ EOT;
         $copyHeaderFields = " z=From:$from\r\n |To:$to\r\n |Date:$date\r\n |Subject:$subject;\r\n";
 
         $this->Mail->DKIM_copyHeaderFields = true;
-        self::assertContains(
+        self::assertStringContainsString(
             $copyHeaderFields,
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header with copied header fields incorrect'
         );
 
         $this->Mail->DKIM_copyHeaderFields = false;
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             $copyHeaderFields,
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header without copied header fields incorrect'
@@ -2321,7 +2333,7 @@ EOT;
 
         $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
 
-        self::assertContains($headerFields, $result, 'DKIM header with extra headers incorrect');
+        self::assertStringContainsString($headerFields, $result, 'DKIM header with extra headers incorrect');
 
         unlink($privatekeyfile);
     }
@@ -2444,18 +2456,18 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        self::assertRegExp('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
+        self::assertMatchesRegularExpression('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
     }
 
     /**
      * Check whether setting a bad custom header throws exceptions.
      *
-     * @expectedException PHPMailer\PHPMailer\Exception
-     *
      * @throws Exception
      */
     public function testHeaderException()
     {
+        $this->expectException(Exception::class);
+
         $mail = new PHPMailer(true);
         $mail->addCustomHeader('SomeHeader', "Some\n Value");
     }
@@ -2896,7 +2908,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=CANCEL;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2938,7 +2950,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -2979,7 +2991,7 @@ EOT;
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/Content-Type: text\/calendar; method=REQUEST;/',
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'

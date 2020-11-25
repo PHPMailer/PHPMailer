@@ -9,3 +9,7 @@ composer.lock
 .phpcs.xml
 phpcs.xml
 .phpcs-cache
+/.rnd
+test/PHPMailerTest.php*nonexistent_file.txt
+phpunit.xml
+/.phpunit.result.cache
