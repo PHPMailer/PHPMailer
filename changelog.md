@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Handle early connection errors such as 421
+
 ## Version 6.2.0
 * PHP 8.0 compatibility, many thanks to @jrf_nl!
 * Switch from PHP CS Fixer to PHP CodeSniffer for coding standards
