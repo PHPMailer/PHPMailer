@@ -59,6 +59,7 @@ jobs:
         shell: bash
         run: |
           echo "$(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)"
+          echo "::set-output name=sendmailinipath::$(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)"
 
       - name: Set up sendmail
         run: |
@@ -69,6 +70,7 @@ jobs:
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
+          echo ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini
           sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini
       
       - name: Run tests
