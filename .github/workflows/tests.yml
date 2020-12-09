@@ -1,4 +1,4 @@
-name: "CI/CD"
+name: "Tests"
 
 on: [push]
 
@@ -67,9 +67,3 @@ jobs:
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./phpunit.xml.dist
-
-      - name: Downloading scrutinizer ocular.phar
-        run: wget https://scrutinizer-ci.com/ocular.phar
-
-      - name: Uploading code coverage to scrutinizer
-        run: php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
