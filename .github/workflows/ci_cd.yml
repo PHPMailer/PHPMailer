@@ -1,0 +1,75 @@
+name: "CI/CD"
+
+on: [push]
+
+jobs:
+
+  coding-standard:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        php: ['8.0']
+        dependency-version: [prefer-stable]
+    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction
+
+      - name: PHP CS
+        run: ./vendor/bin/phpcs -s
+
+  test:
+    needs: ['coding-standard']
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        php: ['5.5', '5.6', '7.0.', '7.1', '7.2', '7.3', '7.4', '8.0']
+        dependency-version: [prefer-stable]
+    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          ini-values: sendmail_path=/usr/sbin/sendmail -t -i
+
+      - name: Install PHP packages
+        run: composer install --no-interaction
+
+      - name: Install postfix
+        run: |
+          sudo apt-get install -y -qq postfix qmail
+          sudo service postfix stop
+
+      - name: Set up sendmail
+        run: |
+          smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
+          mkdir -p build/logs
+          sudo cp test/testbootstrap-dist.php test/testbootstrap.php
+          sudo chmod +x test/fakesendmail.sh
+          sudo mkdir -p /var/qmail/bin
+          sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
+          sudo cp test/fakesendmail.sh /usr/sbin/sendmail
+      
+      - name: Run tests
+        run: ./vendor/bin/phpunit --configuration ./phpunit.xml.dist
+
+      - name: Downloading scrutinizer ocular.phar
+        run: wget https://scrutinizer-ci.com/ocular.phar
+
+      - name: Uploading code coverage to scrutinizer
+        run: php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml

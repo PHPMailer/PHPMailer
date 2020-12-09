@@ -208,7 +208,7 @@ See [changelog](changelog.md).
 ### What's changed since moving from SourceForge?
 - Official successor to the SourceForge and Google Code projects.
 - Test suite.
-- Continuous integration with Travis-CI.
+- Continuous integration with Github Actions.
 - Composer support.
 - Public development.
 - Additional languages and language strings.
