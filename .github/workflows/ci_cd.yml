@@ -22,8 +22,8 @@ jobs:
           php-version: ${{ matrix.php }}
 
       - name: Install dependencies
-        run: composer --no-interaction
-        
+        run: composer install --no-interaction
+
       - name: PHP CS
         run: ./vendor/bin/phpcs -s
 
