@@ -13,6 +13,17 @@ jobs:
     name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Install dependencies
+        run: composer --no-interaction
+        
       - name: PHP CS
         run: ./vendor/bin/phpcs -s
 
