@@ -72,4 +72,4 @@ jobs:
         run: wget https://scrutinizer-ci.com/ocular.phar
 
       - name: Uploading code coverage to scrutinize
-        run: php ocular.phar code-coverage:upload --format=php-clover ./build/logs/coverage.xml
+        run: php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
