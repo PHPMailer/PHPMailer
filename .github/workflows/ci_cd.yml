@@ -47,7 +47,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: composer --no-interaction
+        run: composer install --no-interaction
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
