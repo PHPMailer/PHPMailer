@@ -52,7 +52,7 @@ jobs:
 
       - name: Install postfix
         run: |
-          sudo apt-get install -y -qq postfix
+          sudo apt-get install -y -qq postfix qmail
           sudo service postfix stop
 
       - name: Set up sendmail
