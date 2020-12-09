@@ -60,7 +60,7 @@ jobs:
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|sudo grep -m 1 "ini files in:"|sudo cut -d ":" -f 2)/sendmail.ini
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
