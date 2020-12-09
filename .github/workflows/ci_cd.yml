@@ -66,10 +66,10 @@ jobs:
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
       
       - name: Run tests
-        run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+        run: ./vendor/bin/phpunit --configuration ./phpunit.xml.dist
 
       - name: Downloading scrutinizer ocular.phar
         run: wget https://scrutinizer-ci.com/ocular.phar
 
       - name: Uploading code coverage to scrutinize
-        run: php ocular.phar code-coverage:upload --format=php-clover ./build/coverage/log/coverage.xml
+        run: php ocular.phar code-coverage:upload --format=php-clover ./build/logs/coverage.xml
