@@ -798,7 +798,16 @@ class SMTP
     public function hello($host = '')
     {
         //Try extended hello first (RFC 2821)
-        return $this->sendHello('EHLO', $host) or $this->sendHello('HELO', $host);
+        if ($this->sendHello('EHLO', $host)) {
+            return true;
+        }
+
+        //Some servers shut down the SMTP service here (RFC 5321)
+        if (substr($this->helo_rply, 0, 3) == '421') {
+            return false;
+        }
+
+        return $this->sendHello('HELO', $host);
     }
 
     /**

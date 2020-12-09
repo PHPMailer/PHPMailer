@@ -1,7 +1,8 @@
 # PHPMailer Change Log
 
 ## WIP
-* Handle early connection errors such as 421
+* Handle early connection errors such as 421 during connection and EHLO states
+* Switch to Github Actions for CI
 
 ## Version 6.2.0
 * PHP 8.0 compatibility, many thanks to @jrf_nl!
