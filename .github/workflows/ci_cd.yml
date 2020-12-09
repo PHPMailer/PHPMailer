@@ -49,8 +49,18 @@ jobs:
       - name: Install PHP packages
         run: composer install --no-interaction
 
-      - name: Install Postfix
-        run: sudo apt-get install -y -qq postfix
+      - name: Set up postfix
+        run: |
+          sudo apt-get install -y -qq postfix
+          sudo service postfix stop
+          smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
+          mkdir -p build/logs
+          cp test/testbootstrap-dist.php test/testbootstrap.php
+          chmod +x test/fakesendmail.sh
+          sudo mkdir -p /var/qmail/bin
+          sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
+          sudo cp test/fakesendmail.sh /usr/sbin/sendmail
+          echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
