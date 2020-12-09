@@ -49,10 +49,19 @@ jobs:
       - name: Install PHP packages
         run: composer install --no-interaction
 
-      - name: Set up postfix
+      - name: Install postfix
         run: |
           sudo apt-get install -y -qq postfix
           sudo service postfix stop
+
+      - name: Sendmail path
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sendmailinipath::php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2"
+
+      - name: Set up sendmail
+        run: |
           smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
           mkdir -p build/logs
           sudo cp test/testbootstrap-dist.php test/testbootstrap.php
@@ -60,7 +69,7 @@ jobs:
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(sudo php --ini|sudo grep -m 1 "ini files in:"|sudo cut -d ":" -f 2)/sendmail.ini
+          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
