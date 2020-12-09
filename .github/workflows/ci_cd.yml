@@ -45,6 +45,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
+          ini-values: sendmail_path=/usr/sbin/sendmail -t -i
 
       - name: Install PHP packages
         run: composer install --no-interaction
@@ -53,12 +54,6 @@ jobs:
         run: |
           sudo apt-get install -y -qq postfix
           sudo service postfix stop
-
-      - name: Sendmail path
-        id: vars
-        shell: bash
-        run: |
-          echo "::set-output name=sendmailinipath::$(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)"
 
       - name: Set up sendmail
         run: |
@@ -69,9 +64,6 @@ jobs:
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-          echo ls -la ${{ steps.vars.outputs.sendmailinipath }}/*
-          sudo test -f ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini || touch ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini
-          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > ${{ steps.vars.outputs.sendmailinipath }}/sendmail.ini
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
