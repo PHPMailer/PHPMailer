@@ -1,0 +1,48 @@
+name: "CI/CD"
+
+on: [push]
+
+jobs:
+
+  coding-standard:
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        php: ['7.4']
+        dependency-version: [prefer-stable]
+    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+    steps:
+      - name: PHP CS
+        run: ./vendor/bin/phpcs -s
+
+  test:
+    needs: ['coding-standard']
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        php: ['5.6', '7.0.', '7.1', '7.2', '7.3']
+        dependency-version: [prefer-stable]
+    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer --no-interaction
+      
+      - name: Run tests
+        run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
+
+      - name: Downloading scrutinizer ocular.phar
+        run: wget https://scrutinizer-ci.com/ocular.phar
+
+      - name: Uploading code coverage to scrutinize
+        run: php ocular.phar code-coverage:upload --format=php-clover ./build/coverage/log/coverage.xml
