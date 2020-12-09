@@ -58,7 +58,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "::set-output name=sendmailinipath::php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2"
+          echo "$(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)"
 
       - name: Set up sendmail
         run: |
