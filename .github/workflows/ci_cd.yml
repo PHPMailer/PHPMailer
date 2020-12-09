@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
 
@@ -55,12 +55,12 @@ jobs:
           sudo service postfix stop
           smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
           mkdir -p build/logs
-          cp test/testbootstrap-dist.php test/testbootstrap.php
-          chmod +x test/fakesendmail.sh
+          sudo cp test/testbootstrap-dist.php test/testbootstrap.php
+          sudo chmod +x test/fakesendmail.sh
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-          echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
+          sudo echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > $(php --ini|grep -m 1 "ini files in:"|cut -d ":" -f 2)/sendmail.ini
       
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration ./travis.phpunit.xml.dist
