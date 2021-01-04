@@ -3485,6 +3485,8 @@ class PHPMailer
      * @param string $encoding    File encoding (see $Encoding)
      * @param string $type        File extension (MIME) type
      * @param string $disposition Disposition to use
+     * @param string $cid         Content ID of the attachment; Use this to reference
+     *                            the content when using an embedded image in HTML
      *
      * @throws Exception
      *
@@ -3495,7 +3497,8 @@ class PHPMailer
         $filename,
         $encoding = self::ENCODING_BASE64,
         $type = '',
-        $disposition = 'attachment'
+        $disposition = 'attachment',
+        $cid = 0
     ) {
         try {
             // If a MIME type is not specified, try to work it out from the file name
@@ -3516,7 +3519,7 @@ class PHPMailer
                 4 => $type,
                 5 => true, // isStringAttachment
                 6 => $disposition,
-                7 => 0,
+                7 => $cid,
             ];
         } catch (Exception $exc) {
             $this->setError($exc->getMessage());
