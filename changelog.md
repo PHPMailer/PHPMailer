@@ -1,8 +1,10 @@
 # PHPMailer Change Log
 
-## WIP
+## WIP - 6.3.0
 * Handle early connection errors such as 421 during connection and EHLO states
 * Switch to Github Actions for CI
+* Generate debug output for `mail()` and `sendmail` transports – enable using the same mechanism as for SMTP: set `SMTPDebug` > 0
+* Make the `mail()` transport set the envelope sender the same way as SMTP does, i.e. use whatever `From` is set to, only falling back to the `sendmail_from` php.ini setting if `From` is unset. This avoids errors from the `mail()` function if `Sender` is not set explicitly and php.ini is not configured. This is a minor functionality change, so bumps the minor version number.
 
 ## Version 6.2.0
 * PHP 8.0 compatibility, many thanks to @jrf_nl!
