@@ -1666,7 +1666,7 @@ class PHPMailer
         }
 
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
-        $this->edebug("Sending with sendmail\nTo: {$toAddr}\nCommand: {$sendmail}\nHeaders: {$header}");
+        $this->edebug("Sending with sendmail\nCommand: {$sendmail}\nHeaders: {$header}");
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
