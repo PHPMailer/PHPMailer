@@ -764,7 +764,8 @@ class SMTP
 
             //Send the lines to the server
             foreach ($lines_out as $line_out) {
-                //RFC2821 section 4.5.2
+                //Dot-stuffing as per RFC5321 section 4.5.2
+                //https://tools.ietf.org/html/rfc5321#section-4.5.2
                 if (!empty($line_out) && $line_out[0] === '.') {
                     $line_out = '.' . $line_out;
                 }
