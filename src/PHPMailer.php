@@ -866,7 +866,10 @@ class PHPMailer
             $this->edebug("Sending with mail()\nTo: {$to}\nSubject: {$subject}\nHeaders: {$header}");
             $result = @mail($to, $subject, $body, $header);
         } else {
-            $this->edebug("Sending with mail()\nTo: {$to}\nSubject: {$subject}\nHeaders: {$header}\nAdditional params: {$params}");
+            $this->edebug(
+                "Sending with mail()\nTo: {$to}\nSubject: {$subject}\n" .
+                "Headers: {$header}\nAdditional params: {$params}"
+            );
             $result = @mail($to, $subject, $body, $header, $params);
         }
 
