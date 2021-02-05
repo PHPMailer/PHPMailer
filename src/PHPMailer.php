@@ -863,8 +863,10 @@ class PHPMailer
         }
         //Calling mail() with null params breaks
         if (!$this->UseSendmailOptions || null === $params) {
+            $this->edebug("Sending with mail()\nTo: {$to}\nSubject: {$subject}\nHeaders: {$header}");
             $result = @mail($to, $subject, $body, $header);
         } else {
+            $this->edebug("Sending with mail()\nTo: {$to}\nSubject: {$subject}\nHeaders: {$header}\nAdditional params: {$params}");
             $result = @mail($to, $subject, $body, $header, $params);
         }
 
@@ -1661,6 +1663,7 @@ class PHPMailer
         }
 
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
+        $this->edebug("Sending with sendmail\nTo: {$toAddr}\nCommand: {$sendmail}\nHeaders: {$header}");
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
