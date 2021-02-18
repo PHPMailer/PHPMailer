@@ -883,19 +883,20 @@ final class PHPMailerTest extends TestCase
      */
     public function testHeaderEncoding()
     {
-        $this->Mail->CharSet = 'UTF-8';
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $letter = html_entity_decode('&eacute;', ENT_COMPAT, PHPMailer::CHARSET_UTF8);
         //This should select B-encoding automatically and should fold
-        $bencode = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 1);
+        $bencode = str_repeat($letter, PHPMailer::STD_LINE_LENGTH + 1);
         //This should select Q-encoding automatically and should fold
-        $qencode = str_repeat('e', PHPMailer::STD_LINE_LENGTH) . 'é';
+        $qencode = str_repeat('e', PHPMailer::STD_LINE_LENGTH) . $letter;
         //This should select B-encoding automatically and should not fold
-        $bencodenofold = str_repeat('é', 10);
+        $bencodenofold = str_repeat($letter, 10);
         //This should select Q-encoding automatically and should not fold
-        $qencodenofold = str_repeat('e', 9) . 'é';
+        $qencodenofold = str_repeat('e', 9) . $letter;
         //This should Q-encode as ASCII and fold (previously, this did not encode)
         $longheader = str_repeat('e', PHPMailer::STD_LINE_LENGTH + 10);
         //This should Q-encode as UTF-8 and fold
-        $longutf8 = str_repeat('é', PHPMailer::STD_LINE_LENGTH + 10);
+        $longutf8 = str_repeat($letter, PHPMailer::STD_LINE_LENGTH + 10);
         //This should not change
         $noencode = 'eeeeeeeeee';
         $this->Mail->isMail();
@@ -920,7 +921,6 @@ final class PHPMailerTest extends TestCase
              PHPMailer::getLE() . ' =?utf-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6k=?=' .
              PHPMailer::getLE() . ' =?utf-8?B?w6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqcOpw6nDqQ==?=';
         $noencoderes = 'eeeeeeeeee';
-        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         self::assertEquals(
             $bencoderes,
             $this->Mail->encodeHeader($bencode),
@@ -2643,7 +2643,8 @@ EOT;
             'Unexpected read receipt address'
         );
 
-        $this->Mail->ConfirmReadingTo = 'test@françois.ch';  //Address with IDN
+        $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_UTF8);
+        $this->Mail->ConfirmReadingTo = 'test@fran' . $letter . 'ois.ch';  //Address with IDN
         if (PHPMailer::idnSupported()) {
             self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
             self::assertEquals(
@@ -2669,7 +2670,8 @@ EOT;
         $this->Mail->clearReplyTos();
 
         // This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
-        $domain = '@' . mb_convert_encoding('françois.ch', 'ISO-8859-1', 'UTF-8');
+        $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
+        $domain = '@' . 'fran' . $letter . 'ois.ch';
         $this->Mail->addAddress('test' . $domain);
         $this->Mail->addCC('test+cc' . $domain);
         $this->Mail->addBCC('test+bcc' . $domain);
