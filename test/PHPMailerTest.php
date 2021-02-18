@@ -3034,7 +3034,8 @@ EOT;
      */
     public function imapParsedAddressList_parseAddress_returnsAddressArray()
     {
-        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>, "John O\'Groats" <johnog@example.net>,' .
+        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
+            ' "John O\'Groats" <johnog@example.net>,' .
             ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
 
         //Test using PHPMailer's own parser
@@ -3076,7 +3077,8 @@ EOT;
         if (!extension_loaded('imap')) {
             $this->markTestSkipped("imap extension missing, can't run this test");
         }
-        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>, "John O\'Groats" <johnog@example.net>,' .
+        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
+            ' "John O\'Groats" <johnog@example.net>,' .
             ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
         $expected = [
             [
