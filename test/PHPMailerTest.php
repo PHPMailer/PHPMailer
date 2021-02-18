@@ -3030,6 +3030,16 @@ EOT;
     }
 
     /**
+     * Check IDN test environment
+     * @test
+     */
+    public function check_idn_test_env()
+    {
+        $this->assertTrue(function_exists('idn_to_ascii'), 'idn_to_ascii function missing');
+        $this->assertTrue(function_exists('mb_convert_encoding'), 'mb_convert_encoding function missing');
+    }
+
+    /**
      * Test RFC822 address list parsing using PHPMailer's parser.
      * @test
      */
@@ -3119,12 +3129,14 @@ EOT;
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
             //This source file is in UTF-8, so characters here are in native charset
             $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
-            $result = $this->Mail->punyencodeAddress('test@françois.ch');
+            $result = $this->Mail->punyencodeAddress(
+                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_UTF8)
+            );
             $this->assertEquals('test@xn--franois-xxa.ch', $result);
             //To force working another charset, decode an ASCII string to avoid literal string charset issues
             $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
             $result = $this->Mail->punyencodeAddress(
-                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, 'ISO-8859-1')
+                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_ISO88591)
             );
             $this->assertEquals('test@xn--franois-xxa.ch', $result);
         }

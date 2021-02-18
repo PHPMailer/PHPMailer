@@ -1421,14 +1421,18 @@ class PHPMailer
             $domain = substr($address, ++$pos);
             // Verify CharSet string is a valid one, and domain properly encoded in this CharSet.
             if ($this->has8bitChars($domain) && @mb_check_encoding($domain, $this->CharSet)) {
-                $domain = mb_convert_encoding($domain, 'UTF-8', $this->CharSet);
+                //Convert the domain from whatever charset it's in to UTF-8
+                $domain = mb_convert_encoding($domain, self::CHARSET_UTF8, $this->CharSet);
                 //Ignore IDE complaints about this line - method signature changed in PHP 5.4
                 $errorcode = 0;
                 if (defined('INTL_IDNA_VARIANT_UTS46')) {
-                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_UTS46);
+                    //Use the current punycode standard (appeared in PHP 7.2)
+                    $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_UTS46);
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
-                    $punycode = idn_to_ascii($domain, $errorcode, INTL_IDNA_VARIANT_2003);
+                    //Fall back to this old, deprecated/removed encoding
+                    $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_2003);
                 } else {
+                    //Fall back to a default we don't know about
                     $punycode = idn_to_ascii($domain, $errorcode);
                 }
                 if (false !== $punycode) {
