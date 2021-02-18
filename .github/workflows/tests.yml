@@ -10,13 +10,13 @@ jobs:
       matrix:
         php: ['8.0']
         dependency-version: [prefer-stable]
-    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+    name: Coding standards
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction
 
-      - name: PHP CS
+      - name: Check coding standards
         run: ./vendor/bin/phpcs -s
 
   test:
@@ -37,15 +37,25 @@ jobs:
     name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
-          ini-values: sendmail_path=/usr/sbin/sendmail -t -i
+          coverage: pcov
+          ini-values: |
+            sendmail_path=/usr/sbin/sendmail -t -i
+            zend.multibyte = 1
+            zend.script_encoding = UTF-8
+            default_charset = UTF-8
+          extensions: imap mbstring ctype filter hash
+
+      - name: Setup PCOV
+        run: |
+          composer require pcov/clobber
+          vendor/bin/pcov clobber
 
       - name: Install PHP packages
         run: composer install --no-interaction
