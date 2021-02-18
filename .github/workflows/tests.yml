@@ -44,15 +44,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: pcov
+          coverage: xdebug
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8
-          extensions: pcov, imap, mbstring, ctype, filter, hash
-
-      - name: Set up PCOV
-        if: matrix.php < '7.2'
-        run: |
-          composer require pcov/clobber
-          vendor/bin/pcov clobber
+          extensions: xdebug, imap, mbstring, ctype, filter, hash
 
       - name: Install PHP packages
         run: composer install --no-interaction
