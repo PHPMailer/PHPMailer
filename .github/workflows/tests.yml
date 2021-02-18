@@ -46,9 +46,9 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: pcov
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8
-          extensions: imap, mbstring, ctype, filter, hash
+          extensions: pcov, imap, mbstring, ctype, filter, hash
 
-      - name: Setup PCOV
+      - name: Set up PCOV
         if: matrix.php < '7.2'
         run: |
           composer require pcov/clobber
