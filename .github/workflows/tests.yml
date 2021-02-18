@@ -46,7 +46,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8
-          extensions: xdebug, imap, mbstring, ctype, filter, hash
+          extensions: xdebug, imap, mbstring, intl, ctype, filter, hash
 
       - name: Install PHP packages
         run: composer install --no-interaction
