@@ -3123,7 +3123,9 @@ EOT;
             $this->assertEquals('test@xn--franois-xxa.ch', $result);
             //To force working another charset, decode an ASCII string to avoid literal string charset issues
             $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-            $result = $this->Mail->punyencodeAddress(html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, 'ISO-8859-1'));
+            $result = $this->Mail->punyencodeAddress(
+                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, 'ISO-8859-1')
+            );
             $this->assertEquals('test@xn--franois-xxa.ch', $result);
         }
     }
