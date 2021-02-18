@@ -1196,6 +1196,11 @@ class PHPMailer
                         $address->mailbox . '@' . $address->host
                     )
                 ) {
+                    //Decode the name part if it's present and encoded
+                    if (property_exists($address, 'personal') && preg_match('/^=\?.*\?=$/', $address->personal)) {
+                        $address->personal = mb_decode_mimeheader($address->personal);
+                    }
+
                     $addresses[] = [
                         'name' => (property_exists($address, 'personal') ? $address->personal : ''),
                         'address' => $address->mailbox . '@' . $address->host,
@@ -1219,9 +1224,15 @@ class PHPMailer
                 } else {
                     list($name, $email) = explode('<', $address);
                     $email = trim(str_replace('>', '', $email));
+                    $name = trim($name);
                     if (static::validateAddress($email)) {
+                        //If this name is encoded, decode it
+                        if (preg_match('/^=\?.*\?=$/', $name)) {
+                            $name = mb_decode_mimeheader($name);
+                        }
                         $addresses[] = [
-                            'name' => trim(str_replace(['"', "'"], '', $name)),
+                            //Remove any surrounding quotes and spaces from the name
+                            'name' => trim($name, '\'" '),
                             'address' => $email,
                         ];
                     }

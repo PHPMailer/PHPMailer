@@ -3029,24 +3029,81 @@ EOT;
     }
 
     /**
+     * Test RFC822 address list parsing using PHPMailer's parser.
      * @test
      */
     public function imapParsedAddressList_parseAddress_returnsAddressArray()
     {
+        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>, "John O\'Groats" <johnog@example.net>,' .
+            ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
+
+        //Test using PHPMailer's own parser
         $expected = [
             [
-                'name' => 'joe',
+                'name' => '',
                 'address' => 'joe@example.com',
             ],
             [
-                'name' => 'me',
-                'address' => 'me@home.com',
+                'name' => '',
+                'address' => 'me@example.com',
+            ],
+            [
+                'name' => 'Joe Doe',
+                'address' => 'doe@example.com',
+            ],
+            [
+                'name' => "John O'Groats",
+                'address' => 'johnog@example.net',
+            ],
+            [
+                'name' => 'Название теста',
+                'address' => 'encoded@example.org',
             ],
         ];
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
-            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-            $addresses = PHPMailer::parseAddresses('joe@example.com, me@home.com');
-            $this->assertEquals(asort($expected), asort($addresses));
+        $parsed = PHPMailer::parseAddresses($addressLine, false);
+        $this->assertSameSize($expected, $parsed);
+        for ($i = 0; $i < count($expected); $i++) {
+            $this->assertSame($expected[$i], $parsed[$i]);
+        }
+    }
+
+    /**
+     * Test RFC822 address list parsing using the IMAP extension's parser.
+     * @test
+     */
+    public function imapParsedAddressList_parseAddress_returnsAddressArray_usingImap()
+    {
+        if (!extension_loaded('imap')) {
+            $this->markTestSkipped("imap extension missing, can't run this test");
+        }
+        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>, "John O\'Groats" <johnog@example.net>,' .
+            ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
+        $expected = [
+            [
+                'name' => '',
+                'address' => 'joe@example.com',
+            ],
+            [
+                'name' => '',
+                'address' => 'me@example.com',
+            ],
+            [
+                'name' => 'Joe Doe',
+                'address' => 'doe@example.com',
+            ],
+            [
+                'name' => "John O'Groats",
+                'address' => 'johnog@example.net',
+            ],
+            [
+                'name' => 'Название теста',
+                'address' => 'encoded@example.org',
+            ],
+        ];
+        $parsed = PHPMailer::parseAddresses($addressLine, true);
+        $this->assertSameSize($expected, $parsed);
+        for ($i = 0; $i < count($expected); $i++) {
+            $this->assertSame($expected[$i], $parsed[$i]);
         }
     }
 
