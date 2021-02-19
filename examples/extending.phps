@@ -61,11 +61,11 @@ class MyPHPMailer extends PHPMailer
 try {
     //Instantiate your new class, making use of the new `$body` parameter
     $mail = new myPHPMailer(true, '<strong>This is the message body</strong>');
-    // Now you only need to set things that are different from the defaults you defined
+    //Now you only need to set things that are different from the defaults you defined
     $mail->addAddress('jane@example.com', 'Jane User');
     $mail->Subject = 'Here is the subject';
     $mail->addAttachment(__FILE__, 'myPHPMailer.php');
-    $mail->send(); //no need to check for errors - the exception handler will do it
+    $mail->send(); //No need to check for errors - the exception handler will do it
 } catch (Exception $e) {
     //Note that this is catching the PHPMailer Exception class, not the global \Exception type!
     echo 'Caught a ' . get_class($e) . ': ' . $e->getMessage();

@@ -11,7 +11,7 @@ require '../vendor/autoload.php';
 
 //Create a new PHPMailer instance
 $mail = new PHPMailer();
-// Set PHPMailer to use the sendmail transport
+//Set PHPMailer to use the sendmail transport
 $mail->isSendmail();
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');

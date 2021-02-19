@@ -35,7 +35,7 @@ class SMTPLowMemory extends SMTP
          * NOTE: this does not count towards line-length limit.
          */
 
-        // Normalize line breaks
+        //Normalize line breaks
         $msg_data = str_replace(["\r\n", "\r"], "\n", $msg_data);
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field

@@ -52,9 +52,9 @@ try {
     $mail->addCC('john@example.com', 'John Doe');
     $mail->Subject = 'PHPMailer Test Subject';
     $mail->msgHTML(file_get_contents('../examples/contents.html'));
-    // optional - msgHTML will create an alternate automatically
+    //Optional - msgHTML will create an alternate automatically
     $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!';
-    $mail->addAttachment('images/phpmailer_mini.png'); // attachment
+    $mail->addAttachment('images/phpmailer_mini.png');
     $mail->action_function = 'callbackAction';
     $mail->send();
 } catch (Exception $e) {

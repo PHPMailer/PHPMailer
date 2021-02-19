@@ -136,7 +136,7 @@ final class PHPMailerTest extends TestCase
      */
     protected function tear_down()
     {
-        // Clean global variables
+        //Clean global variables
         $this->Mail = null;
         $this->ChangeLog = [];
         $this->NoteLog = [];
@@ -154,7 +154,7 @@ final class PHPMailerTest extends TestCase
     {
         $this->checkChanges();
 
-        // Determine line endings for message
+        //Determine line endings for message
         if ('text/html' === $this->Mail->ContentType || $this->Mail->AltBody !== '') {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
@@ -182,7 +182,7 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
         }
 
-        // If attachments then create an attachment list
+        //If attachments then create an attachment list
         $attachments = $this->Mail->getAttachments();
         if (count($attachments) > 0) {
             $ReportBody .= 'Attachments:' . $eol;
@@ -195,7 +195,7 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= $list_end . $eol;
         }
 
-        // If there are changes then list them
+        //If there are changes then list them
         if (count($this->ChangeLog) > 0) {
             $ReportBody .= 'Changes' . $eol;
             $ReportBody .= '-------' . $eol;
@@ -208,7 +208,7 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= $list_end . $eol . $eol;
         }
 
-        // If there are notes then list them
+        //If there are notes then list them
         if (count($this->NoteLog) > 0) {
             $ReportBody .= 'Notes' . $eol;
             $ReportBody .= '-----' . $eol;
@@ -220,7 +220,7 @@ final class PHPMailerTest extends TestCase
             $ReportBody .= $list_end;
         }
 
-        // Re-attach the original body
+        //Re-attach the original body
         $this->Mail->Body .= $eol . $ReportBody;
     }
 
@@ -633,7 +633,7 @@ final class PHPMailerTest extends TestCase
             "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello," .
             "\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net",
         ];
-        // IDNs in Unicode and ASCII forms.
+        //IDNs in Unicode and ASCII forms.
         $unicodeaddresses = [
             'first.last@bücher.ch',
             'first.last@кто.рф',
@@ -1057,7 +1057,7 @@ EOT;
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
         $content = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contents.html'));
-        // This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
+        //This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
         $this->Mail->msgHTML(
@@ -2669,7 +2669,7 @@ EOT;
         $this->Mail->clearAllRecipients();
         $this->Mail->clearReplyTos();
 
-        // This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
+        //This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
         $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
         $domain = '@' . 'fran' . $letter . 'ois.ch';
         $this->Mail->addAddress('test' . $domain);
@@ -2677,19 +2677,19 @@ EOT;
         $this->Mail->addBCC('test+bcc' . $domain);
         $this->Mail->addReplyTo('test+replyto' . $domain);
 
-        // Queued addresses are not returned by get*Addresses() before send() call.
+        //Queued addresses are not returned by get*Addresses() before send() call.
         self::assertEmpty($this->Mail->getToAddresses(), 'Bad "to" recipients');
         self::assertEmpty($this->Mail->getCcAddresses(), 'Bad "cc" recipients');
         self::assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
         self::assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
 
-        // Clear queued BCC recipient.
+        //Clear queued BCC recipient.
         $this->Mail->clearBCCs();
 
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
-        // Addresses with IDN are returned by get*Addresses() after send() call.
+        //Addresses with IDN are returned by get*Addresses() after send() call.
         $domain = $this->Mail->punyencodeAddress($domain);
         self::assertEquals(
             [['test' . $domain, '']],
@@ -2742,7 +2742,7 @@ EOT;
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
-        // There should be only one "To" address and one "Reply-To" address.
+        //There should be only one "To" address and one "Reply-To" address.
         self::assertCount(
             1,
             $this->Mail->getToAddresses(),
@@ -2821,24 +2821,24 @@ EOT;
         self::assertTrue($this->Mail->smtpConnect(), 'SMTP single connect failed');
         $this->Mail->smtpClose();
 
-        // $this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
-        // self::assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
-        // $this->Mail->smtpClose();
-        // $this->Mail->Host = '[::1]:' . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
-        // self::assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
-        // $this->Mail->smtpClose();
+        //$this->Mail->Host = 'localhost:12345;10.10.10.10:54321;' . $_REQUEST['mail_host'];
+        //self::assertTrue($this->Mail->smtpConnect(), 'SMTP multi-connect failed');
+        //$this->Mail->smtpClose();
+        //$this->Mail->Host = '[::1]:' . $this->Mail->Port . ';' . $_REQUEST['mail_host'];
+        //self::assertTrue($this->Mail->smtpConnect(), 'SMTP IPv6 literal multi-connect failed');
+        //$this->Mail->smtpClose();
 
-        // All these hosts are expected to fail
-        // $this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;
-        // tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
-        // self::assertFalse($this->Mail->smtpConnect());
-        // $this->Mail->smtpClose();
+        //All these hosts are expected to fail
+        //$this->Mail->Host = 'xyz://bogus:25;tls://[bogus]:25;ssl://localhost:12345;
+        //tls://localhost:587;10.10.10.10:54321;localhost:12345;10.10.10.10'. $_REQUEST['mail_host'].' ';
+        //self::assertFalse($this->Mail->smtpConnect());
+        //$this->Mail->smtpClose();
 
         $this->Mail->Host = ' localhost:12345 ; ' . $_REQUEST['mail_host'] . ' ';
         self::assertTrue($this->Mail->smtpConnect(), 'SMTP hosts with stray spaces failed');
         $this->Mail->smtpClose();
 
-        // Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
+        //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
         $this->Mail->Host = $_REQUEST['mail_host'];
         self::assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
 

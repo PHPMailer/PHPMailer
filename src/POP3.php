@@ -199,13 +199,13 @@ class POP3
     public function authorise($host, $port = false, $timeout = false, $username = '', $password = '', $debug_level = 0)
     {
         $this->host = $host;
-        // If no port value provided, use default
+        //If no port value provided, use default
         if (false === $port) {
             $this->port = static::DEFAULT_PORT;
         } else {
             $this->port = (int) $port;
         }
-        // If no timeout value provided, use default
+        //If no timeout value provided, use default
         if (false === $timeout) {
             $this->tval = static::DEFAULT_TIMEOUT;
         } else {
@@ -214,9 +214,9 @@ class POP3
         $this->do_debug = $debug_level;
         $this->username = $username;
         $this->password = $password;
-        //  Reset the error log
+        //Reset the error log
         $this->errors = [];
-        //  connect
+        //Connect
         $result = $this->connect($this->host, $this->port, $this->tval);
         if ($result) {
             $login_result = $this->login($this->username, $this->password);
@@ -226,7 +226,7 @@ class POP3
                 return true;
             }
         }
-        // We need to disconnect regardless of whether the login succeeded
+        //We need to disconnect regardless of whether the login succeeded
         $this->disconnect();
 
         return false;
@@ -243,7 +243,7 @@ class POP3
      */
     public function connect($host, $port = false, $tval = 30)
     {
-        //  Are we already connected?
+        //Are we already connected?
         if ($this->connected) {
             return true;
         }
@@ -256,22 +256,22 @@ class POP3
             $port = static::DEFAULT_PORT;
         }
 
-        //  connect to the POP3 server
+        //Connect to the POP3 server
         $errno = 0;
         $errstr = '';
         $this->pop_conn = fsockopen(
-            $host, //  POP3 Host
-            $port, //  Port #
-            $errno, //  Error Number
-            $errstr, //  Error Message
+            $host, //POP3 Host
+            $port, //Port #
+            $errno, //Error Number
+            $errstr, //Error Message
             $tval
-        ); //  Timeout (seconds)
-        //  Restore the error handler
+        ); //Timeout (seconds)
+        //Restore the error handler
         restore_error_handler();
 
-        //  Did we connect?
+        //Did we connect?
         if (false === $this->pop_conn) {
-            //  It would appear not...
+            //It would appear not...
             $this->setError(
                 "Failed to connect to server $host on port $port. errno: $errno; errstr: $errstr"
             );
@@ -279,14 +279,14 @@ class POP3
             return false;
         }
 
-        //  Increase the stream time-out
+        //Increase the stream time-out
         stream_set_timeout($this->pop_conn, $tval, 0);
 
-        //  Get the POP3 server response
+        //Get the POP3 server response
         $pop3_response = $this->getResponse();
-        //  Check for the +OK
+        //Check for the +OK
         if ($this->checkResponse($pop3_response)) {
-            //  The connection is established and the POP3 server is talking
+            //The connection is established and the POP3 server is talking
             $this->connected = true;
 
             return true;
@@ -316,11 +316,11 @@ class POP3
             $password = $this->password;
         }
 
-        // Send the Username
+        //Send the Username
         $this->sendString("USER $username" . static::LE);
         $pop3_response = $this->getResponse();
         if ($this->checkResponse($pop3_response)) {
-            // Send the Password
+            //Send the Password
             $this->sendString("PASS $password" . static::LE);
             $pop3_response = $this->getResponse();
             if ($this->checkResponse($pop3_response)) {
