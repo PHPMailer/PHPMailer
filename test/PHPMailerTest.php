@@ -1715,7 +1715,7 @@ EOT;
     {
         $this->Mail->Subject .= ': Error handling test - this should be sent ok';
         $this->buildBody();
-        $this->Mail->clearAllRecipients(); // no addresses should cause an error
+        $this->Mail->clearAllRecipients(); //No addresses should cause an error
         self::assertTrue($this->Mail->isError() == false, 'Error found');
         self::assertTrue($this->Mail->send() == false, 'send succeeded');
         self::assertTrue($this->Mail->isError(), 'No error found');
