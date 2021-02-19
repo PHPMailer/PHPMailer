@@ -3032,16 +3032,6 @@ EOT;
     }
 
     /**
-     * Check IDN test environment
-     * @test
-     */
-    public function check_idn_test_env()
-    {
-        $this->assertTrue(function_exists('idn_to_ascii'), 'idn_to_ascii function missing');
-        $this->assertTrue(function_exists('mb_convert_encoding'), 'mb_convert_encoding function missing');
-    }
-
-    /**
      * Test RFC822 address list parsing using PHPMailer's parser.
      * @test
      */
