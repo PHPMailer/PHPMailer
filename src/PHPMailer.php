@@ -1673,18 +1673,32 @@ class PHPMailer
             $this->edebug('Sending with sendmail');
         }
         $header = static::stripTrailingWSP($header) . static::$LE . static::$LE;
-
-        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-        if (!empty($this->Sender) && self::isShellSafe($this->Sender)) {
-            if ('qmail' === $this->Mailer) {
+        //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
+        //A space after `-f` is optional, but there is a long history of its presence
+        //causing problems, so we don't use one
+        //Exim docs: http://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
+        //Sendmail docs: http://www.sendmail.org/~ca/email/man/sendmail.html
+        //Qmail docs: http://www.qmail.org/man/man8/qmail-inject.html
+        //Example problem: https://www.drupal.org/node/1057954
+        //CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+        if ('' === $this->Sender) {
+            $this->Sender = $this->From;
+        }
+        if (empty($this->Sender) && !empty(ini_get('sendmail_from'))) {
+            //PHP config has a sender address we can use
+            $this->Sender = ini_get('sendmail_from');
+        }
+        //CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+        //But sendmail requires this param, so fail without it
+        if (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
+            if ($this->Mailer === 'qmail') {
                 $sendmailFmt = '%s -f%s';
             } else {
                 $sendmailFmt = '%s -oi -f%s -t';
             }
-        } elseif ('qmail' === $this->Mailer) {
-            $sendmailFmt = '%s';
         } else {
-            $sendmailFmt = '%s -oi -t';
+            $this->edebug('Sender address unusable or missing: ' . $this->Sender);
+            return false;
         }
 
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
