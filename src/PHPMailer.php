@@ -864,6 +864,7 @@ class PHPMailer
         //Calling mail() with null params breaks
         $this->edebug('Sending with mail()');
         $this->edebug('Sendmail path: ' . ini_get('sendmail_path'));
+        $this->edebug("Envelope sender: {$this->Sender}");
         $this->edebug("To: {$to}");
         $this->edebug("Subject: {$subject}");
         $this->edebug("Headers: {$header}");
@@ -1666,6 +1667,11 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
+        if ($this->Mailer === 'qmail') {
+            $this->edebug('Sending with qmail');
+        } else {
+            $this->edebug('Sending with sendmail');
+        }
         $header = static::stripTrailingWSP($header) . static::$LE . static::$LE;
 
         // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
@@ -1682,7 +1688,10 @@ class PHPMailer
         }
 
         $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
-        $this->edebug("Sending with sendmail\nCommand: {$sendmail}\nHeaders: {$header}");
+        $this->edebug('Sendmail path: ' . $this->Sendmail);
+        $this->edebug('Sendmail command: ' . $sendmail);
+        $this->edebug('Envelope sender: ' . $this->Sender);
+        $this->edebug("Headers: {$header}");
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1690,6 +1699,7 @@ class PHPMailer
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
+                $this->edebug("To: {$toAddr}");
                 fwrite($mail, 'To: ' . $toAddr . "\n");
                 fwrite($mail, $header);
                 fwrite($mail, $body);
@@ -1704,6 +1714,7 @@ class PHPMailer
                     $this->From,
                     []
                 );
+                $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
                 if (0 !== $result) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
@@ -1726,6 +1737,7 @@ class PHPMailer
                 $this->From,
                 []
             );
+            $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
             if (0 !== $result) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }
