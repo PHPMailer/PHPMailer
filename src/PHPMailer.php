@@ -862,23 +862,24 @@ class PHPMailer
             $subject = $this->encodeHeader($this->secureHeader($subject));
         }
         //Calling mail() with null params breaks
+        $this->edebug('Sending with mail()');
+        $this->edebug('Sendmail path: ' . ini_get('sendmail_path'));
+        $this->edebug("To: {$to}");
+        $this->edebug("Subject: {$subject}");
+        $this->edebug("Headers: {$header}");
         if (!$this->UseSendmailOptions || null === $params) {
-            $this->edebug("Sending with mail()\nTo: {$to}\nSubject: {$subject}\nHeaders: {$header}");
             $result = @mail($to, $subject, $body, $header);
         } else {
-            $this->edebug(
-                "Sending with mail()\nTo: {$to}\nSubject: {$subject}\n" .
-                "Headers: {$header}\nAdditional params: {$params}"
-            );
+            $this->edebug("Additional params: {$params}");
             $result = @mail($to, $subject, $body, $header, $params);
         }
-
+        $this->edebug('Result: ' . ($result ? 'true' : 'false'));
         return $result;
     }
 
     /**
-     * Output debugging info via user-defined method.
-     * Only generates output if SMTP debug output is enabled (@see SMTP::$do_debug).
+     * Output debugging info via a user-defined method.
+     * Only generates output if debug output is enabled.
      *
      * @see PHPMailer::$Debugoutput
      * @see PHPMailer::$SMTPDebug
