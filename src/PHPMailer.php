@@ -2599,10 +2599,6 @@ class PHPMailer
             }
         }
 
-        if ('mail' !== $this->Mailer) {
-//            $result .= static::$LE;
-        }
-
         return $result;
     }
 
