@@ -614,6 +614,13 @@ class PHPMailer
     protected $ReplyTo = [];
 
     /**
+     * We want array of reply-to names and addresses.
+     *
+     * @var bool
+     */
+    protected $useReplyToAsSender = false;
+
+    /**
      * An array of all kinds of addresses.
      * Includes all of $to, $cc, $bcc.
      *
@@ -1052,8 +1059,9 @@ class PHPMailer
      *
      * @return bool true on success, false if address already used or invalid in some way
      */
-    public function addReplyTo($address, $name = '')
+    public function addReplyTo($address, $name = '', $useAsSender = false)
     {
+        $this->useReplyToAsSender = $useAsSender;
         return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
     }
 
@@ -2505,6 +2513,9 @@ class PHPMailer
 
         if (count($this->ReplyTo) > 0) {
             $result .= $this->addrAppend('Reply-To', $this->ReplyTo);
+            if ($this->useReplyToAsSender) {
+                $result .= $this->addrAppend('Sender', $this->ReplyTo);
+            }
         }
 
         //mail() sets the subject itself
