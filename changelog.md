@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Check for mbstring extension before decoding addresss in `parseAddress`
+
 ## Version 6.3.0 (February 19th, 2021)
 * Handle early connection errors such as 421 during connection and EHLO states
 * Switch to Github Actions for CI

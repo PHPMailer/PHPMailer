@@ -40,7 +40,7 @@
         "yoast/phpunit-polyfills": "^0.2.0"
     },
     "suggest": {
-        "ext-mbstring": "Needed to send email in multibyte encoding charset",
+        "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
         "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
         "psr/log": "For optional PSR-3 debug logging",

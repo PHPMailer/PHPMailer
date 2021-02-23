@@ -1199,7 +1199,7 @@ class PHPMailer
                     )
                 ) {
                     //Decode the name part if it's present and encoded
-                    if (property_exists($address, 'personal') && preg_match('/^=\?.*\?=$/', $address->personal)) {
+                    if (extension_loaded('mbstring') && property_exists($address, 'personal') && preg_match('/^=\?.*\?=$/', $address->personal)) {
                         $address->personal = mb_decode_mimeheader($address->personal);
                     }
 
