@@ -332,6 +332,11 @@ class SMTP
 
         $this->smtp_conn = $this->getSMTPConnection($host, $port, $timeout, $options);
 
+        if ($this->smtp_conn === false) {
+            //Error info already set inside `getSMTPConnection()`
+            return false;
+        }
+        
         $this->edebug('Connection: opened', self::DEBUG_CONNECTION);
         // SMTP server can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
