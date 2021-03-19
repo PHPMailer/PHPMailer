@@ -553,6 +553,8 @@ class SMTP
                 }
                 //Send encoded username and password
                 if (
+                    //Format from https://tools.ietf.org/html/rfc4616#section-2
+                    //We skip the first field (it's forgery), so the string starts with a null byte
                     !$this->sendCommand(
                         'User & Password',
                         base64_encode("\0" . $username . "\0" . $password),
