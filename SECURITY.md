@@ -1,6 +1,6 @@
 # Security notices relating to PHPMailer
 
-Please disclose any vulnerabilities found responsibly - report any security problems found to the maintainers privately.
+Please disclose any security issues or vulnerabilities found through [Tidelift's coordinated disclosure system](https://tidelift.com/security) or to the maintainers privately.
 
 PHPMailer versions 6.1.5 and earlier contain an output escaping bug that occurs in `Content-Type` and `Content-Disposition` when filenames passed into `addAttachment` and other methods that accept attachment names contain double quote characters, in contravention of RFC822 3.4.1. No specific vulnerability has been found relating to this, but it could allow file attachments to bypass attachment filters that are based on matching filename extensions. Recorded as [CVE-2020-13625](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2020-13625). Reported by Elar Lang of Clarified Security.
 
