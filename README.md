@@ -185,12 +185,20 @@ git remote set-url upstream https://github.com/PHPMailer/PHPMailer.git
 Please *don't* use the SourceForge or Google Code projects any more; they are obsolete and no longer maintained.
 
 ## Sponsorship
-Development time and resources for PHPMailer are provided by [Smartmessages.net](https://info.smartmessages.net/), the world's only privacy-first  email marketing system.
+Development time and resources for PHPMailer are provided by [Smartmessages.net](https://info.smartmessages.net/), the world's only privacy-first email marketing system.
 
 <a href="https://info.smartmessages.net/"><img src="https://www.smartmessages.net/img/smartmessages-logo.svg" width="550" alt="Smartmessages.net privacy-first email marketing logo"></a>
 
+Donations are very welcome, whether in beer 🍺, T-shirts 👕, or cold, hard cash 💰. Sponsorship through GitHub is a simple and convenient way to say "thank you" to PHPMailer's maintainers and contributors – just click the "Sponsor" button [on the project page](https://github.com/PHPMailer/PHPMailer). If your company uses PHPMailer, consider taking part in Tidelift's enterprise support programme.
 
-Contributions are very welcome, whether in beer 🍺, T-shirts 👕, or cold, hard cash 💰. Sponsorship through GitHub is a simple and convenient way to say "thank you" to PHPMailer's maintainers and contributors – just click the "Sponsor" button [on the project page](https://github.com/PHPMailer/PHPMailer).
+## PHPMailer For Enterprise
+
+Available as part of the Tidelift Subscription.
+
+The maintainers of PHPMailer and thousands of other packages are working with Tidelift to deliver commercial
+support and maintenance for the open source packages you use to build your applications. Save time, reduce risk, and
+improve code health, while paying the maintainers of the exact packages you
+use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-phpmailer-phpmailer?utm_source=packagist-phpmailer-phpmailer&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
 ## Changelog
 See [changelog](changelog.md).
