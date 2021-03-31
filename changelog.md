@@ -4,6 +4,7 @@
 * Check for mbstring extension before decoding addresss in `parseAddress`
 * Add Serbian Latin translation (`sr_latn`)
 * Enrol PHPMailer in Tidelift
+* Revert change that made the `mail()` and sendmail transports set the envelope sender if one isn't explicitly provided, as it causes problems described at <https://github.com/PHPMailer/PHPMailer/issues/2298>
 
 ## Version 6.3.0 (February 19th, 2021)
 * Handle early connection errors such as 421 during connection and EHLO states
