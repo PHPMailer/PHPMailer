@@ -748,7 +748,7 @@ class PHPMailer
      *
      * @var string
      */
-    const VERSION = '6.3.0';
+    const VERSION = '6.4.0';
 
     /**
      * Error severity: message only, continue processing.
