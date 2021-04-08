@@ -1976,7 +1976,7 @@ class PHPMailer
                     $isSent = true;
                 }
 
-                $callbacks[] = ['issent' => $isSent, 'to' => $to[0]];
+                $callbacks[] = ['issent' => $isSent, 'to' => $to[0], 'name' => $to[1]];
             }
         }
 
@@ -1997,7 +1997,7 @@ class PHPMailer
         foreach ($callbacks as $cb) {
             $this->doCallback(
                 $cb['issent'],
-                [$cb['to']],
+                [[$cb['to'], $cb['name']]],
                 [],
                 [],
                 $this->Subject,
