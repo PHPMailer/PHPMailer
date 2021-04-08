@@ -1721,9 +1721,10 @@ class PHPMailer
                 fwrite($mail, $header);
                 fwrite($mail, $body);
                 $result = pclose($mail);
+                $addrinfo = static::parseAddresses($toAddr);
                 $this->doCallback(
                     ($result === 0),
-                    [$toAddr],
+                    [[$addrinfo['address'], $addrinfo['name']]],
                     $this->cc,
                     $this->bcc,
                     $this->Subject,
@@ -1876,7 +1877,17 @@ class PHPMailer
         if ($this->SingleTo && count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
-                $this->doCallback($result, [$toAddr], $this->cc, $this->bcc, $this->Subject, $body, $this->From, []);
+                $addrinfo = static::parseAddresses($toAddr);
+                $this->doCallback(
+                    $result,
+                    [[$addrinfo['address'], $addrinfo['name']]],
+                    $this->cc,
+                    $this->bcc,
+                    $this->Subject,
+                    $body,
+                    $this->From,
+                    []
+                );
             }
         } else {
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
