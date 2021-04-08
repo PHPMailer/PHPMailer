@@ -26,13 +26,13 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
 {
     echo "Message subject: \"$subject\"\n";
     foreach ($to as $address) {
-        echo "Message to {$address[1]} <{$address[0]}>\n";
+        echo "Message to {$address} <{$address}>\n";
     }
     foreach ($cc as $address) {
-        echo "Message CC to {$address[1]} <{$address[0]}>\n";
+        echo "Message CC to {$address} <{$address}>\n";
     }
     foreach ($bcc as $toaddress) {
-        echo "Message BCC to {$toaddress[1]} <{$toaddress[0]}>\n";
+        echo "Message BCC to {$toaddress} <{$toaddress}>\n";
     }
     if ($result) {
         echo "Message sent successfully\n";
@@ -40,8 +40,6 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
         echo "Message send failed\n";
     }
 }
-
-require_once '../vendor/autoload.php';
 
 $mail = new PHPMailer();
 
