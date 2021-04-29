@@ -1811,7 +1811,8 @@ class PHPMailer
      */
     protected static function isPermittedPath($path)
     {
-        return !preg_match('#^[a-z]+://#i', $path);
+        //Matches scheme definition from https://tools.ietf.org/html/rfc3986#section-3.1
+        return !preg_match('#^[a-z][a-z\d+.-]*://#i', $path);
     }
 
     /**
