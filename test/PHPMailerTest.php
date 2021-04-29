@@ -1238,6 +1238,18 @@ EOT;
             return;
         }
 
+        //Make sure phar paths are rejected
+        self::assertFalse($this->Mail->addAttachment('phar://pharfile.php', 'pharfile.php'));
+        //Make sure any path that looks URLish is rejected
+        self::assertFalse($this->Mail->addAttachment('http://example.com/test.php', 'test.php'));
+        self::assertFalse(
+            $this->Mail->addAttachment(
+                'ssh2.sftp://user:pass@attacker-controlled.example.com:22/tmp/payload.phar',
+                'test.php'
+            )
+        );
+        self::assertFalse($this->Mail->addAttachment('x-1.cd+-://example.com/test.php', 'test.php'));
+
         //Make sure that trying to attach a nonexistent file fails
         $filename = __FILE__ . md5(microtime()) . 'nonexistent_file.txt';
         self::assertFalse($this->Mail->addAttachment($filename));
