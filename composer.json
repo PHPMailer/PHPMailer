@@ -57,5 +57,9 @@
             "PHPMailer\\Test\\": "test/"
         }
     },
-    "license": "LGPL-2.1-only"
+    "license": "LGPL-2.1-only",
+    "scripts": {
+        "check": "./vendor/bin/phpcs",
+        "test": "./vendor/bin/phpunit"
+    }
 }
