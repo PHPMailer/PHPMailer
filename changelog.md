@@ -1,5 +1,12 @@
 # PHPMailer Change Log
 
+## Version 6.4.1 (April 29th, 2021)
+* **SECURITY** Fixes CVE-2020-36326, a regression of CVE-2018-19296 object injection introduced in 6.1.8, see SECURITY.md for details
+* Reject more file paths that look like URLs, matching RFC3986 spec, blocking URLS using schemes such as `ssh2`
+* Ensure method signature consistency in `doCallback` calls
+* Ukrainian language update
+* Add composer scripts for checking coding standards and running tests
+
 ## Version 6.4.0 (March 31st, 2021)
 * Revert change that made the `mail()` and sendmail transports set the envelope sender if one isn't explicitly provided, as it causes problems described in <https://github.com/PHPMailer/PHPMailer/issues/2298>
 * Check for mbstring extension before decoding addresss in `parseAddress`
