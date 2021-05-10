@@ -428,9 +428,11 @@ class PHPMailer
     public $Debugoutput = 'echo';
 
     /**
-     * Whether to keep SMTP connection open after each message.
-     * If this is set to true then to close the connection
-     * requires an explicit call to smtpClose().
+     * Whether to keep the SMTP connection open after each message.
+     * If this is set to true then the connection will remain open after a send,
+     * and closing the connection will require an explicit call to smtpClose().
+     * It's a good idea to use this if you are sending multiple messages as it reduces overhead.
+     * See the mailing list example for how to use it.
      *
      * @var bool
      */
