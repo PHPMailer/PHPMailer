@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+## Version 6.5.0 (June 11th, 2021)
+* **SECURITY** Fixes CVE-2021-34551, a complex RCE affecting Windows hosts.
+* *Deprecation* The translation file format currently used (PHP arrays) is now deprecated; the next major version will introduce a new format.
+
 ## Version 6.4.1 (April 29th, 2021)
 * **SECURITY** Fixes CVE-2020-36326, a regression of CVE-2018-19296 object injection introduced in 6.1.8, see SECURITY.md for details
 * Reject more file paths that look like URLs, matching RFC3986 spec, blocking URLS using schemes such as `ssh2`

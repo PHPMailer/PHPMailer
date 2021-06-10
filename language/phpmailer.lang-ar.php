@@ -19,8 +19,7 @@ $PHPMAILER_LANG['instantiate']          = 'لا يمكن توفير خدمة ا�
 $PHPMAILER_LANG['invalid_address']      = 'الإرسال غير ممكن لأن عنوان البريد الإلكتروني غير صالح: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' برنامج الإرسال غير مدعوم.';
 $PHPMAILER_LANG['provide_address']      = 'يجب توفير عنوان البريد الإلكتروني لمستلم واحد على الأقل.';
-$PHPMAILER_LANG['recipients_failed']    = 'خطأ SMTP: الأخطاء التالية ' .
-                                          'فشل في الارسال لكل من : ';
+$PHPMAILER_LANG['recipients_failed']    = 'خطأ SMTP: الأخطاء التالية فشل في الارسال لكل من : ';
 $PHPMAILER_LANG['signing']              = 'خطأ في التوقيع: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() غير ممكن.';
 $PHPMAILER_LANG['smtp_error']           = 'خطأ على مستوى الخادم SMTP: ';

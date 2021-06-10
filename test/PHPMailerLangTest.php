@@ -39,7 +39,7 @@ final class PHPMailerLangTest extends TestCase
 
     /**
      * Test language files for missing and excess translations.
-     * All languages are compared with English.
+     * All languages are compared with English, which is built-in.
      *
      * @group languages
      */
@@ -57,17 +57,36 @@ final class PHPMailerLangTest extends TestCase
             if (preg_match('/^phpmailer\.lang-([a-z_]{2,})\.php$/', $fileInfo->getFilename(), $matches)) {
                 $lang = $matches[1]; //Extract language code
                 $PHPMAILER_LANG = []; //Language strings get put in here
-                include $fileInfo->getPathname(); //Get language strings
-                $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
-                $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
-                if (!empty($missing)) {
-                    $err .= "\nMissing translations in $lang: " . implode(', ', $missing);
-                }
-                if (!empty($extra)) {
-                    $err .= "\nExtra translations in $lang: " . implode(', ', $extra);
+                $lines = file($fileInfo->getPathname());
+                foreach ($lines as $line) {
+                    //Translation file lines look like this:
+                    //$PHPMAILER_LANG['authenticate'] = 'SMTP-Fehler: Authentifizierung fehlgeschlagen.';
+                    //These files are parsed as text and not PHP so as to avoid the possibility of code injection
+                    $matches = [];
+                    if (
+                        preg_match(
+                            '/^\$PHPMAILER_LANG\[\'([a-z\d_]+)\'\]\s*=\s*(["\'])(.+)*?\2;/',
+                            $line,
+                            $matches
+                        )
+                    ) {
+                        //Overwrite language-specific strings so we'll never have missing translation keys.
+                        $PHPMAILER_LANG[$matches[1]] = (string)$matches[3];
+                    }
                 }
             }
+
+            include $fileInfo->getPathname(); //Get language strings
+            $missing = array_diff(array_keys($definedStrings), array_keys($PHPMAILER_LANG));
+            $extra = array_diff(array_keys($PHPMAILER_LANG), array_keys($definedStrings));
+            if (!empty($missing)) {
+                $err .= "\nMissing translations in $lang: " . implode(', ', $missing);
+            }
+            if (!empty($extra)) {
+                $err .= "\nExtra translations in $lang: " . implode(', ', $extra);
+            }
         }
-        $this->assertEmpty($err, $err);
+        //If we have no extra and no missing translations, $err will be empty
+        self::assertEmpty($err, $err);
     }
 }

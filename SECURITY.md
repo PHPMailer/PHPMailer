@@ -2,6 +2,11 @@
 
 Please disclose any security issues or vulnerabilities found through [Tidelift's coordinated disclosure system](https://tidelift.com/security) or to the maintainers privately.
 
+PHPMailer 6.4.1 contains a possible remote code execution vulnerability through the `$lang_path` parameter of the `setLanguage()` method. If the `$lang_path` parameter is passed unfiltered from user input, it can be set to [a UNC path](https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats#unc-paths), and if an attacker is also able to create a remote mount on the server that the UNC path points to, a script file under their control may be executed. This vulnerability only applies to systems that resolve UNC paths, typically only Microsoft Windows. Recorded as [CVE-2021-34551](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2021-34551). Reported by [listensec.com](https://listensec.com) via Tidelift.
+
+PHPMailer 6.5.0 mitigates this by no longer treating translation files as PHP code, but by parsing their text content directly.
+This approach avoids the possibility of executing unknown code while retaining backward compatibility. This isn't ideal, so the current translation format is deprecated and will be replaced in the next major release.
+
 PHPMailer versions between 6.1.8 and 6.4.0 contain a regression of the earlier CVE-2018-19296 object injection vulnerability as a result of [a fix for Windows UNC paths in 6.1.8](https://github.com/PHPMailer/PHPMailer/commit/e2e07a355ee8ff36aba21d0242c5950c56e4c6f9). Recorded as [CVE-2020-36326](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2020-36326). Reported by Fariskhi Vidyan via Tidelift. 6.4.1 fixes this issue, and also enforces stricter checks for URL schemes in local path contexts.
 
 PHPMailer versions 6.1.5 and earlier contain an output escaping bug that occurs in `Content-Type` and `Content-Disposition` when filenames passed into `addAttachment` and other methods that accept attachment names contain double quote characters, in contravention of RFC822 3.4.1. No specific vulnerability has been found relating to this, but it could allow file attachments to bypass attachment filters that are based on matching filename extensions. Recorded as [CVE-2020-13625](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2020-13625). Reported by Elar Lang of Clarified Security.
