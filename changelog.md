@@ -1,8 +1,9 @@
 # PHPMailer Change Log
 
-## Version 6.5.0 (June 11th, 2021)
-* **SECURITY** Fixes CVE-2021-34551, a complex RCE affecting Windows hosts.
-* *Deprecation* The translation file format currently used (PHP arrays) is now deprecated; the next major version will introduce a new format.
+## Version 6.5.0 (June 16th, 2021)
+* **SECURITY** Fixes CVE-2021-34551, a complex RCE affecting Windows hosts. See [SECURITY.md](SECURITY.md) for details.
+* The fix for this issue changes the way that language files are loaded. While they remain in the same PHP-like format, they are processed as plain text, and any code in them will not be run, including operations such as concatenation using the `.` operator.
+* *Deprecation* The current translation file format using PHP arrays is now deprecated; the next major version will introduce a new format.
 
 ## Version 6.4.1 (April 29th, 2021)
 * **SECURITY** Fixes CVE-2020-36326, a regression of CVE-2018-19296 object injection introduced in 6.1.8, see SECURITY.md for details
