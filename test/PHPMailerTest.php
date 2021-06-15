@@ -20,6 +20,8 @@ use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
+require_once __DIR__ . '/validators.php';
+
 /**
  * PHPMailer - PHP email transport unit test class.
  */
@@ -669,6 +671,7 @@ final class PHPMailerTest extends TestCase
             $err .= implode("\n", $badpasses);
         }
         self::assertEmpty($err, $err);
+
         //For coverage
         self::assertTrue(PHPMailer::validateAddress('test@example.com', 'auto'));
         self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'auto'));
@@ -722,13 +725,21 @@ final class PHPMailerTest extends TestCase
             $this->Mail->addAddress('bananas@example.com'),
             'Custom default validator false positive'
         );
-        //Set default validator to PHP built-in
+        //Set validator back to default
         PHPMailer::$validator = 'php';
         self::assertFalse(
         //This is a valid address that FILTER_VALIDATE_EMAIL thinks is invalid
             $this->Mail->addAddress('first.last@example.123'),
             'PHP validator not behaving as expected'
         );
+
+        //Test denying override of built-in validator names
+        //See SECURITY.md and CVE-2021-3603
+        //If a `php` function defined in validators.php successfully overrides this built-in validator name,
+        //this would return false – and we don't want to allow that
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
+        //Check a non-matching validator function, which should be permitted, and return false in this case
+        self::assertFalse(PHPMailer::validateAddress('test@example.com', 'phpx'));
     }
 
     /**
