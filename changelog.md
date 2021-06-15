@@ -1,5 +1,7 @@
 # PHPMailer Change Log
 
+* **SECURITY** Fixes CVE-2021-3603 that may permit untrusted code to be run from an address validator, see SECURITY.md for details
+
 ## Version 6.4.1 (April 29th, 2021)
 * **SECURITY** Fixes CVE-2020-36326, a regression of CVE-2018-19296 object injection introduced in 6.1.8, see SECURITY.md for details
 * Reject more file paths that look like URLs, matching RFC3986 spec, blocking URLS using schemes such as `ssh2`
