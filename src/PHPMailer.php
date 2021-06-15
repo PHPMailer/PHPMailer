@@ -1337,12 +1337,8 @@ class PHPMailer
         if (null === $patternselect) {
             $patternselect = static::$validator;
         }
-        //Don't allow overriding built-in validators with callables
-        if (
-            is_callable($patternselect) &&
-            //It's callable and not a string, or it's a string callable that's not a built-in pattern
-            (!is_string($patternselect) || !in_array(strtolower($patternselect), ['php', 'pcre', 'pcre8', 'html5']))
-        ) {
+        //Don't allow strings as callables, see SECURITY.md and CVE-2021-3603
+        if (is_callable($patternselect) && !is_string($patternselect)) {
             return call_user_func($patternselect, $address);
         }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321

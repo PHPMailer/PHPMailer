@@ -733,13 +733,14 @@ final class PHPMailerTest extends TestCase
             'PHP validator not behaving as expected'
         );
 
-        //Test denying override of built-in validator names
+        //Test denying function name callables as validators
         //See SECURITY.md and CVE-2021-3603
         //If a `php` function defined in validators.php successfully overrides this built-in validator name,
         //this would return false – and we don't want to allow that
         self::assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
-        //Check a non-matching validator function, which should be permitted, and return false in this case
-        self::assertFalse(PHPMailer::validateAddress('test@example.com', 'phpx'));
+        //Check that a non-existent validator name falls back to a built-in validator
+        //and does not call a global function with that name
+        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'phpx'));
     }
 
     /**
