@@ -2184,7 +2184,8 @@ class PHPMailer
      * The default language is English.
      *
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
-     * @param string $lang_path Path to the language file directory, with trailing separator (slash)
+     * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
+     *                          Do not set this from user input!
      *
      * @return bool
      */
