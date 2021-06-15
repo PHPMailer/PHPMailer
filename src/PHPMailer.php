@@ -1334,10 +1334,11 @@ class PHPMailer
      */
     public static function validateAddress($address, $patternselect = null)
     {
+        $defaultValidation=['pcre','pcre8','html5','php']; //Default validation options
         if (null === $patternselect) {
             $patternselect = static::$validator;
         }
-        if (is_callable($patternselect)) {
+        if (is_callable($patternselect) &&  !array_search($patternselect,$defaultValidation)) {
             return call_user_func($patternselect, $address);
         }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
