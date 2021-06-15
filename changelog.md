@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-* **SECURITY** Fixes CVE-2021-3603 that may permit untrusted code to be run from an address validator, see [SECURITY.md](SECURITY.md) for details
+* **SECURITY** Fixes CVE-2021-3603 that may permit untrusted code to be run from an address validator. See [SECURITY.md](SECURITY.md) for details.
 * The fix for this issue includes a minor BC break: callables injected into `validateAddress`, or indirectly through the `$validator` class property, may no longer be simple strings. If you want to inject your own validator, provide a closure instead of a function name.
 
 ## Version 6.4.1 (April 29th, 2021)
