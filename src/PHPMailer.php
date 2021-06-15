@@ -578,7 +578,7 @@ class PHPMailer
      *
      * @var string|callable
      */
-    public static $validator = 'php';
+    public static $validator = false;
 
     /**
      * An instance of the SMTP sender class.
