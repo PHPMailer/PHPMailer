@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+## Version 6.5.0 (June 16th, 2021)
+* **SECURITY** Fixes CVE-2021-34551, a complex RCE affecting Windows hosts. See [SECURITY.md](SECURITY.md) for details.
+* The fix for this issue changes the way that language files are loaded. While they remain in the same PHP-like format, they are processed as plain text, and any code in them will not be run, including operations such as concatenation using the `.` operator.
+* *Deprecation* The current translation file format using PHP arrays is now deprecated; the next major version will introduce a new format.
 * **SECURITY** Fixes CVE-2021-3603 that may permit untrusted code to be run from an address validator. See [SECURITY.md](SECURITY.md) for details.
 * The fix for this issue includes a minor BC break: callables injected into `validateAddress`, or indirectly through the `$validator` class property, may no longer be simple strings. If you want to inject your own validator, provide a closure instead of a function name.
 
