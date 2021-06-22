@@ -696,7 +696,7 @@ final class PHPMailerTest extends TestCase
         self::assertTrue(
             PHPMailer::validateAddress(
                 'user@example.com',
-                function ($address) {
+                static function ($address) {
                     return strpos($address, '@') !== false;
                 }
             ),
@@ -705,14 +705,14 @@ final class PHPMailerTest extends TestCase
         self::assertFalse(
             PHPMailer::validateAddress(
                 'userexample.com',
-                function ($address) {
+                static function ($address) {
                     return strpos($address, '@') !== false;
                 }
             ),
             'Custom validator false positive'
         );
         //Set the default validator to an injected function
-        PHPMailer::$validator = function ($address) {
+        PHPMailer::$validator = static function ($address) {
             return 'user@example.com' === $address;
         };
         self::assertTrue(
@@ -1195,7 +1195,7 @@ EOT;
         $this->Mail->msgHTML(
             $message,
             realpath($this->INCLUDE_DIR . '/examples'),
-            function ($html) {
+            static function ($html) {
                 return strtoupper(strip_tags($html));
             }
         );
