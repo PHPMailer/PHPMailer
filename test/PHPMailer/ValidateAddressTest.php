@@ -19,17 +19,81 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 /**
  * Test email address validation.
  *
+ * Test addresses obtained from {@link http://isemail.info}.
+ *
  * @covers \PHPMailer\PHPMailer\PHPMailer::validateAddress
  */
 final class ValidateAddressTest extends TestCase
 {
 
     /**
-     * Test email address validation.
-     * Test addresses obtained from http://isemail.info
-     * Some failing cases commented out that are apparently up for debate!
+     * Testing against the pre-defined patterns with a valid address (for coverage).
+     *
+     * @dataProvider dataPatterns
+     *
+     * @param string $pattern Validation pattern.
      */
-    public function testValidate()
+    public function testPatternsValidAddress($pattern)
+    {
+        self::assertTrue(
+            PHPMailer::validateAddress('test@example.com', $pattern),
+            'Good address that failed validation against pattern ' . $pattern
+        );
+    }
+
+    /**
+     * Testing against the pre-defined patterns with an invalid address (for coverage).
+     *
+     * @dataProvider dataPatterns
+     *
+     * @param string $pattern Validation pattern.
+     */
+    public function testPatternsInvalidAddress($pattern)
+    {
+        self::assertFalse(
+            PHPMailer::validateAddress('test@example.com.', $pattern),
+            'Bad address that passed validation against pattern ' . $pattern
+        );
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataPatterns()
+    {
+        $patterns = [
+            'auto',
+            'pcre',
+            'pcre8',
+            'html5',
+            'php',
+            'noregex',
+        ];
+
+        return $this->arrayToNamedDataProvider($patterns);
+    }
+
+    /**
+     * Verify that valid addresses are recognized as such.
+     *
+     * @dataProvider dataValidAddresses
+     * @dataProvider dataAsciiAddresses
+     *
+     * @param string $emailAddress The address to test.
+     */
+    public function testValidAddresses($emailAddress)
+    {
+        self::assertTrue(PHPMailer::validateAddress($emailAddress), 'Good address that failed validation');
+    }
+
+    /**
+     * Data provider for valid addresses.
+     *
+     * @return array
+     */
+    public function dataValidAddresses()
     {
         $validaddresses = [
             'first@example.org',
@@ -105,75 +169,48 @@ final class ValidateAddressTest extends TestCase
             'test@xn--example.com',
             'test@example.com',
         ];
-        //These are invalid according to PHP's filter_var
-        //which doesn't allow dotless domains, numeric TLDs or unbracketed IPv4 literals
-        $invalidphp = [
-            'a@b',
-            'a@bar',
-            'first.last@com',
-            'test@123.123.123.123',
-            'foobar@192.168.0.1',
-            'first.last@example.123',
+
+        return $this->arrayToNamedDataProvider($validaddresses, 'Valid: ');
+    }
+
+    /**
+     * Data provider for IDNs in ASCII form.
+     *
+     * @return array
+     */
+    public function dataAsciiAddresses()
+    {
+        $asciiaddresses = [
+            'first.last@xn--bcher-kva.ch',
+            'first.last@xn--j1ail.xn--p1ai',
+            'first.last@xn--phplst-6va.com',
         ];
-        //Valid RFC 5322 addresses using quoting and comments
-        //Note that these are *not* all valid for RFC5321
-        $validqandc = [
-            'HM2Kinsists@(that comments are allowed)this.is.ok',
-            '"Doug \"Ace\" L."@example.org',
-            '"[[ test ]]"@example.org',
-            '"Ima Fool"@example.org',
-            '"test blah"@example.org',
-            '(foo)cal(bar)@(baz)example.com(quux)',
-            'cal@example(woo).(yay)com',
-            'cal(woo(yay)hoopla)@example.com',
-            'cal(foo\@bar)@example.com',
-            'cal(foo\)bar)@example.com',
-            'first().last@example.org',
-            'pete(his account)@silly.test(his host)',
-            'c@(Chris\'s host.)public.example',
-            'jdoe@machine(comment). example',
-            '1234 @ local(blah) .machine .example',
-            'first(abc.def).last@example.org',
-            'first(a"bc.def).last@example.org',
-            'first.(")middle.last(")@example.org',
-            'first(abc\(def)@example.org',
-            'first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com',
-            'a(a(b(c)d(e(f))g)h(i)j)@example.org',
-            '"hello my name is"@example.com',
-            '"Test \"Fail\" Ing"@example.org',
-            'first.last @example.org',
-        ];
-        //Valid explicit IPv6 numeric addresses
-        $validipv6 = [
-            'first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4]',
-            'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::]',
-            'first.last@[IPv6:::]',
-            'first.last@[IPv6:::b4]',
-            'first.last@[IPv6:::b3:b4]',
-            'first.last@[IPv6:a1::b4]',
-            'first.last@[IPv6:a1::]',
-            'first.last@[IPv6:a1:a2::]',
-            'first.last@[IPv6:0123:4567:89ab:cdef::]',
-            'first.last@[IPv6:0123:4567:89ab:CDEF::]',
-            'first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44]',
-            'first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44]',
-            'first.last@[IPv6:a1:a2:a3:a4::11.22.33.44]',
-            'first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44]',
-            'first.last@[IPv6:a1::11.22.33.44]',
-            'first.last@[IPv6:a1:a2::11.22.33.44]',
-            'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44]',
-            'first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44]',
-            'first.last@[IPv6:a1::b2:11.22.33.44]',
-            'first.last@[IPv6:::12.34.56.78]',
-            'first.last@[IPv6:1111:2222:3333::4444:12.34.56.78]',
-            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78]',
-            'first.last@[IPv6:::1111:2222:3333:4444:5555:6666]',
-            'first.last@[IPv6:1111:2222:3333::4444:5555:6666]',
-            'first.last@[IPv6:1111:2222:3333:4444:5555:6666::]',
-            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888]',
-            'first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78]',
-            'first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777]',
-        ];
+
+        return $this->arrayToNamedDataProvider($asciiaddresses, 'Valid ascii: ');
+    }
+
+    /**
+     * Verify that invalid addresses are recognized as such.
+     *
+     * @dataProvider dataInvalidAddresses
+     * @dataProvider dataUnicodeAddresses
+     *
+     * @param string $emailAddress The address to test.
+     */
+    public function testInvalidAddresses($emailAddress)
+    {
+        self::assertFalse(PHPMailer::validateAddress($emailAddress), 'Bad address that passed validation');
+    }
+
+    /**
+     * Data provider for invalid addresses.
+     *
+     * Some failing cases commented out that are apparently up for debate!
+     *
+     * @return array
+     */
+    public function dataInvalidAddresses()
+    {
         $invalidaddresses = [
             'first.last@sub.do,com',
             'first\@last@iana.org',
@@ -317,55 +354,119 @@ final class ValidateAddressTest extends TestCase
             "(\r\n RCPT TO:user@example.com\r\n DATA \\\nSubject: spam10\\\n\r\n Hello," .
             "\r\n this is a spam mail.\\\n.\r\n QUIT\r\n ) a@example.net",
         ];
-        //IDNs in Unicode and ASCII forms.
+
+        return $this->arrayToNamedDataProvider($invalidaddresses, 'Invalid: ');
+    }
+
+    /**
+     * Data provider for IDNs in Unicode form.
+     *
+     * @return array
+     */
+    public function dataUnicodeAddresses()
+    {
         $unicodeaddresses = [
             'first.last@bücher.ch',
             'first.last@кто.рф',
             'first.last@phplíst.com',
         ];
-        $asciiaddresses = [
-            'first.last@xn--bcher-kva.ch',
-            'first.last@xn--j1ail.xn--p1ai',
-            'first.last@xn--phplst-6va.com',
-        ];
-        $goodfails = [];
-        foreach (array_merge($validaddresses, $asciiaddresses) as $address) {
-            if (!PHPMailer::validateAddress($address)) {
-                $goodfails[] = $address;
-            }
-        }
-        $badpasses = [];
-        foreach (array_merge($invalidaddresses, $unicodeaddresses) as $address) {
-            if (PHPMailer::validateAddress($address)) {
-                $badpasses[] = $address;
-            }
-        }
-        $err = '';
-        if (count($goodfails) > 0) {
-            $err .= "Good addresses that failed validation:\n";
-            $err .= implode("\n", $goodfails);
-        }
-        if (count($badpasses) > 0) {
-            if (!empty($err)) {
-                $err .= "\n\n";
-            }
-            $err .= "Bad addresses that passed validation:\n";
-            $err .= implode("\n", $badpasses);
-        }
-        self::assertEmpty($err, $err);
 
-        //For coverage
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'auto'));
-        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'auto'));
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre'));
-        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre'));
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'pcre8'));
-        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'pcre8'));
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'html5'));
-        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'html5'));
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'php'));
-        self::assertFalse(PHPMailer::validateAddress('test@example.com.', 'php'));
-        self::assertTrue(PHPMailer::validateAddress('test@example.com', 'noregex'));
-        self::assertFalse(PHPMailer::validateAddress('bad', 'noregex'));
+        return $this->arrayToNamedDataProvider($unicodeaddresses, 'Invalid unicode: ');
+    }
+
+    /**
+     * Test data which existed in the original test, but was never used in the tests.
+     */
+    public function unusedTestData()
+    {
+        //These are invalid according to PHP's filter_var
+        //which doesn't allow dotless domains, numeric TLDs or unbracketed IPv4 literals
+        $invalidphp = [
+            'a@b',
+            'a@bar',
+            'first.last@com',
+            'test@123.123.123.123',
+            'foobar@192.168.0.1',
+            'first.last@example.123',
+        ];
+        //Valid RFC 5322 addresses using quoting and comments
+        //Note that these are *not* all valid for RFC5321
+        $validqandc = [
+            'HM2Kinsists@(that comments are allowed)this.is.ok',
+            '"Doug \"Ace\" L."@example.org',
+            '"[[ test ]]"@example.org',
+            '"Ima Fool"@example.org',
+            '"test blah"@example.org',
+            '(foo)cal(bar)@(baz)example.com(quux)',
+            'cal@example(woo).(yay)com',
+            'cal(woo(yay)hoopla)@example.com',
+            'cal(foo\@bar)@example.com',
+            'cal(foo\)bar)@example.com',
+            'first().last@example.org',
+            'pete(his account)@silly.test(his host)',
+            'c@(Chris\'s host.)public.example',
+            'jdoe@machine(comment). example',
+            '1234 @ local(blah) .machine .example',
+            'first(abc.def).last@example.org',
+            'first(a"bc.def).last@example.org',
+            'first.(")middle.last(")@example.org',
+            'first(abc\(def)@example.org',
+            'first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com',
+            'a(a(b(c)d(e(f))g)h(i)j)@example.org',
+            '"hello my name is"@example.com',
+            '"Test \"Fail\" Ing"@example.org',
+            'first.last @example.org',
+        ];
+        //Valid explicit IPv6 numeric addresses
+        $validipv6 = [
+            'first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4]',
+            'first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::]',
+            'first.last@[IPv6:::]',
+            'first.last@[IPv6:::b4]',
+            'first.last@[IPv6:::b3:b4]',
+            'first.last@[IPv6:a1::b4]',
+            'first.last@[IPv6:a1::]',
+            'first.last@[IPv6:a1:a2::]',
+            'first.last@[IPv6:0123:4567:89ab:cdef::]',
+            'first.last@[IPv6:0123:4567:89ab:CDEF::]',
+            'first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44]',
+            'first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44]',
+            'first.last@[IPv6:a1:a2:a3:a4::11.22.33.44]',
+            'first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44]',
+            'first.last@[IPv6:a1::11.22.33.44]',
+            'first.last@[IPv6:a1:a2::11.22.33.44]',
+            'first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44]',
+            'first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44]',
+            'first.last@[IPv6:a1::b2:11.22.33.44]',
+            'first.last@[IPv6:::12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333::4444:12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78]',
+            'first.last@[IPv6:::1111:2222:3333:4444:5555:6666]',
+            'first.last@[IPv6:1111:2222:3333::4444:5555:6666]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666::]',
+            'first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888]',
+            'first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78]',
+            'first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777]',
+        ];
+    }
+
+    /**
+     * Create a dataprovider array from a single-dimensional array.
+     *
+     * Each item will have it's value as the test case name for easier debugging.
+     *
+     * @param array  $items  Single dimensional array.
+     * @param string $prefix Optional. Prefix to add to the data set name.
+     *
+     * @return array
+     */
+    protected function arrayToNamedDataProvider($items, $prefix = '')
+    {
+        $provider = [];
+        foreach ($items as $item) {
+            $provider[$prefix . $item] = [$item];
+        }
+
+        return $provider;
     }
 }
