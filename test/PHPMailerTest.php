@@ -3027,18 +3027,22 @@ EOT;
 
     public function testGivenIdnAddress_addAddress_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
-            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-            $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+            $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
+
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
     }
 
     public function testGivenIdnAddress_addReplyTo_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
-            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-            $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+            $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
+
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
     }
 
     public function testErroneousAddress_addAddress_returns_false()
@@ -3127,21 +3131,23 @@ EOT;
 
     public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
-            include $this->INCLUDE_DIR . '/test/fakefunctions.php';
-            //This source file is in UTF-8, so characters here are in native charset
-            $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
-            $result = $this->Mail->punyencodeAddress(
-                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_UTF8)
-            );
-            $this->assertEquals('test@xn--franois-xxa.ch', $result);
-            //To force working another charset, decode an ASCII string to avoid literal string charset issues
-            $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-            $result = $this->Mail->punyencodeAddress(
-                html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_ISO88591)
-            );
-            $this->assertEquals('test@xn--franois-xxa.ch', $result);
+        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+            $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
+
+        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        //This source file is in UTF-8, so characters here are in native charset
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $result = $this->Mail->punyencodeAddress(
+            html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_UTF8)
+        );
+        $this->assertEquals('test@xn--franois-xxa.ch', $result);
+        //To force working another charset, decode an ASCII string to avoid literal string charset issues
+        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
+        $result = $this->Mail->punyencodeAddress(
+            html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_ISO88591)
+        );
+        $this->assertEquals('test@xn--franois-xxa.ch', $result);
     }
 
     public function testVeryLongWordInMessage_wrapText_returnsWrappedText()
