@@ -1770,10 +1770,10 @@ EOT;
         self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
         $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', true);
-        self::assertSame($this->Mail->Sender, 'a@example.com', 'setFrom failed to set sender');
+        self::assertSame('a@example.com', $this->Mail->Sender, 'setFrom failed to set sender');
         $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', false);
-        self::assertSame($this->Mail->Sender, '', 'setFrom should not have set sender');
+        self::assertSame('', $this->Mail->Sender, 'setFrom should not have set sender');
         $this->Mail->clearCCs();
         $this->Mail->clearBCCs();
         $this->Mail->clearReplyTos();
@@ -2234,13 +2234,13 @@ EOT;
         //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
         $prebody = " C \r\nD \t E\r\n\r\n\r\n";
         $postbody = " C \r\nD \t E\r\n";
-        self::assertSame($this->Mail->DKIM_BodyC(''), "\r\n", 'DKIM empty body canonicalization incorrect');
+        self::assertSame("\r\n", $this->Mail->DKIM_BodyC(''), 'DKIM empty body canonicalization incorrect');
         self::assertSame(
             'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
             base64_encode(hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
             'DKIM canonicalized empty body hash mismatch'
         );
-        self::assertSame($this->Mail->DKIM_BodyC($prebody), $postbody, 'DKIM body canonicalization incorrect');
+        self::assertSame($postbody, $this->Mail->DKIM_BodyC($prebody), 'DKIM body canonicalization incorrect');
     }
 
     /**
@@ -2519,36 +2519,36 @@ EOT;
         //Test pathinfo
         $a = '/mnt/files/飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame($q['dirname'], '/mnt/files', 'UNIX dirname not matched');
-        self::assertSame($q['basename'], '飛兒樂 團光茫.mp3', 'UNIX basename not matched');
-        self::assertSame($q['extension'], 'mp3', 'UNIX extension not matched');
-        self::assertSame($q['filename'], '飛兒樂 團光茫', 'UNIX filename not matched');
+        self::assertSame('/mnt/files', $q['dirname'], 'UNIX dirname not matched');
+        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'UNIX basename not matched');
+        self::assertSame('mp3', $q['extension'], 'UNIX extension not matched');
+        self::assertSame('飛兒樂 團光茫', $q['filename'], 'UNIX filename not matched');
         self::assertSame(
-            PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME),
             '/mnt/files',
+            PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME),
             'Dirname path element not matched'
         );
         self::assertSame(
-            PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
             '飛兒樂 團光茫.mp3',
+            PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
             'Basename path element not matched'
         );
-        self::assertSame(PHPMailer::mb_pathinfo($a, 'filename'), '飛兒樂 團光茫', 'Filename path element not matched');
+        self::assertSame('飛兒樂 團光茫', PHPMailer::mb_pathinfo($a, 'filename'), 'Filename path element not matched');
         $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
         $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame($q['dirname'], 'c:\mnt\files', 'Windows dirname not matched');
-        self::assertSame($q['basename'], '飛兒樂 團光茫.mp3', 'Windows basename not matched');
-        self::assertSame($q['extension'], 'mp3', 'Windows extension not matched');
-        self::assertSame($q['filename'], '飛兒樂 團光茫', 'Windows filename not matched');
+        self::assertSame('c:\mnt\files', $q['dirname'], 'Windows dirname not matched');
+        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'Windows basename not matched');
+        self::assertSame('mp3', $q['extension'], 'Windows extension not matched');
+        self::assertSame('飛兒樂 團光茫', $q['filename'], 'Windows filename not matched');
 
         self::assertSame(
-            PHPMailer::filenameToType('abc.jpg?xyz=1'),
             'image/jpeg',
+            PHPMailer::filenameToType('abc.jpg?xyz=1'),
             'Query string not ignored in filename'
         );
         self::assertSame(
-            PHPMailer::filenameToType('abc.xyzpdq'),
             'application/octet-stream',
+            PHPMailer::filenameToType('abc.xyzpdq'),
             'Default MIME type not applied to unknown extension'
         );
 
@@ -2558,9 +2558,9 @@ EOT;
         $b2 = "1\n2\n3\n";
         $b3 = "1\r\n2\r3\n";
         $t1 = "1{$eol}2{$eol}3{$eol}";
-        self::assertSame(PHPMailer::normalizeBreaks($b1), $t1, 'Failed to normalize line breaks (1)');
-        self::assertSame(PHPMailer::normalizeBreaks($b2), $t1, 'Failed to normalize line breaks (2)');
-        self::assertSame(PHPMailer::normalizeBreaks($b3), $t1, 'Failed to normalize line breaks (3)');
+        self::assertSame($t1, PHPMailer::normalizeBreaks($b1), 'Failed to normalize line breaks (1)');
+        self::assertSame($t1, PHPMailer::normalizeBreaks($b2), 'Failed to normalize line breaks (2)');
+        self::assertSame($t1, PHPMailer::normalizeBreaks($b3), 'Failed to normalize line breaks (3)');
     }
 
     public function testBadSMTP()
@@ -2638,11 +2638,11 @@ EOT;
         $this->Mail->clearCustomHeaders();
         $this->Mail->addCustomHeader('SomeHeader: Some Value');
         $headers = $this->Mail->getCustomHeaders();
-        self::assertSame($headers[0], ['SomeHeader', 'Some Value']);
+        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
         $this->Mail->clearCustomHeaders();
         $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
         $headers = $this->Mail->getCustomHeaders();
-        self::assertSame($headers[0], ['SomeHeader', 'Some Value']);
+        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
         $this->Mail->clearCustomHeaders();
         self::assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
         self::assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
@@ -3157,8 +3157,8 @@ EOT;
             'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE();
         $expectedqp = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' .
             PHPMailer::getLE() . 'eddiamnonumy' . PHPMailer::getLE();
-        $this->assertSame($this->Mail->wrapText($message, 50, true), $expectedqp);
-        $this->assertSame($this->Mail->wrapText($message, 50, false), $expected);
+        $this->assertSame($expectedqp, $this->Mail->wrapText($message, 50, true));
+        $this->assertSame($expected, $this->Mail->wrapText($message, 50, false));
     }
 
     public function testEncodedText_utf8CharBoundary_returnsCorrectMaxLength()
