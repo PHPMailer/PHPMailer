@@ -51,13 +51,6 @@ abstract class TestCase extends PolyfillTestCase
     private $NoteLog = [];
 
     /**
-     * Default include path.
-     *
-     * @var string
-     */
-    protected $INCLUDE_DIR = '..';
-
-    /**
      * PIDs of any processes we need to kill.
      *
      * @var array
@@ -70,6 +63,14 @@ abstract class TestCase extends PolyfillTestCase
     public static function set_up_before_class()
     {
         require_once __DIR__ . '/validators.php';
+
+        if (defined('PHPMAILER_INCLUDE_DIR') === false) {
+            /*
+             * Set up default include path.
+             * Default to the dir above the test dir, i.e. the project home dir.
+             */
+            define('PHPMAILER_INCLUDE_DIR', dirname(__DIR__));
+        }
     }
 
     /**
@@ -77,9 +78,8 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function set_up()
     {
-        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
-        if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
+            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
         $this->Mail = new PHPMailer();
         $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output

@@ -32,7 +32,7 @@ final class PHPMailerTest extends TestCase
     public function testBootstrap()
     {
         self::assertFileExists(
-            $this->INCLUDE_DIR . '/test/testbootstrap.php',
+            \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php',
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
     }
@@ -531,7 +531,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
+        if (!$this->Mail->addAttachment(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
@@ -789,7 +789,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contents.html'));
+        $content = file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/contents.html'));
         //This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -799,7 +799,7 @@ EOT;
                 'ISO-8859-1',
                 mb_detect_encoding($content, 'UTF-8, ISO-8859-1, ISO-8859-15', true)
             ),
-            realpath($this->INCLUDE_DIR . '/examples')
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
         self::assertStringContainsString($check, $this->Mail->Body, 'ISO message body does not contain expected text');
@@ -862,7 +862,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'bäck',
             'phpmailer.png',
             'base64',
@@ -898,12 +898,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
+        $message = file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/contentsutf8.html'));
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . '/examples'));
+        $this->Mail->msgHTML($message, realpath(\PHPMAILER_INCLUDE_DIR . '/examples'));
         $sub = $this->Mail->Subject . ': msgHTML';
         $this->Mail->Subject .= $sub;
 
@@ -915,7 +915,7 @@ EOT;
         $this->Mail->AltBody = '';
         $this->Mail->msgHTML(
             $message,
-            realpath($this->INCLUDE_DIR . '/examples'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples'),
             static function ($html) {
                 return strtoupper(strip_tags($html));
             }
@@ -927,10 +927,10 @@ EOT;
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
         self::assertStringContainsString('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
-        $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="composer.json">test', realpath(\PHPMAILER_INCLUDE_DIR));
         self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
-        $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="../composer.json">test', realpath(\PHPMAILER_INCLUDE_DIR));
         self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
@@ -962,7 +962,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
                 'phpmailer_mini.png'
             )
         ) {
@@ -1007,19 +1007,19 @@ EOT;
         $this->Mail->isHTML(true);
         $this->Mail->CharSet = 'UTF-8';
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png";.jpg'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'phpmailer.png'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
             'PHPMailer card logo.png'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png\\\";.jpg'
         );
         $this->buildBody();
@@ -1068,7 +1068,7 @@ EOT;
 
         if (
             !$this->Mail->addStringEmbeddedImage(
-                file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
+                file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
                 hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
                 '', //Intentionally empty name
                 'base64',
@@ -1096,7 +1096,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
                 'phpmailer_mini.png'
             )
         ) {
@@ -1107,7 +1107,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'phpmailer.png'
             )
         ) {
@@ -1133,7 +1133,7 @@ EOT;
 
         if (
             !$this->Mail->addEmbeddedImage(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'my-attach',
                 'phpmailer.png',
                 'base64',
@@ -1182,7 +1182,7 @@ EOT;
 
         if (
             !$this->Mail->addEmbeddedImage(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'my-attach',
                 'phpmailer.png',
                 'base64',
@@ -1633,7 +1633,7 @@ EOT;
         self::assertSame('Invalid address:  (to): invalidaddressexample.com', $this->Mail->ErrorInfo);
 
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
         );
         self::assertTrue($this->Mail->attachmentExists());
@@ -2510,7 +2510,7 @@ EOT;
         //Start a fake POP server
         $pid = shell_exec(
             '/usr/bin/nohup ' .
-            $this->INCLUDE_DIR .
+            \PHPMAILER_INCLUDE_DIR .
             '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
@@ -2538,7 +2538,7 @@ EOT;
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec(
             '/usr/bin/nohup ' .
-            $this->INCLUDE_DIR .
+            \PHPMAILER_INCLUDE_DIR .
             '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
@@ -2748,21 +2748,21 @@ EOT;
 
     public function testGivenIdnAddress_addAddress_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
     }
 
     public function testGivenIdnAddress_addReplyTo_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
     }
 
@@ -2852,11 +2852,11 @@ EOT;
 
     public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         //This source file is in UTF-8, so characters here are in native charset
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $result = $this->Mail->punyencodeAddress(
