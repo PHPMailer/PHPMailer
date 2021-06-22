@@ -11,7 +11,7 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\Test;
+namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\OAuth;
