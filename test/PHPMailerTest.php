@@ -3025,10 +3025,7 @@ EOT;
         );
     }
 
-    /**
-     * @test
-     */
-    public function givenIdnAddress_addAddress_returns_true()
+    public function testGivenIdnAddress_addAddress_returns_true()
     {
         if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
@@ -3036,10 +3033,7 @@ EOT;
         }
     }
 
-    /**
-     * @test
-     */
-    public function givenIdnAddress_addReplyTo_returns_true()
+    public function testGivenIdnAddress_addReplyTo_returns_true()
     {
         if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
@@ -3047,19 +3041,15 @@ EOT;
         }
     }
 
-    /**
-     * @test
-     */
-    public function erroneousAddress_addAddress_returns_false()
+    public function testErroneousAddress_addAddress_returns_false()
     {
         $this->assertFalse($this->Mail->addAddress('mehome.com'));
     }
 
     /**
      * Test RFC822 address list parsing using PHPMailer's parser.
-     * @test
      */
-    public function imapParsedAddressList_parseAddress_returnsAddressArray()
+    public function testImapParsedAddressList_parseAddress_returnsAddressArray()
     {
         $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
             ' "John O\'Groats" <johnog@example.net>,' .
@@ -3097,9 +3087,8 @@ EOT;
 
     /**
      * Test RFC822 address list parsing using the IMAP extension's parser.
-     * @test
      */
-    public function imapParsedAddressList_parseAddress_returnsAddressArray_usingImap()
+    public function testImapParsedAddressList_parseAddress_returnsAddressArray_usingImap()
     {
         if (!extension_loaded('imap')) {
             $this->markTestSkipped("imap extension missing, can't run this test");
@@ -3136,10 +3125,7 @@ EOT;
         }
     }
 
-    /**
-     * @test
-     */
-    public function givenIdnAddress_punyencodeAddress_returnsCorrectCode()
+    public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
         if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php')) {
             include $this->INCLUDE_DIR . '/test/fakefunctions.php';
@@ -3158,10 +3144,7 @@ EOT;
         }
     }
 
-    /**
-     * @test
-     */
-    public function veryLongWordInMessage_wrapText_returnsWrappedText()
+    public function testVeryLongWordInMessage_wrapText_returnsWrappedText()
     {
         $message = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
         $expected = 'Lorem' . PHPMailer::getLE() .
@@ -3172,10 +3155,7 @@ EOT;
         $this->assertEquals($this->Mail->wrapText($message, 50, false), $expected);
     }
 
-    /**
-     * @test
-     */
-    public function encodedText_utf8CharBoundary_returnsCorrectMaxLength()
+    public function testEncodedText_utf8CharBoundary_returnsCorrectMaxLength()
     {
         $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
         $encodedSingleByteCharacter = '=0C';
