@@ -12,7 +12,7 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\Test;
+namespace PHPMailer\Test\Language;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
@@ -48,7 +48,7 @@ final class PHPMailerLangTest extends TestCase
         $this->Mail->setLanguage('en');
         $definedStrings = $this->Mail->getTranslations();
         $err = '';
-        foreach (new \DirectoryIterator(__DIR__ . '/../language') as $fileInfo) {
+        foreach (new \DirectoryIterator(__DIR__ . '/../../language') as $fileInfo) {
             if ($fileInfo->isDot()) {
                 continue;
             }

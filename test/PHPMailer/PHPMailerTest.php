@@ -11,16 +11,14 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
-namespace PHPMailer\Test;
+namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
-
-require_once __DIR__ . '/validators.php';
+use PHPMailer\Test\TestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
@@ -28,290 +26,13 @@ require_once __DIR__ . '/validators.php';
 final class PHPMailerTest extends TestCase
 {
     /**
-     * Holds the PHPMailer instance.
-     *
-     * @var PHPMailer
-     */
-    private $Mail;
-
-    /**
-     * Holds the SMTP mail host.
-     *
-     * @var string
-     */
-    private $Host = '';
-
-    /**
-     * Holds the change log.
-     *
-     * @var string[]
-     */
-    private $ChangeLog = [];
-
-    /**
-     * Holds the note log.
-     *
-     * @var string[]
-     */
-    private $NoteLog = [];
-
-    /**
-     * Default include path.
-     *
-     * @var string
-     */
-    private $INCLUDE_DIR = '..';
-
-    /**
-     * PIDs of any processes we need to kill.
-     *
-     * @var array
-     */
-    private $pids = [];
-
-    /**
-     * Run before each test is started.
-     */
-    protected function set_up()
-    {
-        $this->INCLUDE_DIR = dirname(__DIR__); //Default to the dir above the test dir, i.e. the project home dir
-        if (file_exists($this->INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include $this->INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
-        }
-        $this->Mail = new PHPMailer();
-        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
-        $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
-        $this->Mail->Priority = 3;
-        $this->Mail->Encoding = '8bit';
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        if (array_key_exists('mail_from', $_REQUEST)) {
-            $this->Mail->From = $_REQUEST['mail_from'];
-        } else {
-            $this->Mail->From = 'unit_test@phpmailer.example.com';
-        }
-        $this->Mail->FromName = 'Unit Tester';
-        $this->Mail->Sender = '';
-        $this->Mail->Subject = 'Unit Test';
-        $this->Mail->Body = '';
-        $this->Mail->AltBody = '';
-        $this->Mail->WordWrap = 0;
-        if (array_key_exists('mail_host', $_REQUEST)) {
-            $this->Mail->Host = $_REQUEST['mail_host'];
-        } else {
-            $this->Mail->Host = 'mail.example.com';
-        }
-        if (array_key_exists('mail_port', $_REQUEST)) {
-            $this->Mail->Port = $_REQUEST['mail_port'];
-        } else {
-            $this->Mail->Port = 25;
-        }
-        $this->Mail->Helo = 'localhost.localdomain';
-        $this->Mail->SMTPAuth = false;
-        $this->Mail->Username = '';
-        $this->Mail->Password = '';
-        if (array_key_exists('mail_useauth', $_REQUEST)) {
-            $this->Mail->SMTPAuth = $_REQUEST['mail_useauth'];
-        }
-        if (array_key_exists('mail_username', $_REQUEST)) {
-            $this->Mail->Username = $_REQUEST['mail_username'];
-        }
-        if (array_key_exists('mail_userpass', $_REQUEST)) {
-            $this->Mail->Password = $_REQUEST['mail_userpass'];
-        }
-        $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
-        $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-        if ($this->Mail->Host != '') {
-            $this->Mail->isSMTP();
-        } else {
-            $this->Mail->isMail();
-        }
-        if (array_key_exists('mail_to', $_REQUEST)) {
-            $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
-        }
-        if (array_key_exists('mail_cc', $_REQUEST) && $_REQUEST['mail_cc'] !== '') {
-            $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
-        }
-    }
-
-    /**
-     * Run after each test is completed.
-     */
-    protected function tear_down()
-    {
-        //Clean global variables
-        $this->Mail = null;
-        $this->ChangeLog = [];
-        $this->NoteLog = [];
-
-        foreach ($this->pids as $pid) {
-            $p = escapeshellarg($pid);
-            shell_exec("ps $p && kill -TERM $p");
-        }
-    }
-
-    /**
-     * Build the body of the message in the appropriate format.
-     */
-    private function buildBody()
-    {
-        $this->checkChanges();
-
-        //Determine line endings for message
-        if ('text/html' === $this->Mail->ContentType || $this->Mail->AltBody !== '') {
-            $eol = "<br>\r\n";
-            $bullet_start = '<li>';
-            $bullet_end = "</li>\r\n";
-            $list_start = "<ul>\r\n";
-            $list_end = "</ul>\r\n";
-        } else {
-            $eol = "\r\n";
-            $bullet_start = ' - ';
-            $bullet_end = "\r\n";
-            $list_start = '';
-            $list_end = '';
-        }
-
-        $ReportBody = '';
-
-        $ReportBody .= '---------------------' . $eol;
-        $ReportBody .= 'Unit Test Information' . $eol;
-        $ReportBody .= '---------------------' . $eol;
-        $ReportBody .= 'phpmailer version: ' . PHPMailer::VERSION . $eol;
-        $ReportBody .= 'Content Type: ' . $this->Mail->ContentType . $eol;
-        $ReportBody .= 'CharSet: ' . $this->Mail->CharSet . $eol;
-
-        if ($this->Mail->Host !== '') {
-            $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
-        }
-
-        //If attachments then create an attachment list
-        $attachments = $this->Mail->getAttachments();
-        if (count($attachments) > 0) {
-            $ReportBody .= 'Attachments:' . $eol;
-            $ReportBody .= $list_start;
-            foreach ($attachments as $attachment) {
-                $ReportBody .= $bullet_start . 'Name: ' . $attachment[1] . ', ';
-                $ReportBody .= 'Encoding: ' . $attachment[3] . ', ';
-                $ReportBody .= 'Type: ' . $attachment[4] . $bullet_end;
-            }
-            $ReportBody .= $list_end . $eol;
-        }
-
-        //If there are changes then list them
-        if (count($this->ChangeLog) > 0) {
-            $ReportBody .= 'Changes' . $eol;
-            $ReportBody .= '-------' . $eol;
-
-            $ReportBody .= $list_start;
-            foreach ($this->ChangeLog as $iValue) {
-                $ReportBody .= $bullet_start . $iValue[0] . ' was changed to [' .
-                    $iValue[1] . ']' . $bullet_end;
-            }
-            $ReportBody .= $list_end . $eol . $eol;
-        }
-
-        //If there are notes then list them
-        if (count($this->NoteLog) > 0) {
-            $ReportBody .= 'Notes' . $eol;
-            $ReportBody .= '-----' . $eol;
-
-            $ReportBody .= $list_start;
-            foreach ($this->NoteLog as $iValue) {
-                $ReportBody .= $bullet_start . $iValue . $bullet_end;
-            }
-            $ReportBody .= $list_end;
-        }
-
-        //Re-attach the original body
-        $this->Mail->Body .= $eol . $ReportBody;
-    }
-
-    /**
-     * Check which default settings have been changed for the report.
-     */
-    private function checkChanges()
-    {
-        if (3 != $this->Mail->Priority) {
-            $this->addChange('Priority', $this->Mail->Priority);
-        }
-        if (PHPMailer::ENCODING_8BIT !== $this->Mail->Encoding) {
-            $this->addChange('Encoding', $this->Mail->Encoding);
-        }
-        if (PHPMailer::CHARSET_ISO88591 !== $this->Mail->CharSet) {
-            $this->addChange('CharSet', $this->Mail->CharSet);
-        }
-        if ('' != $this->Mail->Sender) {
-            $this->addChange('Sender', $this->Mail->Sender);
-        }
-        if (0 != $this->Mail->WordWrap) {
-            $this->addChange('WordWrap', $this->Mail->WordWrap);
-        }
-        if ('mail' !== $this->Mail->Mailer) {
-            $this->addChange('Mailer', $this->Mail->Mailer);
-        }
-        if (25 != $this->Mail->Port) {
-            $this->addChange('Port', $this->Mail->Port);
-        }
-        if ('localhost.localdomain' !== $this->Mail->Helo) {
-            $this->addChange('Helo', $this->Mail->Helo);
-        }
-        if ($this->Mail->SMTPAuth) {
-            $this->addChange('SMTPAuth', 'true');
-        }
-    }
-
-    /**
-     * Add a changelog entry.
-     *
-     * @param string $sName
-     * @param string $sNewValue
-     */
-    private function addChange($sName, $sNewValue)
-    {
-        $this->ChangeLog[] = [$sName, $sNewValue];
-    }
-
-    /**
-     * Adds a simple note to the message.
-     *
-     * @param string $sValue
-     */
-    private function addNote($sValue)
-    {
-        $this->NoteLog[] = $sValue;
-    }
-
-    /**
-     * Adds all of the addresses.
-     *
-     * @param string $sAddress
-     * @param string $sName
-     * @param string $sType
-     *
-     * @return bool
-     */
-    private function setAddress($sAddress, $sName = '', $sType = 'to')
-    {
-        switch ($sType) {
-            case 'to':
-                return $this->Mail->addAddress($sAddress, $sName);
-            case 'cc':
-                return $this->Mail->addCC($sAddress, $sName);
-            case 'bcc':
-                return $this->Mail->addBCC($sAddress, $sName);
-        }
-
-        return false;
-    }
-
-    /**
      * Check that we have loaded default test params.
      * Pretty much everything will fail due to unset recipient if this is not done.
      */
     public function testBootstrap()
     {
         self::assertFileExists(
-            $this->INCLUDE_DIR . '/test/testbootstrap.php',
+            \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php',
             'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
         );
     }
@@ -810,7 +531,7 @@ final class PHPMailerTest extends TestCase
         $this->Mail->Body = 'Here is the text body';
         $this->Mail->Subject .= ': Plain + Multiple FileAttachments';
 
-        if (!$this->Mail->addAttachment(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
+        if (!$this->Mail->addAttachment(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'))) {
             self::assertTrue(false, $this->Mail->ErrorInfo);
 
             return;
@@ -1068,7 +789,7 @@ EOT;
 
         //This file is in ISO-8859-1 charset
         //Needs to be external because this file is in UTF-8
-        $content = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contents.html'));
+        $content = file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/contents.html'));
         //This is the string 'éèîüçÅñæß' in ISO-8859-1, base-64 encoded
         $check = base64_decode('6eju/OfF8ebf');
         //Make sure it really is in ISO-8859-1!
@@ -1078,7 +799,7 @@ EOT;
                 'ISO-8859-1',
                 mb_detect_encoding($content, 'UTF-8, ISO-8859-1, ISO-8859-15', true)
             ),
-            realpath($this->INCLUDE_DIR . '/examples')
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples')
         );
         $this->buildBody();
         self::assertStringContainsString($check, $this->Mail->Body, 'ISO message body does not contain expected text');
@@ -1141,7 +862,7 @@ EOT;
 </html>
 EOT;
         $this->Mail->addEmbeddedImage(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'bäck',
             'phpmailer.png',
             'base64',
@@ -1177,12 +898,12 @@ EOT;
      */
     public function testMsgHTML()
     {
-        $message = file_get_contents(realpath($this->INCLUDE_DIR . '/examples/contentsutf8.html'));
+        $message = file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/contentsutf8.html'));
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $this->Mail->Body = '';
         $this->Mail->AltBody = '';
         //Uses internal HTML to text conversion
-        $this->Mail->msgHTML($message, realpath($this->INCLUDE_DIR . '/examples'));
+        $this->Mail->msgHTML($message, realpath(\PHPMAILER_INCLUDE_DIR . '/examples'));
         $sub = $this->Mail->Subject . ': msgHTML';
         $this->Mail->Subject .= $sub;
 
@@ -1194,7 +915,7 @@ EOT;
         $this->Mail->AltBody = '';
         $this->Mail->msgHTML(
             $message,
-            realpath($this->INCLUDE_DIR . '/examples'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples'),
             static function ($html) {
                 return strtoupper(strip_tags($html));
             }
@@ -1206,10 +927,10 @@ EOT;
         $this->Mail->msgHTML('<img src="/etc/hostname">test');
         self::assertStringContainsString('src="/etc/hostname"', $this->Mail->Body);
         //Test that local paths with a basedir are not ignored
-        $this->Mail->msgHTML('<img src="composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="composer.json">test', realpath(\PHPMAILER_INCLUDE_DIR));
         self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that local paths with parent traversal are ignored
-        $this->Mail->msgHTML('<img src="../composer.json">test', realpath($this->INCLUDE_DIR));
+        $this->Mail->msgHTML('<img src="../composer.json">test', realpath(\PHPMAILER_INCLUDE_DIR));
         self::assertStringNotContainsString('src="composer.json"', $this->Mail->Body);
         //Test that existing embedded URLs are ignored
         $this->Mail->msgHTML('<img src="cid:5d41402abc4b2a76b9719d911017c592">test');
@@ -1241,7 +962,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
                 'phpmailer_mini.png'
             )
         ) {
@@ -1286,19 +1007,19 @@ EOT;
         $this->Mail->isHTML(true);
         $this->Mail->CharSet = 'UTF-8';
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png";.jpg'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
             'phpmailer.png'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/PHPMailer card logo.png'),
             'PHPMailer card logo.png'
         );
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png\\\";.jpg'
         );
         $this->buildBody();
@@ -1347,7 +1068,7 @@ EOT;
 
         if (
             !$this->Mail->addStringEmbeddedImage(
-                file_get_contents(realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
+                file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
                 hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
                 '', //Intentionally empty name
                 'base64',
@@ -1375,7 +1096,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
                 'phpmailer_mini.png'
             )
         ) {
@@ -1386,7 +1107,7 @@ EOT;
 
         if (
             !$this->Mail->addAttachment(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'phpmailer.png'
             )
         ) {
@@ -1412,7 +1133,7 @@ EOT;
 
         if (
             !$this->Mail->addEmbeddedImage(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'my-attach',
                 'phpmailer.png',
                 'base64',
@@ -1461,7 +1182,7 @@ EOT;
 
         if (
             !$this->Mail->addEmbeddedImage(
-                realpath($this->INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
                 'my-attach',
                 'phpmailer.png',
                 'base64',
@@ -1912,7 +1633,7 @@ EOT;
         self::assertSame('Invalid address:  (to): invalidaddressexample.com', $this->Mail->ErrorInfo);
 
         $this->Mail->addAttachment(
-            realpath($this->INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png'),
             'phpmailer_mini.png'
         );
         self::assertTrue($this->Mail->attachmentExists());
@@ -2789,7 +2510,7 @@ EOT;
         //Start a fake POP server
         $pid = shell_exec(
             '/usr/bin/nohup ' .
-            $this->INCLUDE_DIR .
+            \PHPMAILER_INCLUDE_DIR .
             '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
@@ -2817,7 +2538,7 @@ EOT;
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec(
             '/usr/bin/nohup ' .
-            $this->INCLUDE_DIR .
+            \PHPMAILER_INCLUDE_DIR .
             '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
         );
         $this->pids[] = $pid;
@@ -3027,21 +2748,21 @@ EOT;
 
     public function testGivenIdnAddress_addAddress_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
     }
 
     public function testGivenIdnAddress_addReplyTo_returns_true()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
     }
 
@@ -3131,11 +2852,11 @@ EOT;
 
     public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
-        if (file_exists($this->INCLUDE_DIR . '/test/fakefunctions.php') === false) {
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
             $this->markTestSkipped('/test/fakefunctions.php file not found');
         }
 
-        include $this->INCLUDE_DIR . '/test/fakefunctions.php';
+        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         //This source file is in UTF-8, so characters here are in native charset
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $result = $this->Mail->punyencodeAddress(
@@ -3172,28 +2893,3 @@ EOT;
         $this->assertSame(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
     }
 }
-/*
- * This is a sample form for setting appropriate test values through a browser
- * These values can also be set using a file called testbootstrap.php (not in repo) in the same folder as this script
- * which is probably more useful if you run these tests a lot
- * <html>
- * <body>
- * <h3>PHPMailer Unit Test</h3>
- * By entering a SMTP hostname it will automatically perform tests with SMTP.
- *
- * <form name="phpmailer_unit" action=__FILE__ method="get">
- * <input type="hidden" name="submitted" value="1"/>
- * From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
- * <br/>
- * To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
- * <br/>
- * Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
- * <br/>
- * SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
- * <p/>
- * <input type="submit" value="Run Test"/>
- *
- * </form>
- * </body>
- * </html>
- */
