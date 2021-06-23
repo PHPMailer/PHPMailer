@@ -29,11 +29,15 @@ $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 //Set the hostname of the mail server
 $mail->Host = 'smtp.example.com';
 
-//Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-$mail->Port = 587;
+//Set the SMTP port number:
+// - 465 for SMTP with implicit TLS, a.k.a. RFC8314 SMTPS or
+// - 587 for SMTP+STARTTLS
+$mail->Port = 465;
 
-//Set the encryption mechanism to use - STARTTLS or SMTPS
-$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+//Set the encryption mechanism to use:
+// - SMTPS (implicit TLS on port 465) or
+// - STARTTLS (explicit TLS on port 587)
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
 //Custom connection options
 //Note that these settings are INSECURE
