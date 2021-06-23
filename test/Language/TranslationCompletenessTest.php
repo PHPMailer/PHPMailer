@@ -20,7 +20,7 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 /**
  * Check language files for missing or excess translations.
  */
-final class PHPMailerLangTest extends TestCase
+final class TranslationCompletenessTest extends TestCase
 {
     /**
      * Holds a PHPMailer instance.
