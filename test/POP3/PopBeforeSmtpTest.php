@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test Pop before Smtp functionality.
+ *
+ * @group pop3
  */
 final class PopBeforeSmtpTest extends TestCase
 {
@@ -56,8 +58,6 @@ final class PopBeforeSmtpTest extends TestCase
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth with a known-good login.
-     *
-     * @group pop3
      */
     public function testPopBeforeSmtpGood()
     {
@@ -83,8 +83,6 @@ final class PopBeforeSmtpTest extends TestCase
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
      * with a known-bad login.
-     *
-     * @group pop3
      */
     public function testPopBeforeSmtpBad()
     {
