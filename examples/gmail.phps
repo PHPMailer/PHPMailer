@@ -51,9 +51,13 @@ $mail->Username = 'username@gmail.com';
 $mail->Password = 'yourpassword';
 
 //Set who the message is to be sent from
+//Note that with gmail you can only use your account address (same as `Username`)
+//or predefined aliases that you have configured within your account.
+//Do not use user-submitted addresses in here
 $mail->setFrom('from@example.com', 'First Last');
 
 //Set an alternative reply-to address
+//This is a good place to put user-submitted addresses
 $mail->addReplyTo('replyto@example.com', 'First Last');
 
 //Set who the message is to be sent to
