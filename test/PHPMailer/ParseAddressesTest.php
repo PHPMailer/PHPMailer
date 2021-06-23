@@ -23,100 +23,104 @@ final class ParseAddressesTest extends TestCase
 {
 
     /**
-     * Test RFC822 address splitting.
+     * Test RFC822 address splitting using the PHPMailer native implementation.
+     *
+     * @dataProvider dataAddressSplitting
+     *
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
      */
-    public function testAddressSplitting()
+    public function testAddressSplittingNative($addrstr, $expected)
     {
-        //Test built-in address parser
-        self::assertCount(
-            2,
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com>, Jill User <jill@example.net>'
-            ),
-            'Failed to recognise address list (IMAP parser)'
-        );
+        $parsed = PHPMailer::parseAddresses($addrstr, false);
+
+        self::assertIsArray($parsed, 'parseAddresses() did not return an array');
         self::assertSame(
-            [
-                ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                ['name' => '', 'address' => 'frank@example.com'],
+            $expected,
+            $parsed,
+            'The return value from parseAddresses() did not match the expected output'
+        );
+    }
+
+    /**
+     * Test RFC822 address splitting using the IMAP implementation.
+     *
+     * @dataProvider dataAddressSplitting
+     *
+     * @requires extension imap
+     *
+     * @param string $addrstr      The address list string.
+     * @param array  $expected     The expected function output.
+     * @param array  $expectedImap Optional. The expected function output via IMAP if different.
+     */
+    public function testAddressSplittingImap($addrstr, $expected, $expectedImap = [])
+    {
+        $parsed = PHPMailer::parseAddresses($addrstr, true);
+
+        self::assertIsArray($parsed, 'parseAddresses() did not return an array');
+
+        $expected = empty($expectedImap) ? $expected : $expectedImap;
+        self::assertSame(
+            $expected,
+            $parsed,
+            'The return value from parseAddresses() did not match the expected output'
+        );
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataAddressSplitting()
+    {
+        return [
+            // Test cases with valid addresses.
+            'Valid address: two addresses with names' => [
+                'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                ],
             ],
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com>,'
-                . 'Jill User <jill@example.net>,'
-                . 'frank@example.com,'
-            ),
-            'Parsed addresses'
-        );
-        //Test simple address parser
-        self::assertCount(
-            2,
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com>, Jill User <jill@example.net>',
-                false
-            ),
-            'Failed to recognise address list'
-        );
-        //Test single address
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com>',
-                false
-            ),
-            'Failed to recognise single address'
-        );
-        //Test quoted name IMAP
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'Tim "The Book" O\'Reilly <foo@example.com>'
-            ),
-            'Failed to recognise quoted name (IMAP)'
-        );
-        //Test quoted name
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'Tim "The Book" O\'Reilly <foo@example.com>',
-                false
-            ),
-            'Failed to recognise quoted name'
-        );
-        //Test single address IMAP
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com>'
-            ),
-            'Failed to recognise single address (IMAP)'
-        );
-        //Test unnamed address
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'joe@example.com',
-                false
-            ),
-            'Failed to recognise unnamed address'
-        );
-        //Test unnamed address IMAP
-        self::assertNotEmpty(
-            PHPMailer::parseAddresses(
-                'joe@example.com'
-            ),
-            'Failed to recognise unnamed address (IMAP)'
-        );
-        //Test invalid addresses
-        self::assertEmpty(
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com.>, Jill User <jill.@example.net>'
-            ),
-            'Failed to recognise invalid addresses (IMAP)'
-        );
-        //Test invalid addresses
-        self::assertEmpty(
-            PHPMailer::parseAddresses(
-                'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
-                false
-            ),
-            'Failed to recognise invalid addresses'
-        );
+            'Valid address: two addresses with names, one without' => [
+                'addrstr'  => 'Joe User <joe@example.com>,'
+                    . 'Jill User <jill@example.net>,'
+                    . 'frank@example.com,',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                    ['name' => '', 'address' => 'frank@example.com'],
+                ],
+            ],
+            'Valid address: single address with name' => [
+                'addrstr'  => 'Joe User <joe@example.com>',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                ],
+            ],
+            'Valid address: single address, quotes within name' => [
+                'addrstr'  => 'Tim "The Book" O\'Reilly <foo@example.com>',
+                'expected' => [
+                    ['name' => 'Tim "The Book" O\'Reilly', 'address' => 'foo@example.com'],
+                ],
+                'expectedImap' => [
+                    ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
+                ],
+            ],
+            'Valid address: single address without name' => [
+                'addrstr'  => 'joe@example.com',
+                'expected' => [
+                    ['name' => '', 'address' => 'joe@example.com'],
+                ],
+            ],
+
+            // Test cases with invalid addresses.
+            'Invalid address: multiple addresses, invalid periods' => [
+                'addrstr'  => 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
+                'expected' => [],
+            ],
+        ];
     }
 
     /**
