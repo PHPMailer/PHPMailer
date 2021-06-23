@@ -40,13 +40,16 @@ final class DKIMTest extends TestCase
     /**
      * DKIM body canonicalization tests.
      *
-     * @see https://tools.ietf.org/html/rfc6376#section-3.4.4
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.4
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_BodyC
      */
     public function testDKIMBodyCanonicalization()
     {
-        //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
+        // Example from https://tools.ietf.org/html/rfc6376#section-3.4.5.
         $prebody = " C \r\nD \t E\r\n\r\n\r\n";
         $postbody = " C \r\nD \t E\r\n";
+
         self::assertSame("\r\n", $this->Mail->DKIM_BodyC(''), 'DKIM empty body canonicalization incorrect');
         self::assertSame(
             'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
@@ -59,11 +62,13 @@ final class DKIMTest extends TestCase
     /**
      * DKIM header canonicalization tests.
      *
-     * @see https://tools.ietf.org/html/rfc6376#section-3.4.2
+     * @link https://tools.ietf.org/html/rfc6376#section-3.4.2
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_HeaderC
      */
     public function testDKIMHeaderCanonicalization()
     {
-        //Example from https://tools.ietf.org/html/rfc6376#section-3.4.5
+        // Example from https://tools.ietf.org/html/rfc6376#section-3.4.5.
         $preheaders = "A: X\r\nB : Y\t\r\n\tZ  \r\n";
         $postheaders = "a:X\r\nb:Y Z\r\n";
         self::assertSame(
@@ -71,7 +76,8 @@ final class DKIMTest extends TestCase
             $this->Mail->DKIM_HeaderC($preheaders),
             'DKIM header canonicalization incorrect'
         );
-        //Check that long folded lines with runs of spaces are canonicalized properly
+
+        // Check that long folded lines with runs of spaces are canonicalized properly.
         $preheaders = 'Long-Header-1: <https://example.com/somescript.php?' .
             "id=1234567890&name=Abcdefghijklmnopquestuvwxyz&hash=\r\n abc1234\r\n" .
             "Long-Header-2: This  is  a  long  header  value  that  contains  runs  of  spaces and trailing    \r\n" .
@@ -89,9 +95,13 @@ final class DKIMTest extends TestCase
     /**
      * DKIM copied header fields tests.
      *
-     * @see https://tools.ietf.org/html/rfc6376#section-3.5
+     * @link https://tools.ietf.org/html/rfc6376#section-3.5
      *
      * @requires extension openssl
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Add
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_QP
      */
     public function testDKIMOptionalHeaderFieldsCopy()
     {
@@ -104,7 +114,7 @@ final class DKIMTest extends TestCase
         openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
-        //Example from https://tools.ietf.org/html/rfc6376#section-3.5
+        // Example from https://tools.ietf.org/html/rfc6376#section-3.5.
         $from = 'from@example.com';
         $to = 'to@example.com';
         $date = 'date';
@@ -132,6 +142,10 @@ final class DKIMTest extends TestCase
      * DKIM signing extra headers tests.
      *
      * @requires extension openssl
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Add
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_QP
      */
     public function testDKIMExtraHeaders()
     {
@@ -144,7 +158,7 @@ final class DKIMTest extends TestCase
         openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
-        //Example from https://tools.ietf.org/html/rfc6376#section-3.5
+        // Example from https://tools.ietf.org/html/rfc6376#section-3.5.
         $from = 'from@example.com';
         $to = 'to@example.com';
         $date = 'date';
@@ -174,16 +188,19 @@ final class DKIMTest extends TestCase
      * DKIM Signing tests.
      *
      * @requires extension openssl
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Add
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_QP
      */
-    public function testDKIM()
+    public function testDKIMSigningMail()
     {
         $this->Mail->Subject .= ': DKIM signing';
         $this->Mail->Body = 'This message is DKIM signed.';
         $this->buildBody();
 
-        //Make a new key pair
-        //(2048 bits is the recommended minimum key length -
-        //gmail won't accept less than 1024 bits)
+        // Make a new key pair.
+        // Note: 2048 bits is the recommended minimum key length - gmail won't accept less than 1024 bits.
         $pk = openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
@@ -191,11 +208,13 @@ final class DKIMTest extends TestCase
             ]
         );
         openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+
         $this->Mail->DKIM_domain = 'example.com';
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
         $this->Mail->DKIM_selector = 'phpmailer';
         $this->Mail->DKIM_passphrase = ''; //key is not encrypted
         self::assertTrue($this->Mail->send(), 'DKIM signed mail failed');
+
         $this->Mail->isMail();
         self::assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
     }
