@@ -39,7 +39,7 @@ This software is distributed under the [LGPL 2.1](http://www.gnu.org/licenses/lg
 PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via [Composer](https://getcomposer.org) is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
 
 ```json
-"phpmailer/phpmailer": "^6.2"
+"phpmailer/phpmailer": "^6.5"
 ```
 
 or run
@@ -89,7 +89,7 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
-//Instantiation and passing `true` enables exceptions
+//Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
 
 try {
