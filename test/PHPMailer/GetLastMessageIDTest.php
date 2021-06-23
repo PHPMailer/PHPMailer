@@ -23,11 +23,14 @@ final class GetLastMessageIDTest extends TestCase
 
     /**
      * Test setting and retrieving an invalid message ID.
+     *
+     * @dataProvider dataMessageIDInvalid
+     *
+     * @param string $id Custom, invalid message ID.
      */
-    public function testMessageIDInvalid()
+    public function testMessageIDInvalid($id)
     {
         $this->Mail->Body = 'Test message ID.';
-        $id = hash('sha256', 12345);
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
@@ -36,17 +39,44 @@ final class GetLastMessageIDTest extends TestCase
     }
 
     /**
-     * Test setting and retrieving a valid, custom message ID.
+     * Data provider.
+     *
+     * @return array
      */
-    public function testMessageIDValid()
+    public function dataMessageIDInvalid()
+    {
+        return [
+            'Invalid: plain hash' => [ hash('sha256', 12345) ],
+        ];
+    }
+
+    /**
+     * Test setting and retrieving a valid, custom message ID.
+     *
+     * @dataProvider dataMessageIDValid
+     *
+     * @param string $id Custom, valid message ID.
+     */
+    public function testMessageIDValid($id)
     {
         $this->Mail->Body = 'Test message ID.';
-        $id = '<' . hash('sha256', 12345) . '@example.com>';
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
         self::assertSame($id, $lastid, 'Custom Message ID not used');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataMessageIDValid()
+    {
+        return [
+            'hashed pre @' => [ '<' . hash('sha256', 12345) . '@example.com>' ],
+        ];
     }
 
     /**
