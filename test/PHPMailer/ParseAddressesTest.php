@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test RFC822 address splitting.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
  */
 final class ParseAddressesTest extends TestCase
 {
