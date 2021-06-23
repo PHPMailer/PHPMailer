@@ -7,6 +7,7 @@ jobs:
   build_and_publish:
     name: Build and publish Docs
     runs-on: ubuntu-latest
+    if: github.repository == 'PHPMailer/PHPMailer'
     steps:
       - name: Checkout sources
         uses: actions/checkout@v1
