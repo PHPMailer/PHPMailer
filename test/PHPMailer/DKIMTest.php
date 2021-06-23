@@ -21,6 +21,20 @@ use PHPMailer\Test\TestCase;
 final class DKIMTest extends TestCase
 {
 
+    const PRIVATE_KEY_FILE = 'dkim_private.pem';
+
+    /**
+     * Run after each test is completed.
+     */
+    protected function tear_down()
+    {
+        if (file_exists(self::PRIVATE_KEY_FILE)) {
+            unlink(self::PRIVATE_KEY_FILE);
+        }
+
+        parent::tear_down();
+    }
+
     /**
      * DKIM body canonicalization tests.
      *
@@ -79,15 +93,14 @@ final class DKIMTest extends TestCase
      */
     public function testDKIMOptionalHeaderFieldsCopy()
     {
-        $privatekeyfile = 'dkim_private.pem';
         $pk = openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
-        $this->Mail->DKIM_private = 'dkim_private.pem';
+        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+        $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
         //Example from https://tools.ietf.org/html/rfc6376#section-3.5
         $from = 'from@example.com';
@@ -111,8 +124,6 @@ final class DKIMTest extends TestCase
             $this->Mail->DKIM_Add($headerLines, $subject, ''),
             'DKIM header without copied header fields incorrect'
         );
-
-        unlink($privatekeyfile);
     }
 
     /**
@@ -122,15 +133,14 @@ final class DKIMTest extends TestCase
      */
     public function testDKIMExtraHeaders()
     {
-        $privatekeyfile = 'dkim_private.pem';
         $pk = openssl_pkey_new(
             [
                 'private_key_bits' => 2048,
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
-        $this->Mail->DKIM_private = 'dkim_private.pem';
+        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+        $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
         //Example from https://tools.ietf.org/html/rfc6376#section-3.5
         $from = 'from@example.com';
@@ -156,8 +166,6 @@ final class DKIMTest extends TestCase
         $result = $this->Mail->DKIM_Add($headerLines, $subject, '');
 
         self::assertStringContainsString($headerFields, $result, 'DKIM header with extra headers incorrect');
-
-        unlink($privatekeyfile);
     }
 
     /**
@@ -170,7 +178,7 @@ final class DKIMTest extends TestCase
         $this->Mail->Subject .= ': DKIM signing';
         $this->Mail->Body = 'This message is DKIM signed.';
         $this->buildBody();
-        $privatekeyfile = 'dkim_private.pem';
+
         //Make a new key pair
         //(2048 bits is the recommended minimum key length -
         //gmail won't accept less than 1024 bits)
@@ -180,14 +188,13 @@ final class DKIMTest extends TestCase
                 'private_key_type' => OPENSSL_KEYTYPE_RSA,
             ]
         );
-        openssl_pkey_export_to_file($pk, $privatekeyfile);
+        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_domain = 'example.com';
-        $this->Mail->DKIM_private = $privatekeyfile;
+        $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
         $this->Mail->DKIM_selector = 'phpmailer';
         $this->Mail->DKIM_passphrase = ''; //key is not encrypted
         self::assertTrue($this->Mail->send(), 'DKIM signed mail failed');
         $this->Mail->isMail();
         self::assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
-        unlink($privatekeyfile);
     }
 }
