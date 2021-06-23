@@ -24,7 +24,11 @@ final class OAuthTest extends TestCase
 {
 
     /**
-     * Test OAuth method
+     * Test OAuth method.
+     *
+     * @covers PHPMailer\PHPMailer\PHPMailer::getOAuth
+     * @covers PHPMailer\PHPMailer\PHPMailer::setOAuth
+     * @covers PHPMailer\PHPMailer\OAuth::__construct
      */
     public function testOAuth()
     {
@@ -33,7 +37,7 @@ final class OAuthTest extends TestCase
         $property = $reflection->getProperty('oauth');
         $property->setAccessible(true);
         $property->setValue($PHPMailer, true);
-        self::assertTrue($PHPMailer->getOAuth());
+        self::assertTrue($PHPMailer->getOAuth(), 'Initial value of oauth property is not true');
 
         $options = [
             'provider' => 'dummyprovider',
@@ -44,9 +48,13 @@ final class OAuthTest extends TestCase
         ];
 
         $oauth = new OAuth($options);
-        self::assertInstanceOf(OAuth::class, $oauth);
+        self::assertInstanceOf(OAuth::class, $oauth, 'Instantiation of OAuth class failed');
         $subject = $PHPMailer->setOAuth($oauth);
-        self::assertNull($subject);
-        self::assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
+        self::assertNull($subject, 'setOAuth() is not a void function');
+        self::assertInstanceOf(
+            OAuth::class,
+            $PHPMailer->getOAuth(),
+            'Setting Oauth property to an instance of the OAuth class failed'
+        );
     }
 }
