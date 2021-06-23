@@ -1,6 +1,10 @@
 name: "Tests"
 
-on: [push]
+on:
+  push:
+  pull_request:
+  # Allow manually triggering the workflow.
+  workflow_dispatch:
 
 jobs:
 
@@ -20,12 +24,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          coverage: none
+          tools: cs2pr
 
       - name: Install dependencies
         run: composer install --no-interaction
 
       - name: Check coding standards
-        run: ./vendor/bin/phpcs -s
+        continue-on-error: true
+        run: ./vendor/bin/phpcs -s --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Show PHPCS results in PR
+        run: cs2pr ./phpcs-report.xml
 
   test:
     needs: ['coding-standard']
