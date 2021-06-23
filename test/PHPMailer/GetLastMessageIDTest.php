@@ -45,8 +45,12 @@ final class GetLastMessageIDTest extends TestCase
      */
     public function dataMessageIDInvalid()
     {
+        $hash = hash('sha256', 12345);
+
         return [
-            'Invalid: plain hash' => [ hash('sha256', 12345) ],
+            'Invalid: plain hash'       => [ $hash ],
+            'Invalid: missing brackets' => [ $hash . '@example.com' ],
+            'Invalid: missing @'        => [ '<' . $hash . 'example.com>' ],
         ];
     }
 
@@ -74,8 +78,17 @@ final class GetLastMessageIDTest extends TestCase
      */
     public function dataMessageIDValid()
     {
+        $hash = hash('sha256', 12345);
+
         return [
-            'hashed pre @' => [ '<' . hash('sha256', 12345) . '@example.com>' ],
+            'hashed pre @'               => [ '<' . $hash . '@example.com>' ],
+            'no text before @'           => [ '<@example.com>' ],
+            'no text after @'            => [ '<' . $hash . '@>' ],
+            'no text before or after @'  => [ '<@>' ],
+            'new line after end bracket' => [ '<' . $hash . "@>\n" ],
+            'multiple @ signs'           => [ '<' . $hash . '@example@com>' ],
+            'brackets within 1'          => [ '<' . $hash . '<@>example.com>' ],
+            'brackets within 2'          => [ '<<' . $hash . '@example>com>' ],
         ];
     }
 
