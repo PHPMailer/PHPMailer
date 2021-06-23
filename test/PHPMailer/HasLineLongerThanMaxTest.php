@@ -24,11 +24,14 @@ final class HasLineLongerThanMaxTest extends TestCase
 
     /**
      * Test constructing a multipart message that contains lines that are too long for RFC compliance.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::encodeString
+     * @covers \PHPMailer\PHPMailer\PHPMailer::hasLineLongerThanMax
      */
     public function testLongBody()
     {
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . PHPMailer::getLE(), 2);
-        //Use +2 to ensure line length is over limit - LE may only be 1 char
+        // Use +2 to ensure line length is over limit - LE may only be 1 char.
         $badlen = str_repeat(str_repeat('1', PHPMailer::MAX_LINE_LENGTH + 2) . PHPMailer::getLE(), 2);
 
         $this->Mail->Body = 'This message contains lines that are too long.' .
@@ -37,6 +40,7 @@ final class HasLineLongerThanMaxTest extends TestCase
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content does not contain long lines!'
         );
+
         $this->Mail->isHTML();
         $this->buildBody();
         $this->Mail->AltBody = $this->Mail->Body;
@@ -56,6 +60,8 @@ final class HasLineLongerThanMaxTest extends TestCase
 
     /**
      * Test constructing a message that does NOT contain lines that are too long for RFC compliance.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::hasLineLongerThanMax
      */
     public function testShortBody()
     {
@@ -67,6 +73,7 @@ final class HasLineLongerThanMaxTest extends TestCase
             PHPMailer::hasLineLongerThanMax($this->Mail->Body),
             'Test content contains long lines!'
         );
+
         $this->buildBody();
         $this->Mail->Encoding = '8bit';
         $this->Mail->preSend();
@@ -81,10 +88,13 @@ final class HasLineLongerThanMaxTest extends TestCase
 
     /**
      * Test line length detection.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::createBody
+     * @covers \PHPMailer\PHPMailer\PHPMailer::hasLineLongerThanMax
      */
     public function testLineLength()
     {
-        //May have been altered by earlier tests, can interfere with line break format
+        // May have been altered by earlier tests, can interfere with line break format.
         $this->Mail->isSMTP();
         $this->Mail->preSend();
         $oklen = str_repeat(str_repeat('0', PHPMailer::MAX_LINE_LENGTH) . "\r\n", 2);
@@ -97,6 +107,7 @@ final class HasLineLongerThanMaxTest extends TestCase
             'Long line not detected (middle)'
         );
         self::assertFalse(PHPMailer::hasLineLongerThanMax($oklen), 'Long line false positive');
+
         $this->Mail->isHTML(false);
         $this->Mail->Subject .= ': Line length test';
         $this->Mail->CharSet = 'UTF-8';
