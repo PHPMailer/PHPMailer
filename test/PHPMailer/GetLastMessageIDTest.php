@@ -32,13 +32,13 @@ final class GetLastMessageIDTest extends TestCase
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        self::assertNotSame($lastid, $id, 'Invalid Message ID allowed');
+        self::assertNotSame($id, $lastid, 'Invalid Message ID allowed');
         $id = '<' . hash('sha256', 12345) . '@example.com>';
         $this->Mail->MessageID = $id;
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        self::assertSame($lastid, $id, 'Custom Message ID not used');
+        self::assertSame($id, $lastid, 'Custom Message ID not used');
         $this->Mail->MessageID = '';
         $this->buildBody();
         $this->Mail->preSend();
