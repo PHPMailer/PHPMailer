@@ -2117,7 +2117,7 @@ EOT;
         sleep(1);
         //Test a known-good login
         self::assertTrue(
-            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
+            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test'),
             'POP before SMTP failed'
         );
         //Kill the fake server, don't care if it fails
@@ -2145,7 +2145,7 @@ EOT;
         sleep(2);
         //Test a known-bad login
         self::assertFalse(
-            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
+            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx'),
             'POP before SMTP should have failed'
         );
         //Kill the fake server, don't care if it fails
