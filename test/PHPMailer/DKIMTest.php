@@ -90,6 +90,8 @@ final class DKIMTest extends TestCase
      * DKIM copied header fields tests.
      *
      * @see https://tools.ietf.org/html/rfc6376#section-3.5
+     *
+     * @requires extension openssl
      */
     public function testDKIMOptionalHeaderFieldsCopy()
     {
@@ -128,6 +130,8 @@ final class DKIMTest extends TestCase
 
     /**
      * DKIM signing extra headers tests.
+     *
+     * @requires extension openssl
      */
     public function testDKIMExtraHeaders()
     {
