@@ -13,6 +13,8 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\TestCase;
 
 /**
@@ -217,5 +219,38 @@ final class DKIMTest extends TestCase
 
         $this->Mail->isMail();
         self::assertTrue($this->Mail->send(), 'DKIM signed mail via mail() failed');
+    }
+
+    /**
+     * Verify behaviour of the DKIM_Sign method when Open SSL is not available.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
+     */
+    public function testDKIMSignOpenSSLNotAvailable()
+    {
+        if (extension_loaded('openssl')) {
+            $this->markTestSkipped('Test requires OpenSSL *not* to be available');
+        }
+
+        $signature = $this->Mail->DKIM_Sign('foo');
+        self::assertSame('', $signature);
+    }
+
+    /**
+     * Verify behaviour of the DKIM_Sign method when Open SSL is not available and exceptions is enabled.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
+     */
+    public function testDKIMSignOpenSSLNotAvailableException()
+    {
+        if (extension_loaded('openssl')) {
+            $this->markTestSkipped('Test requires OpenSSL *not* to be available');
+        }
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Extension missing: openssl');
+
+        $mail = new PHPMailer(true);
+        $mail->DKIM_Sign('foo');
     }
 }
