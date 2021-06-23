@@ -143,6 +143,14 @@ final class ParseAddressesTest extends TestCase
             ],
 
             // Test cases with invalid addresses.
+            'Invalid address: single address, incomplete email' => [
+                'addrstr'  => 'Jill User <doug@>',
+                'expected' => [],
+            ],
+            'Invalid address: single address, invalid characters in email' => [
+                'addrstr'  => 'Joe User <{^c\@**Dog^}@cartoon.com>',
+                'expected' => [],
+            ],
             'Invalid address: multiple addresses, invalid periods' => [
                 'addrstr'  => 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
                 'expected' => [],
