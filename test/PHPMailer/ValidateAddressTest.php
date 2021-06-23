@@ -21,6 +21,14 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  *
  * Test addresses obtained from {@link http://isemail.info}.
  *
+ * @todo Recommendation JRF: Rework the tests to actually test all test cases
+ *       against each type of build-in pattern.
+ *       As things stand, only the PHP validation is tested (while it shouldn't be as that's
+ *       the responsibility of PHP Core), while the PCRE and HTML5 regexes are untested, while
+ *       those are maintained within this repo.
+ *       There should also be a test to make sure that `auto` and `noregex` correctly
+ *       fall through to the default validation.
+ *
  * @covers \PHPMailer\PHPMailer\PHPMailer::validateAddress
  */
 final class ValidateAddressTest extends TestCase
