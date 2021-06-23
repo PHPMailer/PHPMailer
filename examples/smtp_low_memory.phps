@@ -11,7 +11,7 @@ require '../vendor/autoload.php';
 /**
  * This class demonstrates sending an already-built RFC822 message via SMTP
  * by extending PHPMailer's SMTP class.
- * It uses less memory that PHPMailer's usual approach because it keeps
+ * It uses less memory than PHPMailer's usual approach because it keeps
  * the message as a single string rather than splitting its lines into
  * an array, which can consume very large amounts of memory if you have
  * large attachments. The downside is that it's somewhat slower.
