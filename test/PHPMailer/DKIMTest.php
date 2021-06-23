@@ -17,6 +17,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test DKIM signing functionality.
+ *
+ * @group dkim
  */
 final class DKIMTest extends TestCase
 {
@@ -87,8 +89,6 @@ final class DKIMTest extends TestCase
     /**
      * DKIM copied header fields tests.
      *
-     * @group dkim
-     *
      * @see https://tools.ietf.org/html/rfc6376#section-3.5
      */
     public function testDKIMOptionalHeaderFieldsCopy()
@@ -128,8 +128,6 @@ final class DKIMTest extends TestCase
 
     /**
      * DKIM signing extra headers tests.
-     *
-     * @group dkim
      */
     public function testDKIMExtraHeaders()
     {
