@@ -20,6 +20,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  * Test Pop before Smtp functionality.
  *
  * @group pop3
+ *
+ * @covers PHPMailer\PHPMailer\POP3
  */
 final class PopBeforeSmtpTest extends TestCase
 {
@@ -61,7 +63,7 @@ final class PopBeforeSmtpTest extends TestCase
      */
     public function testPopBeforeSmtpGood()
     {
-        //Start a fake POP server
+        // Start a fake POP server.
         $pid = shell_exec(
             '/usr/bin/nohup ' .
             \PHPMAILER_INCLUDE_DIR .
@@ -70,12 +72,14 @@ final class PopBeforeSmtpTest extends TestCase
         $this->pids[] = $pid;
 
         sleep(1);
-        //Test a known-good login
+
+        // Test a known-good login.
         self::assertTrue(
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test'),
             'POP before SMTP failed'
         );
-        //Kill the fake server, don't care if it fails
+
+        // Kill the fake server, don't care if it fails.
         @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
@@ -86,8 +90,8 @@ final class PopBeforeSmtpTest extends TestCase
      */
     public function testPopBeforeSmtpBad()
     {
-        //Start a fake POP server on a different port
-        //so we don't inadvertently connect to the previous instance
+        // Start a fake POP server on a different port,
+        // so we don't inadvertently connect to the previous instance.
         $pid = shell_exec(
             '/usr/bin/nohup ' .
             \PHPMAILER_INCLUDE_DIR .
@@ -96,12 +100,14 @@ final class PopBeforeSmtpTest extends TestCase
         $this->pids[] = $pid;
 
         sleep(2);
-        //Test a known-bad login
+
+        // Test a known-bad login.
         self::assertFalse(
             POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx'),
             'POP before SMTP should have failed'
         );
-        //Kill the fake server, don't care if it fails
+
+        // Kill the fake server, don't care if it fails.
         @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
