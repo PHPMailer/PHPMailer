@@ -22,9 +22,10 @@ final class ICalTest extends TestCase
 {
 
     /**
-     * Test ICal method
+     * Test ICal method.
      *
      * @dataProvider dataICalMethod
+     * @covers       \PHPMailer\PHPMailer\PHPMailer::createBody
      *
      * @param string $methodLine The Ical method line to use.
      * @param string $expected   The expected content type header.
