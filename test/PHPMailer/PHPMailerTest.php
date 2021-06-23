@@ -16,7 +16,6 @@ namespace PHPMailer\Test\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\POP3;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
 
@@ -1855,60 +1854,6 @@ EOT;
             $this->Mail->getReplyToAddresses(),
             'Bad count of "reply-to" addresses'
         );
-    }
-
-    /**
-     * Use a fake POP3 server to test POP-before-SMTP auth with a known-good login.
-     *
-     * @group pop3
-     */
-    public function testPopBeforeSmtpGood()
-    {
-        //Start a fake POP server
-        $pid = shell_exec(
-            '/usr/bin/nohup ' .
-            \PHPMAILER_INCLUDE_DIR .
-            '/test/runfakepopserver.sh 1100 >/dev/null 2>/dev/null & printf "%u" $!'
-        );
-        $this->pids[] = $pid;
-
-        sleep(1);
-        //Test a known-good login
-        self::assertTrue(
-            POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test'),
-            'POP before SMTP failed'
-        );
-        //Kill the fake server, don't care if it fails
-        @shell_exec('kill -TERM ' . escapeshellarg($pid));
-        sleep(2);
-    }
-
-    /**
-     * Use a fake POP3 server to test POP-before-SMTP auth
-     * with a known-bad login.
-     *
-     * @group pop3
-     */
-    public function testPopBeforeSmtpBad()
-    {
-        //Start a fake POP server on a different port
-        //so we don't inadvertently connect to the previous instance
-        $pid = shell_exec(
-            '/usr/bin/nohup ' .
-            \PHPMAILER_INCLUDE_DIR .
-            '/test/runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!'
-        );
-        $this->pids[] = $pid;
-
-        sleep(2);
-        //Test a known-bad login
-        self::assertFalse(
-            POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx'),
-            'POP before SMTP should have failed'
-        );
-        //Kill the fake server, don't care if it fails
-        @shell_exec('kill -TERM ' . escapeshellarg($pid));
-        sleep(2);
     }
 
     /**

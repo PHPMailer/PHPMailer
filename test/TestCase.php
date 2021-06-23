@@ -51,13 +51,6 @@ abstract class TestCase extends PolyfillTestCase
     private $NoteLog = [];
 
     /**
-     * PIDs of any processes we need to kill.
-     *
-     * @var array
-     */
-    protected $pids = [];
-
-    /**
      * Run before each test class.
      */
     public static function set_up_before_class()
@@ -143,11 +136,6 @@ abstract class TestCase extends PolyfillTestCase
         $this->Mail = null;
         $this->ChangeLog = [];
         $this->NoteLog = [];
-
-        foreach ($this->pids as $pid) {
-            $p = escapeshellarg($pid);
-            shell_exec("ps $p && kill -TERM $p");
-        }
     }
 
     /**
