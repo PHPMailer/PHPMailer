@@ -76,9 +76,37 @@ final class ICalTest extends TestCase
     public function dataICalMethod()
     {
         return [
+            'Valid method: request (default)' => [
+                'methodLine' => "\r\nMETHOD:REQUEST",
+                'expected'   => '/Content-Type: text\/calendar; method=REQUEST;/',
+            ],
+            'Valid method: publish' => [
+                'methodLine' => "\r\nMETHOD:PUBLISH",
+                'expected'   => '/Content-Type: text\/calendar; method=PUBLISH;/',
+            ],
+            'Valid method: reply' => [
+                'methodLine' => "\r\nMETHOD:REPLY",
+                'expected'   => '/Content-Type: text\/calendar; method=REPLY;/',
+            ],
+            'Valid method: add' => [
+                'methodLine' => "\r\nMETHOD:ADD",
+                'expected'   => '/Content-Type: text\/calendar; method=ADD;/',
+            ],
             'Valid method: cancel' => [
                 'methodLine' => "\r\nMETHOD:CANCEL",
                 'expected'   => '/Content-Type: text\/calendar; method=CANCEL;/',
+            ],
+            'Valid method: refresh' => [
+                'methodLine' => "\r\nMETHOD:REFRESH",
+                'expected'   => '/Content-Type: text\/calendar; method=REFRESH;/',
+            ],
+            'Valid method: counter' => [
+                'methodLine' => "\r\nMETHOD:COUNTER",
+                'expected'   => '/Content-Type: text\/calendar; method=COUNTER;/',
+            ],
+            'Valid method: declinecounter' => [
+                'methodLine' => "\r\nMETHOD:DECLINECOUNTER",
+                'expected'   => '/Content-Type: text\/calendar; method=DECLINECOUNTER;/',
             ],
             // Test ICal invalid method to use default (REQUEST).
             'Invalid method' => [
