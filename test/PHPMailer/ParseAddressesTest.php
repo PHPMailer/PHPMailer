@@ -76,21 +76,10 @@ final class ParseAddressesTest extends TestCase
     {
         return [
             // Test cases with valid addresses.
-            'Valid address: two addresses with names' => [
-                'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
+            'Valid address: single address without name' => [
+                'addrstr'  => 'joe@example.com',
                 'expected' => [
-                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                ],
-            ],
-            'Valid address: two addresses with names, one without' => [
-                'addrstr'  => 'Joe User <joe@example.com>,'
-                    . 'Jill User <jill@example.net>,'
-                    . 'frank@example.com,',
-                'expected' => [
-                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                    ['name' => '', 'address' => 'frank@example.com'],
+                    ['name' => '', 'address' => 'joe@example.com'],
                 ],
             ],
             'Valid address: single address with name' => [
@@ -108,10 +97,21 @@ final class ParseAddressesTest extends TestCase
                     ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
                 ],
             ],
-            'Valid address: single address without name' => [
-                'addrstr'  => 'joe@example.com',
+            'Valid address: two addresses with names' => [
+                'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
                 'expected' => [
-                    ['name' => '', 'address' => 'joe@example.com'],
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                ],
+            ],
+            'Valid address: two addresses with names, one without' => [
+                'addrstr'  => 'Joe User <joe@example.com>,'
+                    . 'Jill User <jill@example.net>,'
+                    . 'frank@example.com,',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                    ['name' => '', 'address' => 'frank@example.com'],
                 ],
             ],
             'Valid address: multiple address, various formats, including one utf8-encoded address' => [
