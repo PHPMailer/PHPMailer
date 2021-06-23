@@ -62,8 +62,6 @@ abstract class TestCase extends PolyfillTestCase
      */
     public static function set_up_before_class()
     {
-        require_once __DIR__ . '/validators.php';
-
         if (defined('PHPMAILER_INCLUDE_DIR') === false) {
             /*
              * Set up default include path.

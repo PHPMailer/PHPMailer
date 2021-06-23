@@ -87,6 +87,8 @@ final class ValidateAddressCustomValidatorTest extends TestCase
      */
     public function testRejectCallables($callback, $message)
     {
+        require_once \PHPMAILER_INCLUDE_DIR . '/test/validators.php';
+
         self::assertTrue(PHPMailer::validateAddress('test@example.com', $callback), $message);
     }
 
