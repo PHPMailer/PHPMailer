@@ -17,6 +17,9 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test setting and retrieving message ID.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::createHeader
+ * @covers \PHPMailer\PHPMailer\PHPMailer::getLastMessageID
  */
 final class GetLastMessageIDTest extends TestCase
 {
