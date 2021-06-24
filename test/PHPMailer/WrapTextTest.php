@@ -22,14 +22,41 @@ use PHPMailer\Test\TestCase;
 final class WrapTextTest extends TestCase
 {
 
-    public function testVeryLongWordInMessage_wrapText_returnsWrappedText()
+    /**
+     * Test wrapping text.
+     *
+     * @dataProvider dataWrapText
+     *
+     * @param string $message  Input text string.
+     * @param string $expected Expected funtion output.
+     * @param bool   $qp_mode  Optional. Whether to run in Quoted-Printable mode. Defaults to `false`.
+     * @param int    $length   Optional. Length to wrap at. Defaults to `50`.
+     */
+    public function testWrapText($message, $expected, $qp_mode = false, $length = 50)
     {
-        $message = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
-        $expected = 'Lorem' . PHPMailer::getLE() .
-            'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE();
-        $expectedqp = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' .
-            PHPMailer::getLE() . 'eddiamnonumy' . PHPMailer::getLE();
-        $this->assertSame($expectedqp, $this->Mail->wrapText($message, 50, true));
-        $this->assertSame($expected, $this->Mail->wrapText($message, 50, false));
+        $this->assertSame($expected, $this->Mail->wrapText($message, $length, $qp_mode));
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataWrapText()
+    {
+        return [
+            'very long word in message, qp: false' => [
+                'message'  => 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy',
+                'expected' => 'Lorem' . PHPMailer::getLE()
+                    . 'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE(),
+                'qp_mode'  => false,
+            ],
+            'very long word in message, qp: true' => [
+                'message'  => 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy',
+                'expected' => 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' . PHPMailer::getLE()
+                    . 'eddiamnonumy' . PHPMailer::getLE(),
+                'qp_mode'  => true,
+            ],
+        ];
     }
 }
