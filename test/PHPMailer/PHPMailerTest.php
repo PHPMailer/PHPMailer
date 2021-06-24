@@ -1744,15 +1744,4 @@ EOT;
         $this->assertSame($expectedqp, $this->Mail->wrapText($message, 50, true));
         $this->assertSame($expected, $this->Mail->wrapText($message, 50, false));
     }
-
-    public function testEncodedText_utf8CharBoundary_returnsCorrectMaxLength()
-    {
-        $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
-        $encodedSingleByteCharacter = '=0C';
-        $encodedWordWithMultiByteCharMiddletByte = 'L=C3=B6rem';
-
-        $this->assertSame(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharFirstByte, 3));
-        $this->assertSame(3, $this->Mail->utf8CharBoundary($encodedSingleByteCharacter, 3));
-        $this->assertSame(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
-    }
 }
