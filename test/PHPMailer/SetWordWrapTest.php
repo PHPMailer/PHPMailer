@@ -17,6 +17,9 @@ use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test automatic wordwrap functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::setWordWrap
+ * @covers \PHPMailer\PHPMailer\PHPMailer::wrapText
  */
 final class SetWordWrapTest extends PreSendTestCase
 {
