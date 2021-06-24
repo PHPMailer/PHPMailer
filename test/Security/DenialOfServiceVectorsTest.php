@@ -17,6 +17,8 @@ use PHPMailer\Test\SendTestCase;
 
 /**
  * Test denial of service attack vectors, which have been mitigated.
+ *
+ * @coversNothing
  */
 final class DenialOfServiceVectorsTest extends SendTestCase
 {
@@ -24,9 +26,9 @@ final class DenialOfServiceVectorsTest extends SendTestCase
     /**
      * Test this denial of service attack.
      *
-     * @see http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
+     * @link http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */
-    public function testDenialOfServiceAttack()
+    public function testDenialOfServiceAttack1()
     {
         $this->Mail->Body = 'This should no longer cause a denial of service.';
         $this->buildBody();
@@ -39,15 +41,15 @@ final class DenialOfServiceVectorsTest extends SendTestCase
      * Tests this denial of service attack.
      *
      * According to the ticket, this should get stuck in a loop, though I can't make it happen.
-     * @see https://sourceforge.net/p/phpmailer/bugs/383/
+     * @link https://sourceforge.net/p/phpmailer/bugs/383/
      *
      * @doesNotPerformAssertions
      */
     public function testDenialOfServiceAttack2()
     {
-        //Encoding name longer than 68 chars
+        // Encoding name longer than 68 chars.
         $this->Mail->Encoding = '1234567890123456789012345678901234567890123456789012345678901234567890';
-        //Call wrapText with a zero length value
+        // Call wrapText with a zero length value.
         $this->Mail->wrapText(str_repeat('This should no longer cause a denial of service. ', 30), 0);
     }
 }
