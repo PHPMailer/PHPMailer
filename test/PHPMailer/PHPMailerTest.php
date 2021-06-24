@@ -1707,15 +1707,4 @@ EOT;
         );
         $this->assertSame('test@xn--franois-xxa.ch', $result);
     }
-
-    public function testVeryLongWordInMessage_wrapText_returnsWrappedText()
-    {
-        $message = 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy';
-        $expected = 'Lorem' . PHPMailer::getLE() .
-            'ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy' . PHPMailer::getLE();
-        $expectedqp = 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' .
-            PHPMailer::getLE() . 'eddiamnonumy' . PHPMailer::getLE();
-        $this->assertSame($expectedqp, $this->Mail->wrapText($message, 50, true));
-        $this->assertSame($expected, $this->Mail->wrapText($message, 50, false));
-    }
 }
