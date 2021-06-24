@@ -20,6 +20,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  * Test UTF8 character boundary functionality.
  *
  * @covers \PHPMailer\PHPMailer\PHPMailer::utf8CharBoundary
+ *
+ * @todo Add more testcases to properly cover all paths in the method!
  */
 final class Utf8CharBoundaryTest extends TestCase
 {
