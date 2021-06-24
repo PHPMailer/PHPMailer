@@ -26,12 +26,13 @@ final class SetWordWrapTest extends PreSendTestCase
      *
      * @dataProvider dataWordWrap
      *
+     * @param int    $wrapAt        The number of characters to wrap at.
      * @param string $message       The message to use.
      * @param string $subjectSuffix Subject suffix to use.
      */
-    public function testWordWrap($message, $subjectSuffix)
+    public function testWordWrap($wrapAt, $message, $subjectSuffix)
     {
-        $this->Mail->WordWrap = 40;
+        $this->Mail->WordWrap = $wrapAt;
         $my_body = str_repeat($message, 10);
         $nBodyLen = strlen($my_body);
         $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
@@ -52,12 +53,14 @@ final class SetWordWrapTest extends PreSendTestCase
     {
         return [
             'ascii message' => [
+                'wrapAt'        => 40,
                 'message'       => 'Here is the main body of this message.  It should ' .
                     'be quite a few lines.  It should be wrapped at ' .
                     '40 characters.  Make sure that it is. ',
                 'subjectSuffix' => 'Wordwrap',
             ],
             'multibyte message' => [
+                'wrapAt'        => 40,
                 'message'       => '飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 ' .
                     '飛飛兒樂 團光茫兒樂 團光茫飛兒樂 團光飛兒樂 團光茫飛兒樂 團光茫兒樂 團光茫 ' .
                     '飛兒樂 團光茫飛兒樂 團飛兒樂 團光茫光茫飛兒樂 團光茫. ',
