@@ -85,4 +85,34 @@ final class SetWordWrapTest extends PreSendTestCase
             ],
         ];
     }
+
+    /**
+     * Test explicitly NOT word-wrapping a message.
+     */
+    public function testNoWordWrap()
+    {
+        $this->Mail->WordWrap = 0;
+        $my_body = str_repeat('Irrelevant text, we\'re not wrapping', 10);
+        $nBodyLen = strlen($my_body);
+        $my_body .= "\n\nLong unwrapped message: " . $nBodyLen;
+
+        $this->Mail->Body = $my_body;
+        $this->Mail->Subject .= ': No wordwrap';
+
+        $this->buildBody();
+        $originalLines = explode("\n", $this->Mail->Body);
+        $this->Mail->preSend();
+
+        $lines = explode("\n", $this->Mail->Body);
+        self::assertSameSize($originalLines, $lines, 'Line count of message has changed');
+
+        foreach ($lines as $i => $line) {
+            self::assertSame(
+                $originalLines[$i],
+                $line,
+                'Line ' . ($i + 1) . ' has been changed while it shouldn\'t have been'
+                    . PHP_EOL . 'Line contents: "' . $originalLines[$i] . '"'
+            );
+        }
+    }
 }
