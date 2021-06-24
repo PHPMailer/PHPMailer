@@ -13,22 +13,55 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\TestCase;
+use PHPMailer\PHPMailer\PHPMailer;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test UTF8 character boundary functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::utf8CharBoundary
  */
 final class Utf8CharBoundaryTest extends TestCase
 {
 
-    public function testEncodedText_utf8CharBoundary_returnsCorrectMaxLength()
+    /**
+     * Verify that the utf8CharBoundary() returns the correct last character boundary for encoded text.
+     *
+     * @dataProvider dataUtf8CharBoundary
+     *
+     * @param string $encodedText UTF-8 QP text to use as input string.
+     * @param int    $maxLength   Max length to pass to the function.
+     * @param int    $expected    Expected function output.
+     */
+    public function testUtf8CharBoundary($encodedText, $maxLength, $expected)
     {
-        $encodedWordWithMultiByteCharFirstByte = 'H=E4tten';
-        $encodedSingleByteCharacter = '=0C';
-        $encodedWordWithMultiByteCharMiddletByte = 'L=C3=B6rem';
+        $mail = new PHPMailer();
+        $this->assertSame($expected, $mail->utf8CharBoundary($encodedText, $maxLength));
+    }
 
-        $this->assertSame(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharFirstByte, 3));
-        $this->assertSame(3, $this->Mail->utf8CharBoundary($encodedSingleByteCharacter, 3));
-        $this->assertSame(1, $this->Mail->utf8CharBoundary($encodedWordWithMultiByteCharMiddletByte, 6));
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataUtf8CharBoundary()
+    {
+        return [
+            'Encoded word with multibyte char first byte' => [
+                'encodedText' => 'H=E4tten',
+                'maxLength'   => 3,
+                'expected'    => 1,
+            ],
+            'Encoded single byte char' => [
+                'encodedText' => '=0C',
+                'maxLength'   => 3,
+                'expected'    => 3,
+            ],
+            'Encoded word with multi byte char middle byte' => [
+                'encodedText' => 'L=C3=B6rem',
+                'maxLength'   => 6,
+                'expected'    => 1,
+            ],
+        ];
     }
 }
