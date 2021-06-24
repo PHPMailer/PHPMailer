@@ -13,12 +13,12 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test automatic wordwrap functionality.
  */
-final class SetWordWrapTest extends SendTestCase
+final class SetWordWrapTest extends PreSendTestCase
 {
 
     /**
@@ -40,7 +40,7 @@ final class SetWordWrapTest extends SendTestCase
         $this->Mail->Subject .= ': Wordwrap';
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -62,6 +62,6 @@ final class SetWordWrapTest extends SendTestCase
         $this->Mail->Subject .= ': Wordwrap multibyte';
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
     }
 }
