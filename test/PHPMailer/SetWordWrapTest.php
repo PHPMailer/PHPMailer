@@ -41,7 +41,24 @@ final class SetWordWrapTest extends PreSendTestCase
         $this->Mail->Subject .= ': ' . $subjectSuffix;
 
         $this->buildBody();
-        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
+        $originalLines = explode("\n", $this->Mail->Body);
+        $this->Mail->preSend();
+
+        $lines = explode("\n", $this->Mail->Body);
+        self::assertGreaterThanOrEqual(
+            count($originalLines),
+            count($lines),
+            'Line count of message less than expected'
+        );
+
+        foreach ($lines as $i => $line) {
+            self::assertLessThanOrEqual(
+                $wrapAt,
+                strlen(trim($line)),
+                'Character count for line ' . ($i + 1) . ' does not comply with the expected ' . $wrapAt
+                . ' characters.' . PHP_EOL . 'Line contents: "' . $line . '"'
+            );
+        }
     }
 
     /**
