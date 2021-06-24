@@ -14,7 +14,6 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
@@ -1894,33 +1893,6 @@ EOT;
         self::assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
         self::assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
-    }
-
-    /**
-     * Test OAuth method
-     */
-    public function testOAuth()
-    {
-        $PHPMailer = new PHPMailer();
-        $reflection = new \ReflectionClass($PHPMailer);
-        $property = $reflection->getProperty('oauth');
-        $property->setAccessible(true);
-        $property->setValue($PHPMailer, true);
-        self::assertTrue($PHPMailer->getOAuth());
-
-        $options = [
-            'provider' => 'dummyprovider',
-            'userName' => 'dummyusername',
-            'clientSecret' => 'dummyclientsecret',
-            'clientId' => 'dummyclientid',
-            'refreshToken' => 'dummyrefreshtoken',
-        ];
-
-        $oauth = new OAuth($options);
-        self::assertInstanceOf(OAuth::class, $oauth);
-        $subject = $PHPMailer->setOAuth($oauth);
-        self::assertNull($subject);
-        self::assertInstanceOf(OAuth::class, $PHPMailer->getOAuth());
     }
 
     /**
