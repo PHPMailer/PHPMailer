@@ -45,6 +45,60 @@ final class WrapTextTest extends TestCase
     public function dataWrapText()
     {
         return [
+            'empty string' => [
+                'message'  => '',
+                'expected' => PHPMailer::getLE(),
+                'qp_mode'  => false,
+            ],
+            'line length less than wrap limit, qp: false' => [
+                'message'  => 'Lorem ipsum dolor sit amet.',
+                'expected' => 'Lorem ipsum dolor sit amet.' . PHPMailer::getLE(),
+                'qp_mode'  => false,
+            ],
+            'line length less than wrap limit, qp: true' => [
+                'message'  => 'Lorem ipsum dolor sit amet.',
+                'expected' => 'Lorem ipsum dolor sit amet.' . PHPMailer::getLE(),
+                'qp_mode'  => true,
+            ],
+            'message with line ending at end' => [
+                'message'  => 'Lorem ipsum dolor' . PHPMailer::CRLF,
+                'expected' => 'Lorem ipsum dolor' . PHPMailer::getLE(),
+            ],
+            'line length more than wrap limit, qp: false' => [
+                'message'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    . ' Maecenas ultricies nisi justo, eu convallis tortor porttitor a.'
+                    . ' Nam ut risus tellus. Vivamus imperdiet dictum nibh, in faucibus nunc pretium ac.',
+                'expected' => 'Lorem ipsum dolor sit amet, consectetur adipiscing' . PHPMailer::getLE()
+                    . 'elit. Maecenas ultricies nisi justo, eu convallis' . PHPMailer::getLE()
+                    . 'tortor porttitor a. Nam ut risus tellus. Vivamus' . PHPMailer::getLE()
+                    . 'imperdiet dictum nibh, in faucibus nunc pretium' . PHPMailer::getLE()
+                    . 'ac.' . PHPMailer::getLE(),
+                'qp_mode'  => false,
+            ],
+            'line length more than wrap limit, qp: true' => [
+                'message'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    . ' Maecenas ultricies nisi justo, eu convallis tortor porttitor a.'
+                    . ' Nam ut risus tellus. Vivamus imperdiet dictum nibh, in faucibus nunc pretium ac.',
+                'expected' => 'Lorem ipsum dolor sit amet, consectetur adipiscing =' . PHPMailer::getLE()
+                    . 'elit. Maecenas ultricies nisi justo, eu convallis =' . PHPMailer::getLE()
+                    . 'tortor porttitor a. Nam ut risus tellus. Vivamus =' . PHPMailer::getLE()
+                    . 'imperdiet dictum nibh, in faucibus nunc pretium =' . PHPMailer::getLE()
+                    . 'ac.' . PHPMailer::getLE(),
+                'qp_mode'  => true,
+            ],
+            'line length more than wrap limit, message already in qp format, qp: true' => [
+                'message'  => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. =' . PHPMailer::CRLF
+                    . 'Maecenas ultricies nisi justo, eu convallis tortor porttitor a. =' . PHPMailer::CRLF
+                    . 'Nam ut risus tellus. Vivamus imperdiet dictum nibh, in faucibus nunc pretium ac.'
+                    . PHPMailer::CRLF,
+                'expected' => 'Lorem ipsum dolor sit amet, consectetur adipiscing =' . PHPMailer::getLE()
+                    . 'elit. =' . PHPMailer::getLE()
+                    . 'Maecenas ultricies nisi justo, eu convallis tortor =' . PHPMailer::getLE()
+                    . 'porttitor a. =' . PHPMailer::getLE()
+                    . 'Nam ut risus tellus. Vivamus imperdiet dictum =' . PHPMailer::getLE()
+                    . 'nibh, in faucibus nunc pretium ac.' . PHPMailer::getLE(),
+                'qp_mode'  => true,
+            ],
             'very long word in message, qp: false' => [
                 'message'  => 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy',
                 'expected' => 'Lorem' . PHPMailer::getLE()
@@ -55,6 +109,14 @@ final class WrapTextTest extends TestCase
                 'message'  => 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiamnonumy',
                 'expected' => 'Lorem ipsumdolorsitametconsetetursadipscingelitrs=' . PHPMailer::getLE()
                     . 'eddiamnonumy' . PHPMailer::getLE(),
+                'qp_mode'  => true,
+            ],
+            'very long word in message, message already in qp format, qp: true' => [
+                'message'  => 'Lorem ipsumdolorsitametconsetetursadipscingelitrseddiam=' . PHPMailer::CRLF
+                    . 'nonumy',
+                'expected' => 'Lorem =' . PHPMailer::getLE()
+                    . 'ipsumdolorsitametconsetetursadipscingelitrseddiam=' . PHPMailer::getLE()
+                    . 'nonumy' . PHPMailer::getLE(),
                 'qp_mode'  => true,
             ],
         ];
