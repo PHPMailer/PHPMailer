@@ -24,50 +24,6 @@ use PHPMailer\Test\SendTestCase;
 final class PHPMailerTest extends SendTestCase
 {
     /**
-     * Word-wrap an ASCII message.
-     */
-    public function testWordWrap()
-    {
-        $this->Mail->WordWrap = 40;
-        $my_body = str_repeat(
-            'Here is the main body of this message.  It should ' .
-            'be quite a few lines.  It should be wrapped at ' .
-            '40 characters.  Make sure that it is. ',
-            10
-        );
-        $nBodyLen = strlen($my_body);
-        $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
-
-        $this->Mail->Body = $my_body;
-        $this->Mail->Subject .= ': Wordwrap';
-
-        $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-    }
-
-    /**
-     * Word-wrap a multibyte message.
-     */
-    public function testWordWrapMultibyte()
-    {
-        $this->Mail->WordWrap = 40;
-        $my_body = str_repeat(
-            '飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 飛兒樂 團光茫 ' .
-            '飛飛兒樂 團光茫兒樂 團光茫飛兒樂 團光飛兒樂 團光茫飛兒樂 團光茫兒樂 團光茫 ' .
-            '飛兒樂 團光茫飛兒樂 團飛兒樂 團光茫光茫飛兒樂 團光茫. ',
-            10
-        );
-        $nBodyLen = strlen($my_body);
-        $my_body .= "\n\nThis is the above body length: " . $nBodyLen;
-
-        $this->Mail->Body = $my_body;
-        $this->Mail->Subject .= ': Wordwrap multibyte';
-
-        $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-    }
-
-    /**
      * Test low priority.
      */
     public function testLowPriority()
