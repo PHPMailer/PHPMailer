@@ -18,6 +18,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test word wrapping functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::wrapText
  */
 final class WrapTextTest extends TestCase
 {
