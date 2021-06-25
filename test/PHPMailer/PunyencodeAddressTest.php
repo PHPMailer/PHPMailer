@@ -22,13 +22,12 @@ use PHPMailer\Test\TestCase;
 final class PunyencodeAddressTest extends TestCase
 {
 
+    /**
+     * @requires extension mbstring
+     * @requires function idn_to_ascii
+     */
     public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
     {
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
-            $this->markTestSkipped('/test/fakefunctions.php file not found');
-        }
-
-        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         //This source file is in UTF-8, so characters here are in native charset
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         $result = $this->Mail->punyencodeAddress(
