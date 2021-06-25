@@ -44,6 +44,33 @@ final class MbPathinfoTest extends TestCase
     public function dataMb_pathinfoWithoutOptions()
     {
         return [
+            'Empty string' => [
+                'path'     => '',
+                'expected' => [
+                    'dirname'   => '',
+                    'basename'  => '',
+                    'extension' => '',
+                    'filename'  => '',
+                ],
+            ],
+            'Unix path with singlebyte filename' => [
+                'path'     => '/mnt/music/music.mp3',
+                'expected' => [
+                    'dirname'   => '/mnt/music',
+                    'basename'  => 'music.mp3',
+                    'extension' => 'mp3',
+                    'filename'  => 'music',
+                ],
+            ],
+            'Windows path with singlebyte filename' => [
+                'path'     => 'c:\mnt\music\music.mp3',
+                'expected' => [
+                    'dirname'   => 'c:\mnt\music',
+                    'basename'  => 'music.mp3',
+                    'extension' => 'mp3',
+                    'filename'  => 'music',
+                ],
+            ],
             'Unix path with multibyte filename' => [
                 'path'     => '/mnt/files/飛兒樂 團光茫.mp3',
                 'expected' => [
@@ -60,6 +87,24 @@ final class MbPathinfoTest extends TestCase
                     'basename'  => '飛兒樂 團光茫.mp3',
                     'extension' => 'mp3',
                     'filename'  => '飛兒樂 團光茫',
+                ],
+            ],
+            'Filename, not path, contains spaces' => [
+                'path'     => 'my file.png',
+                'expected' => [
+                    'dirname'   => '',
+                    'basename'  => 'my file.png',
+                    'extension' => 'png',
+                    'filename'  => 'my file',
+                ],
+            ],
+            'Path, no file name, linux style, contains spaces' => [
+                'path'     => '/mnt/sub directory/another sub/',
+                'expected' => [
+                    'dirname'   => '/mnt/sub directory',
+                    'basename'  => 'another sub',
+                    'extension' => '',
+                    'filename'  => 'another sub',
                 ],
             ],
         ];
