@@ -72,4 +72,64 @@ final class PunyencodeAddressTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * Test IDN to ASCII form/punycode conversion returns the original value when no conversion
+     * is needed or when the requirements to convert an address have not been met.
+     *
+     * @dataProvider dataPunyencodeAddressNoConversion
+     *
+     * @param string $input    Input text string.
+     * @param string $charset  The character set.
+     * @param string $expected Expected funtion output.
+     */
+    public function testPunyencodeAddressNoConversion($input, $charset, $expected)
+    {
+        $this->Mail->CharSet = $charset;
+
+        // Prevent a warning about html_entity_decode() not supporting charset `us-ascii`.
+        if ($charset !== PHPMailer::CHARSET_ASCII) {
+            $input    = html_entity_decode($input, ENT_COMPAT, $charset);
+            $expected = html_entity_decode($expected, ENT_COMPAT, $charset);
+        }
+
+        $result = $this->Mail->punyencodeAddress($input);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataPunyencodeAddressNoConversion()
+    {
+        return [
+            'ASCII' => [
+                'input'    => 'test@example.com',
+                'charset'  => PHPMailer::CHARSET_ASCII,
+                'expected' => 'test@example.com',
+            ],
+            'Invalid email address' => [
+                'input'    => 'fran&ccedil;ois@',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => 'fran&ccedil;ois@',
+            ],
+            'Not an email address' => [
+                'input'    => 'testing 1-2-3',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => 'testing 1-2-3',
+            ],
+            'Empty string' => [
+                'input'    => '',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => '',
+            ],
+            'Empty charset' => [
+                'input'    => 'test@fran&ccedil;ois.ch',
+                'charset'  => '',
+                'expected' => 'test@fran&ccedil;ois.ch',
+            ],
+        ];
+    }
 }
