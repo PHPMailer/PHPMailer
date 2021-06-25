@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test mime type mapping functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::_mime_types
  */
 final class MimeTypesTest extends TestCase
 {
