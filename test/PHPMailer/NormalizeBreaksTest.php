@@ -23,34 +23,62 @@ final class NormalizeBreaksTest extends TestCase
 {
 
     /**
-     * Test line break reformatting.
+     * Test line break normalization.
+     *
+     * @dataProvider dataNormalizeBreaks
+     *
+     * @param string $input     Input text string.
+     * @param string $expected  Expected funtion output.
+     * @param string $breaktype Optional. What kind of line break to use.
      */
-    public function testLineBreaks()
+    public function testNormalizeBreaks($input, $expected, $breaktype = null)
     {
-        $unixsrc = "hello\nWorld\nAgain\n";
-        $macsrc = "hello\rWorld\rAgain\r";
-        $windowssrc = "hello\r\nWorld\r\nAgain\r\n";
-        $mixedsrc = "hello\nWorld\rAgain\r\n";
-        $target = "hello\r\nWorld\r\nAgain\r\n";
-        self::assertSame($target, PHPMailer::normalizeBreaks($unixsrc), 'UNIX break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
+        $result = PHPMailer::normalizeBreaks($input, $breaktype);
+        self::assertSame($expected, $result, 'Line break reformatting failed');
     }
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests.
+     * Data provider.
+     *
+     * @return array
      */
-    public function testMiscellaneous()
+    public function dataNormalizeBreaks()
     {
-        //Line break normalization
-        $eol = PHPMailer::getLE();
-        $b1 = "1\r2\r3\r";
-        $b2 = "1\n2\n3\n";
-        $b3 = "1\r\n2\r3\n";
-        $t1 = "1{$eol}2{$eol}3{$eol}";
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b1), 'Failed to normalize line breaks (1)');
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b2), 'Failed to normalize line breaks (2)');
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b3), 'Failed to normalize line breaks (3)');
+        $LE           = PHPMailer::getLE();
+        $baseExpected = 'hello' . PHPMailer::CRLF . 'World' . PHPMailer::CRLF . 'Again' . PHPMailer::CRLF;
+
+        return [
+            'Unix line breaks' => [
+                'input'    => "hello\nWorld\nAgain\n",
+                'expected' => $baseExpected,
+            ],
+            'Mac line breaks' => [
+                'input'    => "hello\rWorld\rAgain\r",
+                'expected' => $baseExpected,
+            ],
+            'Windows line breaks' => [
+                'input'    => "hello\r\nWorld\r\nAgain\r\n",
+                'expected' => $baseExpected,
+            ],
+            'Mixed line breaks' => [
+                'input'    => "hello\nWorld\rAgain\r\n",
+                'expected' => $baseExpected,
+            ],
+            'Mac line breaks, enforce Unix' => [
+                'input'     => "1\r2\r3\r",
+                'expected'  => "1\n2\n3\n",
+                'breaktype' => "\n",
+            ],
+            'Unix line breaks, enforce Mac' => [
+                'input'     => "1\n2\n3\n",
+                'expected'  => "1\r2\r3\r",
+                'breaktype' => "\r",
+            ],
+            'Mixed line breaks, enforce preset' => [
+                'input'     => "1\r\n2\r3\n",
+                'expected'  => "1{$LE}2{$LE}3{$LE}",
+                'breaktype' => $LE,
+            ],
+        ];
     }
 }
