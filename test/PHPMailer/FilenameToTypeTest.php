@@ -23,19 +23,35 @@ final class FilenameToTypeTest extends TestCase
 {
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests.
+     * Verify mapping a file name to a MIME type.
+     *
+     * @dataProvider dataFilenameToType
+     *
+     * @param string $filename Filename input.
+     * @param string $expected Expected function output.
      */
-    public function testMiscellaneous()
+    public function testFilenameToType($filename, $expected)
     {
-        self::assertSame(
-            'image/jpeg',
-            PHPMailer::filenameToType('abc.jpg?xyz=1'),
-            'Query string not ignored in filename'
-        );
-        self::assertSame(
-            'application/octet-stream',
-            PHPMailer::filenameToType('abc.xyzpdq'),
-            'Default MIME type not applied to unknown extension'
-        );
+        $result = PHPMailer::filenameToType($filename);
+        self::assertSame($expected, $result, 'Failed to map file name to a MIME type');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataFilenameToType()
+    {
+        return [
+            'File name with query string' => [
+                'filename' => 'abc.jpg?xyz=1',
+                'expected' => 'image/jpeg',
+            ],
+            'Unknown extension, should return default MIME type' => [
+                'filename' => 'abc.xyzpdq',
+                'expected' => 'application/octet-stream',
+            ],
+        ];
     }
 }
