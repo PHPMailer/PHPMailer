@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test file name to type functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::filenameToType
  */
 final class FilenameToTypeTest extends TestCase
 {
