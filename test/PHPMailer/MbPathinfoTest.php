@@ -141,6 +141,26 @@ final class MbPathinfoTest extends TestCase
                 'options'  => PATHINFO_BASENAME,
                 'expected' => '飛兒樂 團光茫.mp3',
             ],
+            'Option: PATHINFO_EXTENSION' => [
+                'options'  => PATHINFO_EXTENSION,
+                'expected' => 'mp3',
+            ],
+            'Option: PATHINFO_FILENAME' => [
+                'options'  => PATHINFO_FILENAME,
+                'expected' => '飛兒樂 團光茫',
+            ],
+            'Option: dirname' => [
+                'options'  => 'dirname',
+                'expected' => '/mnt/files',
+            ],
+            'Option: basename' => [
+                'options'  => 'basename',
+                'expected' => '飛兒樂 團光茫.mp3',
+            ],
+            'Option: extension' => [
+                'options'  => 'extension',
+                'expected' => 'mp3',
+            ],
             'Option: filename' => [
                 'options'  => 'filename',
                 'expected' => '飛兒樂 團光茫',
