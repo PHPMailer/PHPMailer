@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test Multi-byte-safe pathinfo replacement functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::mb_pathinfo
  */
 final class MbPathinfoTest extends TestCase
 {
