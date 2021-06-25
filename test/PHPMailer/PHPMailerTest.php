@@ -1298,15 +1298,6 @@ EOT;
         //May have been altered by earlier tests, can interfere with line break format
         $this->Mail->isSMTP();
         $this->Mail->preSend();
-        $unixsrc = "hello\nWorld\nAgain\n";
-        $macsrc = "hello\rWorld\rAgain\r";
-        $windowssrc = "hello\r\nWorld\r\nAgain\r\n";
-        $mixedsrc = "hello\nWorld\rAgain\r\n";
-        $target = "hello\r\nWorld\r\nAgain\r\n";
-        self::assertSame($target, PHPMailer::normalizeBreaks($unixsrc), 'UNIX break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($macsrc), 'Mac break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($windowssrc), 'Windows break reformatting failed');
-        self::assertSame($target, PHPMailer::normalizeBreaks($mixedsrc), 'Mixed break reformatting failed');
 
         //To see accurate results when using postfix, set `sendmail_fix_line_endings = never` in main.cf
         $this->Mail->Subject = 'PHPMailer DOS line breaks';
@@ -1394,16 +1385,6 @@ EOT;
             PHPMailer::filenameToType('abc.xyzpdq'),
             'Default MIME type not applied to unknown extension'
         );
-
-        //Line break normalization
-        $eol = PHPMailer::getLE();
-        $b1 = "1\r2\r3\r";
-        $b2 = "1\n2\n3\n";
-        $b3 = "1\r\n2\r3\n";
-        $t1 = "1{$eol}2{$eol}3{$eol}";
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b1), 'Failed to normalize line breaks (1)');
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b2), 'Failed to normalize line breaks (2)');
-        self::assertSame($t1, PHPMailer::normalizeBreaks($b3), 'Failed to normalize line breaks (3)');
     }
 
     public function testBadSMTP()
