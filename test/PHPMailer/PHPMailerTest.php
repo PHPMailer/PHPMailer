@@ -1451,31 +1451,6 @@ EOT;
     }
 
     /**
-     * Test setting and retrieving message ID.
-     */
-    public function testMessageID()
-    {
-        $this->Mail->Body = 'Test message ID.';
-        $id = hash('sha256', 12345);
-        $this->Mail->MessageID = $id;
-        $this->buildBody();
-        $this->Mail->preSend();
-        $lastid = $this->Mail->getLastMessageID();
-        self::assertNotSame($lastid, $id, 'Invalid Message ID allowed');
-        $id = '<' . hash('sha256', 12345) . '@example.com>';
-        $this->Mail->MessageID = $id;
-        $this->buildBody();
-        $this->Mail->preSend();
-        $lastid = $this->Mail->getLastMessageID();
-        self::assertSame($lastid, $id, 'Custom Message ID not used');
-        $this->Mail->MessageID = '';
-        $this->buildBody();
-        $this->Mail->preSend();
-        $lastid = $this->Mail->getLastMessageID();
-        self::assertMatchesRegularExpression('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
-    }
-
-    /**
      * Check whether setting a bad custom header throws exceptions.
      *
      * @throws Exception
