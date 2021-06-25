@@ -23,10 +23,31 @@ final class MimeTypesTest extends TestCase
 {
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests.
+     * Test mime type mapping.
+     *
+     * @dataProvider dataMime_Types
+     *
+     * @param string $input     Input text string.
+     * @param string $expected  Expected funtion output.
      */
-    public function testMiscellaneous()
+    public function testMime_Types($input, $expected)
     {
-        self::assertSame('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
+        $result = PHPMailer::_mime_types($input);
+        self::assertSame($expected, $result, 'MIME TYPE lookup failed');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataMime_Types()
+    {
+        return [
+            'Extension: pdf (lowercase)' => [
+                'input'    => 'pdf',
+                'expected' => 'application/pdf',
+            ],
+        ];
     }
 }
