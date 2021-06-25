@@ -48,6 +48,22 @@ final class MimeTypesTest extends TestCase
                 'input'    => 'pdf',
                 'expected' => 'application/pdf',
             ],
+            'Extension: PHP (uppercase)' => [
+                'input'    => 'PHP',
+                'expected' => 'application/x-httpd-php',
+            ],
+            'Extension: Doc (mixed case)' => [
+                'input'    => 'Doc',
+                'expected' => 'application/msword',
+            ],
+            'Extension which is not in the list' => [
+                'input'    => 'md',
+                'expected' => 'application/octet-stream',
+            ],
+            'Empty string' => [
+                'input'    => '',
+                'expected' => 'application/octet-stream',
+            ],
         ];
     }
 }
