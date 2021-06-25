@@ -1336,7 +1336,6 @@ EOT;
      */
     public function testMiscellaneous()
     {
-        self::assertSame('application/pdf', PHPMailer::_mime_types('pdf'), 'MIME TYPE lookup failed');
         $this->Mail->clearAttachments();
         $this->Mail->isHTML(false);
         $this->Mail->isSMTP();
