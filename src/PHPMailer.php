@@ -1194,6 +1194,8 @@ class PHPMailer
         if ($useimap && function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
             $list = imap_rfc822_parse_adrlist($addrstr, '');
+            // Clear any potential IMAP errors to get rid of notices begin thrown at end of script.
+            imap_errors();
             foreach ($list as $address) {
                 if (
                     ('.SYNTAX-ERROR.' !== $address->host) && static::validateAddress(
