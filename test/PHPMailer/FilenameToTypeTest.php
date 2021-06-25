@@ -44,9 +44,25 @@ final class FilenameToTypeTest extends TestCase
     public function dataFilenameToType()
     {
         return [
+            'Empty string' => [
+                'filename' => '',
+                'expected' => 'application/octet-stream',
+            ],
+            'File name without query string' => [
+                'filename' => 'abc.png',
+                'expected' => 'image/png',
+            ],
             'File name with query string' => [
                 'filename' => 'abc.jpg?xyz=1',
                 'expected' => 'image/jpeg',
+            ],
+            'Full path to file, linux style' => [
+                'filename' => '/usr/sbin/subdir/docs.pdf',
+                'expected' => 'application/pdf',
+            ],
+            'Full path to file, windows style' => [
+                'filename' => 'D:\subdir\with spaces\subdir\myapp.zip',
+                'expected' => 'application/zip',
             ],
             'Unknown extension, should return default MIME type' => [
                 'filename' => 'abc.xyzpdq',
