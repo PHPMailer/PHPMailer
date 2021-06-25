@@ -48,6 +48,10 @@ final class NormalizeBreaksTest extends TestCase
         $baseExpected = 'hello' . PHPMailer::CRLF . 'World' . PHPMailer::CRLF . 'Again' . PHPMailer::CRLF;
 
         return [
+            'Text without line breaks' => [
+                'input'    => 'hello World!',
+                'expected' => 'hello World!',
+            ],
             'Unix line breaks' => [
                 'input'    => "hello\nWorld\nAgain\n",
                 'expected' => $baseExpected,
