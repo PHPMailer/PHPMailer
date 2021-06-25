@@ -114,6 +114,33 @@ final class ParseAddressesTest extends TestCase
                     ['name' => '', 'address' => 'joe@example.com'],
                 ],
             ],
+            'Valid address: multiple address, various formats, including one utf8-encoded address' => [
+                'addrstr'  => 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
+                    ' "John O\'Groats" <johnog@example.net>,' .
+                    ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>',
+                'expected' => [
+                    [
+                        'name'    => '',
+                        'address' => 'joe@example.com',
+                    ],
+                    [
+                        'name'    => '',
+                        'address' => 'me@example.com',
+                    ],
+                    [
+                        'name'    => 'Joe Doe',
+                        'address' => 'doe@example.com',
+                    ],
+                    [
+                        'name'    => "John O'Groats",
+                        'address' => 'johnog@example.net',
+                    ],
+                    [
+                        'name'    => 'Название теста',
+                        'address' => 'encoded@example.org',
+                    ],
+                ],
+            ],
 
             // Test cases with invalid addresses.
             'Invalid address: multiple addresses, invalid periods' => [
@@ -121,84 +148,5 @@ final class ParseAddressesTest extends TestCase
                 'expected' => [],
             ],
         ];
-    }
-
-    /**
-     * Test RFC822 address list parsing using PHPMailer's parser.
-     */
-    public function testImapParsedAddressList_parseAddress_returnsAddressArray()
-    {
-        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
-            ' "John O\'Groats" <johnog@example.net>,' .
-            ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
-
-        //Test using PHPMailer's own parser
-        $expected = [
-            [
-                'name' => '',
-                'address' => 'joe@example.com',
-            ],
-            [
-                'name' => '',
-                'address' => 'me@example.com',
-            ],
-            [
-                'name' => 'Joe Doe',
-                'address' => 'doe@example.com',
-            ],
-            [
-                'name' => "John O'Groats",
-                'address' => 'johnog@example.net',
-            ],
-            [
-                'name' => 'Название теста',
-                'address' => 'encoded@example.org',
-            ],
-        ];
-        $parsed = PHPMailer::parseAddresses($addressLine, false);
-        $this->assertSameSize($expected, $parsed);
-        for ($i = 0; $i < count($expected); $i++) {
-            $this->assertSame($expected[$i], $parsed[$i]);
-        }
-    }
-
-    /**
-     * Test RFC822 address list parsing using the IMAP extension's parser.
-     */
-    public function testImapParsedAddressList_parseAddress_returnsAddressArray_usingImap()
-    {
-        if (!extension_loaded('imap')) {
-            $this->markTestSkipped("imap extension missing, can't run this test");
-        }
-        $addressLine = 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
-            ' "John O\'Groats" <johnog@example.net>,' .
-            ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>';
-        $expected = [
-            [
-                'name' => '',
-                'address' => 'joe@example.com',
-            ],
-            [
-                'name' => '',
-                'address' => 'me@example.com',
-            ],
-            [
-                'name' => 'Joe Doe',
-                'address' => 'doe@example.com',
-            ],
-            [
-                'name' => "John O'Groats",
-                'address' => 'johnog@example.net',
-            ],
-            [
-                'name' => 'Название теста',
-                'address' => 'encoded@example.org',
-            ],
-        ];
-        $parsed = PHPMailer::parseAddresses($addressLine, true);
-        $this->assertSameSize($expected, $parsed);
-        for ($i = 0; $i < count($expected); $i++) {
-            $this->assertSame($expected[$i], $parsed[$i]);
-        }
     }
 }
