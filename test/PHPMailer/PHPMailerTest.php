@@ -755,29 +755,9 @@ EOT;
         self::assertFalse($this->Mail->addBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
         self::assertTrue($this->Mail->addReplyTo('a@example.com'), 'Replyto Addressing failed');
         self::assertFalse($this->Mail->addReplyTo('a@example..com'), 'Invalid Replyto address accepted');
-        self::assertTrue($this->Mail->setFrom('a@example.com', 'some name'), 'setFrom failed');
-        self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
-        $this->Mail->Sender = '';
-        $this->Mail->setFrom('a@example.com', 'some name', true);
-        self::assertSame('a@example.com', $this->Mail->Sender, 'setFrom failed to set sender');
-        $this->Mail->Sender = '';
-        $this->Mail->setFrom('a@example.com', 'some name', false);
-        self::assertSame('', $this->Mail->Sender, 'setFrom should not have set sender');
         $this->Mail->clearCCs();
         $this->Mail->clearBCCs();
         $this->Mail->clearReplyTos();
-    }
-
-    /**
-     * Test addressing.
-     */
-    public function testAddressing2()
-    {
-        $this->buildBody();
-        $this->Mail->setFrom('bob@example.com', '"Bob\'s Burgers" (Bob\'s "Burgers")', true);
-        $this->Mail->isSMTP();
-        $this->Mail->Subject .= ': quotes in from name';
-        self::assertTrue($this->Mail->send(), 'send failed');
     }
 
     /**
