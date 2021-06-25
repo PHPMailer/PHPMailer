@@ -23,32 +23,83 @@ final class MbPathinfoTest extends TestCase
 {
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests.
+     * Verify retrieving information about a file path when the $options parameter has been passed.
+     *
+     * @dataProvider dataMb_pathinfoWithoutOptions
+     *
+     * @param string $path     Path input.
+     * @param string $expected Expected function output.
      */
-    public function testMiscellaneous()
+    public function testMb_pathinfoWithoutOptions($path, $expected)
     {
-        $a = '/mnt/files/飛兒樂 團光茫.mp3';
-        $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame('/mnt/files', $q['dirname'], 'UNIX dirname not matched');
-        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'UNIX basename not matched');
-        self::assertSame('mp3', $q['extension'], 'UNIX extension not matched');
-        self::assertSame('飛兒樂 團光茫', $q['filename'], 'UNIX filename not matched');
-        self::assertSame(
-            '/mnt/files',
-            PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME),
-            'Dirname path element not matched'
-        );
-        self::assertSame(
-            '飛兒樂 團光茫.mp3',
-            PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
-            'Basename path element not matched'
-        );
-        self::assertSame('飛兒樂 團光茫', PHPMailer::mb_pathinfo($a, 'filename'), 'Filename path element not matched');
-        $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
-        $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame('c:\mnt\files', $q['dirname'], 'Windows dirname not matched');
-        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'Windows basename not matched');
-        self::assertSame('mp3', $q['extension'], 'Windows extension not matched');
-        self::assertSame('飛兒樂 團光茫', $q['filename'], 'Windows filename not matched');
+        $result = PHPMailer::mb_pathinfo($path);
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataMb_pathinfoWithoutOptions()
+    {
+        return [
+            'Unix path with multibyte filename' => [
+                'path'     => '/mnt/files/飛兒樂 團光茫.mp3',
+                'expected' => [
+                    'dirname'   => '/mnt/files',
+                    'basename'  => '飛兒樂 團光茫.mp3',
+                    'extension' => 'mp3',
+                    'filename'  => '飛兒樂 團光茫',
+                ],
+            ],
+            'Windows path with multibyte filename' => [
+                'path'     => 'c:\mnt\files\飛兒樂 團光茫.mp3',
+                'expected' => [
+                    'dirname'   => 'c:\mnt\files',
+                    'basename'  => '飛兒樂 團光茫.mp3',
+                    'extension' => 'mp3',
+                    'filename'  => '飛兒樂 團光茫',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Verify retrieving information about a file path when the $options parameter has been passed.
+     *
+     * @dataProvider dataMb_pathinfoWithOptions
+     *
+     * @param int|string $options  Input to pass to the $options parameter.
+     * @param string     $expected Expected function output.
+     */
+    public function testMb_pathinfoWithOptions($options, $expected)
+    {
+        $path   = '/mnt/files/飛兒樂 團光茫.mp3';
+        $result = PHPMailer::mb_pathinfo($path, $options);
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataMb_pathinfoWithOptions()
+    {
+        return [
+            'Option: PATHINFO_DIRNAME' => [
+                'options'  => PATHINFO_DIRNAME,
+                'expected' => '/mnt/files',
+            ],
+            'Option: PATHINFO_BASENAME' => [
+                'options'  => PATHINFO_BASENAME,
+                'expected' => '飛兒樂 團光茫.mp3',
+            ],
+            'Option: filename' => [
+                'options'  => 'filename',
+                'expected' => '飛兒樂 團光茫',
+            ],
+        ];
     }
 }
