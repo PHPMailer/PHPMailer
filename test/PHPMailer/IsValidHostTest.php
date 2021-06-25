@@ -22,37 +22,69 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 final class IsValidHostTest extends TestCase
 {
 
-    public function testHostValidation()
+    /**
+     * Test host validation when a valid host is passed.
+     *
+     * @dataProvider dataValidHost
+     *
+     * @param string $input Input text string.
+     */
+    public function testValidHost($input)
     {
-        $good = [
-            'localhost',
-            'example.com',
-            'smtp.gmail.com',
-            '127.0.0.1',
-            trim(str_repeat('a0123456789.', 21), '.'),
-            '[::1]',
-            '[0:1234:dc0:41:216:3eff:fe67:3e01]',
+        self::assertTrue(PHPMailer::isValidHost($input), 'Good hostname denied');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataValidHost()
+    {
+        return [
+            'localhost'                 => ['localhost'],
+            'Domain: lowercase'         => ['example.com'],
+            'Domain: with subdomain'    => ['smtp.gmail.com'],
+            'IPv4 address: 127.0.0.1'   => ['127.0.0.1'],
+            'Long hex address'          => [trim(str_repeat('a0123456789.', 21), '.')],
+            'Bracketed IPv6: localhost' => ['[::1]'],
+            'Bracketed IPv6'            => ['[0:1234:dc0:41:216:3eff:fe67:3e01]'],
         ];
-        $bad = [
-            null,
-            123,
-            1.5,
-            new \stdClass(),
-            [],
-            '',
-            '999.0.0.0',
-            '[1234]',
-            '[1234:::1]',
-            trim(str_repeat('a0123456789.', 22), '.'),
-            '0:1234:dc0:41:216:3eff:fe67:3e01',
-            '[012q:1234:dc0:41:216:3eff:fe67:3e01]',
-            '[[::1]]',
+    }
+
+    /**
+     * Test host validation when an invalid host is passed.
+     *
+     * @dataProvider dataInvalidHost
+     *
+     * @param string $input Input text string.
+     */
+    public function testInvalidHost($input)
+    {
+        self::assertFalse(PHPMailer::isValidHost($input), 'Bad hostname accepted');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataInvalidHost()
+    {
+        return [
+            'Invalid type: null'                        => [null],
+            'Invalid type: int'                         => [123],
+            'Invalid type: float'                       => [1.5],
+            'Invalid type: object'                      => [new \stdClass()],
+            'Invalid type: array'                       => [[]],
+            'Invalid input: empty string'               => [''],
+            'Invalid input: IPv4 address outside range' => ['999.0.0.0'],
+            'Invalid input: bracketed, not IPv6 (num)'  => ['[1234]'],
+            'Invalid input: bracketed, triple :'        => ['[1234:::1]'],
+            'Invalid input: hex address, wrong size'    => [trim(str_repeat('a0123456789.', 22), '.')],
+            'Invalid input: IPv6 without brackets'      => ['0:1234:dc0:41:216:3eff:fe67:3e01'],
+            'Invalid input: IPv6 non-hex char'          => ['[012q:1234:dc0:41:216:3eff:fe67:3e01]'],
+            'Invalid input: IPv6 double bracketed'      => ['[[::1]]'],
         ];
-        foreach ($good as $h) {
-            self::assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
-        }
-        foreach ($bad as $h) {
-            self::assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
-        }
     }
 }
