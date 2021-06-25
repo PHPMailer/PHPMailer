@@ -18,6 +18,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test IDN to ASCII functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::punyencodeAddress
  */
 final class PunyencodeAddressTest extends TestCase
 {
