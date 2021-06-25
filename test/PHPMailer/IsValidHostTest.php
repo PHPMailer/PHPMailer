@@ -18,6 +18,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test host validation functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::isValidHost
  */
 final class IsValidHostTest extends TestCase
 {
