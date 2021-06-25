@@ -38,7 +38,10 @@ final class PunyencodeAddressTest extends TestCase
     {
         $this->Mail->CharSet = $charset;
 
-        $result = $this->Mail->punyencodeAddress(html_entity_decode($input, ENT_COMPAT, $charset));
+        $input    = html_entity_decode($input, ENT_COMPAT, $charset);
+        $expected = html_entity_decode($expected, ENT_COMPAT, $charset);
+
+        $result = $this->Mail->punyencodeAddress($input);
         $this->assertSame($expected, $result);
     }
 
@@ -61,6 +64,11 @@ final class PunyencodeAddressTest extends TestCase
                 'input'    => 'test@fran&ccedil;ois.ch',
                 'charset'  => PHPMailer::CHARSET_ISO88591,
                 'expected' => 'test@xn--franois-xxa.ch',
+            ],
+            'Decode only domain' => [
+                'input'    => 'fran&ccedil;ois@fran&ccedil;ois.ch',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => 'fran&ccedil;ois@xn--franois-xxa.ch',
             ],
         ];
     }
