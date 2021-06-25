@@ -23,22 +23,45 @@ final class PunyencodeAddressTest extends TestCase
 {
 
     /**
+     * Test IDN to ASCII form/punycode conversion for an email address.
+     *
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     *
+     * @dataProvider dataPunyencodeAddressConversion
+     *
+     * @param string $input    Input text string.
+     * @param string $charset  The character set.
+     * @param string $expected Expected funtion output.
      */
-    public function testGivenIdnAddress_punyencodeAddress_returnsCorrectCode()
+    public function testPunyencodeAddressConversion($input, $charset, $expected)
     {
-        //This source file is in UTF-8, so characters here are in native charset
-        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
-        $result = $this->Mail->punyencodeAddress(
-            html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_UTF8)
-        );
-        $this->assertSame('test@xn--franois-xxa.ch', $result);
-        //To force working another charset, decode an ASCII string to avoid literal string charset issues
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        $result = $this->Mail->punyencodeAddress(
-            html_entity_decode('test@fran&ccedil;ois.ch', ENT_COMPAT, PHPMailer::CHARSET_ISO88591)
-        );
-        $this->assertSame('test@xn--franois-xxa.ch', $result);
+        $this->Mail->CharSet = $charset;
+
+        $result = $this->Mail->punyencodeAddress(html_entity_decode($input, ENT_COMPAT, $charset));
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataPunyencodeAddressConversion()
+    {
+        return [
+            // This source file is in UTF-8, so characters here are in native charset.
+            'UTF8' => [
+                'input'    => 'test@fran&ccedil;ois.ch',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => 'test@xn--franois-xxa.ch',
+            ],
+            // To force working another charset, decode an ASCII string to avoid literal string charset issues.
+            'ISO88591' => [
+                'input'    => 'test@fran&ccedil;ois.ch',
+                'charset'  => PHPMailer::CHARSET_ISO88591,
+                'expected' => 'test@xn--franois-xxa.ch',
+            ],
+        ];
     }
 }
