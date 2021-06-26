@@ -19,6 +19,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test setting the "from" address.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::setFrom
  */
 final class SetFromTest extends TestCase
 {
