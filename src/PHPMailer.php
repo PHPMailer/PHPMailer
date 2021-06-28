@@ -2553,7 +2553,17 @@ class PHPMailer
 
         //Only allow a custom message ID if it conforms to RFC 5322 section 3.6.4
         //https://tools.ietf.org/html/rfc5322#section-3.6.4
-        if ('' !== $this->MessageID && preg_match('/^<.*@.*>$/', $this->MessageID)) {
+        if (
+            '' !== $this->MessageID &&
+            preg_match(
+                '/^<((([a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+)*)' .
+                '|("(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]|[\x21\x23-\x5B\x5D-\x7E])' .
+                '|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*"))@(([a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+' .
+                '(\.[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+)*)|(\[(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]' .
+                '|[\x21-\x5A\x5E-\x7E])|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*\])))>$/',
+                $this->MessageID
+            )
+        ) {
             $this->lastMessageID = $this->MessageID;
         } else {
             $this->lastMessageID = sprintf('<%s@%s>', $this->uniqueid, $this->serverHostname());

@@ -51,9 +51,16 @@ final class GetLastMessageIDTest extends TestCase
         $hash = hash('sha256', 12345);
 
         return [
-            'Invalid: plain hash'       => [ $hash ],
-            'Invalid: missing brackets' => [ $hash . '@example.com' ],
-            'Invalid: missing @'        => [ '<' . $hash . 'example.com>' ],
+            'Invalid: plain hash' => [$hash],
+            'Invalid: missing brackets' => [$hash . '@example.com'],
+            'Invalid: missing @' => ['<' . $hash . 'example.com>'],
+            'Invalid: no text before @' => ['<@example.com>'],
+            'Invalid: no text after @' => ['<' . $hash . '@>'],
+            'Invalid: no text before or after @' => ['<@>'],
+            'Invalid: multiple @ signs' => ['<' . $hash . '@example@com>'],
+            'Invalid: new line after end bracket' => ['<' . $hash . "@>\n"],
+            'Invalid: brackets within 1' => ['<' . $hash . '<@>example.com>'],
+            'Invalid: brackets within 2' => ['<<' . $hash . '@example>com>'],
         ];
     }
 
@@ -85,13 +92,6 @@ final class GetLastMessageIDTest extends TestCase
 
         return [
             'hashed pre @'               => [ '<' . $hash . '@example.com>' ],
-            'no text before @'           => [ '<@example.com>' ],
-            'no text after @'            => [ '<' . $hash . '@>' ],
-            'no text before or after @'  => [ '<@>' ],
-            'new line after end bracket' => [ '<' . $hash . "@>\n" ],
-            'multiple @ signs'           => [ '<' . $hash . '@example@com>' ],
-            'brackets within 1'          => [ '<' . $hash . '<@>example.com>' ],
-            'brackets within 2'          => [ '<<' . $hash . '@example>com>' ],
         ];
     }
 
