@@ -19,6 +19,8 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test normalize line breaks functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::normalizeBreaks
  */
 final class NormalizeBreaksTest extends TestCase
 {
