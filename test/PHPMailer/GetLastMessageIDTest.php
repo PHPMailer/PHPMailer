@@ -106,6 +106,6 @@ final class GetLastMessageIDTest extends TestCase
         $this->buildBody();
         $this->Mail->preSend();
         $lastid = $this->Mail->getLastMessageID();
-        self::assertMatchesRegularExpression('/^<.*@.*>$/', $lastid, 'Invalid default Message ID');
+        self::assertMatchesRegularExpression('/^<.+@.+>$/D', $lastid, 'Invalid default Message ID');
     }
 }
