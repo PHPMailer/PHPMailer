@@ -22,6 +22,17 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase as PolyfillTestCase;
  */
 abstract class TestCase extends PolyfillTestCase
 {
+
+    /**
+     * Whether or not to initialize the PHPMailer object to throw exceptions.
+     *
+     * Overload this constant in a concrete test class and set the value to `true`
+     * to initialize PHPMailer with Exceptions turned on.
+     *
+     * @var bool|null
+     */
+    const USE_EXCEPTIONS = null;
+
     /**
      * Holds the PHPMailer instance.
      *
@@ -81,7 +92,14 @@ abstract class TestCase extends PolyfillTestCase
         if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
             include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
-        $this->Mail = new PHPMailer();
+
+        // Initialize the PHPMailer class.
+        if (is_bool(static::USE_EXCEPTIONS)) {
+            $this->Mail = new PHPMailer(static::USE_EXCEPTIONS);
+        } else {
+            $this->Mail = new PHPMailer();
+        }
+
         $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
