@@ -35,6 +35,23 @@ final class ValidateAddressTest extends TestCase
 {
 
     /**
+     * Run before this test class.
+     */
+    public static function set_up_before_class()
+    {
+        // Make sure that validator property starts off with its default value.
+        PHPMailer::$validator = 'php';
+    }
+
+    /**
+     * Run after this test class.
+     */
+    public static function tear_down_after_class()
+    {
+        self::set_up_before_class();
+    }
+
+    /**
      * Testing against the pre-defined patterns with a valid address (for coverage).
      *
      * @dataProvider dataPatterns
