@@ -30,13 +30,6 @@ abstract class TestCase extends PolyfillTestCase
     protected $Mail;
 
     /**
-     * Holds the SMTP mail host.
-     *
-     * @var string
-     */
-    private $Host = '';
-
-    /**
      * Holds the change log.
      *
      * @var string[]
