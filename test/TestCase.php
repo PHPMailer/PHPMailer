@@ -121,7 +121,7 @@ abstract class TestCase extends PolyfillTestCase
         if (array_key_exists('mail_userpass', $_REQUEST)) {
             $this->Mail->Password = $_REQUEST['mail_userpass'];
         }
-        $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
+        $this->setAddress('no_reply@phpmailer.example.com', 'Reply Guy', 'ReplyTo');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
@@ -297,6 +297,8 @@ abstract class TestCase extends PolyfillTestCase
                 return $this->Mail->addCC($sAddress, $sName);
             case 'bcc':
                 return $this->Mail->addBCC($sAddress, $sName);
+            case 'ReplyTo':
+                return $this->Mail->addReplyTo($sAddress, $sName);
         }
 
         return false;
