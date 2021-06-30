@@ -48,6 +48,16 @@ final class PopBeforeSmtpTest extends TestCase
     }
 
     /**
+     * Run before each test is started.
+     */
+    protected function set_up()
+    {
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $this->markTestSkipped('This test needs a non-Windows OS to run');
+        }
+    }
+
+    /**
      * Run after each test is completed.
      */
     protected function tear_down()
