@@ -14,6 +14,7 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\Test\TestCase as MailerTestCase;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -84,5 +85,26 @@ final class NormalizeBreaksTest extends TestCase
                 'breaktype' => $LE,
             ],
         ];
+    }
+
+    /**
+     * Test line break normalization with a custom line ending setting.
+     */
+    public function testNormalizeBreaksWithCustomLineEnding()
+    {
+        $input    = "hello\rWorld\rAgain\r";
+        $expected = "hello\n\rWorld\n\rAgain\n\r";
+
+        $origLE = PHPMailer::getLE();
+        MailerTestCase::updateStaticProperty(PHPMailer::class, 'LE', "\n\r");
+        $result = PHPMailer::normalizeBreaks($input);
+
+        /*
+         * Reset the static property *before* the assertion to ensure the reset executes
+         * even when the test would fail.
+         */
+        MailerTestCase::updateStaticProperty(PHPMailer::class, 'LE', $origLE);
+
+        self::assertSame($expected, $result, 'Line break reformatting failed');
     }
 }
