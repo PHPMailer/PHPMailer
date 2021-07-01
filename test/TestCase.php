@@ -51,6 +51,17 @@ abstract class TestCase extends PolyfillTestCase
     private $NoteLog = [];
 
     /**
+     * List of *public static* properties in the PHPMailer class with their default values.
+     *
+     * This list is used by the `set_up()` method.
+     *
+     * @var array Key is the property name, value the default as per the PHPMailer class.
+     */
+    private $PHPMailerStaticProps = [
+        'validator' => 'php',
+    ];
+
+    /**
      * Run before each test class.
      */
     public static function set_up_before_class()
@@ -69,6 +80,11 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function set_up()
     {
+        // Make sure that public static variables contain their default values at the start of each test.
+        foreach ($this->PHPMailerStaticProps as $key => $value) {
+            PHPMailer::${$key} = $value;
+        }
+
         if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
             include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
         }
