@@ -25,6 +25,13 @@ use PHPMailer\Test\TestCase;
 final class DKIMTest extends TestCase
 {
 
+    /**
+     * Whether or not to initialize the PHPMailer object to throw exceptions.
+     *
+     * @var bool|null
+     */
+    const USE_EXCEPTIONS = true;
+
     const PRIVATE_KEY_FILE = 'dkim_private.pem';
 
     /**
@@ -250,7 +257,6 @@ final class DKIMTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Extension missing: openssl');
 
-        $mail = new PHPMailer(true);
-        $mail->DKIM_Sign('foo');
+        $this->Mail->DKIM_Sign('foo');
     }
 }

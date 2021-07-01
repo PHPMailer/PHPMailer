@@ -22,19 +22,23 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase as PolyfillTestCase;
  */
 abstract class TestCase extends PolyfillTestCase
 {
+
+    /**
+     * Whether or not to initialize the PHPMailer object to throw exceptions.
+     *
+     * Overload this constant in a concrete test class and set the value to `true`
+     * to initialize PHPMailer with Exceptions turned on.
+     *
+     * @var bool|null
+     */
+    const USE_EXCEPTIONS = null;
+
     /**
      * Holds the PHPMailer instance.
      *
      * @var PHPMailer
      */
     protected $Mail;
-
-    /**
-     * Holds the SMTP mail host.
-     *
-     * @var string
-     */
-    private $Host = '';
 
     /**
      * Holds the change log.
@@ -86,10 +90,17 @@ abstract class TestCase extends PolyfillTestCase
         }
 
         if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; //Overrides go in here
+            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
         }
-        $this->Mail = new PHPMailer();
-        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; //Full debug output
+
+        // Initialize the PHPMailer class.
+        if (is_bool(static::USE_EXCEPTIONS)) {
+            $this->Mail = new PHPMailer(static::USE_EXCEPTIONS);
+        } else {
+            $this->Mail = new PHPMailer();
+        }
+
+        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; // Full debug output.
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
@@ -128,7 +139,7 @@ abstract class TestCase extends PolyfillTestCase
         if (array_key_exists('mail_userpass', $_REQUEST)) {
             $this->Mail->Password = $_REQUEST['mail_userpass'];
         }
-        $this->Mail->addReplyTo('no_reply@phpmailer.example.com', 'Reply Guy');
+        $this->setAddress('no_reply@phpmailer.example.com', 'Reply Guy', 'ReplyTo');
         $this->Mail->Sender = 'unit_test@phpmailer.example.com';
         if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
@@ -148,7 +159,7 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function tear_down()
     {
-        //Clean global variables
+        // Clean test class native properties between tests.
         $this->Mail = null;
         $this->ChangeLog = [];
         $this->NoteLog = [];
@@ -161,7 +172,7 @@ abstract class TestCase extends PolyfillTestCase
     {
         $this->checkChanges();
 
-        //Determine line endings for message
+        // Determine line endings for message.
         if ('text/html' === $this->Mail->ContentType || $this->Mail->AltBody !== '') {
             $eol = "<br>\r\n";
             $bullet_start = '<li>';
@@ -189,7 +200,7 @@ abstract class TestCase extends PolyfillTestCase
             $ReportBody .= 'Host: ' . $this->Mail->Host . $eol;
         }
 
-        //If attachments then create an attachment list
+        // If attachments then create an attachment list.
         $attachments = $this->Mail->getAttachments();
         if (count($attachments) > 0) {
             $ReportBody .= 'Attachments:' . $eol;
@@ -202,7 +213,7 @@ abstract class TestCase extends PolyfillTestCase
             $ReportBody .= $list_end . $eol;
         }
 
-        //If there are changes then list them
+        // If there are changes then list them.
         if (count($this->ChangeLog) > 0) {
             $ReportBody .= 'Changes' . $eol;
             $ReportBody .= '-------' . $eol;
@@ -215,7 +226,7 @@ abstract class TestCase extends PolyfillTestCase
             $ReportBody .= $list_end . $eol . $eol;
         }
 
-        //If there are notes then list them
+        // If there are notes then list them.
         if (count($this->NoteLog) > 0) {
             $ReportBody .= 'Notes' . $eol;
             $ReportBody .= '-----' . $eol;
@@ -227,7 +238,7 @@ abstract class TestCase extends PolyfillTestCase
             $ReportBody .= $list_end;
         }
 
-        //Re-attach the original body
+        // Re-attach the original body.
         $this->Mail->Body .= $eol . $ReportBody;
     }
 
@@ -304,6 +315,8 @@ abstract class TestCase extends PolyfillTestCase
                 return $this->Mail->addCC($sAddress, $sName);
             case 'bcc':
                 return $this->Mail->addBCC($sAddress, $sName);
+            case 'ReplyTo':
+                return $this->Mail->addReplyTo($sAddress, $sName);
         }
 
         return false;
