@@ -39,15 +39,13 @@ jobs:
     strategy:
       matrix:
         php: ['5.5', '5.6', '7.0.', '7.1', '7.2', '7.3', '7.4', '8.0']
-        dependency-version: [prefer-stable]
         experimental: [false]
         include:
           # Experimental builds. These are allowed to fail.
           - php: '8.1'
-            dependency-version: 'prefer-stable'
             experimental: true
 
-    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }}
 
     continue-on-error: ${{ matrix.experimental }}
 
