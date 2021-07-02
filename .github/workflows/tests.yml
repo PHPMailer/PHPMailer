@@ -77,11 +77,21 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php: ['5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4']
+        coverage: [false]
         experimental: [false]
         include:
+          # Run code coverage on high/low PHP.
+          - php: '5.5'
+            coverage: true
+            experimental: false
+          - php: '8.0'
+            coverage: true
+            experimental: false
+
           # Experimental builds. These are allowed to fail.
           - php: '8.1'
+            coverage: false
             experimental: true
 
     name: "Test: PHP ${{ matrix.php }}"
@@ -92,11 +102,20 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Set coverage variable
+        id: set_cov
+        run: |
+          if [ ${{ matrix.coverage }} == "true" ]; then
+            echo '::set-output name=COV::xdebug'
+          else
+            echo '::set-output name=COV::none'
+          fi
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
+          coverage: ${{ steps.set_cov.outputs.COV }}
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8, error_reporting=E_ALL, display_errors=On
           extensions: imap, mbstring, intl, ctype, filter, hash
 
@@ -127,5 +146,18 @@ jobs:
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
       
-      - name: Run tests
-        run: ./vendor/bin/phpunit --configuration ./phpunit.xml.dist
+      - name: Run tests, no code coverage
+        if: ${{ matrix.coverage == false }}
+        run: ./vendor/bin/phpunit --no-coverage
+
+      - name: Run tests with code coverage
+        if: ${{ matrix.coverage == true }}
+        run: vendor/bin/phpunit
+
+      - name: Send coverage report to Codecov
+        if: ${{ success() && matrix.coverage == true }}
+        uses: codecov/codecov-action@v1
+        with:
+          files: ./build/logs/clover.xml
+          fail_ci_if_error: true
+          verbose: true

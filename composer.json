@@ -62,7 +62,8 @@
     "license": "LGPL-2.1-only",
     "scripts": {
         "check": "./vendor/bin/phpcs",
-        "test": "./vendor/bin/phpunit",
+        "test": "./vendor/bin/phpunit --no-coverage",
+        "coverage": "./vendor/bin/phpunit",
         "lint": [
             "@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php,phps --exclude vendor --exclude .git --exclude build"
         ]
