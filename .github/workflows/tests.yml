@@ -10,10 +10,6 @@ jobs:
 
   coding-standard:
     runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        php: ['8.0']
-        dependency-version: [prefer-stable]
     name: Coding standards
 
     steps:
@@ -23,7 +19,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.0'
           coverage: none
           tools: cs2pr
 
