@@ -23,8 +23,10 @@ jobs:
           coverage: none
           tools: cs2pr
 
-      - name: Install dependencies
-        run: composer install --no-interaction
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v1"
 
       - name: Check coding standards
         continue-on-error: true
@@ -61,13 +63,17 @@ jobs:
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8, error_reporting=E_ALL, display_errors=On
           extensions: xdebug, imap, mbstring, intl, ctype, filter, hash
 
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install PHP packages - normal
         if: ${{ matrix.php != '8.1' }}
-        run: composer install --no-interaction
+        uses: "ramsey/composer-install@v1"
 
       - name: Install PHP packages - ignore-platform-reqs
         if: ${{ matrix.php == '8.1' }}
-        run: composer install --no-interaction --ignore-platform-reqs
+        uses: "ramsey/composer-install@v1"
+        with:
+          composer-options: --ignore-platform-reqs
 
       - name: Install postfix
         run: |
