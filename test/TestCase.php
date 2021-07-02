@@ -15,6 +15,8 @@ namespace PHPMailer\Test;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use ReflectionClass;
+use ReflectionProperty;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase as PolyfillTestCase;
 
 /**
@@ -55,13 +57,18 @@ abstract class TestCase extends PolyfillTestCase
     private $NoteLog = [];
 
     /**
-     * List of *public static* properties in the PHPMailer class with their default values.
+     * List of *static* properties in the PHPMailer class which _may_ be changed from within a test,
+     * with their default values.
      *
-     * This list is used by the `set_up()` method.
+     * This list is used by the {@see `TestCase::resetStaticProperties()`} method.
+     *
+     * {@internal The default values have to be (manually) maintained here as the Reflection
+     * extension does not provide accurate information on the default values of static properties.}
      *
      * @var array Key is the property name, value the default as per the PHPMailer class.
      */
     private $PHPMailerStaticProps = [
+        'LE'        => PHPMailer::CRLF,
         'validator' => 'php',
     ];
 
@@ -84,11 +91,6 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function set_up()
     {
-        // Make sure that public static variables contain their default values at the start of each test.
-        foreach ($this->PHPMailerStaticProps as $key => $value) {
-            PHPMailer::${$key} = $value;
-        }
-
         if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
             include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
         }
@@ -159,10 +161,52 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function tear_down()
     {
+        // Make sure that any changes to static variables are undone after each test.
+        $this->resetStaticProperties();
+
         // Clean test class native properties between tests.
         $this->Mail = null;
         $this->ChangeLog = [];
         $this->NoteLog = [];
+    }
+
+    /**
+     * Reset the static properties in the PHPMailer class to their default values.
+     */
+    protected function resetStaticProperties()
+    {
+        $reflClass        = new ReflectionClass(PHPMailer::class);
+        $staticPropValues = $reflClass->getStaticProperties();
+
+        foreach ($this->PHPMailerStaticProps as $name => $default) {
+            if (isset($staticPropValues[$name]) && $staticPropValues[$name] === $default) {
+                continue;
+            }
+
+            self::updateStaticProperty(PHPMailer::class, $name, $default);
+        }
+    }
+
+    /**
+     * Update the value of a - potentially inaccessible - static property in a class.
+     *
+     * @param string $className    The target class.
+     * @param string $propertyName The name of the static property.
+     * @param mixed  $value        The new value for the property.
+     */
+    public static function updateStaticProperty($className, $propertyName, $value)
+    {
+        $reflProp = new ReflectionProperty($className, $propertyName);
+        $isPublic = $reflProp->isPublic();
+        if ($isPublic !== true) {
+            $reflProp->setAccessible(true);
+        }
+
+        $reflProp->setValue($value);
+
+        if ($isPublic !== true) {
+            $reflProp->setAccessible(false);
+        }
     }
 
     /**
