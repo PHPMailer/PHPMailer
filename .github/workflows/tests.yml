@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php: ['5.5', '5.6', '7.0.', '7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
         experimental: [false]
         include:
           # Experimental builds. These are allowed to fail.
