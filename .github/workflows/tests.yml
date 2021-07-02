@@ -61,7 +61,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8, error_reporting=E_ALL, display_errors=On
-          extensions: xdebug, imap, mbstring, intl, ctype, filter, hash
+          extensions: imap, mbstring, intl, ctype, filter, hash
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
