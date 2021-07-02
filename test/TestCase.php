@@ -91,10 +91,6 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function set_up()
     {
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
-        }
-
         // Initialize the PHPMailer class.
         if (is_bool(static::USE_EXCEPTIONS)) {
             $this->Mail = new PHPMailer(static::USE_EXCEPTIONS);
@@ -104,55 +100,11 @@ abstract class TestCase extends PolyfillTestCase
 
         $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; // Full debug output.
         $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
-        $this->Mail->Priority = 3;
-        $this->Mail->Encoding = '8bit';
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        if (array_key_exists('mail_from', $_REQUEST)) {
-            $this->Mail->From = $_REQUEST['mail_from'];
-        } else {
-            $this->Mail->From = 'unit_test@phpmailer.example.com';
-        }
-        $this->Mail->FromName = 'Unit Tester';
-        $this->Mail->Sender = '';
-        $this->Mail->Subject = 'Unit Test';
-        $this->Mail->Body = '';
-        $this->Mail->AltBody = '';
-        $this->Mail->WordWrap = 0;
-        if (array_key_exists('mail_host', $_REQUEST)) {
-            $this->Mail->Host = $_REQUEST['mail_host'];
-        } else {
-            $this->Mail->Host = 'mail.example.com';
-        }
-        if (array_key_exists('mail_port', $_REQUEST)) {
-            $this->Mail->Port = $_REQUEST['mail_port'];
-        } else {
-            $this->Mail->Port = 25;
-        }
-        $this->Mail->Helo = 'localhost.localdomain';
-        $this->Mail->SMTPAuth = false;
-        $this->Mail->Username = '';
-        $this->Mail->Password = '';
-        if (array_key_exists('mail_useauth', $_REQUEST)) {
-            $this->Mail->SMTPAuth = $_REQUEST['mail_useauth'];
-        }
-        if (array_key_exists('mail_username', $_REQUEST)) {
-            $this->Mail->Username = $_REQUEST['mail_username'];
-        }
-        if (array_key_exists('mail_userpass', $_REQUEST)) {
-            $this->Mail->Password = $_REQUEST['mail_userpass'];
-        }
-        $this->setAddress('no_reply@phpmailer.example.com', 'Reply Guy', 'ReplyTo');
-        $this->Mail->Sender = 'unit_test@phpmailer.example.com';
+
         if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
         } else {
             $this->Mail->isMail();
-        }
-        if (array_key_exists('mail_to', $_REQUEST)) {
-            $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
-        }
-        if (array_key_exists('mail_cc', $_REQUEST) && $_REQUEST['mail_cc'] !== '') {
-            $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
 
@@ -366,28 +318,3 @@ abstract class TestCase extends PolyfillTestCase
         return false;
     }
 }
-/*
- * This is a sample form for setting appropriate test values through a browser
- * These values can also be set using a file called testbootstrap.php (not in repo) in the same folder as this script
- * which is probably more useful if you run these tests a lot
- * <html>
- * <body>
- * <h3>PHPMailer Unit Test</h3>
- * By entering a SMTP hostname it will automatically perform tests with SMTP.
- *
- * <form name="phpmailer_unit" action=__FILE__ method="get">
- * <input type="hidden" name="submitted" value="1"/>
- * From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
- * <br/>
- * To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
- * <br/>
- * Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
- * <br/>
- * SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
- * <p/>
- * <input type="submit" value="Run Test"/>
- *
- * </form>
- * </body>
- * </html>
- */

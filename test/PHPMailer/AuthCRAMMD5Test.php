@@ -13,12 +13,12 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\SendTestCase;
 
 /**
  * Test CRAM-MD5 authentication functionality.
  */
-final class AuthCRAMMD5Test extends TestCase
+final class AuthCRAMMD5Test extends SendTestCase
 {
 
     /**

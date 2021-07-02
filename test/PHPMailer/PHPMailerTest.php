@@ -16,12 +16,12 @@ namespace PHPMailer\Test\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\SendTestCase;
 
 /**
  * PHPMailer - PHP email transport unit test class.
  */
-final class PHPMailerTest extends TestCase
+final class PHPMailerTest extends SendTestCase
 {
     /**
      * Check that we have loaded default test params.
