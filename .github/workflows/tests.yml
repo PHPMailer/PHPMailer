@@ -10,10 +10,6 @@ jobs:
 
   coding-standard:
     runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        php: ['8.0']
-        dependency-version: [prefer-stable]
     name: Coding standards
 
     steps:
@@ -23,12 +19,14 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.0'
           coverage: none
           tools: cs2pr
 
-      - name: Install dependencies
-        run: composer install --no-interaction
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v1"
 
       - name: Check coding standards
         continue-on-error: true
@@ -42,16 +40,14 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php: ['5.5', '5.6', '7.0.', '7.1', '7.2', '7.3', '7.4', '8.0']
-        dependency-version: [prefer-stable]
+        php: ['5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
         experimental: [false]
         include:
           # Experimental builds. These are allowed to fail.
           - php: '8.1'
-            dependency-version: 'prefer-stable'
             experimental: true
 
-    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }}
 
     continue-on-error: ${{ matrix.experimental }}
 
@@ -65,15 +61,19 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, zend.multibyte=1, zend.script_encoding=UTF-8, default_charset=UTF-8, error_reporting=E_ALL, display_errors=On
-          extensions: xdebug, imap, mbstring, intl, ctype, filter, hash
+          extensions: imap, mbstring, intl, ctype, filter, hash
 
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install PHP packages - normal
         if: ${{ matrix.php != '8.1' }}
-        run: composer install --no-interaction
+        uses: "ramsey/composer-install@v1"
 
       - name: Install PHP packages - ignore-platform-reqs
         if: ${{ matrix.php == '8.1' }}
-        run: composer install --no-interaction --ignore-platform-reqs
+        uses: "ramsey/composer-install@v1"
+        with:
+          composer-options: --ignore-platform-reqs
 
       - name: Install postfix
         run: |
