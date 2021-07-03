@@ -24,18 +24,6 @@ use PHPMailer\Test\SendTestCase;
 final class PHPMailerTest extends SendTestCase
 {
     /**
-     * Check that we have loaded default test params.
-     * Pretty much everything will fail due to unset recipient if this is not done.
-     */
-    public function testBootstrap()
-    {
-        self::assertFileExists(
-            \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php',
-            'Test config params missing - copy testbootstrap.php to testbootstrap-dist.php and change as appropriate'
-        );
-    }
-
-    /**
      * Word-wrap an ASCII message.
      */
     public function testWordWrap()
