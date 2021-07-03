@@ -1374,17 +1374,6 @@ EOT;
         self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'Windows basename not matched');
         self::assertSame('mp3', $q['extension'], 'Windows extension not matched');
         self::assertSame('飛兒樂 團光茫', $q['filename'], 'Windows filename not matched');
-
-        self::assertSame(
-            'image/jpeg',
-            PHPMailer::filenameToType('abc.jpg?xyz=1'),
-            'Query string not ignored in filename'
-        );
-        self::assertSame(
-            'application/octet-stream',
-            PHPMailer::filenameToType('abc.xyzpdq'),
-            'Default MIME type not applied to unknown extension'
-        );
     }
 
     public function testBadSMTP()
