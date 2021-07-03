@@ -13,7 +13,6 @@
 
 namespace PHPMailer\Test;
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
 
@@ -38,26 +37,8 @@ abstract class PreSendTestCase extends TestCase
         'SMTPDebug'   => SMTP::DEBUG_CONNECTION, // Full debug output.
         'Debugoutput' => ['PHPMailer\Test\DebugLogTestListener', 'debugLog'],
 
-        'Priority'    => 3,
-        'Encoding'    => '8bit',
-        'CharSet'     => PHPMailer::CHARSET_ISO88591,
+        // Minimal set of properties which are needed for the preSend() command to succeed.
         'From'        => 'unit_test@phpmailer.example.com',
-        'FromName'    => 'Unit Tester',
-        'Sender'      => 'unit_test@phpmailer.example.com',
-        'Subject'     => 'Unit Test',
-        'Body'        => '',
-        'AltBody'     => '',
-        'WordWrap'    => 0,
-        'Host'        => 'mail.example.com',
-        'Port'        => 25,
-        'Helo'        => 'localhost.localdomain',
-        'SMTPAuth'    => false,
-        'Username'    => '',
-        'Password'    => '',
-        'ReplyTo'     => [
-            'address' => 'no_reply@phpmailer.example.com',
-            'name'    => 'Reply Guy',
-        ],
         'to'          => [
             'address' => 'somebody@example.com',
             'name'    => 'Test User',
