@@ -14,6 +14,7 @@
 namespace PHPMailer\Test;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
 
 /**
@@ -23,36 +24,43 @@ abstract class PreSendTestCase extends TestCase
 {
 
     /**
-     * Run before each test is started.
+     * Property names and their values for the test instance of the PHPMailer class.
+     *
+     * These properties will be set in the `set_up()` method.
+     *
+     * This property can be enhanced/overloaded in concrete test classes to change the presets
+     * or add additional properties.
+     *
+     * @var array
      */
-    protected function set_up()
-    {
-        parent::set_up();
+    protected $propertyChanges = [
+        // Generic changes.
+        'SMTPDebug'   => SMTP::DEBUG_CONNECTION, // Full debug output.
+        'Debugoutput' => ['PHPMailer\Test\DebugLogTestListener', 'debugLog'],
 
-        $this->Mail->Priority = 3;
-        $this->Mail->Encoding = '8bit';
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        $this->Mail->From = 'unit_test@phpmailer.example.com';
-        $this->Mail->FromName = 'Unit Tester';
-        $this->Mail->Sender = '';
-        $this->Mail->Subject = 'Unit Test';
-        $this->Mail->Body = '';
-        $this->Mail->AltBody = '';
-        $this->Mail->WordWrap = 0;
-        $this->Mail->Host = 'mail.example.com';
-        $this->Mail->Port = 25;
-        $this->Mail->Helo = 'localhost.localdomain';
-        $this->Mail->SMTPAuth = false;
-        $this->Mail->Username = '';
-        $this->Mail->Password = '';
-        $this->setAddress('no_reply@phpmailer.example.com', 'Reply Guy', 'ReplyTo');
-        $this->Mail->Sender = 'unit_test@phpmailer.example.com';
-        $this->setAddress('somebody@example.com', 'Test User', 'to');
-
-        if ($this->Mail->Host != '') {
-            $this->Mail->isSMTP();
-        } else {
-            $this->Mail->isMail();
-        }
-    }
+        'Priority'    => 3,
+        'Encoding'    => '8bit',
+        'CharSet'     => PHPMailer::CHARSET_ISO88591,
+        'From'        => 'unit_test@phpmailer.example.com',
+        'FromName'    => 'Unit Tester',
+        'Sender'      => 'unit_test@phpmailer.example.com',
+        'Subject'     => 'Unit Test',
+        'Body'        => '',
+        'AltBody'     => '',
+        'WordWrap'    => 0,
+        'Host'        => 'mail.example.com',
+        'Port'        => 25,
+        'Helo'        => 'localhost.localdomain',
+        'SMTPAuth'    => false,
+        'Username'    => '',
+        'Password'    => '',
+        'ReplyTo'     => [
+            'address' => 'no_reply@phpmailer.example.com',
+            'name'    => 'Reply Guy',
+        ],
+        'to'          => [
+            'address' => 'somebody@example.com',
+            'name'    => 'Test User',
+        ],
+    ];
 }
