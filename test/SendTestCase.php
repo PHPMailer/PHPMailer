@@ -22,6 +22,23 @@ abstract class SendTestCase extends PreSendTestCase
 {
 
     /**
+     * Translation map for supported $REQUEST keys to the property name in the PHPMailer class.
+     *
+     * @var array
+     */
+    private $requestKeys = [
+        'mail_from'     => 'From',
+        'mail_host'     => 'Host',
+        'mail_port'     => 'Port',
+        'mail_useauth'  => 'SMTPAuth',
+        'mail_username' => 'Username',
+        'mail_userpass' => 'Password',
+        'mail_to'       => 'to',
+        'mail_cc'       => 'cc',
+        'mail_bcc'      => 'bcc',
+    ];
+
+    /**
      * Run before each test is started.
      */
     protected function set_up()
@@ -32,36 +49,45 @@ abstract class SendTestCase extends PreSendTestCase
             include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
         }
 
-        if (array_key_exists('mail_from', $_REQUEST)) {
-            $this->Mail->From = $_REQUEST['mail_from'];
-        }
-        if (array_key_exists('mail_host', $_REQUEST)) {
-            $this->Mail->Host = $_REQUEST['mail_host'];
-        }
-        if (array_key_exists('mail_port', $_REQUEST)) {
-            $this->Mail->Port = $_REQUEST['mail_port'];
-        }
-        if (array_key_exists('mail_useauth', $_REQUEST)) {
-            $this->Mail->SMTPAuth = $_REQUEST['mail_useauth'];
-        }
-        if (array_key_exists('mail_username', $_REQUEST)) {
-            $this->Mail->Username = $_REQUEST['mail_username'];
-        }
-        if (array_key_exists('mail_userpass', $_REQUEST)) {
-            $this->Mail->Password = $_REQUEST['mail_userpass'];
-        }
-        if (array_key_exists('mail_to', $_REQUEST)) {
-            $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
-        }
-        if (array_key_exists('mail_cc', $_REQUEST) && $_REQUEST['mail_cc'] !== '') {
-            $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
+        /*
+         * Process the $REQUEST values and add them to the list of properties
+         * to change at class initialization.
+         */
+        foreach ($this->requestKeys as $requestKey => $phpmailerKey) {
+            if (array_key_exists($requestKey, $_REQUEST) === false) {
+                continue;
+            }
+
+            switch ($requestKey) {
+                case 'mail_to':
+                    $this->propertyChanges[$phpmailerKey] = [
+                        'address' => $_REQUEST[$requestKey],
+                        'name'    => 'Test User',
+                    ];
+                    break;
+
+                case 'mail_cc':
+                    $this->propertyChanges[$phpmailerKey] = [
+                        'address' => $_REQUEST[$requestKey],
+                        'name'    => 'Carbon User',
+                    ];
+                    break;
+
+                case 'mail_bcc':
+                    $this->propertyChanges[$phpmailerKey] = [
+                        'address' => $_REQUEST[$requestKey],
+                        'name'    => 'Blind Carbon User',
+                    ];
+                    break;
+
+                default:
+                    $this->propertyChanges[$phpmailerKey] = $_REQUEST[$requestKey];
+                    break;
+            }
         }
 
-        if ($this->Mail->Host != '') {
-            $this->Mail->isSMTP();
-        } else {
-            $this->Mail->isMail();
-        }
+        // Initialize the PHPMailer class.
+        parent::set_up();
     }
 }
 /*
@@ -80,6 +106,8 @@ abstract class SendTestCase extends PreSendTestCase
  * To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
  * <br/>
  * Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
+ * <br/>
+ * Bcc Address: <input type="text" size="50" name="mail_bcc" value="<?php echo get("mail_bcc"); ?>"/>
  * <br/>
  * SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
  * <p/>
