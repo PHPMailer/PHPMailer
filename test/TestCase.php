@@ -36,6 +36,24 @@ abstract class TestCase extends PolyfillTestCase
     const USE_EXCEPTIONS = null;
 
     /**
+     * Property names and their values for the test instance of the PHPMailer class.
+     *
+     * These (public) properties will be set in the `set_up()` method.
+     *
+     * This property can be enhanced/overloaded in concrete test classes to change the presets
+     * or add additional properties.
+     *
+     * It is the responsibility of the individual test classes to ensure that
+     * property values of the correct type are passed.
+     *
+     * @var array Key is the property name, value the desired value for the PHPMailer instance.
+     */
+    protected $propertyChanges = [
+        'SMTPDebug'   => SMTP::DEBUG_CONNECTION, // Full debug output.
+        'Debugoutput' => ['PHPMailer\Test\DebugLogTestListener', 'debugLog'],
+    ];
+
+    /**
      * Holds the PHPMailer instance.
      *
      * @var PHPMailer
@@ -98,8 +116,20 @@ abstract class TestCase extends PolyfillTestCase
             $this->Mail = new PHPMailer();
         }
 
-        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; // Full debug output.
-        $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
+        // Set initial property values.
+        foreach ($this->propertyChanges as $key => $value) {
+            if ($key === 'to' || $key === 'cc' || $key === 'bcc' || $key === 'ReplyTo') {
+                if (is_array($value) && isset($value['address'], $value['name'])) {
+                    $this->setAddress($value['address'], $value['name'], $key);
+                } elseif (is_string($value)) {
+                    $this->setAddress($value, '', $key);
+                }
+
+                continue;
+            }
+
+            $this->Mail->{$key} = $value;
+        }
 
         if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
