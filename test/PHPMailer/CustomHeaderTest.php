@@ -24,45 +24,87 @@ final class CustomHeaderTest extends TestCase
 {
 
     /**
-     * Tests the Custom header getter.
+     * Tests setting and getting custom headers.
+     *
+     * @dataProvider dataAddAndGetCustomHeader
+     *
+     * @param array      $headers  Array of headers to set.
+     * @param array|null $expected Optional. The expected set headers.
+     *                             Only needs to be passed if different from the $headers array.
      */
-    public function testCustomHeaderGetter()
+    public function testAddAndGetCustomHeader($headers, $expected = null)
     {
-        $this->Mail->addCustomHeader('foo', 'bar');
-        self::assertSame([['foo', 'bar']], $this->Mail->getCustomHeaders());
+        if (isset($expected) === false) {
+            $expected = $headers;
+        }
 
-        $this->Mail->addCustomHeader('foo', 'baz');
+        // Test setting the custom header(s).
+        foreach ($headers as $header) {
+            if (isset($header[1])) {
+                $set = $this->Mail->addCustomHeader($header[0], $header[1]);
+            } else {
+                $set = $this->Mail->addCustomHeader($header[0]);
+            }
+
+            self::assertTrue($set, 'Custom header failed to set for ' . var_export($header, true));
+        }
+
+        // Test retrieving the custom header(s) and verify they have been correctly set.
         self::assertSame(
-            [
-                ['foo', 'bar'],
-                ['foo', 'baz'],
-            ],
-            $this->Mail->getCustomHeaders()
+            $expected,
+            $this->Mail->getCustomHeaders(),
+            'Custom headers retrieved not the same as expected'
         );
+    }
 
-        $this->Mail->clearCustomHeaders();
-        self::assertEmpty($this->Mail->getCustomHeaders());
-
-        $this->Mail->addCustomHeader('yux');
-        self::assertSame([['yux', '']], $this->Mail->getCustomHeaders());
-
-        $this->Mail->addCustomHeader('Content-Type: application/json');
-        self::assertSame(
-            [
-                ['yux', ''],
-                ['Content-Type', 'application/json'],
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataAddAndGetCustomHeader()
+    {
+        return [
+            'Single custom header' => [
+                'headers' => [
+                    ['foo', 'bar'],
+                ],
             ],
-            $this->Mail->getCustomHeaders()
-        );
-        $this->Mail->clearCustomHeaders();
-        $this->Mail->addCustomHeader('SomeHeader: Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
-        $this->Mail->clearCustomHeaders();
-        $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
-        $this->Mail->clearCustomHeaders();
+            'Multiple custom headers' => [
+                'headers' => [
+                    ['foo', 'bar'],
+                    ['foo', 'baz'],
+                ],
+            ],
+            'Custom header: only name, no colon' => [
+                'headers' => [
+                    ['yux'],
+                ],
+                'expected' => [
+                    ['yux', ''],
+                ],
+            ],
+            'Custom headers: "name: value" sets' => [
+                'headers' => [
+                    ['Content-Type: application/json'],
+                    ['SomeHeader: Some Value'],
+                ],
+                'expected' => [
+                    ['Content-Type', 'application/json'],
+                    ['SomeHeader', 'Some Value'],
+                ],
+            ],
+            'Custom headers: duplicate headers' => [
+                'headers' => [
+                    ['SomeHeader: Some Value'],
+                    ['SomeHeader', 'Some Value']
+                ],
+                'expected' => [
+                    ['SomeHeader', 'Some Value'],
+                    ['SomeHeader', 'Some Value'],
+                ],
+            ],
+        ];
     }
 
     /**
