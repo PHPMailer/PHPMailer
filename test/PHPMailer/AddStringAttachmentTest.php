@@ -15,12 +15,12 @@ namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding string attachments functionality.
  */
-final class AddStringAttachmentTest extends SendTestCase
+final class AddStringAttachmentTest extends PreSendTestCase
 {
 
     /**
@@ -38,7 +38,7 @@ final class AddStringAttachmentTest extends SendTestCase
         $this->Mail->addStringAttachment($sAttachment, 'string_attach.txt');
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
     }
 
     /**
