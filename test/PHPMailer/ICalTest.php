@@ -28,7 +28,7 @@ final class ICalTest extends TestCase
      * @covers       \PHPMailer\PHPMailer\PHPMailer::createBody
      *
      * @param string $methodLine The Ical method line to use.
-     * @param string $expected   The expected content type header.
+     * @param string $expected   The expected method in the content type header.
      */
     public function testICalMethod($methodLine, $expected)
     {
@@ -62,7 +62,10 @@ final class ICalTest extends TestCase
             . "\r\nEND:VCALENDAR";
         $this->buildBody();
         $this->Mail->preSend();
-        self::assertMatchesRegularExpression(
+
+        $expected = 'Content-Type: text/calendar; method=' . $expected . ';';
+
+        self::assertStringContainsString(
             $expected,
             $this->Mail->getSentMIMEMessage(),
             'Wrong ICal method in Content-Type header'
@@ -79,45 +82,45 @@ final class ICalTest extends TestCase
         return [
             'Valid method: request (default)' => [
                 'methodLine' => "\r\nMETHOD:REQUEST",
-                'expected'   => '/Content-Type: text\/calendar; method=REQUEST;/',
+                'expected'   => 'REQUEST',
             ],
             'Valid method: publish' => [
                 'methodLine' => "\r\nMETHOD:PUBLISH",
-                'expected'   => '/Content-Type: text\/calendar; method=PUBLISH;/',
+                'expected'   => 'PUBLISH',
             ],
             'Valid method: reply' => [
                 'methodLine' => "\r\nMETHOD:REPLY",
-                'expected'   => '/Content-Type: text\/calendar; method=REPLY;/',
+                'expected'   => 'REPLY',
             ],
             'Valid method: add' => [
                 'methodLine' => "\r\nMETHOD:ADD",
-                'expected'   => '/Content-Type: text\/calendar; method=ADD;/',
+                'expected'   => 'ADD',
             ],
             'Valid method: cancel' => [
                 'methodLine' => "\r\nMETHOD:CANCEL",
-                'expected'   => '/Content-Type: text\/calendar; method=CANCEL;/',
+                'expected'   => 'CANCEL',
             ],
             'Valid method: refresh' => [
                 'methodLine' => "\r\nMETHOD:REFRESH",
-                'expected'   => '/Content-Type: text\/calendar; method=REFRESH;/',
+                'expected'   => 'REFRESH',
             ],
             'Valid method: counter' => [
                 'methodLine' => "\r\nMETHOD:COUNTER",
-                'expected'   => '/Content-Type: text\/calendar; method=COUNTER;/',
+                'expected'   => 'COUNTER',
             ],
             'Valid method: declinecounter' => [
                 'methodLine' => "\r\nMETHOD:DECLINECOUNTER",
-                'expected'   => '/Content-Type: text\/calendar; method=DECLINECOUNTER;/',
+                'expected'   => 'DECLINECOUNTER',
             ],
             // Test ICal invalid method to use default (REQUEST).
             'Invalid method' => [
                 'methodLine' => "\r\nMETHOD:INVALID",
-                'expected'   => '/Content-Type: text\/calendar; method=REQUEST;/',
+                'expected'   => 'REQUEST',
             ],
             // Test ICal missing method to use default (REQUEST).
             'Missing method' => [
                 'methodLine' => '',
-                'expected'   => '/Content-Type: text\/calendar; method=REQUEST;/',
+                'expected'   => 'REQUEST',
             ],
         ];
     }
