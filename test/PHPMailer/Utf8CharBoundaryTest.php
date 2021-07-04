@@ -13,8 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPMailer\Test\TestCase;
 
 /**
  * Test UTF8 character boundary functionality.
@@ -37,8 +36,7 @@ final class Utf8CharBoundaryTest extends TestCase
      */
     public function testUtf8CharBoundary($encodedText, $maxLength, $expected)
     {
-        $mail = new PHPMailer();
-        $this->assertSame($expected, $mail->utf8CharBoundary($encodedText, $maxLength));
+        $this->assertSame($expected, $this->Mail->utf8CharBoundary($encodedText, $maxLength));
     }
 
     /**
