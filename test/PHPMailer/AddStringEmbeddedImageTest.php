@@ -15,12 +15,12 @@ namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding stringified attachments functionality.
  */
-final class AddStringEmbeddedImageTest extends SendTestCase
+final class AddStringEmbeddedImageTest extends PreSendTestCase
 {
 
     /**
@@ -48,7 +48,7 @@ final class AddStringEmbeddedImageTest extends SendTestCase
         }
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
     }
 
     /**
