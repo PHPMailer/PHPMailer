@@ -84,6 +84,14 @@ final class CustomHeaderTest extends TestCase
                     ['yux', ''],
                 ],
             ],
+            'Custom header: whitespace around name and value' => [
+                'headers' => [
+                    ['  name  ', '  value  '],
+                ],
+                'expected' => [
+                    ['name', 'value'],
+                ],
+            ],
             'Custom headers: "name: value" sets' => [
                 'headers' => [
                     ['Content-Type: application/json'],
@@ -92,6 +100,40 @@ final class CustomHeaderTest extends TestCase
                 'expected' => [
                     ['Content-Type', 'application/json'],
                     ['SomeHeader', 'Some Value'],
+                ],
+            ],
+            'Custom headers: "name:value" sets, no space and lots of space' => [
+                'headers' => [
+                    ['Content-Type:application/json'],
+                    ['SomeHeader    :     Some Value'],
+                ],
+                'expected' => [
+                    ['Content-Type', 'application/json'],
+                    ['SomeHeader', 'Some Value'],
+                ],
+            ],
+            'Custom headers: "name: value" set with a colon in the value' => [
+                'headers' => [
+                    ['name: value:value'],
+                ],
+                'expected' => [
+                    ['name', 'value:value'],
+                ],
+            ],
+            'Custom headers: "name: value" set without a value' => [
+                'headers' => [
+                    ['name:'],
+                ],
+                'expected' => [
+                    ['name', ''],
+                ],
+            ],
+            'Custom header: "name: value" set with whitespace around name and value' => [
+                'headers' => [
+                    ['  name  :  value  '],
+                ],
+                'expected' => [
+                    ['name', 'value'],
                 ],
             ],
             'Custom headers: duplicate headers' => [
