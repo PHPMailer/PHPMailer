@@ -26,6 +26,9 @@ final class CustomHeaderTest extends TestCase
     /**
      * Tests setting and getting custom headers.
      *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addCustomHeader
+     * @covers \PHPMailer\PHPMailer\PHPMailer::getCustomHeaders
+     *
      * @dataProvider dataAddAndGetCustomHeader
      *
      * @param array      $headers  Array of headers to set.
@@ -152,6 +155,7 @@ final class CustomHeaderTest extends TestCase
     /**
      * Tests failing to set custom headers when the header info provided does not validate.
      *
+     * @covers       \PHPMailer\PHPMailer\PHPMailer::addCustomHeader
      * @dataProvider dataAddCustomHeaderInvalid
      *
      * @param string $name  Custom header name.
@@ -189,6 +193,8 @@ final class CustomHeaderTest extends TestCase
 
     /**
      * Test removing previously set custom headers.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::clearCustomHeaders
      */
     public function testClearCustomHeaders()
     {
@@ -204,6 +210,8 @@ final class CustomHeaderTest extends TestCase
 
     /**
      * Check whether setting a bad custom header throws exceptions.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addCustomHeader
      *
      * @throws Exception
      */
