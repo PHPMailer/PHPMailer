@@ -84,6 +84,24 @@ final class AddStringAttachmentTest extends PreSendTestCase
     }
 
     /**
+     * Test that adding a string attachment fails in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $string           String attachment data.
+     * @param string $filename         Name of the attachment.
+     * @param string $exceptionMessage Unused in this test.
+     * @param string $encoding         Optional. File encoding to pass.
+     */
+    public function testFailToAttach($string, $filename, $exceptionMessage, $encoding = PHPMailer::ENCODING_BASE64)
+    {
+        $result = $this->Mail->addStringAttachment($string, $filename, $encoding);
+        self::assertFalse($result, 'String attachment did not fail to attach');
+
+        self::assertFalse($this->Mail->attachmentExists(), 'Attachment present in attachments array');
+    }
+
+    /**
      * Test that adding a string attachment throws an exception in select use cases.
      *
      * @dataProvider dataFailToAttach
