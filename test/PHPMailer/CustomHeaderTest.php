@@ -178,6 +178,12 @@ final class CustomHeaderTest extends TestCase
                 'name'  => "Some\nHeader",
                 'value' => 'Some Value',
             ],
+            'Invalid: empty name' => [
+                'name'  => '   ',
+            ],
+            'Invalid: empty name and empty value' => [
+                'name'  => '  :  ',
+            ],
         ];
     }
 
