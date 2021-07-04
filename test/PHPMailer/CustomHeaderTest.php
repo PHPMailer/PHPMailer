@@ -63,8 +63,38 @@ final class CustomHeaderTest extends TestCase
         $headers = $this->Mail->getCustomHeaders();
         self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
         $this->Mail->clearCustomHeaders();
-        self::assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
-        self::assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
+    }
+
+    /**
+     * Tests failing to set custom headers when the header info provided does not validate.
+     *
+     * @dataProvider dataAddCustomHeaderInvalid
+     *
+     * @param string $name  Custom header name.
+     * @param mixed  $value Optional. Custom header value.
+     */
+    public function testAddCustomHeaderInvalid($name, $value = null)
+    {
+        self::assertFalse($this->Mail->addCustomHeader($name, $value));
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataAddCustomHeaderInvalid()
+    {
+        return [
+            'Invalid: new line in value' => [
+                'name'  => 'SomeHeader',
+                'value' => "Some\n Value",
+            ],
+            'Invalid: new line in name' => [
+                'name'  => "Some\nHeader",
+                'value' => 'Some Value',
+            ],
+        ];
     }
 
     /**
