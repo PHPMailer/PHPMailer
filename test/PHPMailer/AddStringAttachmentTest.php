@@ -84,13 +84,42 @@ final class AddStringAttachmentTest extends PreSendTestCase
     }
 
     /**
-     * Expect exceptions on bad encoding
+     * Test that adding a string attachment throws an exception in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $string           String attachment data.
+     * @param string $filename         Name of the attachment.
+     * @param string $exceptionMessage The exception message to expect.
+     * @param string $encoding         Optional. File encoding to pass.
      */
-    public function testStringAttachmentEncodingException()
-    {
+    public function testFailToAttachException(
+        $string,
+        $filename,
+        $exceptionMessage,
+        $encoding = PHPMailer::ENCODING_BASE64
+    ) {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage($exceptionMessage);
 
         $mail = new PHPMailer(true);
-        $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
+        $mail->addStringAttachment($string, $filename, $encoding);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataFailToAttach()
+    {
+        return [
+            'Invalid: invalid encoding' => [
+                'string'           => 'hello',
+                'filename'         => 'test.txt',
+                'exceptionMessage' => 'Unknown encoding: invalidencoding',
+                'encoding'         => 'invalidencoding',
+            ],
+        ];
     }
 }
