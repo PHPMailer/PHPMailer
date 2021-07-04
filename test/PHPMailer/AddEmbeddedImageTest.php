@@ -110,17 +110,43 @@ final class AddEmbeddedImageTest extends PreSendTestCase
      *
      * @dataProvider dataFailToAttach
      *
-     * @param string $path     Path to the attachment.
-     * @param string $cid      Content ID for the attachment.
-     * @param string $name     Optional. Attachment name to use.
-     * @param string $encoding Optional. File encoding to pass.
+     * @param string $path             Path to the attachment.
+     * @param string $cid              Content ID for the attachment.
+     * @param string $exceptionMessage Unused in this test.
+     * @param string $name             Optional. Attachment name to use.
+     * @param string $encoding         Optional. File encoding to pass.
      */
-    public function testFailToAttach($path, $cid, $name = '', $encoding = PHPMailer::ENCODING_BASE64)
+    public function testFailToAttach($path, $cid, $exceptionMessage, $name = '', $encoding = PHPMailer::ENCODING_BASE64)
     {
         $result = $this->Mail->addEmbeddedImage($path, $cid, $name, $encoding);
         self::assertFalse($result, 'Image did not fail to attach');
 
         self::assertFalse($this->Mail->inlineImageExists(), 'Inline image present in attachments array');
+    }
+
+    /**
+     * Test that embedding an image throws an exception in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $path             Path to the attachment.
+     * @param string $cid              Content ID for the attachment.
+     * @param string $exceptionMessage The exception message to expect.
+     * @param string $name             Optional. Attachment name to use.
+     * @param string $encoding         Optional. File encoding to pass.
+     */
+    public function testFailToAttachException(
+        $path,
+        $cid,
+        $exceptionMessage,
+        $name = '',
+        $encoding = PHPMailer::ENCODING_BASE64
+    ) {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        $mail = new PHPMailer(true);
+        $mail->addEmbeddedImage($path, $cid, $name, $encoding);
     }
 
     /**
@@ -132,26 +158,17 @@ final class AddEmbeddedImageTest extends PreSendTestCase
     {
         return [
             'Invalid: non-existent file' => [
-                'path' => 'thisfiledoesntexist',
-                'cid'  => 'xyz',
+                'path'             => 'thisfiledoesntexist',
+                'cid'              => 'xyz',
+                'exceptionMessage' => 'Could not access file: thisfiledoesntexist',
             ],
             'Invalid: invalid encoding' => [
-                'path'     => __FILE__,
-                'cid'      => 'cid',
-                'name'     => 'test.png',
-                'encoding' => 'invalidencoding',
+                'path'             => __FILE__,
+                'cid'              => 'cid',
+                'exceptionMessage' => 'Unknown encoding: invalidencoding',
+                'name'             => 'test.png',
+                'encoding'         => 'invalidencoding',
             ],
         ];
-    }
-
-    /**
-     * Expect exceptions on bad encoding
-     */
-    public function testEmbeddedImageEncodingException()
-    {
-        $this->expectException(Exception::class);
-
-        $mail = new PHPMailer(true);
-        $mail->addEmbeddedImage(__FILE__, 'cid', 'test.png', 'invalidencoding');
     }
 }
