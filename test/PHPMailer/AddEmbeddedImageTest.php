@@ -53,8 +53,40 @@ final class AddEmbeddedImageTest extends PreSendTestCase
         $this->Mail->clearAttachments();
 
         //For code coverage
-        $this->Mail->addEmbeddedImage('thisfiledoesntexist', 'xyz'); //Non-existent file
         $this->Mail->addEmbeddedImage(__FILE__, '123'); //Missing name
+    }
+
+    /**
+     * Test that embedding an image fails in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $path     Path to the attachment.
+     * @param string $cid      Content ID for the attachment.
+     * @param string $name     Optional. Attachment name to use.
+     * @param string $encoding Optional. File encoding to pass.
+     */
+    public function testFailToAttach($path, $cid, $name = '', $encoding = PHPMailer::ENCODING_BASE64)
+    {
+        $result = $this->Mail->addEmbeddedImage($path, $cid, $name, $encoding);
+        self::assertFalse($result, 'Image did not fail to attach');
+
+        self::assertFalse($this->Mail->inlineImageExists(), 'Inline image present in attachments array');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataFailToAttach()
+    {
+        return [
+            'Invalid: non-existent file' => [
+                'path' => 'thisfiledoesntexist',
+                'cid'  => 'xyz',
+            ],
+        ];
     }
 
     /**
