@@ -72,9 +72,10 @@ final class CustomHeaderTest extends TestCase
      *
      * @throws Exception
      */
-    public function testHeaderException()
+    public function testInvalidHeaderException()
     {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid header name or value');
 
         $mail = new PHPMailer(true);
         $mail->addCustomHeader('SomeHeader', "Some\n Value");
