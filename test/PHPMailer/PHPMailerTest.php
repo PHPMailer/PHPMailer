@@ -1350,30 +1350,6 @@ EOT;
         self::assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
         self::assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
         self::assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
-        //Test pathinfo
-        $a = '/mnt/files/飛兒樂 團光茫.mp3';
-        $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame('/mnt/files', $q['dirname'], 'UNIX dirname not matched');
-        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'UNIX basename not matched');
-        self::assertSame('mp3', $q['extension'], 'UNIX extension not matched');
-        self::assertSame('飛兒樂 團光茫', $q['filename'], 'UNIX filename not matched');
-        self::assertSame(
-            '/mnt/files',
-            PHPMailer::mb_pathinfo($a, PATHINFO_DIRNAME),
-            'Dirname path element not matched'
-        );
-        self::assertSame(
-            '飛兒樂 團光茫.mp3',
-            PHPMailer::mb_pathinfo($a, PATHINFO_BASENAME),
-            'Basename path element not matched'
-        );
-        self::assertSame('飛兒樂 團光茫', PHPMailer::mb_pathinfo($a, 'filename'), 'Filename path element not matched');
-        $a = 'c:\mnt\files\飛兒樂 團光茫.mp3';
-        $q = PHPMailer::mb_pathinfo($a);
-        self::assertSame('c:\mnt\files', $q['dirname'], 'Windows dirname not matched');
-        self::assertSame('飛兒樂 團光茫.mp3', $q['basename'], 'Windows basename not matched');
-        self::assertSame('mp3', $q['extension'], 'Windows extension not matched');
-        self::assertSame('飛兒樂 團光茫', $q['filename'], 'Windows filename not matched');
     }
 
     public function testBadSMTP()
