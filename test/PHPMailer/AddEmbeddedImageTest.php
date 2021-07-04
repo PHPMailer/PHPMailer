@@ -15,12 +15,12 @@ namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding embedded image(s) functionality.
  */
-final class AddEmbeddedImageTest extends SendTestCase
+final class AddEmbeddedImageTest extends PreSendTestCase
 {
 
     /**
@@ -49,7 +49,7 @@ final class AddEmbeddedImageTest extends SendTestCase
         }
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
         $this->Mail->clearAttachments();
 
         //For code coverage
