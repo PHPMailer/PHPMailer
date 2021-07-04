@@ -19,6 +19,10 @@ use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding stringified attachments functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::addStringEmbeddedImage
+ * @covers \PHPMailer\PHPMailer\PHPMailer::getAttachments
+ * @covers \PHPMailer\PHPMailer\PHPMailer::inlineImageExists
  */
 final class AddStringEmbeddedImageTest extends PreSendTestCase
 {
