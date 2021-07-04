@@ -35,8 +35,45 @@ jobs:
       - name: Show PHPCS results in PR
         run: cs2pr ./phpcs-report.xml
 
+  lint:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        php: ['5.5', '7.2', '8.0']
+        experimental: [false]
+        include:
+          - php: '8.1'
+            experimental: true
+
+    name: "Lint: PHP ${{ matrix.php }}"
+    continue-on-error: ${{ matrix.experimental }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: cs2pr
+
+      # Install dependencies and handle caching in one go.
+      # @link https://github.com/marketplace/actions/install-composer-dependencies
+      - name: Install Composer dependencies
+        uses: "ramsey/composer-install@v1"
+
+      - name: Lint against parse errors
+        if: ${{ matrix.php != '8.1' }}
+        run: composer lint -- --checkstyle | cs2pr
+
+      - name: Lint against parse errors (PHP 8.1)
+        if: ${{ matrix.php == '8.1' }}
+        run: composer lint
+
   test:
-    needs: ['coding-standard']
+    needs: ['coding-standard', 'lint']
     runs-on: ubuntu-18.04
     strategy:
       matrix:
@@ -47,7 +84,7 @@ jobs:
           - php: '8.1'
             experimental: true
 
-    name: PHP ${{ matrix.php }}
+    name: "Test: PHP ${{ matrix.php }}"
 
     continue-on-error: ${{ matrix.experimental }}
 
