@@ -24,9 +24,9 @@ final class AddEmbeddedImageTest extends PreSendTestCase
 {
 
     /**
-     * An embedded attachment test.
+     * Test successfully adding an embedded image.
      */
-    public function testEmbeddedImage()
+    public function testAddEmbeddedImage()
     {
         $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="' .
             'cid:my-attach">' .
@@ -34,23 +34,18 @@ final class AddEmbeddedImageTest extends PreSendTestCase
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
-        if (
-            !$this->Mail->addEmbeddedImage(
-                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
-                'my-attach',
-                'phpmailer.png',
-                'base64',
-                'image/png'
-            )
-        ) {
-            self::assertTrue(false, $this->Mail->ErrorInfo);
+        $result = $this->Mail->addEmbeddedImage(
+            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            'my-attach',
+            'phpmailer.png',
+            'base64',
+            'image/png'
+        );
 
-            return;
-        }
+        self::assertTrue($result, $this->Mail->ErrorInfo);
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
-        $this->Mail->clearAttachments();
     }
 
     /**
