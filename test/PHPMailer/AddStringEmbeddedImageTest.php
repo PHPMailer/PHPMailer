@@ -28,13 +28,28 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
      */
     public function testHtmlStringEmbedNoName()
     {
+        $attachmentFile   = realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png');
+        $attachmentString = file_get_contents($attachmentFile);
+        $cid              = hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0';
+
+        $expected = [
+            0 => $attachmentString,
+            1 => '',
+            2 => '',
+            3 => 'base64',
+            4 => '',
+            5 => true,
+            6 => 'inline',
+            7 => $cid,
+        ];
+
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->Subject .= ': HTML + unnamed embedded image';
         $this->Mail->isHTML(true);
 
         $result = $this->Mail->addStringEmbeddedImage(
-            file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-            hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
+            $attachmentString,
+            $cid,
             '', // Intentionally empty name.
             'base64',
             '', // Intentionally empty MIME type.
@@ -42,9 +57,36 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
         );
 
         self::assertTrue($result, $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->inlineImageExists(), 'Inline image not present in attachments array');
+
+        $attachments = $this->Mail->getAttachments();
+        self::assertIsArray($attachments, 'Attachments is not an array');
+        self::assertArrayHasKey(0, $attachments, 'Attachments does not have the expected array entry');
+        self::assertSame($expected, $attachments[0], 'Attachment info does not match the expected array');
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
+
+        $sendMessage = $this->Mail->getSentMIMEMessage();
+        $LE          = PHPMailer::getLE();
+
+        self::assertStringContainsString(
+            'Content-Type: ' . $LE,
+            $sendMessage,
+            'Embedded image header content type incorrect.'
+        );
+
+        self::assertStringContainsString(
+            'Content-ID: <' . $cid . '>' . $LE,
+            $sendMessage,
+            'Embedded image header encoding incorrect.'
+        );
+
+        self::assertStringContainsString(
+            'Content-Disposition: inline' . $LE,
+            $sendMessage,
+            'Embedded image header content disposition incorrect.'
+        );
     }
 
     /**
