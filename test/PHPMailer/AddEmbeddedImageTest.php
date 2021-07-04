@@ -135,6 +135,12 @@ final class AddEmbeddedImageTest extends PreSendTestCase
                 'path' => 'thisfiledoesntexist',
                 'cid'  => 'xyz',
             ],
+            'Invalid: invalid encoding' => [
+                'path'     => __FILE__,
+                'cid'      => 'cid',
+                'name'     => 'test.png',
+                'encoding' => 'invalidencoding',
+            ],
         ];
     }
 
