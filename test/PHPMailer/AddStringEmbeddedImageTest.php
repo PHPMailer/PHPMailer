@@ -90,13 +90,45 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
     }
 
     /**
-     * Expect exceptions on bad encoding
+     * Test that embedding a stringified attachment throws an exception in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $string           The attachment binary data.
+     * @param string $cid              Content ID for the attachment.
+     * @param string $exceptionMessage The exception message to expect.
+     * @param string $name             Optional. Attachment name to use.
+     * @param string $encoding         Optional. File encoding to pass.
      */
-    public function testStringEmbeddedImageEncodingException()
-    {
+    public function testFailToAttachException(
+        $string,
+        $cid,
+        $exceptionMessage,
+        $name = '',
+        $encoding = PHPMailer::ENCODING_BASE64
+    ) {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage($exceptionMessage);
 
         $mail = new PHPMailer(true);
-        $mail->addStringEmbeddedImage('hello', 'cid', 'test.png', 'invalidencoding');
+        $mail->addStringEmbeddedImage($string, $cid, $name, $encoding);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataFailToAttach()
+    {
+        return [
+            'Invalid: invalid encoding' => [
+                'string'           => 'hello',
+                'cid'              => 'cid',
+                'exceptionMessage' => 'Unknown encoding: invalidencoding',
+                'name'             => 'test.png',
+                'encoding'         => 'invalidencoding',
+            ],
+        ];
     }
 }
