@@ -19,6 +19,11 @@ use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding embedded image(s) functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::addEmbeddedImage
+ * @covers \PHPMailer\PHPMailer\PHPMailer::createBody
+ * @covers \PHPMailer\PHPMailer\PHPMailer::getAttachments
+ * @covers \PHPMailer\PHPMailer\PHPMailer::inlineImageExists
  */
 final class AddEmbeddedImageTest extends PreSendTestCase
 {
