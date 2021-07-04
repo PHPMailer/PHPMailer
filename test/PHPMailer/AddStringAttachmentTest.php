@@ -19,6 +19,11 @@ use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test adding string attachments functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::addStringAttachment
+ * @covers \PHPMailer\PHPMailer\PHPMailer::attachmentExists
+ * @covers \PHPMailer\PHPMailer\PHPMailer::createBody
+ * @covers \PHPMailer\PHPMailer\PHPMailer::getAttachments
  */
 final class AddStringAttachmentTest extends PreSendTestCase
 {
