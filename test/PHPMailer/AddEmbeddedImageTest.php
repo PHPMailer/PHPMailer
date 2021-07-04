@@ -28,14 +28,27 @@ final class AddEmbeddedImageTest extends PreSendTestCase
      */
     public function testAddEmbeddedImage()
     {
+        $pathToFile = realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png');
+        $expected   = [
+            0 => $pathToFile,
+            1 => 'phpmailer.png',
+            2 => 'phpmailer.png',
+            3 => 'base64',
+            4 => 'image/png',
+            5 => false,
+            6 => 'inline',
+            7 => 'my-attach',
+        ];
+
         $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="' .
             'cid:my-attach">' .
             'Here is an image!';
         $this->Mail->Subject .= ': Embedded Image';
         $this->Mail->isHTML(true);
 
+        // Test attaching the image.
         $result = $this->Mail->addEmbeddedImage(
-            realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
+            $pathToFile,
             'my-attach',
             'phpmailer.png',
             'base64',
@@ -43,9 +56,37 @@ final class AddEmbeddedImageTest extends PreSendTestCase
         );
 
         self::assertTrue($result, $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->inlineImageExists(), 'Embedded image not present in attachments array');
 
+        $attachments = $this->Mail->getAttachments();
+        self::assertIsArray($attachments, 'Attachments is not an array');
+        self::assertArrayHasKey(0, $attachments, 'Attachments does not have the expected array entry');
+        self::assertSame($expected, $attachments[0], 'Attachment info does not match the expected array');
+
+        // Test that the image was correctly added to the message body.
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
+
+        $sendMessage = $this->Mail->getSentMIMEMessage();
+        $LE          = PHPMailer::getLE();
+
+        self::assertStringContainsString(
+            'Content-Type: image/png; name=phpmailer.png' . $LE,
+            $sendMessage,
+            'Embedded image header content type incorrect.'
+        );
+
+        self::assertStringContainsString(
+            'Content-ID: <my-attach>' . $LE,
+            $sendMessage,
+            'Embedded image header content ID incorrect.'
+        );
+
+        self::assertStringContainsString(
+            'Content-Disposition: inline; filename=phpmailer.png' . $LE,
+            $sendMessage,
+            'Embedded image header content disposition incorrect.'
+        );
     }
 
     /**
