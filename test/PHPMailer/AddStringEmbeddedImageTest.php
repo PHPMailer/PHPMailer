@@ -24,28 +24,24 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
 {
 
     /**
-     * Test embedded image without a name.
+     * Test successfully adding a stingified embedded image without a name.
      */
-    public function testHTMLStringEmbedNoName()
+    public function testHtmlStringEmbedNoName()
     {
         $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
         $this->Mail->Subject .= ': HTML + unnamed embedded image';
         $this->Mail->isHTML(true);
 
-        if (
-            !$this->Mail->addStringEmbeddedImage(
-                file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-                hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
-                '', //Intentionally empty name
-                'base64',
-                '', //Intentionally empty MIME type
-                'inline'
-            )
-        ) {
-            self::assertTrue(false, $this->Mail->ErrorInfo);
+        $result = $this->Mail->addStringEmbeddedImage(
+            file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
+            hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
+            '', // Intentionally empty name.
+            'base64',
+            '', // Intentionally empty MIME type.
+            'inline'
+        );
 
-            return;
-        }
+        self::assertTrue($result, $this->Mail->ErrorInfo);
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
