@@ -98,6 +98,21 @@ final class CustomHeaderTest extends TestCase
     }
 
     /**
+     * Test removing previously set custom headers.
+     */
+    public function testClearCustomHeaders()
+    {
+        $this->Mail->addCustomHeader('foo', 'bar');
+        self::assertSame([['foo', 'bar']], $this->Mail->getCustomHeaders());
+
+        $this->Mail->clearCustomHeaders();
+
+        $cleared = $this->Mail->getCustomHeaders();
+        self::assertIsArray($cleared);
+        self::assertEmpty($cleared);
+    }
+
+    /**
      * Check whether setting a bad custom header throws exceptions.
      *
      * @throws Exception
