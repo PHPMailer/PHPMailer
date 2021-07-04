@@ -90,6 +90,30 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
     }
 
     /**
+     * Test that embedding a stringified attachment fails in select use cases.
+     *
+     * @dataProvider dataFailToAttach
+     *
+     * @param string $string           The attachment binary data.
+     * @param string $cid              Content ID for the attachment.
+     * @param string $exceptionMessage Unused in this test.
+     * @param string $name             Optional. Attachment name to use.
+     * @param string $encoding         Optional. File encoding to pass.
+     */
+    public function testFailToAttach(
+        $string,
+        $cid,
+        $exceptionMessage,
+        $name = '',
+        $encoding = PHPMailer::ENCODING_BASE64
+    ) {
+        $result = $this->Mail->addStringEmbeddedImage($string, $cid, $name, $encoding);
+        self::assertFalse($result, 'Stringified attachment did not fail to attach');
+
+        self::assertFalse($this->Mail->inlineImageExists(), 'Stringified attachment present in attachments array');
+    }
+
+    /**
      * Test that embedding a stringified attachment throws an exception in select use cases.
      *
      * @dataProvider dataFailToAttach
