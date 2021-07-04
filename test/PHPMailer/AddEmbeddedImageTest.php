@@ -51,9 +51,22 @@ final class AddEmbeddedImageTest extends PreSendTestCase
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
         $this->Mail->clearAttachments();
+    }
 
-        //For code coverage
-        $this->Mail->addEmbeddedImage(__FILE__, '123'); //Missing name
+    /**
+     * Test adding an image without explicitly adding a name for the image will set the name as the existing file name.
+     */
+    public function testAddingImageWithoutExplicitName()
+    {
+        $result = $this->Mail->addEmbeddedImage(__FILE__, '123');
+        self::assertTrue($result, 'File failed to attach');
+
+        self::assertTrue($this->Mail->inlineImageExists(), 'Inline image not present in attachments array');
+
+        $attachments = $this->Mail->getAttachments();
+        self::assertIsArray($attachments, 'Attachments is not an array');
+        self::assertArrayHasKey(0, $attachments, 'Attachments does not have the expected array entry');
+        self::assertSame($attachments[0][1], $attachments[0][2], 'Name is not the same as filename');
     }
 
     /**
