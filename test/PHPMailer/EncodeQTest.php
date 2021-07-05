@@ -18,6 +18,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test encoding a string using Q encoding functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::encodeQ
  */
 final class EncodeQTest extends TestCase
 {
