@@ -35,8 +35,8 @@ final class EncodeStringTest extends TestCase
         $this->Mail->ErrorInfo = '';
         $this->Mail->encodeString('hello', 'asdfghjkl');
         self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        self::assertMatchesRegularExpression(
-            '/' . base64_encode('hello') . '/',
+        self::assertSame(
+            base64_encode('hello') . PHPMailer::getLE(),
             $this->Mail->encodeString('hello')
         );
     }
