@@ -51,18 +51,54 @@ final class EncodeStringTest extends TestCase
      */
     public function dataEncodeString()
     {
-        $input = 'hello';
-        $LE    = PHPMailer::getLE();
+        $input           = 'hello';
+        $LE              = PHPMailer::getLE();
+        $base64_expected = base64_encode($input) . $LE;
 
         return [
             'Simple string; no explicit encoding (using base64 default)' => [
                 'input'    => $input,
-                'expected' => base64_encode($input) . $LE,
+                'expected' => $base64_expected,
+            ],
+            'Simple string; base64 encoding (lowercase)' => [
+                'input'    => $input,
+                'expected' => $base64_expected,
+                'encoding' => PHPMailer::ENCODING_BASE64,
+            ],
+            'Simple string; base64 encoding (uppercase)' => [
+                'input'    => $input,
+                'expected' => $base64_expected,
+                'encoding' => strtoupper(PHPMailer::ENCODING_BASE64),
+            ],
+            'Simple string; 7-bit encoding' => [
+                'input'    => $input,
+                'expected' => $input . $LE,
+                'encoding' => PHPMailer::ENCODING_7BIT,
+            ],
+            'Simple string; 8-bit encoding' => [
+                'input'    => $input,
+                'expected' => $input . $LE,
+                'encoding' => PHPMailer::ENCODING_8BIT,
             ],
             'Simple string; binary encoding' => [
                 'input'    => $input,
                 'expected' => $input,
                 'encoding' => PHPMailer::ENCODING_BINARY,
+            ],
+            'Simple string; binary encoding (mixed case)' => [
+                'input'    => $input,
+                'expected' => $input,
+                'encoding' => ucfirst(PHPMailer::ENCODING_BINARY),
+            ],
+            'Simple string; quoted printable encoding' => [
+                'input'    => $input,
+                'expected' => $input,
+                'encoding' => PHPMailer::ENCODING_QUOTED_PRINTABLE,
+            ],
+            'String with line breaks; 8-bit encoding' => [
+                'input'    => "hello\rWorld\r",
+                'expected' => "hello{$LE}World{$LE}",
+                'encoding' => PHPMailer::ENCODING_8BIT,
             ],
         ];
     }
