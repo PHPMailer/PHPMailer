@@ -105,10 +105,16 @@ final class EncodeStringTest extends TestCase
 
     /**
      * Test passing an incorrect encoding.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::encodeString
      */
     public function testInvalidEncoding()
     {
-        $this->Mail->encodeString('hello', 'asdfghjkl');
+        $result = $this->Mail->encodeString('hello', 'asdfghjkl');
+        self::assertSame('', $result, 'Invalid encoding should result in an empty string');
+
         self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
+        self::assertTrue($this->Mail->isError(), 'Error count not correctly incremented');
+        self::assertSame('Unknown encoding: asdfghjkl', $this->Mail->ErrorInfo, 'Error info not correctly set');
     }
 }
