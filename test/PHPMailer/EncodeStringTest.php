@@ -13,6 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\TestCase;
 
@@ -116,5 +117,20 @@ final class EncodeStringTest extends TestCase
         self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
         self::assertTrue($this->Mail->isError(), 'Error count not correctly incremented');
         self::assertSame('Unknown encoding: asdfghjkl', $this->Mail->ErrorInfo, 'Error info not correctly set');
+    }
+
+    /**
+     * Test passing an incorrect encoding results in an exception being thrown when PHPMailer is
+     * instantiated with `$exceptions = true`.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::encodeString
+     */
+    public function testInvalidEncodingException()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown encoding: asdfghjkl');
+
+        $mail = new PHPMailer(true);
+        $mail->encodeString('hello', 'asdfghjkl');
     }
 }
