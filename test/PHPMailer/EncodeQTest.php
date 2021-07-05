@@ -60,15 +60,20 @@ final class EncodeQTest extends TestCase
                 'expected' => '=A1Hola!_Se=F1or!',
                 'position' => 'text',
             ],
+            'Encode for TEXT (uppercase); char encoding default (iso88591)' => [
+                'input'    => "\xa1Hola! Se\xf1or!",
+                'expected' => '=A1Hola!_Se=F1or!',
+                'position' => 'TEXT',
+            ],
             'Encode for comment; char encoding default (iso88591)' => [
                 'input'    => "\xa1Hola! Se\xf1or!",
                 'expected' => '=A1Hola!_Se=F1or!',
                 'position' => 'comment',
             ],
-            'Encode for phrase; char encoding default (iso88591)' => [
+            'Encode for Phrase (mixed case); char encoding default (iso88591)' => [
                 'input'    => "\xa1Hola! Se\xf1or!",
                 'expected' => '=A1Hola!_Se=F1or!',
-                'position' => 'phrase',
+                'position' => 'Phrase',
             ],
             'Encode for text; char encoding explicit: utf-8' => [
                 'input'    => "\xc2\xa1Hola! Se\xc3\xb1or!",
@@ -80,6 +85,23 @@ final class EncodeQTest extends TestCase
                 'input'    => "Nov\xc3\xa1=",
                 'expected' => 'Nov=C3=A1=3D',
                 'position' => 'text',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+            ],
+            'Encode for text; char encoding default (iso88591); string containing new lines' => [
+                'input'    => "\xa1Hola!\r\nSe\xf1or!\r\n",
+                'expected' => '=A1Hola!Se=F1or!',
+                'position' => 'text',
+            ],
+            'Encode for text; char encoding explicit: utf-8; phrase vs text regex (text)' => [
+                'input'    => "Hello?\xbdWorld\x5e\xa9",
+                'expected' => 'Hello=3F=BDWorld^=A9',
+                'position' => 'text',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+            ],
+            'Encode for phrase; char encoding explicit: utf-8;  phrase vs text regex (phrase)' => [
+                'input'    => "Hello?\xbdWorld\x5e\xa9",
+                'expected' => 'Hello=3F=BDWorld=5E=A9',
+                'position' => 'phrase',
                 'charset'  => PHPMailer::CHARSET_UTF8,
             ],
         ];
