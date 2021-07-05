@@ -23,37 +23,65 @@ final class EncodeQTest extends TestCase
 {
 
     /**
-     * Encoding and charset tests.
+     * Test encoding a string using Q encoding.
+     *
+     * @dataProvider dataEncodeQ
+     *
+     * @param string $input    The text to encode.
+     * @param string $expected The expected function return value.
+     * @param string $position Optional. Input for the position parameter.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testEncodings()
+    public function testEncodeQ($input, $expected, $position = null, $charset = null)
     {
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        self::assertSame(
-            '=A1Hola!_Se=F1or!',
-            $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'text'),
-            'Q Encoding (text) failed'
-        );
-        self::assertSame(
-            '=A1Hola!_Se=F1or!',
-            $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'comment'),
-            'Q Encoding (comment) failed'
-        );
-        self::assertSame(
-            '=A1Hola!_Se=F1or!',
-            $this->Mail->encodeQ("\xa1Hola! Se\xf1or!", 'phrase'),
-            'Q Encoding (phrase) failed'
-        );
-        $this->Mail->CharSet = 'UTF-8';
-        self::assertSame(
-            '=C2=A1Hola!_Se=C3=B1or!',
-            $this->Mail->encodeQ("\xc2\xa1Hola! Se\xc3\xb1or!", 'text'),
-            'Q Encoding (text) failed'
-        );
-        // Strings containing '=' are a special case.
-        self::assertSame(
-            'Nov=C3=A1=3D',
-            $this->Mail->encodeQ("Nov\xc3\xa1=", 'text'),
-            'Q Encoding (text) failed 2'
-        );
+        if (isset($charset)) {
+            $this->Mail->CharSet = $charset;
+        }
+
+        if (isset($position)) {
+            $result = $this->Mail->encodeQ($input, $position);
+        } else {
+            $result = $this->Mail->encodeQ($input);
+        }
+
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataEncodeQ()
+    {
+        return [
+            'Encode for text; char encoding default (iso88591)' => [
+                'input'    => "\xa1Hola! Se\xf1or!",
+                'expected' => '=A1Hola!_Se=F1or!',
+                'position' => 'text',
+            ],
+            'Encode for comment; char encoding default (iso88591)' => [
+                'input'    => "\xa1Hola! Se\xf1or!",
+                'expected' => '=A1Hola!_Se=F1or!',
+                'position' => 'comment',
+            ],
+            'Encode for phrase; char encoding default (iso88591)' => [
+                'input'    => "\xa1Hola! Se\xf1or!",
+                'expected' => '=A1Hola!_Se=F1or!',
+                'position' => 'phrase',
+            ],
+            'Encode for text; char encoding explicit: utf-8' => [
+                'input'    => "\xc2\xa1Hola! Se\xc3\xb1or!",
+                'expected' => '=C2=A1Hola!_Se=C3=B1or!',
+                'position' => 'text',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+            ],
+            'Encode for text; char encoding explicit: utf-8; string containg "=" character' => [
+                'input'    => "Nov\xc3\xa1=",
+                'expected' => 'Nov=C3=A1=3D',
+                'position' => 'text',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+            ],
+        ];
     }
 }
