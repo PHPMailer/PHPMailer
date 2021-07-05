@@ -33,11 +33,18 @@ final class EncodeStringTest extends TestCase
             'Binary encoding changed input'
         );
         $this->Mail->ErrorInfo = '';
-        $this->Mail->encodeString('hello', 'asdfghjkl');
-        self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
         self::assertSame(
             base64_encode('hello') . PHPMailer::getLE(),
             $this->Mail->encodeString('hello')
         );
+    }
+
+    /**
+     * Test passing an incorrect encoding.
+     */
+    public function testInvalidEncoding()
+    {
+        $this->Mail->encodeString('hello', 'asdfghjkl');
+        self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
     }
 }
