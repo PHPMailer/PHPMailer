@@ -24,19 +24,47 @@ final class EncodeStringTest extends TestCase
 
     /**
      * Encoding and charset tests.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::encodeString
+     *
+     * @dataProvider dataEncodeString
+     *
+     * @param string $input    Text to encode.
+     * @param string $expected Expected function return value.
+     * @param string $encoding Optional. Encoding to use.
      */
-    public function testEncodings()
+    public function testEncodeString($input, $expected, $encoding = null)
     {
-        self::assertSame(
-            'hello',
-            $this->Mail->encodeString('hello', 'binary'),
-            'Binary encoding changed input'
-        );
-        $this->Mail->ErrorInfo = '';
-        self::assertSame(
-            base64_encode('hello') . PHPMailer::getLE(),
-            $this->Mail->encodeString('hello')
-        );
+        if (isset($encoding)) {
+            $result = $this->Mail->encodeString($input, $encoding);
+        } else {
+            $result = $this->Mail->encodeString($input);
+        }
+
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataEncodeString()
+    {
+        $input = 'hello';
+        $LE    = PHPMailer::getLE();
+
+        return [
+            'Simple string; no explicit encoding (using base64 default)' => [
+                'input'    => $input,
+                'expected' => base64_encode($input) . $LE,
+            ],
+            'Simple string; binary encoding' => [
+                'input'    => $input,
+                'expected' => $input,
+                'encoding' => PHPMailer::ENCODING_BINARY,
+            ],
+        ];
     }
 
     /**
