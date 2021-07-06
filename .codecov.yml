@@ -1,0 +1,21 @@
+codecov:
+  notify:
+    after_n_builds: 2
+
+coverage:
+  round: nearest
+  # Status will be green when coverage is between 70 and 100%.
+  range: "70...100"
+  status:
+    project:
+      default:
+        threshold: 2%
+        paths:
+          - "src"
+    patch:
+      default:
+        threshold: 0%
+        paths:
+          - "src"
+
+comment: false
