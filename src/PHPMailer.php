@@ -4014,7 +4014,7 @@ class PHPMailer
             empty($host)
             || !is_string($host)
             || strlen($host) > 256
-            || !preg_match('/^([a-zA-Z\d.-]*|\[[a-fA-F\d:]+])$/', $host)
+            || !preg_match('/^([a-zA-Z\d.-]*|\[[a-fA-F\d:]+\])$/', $host)
         ) {
             return false;
         }

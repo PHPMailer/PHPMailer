@@ -1358,40 +1358,6 @@ EOT;
         self::assertFalse($smtp->mail("somewhere\nbad"), 'Bad SMTP command containing breaks accepted');
     }
 
-    public function testHostValidation()
-    {
-        $good = [
-            'localhost',
-            'example.com',
-            'smtp.gmail.com',
-            '127.0.0.1',
-            trim(str_repeat('a0123456789.', 21), '.'),
-            '[::1]',
-            '[0:1234:dc0:41:216:3eff:fe67:3e01]',
-        ];
-        $bad = [
-            null,
-            123,
-            1.5,
-            new \stdClass(),
-            [],
-            '',
-            '999.0.0.0',
-            '[1234]',
-            '[1234:::1]',
-            trim(str_repeat('a0123456789.', 22), '.'),
-            '0:1234:dc0:41:216:3eff:fe67:3e01',
-            '[012q:1234:dc0:41:216:3eff:fe67:3e01]',
-            '[[::1]]',
-        ];
-        foreach ($good as $h) {
-            self::assertTrue(PHPMailer::isValidHost($h), 'Good hostname denied: ' . $h);
-        }
-        foreach ($bad as $h) {
-            self::assertFalse(PHPMailer::isValidHost($h), 'Bad hostname accepted: ' . var_export($h, true));
-        }
-    }
-
     /**
      * Tests the Custom header getter.
      */
