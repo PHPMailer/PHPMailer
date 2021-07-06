@@ -36,6 +36,24 @@ abstract class TestCase extends PolyfillTestCase
     const USE_EXCEPTIONS = null;
 
     /**
+     * Property names and their values for the test instance of the PHPMailer class.
+     *
+     * These (public) properties will be set in the `set_up()` method.
+     *
+     * This property can be enhanced/overloaded in concrete test classes to change the presets
+     * or add additional properties.
+     *
+     * It is the responsibility of the individual test classes to ensure that
+     * property values of the correct type are passed.
+     *
+     * @var array Key is the property name, value the desired value for the PHPMailer instance.
+     */
+    protected $propertyChanges = [
+        'SMTPDebug'   => SMTP::DEBUG_CONNECTION, // Full debug output.
+        'Debugoutput' => ['PHPMailer\Test\DebugLogTestListener', 'debugLog'],
+    ];
+
+    /**
      * Holds the PHPMailer instance.
      *
      * @var PHPMailer
@@ -56,11 +74,43 @@ abstract class TestCase extends PolyfillTestCase
      */
     private $NoteLog = [];
 
+    /*
+     * List of *public* properties which we don't want listed in the changelog
+     * as they will already be included in the mail/debug information
+     * created in `buildBody()` anyway.
+     *
+     * Note: no need to include protected or private properties as the tests don't
+     * have access to those anyway.
+     *
+     * @var array Key is the property name, value irrelevant.
+     */
+    private $changelogExclude = [
+        // These are always set in set_up().
+        'SMTPDebug'   => true,
+        'Debugoutput' => true,
+
+        // These are part of the message body anyway.
+        'Subject'     => true,
+        'Body'        => true,
+        'AltBody'     => true,
+        'Ical'        => true,
+
+        // These will always change.
+        'MessageID'   => true,
+        'MessageDate' => true,
+
+        // These are always explicitly added via buildBody() anyway.
+        'ContentType' => true,
+        'CharSet'     => true,
+        'Host'        => true,
+    ];
+
     /**
      * List of *static* properties in the PHPMailer class which _may_ be changed from within a test,
      * with their default values.
      *
-     * This list is used by the {@see `TestCase::resetStaticProperties()`} method.
+     * This list is used by the {@see `TestCase::resetStaticProperties()`} method, as well as
+     * in the {@see `TestCase::checkChanges()`} method.
      *
      * {@internal The default values have to be (manually) maintained here as the Reflection
      * extension does not provide accurate information on the default values of static properties.}
@@ -91,10 +141,6 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function set_up()
     {
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
-        }
-
         // Initialize the PHPMailer class.
         if (is_bool(static::USE_EXCEPTIONS)) {
             $this->Mail = new PHPMailer(static::USE_EXCEPTIONS);
@@ -102,57 +148,25 @@ abstract class TestCase extends PolyfillTestCase
             $this->Mail = new PHPMailer();
         }
 
-        $this->Mail->SMTPDebug = SMTP::DEBUG_CONNECTION; // Full debug output.
-        $this->Mail->Debugoutput = ['PHPMailer\Test\DebugLogTestListener', 'debugLog'];
-        $this->Mail->Priority = 3;
-        $this->Mail->Encoding = '8bit';
-        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-        if (array_key_exists('mail_from', $_REQUEST)) {
-            $this->Mail->From = $_REQUEST['mail_from'];
-        } else {
-            $this->Mail->From = 'unit_test@phpmailer.example.com';
+        // Set initial property values.
+        foreach ($this->propertyChanges as $key => $value) {
+            if ($key === 'to' || $key === 'cc' || $key === 'bcc' || $key === 'ReplyTo') {
+                if (is_array($value) && isset($value['address'], $value['name'])) {
+                    $this->setAddress($value['address'], $value['name'], $key);
+                } elseif (is_string($value)) {
+                    $this->setAddress($value, '', $key);
+                }
+
+                continue;
+            }
+
+            $this->Mail->{$key} = $value;
         }
-        $this->Mail->FromName = 'Unit Tester';
-        $this->Mail->Sender = '';
-        $this->Mail->Subject = 'Unit Test';
-        $this->Mail->Body = '';
-        $this->Mail->AltBody = '';
-        $this->Mail->WordWrap = 0;
-        if (array_key_exists('mail_host', $_REQUEST)) {
-            $this->Mail->Host = $_REQUEST['mail_host'];
-        } else {
-            $this->Mail->Host = 'mail.example.com';
-        }
-        if (array_key_exists('mail_port', $_REQUEST)) {
-            $this->Mail->Port = $_REQUEST['mail_port'];
-        } else {
-            $this->Mail->Port = 25;
-        }
-        $this->Mail->Helo = 'localhost.localdomain';
-        $this->Mail->SMTPAuth = false;
-        $this->Mail->Username = '';
-        $this->Mail->Password = '';
-        if (array_key_exists('mail_useauth', $_REQUEST)) {
-            $this->Mail->SMTPAuth = $_REQUEST['mail_useauth'];
-        }
-        if (array_key_exists('mail_username', $_REQUEST)) {
-            $this->Mail->Username = $_REQUEST['mail_username'];
-        }
-        if (array_key_exists('mail_userpass', $_REQUEST)) {
-            $this->Mail->Password = $_REQUEST['mail_userpass'];
-        }
-        $this->setAddress('no_reply@phpmailer.example.com', 'Reply Guy', 'ReplyTo');
-        $this->Mail->Sender = 'unit_test@phpmailer.example.com';
+
         if ($this->Mail->Host != '') {
             $this->Mail->isSMTP();
         } else {
             $this->Mail->isMail();
-        }
-        if (array_key_exists('mail_to', $_REQUEST)) {
-            $this->setAddress($_REQUEST['mail_to'], 'Test User', 'to');
-        }
-        if (array_key_exists('mail_cc', $_REQUEST) && $_REQUEST['mail_cc'] !== '') {
-            $this->setAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
         }
     }
 
@@ -291,32 +305,37 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function checkChanges()
     {
-        if (3 != $this->Mail->Priority) {
-            $this->addChange('Priority', $this->Mail->Priority);
-        }
-        if (PHPMailer::ENCODING_8BIT !== $this->Mail->Encoding) {
-            $this->addChange('Encoding', $this->Mail->Encoding);
-        }
-        if (PHPMailer::CHARSET_ISO88591 !== $this->Mail->CharSet) {
-            $this->addChange('CharSet', $this->Mail->CharSet);
-        }
-        if ('' != $this->Mail->Sender) {
-            $this->addChange('Sender', $this->Mail->Sender);
-        }
-        if (0 != $this->Mail->WordWrap) {
-            $this->addChange('WordWrap', $this->Mail->WordWrap);
-        }
-        if ('mail' !== $this->Mail->Mailer) {
-            $this->addChange('Mailer', $this->Mail->Mailer);
-        }
-        if (25 != $this->Mail->Port) {
-            $this->addChange('Port', $this->Mail->Port);
-        }
-        if ('localhost.localdomain' !== $this->Mail->Helo) {
-            $this->addChange('Helo', $this->Mail->Helo);
-        }
-        if ($this->Mail->SMTPAuth) {
-            $this->addChange('SMTPAuth', 'true');
+        // Get the default values of all public properties.
+        $defaults = get_class_vars(PHPMailer::class);
+
+        foreach ($defaults as $propertyName => $value) {
+            if (isset($this->changelogExclude[$propertyName])) {
+                continue;
+            }
+
+            if (isset($this->PHPMailerStaticProps[$propertyName])) {
+                // Nested static access is not supported in PHP < 7.0, so we need an interim variable.
+                $mail = $this->Mail;
+                if ($mail::${$propertyName} !== $this->PHPMailerStaticProps[$propertyName]) {
+                    $this->addChange($propertyName, var_export($mail::${$propertyName}, true));
+                }
+
+                continue;
+            }
+
+            // Check against the TestCase specific defaults.
+            if (
+                isset($this->propertyChanges[$propertyName])
+                && $this->Mail->{$propertyName} !== $this->propertyChanges[$propertyName]
+            ) {
+                $this->addChange($propertyName, var_export($this->Mail->{$propertyName}, true));
+                continue;
+            }
+
+            // Check against the PHPMailer class defaults.
+            if ($this->Mail->{$propertyName} !== $value) {
+                $this->addChange($propertyName, var_export($this->Mail->{$propertyName}, true));
+            }
         }
     }
 
@@ -366,28 +385,3 @@ abstract class TestCase extends PolyfillTestCase
         return false;
     }
 }
-/*
- * This is a sample form for setting appropriate test values through a browser
- * These values can also be set using a file called testbootstrap.php (not in repo) in the same folder as this script
- * which is probably more useful if you run these tests a lot
- * <html>
- * <body>
- * <h3>PHPMailer Unit Test</h3>
- * By entering a SMTP hostname it will automatically perform tests with SMTP.
- *
- * <form name="phpmailer_unit" action=__FILE__ method="get">
- * <input type="hidden" name="submitted" value="1"/>
- * From Address: <input type="text" size="50" name="mail_from" value="<?php echo get("mail_from"); ?>"/>
- * <br/>
- * To Address: <input type="text" size="50" name="mail_to" value="<?php echo get("mail_to"); ?>"/>
- * <br/>
- * Cc Address: <input type="text" size="50" name="mail_cc" value="<?php echo get("mail_cc"); ?>"/>
- * <br/>
- * SMTP Hostname: <input type="text" size="50" name="mail_host" value="<?php echo get("mail_host"); ?>"/>
- * <p/>
- * <input type="submit" value="Run Test"/>
- *
- * </form>
- * </body>
- * </html>
- */

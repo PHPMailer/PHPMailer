@@ -15,14 +15,14 @@ namespace PHPMailer\Test\PHPMailer;
 
 use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\SendTestCase;
 
 /**
  * Test DKIM signing functionality.
  *
  * @group dkim
  */
-final class DKIMTest extends TestCase
+final class DKIMTest extends SendTestCase
 {
 
     /**

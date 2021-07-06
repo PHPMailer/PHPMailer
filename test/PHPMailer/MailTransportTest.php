@@ -13,12 +13,12 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\SendTestCase;
 
 /**
  * Test sending mail using the various available mail transport options.
  */
-final class MailTransportTest extends TestCase
+final class MailTransportTest extends SendTestCase
 {
 
     /**

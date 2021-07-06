@@ -13,7 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test setting and retrieving message ID.
@@ -21,7 +21,7 @@ use PHPMailer\Test\TestCase;
  * @covers \PHPMailer\PHPMailer\PHPMailer::createHeader
  * @covers \PHPMailer\PHPMailer\PHPMailer::getLastMessageID
  */
-final class GetLastMessageIDTest extends TestCase
+final class GetLastMessageIDTest extends PreSendTestCase
 {
 
     /**

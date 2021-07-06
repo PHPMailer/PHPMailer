@@ -14,12 +14,12 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\SendTestCase;
 
 /**
  * Test line length detection and handling.
  */
-final class HasLineLongerThanMaxTest extends TestCase
+final class HasLineLongerThanMaxTest extends SendTestCase
 {
 
     /**

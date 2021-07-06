@@ -13,12 +13,12 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\TestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test ICal calendar events handling.
  */
-final class ICalTest extends TestCase
+final class ICalTest extends PreSendTestCase
 {
 
     /**
