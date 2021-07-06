@@ -74,11 +74,43 @@ abstract class TestCase extends PolyfillTestCase
      */
     private $NoteLog = [];
 
+    /*
+     * List of *public* properties which we don't want listed in the changelog
+     * as they will already be included in the mail/debug information
+     * created in `buildBody()` anyway.
+     *
+     * Note: no need to include protected or private properties as the tests don't
+     * have access to those anyway.
+     *
+     * @var array Key is the property name, value irrelevant.
+     */
+    private $changelogExclude = [
+        // These are always set in set_up().
+        'SMTPDebug'   => true,
+        'Debugoutput' => true,
+
+        // These are part of the message body anyway.
+        'Subject'     => true,
+        'Body'        => true,
+        'AltBody'     => true,
+        'Ical'        => true,
+
+        // These will always change.
+        'MessageID'   => true,
+        'MessageDate' => true,
+
+        // These are always explicitly added via buildBody() anyway.
+        'ContentType' => true,
+        'CharSet'     => true,
+        'Host'        => true,
+    ];
+
     /**
      * List of *static* properties in the PHPMailer class which _may_ be changed from within a test,
      * with their default values.
      *
-     * This list is used by the {@see `TestCase::resetStaticProperties()`} method.
+     * This list is used by the {@see `TestCase::resetStaticProperties()`} method, as well as
+     * in the {@see `TestCase::checkChanges()`} method.
      *
      * {@internal The default values have to be (manually) maintained here as the Reflection
      * extension does not provide accurate information on the default values of static properties.}
@@ -273,32 +305,37 @@ abstract class TestCase extends PolyfillTestCase
      */
     protected function checkChanges()
     {
-        if (3 != $this->Mail->Priority) {
-            $this->addChange('Priority', $this->Mail->Priority);
-        }
-        if (PHPMailer::ENCODING_8BIT !== $this->Mail->Encoding) {
-            $this->addChange('Encoding', $this->Mail->Encoding);
-        }
-        if (PHPMailer::CHARSET_ISO88591 !== $this->Mail->CharSet) {
-            $this->addChange('CharSet', $this->Mail->CharSet);
-        }
-        if ('' != $this->Mail->Sender) {
-            $this->addChange('Sender', $this->Mail->Sender);
-        }
-        if (0 != $this->Mail->WordWrap) {
-            $this->addChange('WordWrap', $this->Mail->WordWrap);
-        }
-        if ('mail' !== $this->Mail->Mailer) {
-            $this->addChange('Mailer', $this->Mail->Mailer);
-        }
-        if (25 != $this->Mail->Port) {
-            $this->addChange('Port', $this->Mail->Port);
-        }
-        if ('localhost.localdomain' !== $this->Mail->Helo) {
-            $this->addChange('Helo', $this->Mail->Helo);
-        }
-        if ($this->Mail->SMTPAuth) {
-            $this->addChange('SMTPAuth', 'true');
+        // Get the default values of all public properties.
+        $defaults = get_class_vars(PHPMailer::class);
+
+        foreach ($defaults as $propertyName => $value) {
+            if (isset($this->changelogExclude[$propertyName])) {
+                continue;
+            }
+
+            if (isset($this->PHPMailerStaticProps[$propertyName])) {
+                // Nested static access is not supported in PHP < 7.0, so we need an interim variable.
+                $mail = $this->Mail;
+                if ($mail::${$propertyName} !== $this->PHPMailerStaticProps[$propertyName]) {
+                    $this->addChange($propertyName, var_export($mail::${$propertyName}, true));
+                }
+
+                continue;
+            }
+
+            // Check against the TestCase specific defaults.
+            if (
+                isset($this->propertyChanges[$propertyName])
+                && $this->Mail->{$propertyName} !== $this->propertyChanges[$propertyName]
+            ) {
+                $this->addChange($propertyName, var_export($this->Mail->{$propertyName}, true));
+                continue;
+            }
+
+            // Check against the PHPMailer class defaults.
+            if ($this->Mail->{$propertyName} !== $value) {
+                $this->addChange($propertyName, var_export($this->Mail->{$propertyName}, true));
+            }
         }
     }
 
