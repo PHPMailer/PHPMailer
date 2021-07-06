@@ -131,10 +131,17 @@ jobs:
         with:
           composer-options: --ignore-platform-reqs
 
+      # Install postfix and automatically retry if the install failed, which happens reguarly.
+      # @link https://github.com/marketplace/actions/retry-step
       - name: Install postfix
-        run: |
-          sudo apt-get install -y -qq postfix qmail
-          sudo service postfix stop
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 2
+          max_attempts: 3
+          retry_wait_seconds: 5
+          command: |
+            sudo apt-get install -y -qq postfix qmail
+            sudo service postfix stop
 
       - name: Set up sendmail
         run: |
@@ -145,7 +152,7 @@ jobs:
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
           sudo cp test/fakesendmail.sh /usr/sbin/sendmail
-      
+
       - name: Run tests, no code coverage
         if: ${{ matrix.coverage == false }}
         run: ./vendor/bin/phpunit --no-coverage
