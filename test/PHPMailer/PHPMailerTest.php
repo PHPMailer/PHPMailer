@@ -866,36 +866,6 @@ EOT;
     }
 
     /**
-     * Test this denial of service attack.
-     *
-     * @see http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
-     */
-    public function testDenialOfServiceAttack()
-    {
-        $this->Mail->Body = 'This should no longer cause a denial of service.';
-        $this->buildBody();
-
-        $this->Mail->Subject = substr(str_repeat('0123456789', 100), 0, 998);
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-    }
-
-    /**
-     * Tests this denial of service attack.
-     *
-     * According to the ticket, this should get stuck in a loop, though I can't make it happen.
-     * @see https://sourceforge.net/p/phpmailer/bugs/383/
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testDenialOfServiceAttack2()
-    {
-        //Encoding name longer than 68 chars
-        $this->Mail->Encoding = '1234567890123456789012345678901234567890123456789012345678901234567890';
-        //Call wrapText with a zero length value
-        $this->Mail->wrapText(str_repeat('This should no longer cause a denial of service. ', 30), 0);
-    }
-
-    /**
      * Test error handling.
      */
     public function testError()
