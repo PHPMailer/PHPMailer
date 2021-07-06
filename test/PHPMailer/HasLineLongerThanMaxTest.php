@@ -14,12 +14,12 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test line length detection and handling.
  */
-final class HasLineLongerThanMaxTest extends SendTestCase
+final class HasLineLongerThanMaxTest extends PreSendTestCase
 {
 
     /**
@@ -114,7 +114,7 @@ final class HasLineLongerThanMaxTest extends SendTestCase
         $this->Mail->Encoding = '8bit';
         $this->Mail->Body = $oklen . $badlen . $oklen . $badlen;
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
         self::assertSame('quoted-printable', $this->Mail->Encoding, 'Long line did not override transfer encoding');
     }
 }
