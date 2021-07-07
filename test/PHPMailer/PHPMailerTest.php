@@ -1233,19 +1233,6 @@ EOT;
     }
 
     /**
-     * Check whether setting a bad custom header throws exceptions.
-     *
-     * @throws Exception
-     */
-    public function testHeaderException()
-    {
-        $this->expectException(Exception::class);
-
-        $mail = new PHPMailer(true);
-        $mail->addCustomHeader('SomeHeader', "Some\n Value");
-    }
-
-    /**
      * Miscellaneous calls to improve test coverage and some small tests.
      */
     public function testMiscellaneous()
@@ -1270,50 +1257,6 @@ EOT;
         $this->Mail->smtpConnect();
         $smtp = $this->Mail->getSMTPInstance();
         self::assertFalse($smtp->mail("somewhere\nbad"), 'Bad SMTP command containing breaks accepted');
-    }
-
-    /**
-     * Tests the Custom header getter.
-     */
-    public function testCustomHeaderGetter()
-    {
-        $this->Mail->addCustomHeader('foo', 'bar');
-        self::assertSame([['foo', 'bar']], $this->Mail->getCustomHeaders());
-
-        $this->Mail->addCustomHeader('foo', 'baz');
-        self::assertSame(
-            [
-                ['foo', 'bar'],
-                ['foo', 'baz'],
-            ],
-            $this->Mail->getCustomHeaders()
-        );
-
-        $this->Mail->clearCustomHeaders();
-        self::assertEmpty($this->Mail->getCustomHeaders());
-
-        $this->Mail->addCustomHeader('yux');
-        self::assertSame([['yux', '']], $this->Mail->getCustomHeaders());
-
-        $this->Mail->addCustomHeader('Content-Type: application/json');
-        self::assertSame(
-            [
-                ['yux', ''],
-                ['Content-Type', 'application/json'],
-            ],
-            $this->Mail->getCustomHeaders()
-        );
-        $this->Mail->clearCustomHeaders();
-        $this->Mail->addCustomHeader('SomeHeader: Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
-        $this->Mail->clearCustomHeaders();
-        $this->Mail->addCustomHeader('SomeHeader', 'Some Value');
-        $headers = $this->Mail->getCustomHeaders();
-        self::assertSame(['SomeHeader', 'Some Value'], $headers[0]);
-        $this->Mail->clearCustomHeaders();
-        self::assertFalse($this->Mail->addCustomHeader('SomeHeader', "Some\n Value"));
-        self::assertFalse($this->Mail->addCustomHeader("Some\nHeader", 'Some Value'));
     }
 
     /**
