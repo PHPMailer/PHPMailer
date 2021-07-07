@@ -13,6 +13,7 @@
 
 namespace PHPMailer\Test;
 
+use Exception;
 use PHPMailer\Test\PreSendTestCase;
 
 /**
@@ -43,11 +44,19 @@ abstract class SendTestCase extends PreSendTestCase
      */
     protected function set_up()
     {
-        parent::set_up();
-
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php')) {
-            include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
+        /*
+         * Make sure the testbootstrap.php file is available.
+         * Pretty much everything will fail due to unset recipient if this is not done, so error
+         * the tests out before they run if the file does not exist.
+         */
+        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php') === false) {
+            throw new Exception(
+                'Test config params missing - copy testbootstrap-dist.php to testbootstrap.php and change'
+                . ' as appropriate for your own test environment setup.'
+            );
         }
+
+        include \PHPMAILER_INCLUDE_DIR . '/test/testbootstrap.php'; // Overrides go in here.
 
         /*
          * Process the $REQUEST values and add them to the list of properties
