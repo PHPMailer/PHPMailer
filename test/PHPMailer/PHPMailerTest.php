@@ -640,29 +640,6 @@ EOT;
      */
     public function testEmbeddedImage()
     {
-        $this->Mail->Body = 'Embedded Image: <img alt="phpmailer" src="' .
-            'cid:my-attach">' .
-            'Here is an image!';
-        $this->Mail->Subject .= ': Embedded Image';
-        $this->Mail->isHTML(true);
-
-        if (
-            !$this->Mail->addEmbeddedImage(
-                realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
-                'my-attach',
-                'phpmailer.png',
-                'base64',
-                'image/png'
-            )
-        ) {
-            self::assertTrue(false, $this->Mail->ErrorInfo);
-
-            return;
-        }
-
-        $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-        $this->Mail->clearAttachments();
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -679,9 +656,6 @@ EOT;
             $this->Mail->getSentMIMEMessage(),
             'Embedded image header encoding incorrect.'
         );
-        //For code coverage
-        $this->Mail->addEmbeddedImage('thisfiledoesntexist', 'xyz'); //Non-existent file
-        $this->Mail->addEmbeddedImage(__FILE__, '123'); //Missing name
     }
 
     /**
@@ -1029,17 +1003,6 @@ EOT;
 
         $mail = new PHPMailer(true);
         $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
-    }
-
-    /**
-     * Expect exceptions on bad encoding
-     */
-    public function testEmbeddedImageEncodingException()
-    {
-        $this->expectException(Exception::class);
-
-        $mail = new PHPMailer(true);
-        $mail->addEmbeddedImage(__FILE__, 'cid', 'test.png', 'invalidencoding');
     }
 
     /**
