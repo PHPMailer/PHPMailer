@@ -2186,14 +2186,13 @@ class PHPMailer
 
     /**
      * Set the language for error messages.
-     * Returns false if it cannot load the language file.
      * The default language is English.
      *
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
      * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
      *                          Do not set this from user input!
      *
-     * @return bool
+     * @return bool Returns true if the requested language was loaded, false otherwise.
      */
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
@@ -2248,11 +2247,14 @@ class PHPMailer
             //Calculate an absolute path so it can work if CWD is not here
             $lang_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
         }
+
         //Validate $langcode
-        if (!preg_match('/^[a-z]{2}(?:_[a-zA-Z]{2})?$/', $langcode)) {
+        $foundlang = true;
+        if (!preg_match('/^[a-z]{2}(?:_[a-zA-Z]{2})?$/', $langcode) && $langcode !== 'en') {
+            $foundlang = false;
             $langcode = 'en';
         }
-        $foundlang = true;
+
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         //There is no English translation file
         if ('en' !== $langcode) {
