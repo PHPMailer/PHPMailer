@@ -2251,19 +2251,32 @@ class PHPMailer
         //Validate $langcode
         $foundlang = true;
         $langcode  = strtolower($langcode);
-        if (!preg_match('/^[a-z]{2}(?:_[a-z]{2})?$/', $langcode) && $langcode !== 'en') {
+        if (!preg_match('/^(?P<lang>[a-z]{2})(?P<country>_[a-z]{2})?$/', $langcode, $matches) && $langcode !== 'en') {
             $foundlang = false;
             $langcode = 'en';
         }
 
-        $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
         //There is no English translation file
         if ('en' !== $langcode) {
-            //Make sure language file path is readable
-            if (!static::fileIsAccessible($lang_file)) {
+            $langcodes = [];
+            if (!empty($matches['country'])) {
+                $langcodes[] = $matches['lang'] . $matches['country'];
+            }
+            $langcodes[] = $matches['lang'];
+
+            //Try and find a readable language file for the requested language.
+            $foundFile = false;
+            foreach ($langcodes as $code) {
+                $lang_file = $lang_path . 'phpmailer.lang-' . $code . '.php';
+                if (static::fileIsAccessible($lang_file)) {
+                    $foundFile = true;
+                    break;
+                }
+            }
+
+            if ($foundFile === false) {
                 $foundlang = false;
             } else {
-                //$foundlang = include $lang_file;
                 $lines = file($lang_file);
                 foreach ($lines as $line) {
                     //Translation file lines look like this:
