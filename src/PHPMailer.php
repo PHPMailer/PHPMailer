@@ -2250,7 +2250,8 @@ class PHPMailer
 
         //Validate $langcode
         $foundlang = true;
-        if (!preg_match('/^[a-z]{2}(?:_[a-zA-Z]{2})?$/', $langcode) && $langcode !== 'en') {
+        $langcode  = strtolower($langcode);
+        if (!preg_match('/^[a-z]{2}(?:_[a-z]{2})?$/', $langcode) && $langcode !== 'en') {
             $foundlang = false;
             $langcode = 'en';
         }
