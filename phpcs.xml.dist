@@ -36,4 +36,7 @@
         <exclude name="PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet"/>
     </rule>
 
+    <rule ref="Generic.Files.LineLength.TooLong">
+        <exclude-pattern>*/language/phpmailer\.lang*\.php$</exclude-pattern>
+    </rule>
 </ruleset>
