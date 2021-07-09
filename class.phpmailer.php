@@ -3026,8 +3026,8 @@ class PHPMailer
         // Append to $attachment array
         $this->attachment[] = array(
             0 => $string,
-            1 => $filename,
-            2 => basename($filename),
+            1 => basename($filename),
+            2 => $filename,
             3 => $encoding,
             4 => $type,
             5 => true, // isStringAttachment
