@@ -555,34 +555,6 @@ EOT;
     }
 
     /**
-     * Test embedded image without a name.
-     */
-    public function testHTMLStringEmbedNoName()
-    {
-        $this->Mail->Body = 'This is the <strong>HTML</strong> part of the email.';
-        $this->Mail->Subject .= ': HTML + unnamed embedded image';
-        $this->Mail->isHTML(true);
-
-        if (
-            !$this->Mail->addStringEmbeddedImage(
-                file_get_contents(realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer_mini.png')),
-                hash('sha256', 'phpmailer_mini.png') . '@phpmailer.0',
-                '', //Intentionally empty name
-                'base64',
-                '', //Intentionally empty MIME type
-                'inline'
-            )
-        ) {
-            self::assertTrue(false, $this->Mail->ErrorInfo);
-
-            return;
-        }
-
-        $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-    }
-
-    /**
      * Simple HTML and multiple attachment test.
      */
     public function testHTMLMultiAttachment()
@@ -974,17 +946,6 @@ EOT;
         $this->Mail->addAttachment($filename);
         unlink($filename);
         self::assertFalse($this->Mail->send());
-    }
-
-    /**
-     * Expect exceptions on bad encoding
-     */
-    public function testStringEmbeddedImageEncodingException()
-    {
-        $this->expectException(Exception::class);
-
-        $mail = new PHPMailer(true);
-        $mail->addStringEmbeddedImage('hello', 'cid', 'test.png', 'invalidencoding');
     }
 
     /**
