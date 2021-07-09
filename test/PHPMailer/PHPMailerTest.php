@@ -79,24 +79,6 @@ final class PHPMailerTest extends SendTestCase
     }
 
     /**
-     * Simple plain string attachment test.
-     */
-    public function testPlainStringAttachment()
-    {
-        $this->Mail->Body = 'Here is the text body';
-        $this->Mail->Subject .= ': Plain + StringAttachment';
-
-        $sAttachment = 'These characters are the content of the ' .
-            "string attachment.\nThis might be taken from a " .
-            'database or some other such thing. ';
-
-        $this->Mail->addStringAttachment($sAttachment, 'string_attach.txt');
-
-        $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
-    }
-
-    /**
      * Plain quoted-printable message.
      */
     public function testQuotedPrintable()
@@ -992,17 +974,6 @@ EOT;
         $this->Mail->addAttachment($filename);
         unlink($filename);
         self::assertFalse($this->Mail->send());
-    }
-
-    /**
-     * Expect exceptions on bad encoding
-     */
-    public function testStringAttachmentEncodingException()
-    {
-        $this->expectException(Exception::class);
-
-        $mail = new PHPMailer(true);
-        $mail->addStringAttachment('hello', 'test.txt', 'invalidencoding');
     }
 
     /**
