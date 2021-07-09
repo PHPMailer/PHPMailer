@@ -3610,8 +3610,8 @@ class PHPMailer
             //Append to $attachment array
             $this->attachment[] = [
                 0 => $string,
-                1 => $filename,
-                2 => static::mb_pathinfo($filename, PATHINFO_BASENAME),
+                1 => static::mb_pathinfo($filename, PATHINFO_BASENAME),
+                2 => $filename,
                 3 => $encoding,
                 4 => $type,
                 5 => true, //isStringAttachment
