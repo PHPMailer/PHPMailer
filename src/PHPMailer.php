@@ -2189,6 +2189,8 @@ class PHPMailer
      * The default language is English.
      *
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
+     *                          Optionally, the language code can be enhanced with a 4-character
+     *                          script annotation and/or a 2-character country annotation.
      * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
      *                          Do not set this from user input!
      *
@@ -2251,7 +2253,10 @@ class PHPMailer
         //Validate $langcode
         $foundlang = true;
         $langcode  = strtolower($langcode);
-        if (!preg_match('/^(?P<lang>[a-z]{2})(?P<country>_[a-z]{2})?$/', $langcode, $matches) && $langcode !== 'en') {
+        if (
+            !preg_match('/^(?P<lang>[a-z]{2})(?P<script>_[a-z]{4})?(?P<country>_[a-z]{2})?$/', $langcode, $matches)
+            && $langcode !== 'en'
+        ) {
             $foundlang = false;
             $langcode = 'en';
         }
@@ -2259,8 +2264,14 @@ class PHPMailer
         //There is no English translation file
         if ('en' !== $langcode) {
             $langcodes = [];
+            if (!empty($matches['script']) && !empty($matches['country'])) {
+                $langcodes[] = $matches['lang'] . $matches['script'] . $matches['country'];
+            }
             if (!empty($matches['country'])) {
                 $langcodes[] = $matches['lang'] . $matches['country'];
+            }
+            if (!empty($matches['script'])) {
+                $langcodes[] = $matches['lang'] . $matches['script'];
             }
             $langcodes[] = $matches['lang'];
 
