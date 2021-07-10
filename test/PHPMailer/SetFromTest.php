@@ -48,6 +48,20 @@ final class SetFromTest extends TestCase
     public function dataSetFromSuccess()
     {
         return [
+            'Email, no name' => [
+                'expected' => [
+                    'From'     => 'a@example.com',
+                    'FromName' => '',
+                ],
+                'address'  => 'a@example.com',
+            ],
+            'Email, no name; whitespace padding around email' => [
+                'expected' => [
+                    'From'     => 'whitespacepadding@example.com',
+                    'FromName' => '',
+                ],
+                'address'  => " \t  whitespacepadding@example.com   \n",
+            ],
             'Email + name' => [
                 'expected' => [
                     'From'     => 'a@example.com',
@@ -63,6 +77,22 @@ final class SetFromTest extends TestCase
                 ],
                 'address'  => 'bob@example.com',
                 'name'     => '"Bob\'s Burgers" (Bob\'s "Burgers")',
+            ],
+            'Email + name; line breaks in name' => [
+                'expected' => [
+                    'From'     => 'removebreaks@example.com',
+                    'FromName' => 'somename',
+                ],
+                'address'  => 'removebreaks@example.com',
+                'name'     => "\r\nsome\r\nname\r\n",
+            ],
+            'Email + name; whitespace padding around name' => [
+                'expected' => [
+                    'From'     => 'a@example.com',
+                    'FromName' => 'some name',
+                ],
+                'address'  => 'a@example.com',
+                'name'     => "\t\tsome name    \r\n",
             ],
         ];
     }
