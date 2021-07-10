@@ -109,6 +109,20 @@ final class SetFromTest extends TestCase
     }
 
     /**
+     * Test setting the From address, but not overruling an existing, non-empty Sender value.
+     */
+    public function testSetFromDoesNotOverruleExistingSender()
+    {
+        $sender             = 'donotoverrule@example.com';
+        $this->Mail->Sender = $sender;
+
+        $result = $this->Mail->setFrom('overruled@example.com');
+
+        self::assertTrue($result, 'setFrom failed');
+        self::assertSame($sender, $this->Mail->Sender, 'Sender has been overruled');
+    }
+
+    /**
      * Test unsuccesfully setting the From, FromName and Sender properties.
      */
     public function testSetFromFail()
