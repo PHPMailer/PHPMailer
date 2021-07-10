@@ -13,6 +13,8 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\TestCase;
 
 /**
@@ -124,19 +126,56 @@ final class SetFromTest extends TestCase
 
     /**
      * Test unsuccesfully setting the From, FromName and Sender properties.
+     *
+     * @dataProvider dataSetFromFail
+     *
+     * @param string $address Email address input to pass to the function.
+     * @param string $name    Optional. Name input to pass to the function.
      */
-    public function testSetFromFail()
+    public function testSetFromFail($address, $name = '')
     {
         // Get the original, default values from the class.
         $expectedFrom     = $this->Mail->From;
         $expectedFromName = $this->Mail->FromName;
 
-        $result = $this->Mail->setFrom('a@example.com.', 'some name');
+        $result = $this->Mail->setFrom($address, $name);
         self::assertFalse($result, 'setFrom did not fail');
         self::assertTrue($this->Mail->isError(), 'Error count not incremented');
 
         self::assertSame($expectedFrom, $this->Mail->From, 'From has been overruled');
         self::assertSame($expectedFromName, $this->Mail->FromName, 'From name has been overruled');
         self::assertSame('', $this->Mail->Sender, 'Sender has been overruled');
+    }
+
+    /**
+     * Test that setting an invalid email address results in an exception.
+     *
+     * @dataProvider dataSetFromFail
+     *
+     * @param string $address Email address input to pass to the function.
+     * @param string $name    Optional. Name input to pass to the function.
+     */
+    public function testInvalidAddressException($address, $name = '')
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid address:  (From):');
+
+        $mail = new PHPMailer(true);
+        $mail->setFrom($address, $name);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataSetFromFail()
+    {
+        return [
+            'Invalid email address' => [
+                'address' => 'a@example.com.',
+                'name'    => 'some name',
+            ],
+        ];
     }
 }
