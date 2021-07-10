@@ -26,25 +26,54 @@ final class SetFromTest extends TestCase
      */
     public function testAddressing()
     {
-        self::assertTrue($this->Mail->setFrom('a@example.com', 'some name'), 'setFrom failed');
-        $this->Mail->Sender = '';
-        $this->Mail->setFrom('a@example.com', 'some name', true);
-        self::assertSame('a@example.com', $this->Mail->Sender, 'setFrom failed to set sender');
-        $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', false);
         self::assertSame('', $this->Mail->Sender, 'setFrom should not have set sender');
     }
 
     /**
-     * Test addressing.
+     * Test succesfully setting the From, FromName and Sender properties.
+     *
+     * @dataProvider dataSetFromSuccess
+     *
+     * @param string $expected Expected funtion output.
+     * @param string $address  Email address input to pass to the function.
+     * @param string $name     Optional. Name input to pass to the function.
      */
-    public function testAddressing2()
+    public function testSetFromSuccess($expected, $address, $name = '')
     {
-        $this->buildBody();
-        $this->Mail->setFrom('bob@example.com', '"Bob\'s Burgers" (Bob\'s "Burgers")', true);
-        $this->Mail->isSMTP();
-        $this->Mail->Subject .= ': quotes in from name';
-        self::assertTrue($this->Mail->send(), 'send failed');
+        $result = $this->Mail->setFrom($address, $name);
+        self::assertTrue($result, 'setFrom failed');
+
+        self::assertSame($expected['From'], $this->Mail->From, 'From has not been set');
+        self::assertSame($expected['FromName'], $this->Mail->FromName, 'From name has not been set');
+        self::assertSame($expected['From'], $this->Mail->Sender, 'Sender has not been set');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataSetFromSuccess()
+    {
+        return [
+            'Email + name' => [
+                'expected' => [
+                    'From'     => 'a@example.com',
+                    'FromName' => 'some name',
+                ],
+                'address'  => 'a@example.com',
+                'name'     => 'some name',
+            ],
+            'Email + name; quotes in the name' => [
+                'expected' => [
+                    'From'     => 'bob@example.com',
+                    'FromName' => '"Bob\'s Burgers" (Bob\'s "Burgers")',
+                ],
+                'address'  => 'bob@example.com',
+                'name'     => '"Bob\'s Burgers" (Bob\'s "Burgers")',
+            ],
+        ];
     }
 
     /**
