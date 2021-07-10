@@ -22,15 +22,6 @@ final class SetFromTest extends TestCase
 {
 
     /**
-     * Test addressing.
-     */
-    public function testAddressing()
-    {
-        $this->Mail->setFrom('a@example.com', 'some name', false);
-        self::assertSame('', $this->Mail->Sender, 'setFrom should not have set sender');
-    }
-
-    /**
      * Test succesfully setting the From, FromName and Sender properties.
      *
      * @dataProvider dataSetFromSuccess
@@ -74,6 +65,17 @@ final class SetFromTest extends TestCase
                 'name'     => '"Bob\'s Burgers" (Bob\'s "Burgers")',
             ],
         ];
+    }
+
+    /**
+     * Test setting the From address, but not overruling the Sender value when the $auto parameter is set to false.
+     */
+    public function testSetFromDoesNotOverruleSenderWithAutoFalse()
+    {
+        $result = $this->Mail->setFrom('overruled@example.com', 'some name', false);
+
+        self::assertTrue($result, 'setFrom failed');
+        self::assertSame('', $this->Mail->Sender, 'Sender has been overruled');
     }
 
     /**
