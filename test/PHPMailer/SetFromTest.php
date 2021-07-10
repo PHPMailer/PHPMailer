@@ -27,7 +27,6 @@ final class SetFromTest extends TestCase
     public function testAddressing()
     {
         self::assertTrue($this->Mail->setFrom('a@example.com', 'some name'), 'setFrom failed');
-        self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
         $this->Mail->Sender = '';
         $this->Mail->setFrom('a@example.com', 'some name', true);
         self::assertSame('a@example.com', $this->Mail->Sender, 'setFrom failed to set sender');
@@ -46,5 +45,13 @@ final class SetFromTest extends TestCase
         $this->Mail->isSMTP();
         $this->Mail->Subject .= ': quotes in from name';
         self::assertTrue($this->Mail->send(), 'send failed');
+    }
+
+    /**
+     * Test unsuccesfully setting the From, FromName and Sender properties.
+     */
+    public function testSetFromFail()
+    {
+        self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
     }
 }
