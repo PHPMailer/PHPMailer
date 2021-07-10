@@ -32,7 +32,6 @@ final class PHPMailerTest extends SendTestCase
         $this->Mail->Body = 'Here is the main body.  There should be ' .
             'a reply to address in this message.';
         $this->Mail->Subject .= ': Low Priority';
-        $this->Mail->addReplyTo('nobody@nobody.com', 'Nobody (Unit Test)');
 
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
@@ -753,11 +752,8 @@ EOT;
         self::assertTrue($this->Mail->addBCC('c@example.com'), 'BCC addressing failed');
         self::assertFalse($this->Mail->addBCC('c@example.com'), 'BCC duplicate addressing failed');
         self::assertFalse($this->Mail->addBCC('a@example.com'), 'BCC duplicate addressing failed (2)');
-        self::assertTrue($this->Mail->addReplyTo('a@example.com'), 'Replyto Addressing failed');
-        self::assertFalse($this->Mail->addReplyTo('a@example..com'), 'Invalid Replyto address accepted');
         $this->Mail->clearCCs();
         $this->Mail->clearBCCs();
-        $this->Mail->clearReplyTos();
     }
 
     /**
@@ -1109,7 +1105,6 @@ EOT;
         }
 
         $this->Mail->clearAllRecipients();
-        $this->Mail->clearReplyTos();
 
         //This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
         $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
@@ -1117,13 +1112,11 @@ EOT;
         $this->Mail->addAddress('test' . $domain);
         $this->Mail->addCC('test+cc' . $domain);
         $this->Mail->addBCC('test+bcc' . $domain);
-        $this->Mail->addReplyTo('test+replyto' . $domain);
 
         //Queued addresses are not returned by get*Addresses() before send() call.
         self::assertEmpty($this->Mail->getToAddresses(), 'Bad "to" recipients');
         self::assertEmpty($this->Mail->getCcAddresses(), 'Bad "cc" recipients');
         self::assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
-        self::assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
 
         //Clear queued BCC recipient.
         $this->Mail->clearBCCs();
@@ -1144,11 +1137,6 @@ EOT;
             'Bad "cc" recipients'
         );
         self::assertEmpty($this->Mail->getBccAddresses(), 'Bad "bcc" recipients');
-        self::assertSame(
-            ['test+replyto' . $domain => ['test+replyto' . $domain, '']],
-            $this->Mail->getReplyToAddresses(),
-            'Bad "reply-to" addresses'
-        );
     }
 
     /**
@@ -1161,7 +1149,6 @@ EOT;
         }
 
         $this->Mail->clearAllRecipients();
-        $this->Mail->clearReplyTos();
 
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
 
@@ -1173,14 +1160,6 @@ EOT;
         self::assertFalse($this->Mail->addAddress('test@xn--franois-xxa.ch'));
         self::assertFalse($this->Mail->addAddress('test@XN--FRANOIS-XXA.CH'));
 
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
-
         $this->buildBody();
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
 
@@ -1189,11 +1168,6 @@ EOT;
             1,
             $this->Mail->getToAddresses(),
             'Bad count of "to" recipients'
-        );
-        self::assertCount(
-            1,
-            $this->Mail->getReplyToAddresses(),
-            'Bad count of "reply-to" addresses'
         );
     }
 
@@ -1245,16 +1219,6 @@ EOT;
 
         include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
         $this->assertTrue($this->Mail->addAddress('test@françois.ch'));
-    }
-
-    public function testGivenIdnAddress_addReplyTo_returns_true()
-    {
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
-            $this->markTestSkipped('/test/fakefunctions.php file not found');
-        }
-
-        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
-        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
     }
 
     public function testErroneousAddress_addAddress_returns_false()
