@@ -127,6 +127,16 @@ final class SetFromTest extends TestCase
      */
     public function testSetFromFail()
     {
-        self::assertFalse($this->Mail->setFrom('a@example.com.', 'some name'), 'setFrom accepted invalid address');
+        // Get the original, default values from the class.
+        $expectedFrom     = $this->Mail->From;
+        $expectedFromName = $this->Mail->FromName;
+
+        $result = $this->Mail->setFrom('a@example.com.', 'some name');
+        self::assertFalse($result, 'setFrom did not fail');
+        self::assertTrue($this->Mail->isError(), 'Error count not incremented');
+
+        self::assertSame($expectedFrom, $this->Mail->From, 'From has been overruled');
+        self::assertSame($expectedFromName, $this->Mail->FromName, 'From name has been overruled');
+        self::assertSame('', $this->Mail->Sender, 'Sender has been overruled');
     }
 }
