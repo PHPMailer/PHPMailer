@@ -184,4 +184,18 @@ final class SetFromTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * Test unsuccesfully setting the From, FromName and Sender properties when an email address
+     * containing an 8bit character is passed and either the MbString or the Intl extension are
+     * not available.
+     */
+    public function testSetFromFailsOn8BitCharInDomainWithoutOptionalExtensions()
+    {
+        if (extension_loaded('mbstring') && function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('Test requires MbString and/or Intl *not* to be available');
+        }
+
+        $this->testSetFromFail("8bit@ex\x80mple.com");
+    }
 }
