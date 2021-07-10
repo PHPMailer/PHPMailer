@@ -176,6 +176,12 @@ final class SetFromTest extends TestCase
                 'address' => 'a@example.com.',
                 'name'    => 'some name',
             ],
+            'Not an email address: missing @ sign' => [
+                'address' => 'example.com',
+            ],
+            'Not an email address: nothing after the @ sign' => [
+                'address' => 'example@',
+            ],
         ];
     }
 }
