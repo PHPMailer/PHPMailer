@@ -301,33 +301,102 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     }
 
     /**
-     * Tests removal of duplicate recipients and reply-tos.
+     * Tests that non-exact duplicate reply-to addresses do get enqueued (IDN),
+     * but don't get added (IDN converted to punycode + non-IDN).
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addOrEnqueueAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
      */
-    public function testDuplicateIDNRemoved()
+    public function testNoDuplicateReplyToAddresses()
     {
-        $this->Mail->clearReplyTos();
-
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
 
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@françois.ch'));
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'));
-        self::assertTrue($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'));
-        self::assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
+        self::assertTrue(
+            $this->Mail->addReplyTo('test+replyto@françois.ch', 'UTF8 domain'),
+            'Initial address + name not queued'
+        );
+        self::assertFalse(
+            $this->Mail->addReplyTo('test+replyto@françois.ch'),
+            'Duplicate address should not have been queued'
+        );
+        // For the queue, a duplicate address in a different case is accepted.
+        self::assertTrue(
+            $this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'),
+            'Duplicate address, different case address not queued'
+        );
+        self::assertFalse(
+            $this->Mail->addReplyTo('test+replyto@FRANÇOIS.CH'),
+            'Duplicate address, different case should not have been queued twice'
+        );
+        // An address in punycode does not go into the queue, but gets added straight away.
+        self::assertTrue(
+            $this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch'),
+            'Punycode address, no name not added'
+        );
+        self::assertFalse(
+            $this->Mail->addReplyTo('test+replyto@xn--franois-xxa.ch', 'Punycode domain'),
+            'Duplicate punycode address should not have been added, no matter that this one has a name'
+        );
+        self::assertFalse(
+            $this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'),
+            'Duplicate punycode address, different case should not have been added'
+        );
+
+        // The one accepted punycode address should already be lined up.
+        self::assertCount(1, $this->Mail->getReplyToAddresses(), 'Addresses added did not match expected count of 1');
+
+        // Check that the non-punycode addresses were added to the queue correctly.
+        $queue = $this->getPropertyValue($this->Mail, 'ReplyToQueue');
+        self::assertIsArray($queue, 'Queue is not an array');
+        self::assertCount(2, $queue, 'Queue does not contain exactly 2 entries');
+        self::assertArrayHasKey(
+            'test+replyto@françois.ch',
+            $queue,
+            'Queue does not contain an entry for the lowercase address'
+        );
+        self::assertArrayHasKey(
+            'test+replyto@FRANÇOIS.CH',
+            $queue,
+            'Queue does not contain an entry for the uppercase address'
+        );
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
 
-        //There should be only one "Reply-To" address.
+        // There should be only one "Reply-To" address after preSend().
         self::assertCount(
             1,
             $this->Mail->getReplyToAddresses(),
             'Bad count of "reply-to" addresses'
+        );
+
+        $expectedAddress = 'test+replyto@xn--franois-xxa.ch';
+        $retrieved       = $this->Mail->getReplyToAddresses();
+        self::assertCount(1, $retrieved, 'Stored addresses after preSend() is not 1');
+
+        // Verify that the registered reply-to address is the initially added lowercase punycode one.
+        self::assertArrayHasKey(
+            $expectedAddress,
+            $retrieved,
+            'ReplyTo property does not contain an entry with this address as the key'
+        );
+        self::assertCount(
+            2,
+            $retrieved[$expectedAddress],
+            'ReplyTo array for this address does not contain exactly two array items'
+        );
+        self::assertSame(
+            $expectedAddress,
+            $retrieved[$expectedAddress][0],
+            'ReplyTo array for this address does not contain added address'
+        );
+        self::assertSame(
+            '',
+            $retrieved[$expectedAddress][1],
+            'ReplyTo array for this address does not contain added name'
         );
     }
 
