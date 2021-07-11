@@ -1188,7 +1188,7 @@ class PHPMailer
      *
      * @return array
      */
-    public static function parseAddresses($addrstr, $useimap = true)
+    public static function parseAddresses($addrstr, $useimap = true, $charset = self::CHARSET_ISO88591)
     {
         $addresses = [];
         if ($useimap && function_exists('imap_rfc822_parse_adrlist')) {
@@ -1209,7 +1209,10 @@ class PHPMailer
                         defined('MB_CASE_UPPER') &&
                         preg_match('/^=\?.*\?=$/', $address->personal)
                     ) {
+                        $origCharset = mb_internal_encoding();
+                        mb_internal_encoding($charset);
                         $address->personal = mb_decode_mimeheader($address->personal);
+                        mb_internal_encoding($origCharset);
                     }
 
                     $addresses[] = [
@@ -1240,7 +1243,10 @@ class PHPMailer
                         //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
                         //If this name is encoded, decode it
                         if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/', $name)) {
+                            $origCharset = mb_internal_encoding();
+                            mb_internal_encoding($charset);
                             $name = mb_decode_mimeheader($name);
+                            mb_internal_encoding($origCharset);
                         }
                         $addresses[] = [
                             //Remove any surrounding quotes and spaces from the name
@@ -1723,7 +1729,7 @@ class PHPMailer
                 fwrite($mail, $header);
                 fwrite($mail, $body);
                 $result = pclose($mail);
-                $addrinfo = static::parseAddresses($toAddr);
+                $addrinfo = static::parseAddresses($toAddr, true, $this->charSet);
                 $this->doCallback(
                     ($result === 0),
                     [[$addrinfo['address'], $addrinfo['name']]],
@@ -1883,7 +1889,7 @@ class PHPMailer
         if ($this->SingleTo && count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
-                $addrinfo = static::parseAddresses($toAddr);
+                $addrinfo = static::parseAddresses($toAddr, true, $this->charSet);
                 $this->doCallback(
                     $result,
                     [[$addrinfo['address'], $addrinfo['name']]],
