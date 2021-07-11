@@ -18,6 +18,9 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test error registration functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::isError
+ * @covers \PHPMailer\PHPMailer\PHPMailer::setError
  */
 final class SetErrorTest extends TestCase
 {
