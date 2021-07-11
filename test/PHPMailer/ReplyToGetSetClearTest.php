@@ -177,17 +177,58 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     }
 
     /**
-     * Test low priority.
+     * Test that the correct Reply-To message header has been added to the message.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addReplyTo
+     * @covers \PHPMailer\PHPMailer\PHPMailer::createHeader
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addrAppend
+     *
+     * @dataProvider dataReplyToInMessageHeader
+     *
+     * @param string $addresses The email address(es) to set for Reply-To.
+     * @param string $expected  The expected message header.
      */
-    public function testLowPriority()
+    public function testReplyToInMessageHeader($addresses, $expected)
     {
         $this->Mail->Body = 'Here is the main body.  There should be ' .
-            'a reply to address in this message.';
-        $this->Mail->Subject .= ': Low Priority';
-        $this->Mail->addReplyTo('nobody@nobody.com', 'Nobody (Unit Test)');
+            'a reply to header in this message.';
+        $this->Mail->Subject .= ': Reply to header';
+
+        foreach ($addresses as $address) {
+            if (isset($address['name'])) {
+                $this->Mail->addReplyTo($address['address'], $address['name']);
+            } else {
+                $this->Mail->addReplyTo($address['address']);
+            }
+        }
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
+
+        $message = $this->Mail->getSentMIMEMessage();
+        self::assertStringContainsString($expected, $message, 'Message does not contain the expected reply-to header');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataReplyToInMessageHeader()
+    {
+        $LE = PHPMailer::getLE();
+
+        return [
+            'Single address + name' => [
+                'addresses' => [
+                    [
+                        'address' => 'nobody@nobody.com',
+                        'name'    => 'Nobody (Unit Test)',
+                    ],
+                ],
+                'expected'  => $LE . 'Reply-To: "Nobody (Unit Test)" <nobody@nobody.com>' . $LE,
+            ],
+        ];
     }
 
     /**
