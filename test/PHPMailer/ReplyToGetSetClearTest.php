@@ -257,27 +257,41 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     }
 
     /**
-     * Tests CharSet and Unicode -> ASCII conversions for addresses with IDN.
+     * Tests handling of IDN reply-to addresses.
+     *
+     * Verifies that:
+     * - CharSet and Unicode -> ASCII conversions for addresses with IDN gets executed correctly.
+     * - IDN addresses initially get enqueued.
+     * - IDN addresses correctly get added during `preSend()`.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addReplyTo
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addOrEnqueueAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::preSend
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
      */
-    public function testConvertEncoding()
+    public function testEnqueueAndAddIdnAddress()
     {
-        $this->Mail->clearReplyTos();
+        // This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
+        $letter  = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
+        $domain  = '@' . 'fran' . $letter . 'ois.ch';
+        $address = 'test+replyto' . $domain;
+        self::assertTrue($this->Mail->addReplyTo($address), 'Replyto Addressing failed');
 
-        //This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
-        $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
-        $domain = '@' . 'fran' . $letter . 'ois.ch';
-        $this->Mail->addReplyTo('test+replyto' . $domain);
+        // Queued addresses are not returned by get*Addresses() before send() call.
+        self::assertEmpty($this->Mail->getReplyToAddresses(), 'Unexpected "reply-to" address added');
 
-        //Queued addresses are not returned by get*Addresses() before send() call.
-        self::assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
+        // Check that the queue has been set correctly.
+        $queue = $this->getPropertyValue($this->Mail, 'ReplyToQueue');
+        self::assertCount(1, $queue, 'Queue does not contain exactly 1 entry');
+        self::assertArrayHasKey($address, $queue, 'Queue does not contain an entry for the IDN address');
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
 
-        //Addresses with IDN are returned by get*Addresses() after send() call.
+        // Addresses with IDN are returned by get*Addresses() after preSend() call.
         $domain = $this->Mail->punyencodeAddress($domain);
         self::assertSame(
             ['test+replyto' . $domain => ['test+replyto' . $domain, '']],
