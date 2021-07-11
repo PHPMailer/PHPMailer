@@ -48,13 +48,12 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
     /**
      * Tests CharSet and Unicode -> ASCII conversions for addresses with IDN.
+     *
+     * @requires extension mbstring
+     * @requires function idn_to_ascii
      */
     public function testConvertEncoding()
     {
-        if (!PHPMailer::idnSupported()) {
-            self::markTestSkipped('intl and/or mbstring extensions are not available');
-        }
-
         $this->Mail->clearReplyTos();
 
         //This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
@@ -79,13 +78,12 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
     /**
      * Tests removal of duplicate recipients and reply-tos.
+     *
+     * @requires extension mbstring
+     * @requires function idn_to_ascii
      */
     public function testDuplicateIDNRemoved()
     {
-        if (!PHPMailer::idnSupported()) {
-            self::markTestSkipped('intl and/or mbstring extensions are not available');
-        }
-
         $this->Mail->clearReplyTos();
 
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
