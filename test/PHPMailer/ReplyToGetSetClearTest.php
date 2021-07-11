@@ -32,16 +32,26 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @dataProvider dataAddReplyToValidAddressNonIdn
      *
-     * @param string $address The email address to set.
-     * @param string $name    Optional. The name to set.
+     * @param string $address  The email address to set.
+     * @param string $name     Optional. The name to set.
+     * @param string $expected Optional. The email address and name as they are expected to be set.
+     *                         Only needs to be passed if different than the original inputs.
      */
-    public function testAddReplyToValidAddressNonIdn($address, $name = null)
+    public function testAddReplyToValidAddressNonIdn($address, $name = null, $expected = null)
     {
         if (isset($name)) {
             $result = $this->Mail->addReplyTo($address, $name);
         } else {
             $result = $this->Mail->addReplyTo($address);
             $name   = '';
+        }
+
+        if (isset($expected) === false) {
+            $expected = [
+                'key'     => $address,
+                'address' => $address,
+                'name'    => $name,
+            ];
         }
 
         // Test the setting is successful.
@@ -52,24 +62,25 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         self::assertIsArray($retrieved, 'ReplyTo property is not an array');
         self::assertCount(1, $retrieved, 'ReplyTo property does not contain exactly one address');
 
+        $key = $expected['key'];
         self::assertArrayHasKey(
-            $address,
+            $key,
             $retrieved,
             'ReplyTo property does not contain an entry with this address as the key'
         );
         self::assertCount(
             2,
-            $retrieved[$address],
+            $retrieved[$key],
             'ReplyTo array for this address does not contain exactly two array items'
         );
         self::assertSame(
-            $address,
-            $retrieved[$address][0],
+            $expected['address'],
+            $retrieved[$key][0],
             'ReplyTo array for this address does not contain added address'
         );
         self::assertSame(
-            $name,
-            $retrieved[$address][1],
+            $expected['name'],
+            $retrieved[$key][1],
             'ReplyTo array for this address does not contain added name'
         );
     }
@@ -85,9 +96,27 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
             'Valid address' => [
                 'address' => 'a@example.com',
             ],
+            'Valid address with surrounding whitespace and mixed case' => [
+                'address' => " \tMiXeD@Example.Com  \r\n",
+                'name'    => null,
+                'expected' => [
+                    'key'     => 'mixed@example.com',
+                    'address' => 'MiXeD@Example.Com',
+                    'name'    => '',
+                ],
+            ],
             'Valid address with name' => [
                 'address' => 'a@example.com',
                 'name'    => 'ReplyTo name',
+            ],
+            'Valid address with name; name with whitespace and line breaks' => [
+                'address'  => 'a@example.com',
+                'name'     => "\t\t  ReplyTo\r\nname  ",
+                'expected' => [
+                    'key'     => 'a@example.com',
+                    'address' => 'a@example.com',
+                    'name'    => 'ReplyToname',
+                ],
             ],
         ];
     }
