@@ -415,4 +415,38 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
         self::assertFalse($this->Mail->addReplyTo('test@françois.ch'));
     }
+
+    /**
+     * Test successfully clearing out both the added as well as the queued Reply-to addresses.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::clearReplyTos
+     *
+     * @requires extension mbstring
+     * @requires function idn_to_ascii
+     */
+    public function testClearReplyTos()
+    {
+        self::assertTrue($this->Mail->addReplyTo('example@example.com'), 'Address not added');
+        self::assertTrue($this->Mail->addReplyTo('test@françois.ch'), 'IDN Address not queued');
+
+        // Verify there is something to clear.
+        $retrieved = $this->Mail->getReplyToAddresses();
+        self::assertIsArray($retrieved, 'ReplyTo property is not an array (pre-clear)');
+        self::assertCount(1, $retrieved, 'ReplyTo property does not contain exactly one address');
+
+        $queue = $this->getPropertyValue($this->Mail, 'ReplyToQueue');
+        self::assertIsArray($queue, 'Queue is not an array (pre-clear)');
+        self::assertCount(1, $queue, 'Queue does not contain exactly one entry');
+
+        $this->Mail->clearReplyTos();
+
+        // Verify the clearing was successful.
+        $retrieved = $this->Mail->getReplyToAddresses();
+        self::assertIsArray($retrieved, 'ReplyTo property is not an array (post-clear)');
+        self::assertCount(0, $retrieved, 'ReplyTo property still contains an address');
+
+        $queue = $this->getPropertyValue($this->Mail, 'ReplyToQueue');
+        self::assertIsArray($queue, 'Queue is not an array (post-clear)');
+        self::assertCount(0, $queue, 'Queue still contains an entry');
+    }
 }
