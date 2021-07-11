@@ -738,22 +738,6 @@ EOT;
     }
 
     /**
-     * Test error handling.
-     */
-    public function testError()
-    {
-        $this->Mail->Subject .= ': Error handling test - this should be sent ok';
-        $this->buildBody();
-        $this->Mail->clearAllRecipients(); //No addresses should cause an error
-        self::assertTrue($this->Mail->isError() == false, 'Error found');
-        self::assertTrue($this->Mail->send() == false, 'send succeeded');
-        self::assertTrue($this->Mail->isError(), 'No error found');
-        self::assertSame('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
-        $this->Mail->addAddress($_REQUEST['mail_to']);
-        self::assertTrue($this->Mail->send(), 'send failed');
-    }
-
-    /**
      * Test addressing.
      */
     public function testAddressing()
