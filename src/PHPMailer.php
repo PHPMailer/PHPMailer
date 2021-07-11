@@ -1237,7 +1237,7 @@ class PHPMailer
                     $name = trim($name);
                     if (static::validateAddress($email)) {
                         //If this name is encoded, decode it
-                        if (preg_match('/^=\?.*\?=$/', $name)) {
+                        if (extension_loaded('mbstring') && preg_match('/^=\?.*\?=$/', $name)) {
                             $name = mb_decode_mimeheader($name);
                         }
                         $addresses[] = [
