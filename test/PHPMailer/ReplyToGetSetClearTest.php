@@ -13,6 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\PreSendTestCase;
 
@@ -141,6 +142,25 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         $retrieved = $this->Mail->getReplyToAddresses();
         self::assertIsArray($retrieved, 'ReplyTo property is not an array');
         self::assertCount(0, $retrieved, 'ReplyTo property is not empty');
+    }
+
+    /**
+     * Test receiving an excepting when adding an invalid non-IDN reply-to address.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addOrEnqueueAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
+     *
+     * @dataProvider dataAddReplyToInvalidAddressNonIdn
+     *
+     * @param string $address The email address to set.
+     */
+    public function testAddReplyToInvalidAddressNonIdnException($address)
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid address:  (Reply-To): ' . $address);
+
+        $mail = new PHPMailer(true);
+        $mail->addReplyTo($address);
     }
 
     /**
