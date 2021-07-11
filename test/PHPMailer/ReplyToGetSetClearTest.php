@@ -23,6 +23,110 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 {
 
     /**
+     * Test adding a non-IDN reply-to address.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addReplyTo
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addOrEnqueueAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::getReplyToAddresses
+     *
+     * @dataProvider dataAddReplyToValidAddressNonIdn
+     *
+     * @param string $address The email address to set.
+     * @param string $name    Optional. The name to set.
+     */
+    public function testAddReplyToValidAddressNonIdn($address, $name = null)
+    {
+        if (isset($name)) {
+            $result = $this->Mail->addReplyTo($address, $name);
+        } else {
+            $result = $this->Mail->addReplyTo($address);
+            $name   = '';
+        }
+
+        // Test the setting is successful.
+        self::assertTrue($result, 'Replyto Addressing failed');
+
+        // Verify that the address was correctly added to the array.
+        $retrieved = $this->Mail->getReplyToAddresses();
+        self::assertIsArray($retrieved, 'ReplyTo property is not an array');
+        self::assertCount(1, $retrieved, 'ReplyTo property does not contain exactly one address');
+
+        self::assertArrayHasKey(
+            $address,
+            $retrieved,
+            'ReplyTo property does not contain an entry with this address as the key'
+        );
+        self::assertCount(
+            2,
+            $retrieved[$address],
+            'ReplyTo array for this address does not contain exactly two array items'
+        );
+        self::assertSame(
+            $address,
+            $retrieved[$address][0],
+            'ReplyTo array for this address does not contain added address'
+        );
+        self::assertSame(
+            $name,
+            $retrieved[$address][1],
+            'ReplyTo array for this address does not contain added name'
+        );
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataAddReplyToValidAddressNonIdn()
+    {
+        return [
+            'Valid address' => [
+                'address' => 'a@example.com',
+            ],
+            'Valid address with name' => [
+                'address' => 'a@example.com',
+                'name'    => 'ReplyTo name',
+            ],
+        ];
+    }
+
+    /**
+     * Test adding an invalid non-IDN reply-to address.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addOrEnqueueAnAddress
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
+     *
+     * @dataProvider dataAddReplyToInvalidAddressNonIdn
+     *
+     * @param string $address The email address to set.
+     */
+    public function testAddReplyToInvalidAddressNonIdn($address)
+    {
+        // Test the setting fails.
+        $result = $this->Mail->addReplyTo($address);
+        self::assertFalse($result, 'Invalid Replyto address accepted');
+
+        // Verify that the address was not added to the array.
+        $retrieved = $this->Mail->getReplyToAddresses();
+        self::assertIsArray($retrieved, 'ReplyTo property is not an array');
+        self::assertCount(0, $retrieved, 'ReplyTo property is not empty');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataAddReplyToInvalidAddressNonIdn()
+    {
+        return [
+            'Invalid domain' => ['a@example..com'],
+        ];
+    }
+
+    /**
      * Test low priority.
      */
     public function testLowPriority()
@@ -34,16 +138,6 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
         $this->buildBody();
         self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
-    }
-
-    /**
-     * Test addressing.
-     */
-    public function testAddressing()
-    {
-        self::assertTrue($this->Mail->addReplyTo('a@example.com'), 'Replyto Addressing failed');
-        self::assertFalse($this->Mail->addReplyTo('a@example..com'), 'Invalid Replyto address accepted');
-        $this->Mail->clearReplyTos();
     }
 
     /**
