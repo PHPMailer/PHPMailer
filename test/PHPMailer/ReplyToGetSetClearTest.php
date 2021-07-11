@@ -219,6 +219,14 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         $LE = PHPMailer::getLE();
 
         return [
+            'Single address' => [
+                'addresses' => [
+                    [
+                        'address' => 'nobody@nobody.com',
+                    ],
+                ],
+                'expected'  => $LE . 'Reply-To: nobody@nobody.com' . $LE,
+            ],
             'Single address + name' => [
                 'addresses' => [
                     [
@@ -227,6 +235,23 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
                     ],
                 ],
                 'expected'  => $LE . 'Reply-To: "Nobody (Unit Test)" <nobody@nobody.com>' . $LE,
+            ],
+            'Multiple addresses, including no name and mixed case email' => [
+                'addresses' => [
+                    [
+                        'address' => 'nobody@nobody.com',
+                        'name'    => 'Nobody (Unit Test)',
+                    ],
+                    [
+                        'address' => 'Somebody@SomeBody.com',
+                        'name'    => 'Somebody (Unit Test)',
+                    ],
+                    [
+                        'address' => 'noname@noname.com',
+                    ],
+                ],
+                'expected'  => $LE . 'Reply-To: "Nobody (Unit Test)" <nobody@nobody.com>,'
+                    . ' "Somebody (Unit Test)" <Somebody@SomeBody.com>, noname@noname.com' . $LE,
             ],
         ];
     }
