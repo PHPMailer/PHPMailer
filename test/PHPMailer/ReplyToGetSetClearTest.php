@@ -152,6 +152,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     {
         return [
             'Invalid domain' => ['a@example..com'],
+            'Missing @ sign' => ['example.com'],
         ];
     }
 
