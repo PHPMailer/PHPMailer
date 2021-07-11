@@ -689,7 +689,7 @@ class PHPMailer
     protected $boundary = [];
 
     /**
-     * The array of available languages.
+     * The array of available text strings for the current language.
      *
      * @var array
      */
@@ -2287,6 +2287,10 @@ class PHPMailer
      */
     public function getTranslations()
     {
+        if (empty($this->language)) {
+            $this->setLanguage(); // Set the default language.
+        }
+
         return $this->language;
     }
 
