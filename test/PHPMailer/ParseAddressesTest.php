@@ -25,7 +25,8 @@ final class ParseAddressesTest extends TestCase
 {
 
     /**
-     * Test RFC822 address splitting using the PHPMailer native implementation.
+     * Test RFC822 address splitting using the PHPMailer native implementation
+     * with the Mbstring extension available.
      *
      * @requires extension mbstring
      *
@@ -36,29 +37,94 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingNative($addrstr, $expected)
     {
-        $parsed = PHPMailer::parseAddresses($addrstr, false);
+        $parsed         = PHPMailer::parseAddresses($addrstr, false);
+        $expectedOutput = $expected['default'];
+        if (empty($expected['native+mbstring']) === false) {
+            $expectedOutput = $expected['native+mbstring'];
+        } elseif (empty($expected['native']) === false) {
+            $expectedOutput = $expected['native'];
+        }
 
-        $this->verifyExpectations($parsed, $expected);
+        $this->verifyExpectations($parsed, $expectedOutput);
     }
 
     /**
-     * Test RFC822 address splitting using the IMAP implementation.
+     * Test RFC822 address splitting using the IMAP implementation
+     * with the Mbstring extension available.
      *
      * @requires extension imap
      * @requires extension mbstring
      *
      * @dataProvider dataAddressSplitting
      *
-     * @param string $addrstr      The address list string.
-     * @param array  $expected     The expected function output.
-     * @param array  $expectedImap Optional. The expected function output via IMAP if different.
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
      */
-    public function testAddressSplittingImap($addrstr, $expected, $expectedImap = [])
+    public function testAddressSplittingImap($addrstr, $expected)
     {
-        $parsed   = PHPMailer::parseAddresses($addrstr, true);
-        $expected = empty($expectedImap) ? $expected : $expectedImap;
+        $parsed         = PHPMailer::parseAddresses($addrstr, true);
+        $expectedOutput = $expected['default'];
+        if (empty($expected['imap+mbstring']) === false) {
+            $expectedOutput = $expected['imap+mbstring'];
+        } elseif (empty($expected['imap']) === false) {
+            $expectedOutput = $expected['imap'];
+        }
 
-        $this->verifyExpectations($parsed, $expected);
+        $this->verifyExpectations($parsed, $expectedOutput);
+    }
+
+    /**
+     * Test RFC822 address splitting using the PHPMailer native implementation
+     * without the Mbstring extension.
+     *
+     * @dataProvider dataAddressSplitting
+     *
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
+     */
+    public function testAddressSplittingNativeNoMbstring($addrstr, $expected)
+    {
+        if (extension_loaded('mbstring')) {
+            $this->markTestSkipped('Test requires MbString *not* to be available');
+        }
+
+        $parsed         = PHPMailer::parseAddresses($addrstr, false);
+        $expectedOutput = $expected['default'];
+        if (empty($expected['native--mbstring']) === false) {
+            $expectedOutput = $expected['native--mbstring'];
+        } elseif (empty($expected['native']) === false) {
+            $expectedOutput = $expected['native'];
+        }
+
+        $this->verifyExpectations($parsed, $expectedOutput);
+    }
+
+    /**
+     * Test RFC822 address splitting using the IMAP implementation
+     * without the Mbstring extension.
+     *
+     * @requires extension imap
+     *
+     * @dataProvider dataAddressSplitting
+     *
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
+     */
+    public function testAddressSplittingImapNoMbstring($addrstr, $expected)
+    {
+        if (extension_loaded('mbstring')) {
+            $this->markTestSkipped('Test requires MbString *not* to be available');
+        }
+
+        $parsed         = PHPMailer::parseAddresses($addrstr, true);
+        $expectedOutput = $expected['default'];
+        if (empty($expected['imap--mbstring']) === false) {
+            $expectedOutput = $expected['imap--mbstring'];
+        } elseif (empty($expected['imap']) === false) {
+            $expectedOutput = $expected['imap'];
+        }
+
+        $this->verifyExpectations($parsed, $expectedOutput);
     }
 
     /**
@@ -82,7 +148,15 @@ final class ParseAddressesTest extends TestCase
     /**
      * Data provider.
      *
-     * @return array
+     * @return array The array is expected to have an `addrstr` and an `expected` key.
+     *               The `expected` key should - as a minimum - have a `default` key.
+     *               Optionally, the following extra keys are supported:
+     *               - `native`           Expected output from the native implementation with or without Mbstring.
+     *               - `native+mbstring`  Expected output from the native implementation with Mbstring.
+     *               - `native--mbstring` Expected output from the native implementation without Mbstring.
+     *               - `imap`             Expected output from the IMAP implementation with or without Mbstring.
+     *               - `imap+mbstring`    Expected output from the IMAP implementation with Mbstring.
+     *               - `imap--mbstring`   Expected output from the IMAP implementation without Mbstring.
      */
     public function dataAddressSplitting()
     {
@@ -91,29 +165,37 @@ final class ParseAddressesTest extends TestCase
             'Valid address: single address without name' => [
                 'addrstr'  => 'joe@example.com',
                 'expected' => [
-                    ['name' => '', 'address' => 'joe@example.com'],
+                    'default' => [
+                        ['name' => '', 'address' => 'joe@example.com'],
+                    ],
                 ],
             ],
             'Valid address: single address with name' => [
                 'addrstr'  => 'Joe User <joe@example.com>',
                 'expected' => [
-                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    'default' => [
+                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ],
                 ],
             ],
             'Valid address: single address, quotes within name' => [
                 'addrstr'  => 'Tim "The Book" O\'Reilly <foo@example.com>',
                 'expected' => [
-                    ['name' => 'Tim "The Book" O\'Reilly', 'address' => 'foo@example.com'],
-                ],
-                'expectedImap' => [
-                    ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
+                    'default' => [
+                        ['name' => 'Tim "The Book" O\'Reilly', 'address' => 'foo@example.com'],
+                    ],
+                    'imap' => [
+                        ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
+                    ],
                 ],
             ],
             'Valid address: two addresses with names' => [
                 'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
                 'expected' => [
-                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                    'default' => [
+                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                        ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                    ],
                 ],
             ],
             'Valid address: two addresses with names, one without' => [
@@ -121,9 +203,11 @@ final class ParseAddressesTest extends TestCase
                     . 'Jill User <jill@example.net>,'
                     . 'frank@example.com,',
                 'expected' => [
-                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                    ['name' => '', 'address' => 'frank@example.com'],
+                    'default' => [
+                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                        ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                        ['name' => '', 'address' => 'frank@example.com'],
+                    ],
                 ],
             ],
             'Valid address: multiple address, various formats, including one utf8-encoded name' => [
@@ -131,25 +215,71 @@ final class ParseAddressesTest extends TestCase
                     ' "John O\'Groats" <johnog@example.net>,' .
                     ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>',
                 'expected' => [
-                    [
-                        'name'    => '',
-                        'address' => 'joe@example.com',
+                    'default' => [
+                        [
+                            'name'    => '',
+                            'address' => 'joe@example.com',
+                        ],
+                        [
+                            'name'    => '',
+                            'address' => 'me@example.com',
+                        ],
+                        [
+                            'name'    => 'Joe Doe',
+                            'address' => 'doe@example.com',
+                        ],
+                        [
+                            'name'    => "John O'Groats",
+                            'address' => 'johnog@example.net',
+                        ],
+                        [
+                            'name'    => 'Название теста',
+                            'address' => 'encoded@example.org',
+                        ],
                     ],
-                    [
-                        'name'    => '',
-                        'address' => 'me@example.com',
+                    'native--mbstring' => [
+                        [
+                            'name'    => '',
+                            'address' => 'joe@example.com',
+                        ],
+                        [
+                            'name'    => '',
+                            'address' => 'me@example.com',
+                        ],
+                        [
+                            'name'    => 'Joe Doe',
+                            'address' => 'doe@example.com',
+                        ],
+                        [
+                            'name'    => "John O'Groats",
+                            'address' => 'johnog@example.net',
+                        ],
+                        [
+                            'name'    => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
+                            'address' => 'encoded@example.org',
+                        ],
                     ],
-                    [
-                        'name'    => 'Joe Doe',
-                        'address' => 'doe@example.com',
-                    ],
-                    [
-                        'name'    => "John O'Groats",
-                        'address' => 'johnog@example.net',
-                    ],
-                    [
-                        'name'    => 'Название теста',
-                        'address' => 'encoded@example.org',
+                    'imap--mbstring' => [
+                        [
+                            'name'    => '',
+                            'address' => 'joe@example.com',
+                        ],
+                        [
+                            'name'    => '',
+                            'address' => 'me@example.com',
+                        ],
+                        [
+                            'name'    => 'Joe Doe',
+                            'address' => 'doe@example.com',
+                        ],
+                        [
+                            'name'    => "John O'Groats",
+                            'address' => 'johnog@example.net',
+                        ],
+                        [
+                            'name'    => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
+                            'address' => 'encoded@example.org',
+                        ],
                     ],
                 ],
             ],
@@ -157,15 +287,21 @@ final class ParseAddressesTest extends TestCase
             // Test cases with invalid addresses.
             'Invalid address: single address, incomplete email' => [
                 'addrstr'  => 'Jill User <doug@>',
-                'expected' => [],
+                'expected' => [
+                    'default' => [],
+                ],
             ],
             'Invalid address: single address, invalid characters in email' => [
                 'addrstr'  => 'Joe User <{^c\@**Dog^}@cartoon.com>',
-                'expected' => [],
+                'expected' => [
+                    'default' => [],
+                ],
             ],
             'Invalid address: multiple addresses, invalid periods' => [
                 'addrstr'  => 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
-                'expected' => [],
+                'expected' => [
+                    'default' => [],
+                ],
             ],
         ];
     }
