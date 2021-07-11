@@ -13,27 +13,29 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\TestCase;
 
 /**
  * Test error registration functionality.
  */
-final class SetErrorTest extends SendTestCase
+final class SetErrorTest extends TestCase
 {
 
     /**
-     * Test error handling.
+     * Test simple, non-STMP, error registration.
      */
-    public function testError()
+    public function testSetErrorNonSmtp()
     {
-        $this->Mail->Subject .= ': Error handling test - this should be sent ok';
-        $this->buildBody();
-        $this->Mail->clearAllRecipients(); //No addresses should cause an error
-        self::assertTrue($this->Mail->isError() == false, 'Error found');
-        self::assertTrue($this->Mail->send() == false, 'send succeeded');
-        self::assertTrue($this->Mail->isError(), 'No error found');
-        self::assertSame('You must provide at least one recipient email address.', $this->Mail->ErrorInfo);
-        $this->Mail->addAddress($_REQUEST['mail_to']);
-        self::assertTrue($this->Mail->send(), 'send failed');
+        self::assertFalse($this->Mail->isError(), 'Errors found after class initialization');
+
+        // "Abuse" the `PHPMailer::set()` method to register an error.
+        self::assertFalse($this->Mail->set('nonexistentproperty', 'value'));
+
+        self::assertTrue($this->Mail->isError(), 'Error count not incremented');
+        self::assertSame(
+            'Cannot set or reset variable: nonexistentproperty',
+            $this->Mail->ErrorInfo,
+            'Error info not correctly set'
+        );
     }
 }
