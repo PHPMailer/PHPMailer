@@ -36,12 +36,7 @@ final class ParseAddressesTest extends TestCase
     {
         $parsed = PHPMailer::parseAddresses($addrstr, false);
 
-        self::assertIsArray($parsed, 'parseAddresses() did not return an array');
-        self::assertSame(
-            $expected,
-            $parsed,
-            'The return value from parseAddresses() did not match the expected output'
-        );
+        $this->verifyExpectations($parsed, $expected);
     }
 
     /**
@@ -57,14 +52,26 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingImap($addrstr, $expected, $expectedImap = [])
     {
-        $parsed = PHPMailer::parseAddresses($addrstr, true);
-
-        self::assertIsArray($parsed, 'parseAddresses() did not return an array');
-
+        $parsed   = PHPMailer::parseAddresses($addrstr, true);
         $expected = empty($expectedImap) ? $expected : $expectedImap;
+
+        $this->verifyExpectations($parsed, $expected);
+    }
+
+    /**
+     * Verify the expectations.
+     *
+     * Abstracted out as the same verification needs to be done for every test, just with different data.
+     *
+     * @param string $actual   The actual function output.
+     * @param array  $expected The expected function output.
+     */
+    protected function verifyExpectations($actual, $expected)
+    {
+        self::assertIsArray($actual, 'parseAddresses() did not return an array');
         self::assertSame(
             $expected,
-            $parsed,
+            $actual,
             'The return value from parseAddresses() did not match the expected output'
         );
     }
