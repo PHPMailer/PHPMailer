@@ -116,7 +116,7 @@ final class ParseAddressesTest extends TestCase
                     ['name' => '', 'address' => 'frank@example.com'],
                 ],
             ],
-            'Valid address: multiple address, various formats, including one utf8-encoded address' => [
+            'Valid address: multiple address, various formats, including one utf8-encoded name' => [
                 'addrstr'  => 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
                     ' "John O\'Groats" <johnog@example.net>,' .
                     ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>',
