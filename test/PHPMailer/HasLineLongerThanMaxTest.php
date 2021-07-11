@@ -25,7 +25,6 @@ final class HasLineLongerThanMaxTest extends PreSendTestCase
     /**
      * Test constructing a multipart message that contains lines that are too long for RFC compliance.
      *
-     * @covers \PHPMailer\PHPMailer\PHPMailer::encodeString
      * @covers \PHPMailer\PHPMailer\PHPMailer::hasLineLongerThanMax
      */
     public function testLongBody()

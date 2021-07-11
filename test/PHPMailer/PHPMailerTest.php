@@ -894,19 +894,6 @@ EOT;
             $this->Mail->encodeQ("Nov\xc3\xa1=", 'text'),
             'Q Encoding (text) failed 2'
         );
-
-        self::assertSame(
-            'hello',
-            $this->Mail->encodeString('hello', 'binary'),
-            'Binary encoding changed input'
-        );
-        $this->Mail->ErrorInfo = '';
-        $this->Mail->encodeString('hello', 'asdfghjkl');
-        self::assertNotEmpty($this->Mail->ErrorInfo, 'Invalid encoding not detected');
-        self::assertMatchesRegularExpression(
-            '/' . base64_encode('hello') . '/',
-            $this->Mail->encodeString('hello')
-        );
     }
 
     /**
