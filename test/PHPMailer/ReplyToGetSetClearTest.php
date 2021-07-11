@@ -14,12 +14,12 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\Test\SendTestCase;
+use PHPMailer\Test\PreSendTestCase;
 
 /**
  * Test reply-to address setting, getting and clearing functionality.
  */
-final class ReplyToGetSetClearTest extends SendTestCase
+final class ReplyToGetSetClearTest extends PreSendTestCase
 {
 
     /**
@@ -33,7 +33,7 @@ final class ReplyToGetSetClearTest extends SendTestCase
         $this->Mail->addReplyTo('nobody@nobody.com', 'Nobody (Unit Test)');
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
     }
 
     /**
@@ -66,7 +66,7 @@ final class ReplyToGetSetClearTest extends SendTestCase
         self::assertEmpty($this->Mail->getReplyToAddresses(), 'Bad "reply-to" recipients');
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
 
         //Addresses with IDN are returned by get*Addresses() after send() call.
         $domain = $this->Mail->punyencodeAddress($domain);
@@ -99,7 +99,7 @@ final class ReplyToGetSetClearTest extends SendTestCase
         self::assertFalse($this->Mail->addReplyTo('test+replyto@XN--FRANOIS-XXA.CH'));
 
         $this->buildBody();
-        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+        self::assertTrue($this->Mail->preSend(), $this->Mail->ErrorInfo);
 
         //There should be only one "Reply-To" address.
         self::assertCount(
