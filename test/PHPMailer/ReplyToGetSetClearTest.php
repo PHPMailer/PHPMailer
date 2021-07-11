@@ -400,13 +400,19 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         );
     }
 
-    public function testGivenIdnAddress_addReplyTo_returns_true()
+    /**
+     * Test unsuccesfully adding an Reply-to address when an email address containing
+     * an 8bit character is passed and either the MbString or the Intl extension are
+     * not available.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
+     */
+    public function testAddReplyToFailsOn8BitCharInDomainWithoutOptionalExtensions()
     {
-        if (file_exists(\PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php') === false) {
-            $this->markTestSkipped('/test/fakefunctions.php file not found');
+        if (extension_loaded('mbstring') && function_exists('idn_to_ascii')) {
+            $this->markTestSkipped('Test requires MbString and/or Intl *not* to be available');
         }
 
-        include \PHPMAILER_INCLUDE_DIR . '/test/fakefunctions.php';
-        $this->assertTrue($this->Mail->addReplyTo('test@françois.ch'));
+        self::assertFalse($this->Mail->addReplyTo('test@françois.ch'));
     }
 }
