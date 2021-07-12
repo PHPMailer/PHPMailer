@@ -81,16 +81,10 @@ final class MailTransportTest extends SendTestCase
         $this->setAddress('testmailsend@example.com', 'totest');
         $this->setAddress('cctestmailsend@example.com', 'cctest', $sType = 'cc');
         $this->setAddress('bcctestmailsend@example.com', 'bcctest', $sType = 'bcc');
-        $this->setAddress('replytotestmailsend@example.com', 'replytotest', $sType = 'ReplyTo');
 
         self::assertContains('testmailsend@example.com', $this->Mail->getToAddresses()[0], 'To address not found');
         self::assertContains('cctestmailsend@example.com', $this->Mail->getCcAddresses()[0], 'CC address not found');
         self::assertContains('bcctestmailsend@example.com', $this->Mail->getBccAddresses()[0], 'BCC address not found');
-        self::assertContains(
-            'replytotestmailsend@example.com',
-            $this->Mail->getReplyToAddresses()['replytotestmailsend@example.com'],
-            'Replyto address not found'
-        );
 
         self::assertTrue(
             $this->Mail->getAllRecipientAddresses()['testmailsend@example.com'],
