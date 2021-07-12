@@ -1205,7 +1205,8 @@ class PHPMailer
                     //Decode the name part if it's present and encoded
                     if (
                         property_exists($address, 'personal') &&
-                        extension_loaded('mbstring') &&
+                        //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
+                        defined('MB_CASE_UPPER') &&
                         preg_match('/^=\?.*\?=$/', $address->personal)
                     ) {
                         $address->personal = mb_decode_mimeheader($address->personal);
@@ -1236,8 +1237,9 @@ class PHPMailer
                     $email = trim(str_replace('>', '', $email));
                     $name = trim($name);
                     if (static::validateAddress($email)) {
+                        //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
                         //If this name is encoded, decode it
-                        if (preg_match('/^=\?.*\?=$/', $name)) {
+                        if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/', $name)) {
                             $name = mb_decode_mimeheader($name);
                         }
                         $addresses[] = [
