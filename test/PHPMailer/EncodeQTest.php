@@ -83,7 +83,7 @@ final class EncodeQTest extends TestCase
                 'position' => 'text',
                 'charset'  => PHPMailer::CHARSET_UTF8,
             ],
-            'Encode for text; char encoding explicit: utf-8; string containg "=" character' => [
+            'Encode for text; char encoding explicit: utf-8; string contains "=" character' => [
                 'input'    => "Nov\xc3\xa1=",
                 'expected' => 'Nov=C3=A1=3D',
                 'position' => 'text',
