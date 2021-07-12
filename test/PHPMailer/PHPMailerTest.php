@@ -1057,10 +1057,6 @@ EOT;
         $this->Mail->setLanguage('fr');
         $this->Mail->Sender = '';
         $this->Mail->createHeader();
-        self::assertFalse($this->Mail->set('x', 'y'), 'Invalid property set succeeded');
-        self::assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
-        self::assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
-        self::assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
     }
 
     public function testBadSMTP()
