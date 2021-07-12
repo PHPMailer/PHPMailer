@@ -17,6 +17,8 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test property setting functionality.
+ *
+ * @covers \PHPMailer\PHPMailer\PHPMailer::set
  */
 final class SetTest extends TestCase
 {
