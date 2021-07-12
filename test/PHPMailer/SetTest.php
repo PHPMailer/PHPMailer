@@ -46,6 +46,11 @@ final class SetTest extends TestCase
                 'name'  => 'Timeout',
                 'value' => '11',
             ],
+            'Valid: property exists, protected' => [
+                'name'  => 'MIMEBody',
+                'value' => 'Some text',
+            ],
+            // Note: no test for private property as the PHPMailer class doesn't have any.
         ];
     }
 
