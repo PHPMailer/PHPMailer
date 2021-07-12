@@ -22,11 +22,31 @@ final class SetTest extends TestCase
 {
 
     /**
-     * Miscellaneous calls to improve test coverage and some small tests.
+     * Test setting the value of a class property.
+     *
+     * @dataProvider dataSetValidProperty
+     *
+     * @param string $name  The property name to set
+     * @param mixed  $value The value to set the property to
      */
-    public function testMiscellaneous()
+    public function testSetValidProperty($name, $value)
     {
-        self::assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+        self::assertTrue($this->Mail->set($name, $value), 'Valid property set failed');
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public function dataSetValidProperty()
+    {
+        return [
+            'Valid: property exists, public' => [
+                'name'  => 'Timeout',
+                'value' => '11',
+            ],
+        ];
     }
 
     /**
