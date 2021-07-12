@@ -27,6 +27,13 @@ final class SetTest extends TestCase
     public function testMiscellaneous()
     {
         self::assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
+    }
+
+    /**
+     * Test setting a property to `null` and then resetting it to a non-null value.
+     */
+    public function testTogglingPropertyValueAwayFromNull()
+    {
         self::assertTrue($this->Mail->set('AllowEmpty', null), 'Null property set failed');
         self::assertTrue($this->Mail->set('AllowEmpty', false), 'Valid property set of null property failed');
     }
