@@ -19,6 +19,11 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 /**
  * Test RFC822 address splitting.
  *
+ * @todo Additional tests need to be added to verify the correct handling of inputs which
+ * include a different encoding than UTF8 or even mixed encoding. For more information
+ * on what these test cases should look like and should test, please see
+ * {@link https://github.com/PHPMailer/PHPMailer/pull/2449} for context.
+ *
  * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
  */
 final class ParseAddressesTest extends TestCase
@@ -34,10 +39,16 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The address list string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplittingNative($addrstr, $expected)
+    public function testAddressSplittingNative($addrstr, $expected, $charset = null)
     {
-        $parsed         = PHPMailer::parseAddresses($addrstr, false);
+        if (isset($charset)) {
+            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
+        } else {
+            $parsed = PHPMailer::parseAddresses($addrstr, false);
+        }
+
         $expectedOutput = $expected['default'];
         if (empty($expected['native+mbstring']) === false) {
             $expectedOutput = $expected['native+mbstring'];
@@ -59,10 +70,16 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The address list string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplittingImap($addrstr, $expected)
+    public function testAddressSplittingImap($addrstr, $expected, $charset = null)
     {
-        $parsed         = PHPMailer::parseAddresses($addrstr, true);
+        if (isset($charset)) {
+            $parsed = PHPMailer::parseAddresses($addrstr, true, $charset);
+        } else {
+            $parsed = PHPMailer::parseAddresses($addrstr, true);
+        }
+
         $expectedOutput = $expected['default'];
         if (empty($expected['imap+mbstring']) === false) {
             $expectedOutput = $expected['imap+mbstring'];
@@ -81,14 +98,20 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The address list string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplittingNativeNoMbstring($addrstr, $expected)
+    public function testAddressSplittingNativeNoMbstring($addrstr, $expected, $charset = null)
     {
         if (extension_loaded('mbstring')) {
             $this->markTestSkipped('Test requires MbString *not* to be available');
         }
 
-        $parsed         = PHPMailer::parseAddresses($addrstr, false);
+        if (isset($charset)) {
+            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
+        } else {
+            $parsed = PHPMailer::parseAddresses($addrstr, false);
+        }
+
         $expectedOutput = $expected['default'];
         if (empty($expected['native--mbstring']) === false) {
             $expectedOutput = $expected['native--mbstring'];
@@ -109,14 +132,20 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The address list string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplittingImapNoMbstring($addrstr, $expected)
+    public function testAddressSplittingImapNoMbstring($addrstr, $expected, $charset = null)
     {
         if (extension_loaded('mbstring')) {
             $this->markTestSkipped('Test requires MbString *not* to be available');
         }
 
-        $parsed         = PHPMailer::parseAddresses($addrstr, true);
+        if (isset($charset)) {
+            $parsed = PHPMailer::parseAddresses($addrstr, true, $charset);
+        } else {
+            $parsed = PHPMailer::parseAddresses($addrstr, true);
+        }
+
         $expectedOutput = $expected['default'];
         if (empty($expected['imap--mbstring']) === false) {
             $expectedOutput = $expected['imap--mbstring'];
@@ -157,6 +186,7 @@ final class ParseAddressesTest extends TestCase
      *               - `imap`             Expected output from the IMAP implementation with or without Mbstring.
      *               - `imap+mbstring`    Expected output from the IMAP implementation with Mbstring.
      *               - `imap--mbstring`   Expected output from the IMAP implementation without Mbstring.
+     *               Also optionally, an additional `charset` key can be passed,
      */
     public function dataAddressSplitting()
     {
@@ -282,6 +312,7 @@ final class ParseAddressesTest extends TestCase
                         ],
                     ],
                 ],
+                'charset' => PHPMailer::CHARSET_UTF8,
             ],
 
             // Test cases with invalid addresses.
