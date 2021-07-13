@@ -2186,14 +2186,15 @@ class PHPMailer
 
     /**
      * Set the language for error messages.
-     * Returns false if it cannot load the language file.
      * The default language is English.
      *
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
+     *                          Optionally, the language code can be enhanced with a 4-character
+     *                          script annotation and/or a 2-character country annotation.
      * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
      *                          Do not set this from user input!
      *
-     * @return bool
+     * @return bool Returns true if the requested language was loaded, false otherwise.
      */
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
@@ -2248,19 +2249,45 @@ class PHPMailer
             //Calculate an absolute path so it can work if CWD is not here
             $lang_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR;
         }
+
         //Validate $langcode
-        if (!preg_match('/^[a-z]{2}(?:_[a-zA-Z]{2})?$/', $langcode)) {
+        $foundlang = true;
+        $langcode  = strtolower($langcode);
+        if (
+            !preg_match('/^(?P<lang>[a-z]{2})(?P<script>_[a-z]{4})?(?P<country>_[a-z]{2})?$/', $langcode, $matches)
+            && $langcode !== 'en'
+        ) {
+            $foundlang = false;
             $langcode = 'en';
         }
-        $foundlang = true;
-        $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
+
         //There is no English translation file
         if ('en' !== $langcode) {
-            //Make sure language file path is readable
-            if (!static::fileIsAccessible($lang_file)) {
+            $langcodes = [];
+            if (!empty($matches['script']) && !empty($matches['country'])) {
+                $langcodes[] = $matches['lang'] . $matches['script'] . $matches['country'];
+            }
+            if (!empty($matches['country'])) {
+                $langcodes[] = $matches['lang'] . $matches['country'];
+            }
+            if (!empty($matches['script'])) {
+                $langcodes[] = $matches['lang'] . $matches['script'];
+            }
+            $langcodes[] = $matches['lang'];
+
+            //Try and find a readable language file for the requested language.
+            $foundFile = false;
+            foreach ($langcodes as $code) {
+                $lang_file = $lang_path . 'phpmailer.lang-' . $code . '.php';
+                if (static::fileIsAccessible($lang_file)) {
+                    $foundFile = true;
+                    break;
+                }
+            }
+
+            if ($foundFile === false) {
                 $foundlang = false;
             } else {
-                //$foundlang = include $lang_file;
                 $lines = file($lang_file);
                 foreach ($lines as $line) {
                     //Translation file lines look like this:
