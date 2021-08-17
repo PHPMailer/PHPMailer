@@ -1077,22 +1077,22 @@ class PHPMailer
     {
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
-        $pos = strrpos($address, '@');
-        if (false === $pos) {
-            //At-sign is missing.
-            $error_message = sprintf(
-                '%s (%s): %s',
-                $this->lang('invalid_address'),
-                $kind,
-                $address
-            );
-            $this->setError($error_message);
-            $this->edebug($error_message);
-            if ($this->exceptions) {
-                throw new Exception($error_message);
-            }
+        // Validate the proper email address format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+          //At-sign is missing.
+          $error_message = sprintf(
+              '%s (%s): %s',
+              $this->lang('invalid_address'),
+              $kind,
+              $address
+          );
+          $this->setError($error_message);
+          $this->edebug($error_message);
+          if ($this->exceptions) {
+              throw new Exception($error_message);
+          }
 
-            return false;
+          return false;
         }
         $params = [$kind, $address, $name];
         //Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
