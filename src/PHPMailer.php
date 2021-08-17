@@ -1079,7 +1079,6 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Validate the proper email address format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-          //At-sign is missing.
           $error_message = sprintf(
               '%s (%s): %s',
               $this->lang('invalid_address'),
