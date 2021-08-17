@@ -1078,7 +1078,7 @@ class PHPMailer
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         // Validate the proper email address format
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($address, FILTER_VALIDATE_EMAIL)) {
           $error_message = sprintf(
               '%s (%s): %s',
               $this->lang('invalid_address'),
