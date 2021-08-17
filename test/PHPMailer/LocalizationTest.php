@@ -455,7 +455,7 @@ final class LocalizationTest extends TestCase
             ],
             'Key: "mailer_not_supported", explicit language: ja' => [
                'input'    => 'mailer_not_supported',
-               'expected' => 'メーラーがサポートされていません。',
+               'expected' => ' メーラーがサポートされていません。',
                'langCode' => 'ja',
             ],
             'Key: "smtp_connect_failed", default language (en)' => [
