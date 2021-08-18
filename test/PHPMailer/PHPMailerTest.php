@@ -1205,8 +1205,6 @@ EOT;
 
         $this->Smtp = $this->Mail->getSMTPInstance();
         self::assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));
-        self::assertFalse($this->Smtp->startTLS(), 'SMTP connect with options failed');
-        self::assertFalse($this->Mail->SMTPAuth);
         $this->Mail->smtpClose();
     }
 
