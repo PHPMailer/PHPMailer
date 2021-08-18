@@ -103,14 +103,14 @@ class PHPMailer
      *
      * @var string
      */
-    public $From = 'root@localhost';
+    public $From = '';
 
     /**
      * The From name of the message.
      *
      * @var string
      */
-    public $FromName = 'Root User';
+    public $FromName = '';
 
     /**
      * The envelope sender of the message.
