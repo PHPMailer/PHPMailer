@@ -208,6 +208,23 @@ final class ParseAddressesTest extends TestCase
                     ],
                 ],
             ],
+            'Valid address: single RFC2047 address folded onto multiple lines' => [
+                'addrstr' => "=?iso-8859-1?B?QWJjZGVmZ2ggSWprbG3DsSDmnIPorbDlrqTpoJDntITn?=\r\n" .
+                    ' =?iso-8859-1?B?s7vntbE=?= <xyz@example.com>',
+                'expected' => [
+                    'default' => [
+                        ['name' => 'Abcdefgh Ijklmñ 會議室預約系統', 'address' => 'xyz@example.com'],
+                    ],
+                ],
+            ],
+            'Valid address: single RFC2047 address with space encoded as _' => [
+                'addrstr' => '=?iso-8859-1?Q?Abcdefgh_ijklm=C3=B1?= <xyz@example.com>',
+                'expected' => [
+                    'default' => [
+                        ['name' => 'Abcdefgh ijklmñ', 'address' => 'xyz@example.com'],
+                    ],
+                ],
+            ],
             'Valid address: single address, quotes within name' => [
                 'addrstr'  => 'Tim "The Book" O\'Reilly <foo@example.com>',
                 'expected' => [
