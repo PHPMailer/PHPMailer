@@ -22,7 +22,7 @@
 - Protects against header injection attacks
 - Error messages in over 50 languages!
 - DKIM and S/MIME signing support
-- Compatible with PHP 5.5 and later, including PHP 8.0
+- Compatible with PHP 5.5 and later, including PHP 8.1
 - Namespaced to prevent name clashes
 - Much more!
 

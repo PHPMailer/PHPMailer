@@ -1,5 +1,19 @@
 # PHPMailer Change Log
 
+## Version 6.5.1 (August 18th, 2021)
+* Provisional support for PHP 8.1
+* Major overhaul of test suite
+* Add codecov.io coverage reporting
+* Prefer implicit TLS on port 465 as default encryption scheme in examples, as per RFC8314
+* Fix potential noisy output from IMAP address parser
+* Stricter checking of custom MessageID validity
+* Replace invalid default From address
+* Support fallback for languages, so a request for `pt_xx` will fall back to `pt` rather than the default `en`.
+* Support multi-line RFC2047 addresses in parseAddresses
+* Improved Japanese translation
+
+Many thanks to @jrfnl for all her work.
+
 ## Version 6.5.0 (June 16th, 2021)
 * **SECURITY** Fixes CVE-2021-34551, a complex RCE affecting Windows hosts. See [SECURITY.md](SECURITY.md) for details.
 * The fix for this issue changes the way that language files are loaded. While they remain in the same PHP-like format, they are processed as plain text, and any code in them will not be run, including operations such as concatenation using the `.` operator.
