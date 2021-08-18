@@ -14,7 +14,6 @@
 namespace PHPMailer\Test;
 
 use Exception;
-use PHPMailer\Test\PreSendTestCase;
 
 /**
  * PHPMailer - Test class for tests which need the `PHPMailer::send()` method to be called.
