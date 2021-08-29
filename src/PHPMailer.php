@@ -2196,7 +2196,7 @@ class PHPMailer
      * @param string $langcode  ISO 639-1 2-character language code (e.g. French is "fr")
      *                          Optionally, the language code can be enhanced with a 4-character
      *                          script annotation and/or a 2-character country annotation.
-     * @param string $lang_path Path to the language file directory, with trailing separator (slash).D
+     * @param string $lang_path Path to the language file directory, with trailing separator (slash)
      *                          Do not set this from user input!
      *
      * @return bool Returns true if the requested language was loaded, false otherwise.
