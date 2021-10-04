@@ -338,7 +338,7 @@ class POP3
     public function disconnect()
     {
         $this->sendString('QUIT');
-        
+
         // RFC 1939 shows POP3 server sending a +OK response to the QUIT command.
         // Try to get it.  Ignore any failures here.
         try {
