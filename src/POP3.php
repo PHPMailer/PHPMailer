@@ -308,6 +308,7 @@ class POP3
     {
         if (!$this->connected) {
             $this->setError('Not connected to POP3 server');
+            return false;
         }
         if (empty($username)) {
             $username = $this->username;
