@@ -358,9 +358,9 @@ class PHPMailer
     public $AuthType = '';
 
     /**
-     * An instance of the PHPMailer OAuth class.
+     * An implementation of the PHPMailer OAuthTokenProvider interface.
      *
-     * @var OAuth
+     * @var OAuthTokenProvider
      */
     protected $oauth;
 
@@ -5010,9 +5010,9 @@ class PHPMailer
     }
 
     /**
-     * Get the OAuth instance.
+     * Get the OAuthTokenProvider instance.
      *
-     * @return OAuth
+     * @return OAuthTokenProvider
      */
     public function getOAuth()
     {
@@ -5020,9 +5020,9 @@ class PHPMailer
     }
 
     /**
-     * Set an OAuth instance.
+     * Set an OAuthTokenProvider instance.
      */
-    public function setOAuth(OAuth $oauth)
+    public function setOAuth(OAuthTokenProvider $oauth)
     {
         $this->oauth = $oauth;
     }

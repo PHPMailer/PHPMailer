@@ -33,7 +33,7 @@ use League\OAuth2\Client\Token\AccessToken;
  *
  * @author  Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
  */
-class OAuth
+class OAuth implements OAuthTokenProvider
 {
     /**
      * An instance of the League OAuth Client Provider.
