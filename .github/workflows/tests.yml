@@ -114,14 +114,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install PHP packages - normal
-        if: ${{ matrix.php != '8.1' }}
         uses: "ramsey/composer-install@v1"
-
-      - name: Install PHP packages - ignore-platform-reqs
-        if: ${{ matrix.php == '8.1' }}
-        uses: "ramsey/composer-install@v1"
-        with:
-          composer-options: --ignore-platform-reqs
 
       # Install postfix and automatically retry if the install failed, which happens reguarly.
       # @link https://github.com/marketplace/actions/retry-step
