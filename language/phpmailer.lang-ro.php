@@ -6,9 +6,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Eroare SMTP: Autentificarea a eșuat.';
-$PHPMAILER_LANG['buggy_php']            = 'Versiunea instalată de PHP este afectată de o problemă care poate duce la coruperea mesajelor' .
-    ' Pentru a preveni această problemă, folosiți SMTP, dezactivați opțiunea mail.add_x_header din php.ini,' .
-    ' folosiți MacOS/Linux sau actualizați versiunea de PHP la 7.0.17+ sau 7.1.3+.';
+$PHPMAILER_LANG['buggy_php']            = 'Versiunea instalată de PHP este afectată de o problemă care poate duce la coruperea mesajelor Pentru a preveni această problemă, folosiți SMTP, dezactivați opțiunea mail.add_x_header din php.ini, folosiți MacOS/Linux sau actualizați versiunea de PHP la 7.0.17+ sau 7.1.3+.';
 $PHPMAILER_LANG['connect_host']         = 'Eroare SMTP: Conectarea la serverul SMTP a eșuat.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Eroare SMTP: Datele nu au fost acceptate.';
 $PHPMAILER_LANG['empty_message']        = 'Mesajul este gol.';
