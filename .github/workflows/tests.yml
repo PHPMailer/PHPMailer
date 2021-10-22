@@ -39,11 +39,8 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        php: ['5.5', '7.2', '8.0']
+        php: ['5.5', '7.2', '8.0', '8.1']
         experimental: [false]
-        include:
-          - php: '8.1'
-            experimental: true
 
     name: "Lint: PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.experimental }}
@@ -85,14 +82,9 @@ jobs:
           - php: '5.5'
             coverage: true
             experimental: false
-          - php: '8.0'
+          - php: '8.1'
             coverage: true
             experimental: false
-
-          # Experimental builds. These are allowed to fail.
-          - php: '8.1'
-            coverage: false
-            experimental: true
 
     name: "Test: PHP ${{ matrix.php }}"
 
