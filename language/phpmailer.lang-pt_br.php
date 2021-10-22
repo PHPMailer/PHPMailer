@@ -11,9 +11,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Erro de SMTP: Não foi possível autenticar.';
-$PHPMAILER_LANG['buggy_php']            = 'Sua versão do PHP é afetada por um bug que por resultar em messagens corrompidas.'.
-                                          ' Para corrigir, mude para enviar usando SMTP, desative a opção mail.add_x_header em' .
-                                          ' seu php.ini, mude para MacOS ou Linux, ou atualize seu PHP para versão 7.0.17+ ou 7.1.3+ ';
+$PHPMAILER_LANG['buggy_php']            = 'Sua versão do PHP é afetada por um bug que por resultar em messagens corrompidas. Para corrigir, mude para enviar usando SMTP, desative a opção mail.add_x_header em seu php.ini, mude para MacOS ou Linux, ou atualize seu PHP para versão 7.0.17+ ou 7.1.3+ ';
 $PHPMAILER_LANG['connect_host']         = 'Erro de SMTP: Não foi possível conectar ao servidor SMTP.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Erro de SMTP: Dados rejeitados.';
 $PHPMAILER_LANG['empty_message']        = 'Mensagem vazia';
