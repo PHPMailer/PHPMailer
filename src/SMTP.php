@@ -392,7 +392,6 @@ class SMTP
                 STREAM_CLIENT_CONNECT,
                 $socket_context
             );
-            restore_error_handler();
         } else {
             //Fall back to fsockopen which should work in more places, but is missing some features
             $this->edebug(
@@ -407,8 +406,8 @@ class SMTP
                 $errstr,
                 $timeout
             );
-            restore_error_handler();
         }
+        restore_error_handler();
 
         //Verify we connected properly
         if (!is_resource($connection)) {
