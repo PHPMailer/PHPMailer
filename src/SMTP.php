@@ -392,7 +392,6 @@ class SMTP
                 STREAM_CLIENT_CONNECT,
                 $socket_context
             );
-            restore_error_handler();
         } else {
             //Fall back to fsockopen which should work in more places, but is missing some features
             $this->edebug(
@@ -407,8 +406,8 @@ class SMTP
                 $errstr,
                 $timeout
             );
-            restore_error_handler();
         }
+        restore_error_handler();
 
         //Verify we connected properly
         if (!is_resource($connection)) {
@@ -696,7 +695,7 @@ class SMTP
     /**
      * Send an SMTP DATA command.
      * Issues a data command and sends the msg_data to the server,
-     * finializing the mail transaction. $msg_data is the message
+     * finalizing the mail transaction. $msg_data is the message
      * that is to be send with the headers. Each header needs to be
      * on a single line followed by a <CRLF> with the message headers
      * and the message body being separated by an additional <CRLF>.
@@ -1170,7 +1169,7 @@ class SMTP
         if (!$this->server_caps) {
             $this->setError('No HELO/EHLO was sent');
 
-            return;
+            return null;
         }
 
         if (!array_key_exists($name, $this->server_caps)) {
@@ -1182,7 +1181,7 @@ class SMTP
             }
             $this->setError('HELO handshake was used; No information about server extensions available');
 
-            return;
+            return null;
         }
 
         return $this->server_caps[$name];
