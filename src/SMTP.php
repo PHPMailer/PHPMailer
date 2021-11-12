@@ -1170,7 +1170,7 @@ class SMTP
         if (!$this->server_caps) {
             $this->setError('No HELO/EHLO was sent');
 
-            return;
+            return null;
         }
 
         if (!array_key_exists($name, $this->server_caps)) {
@@ -1182,7 +1182,7 @@ class SMTP
             }
             $this->setError('HELO handshake was used; No information about server extensions available');
 
-            return;
+            return null;
         }
 
         return $this->server_caps[$name];
