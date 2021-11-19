@@ -72,6 +72,11 @@ final class PunyencodeAddressTest extends TestCase
                 'charset'  => PHPMailer::CHARSET_UTF8,
                 'expected' => 'fran&ccedil;ois@xn--franois-xxa.ch',
             ],
+            'IDN conversion flags' => [
+                'input'    => 'test@fußball.test',
+                'charset'  => PHPMailer::CHARSET_UTF8,
+                'expected' => 'test@xn--fuball-cta.test',
+            ],
         ];
     }
 
