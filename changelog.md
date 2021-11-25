@@ -1,6 +1,7 @@
 # PHPMailer Change Log
 
 ## Work In Progress
+* Enable official support for PHP 8.1
 * Fix for PHP 5.6
 * Fix for incorrect options for punyencoding IDNs
 
