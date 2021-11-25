@@ -1,6 +1,7 @@
 # PHPMailer Change Log
 
 ## Work In Progress
+* Enable official support for PHP 8.1
 * Fix for PHP 5.6
 
 ## Version 6.5.1 (August 18th, 2021)
