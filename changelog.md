@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+## Version 6.5.3 (November 25th, 2021)
+* Wrong commit tagged for the 6.5.2 release!
+* Version file updated
+
 ## Version 6.5.2 (November 25th, 2021)
 * Enable official support for PHP 8.1
 * Enable experimental support for PHP 8.2
