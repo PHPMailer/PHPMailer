@@ -23,6 +23,8 @@ use PHPMailer\Test\SendTestCase;
  */
 final class PHPMailerTest extends SendTestCase
 {
+    private $Smtp;
+
     /**
      * Test low priority.
      */
