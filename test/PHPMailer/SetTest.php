@@ -22,7 +22,6 @@ use PHPMailer\Test\TestCase;
  */
 final class SetTest extends TestCase
 {
-
     /**
      * Test setting the value of a class property.
      *

@@ -23,7 +23,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class GenerateIdTest extends PreSendTestCase
 {
-
     /**
      * Test generating a unique ID.
      *

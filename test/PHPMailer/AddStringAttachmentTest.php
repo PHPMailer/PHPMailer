@@ -27,7 +27,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class AddStringAttachmentTest extends PreSendTestCase
 {
-
     /**
      * Test successfully adding a simple plain string attachment.
      */

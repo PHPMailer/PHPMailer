@@ -23,7 +23,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class FilenameToTypeTest extends TestCase
 {
-
     /**
      * Verify mapping a file name to a MIME type.
      *

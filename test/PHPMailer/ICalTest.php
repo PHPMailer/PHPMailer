@@ -20,7 +20,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class ICalTest extends PreSendTestCase
 {
-
     /**
      * Test ICal method.
      *

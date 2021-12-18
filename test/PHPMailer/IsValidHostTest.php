@@ -23,7 +23,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class IsValidHostTest extends TestCase
 {
-
     /**
      * Test host validation when a valid host is passed.
      *

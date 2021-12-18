@@ -23,7 +23,6 @@ use PHPMailer\Test\TestCase;
  */
 final class PunyencodeAddressTest extends TestCase
 {
-
     /**
      * Test IDN to ASCII form/punycode conversion for an email address.
      *

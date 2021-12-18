@@ -20,7 +20,6 @@ use PHPMailer\Test\SendTestCase;
  */
 final class AuthCRAMMD5Test extends SendTestCase
 {
-
     /**
      * Test CRAM-MD5 authentication.
      * Needs a connection to a server that supports this auth mechanism, so commented out by default.

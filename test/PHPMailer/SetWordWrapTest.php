@@ -23,7 +23,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class SetWordWrapTest extends PreSendTestCase
 {
-
     /**
      * Test word-wrapping a message.
      *

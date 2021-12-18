@@ -23,7 +23,6 @@ use PHPMailer\Test\TestCase;
  */
 final class EncodeQTest extends TestCase
 {
-
     /**
      * Test encoding a string using Q encoding.
      *

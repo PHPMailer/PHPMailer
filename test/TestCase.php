@@ -24,7 +24,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase as PolyfillTestCase;
  */
 abstract class TestCase extends PolyfillTestCase
 {
-
     /**
      * Whether or not to initialize the PHPMailer object to throw exceptions.
      *

@@ -31,7 +31,6 @@ use PHPMailer\Test\TestCase;
  */
 final class LocalizationTest extends TestCase
 {
-
     /**
      * Test setting the preferred language for error messages.
      *

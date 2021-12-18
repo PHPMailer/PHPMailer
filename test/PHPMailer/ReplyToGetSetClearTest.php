@@ -22,7 +22,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class ReplyToGetSetClearTest extends PreSendTestCase
 {
-
     /**
      * Test adding a non-IDN reply-to address.
      *

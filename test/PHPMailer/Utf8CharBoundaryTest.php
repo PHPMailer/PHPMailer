@@ -24,7 +24,6 @@ use PHPMailer\Test\TestCase;
  */
 final class Utf8CharBoundaryTest extends TestCase
 {
-
     /**
      * Verify that the utf8CharBoundary() returns the correct last character boundary for encoded text.
      *

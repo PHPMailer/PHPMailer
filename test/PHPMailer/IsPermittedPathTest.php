@@ -24,7 +24,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class IsPermittedPathTest extends TestCase
 {
-
     /**
      * Test whether the validation of whether a path is of a permitted type works correctly.
      *
