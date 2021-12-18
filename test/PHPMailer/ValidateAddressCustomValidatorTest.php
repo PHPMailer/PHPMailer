@@ -23,7 +23,6 @@ use PHPMailer\Test\TestCase;
  */
 final class ValidateAddressCustomValidatorTest extends TestCase
 {
-
     /**
      * Test injecting a one-off custom validator.
      */

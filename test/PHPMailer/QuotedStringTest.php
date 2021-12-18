@@ -23,7 +23,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class QuotedStringTest extends TestCase
 {
-
     /**
      * Test quoting of a string depending on the content of the string.
      *

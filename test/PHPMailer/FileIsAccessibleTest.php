@@ -28,7 +28,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class FileIsAccessibleTest extends TestCase
 {
-
     /**
      * Verify whether the "is a file accessible" check works correctly.
      *

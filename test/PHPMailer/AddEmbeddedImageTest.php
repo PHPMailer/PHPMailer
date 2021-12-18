@@ -27,7 +27,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class AddEmbeddedImageTest extends PreSendTestCase
 {
-
     /**
      * Test successfully adding an embedded image.
      */

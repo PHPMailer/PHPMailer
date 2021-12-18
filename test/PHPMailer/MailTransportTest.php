@@ -20,7 +20,6 @@ use PHPMailer\Test\SendTestCase;
  */
 final class MailTransportTest extends SendTestCase
 {
-
     /**
      * Test sending using SendMail.
      *

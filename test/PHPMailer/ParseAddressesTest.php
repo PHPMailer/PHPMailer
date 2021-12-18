@@ -28,7 +28,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class ParseAddressesTest extends TestCase
 {
-
     /**
      * Test RFC822 address splitting using the PHPMailer native implementation
      * with the Mbstring extension available.

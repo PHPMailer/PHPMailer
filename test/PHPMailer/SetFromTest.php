@@ -24,7 +24,6 @@ use PHPMailer\Test\TestCase;
  */
 final class SetFromTest extends TestCase
 {
-
     /**
      * Test succesfully setting the From, FromName and Sender properties.
      *

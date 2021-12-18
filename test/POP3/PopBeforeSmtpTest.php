@@ -25,7 +25,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class PopBeforeSmtpTest extends TestCase
 {
-
     /**
      * PIDs of any processes we need to kill.
      *

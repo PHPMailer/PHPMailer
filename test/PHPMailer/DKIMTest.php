@@ -24,7 +24,6 @@ use PHPMailer\Test\SendTestCase;
  */
 final class DKIMTest extends SendTestCase
 {
-
     /**
      * Whether or not to initialize the PHPMailer object to throw exceptions.
      *

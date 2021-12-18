@@ -23,7 +23,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class MimeTypesTest extends TestCase
 {
-
     /**
      * Test mime type mapping.
      *

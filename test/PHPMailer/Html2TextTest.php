@@ -23,7 +23,6 @@ use PHPMailer\Test\TestCase;
  */
 final class Html2TextTest extends TestCase
 {
-
     /**
      * Test converting an arbitrary HTML string into plain text.
      *

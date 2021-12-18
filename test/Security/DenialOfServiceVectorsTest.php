@@ -22,7 +22,6 @@ use PHPMailer\Test\SendTestCase;
  */
 final class DenialOfServiceVectorsTest extends SendTestCase
 {
-
     /**
      * Test this denial of service attack.
      *

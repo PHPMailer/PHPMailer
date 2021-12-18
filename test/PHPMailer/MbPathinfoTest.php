@@ -23,7 +23,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class MbPathinfoTest extends TestCase
 {
-
     /**
      * Verify retrieving information about a file path when the $options parameter has been passed.
      *

@@ -22,7 +22,6 @@ use PHPMailer\Test\TestCase;
  */
 final class CustomHeaderTest extends TestCase
 {
-
     /**
      * Tests setting and getting custom headers.
      *

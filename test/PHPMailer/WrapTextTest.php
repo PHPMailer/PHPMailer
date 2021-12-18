@@ -23,7 +23,6 @@ use PHPMailer\Test\TestCase;
  */
 final class WrapTextTest extends TestCase
 {
-
     /**
      * Test wrapping text.
      *

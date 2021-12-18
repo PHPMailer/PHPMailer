@@ -23,7 +23,6 @@ use PHPMailer\Test\PreSendTestCase;
  */
 final class GetLastMessageIDTest extends PreSendTestCase
 {
-
     /**
      * Test setting and retrieving an invalid message ID.
      *

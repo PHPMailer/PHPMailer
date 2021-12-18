@@ -21,7 +21,6 @@ use PHPMailer\Test\TestCase;
  */
 abstract class PreSendTestCase extends TestCase
 {
-
     /**
      * Property names and their values for the test instance of the PHPMailer class.
      *

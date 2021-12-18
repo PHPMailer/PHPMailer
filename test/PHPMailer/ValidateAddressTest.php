@@ -33,7 +33,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class ValidateAddressTest extends TestCase
 {
-
     /**
      * Run before this test class.
      */

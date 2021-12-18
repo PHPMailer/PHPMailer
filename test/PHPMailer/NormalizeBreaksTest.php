@@ -24,7 +24,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class NormalizeBreaksTest extends TestCase
 {
-
     /**
      * Test line break normalization.
      *

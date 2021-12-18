@@ -24,7 +24,6 @@ use PHPMailer\Test\TestCase;
  */
 final class SetErrorTest extends TestCase
 {
-
     /**
      * Test simple, non-STMP, error registration.
      */

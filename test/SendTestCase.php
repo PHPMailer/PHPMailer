@@ -20,7 +20,6 @@ use Exception;
  */
 abstract class SendTestCase extends PreSendTestCase
 {
-
     /**
      * Translation map for supported $REQUEST keys to the property name in the PHPMailer class.
      *

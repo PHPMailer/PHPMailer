@@ -22,7 +22,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class OAuthTest extends TestCase
 {
-
     /**
      * Test OAuth method.
      *

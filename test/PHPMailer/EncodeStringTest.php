@@ -22,7 +22,6 @@ use PHPMailer\Test\TestCase;
  */
 final class EncodeStringTest extends TestCase
 {
-
     /**
      * Encoding and charset tests.
      *
