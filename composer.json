@@ -25,6 +25,11 @@
             "type": "github"
         }
     ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
     "require": {
         "php": ">=5.5.0",
         "ext-ctype": "*",
