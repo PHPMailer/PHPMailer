@@ -26,7 +26,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: Check coding standards
         continue-on-error: true
@@ -62,7 +62,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: Lint against parse errors
         if: ${{ matrix.php != '8.2' }}
@@ -123,11 +123,11 @@ jobs:
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install PHP packages - normal
         if: ${{ matrix.php != '8.2' }}
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
 
       - name: Install PHP packages - ignore-platform-reqs
         if: ${{ matrix.php == '8.2' }}
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           composer-options: --ignore-platform-reqs
 
