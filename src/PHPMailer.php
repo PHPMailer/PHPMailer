@@ -41,6 +41,7 @@ class PHPMailer
     const CONTENT_TYPE_MULTIPART_ALTERNATIVE = 'multipart/alternative';
     const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
     const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
+    const CONTENT_TYPE_X_AMP = 'text/x-amp-html';
 
     const ENCODING_7BIT = '7bit';
     const ENCODING_8BIT = '8bit';
@@ -146,6 +147,15 @@ class PHPMailer
      * @var string
      */
     public $AltBody = '';
+    
+    /**
+     * The AMP message body.
+     * This body can be read by mail clients that support AMP email.
+     * Clients that can't read AMP will view the HTML Body.
+     *
+     * @var string
+     */
+    public $AMPBody = '';
 
     /**
      * An iCal message part body.
@@ -2851,6 +2861,16 @@ class PHPMailer
                     $bodyEncoding
                 );
                 $body .= $this->encodeString($this->Body, $bodyEncoding);
+                if (!empty($this->AMPBody)) {
+                    $body .= static::$LE;
+                    $body .= $this->getBoundary(
+                        $this->boundary[1],
+                        $bodyCharSet,
+                        static::CONTENT_TYPE_X_AMP,
+                        $bodyEncoding
+                    );
+                    $body .= $this->encodeString($this->AMPBody, $bodyEncoding);
+                }
                 $body .= static::$LE;
                 if (!empty($this->Ical)) {
                     $method = static::ICAL_METHOD_REQUEST;
@@ -4286,6 +4306,19 @@ class PHPMailer
         }
 
         return $this->Body;
+    }
+    
+    /**
+     * Create a AMP body from an HTML string.
+     * Do not source $message content from user input!
+     * If you don't want to apply these transformations to your AMP, just set AMPBody directly.
+     *
+     * @param string        $message  AMP message string
+     * @return string The transformed message body
+     */
+    public function msgAMP($message)
+    {
+        $this->AMPBody = static::normalizeBreaks($message);
     }
 
     /**
