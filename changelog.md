@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* If we can't use escaping functions, refuse to do unsafe things
+
 ## Version 6.5.3 (November 25th, 2021)
 * Wrong commit tagged for the 6.5.2 release!
 * Version file updated

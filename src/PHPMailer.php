@@ -1798,7 +1798,13 @@ class PHPMailer
      */
     protected static function isShellSafe($string)
     {
-        //Future-proof
+        //It's not possible to use shell commands safely (which includes the mail() function) without escapeshellarg,
+        //but some hosting providers disable it, creating a security problem that we don't want to have to deal with,
+        //so we don't.
+        if (!function_exists('escapeshellarg') || !function_exists('escapeshellcmd')) {
+            return false;
+        }
+
         if (
             escapeshellcmd($string) !== $string
             || !in_array(escapeshellarg($string), ["'$string'", "\"$string\""])
