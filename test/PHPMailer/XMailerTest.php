@@ -18,8 +18,6 @@ use PHPMailer\Test\TestCase;
 
 /**
  * Test XMailer header setting functionality.
- *
- * @covers \PHPMailer\PHPMailer\PHPMailer::XMailer
  */
 final class XMailerTest extends TestCase
 {
