@@ -1,9 +1,12 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.5.4 (February 17th, 2022)
 * If we can't use escaping functions, refuse to do unsafe things
 * Avoid PHP 8.1 trim issue
 * Add tests for XMailer
+* Fix bug in use of CharSet property
+* Fix bug in file upload example
+* Update dev dependencies
 
 ## Version 6.5.3 (November 25th, 2021)
 * Wrong commit tagged for the 6.5.2 release!
