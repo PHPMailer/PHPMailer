@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Introduce interface for OAuth providers, making it easier to use OAuth libraries other than the League one, thanks to @pdscopes.
+
 ## Version 6.5.4 (February 17th, 2022)
 * If we can't use escaping functions, refuse to do unsafe things
 * Avoid PHP 8.1 trim issue
