@@ -1,7 +1,10 @@
 <?php
 
 /**
- * This example shows how to send via Google's Gmail servers using XOAUTH2 authentication.
+ * This example shows how to send via Google's Gmail servers using XOAUTH2 authentication
+ * using the league/oauth2-client to provide the OAuth2 token.
+ * To use a different OAuth2 library create a wrapper class that implements OAuthTokenProvider and
+ * pass that wrapper class to PHPMailer::setOAuth().
  */
 
 //Import PHPMailer classes into the global namespace
@@ -50,6 +53,7 @@ $mail->SMTPAuth = true;
 //Set AuthType to use XOAUTH2
 $mail->AuthType = 'XOAUTH2';
 
+//Start Option 1: Use league/oauth2-client as OAuth2 token provider
 //Fill in authentication details here
 //Either the gmail account owner, or the user that gave consent
 $email = 'someone@gmail.com';
@@ -80,6 +84,16 @@ $mail->setOAuth(
         ]
     )
 );
+//End Option 1
+
+//Option 2: Another OAuth library as OAuth2 token provider
+//Set up the other oauth library as per its documentation
+//Then create the wrapper class that implementations OAuthTokenProvider
+$oauthTokenProvider = new MyOAuthTokenProvider(/* Email, ClientId, ClientSecret, etc. */);
+
+//Pass the implementation of OAuthTokenProvider to PHPMailer
+$mail->setOAuth($oauthTokenProvider);
+//End Option 2
 
 //Set who the message is to be sent from
 //For gmail, this generally needs to be the same as the user you logged in as
