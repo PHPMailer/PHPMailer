@@ -60,11 +60,11 @@ final class OAuthTest extends TestCase
         );
         $this->expectException(\Exception::class);
         $PHPMailer->setOAuth(new \stdClass());
-        $PHPMailer->setOAuth(new testOAuthProvider());
+        $PHPMailer->setOAuth(new DummyOAuthProvider());
     }
 }
 
-class testOauthProvider implements OAuthTokenProvider
+class DummyOauthProvider implements OAuthTokenProvider
 {
     public function getOauth64()
     {
