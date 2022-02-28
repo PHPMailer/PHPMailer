@@ -2,6 +2,7 @@
 
 ## Version 6.6 (February 28th, 2022)
 * Introduce interface for OAuth providers, making it easier to use OAuth libraries other than the League one, thanks to @pdscopes.
+* Add more contextual information to TLS connection failure error messages, and throw exceptions on TLS connection errors, thanks to @miken32
 
 ## Version 6.5.4 (February 17th, 2022)
 * If we can't use escaping functions, refuse to do unsafe things
