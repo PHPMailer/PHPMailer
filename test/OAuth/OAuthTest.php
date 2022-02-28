@@ -58,24 +58,12 @@ final class OAuthTest extends TestCase
             $PHPMailer->getOAuth(),
             'Setting Oauth property to an instance of the OAuth class failed'
         );
-        $this->expectException(\Error::class);
-        $PHPMailer->setOAuth(new \stdClass());
         $PHPMailer->setOAuth(new DummyOAuthProvider());
-    }
-
-    /**
-     * Test OAuth class on more recent PHP versions.
-     *
-     * @requires PHP >= 7.0
-     * @covers PHPMailer\PHPMailer\PHPMailer::setOAuth
-     * @covers PHPMailer\PHPMailer\OAuthTokenProvider
-     */
-    public function testOAuthRecent()
-    {
-        $PHPMailer = new PHPMailer(true);
-
-        $this->expectException(\TypeError::class);
-        $PHPMailer->setOAuth(new \stdClass());
+        self::assertInstanceOf(
+            OAuthTokenProvider::class,
+            $PHPMailer->getOAuth(),
+            'Setting Oauth property to an instance of the OAuth class failed (2)'
+        );
     }
 }
 
