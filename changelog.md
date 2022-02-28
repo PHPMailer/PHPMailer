@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.6 (February 28th, 2022)
 * Introduce interface for OAuth providers, making it easier to use OAuth libraries other than the League one, thanks to @pdscopes.
 
 ## Version 6.5.4 (February 17th, 2022)
