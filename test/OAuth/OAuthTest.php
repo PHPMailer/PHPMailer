@@ -58,13 +58,13 @@ final class OAuthTest extends TestCase
             $PHPMailer->getOAuth(),
             'Setting Oauth property to an instance of the OAuth class failed'
         );
-        $this->expectException(\TypeError::class);
+        $this->expectException(\Exception::class);
         $PHPMailer->setOAuth(new \stdClass());
         $PHPMailer->setOAuth(new testOAuthProvider());
     }
 }
 
-class testOAuthProvider implements OAuthTokenProvider
+class testOauthProvider implements OAuthTokenProvider
 {
     public function getOauth64()
     {
