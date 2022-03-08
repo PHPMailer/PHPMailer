@@ -815,11 +815,10 @@ EOT;
         $this->Mail->Subject .= ': BCC-only addressing';
         $this->buildBody();
         $this->Mail->clearAllRecipients();
-        $this->Mail->addAddress('foo@example.com', 'Foo');
         $this->Mail->preSend();
         $b = $this->Mail->getSentMIMEMessage();
         self::assertTrue($this->Mail->addBCC('a@example.com'), 'BCC addressing failed');
-        self::assertStringContainsString('To: Foo <foo@example.com>', $b);
+        self::assertStringNotContainsString('a@example.com', $b);
         self::assertTrue($this->Mail->send(), 'send failed');
     }
 
