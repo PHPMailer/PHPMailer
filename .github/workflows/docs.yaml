@@ -16,7 +16,7 @@ jobs:
       - name: Build Docs
         uses: ./.github/actions/build-docs
       - name: Publish Docs to gh-pages
-        uses: maxheld83/ghpages@v0.2.1
+        uses: maxheld83/ghpages@v0.3.0
         env:
           BUILD_DIR: docs/
           GH_PAT: ${{ secrets.GH_PAT }}
