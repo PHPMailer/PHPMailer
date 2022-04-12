@@ -1,0 +1,1105 @@
+
+:root {
+    /* Typography */
+    --font-primary: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    --font-secondary: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    --font-monospace: 'Source Code Pro', monospace;
+    --line-height--primary: 1.6;
+    --letter-spacing--primary: .05rem;
+    --text-base-size: 1em;
+    --text-scale-ratio: 1.2;
+
+    --text-xxs: calc(var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio) / var(--text-scale-ratio));
+    --text-xs: calc(var(--text-base-size) / var(--text-scale-ratio) / var(--text-scale-ratio));
+    --text-sm: calc(var(--text-base-size) / var(--text-scale-ratio));
+    --text-md: var(--text-base-size);
+    --text-lg: calc(var(--text-base-size) * var(--text-scale-ratio));
+    --text-xl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+    --text-xxxxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
+
+    /* Colors */
+    --primary-color-hue: 96;
+    --primary-color-saturation: 57%;
+    --primary-color: hsl(var(--primary-color-hue), var(--primary-color-saturation), 60%);
+    --primary-color-darken: hsl(var(--primary-color-hue), var(--primary-color-saturation), 40%);
+    --primary-color-darker: hsl(var(--primary-color-hue), var(--primary-color-saturation), 20%);
+    --primary-color-darkest: hsl(var(--primary-color-hue), var(--primary-color-saturation), 10%);
+    --primary-color-lighten: hsl(var(--primary-color-hue), var(--primary-color-saturation), 80%);
+    --primary-color-lighter: hsl(var(--primary-color-hue), var(--primary-color-saturation), 99%);
+    --dark-gray: #d1d1d1;
+    --light-gray: #f0f0f0;
+
+    --text-color: var(--primary-color-darkest);
+
+    --header-height: var(--spacing-xxxxl);
+    --header-bg-color: var(--primary-color);
+    --code-background-color: var(--primary-color-lighter);
+    --code-border-color: --primary-color-lighten;
+    --button-border-color: var(--primary-color-darken);
+    --button-color: transparent;
+    --button-color-primary: var(--primary-color);
+    --button-text-color: #555;
+    --button-text-color-primary: white;
+    --popover-background-color: rgba(255, 255, 255, 0.75);
+    --link-color-primary: var(--primary-color-darken);
+    --link-hover-color-primary: var(--primary-color-darker);
+    --form-field-border-color: var(--dark-gray);
+    --form-field-color: #fff;
+    --admonition-success-color: var(--primary-color);
+    --admonition-border-color: silver;
+    --table-separator-color: var(--primary-color-lighten);
+    --title-text-color: var(--primary-color);
+
+    --sidebar-border-color: var(--primary-color-lighten);
+
+    /* Grid */
+    --container-width: 1400px;
+
+    /* Spacing */
+    --spacing-base-size: 1rem;
+    --spacing-scale-ratio: 1.5;
+
+    --spacing-xxxs: calc(var(--spacing-base-size) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio));
+    --spacing-xxs: calc(var(--spacing-base-size) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio));
+    --spacing-xs: calc(var(--spacing-base-size) / var(--spacing-scale-ratio) / var(--spacing-scale-ratio));
+    --spacing-sm: calc(var(--spacing-base-size) / var(--spacing-scale-ratio));
+    --spacing-md: var(--spacing-base-size);
+    --spacing-lg: calc(var(--spacing-base-size) * var(--spacing-scale-ratio));
+    --spacing-xl: calc(var(--spacing-base-size) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio));
+    --spacing-xxl: calc(var(--spacing-base-size) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio));
+    --spacing-xxxl: calc(var(--spacing-base-size) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio));
+    --spacing-xxxxl: calc(var(--spacing-base-size) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio) * var(--spacing-scale-ratio));
+
+    --border-radius-base-size: 3px;
+}
+
+/* Base Styles
+-------------------------------------------------- */
+body {
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    font-size: var(--text-md);
+    letter-spacing: var(--letter-spacing--primary);
+    line-height: var(--line-height--primary);
+    width: 100%;
+}
+
+.phpdocumentor h1,
+.phpdocumentor h2,
+.phpdocumentor h3,
+.phpdocumentor h4,
+.phpdocumentor h5,
+.phpdocumentor h6 {
+    margin-bottom: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    font-weight: 600;
+}
+
+.phpdocumentor h1 {
+    font-size: var(--text-xxxxl);
+    letter-spacing: var(--letter-spacing--primary);
+    line-height: 1.2;
+    margin-top: 0;
+}
+
+.phpdocumentor h2 {
+    font-size: var(--text-xxxl);
+    letter-spacing: var(--letter-spacing--primary);
+    line-height: 1.25;
+}
+
+.phpdocumentor h3 {
+    font-size: var(--text-xxl);
+    letter-spacing: var(--letter-spacing--primary);
+    line-height: 1.3;
+}
+
+.phpdocumentor h4 {
+    font-size: var(--text-xl);
+    letter-spacing: calc(var(--letter-spacing--primary) / 2);
+    line-height: 1.35;
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor h5 {
+    font-size: var(--text-lg);
+    letter-spacing: calc(var(--letter-spacing--primary) / 4);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.phpdocumentor h6 {
+    font-size: var(--text-md);
+    letter-spacing: 0;
+    line-height: var(--line-height--primary);
+    margin-bottom: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.phpdocumentor h1 .headerlink,
+.phpdocumentor h2 .headerlink,
+.phpdocumentor h3 .headerlink,
+.phpdocumentor h4 .headerlink,
+.phpdocumentor h5 .headerlink,
+.phpdocumentor h6 .headerlink
+{
+    transition: all .3s ease-in-out;
+    opacity: 0;
+    text-decoration: none;
+    color: silver;
+    font-size: 80%;
+}
+
+.phpdocumentor h1:hover .headerlink,
+.phpdocumentor h2:hover .headerlink,
+.phpdocumentor h3:hover .headerlink,
+.phpdocumentor h4:hover .headerlink,
+.phpdocumentor h5:hover .headerlink,
+.phpdocumentor h6:hover .headerlink
+{
+    opacity: 1;
+}
+.phpdocumentor p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+.phpdocumentor figure {
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor figcaption {
+    text-align: center;
+    font-style: italic;
+    font-size: 80%;
+}
+
+.phpdocumentor-uml-diagram svg {
+    max-width: 100%;
+    height: auto !important;
+}
+.phpdocumentor-line {
+    border-top: 1px solid #E1E1E1;
+    border-width: 0;
+    margin-bottom: var(--spacing-xxl);
+    margin-top: var(--spacing-xxl);
+}
+.phpdocumentor-section {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: var(--container-width);
+    padding: 0 var(--spacing-lg);
+    position: relative;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .phpdocumentor-section {
+        padding: 0;
+        width: 95%;
+    }
+}
+.phpdocumentor-column {
+    box-sizing: border-box;
+    float: left;
+    width: 100%;
+}
+
+@media (min-width: 550px) {
+    .phpdocumentor-column {
+        margin-left: 4%;
+    }
+
+    .phpdocumentor-column:first-child {
+        margin-left: 0;
+    }
+
+    .-one.phpdocumentor-column {
+        width: 4.66666666667%;
+    }
+
+    .-two.phpdocumentor-column {
+        width: 13.3333333333%;
+    }
+
+    .-three.phpdocumentor-column {
+        width: 22%;
+    }
+
+    .-four.phpdocumentor-column {
+        width: 30.6666666667%;
+    }
+
+    .-five.phpdocumentor-column {
+        width: 39.3333333333%;
+    }
+
+    .-six.phpdocumentor-column {
+        width: 48%;
+    }
+
+    .-seven.phpdocumentor-column {
+        width: 56.6666666667%;
+    }
+
+    .-eight.phpdocumentor-column {
+        width: 65.3333333333%;
+    }
+
+    .-nine.phpdocumentor-column {
+        width: 74.0%;
+    }
+
+    .-ten.phpdocumentor-column {
+        width: 82.6666666667%;
+    }
+
+    .-eleven.phpdocumentor-column {
+        width: 91.3333333333%;
+    }
+
+    .-twelve.phpdocumentor-column {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .-one-third.phpdocumentor-column {
+        width: 30.6666666667%;
+    }
+
+    .-two-thirds.phpdocumentor-column {
+        width: 65.3333333333%;
+    }
+
+    .-one-half.phpdocumentor-column {
+        width: 48%;
+    }
+
+    /* Offsets */
+    .-offset-by-one.phpdocumentor-column {
+        margin-left: 8.66666666667%;
+    }
+
+    .-offset-by-two.phpdocumentor-column {
+        margin-left: 17.3333333333%;
+    }
+
+    .-offset-by-three.phpdocumentor-column {
+        margin-left: 26%;
+    }
+
+    .-offset-by-four.phpdocumentor-column {
+        margin-left: 34.6666666667%;
+    }
+
+    .-offset-by-five.phpdocumentor-column {
+        margin-left: 43.3333333333%;
+    }
+
+    .-offset-by-six.phpdocumentor-column {
+        margin-left: 52%;
+    }
+
+    .-offset-by-seven.phpdocumentor-column {
+        margin-left: 60.6666666667%;
+    }
+
+    .-offset-by-eight.phpdocumentor-column {
+        margin-left: 69.3333333333%;
+    }
+
+    .-offset-by-nine.phpdocumentor-column {
+        margin-left: 78.0%;
+    }
+
+    .-offset-by-ten.phpdocumentor-column {
+        margin-left: 86.6666666667%;
+    }
+
+    .-offset-by-eleven.phpdocumentor-column {
+        margin-left: 95.3333333333%;
+    }
+
+    .-offset-by-one-third.phpdocumentor-column {
+        margin-left: 34.6666666667%;
+    }
+
+    .-offset-by-two-thirds.phpdocumentor-column {
+        margin-left: 69.3333333333%;
+    }
+
+    .-offset-by-one-half.phpdocumentor-column {
+        margin-left: 52%;
+    }
+}
+.phpdocumentor a {
+    color: var(--link-color-primary);
+}
+
+.phpdocumentor a:hover {
+    color: var(--link-hover-color-primary);
+}
+.phpdocumentor-button {
+    background-color: var(--button-color);
+    border: 1px solid var(--button-border-color);
+    border-radius: var(--border-radius-base-size);
+    box-sizing: border-box;
+    color: var(--button-text-color);
+    cursor: pointer;
+    display: inline-block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    height: 38px;
+    letter-spacing: .1rem;
+    line-height: 38px;
+    padding: 0 var(--spacing-xxl);
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor-button .-wide {
+    width: 100%;
+}
+
+.phpdocumentor-button:hover,
+.phpdocumentor-button:focus {
+    border-color: #888;
+    color: #333;
+    outline: 0;
+}
+
+.phpdocumentor-button.-primary {
+    background-color: var(--button-color-primary);
+    border-color: var(--button-color-primary);
+    color: var(--button-text-color-primary);
+}
+
+.phpdocumentor-button.-primary:hover,
+.phpdocumentor-button.-primary:focus {
+    background-color: var(--link-color-primary);
+    border-color: var(--link-color-primary);
+    color: var(--button-text-color-primary);
+}
+.phpdocumentor form {
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor-field {
+    background-color: var(--form-field-color);
+    border: 1px solid var(--form-field-border-color);
+    border-radius: var(--border-radius-base-size);
+    box-shadow: none;
+    box-sizing: border-box;
+    height: 38px;
+    padding: var(--spacing-xxxs) var(--spacing-xxs); /* The 6px vertically centers text on FF, ignored by Webkit */
+    margin-bottom: var(--spacing-md);
+}
+
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.phpdocumentor-textarea {
+    min-height: 65px;
+    padding-bottom: var(--spacing-xxxs);
+    padding-top: var(--spacing-xxxs);
+}
+
+.phpdocumentor-field:focus {
+    border: 1px solid var(--button-color-primary);
+    outline: 0;
+}
+
+.phpdocumentor-label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.phpdocumentor-fieldset {
+    border-width: 0;
+    padding: 0;
+}
+
+input[type="checkbox"].phpdocumentor-field,
+input[type="radio"].phpdocumentor-field {
+    display: inline;
+}
+.phpdocumentor-column ul,
+div.phpdocumentor-list > ul,
+ul.phpdocumentor-list {
+    list-style: circle;
+}
+
+.phpdocumentor-column ol,
+div.phpdocumentor-list > ol,
+ol.phpdocumentor-list {
+    list-style: decimal;
+}
+
+
+.phpdocumentor-column ul,
+div.phpdocumentor-list > ul,
+ol.phpdocumentor-list,
+ul.phpdocumentor-list {
+    margin-top: 0;
+    padding-left: 1rem;
+    margin-bottom: var(--spacing-md);
+}
+
+dl {
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor-column ul ul,
+div.phpdocumentor-list > ul ul,
+ul.phpdocumentor-list ul.phpdocumentor-list,
+ul.phpdocumentor-list ol.phpdocumentor-list,
+ol.phpdocumentor-list ol.phpdocumentor-list,
+ol.phpdocumentor-list ul.phpdocumentor-list {
+    font-size: var(--text-sm);
+    margin: var(--spacing-xs) 0 var(--spacing-xs) calc(var(--spacing-xs) * 2);
+}
+
+.phpdocumentor-column ul li,
+.phpdocumentor-list li {
+    padding-bottom: var(--spacing-xs);
+}
+
+.phpdocumentor dl dt {
+    margin-bottom: var(--spacing-xs);
+}
+
+.phpdocumentor dl dd {
+    margin-bottom: var(--spacing-md);
+}
+.phpdocumentor pre {
+    margin-bottom: var(--spacing-md);
+}
+
+.phpdocumentor-code {
+    font-family: var(--font-monospace);
+    background: var(--code-background-color);
+    border: 1px solid var(--code-border-color);
+    border-radius: var(--border-radius-base-size);
+    font-size: var(--text-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.phpdocumentor-code.-dark {
+    background: var(--primary-color-darkest);
+    color: var(--light-gray);
+    box-shadow: 0 2px 3px var(--dark-gray);
+}
+
+pre > .phpdocumentor-code {
+    display: block;
+    white-space: pre;
+}
+.phpdocumentor blockquote {
+    border-left: 4px solid var(--primary-color-darken);
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    color: var(--primary-color-darker);
+    font-style: italic;
+}
+
+.phpdocumentor blockquote p:last-of-type {
+    margin-bottom: 0;
+}
+.phpdocumentor table {
+    margin-bottom: var(--spacing-md);
+}
+
+th.phpdocumentor-heading,
+td.phpdocumentor-cell {
+    border-bottom: 1px solid var(--table-separator-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+}
+
+th.phpdocumentor-heading:first-child,
+td.phpdocumentor-cell:first-child {
+    padding-left: 0;
+}
+
+th.phpdocumentor-heading:last-child,
+td.phpdocumentor-cell:last-child {
+    padding-right: 0;
+}
+
+.phpdocumentor-header {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: auto;
+    padding: var(--spacing-md) var(--spacing-md);
+}
+
+.phpdocumentor-header__menu-button {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+}
+
+.phpdocumentor-header__menu-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.phpdocumentor-header__menu-button:checked ~ .phpdocumentor-topnav {
+    max-height: 250px;
+    padding-top: var(--spacing-md);
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-header {
+        flex-direction: row;
+        padding: var(--spacing-lg) var(--spacing-lg);
+        min-height: var(--header-height);
+    }
+
+    .phpdocumentor-header__menu-icon {
+        display: none;
+    }
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-header {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+@media (min-width: 1200px) {
+    .phpdocumentor-header {
+        padding: 0;
+    }
+}
+.phpdocumentor-title {
+    box-sizing: border-box;
+    color: var(--title-text-color);
+    font-size: var(--text-xxl);
+    letter-spacing: .05rem;
+    font-weight: normal;
+    width: auto;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.phpdocumentor-title.-without-divider {
+    border: none;
+}
+
+.phpdocumentor-title__link {
+    transition: all .3s ease-out;
+    display: flex;
+    color: var(--title-text-color);
+    text-decoration: none;
+    font-weight: normal;
+    white-space: nowrap;
+    transform: scale(.75);
+    transform-origin: left;
+}
+
+.phpdocumentor-title__link:hover {
+    transform: perspective(15rem) translateX(.5rem);
+    font-weight: 600;
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-title {
+        width: 30.6666666667%;
+        border-right: var(--sidebar-border-color) solid 1px;
+    }
+
+    .phpdocumentor-title__link {
+        transform-origin: left;
+    }
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-title__link {
+        transform: scale(.85);
+    }
+}
+
+@media (min-width: 1200px) {
+    .phpdocumentor-title__link {
+        transform: scale(1);
+    }
+}
+.phpdocumentor-topnav {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    flex-basis: 100%;
+}
+
+.phpdocumentor-topnav__menu {
+    text-align: right;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.phpdocumentor-topnav__menu-item {
+    margin: 0;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    padding: var(--spacing-sm) 0
+}
+
+.phpdocumentor-topnav__menu-item.-social {
+    width: auto;
+    padding: var(--spacing-sm)
+}
+
+.phpdocumentor-topnav__menu-item a {
+    display: inline-block;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: var(--text-lg);
+    transition: all .3s ease-out;
+    border-bottom: 1px dotted transparent;
+    line-height: 1;
+}
+
+.phpdocumentor-topnav__menu-item a:hover {
+    transform: perspective(15rem) translateY(.1rem);
+    border-bottom: 1px dotted var(--text-color);
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-topnav {
+        max-height: none;
+        overflow: visible;
+        flex-basis: auto;
+    }
+
+    .phpdocumentor-topnav__menu {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-end;
+    }
+
+    .phpdocumentor-topnav__menu-item,
+    .phpdocumentor-topnav__menu-item.-social {
+        width: auto;
+        display: inline;
+        text-align: right;
+        padding: 0 0 0 var(--spacing-md)
+    }
+}
+.phpdocumentor-sidebar {
+    margin: 0;
+    overflow: hidden;
+    max-height: 0;
+}
+
+.phpdocumentor .phpdocumentor-sidebar .phpdocumentor-list {
+    padding: var(--spacing-xs) var(--spacing-md);
+    list-style: none;
+    margin: 0;
+}
+
+.phpdocumentor .phpdocumentor-sidebar li {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 0 var(--spacing-xxxs) var(--spacing-md);
+}
+
+.phpdocumentor .phpdocumentor-sidebar abbr,
+.phpdocumentor .phpdocumentor-sidebar a {
+    text-decoration: none;
+    border-bottom: none;
+    color: var(--text-color);
+    font-size: var(--text-md);
+    padding-left: 0;
+    transition: padding-left .4s ease-out;
+}
+
+.phpdocumentor .phpdocumentor-sidebar a:hover,
+.phpdocumentor .phpdocumentor-sidebar a.-active {
+    padding-left: 5px;
+    font-weight: 600;
+}
+
+.phpdocumentor .phpdocumentor-sidebar__category > * {
+    border-left: 1px solid var(--primary-color-lighten);
+}
+
+.phpdocumentor .phpdocumentor-sidebar__category {
+    margin-bottom: var(--spacing-lg);
+}
+
+.phpdocumentor .phpdocumentor-sidebar__category-header {
+    font-size: var(--text-md);
+    margin-bottom: var(--spacing-xs);
+    color: var(--link-color-primary);
+    font-weight: 600;
+    border-left: 0;
+}
+
+.phpdocumentor .phpdocumentor-sidebar__root-package,
+.phpdocumentor .phpdocumentor-sidebar__root-namespace {
+    font-size: var(--text-md);
+    margin: 0;
+    padding-top: var(--spacing-xs);
+    padding-left: var(--spacing-md);
+    color: var(--text-color);
+    font-weight: normal;
+}
+
+@media (min-width: 550px) {
+    .phpdocumentor-sidebar {
+        border-right: var(--sidebar-border-color) solid 1px;
+    }
+}
+
+.phpdocumentor-sidebar__menu-button {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+}
+
+.phpdocumentor-sidebar__menu-icon {
+    font-size: var(--text-md);
+    font-weight: 600;
+    background: var(--primary-color);
+    color: white;
+    margin: 0 0 var(--spacing-lg);
+    display: block;
+    padding: var(--spacing-sm);
+    text-align: center;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: .15rem;
+}
+
+.phpdocumentor-sidebar__menu-button:checked ~ .phpdocumentor-sidebar {
+    max-height: 100%;
+    padding-top: var(--spacing-md);
+}
+
+@media (min-width: 550px) {
+    .phpdocumentor-sidebar {
+        overflow: visible;
+        max-height: 100%;
+    }
+
+    .phpdocumentor-sidebar__menu-icon {
+        display: none;
+    }
+}
+.phpdocumentor-admonition {
+    border: 1px solid var(--admonition-border-color);
+    border-radius: var(--border-radius-base-size);
+    border-color: var(--primary-color-lighten);
+    background-color: var(--primary-color-lighter);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.phpdocumentor-admonition p:last-of-type {
+    margin-bottom: 0;
+}
+
+.phpdocumentor-admonition--success,
+.phpdocumentor-admonition.-success {
+    border-color: var(--admonition-success-color);
+}
+
+.phpdocumentor-admonition__icon {
+    margin-right: var(--spacing-md);
+    color: var(--primary-color);
+    max-width: 3rem;
+}
+.phpdocumentor ul.phpdocumentor-breadcrumbs {
+    font-size: var(--text-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.phpdocumentor ul.phpdocumentor-breadcrumbs a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.phpdocumentor ul.phpdocumentor-breadcrumbs > li {
+    display: inline-block;
+    margin: 0;
+}
+
+.phpdocumentor ul.phpdocumentor-breadcrumbs > li + li:before {
+    color: var(--dark-gray);
+    content: "\\\A0";
+    padding: 0;
+}
+.phpdocumentor .phpdocumentor-back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    font-size: 2.5rem;
+    opacity: .25;
+    transition: all .3s ease-in-out;
+    right: 2rem;
+}
+
+.phpdocumentor .phpdocumentor-back-to-top:hover {
+    color: var(--link-color-primary);
+    opacity: 1;
+}
+.phpdocumentor-search {
+    position: relative;
+    display: none; /** disable by default for non-js flow */
+    opacity: .3; /** white-out default for loading indication */
+    transition: opacity .3s, background .3s;
+    margin: var(--spacing-sm) 0;
+    flex: 1;
+    min-width: 100%;
+}
+
+.phpdocumentor-search label {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.phpdocumentor-search__icon {
+    color: var(--primary-color);
+    margin-right: var(--spacing-sm);
+    width: 1rem;
+    height: 1rem;
+}
+
+.phpdocumentor-search--enabled {
+    display: flex;
+}
+
+.phpdocumentor-search--active {
+    opacity: 1;
+}
+
+.phpdocumentor-search input:disabled {
+    background-color: lightgray;
+}
+
+.phpdocumentor-search__field:focus,
+.phpdocumentor-search__field {
+    margin-bottom: 0;
+    border: 0;
+    border-bottom: 2px solid var(--primary-color);
+    padding: 0;
+    border-radius: 0;
+    flex: 1;
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-search {
+        min-width: auto;
+        max-width: 20rem;
+        margin: 0 0 0 auto;
+    }
+}
+.phpdocumentor-content {
+    position: relative;
+}
+
+.phpdocumentor-search-results {
+    backdrop-filter: blur(5px);
+    background: var(--popover-background-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    opacity: 1;
+    pointer-events: all;
+
+    transition: opacity .3s, background .3s;
+}
+
+.phpdocumentor-search-results--hidden {
+    background: transparent;
+    backdrop-filter: blur(0);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.phpdocumentor-search-results__dialog {
+    width: 100%;
+    background: white;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.phpdocumentor-search-results__body {
+    overflow: auto;
+}
+
+.phpdocumentor-search-results__header {
+    padding: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    background: var(--primary-color-darken);
+    color: white;
+    align-items: center;
+}
+
+.phpdocumentor-search-results__close {
+    font-size: var(--text-xl);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.phpdocumentor  .phpdocumentor-search-results__title {
+    font-size: var(--text-xl);
+    margin-bottom: 0;
+}
+
+.phpdocumentor-search-results__entries {
+    list-style: none;
+    padding: 0 var(--spacing-lg);
+    margin: 0;
+}
+
+.phpdocumentor-search-results__entry {
+    border-bottom: 1px solid var(--table-separator-color);
+    padding: var(--spacing-sm) 0;
+    text-align: left;
+}
+
+.phpdocumentor-search-results__entry a {
+    display: block;
+}
+
+.phpdocumentor-search-results__entry small {
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-color-darker);
+    display: block;
+    word-break: break-word;
+}
+
+.phpdocumentor-search-results__entry h3 {
+    font-size: var(--text-lg);
+    margin: 0;
+}
+
+@media (min-width: 550px) {
+    .phpdocumentor-search-results {
+        padding: 0 var(--spacing-lg);
+    }
+
+    .phpdocumentor-search-results__entry h3 {
+        font-size: var(--text-xxl);
+    }
+
+    .phpdocumentor-search-results__dialog {
+        margin: var(--spacing-xl) auto;
+        max-width: 40rem;
+        background: white;
+        border: 1px solid silver;
+        box-shadow: 0 2px 5px silver;
+        max-height: 40rem;
+        border-radius: 3px;
+    }
+}
+.phpdocumentor-modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phpdocumentor-modal__open {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+.phpdocumentor-modal-bg {
+    position: absolute;
+    background: gray;
+    opacity: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.phpdocumentor-modal-container {
+    border-radius: 1em;
+    background: #fff;
+    position: relative;
+    padding: 2em;
+    box-sizing: border-box;
+    max-width:100vw;
+}
+
+.phpdocumentor-modal__close {
+    position: absolute;
+    right: 0.75em;
+    top: 0.75em;
+    outline: none;
+    appearance: none;
+    color: var(--primary-color);
+    background: none;
+    border: 0px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Used for screen readers and such */
+.visually-hidden {
+    display: none;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
