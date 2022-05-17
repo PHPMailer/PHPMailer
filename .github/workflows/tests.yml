@@ -162,7 +162,7 @@ jobs:
         run: vendor/bin/phpunit
 
       - name: Send coverage report to Codecov
-        if: ${{ env.GITHUB_REPOSITORY_OWNER == "PHPMailer" && success() && matrix.coverage == true }}
+        if: ${{ env.GITHUB_REPOSITORY_OWNER == 'PHPMailer' && success() && matrix.coverage == true }}
         uses: codecov/codecov-action@v3
         with:
           files: ./build/logs/clover.xml
