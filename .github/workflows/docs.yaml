@@ -16,7 +16,10 @@ jobs:
       - name: Build Docs
         uses: ./.github/actions/build-docs
       - name: Publish Docs to gh-pages
-        uses: maxheld83/ghpages@v0.3.0
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: gh-pages
+          folder: docs
         env:
           BUILD_DIR: docs/
           GH_PAT: ${{ secrets.GH_PAT }}
