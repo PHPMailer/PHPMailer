@@ -1,5 +1,11 @@
 # PHPMailer Change Log
 
+## Version 6.6.1 (June 14th, 2022)
+* Don't clear errors on RSET, so they can be obtained when using keepalive
+* Bump some GitHub action versions
+* Fix some tests
+* 🇺🇦 Slava Ukraini!
+
 ## Version 6.6 (February 28th, 2022)
 * Introduce interface for OAuth providers, making it easier to use OAuth libraries other than the League one, thanks to @pdscopes.
 * Add more contextual information to TLS connection failure error messages, and throw exceptions on TLS connection errors, thanks to @miken32
