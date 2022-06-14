@@ -70,7 +70,7 @@
         "test": "./vendor/bin/phpunit --no-coverage",
         "coverage": "./vendor/bin/phpunit",
         "lint": [
-            "@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php,phps --exclude vendor --exclude .git --exclude build"
+            "@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . --show-deprecated -e php,phps --exclude vendor --exclude .git --exclude build"
         ]
     }
 }
