@@ -1,7 +1,11 @@
 # PHPMailer Change Log
 
-## Version 6.6.1 (June 14th, 2022)
-* Don't clear errors on RSET, so they can be obtained when using keepalive
+## Version 6.6.2 (June 14th, 2022)
+* Fix docs deployment GitHub action
+* Updates to parallel-lint and console highlighter, thanks to @jrfnl
+
+## Version 6.6.1 (June 14th, 2022) (unreleased)
+* Don't clear errors on RSET, so they can still be obtained when using keepalive
 * Bump some GitHub action versions
 * Fix some tests
 * 🇺🇦 Slava Ukraini!
