@@ -6290,7 +6290,7 @@ both header name and value (name:value).</p>
 These differ from 'regular' attachments in that they are intended to be
 displayed inline with the message, not just attached for download.
 This is used in HTML messages that embed the images
-the HTML refers to using the $cid value.
+the HTML refers to using the <code class="prettyprint">$cid</code> value in <code class="prettyprint">img</code> tags, for example <code class="prettyprint">&lt;img src=&quot;cid:mylogo&quot;&gt;</code>.
 Never use a user-supplied path to a file!</p>
 </section>
 
@@ -6320,7 +6320,7 @@ the content when using an embedded image in HTML</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Overrides the attachment name</p>
+                    <section class="phpdocumentor-description"><p>Overrides the attachment filename</p>
 </section>
 
             </dd>
@@ -6329,7 +6329,7 @@ the content when using an embedded image in HTML</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">self::ENCODING_BASE64</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>File encoding (see $Encoding)</p>
+                    <section class="phpdocumentor-description"><p>File encoding (see $Encoding) defaults to <code class="prettyprint">base64</code></p>
 </section>
 
             </dd>
@@ -6338,7 +6338,7 @@ the content when using an embedded image in HTML</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>File MIME type</p>
+                    <section class="phpdocumentor-description"><p>File MIME type (by default mapped from the <code class="prettyprint">$path</code> filename's extension)</p>
 </section>
 
             </dd>
@@ -6347,7 +6347,7 @@ the content when using an embedded image in HTML</p>
                 : <span class="phpdocumentor-signature__argument__return-type">string</span>
                  = <span class="phpdocumentor-signature__argument__default-value">&#039;inline&#039;</span>            </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Disposition to use</p>
+                    <section class="phpdocumentor-description"><p>Disposition to use: <code class="prettyprint">inline</code> (default) or <code class="prettyprint">attachment</code> (unlikely you want this – <code class="prettyprint">addAttachment()</code> instead)</p>
 </section>
 
             </dd>
