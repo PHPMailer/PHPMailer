@@ -3726,7 +3726,7 @@ class PHPMailer
      *                            (unlikely you want this – {@see `addAttachment()`} instead)
      *
      * @return bool True on successfully adding an attachment
-     *@throws Exception
+     * @throws Exception
      *
      */
     public function addEmbeddedImage(
