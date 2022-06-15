@@ -3722,11 +3722,12 @@ class PHPMailer
      * @param string $name        Overrides the attachment filename
      * @param string $encoding    File encoding (see $Encoding) defaults to `base64`
      * @param string $type        File MIME type (by default mapped from the `$path` filename's extension)
-     * @param string $disposition Disposition to use: `inline` (default) or `attachment` (unlikely you want this – {@see `addAttachment()`} instead)
-     *
-     * @throws Exception
+     * @param string $disposition Disposition to use: `inline` (default) or `attachment`
+     *                            (unlikely you want this – {@see `addAttachment()`} instead)
      *
      * @return bool True on successfully adding an attachment
+     *@throws Exception
+     *
      */
     public function addEmbeddedImage(
         $path,
