@@ -3932,9 +3932,7 @@ class PHPMailer
     {
         $this->RecipientsQueue = array_filter(
             $this->RecipientsQueue,
-            static function ($params) use ($kind) {
-                return $params[0] !== $kind;
-            }
+            static fn ($params) => $params[0] !== $kind
         );
     }
 
