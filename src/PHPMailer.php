@@ -1363,7 +1363,7 @@ class PHPMailer
         }
         //Don't allow strings as callables, see SECURITY.md and CVE-2021-3603
         if (is_callable($patternselect) && !is_string($patternselect)) {
-            return call_user_func($patternselect, $address);
+            return $patternselect($address);
         }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
         if (strpos($address, "\n") !== false || strpos($address, "\r") !== false) {
@@ -4354,7 +4354,7 @@ class PHPMailer
     public function html2text($html, $advanced = false)
     {
         if (is_callable($advanced)) {
-            return call_user_func($advanced, $html);
+            return $advanced($html);
         }
 
         return html_entity_decode(
@@ -5056,7 +5056,7 @@ class PHPMailer
     protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from, $extra)
     {
         if (!empty($this->action_function) && is_callable($this->action_function)) {
-            call_user_func($this->action_function, $isSent, $to, $cc, $bcc, $subject, $body, $from, $extra);
+            ($this->action_function)($isSent, $to, $cc, $bcc, $subject, $body, $from, $extra);
         }
     }
 
