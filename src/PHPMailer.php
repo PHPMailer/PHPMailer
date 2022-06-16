@@ -1247,7 +1247,7 @@ class PHPMailer
                         ];
                     }
                 } else {
-                    list($name, $email) = explode('<', $address);
+                    [$name, $email] = explode('<', $address);
                     $email = trim(str_replace('>', '', $email));
                     $name = trim($name);
                     if (static::validateAddress($email)) {
@@ -4185,7 +4185,7 @@ class PHPMailer
     {
         if (null === $value && strpos($name, ':') !== false) {
             //Value passed in as name:value
-            list($name, $value) = explode(':', $name, 2);
+            [$name, $value] = explode(':', $name, 2);
         }
         $name = trim($name);
         $value = (null === $value) ? '' : trim($value);
@@ -4766,7 +4766,7 @@ class PHPMailer
             if (strpos($line, ':') === false) {
                 continue;
             }
-            list($heading, $value) = explode(':', $line, 2);
+            [$heading, $value] = explode(':', $line, 2);
             //Lower-case header name
             $heading = strtolower($heading);
             //Collapse white space within the value, also convert WSP to space
