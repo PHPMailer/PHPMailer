@@ -407,7 +407,7 @@ class POP3
      */
     protected function checkResponse($string)
     {
-        if (strpos($string, '+OK') !== 0) {
+        if (!str_starts_with($string, '+OK')  ) {
             $this->setError("Server reported an error: $string");
 
             return false;

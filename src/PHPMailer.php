@@ -829,7 +829,7 @@ class PHPMailer
             $this->exceptions = (bool) $exceptions;
         }
         //Pick an appropriate debug output format automatically
-        $this->Debugoutput = (strpos(PHP_SAPI, 'cli') !== false ? 'echo' : 'html');
+        $this->Debugoutput = (str_contains(PHP_SAPI, 'cli')   ? 'echo' : 'html');
     }
 
     /**
@@ -1238,7 +1238,7 @@ class PHPMailer
             foreach ($list as $address) {
                 $address = trim($address);
                 //Is there a separate name part?
-                if (strpos($address, '<') === false) {
+                if (!str_contains($address, '<')  ) {
                     //No separate name, just use the whole thing
                     if (static::validateAddress($address)) {
                         $addresses[] = [
@@ -1366,7 +1366,7 @@ class PHPMailer
             return call_user_func($patternselect, $address);
         }
         //Reject line breaks in addresses; it's valid RFC5322, but not RFC5321
-        if (strpos($address, "\n") !== false || strpos($address, "\r") !== false) {
+        if (str_contains($address, "\n")   || str_contains($address, "\r")  ) {
             return false;
         }
         switch ($patternselect) {
@@ -1828,7 +1828,7 @@ class PHPMailer
             //All other characters have a special meaning in at least one common shell, including = and +.
             //Full stop (.) has a special meaning in cmd.exe, but its impact should be negligible here.
             //Note that this does permit non-Latin alphanumeric characters based on the current locale.
-            if (!ctype_alnum($c) && strpos('@_-.', $c) === false) {
+            if (!ctype_alnum($c) && !str_contains('@_-.', $c)  ) {
                 return false;
             }
         }
@@ -1865,7 +1865,7 @@ class PHPMailer
         }
         $readable = file_exists($path);
         //If not a UNC path (expected to start with \\), check read permission, see #2069
-        if (strpos($path, '\\\\') !== 0) {
+        if (!str_starts_with($path, '\\\\')  ) {
             $readable = $readable && is_readable($path);
         }
         return  $readable;
@@ -4183,7 +4183,7 @@ class PHPMailer
      */
     public function addCustomHeader($name, $value = null)
     {
-        if (null === $value && strpos($name, ':') !== false) {
+        if (null === $value && str_contains($name, ':')  ) {
             //Value passed in as name:value
             list($name, $value) = explode(':', $name, 2);
         }
@@ -4278,9 +4278,9 @@ class PHPMailer
                     //Only process relative URLs if a basedir is provided (i.e. no absolute local paths)
                     !empty($basedir)
                     //Ignore URLs containing parent dir traversal (..)
-                    && (strpos($url, '..') === false)
+                    && (!str_contains($url, '..')  )
                     //Do not change urls that are already inline images
-                    && 0 !== strpos($url, 'cid:')
+                    &&   !str_starts_with($url, 'cid:')
                     //Do not change absolute URLs, including anonymous protocol
                     && !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)
                 ) {
@@ -4763,7 +4763,7 @@ class PHPMailer
             //If the header is missing a :, skip it as it's invalid
             //This is likely to happen because the explode() above will also split
             //on the trailing LE, leaving an empty line
-            if (strpos($line, ':') === false) {
+            if (!str_contains($line, ':')  ) {
                 continue;
             }
             list($heading, $value) = explode(':', $line, 2);
