@@ -253,7 +253,7 @@ class SMTP
      * @see SMTP::$Debugoutput
      * @see SMTP::$do_debug
      */
-    protected function edebug($str, $level = 0)
+    protected function edebug($str, $level = 0): void
     {
         if ($level > $this->do_debug) {
             return;
@@ -680,7 +680,7 @@ class SMTP
      *
      * @see quit()
      */
-    public function close()
+    public function close(): void
     {
         $this->setError('');
         $this->server_caps = null;
@@ -844,7 +844,7 @@ class SMTP
      *
      * @param string $type `HELO` or `EHLO`
      */
-    protected function parseHelloFields($type)
+    protected function parseHelloFields($type): void
     {
         $this->server_caps = [];
         $lines = explode("\n", $this->helo_rply);
@@ -1299,7 +1299,7 @@ class SMTP
      *
      * @param bool $enabled
      */
-    public function setVerp($enabled = false)
+    public function setVerp($enabled = false): void
     {
         $this->do_verp = $enabled;
     }
@@ -1322,7 +1322,7 @@ class SMTP
      * @param string $smtp_code    An associated SMTP error code
      * @param string $smtp_code_ex Extended SMTP code
      */
-    protected function setError($message, $detail = '', $smtp_code = '', $smtp_code_ex = '')
+    protected function setError($message, $detail = '', $smtp_code = '', $smtp_code_ex = ''): void
     {
         $this->error = [
             'error' => $message,
@@ -1337,7 +1337,7 @@ class SMTP
      *
      * @param string|callable $method The name of the mechanism to use for debugging output, or a callable to handle it
      */
-    public function setDebugOutput($method = 'echo')
+    public function setDebugOutput($method = 'echo'): void
     {
         $this->Debugoutput = $method;
     }
@@ -1357,7 +1357,7 @@ class SMTP
      *
      * @param int $level
      */
-    public function setDebugLevel($level = 0)
+    public function setDebugLevel($level = 0): void
     {
         $this->do_debug = $level;
     }
@@ -1377,7 +1377,7 @@ class SMTP
      *
      * @param int $timeout The timeout duration in seconds
      */
-    public function setTimeout($timeout = 0)
+    public function setTimeout($timeout = 0): void
     {
         $this->Timeout = $timeout;
     }
@@ -1400,7 +1400,7 @@ class SMTP
      * @param string $errfile The file the error occurred in
      * @param int    $errline The line number the error occurred on
      */
-    protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0)
+    protected function errorHandler($errno, $errmsg, $errfile = '', $errline = 0): void
     {
         $notice = 'Connection failed.';
         $this->setError(

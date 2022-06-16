@@ -335,7 +335,7 @@ class POP3
     /**
      * Disconnect from the POP3 server.
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         $this->sendString('QUIT');
 
@@ -422,7 +422,7 @@ class POP3
      *
      * @param string $error
      */
-    protected function setError($error)
+    protected function setError($error): void
     {
         $this->errors[] = $error;
         if ($this->do_debug >= self::DEBUG_SERVER) {
@@ -452,7 +452,7 @@ class POP3
      * @param string $errfile
      * @param int    $errline
      */
-    protected function catchWarning($errno, $errstr, $errfile, $errline)
+    protected function catchWarning($errno, $errstr, $errfile, $errline): void
     {
         $this->setError(
             'Connecting to the POP3 server raised a PHP warning:' .

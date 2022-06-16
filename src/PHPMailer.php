@@ -889,7 +889,7 @@ class PHPMailer
      *
      * @param string $str
      */
-    protected function edebug($str)
+    protected function edebug($str): void
     {
         if ($this->SMTPDebug <= 0) {
             return;
@@ -944,7 +944,7 @@ class PHPMailer
      *
      * @param bool $isHtml True for HTML mode
      */
-    public function isHTML($isHtml = true)
+    public function isHTML($isHtml = true): void
     {
         if ($isHtml) {
             $this->ContentType = static::CONTENT_TYPE_TEXT_HTML;
@@ -956,7 +956,7 @@ class PHPMailer
     /**
      * Send messages using SMTP.
      */
-    public function isSMTP()
+    public function isSMTP(): void
     {
         $this->Mailer = 'smtp';
     }
@@ -964,7 +964,7 @@ class PHPMailer
     /**
      * Send messages using PHP's mail() function.
      */
-    public function isMail()
+    public function isMail(): void
     {
         $this->Mailer = 'mail';
     }
@@ -972,7 +972,7 @@ class PHPMailer
     /**
      * Send messages using $Sendmail.
      */
-    public function isSendmail()
+    public function isSendmail(): void
     {
         $ini_sendmail_path = ini_get('sendmail_path');
 
@@ -987,7 +987,7 @@ class PHPMailer
     /**
      * Send messages using qmail.
      */
-    public function isQmail()
+    public function isQmail(): void
     {
         $ini_sendmail_path = ini_get('sendmail_path');
 
@@ -2212,7 +2212,7 @@ class PHPMailer
     /**
      * Close the active SMTP session if one exists.
      */
-    public function smtpClose()
+    public function smtpClose(): void
     {
         if ((null !== $this->smtp) && $this->smtp->connected()) {
             $this->smtp->quit();
@@ -2560,7 +2560,7 @@ class PHPMailer
      * You should only do this to plain-text bodies as wrapping HTML tags may break them.
      * This is called automatically by createBody(), so you don't need to call it yourself.
      */
-    public function setWordWrap()
+    public function setWordWrap(): void
     {
         if ($this->WordWrap < 1) {
             return;
@@ -3108,7 +3108,7 @@ class PHPMailer
      * Set the message type.
      * PHPMailer only supports some preset message types, not arbitrary MIME structures.
      */
-    protected function setMessageType()
+    protected function setMessageType(): void
     {
         $type = [];
         if ($this->alternativeExists()) {
@@ -3928,7 +3928,7 @@ class PHPMailer
      *
      * @param string $kind 'to', 'cc', or 'bcc'
      */
-    public function clearQueuedAddresses($kind)
+    public function clearQueuedAddresses($kind): void
     {
         $this->RecipientsQueue = array_filter(
             $this->RecipientsQueue,
@@ -3941,7 +3941,7 @@ class PHPMailer
     /**
      * Clear all To recipients.
      */
-    public function clearAddresses()
+    public function clearAddresses(): void
     {
         foreach ($this->to as $to) {
             unset($this->all_recipients[strtolower($to[0])]);
@@ -3953,7 +3953,7 @@ class PHPMailer
     /**
      * Clear all CC recipients.
      */
-    public function clearCCs()
+    public function clearCCs(): void
     {
         foreach ($this->cc as $cc) {
             unset($this->all_recipients[strtolower($cc[0])]);
@@ -3965,7 +3965,7 @@ class PHPMailer
     /**
      * Clear all BCC recipients.
      */
-    public function clearBCCs()
+    public function clearBCCs(): void
     {
         foreach ($this->bcc as $bcc) {
             unset($this->all_recipients[strtolower($bcc[0])]);
@@ -3977,7 +3977,7 @@ class PHPMailer
     /**
      * Clear all ReplyTo recipients.
      */
-    public function clearReplyTos()
+    public function clearReplyTos(): void
     {
         $this->ReplyTo = [];
         $this->ReplyToQueue = [];
@@ -3986,7 +3986,7 @@ class PHPMailer
     /**
      * Clear all recipient types.
      */
-    public function clearAllRecipients()
+    public function clearAllRecipients(): void
     {
         $this->to = [];
         $this->cc = [];
@@ -3998,7 +3998,7 @@ class PHPMailer
     /**
      * Clear all filesystem, string, and binary attachments.
      */
-    public function clearAttachments()
+    public function clearAttachments(): void
     {
         $this->attachment = [];
     }
@@ -4006,7 +4006,7 @@ class PHPMailer
     /**
      * Clear all custom headers.
      */
-    public function clearCustomHeaders()
+    public function clearCustomHeaders(): void
     {
         $this->CustomHeader = [];
     }
@@ -4016,7 +4016,7 @@ class PHPMailer
      *
      * @param string $msg
      */
-    protected function setError($msg)
+    protected function setError($msg): void
     {
         ++$this->error_count;
         if ('smtp' === $this->Mailer && null !== $this->smtp) {
@@ -4653,7 +4653,7 @@ class PHPMailer
      *
      * @param string $le
      */
-    protected static function setLE($le)
+    protected static function setLE($le): void
     {
         static::$LE = $le;
     }
@@ -4666,7 +4666,7 @@ class PHPMailer
      * @param string $key_pass            Password for private key
      * @param string $extracerts_filename Optional path to chain certificate
      */
-    public function sign($cert_filename, $key_filename, $key_pass, $extracerts_filename = '')
+    public function sign($cert_filename, $key_filename, $key_pass, $extracerts_filename = ''): void
     {
         $this->sign_cert_file = $cert_filename;
         $this->sign_key_file = $key_filename;
@@ -5053,7 +5053,7 @@ class PHPMailer
      * @param string $from
      * @param array  $extra
      */
-    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from, $extra)
+    protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body, $from, $extra): void
     {
         if (!empty($this->action_function) && is_callable($this->action_function)) {
             call_user_func($this->action_function, $isSent, $to, $cc, $bcc, $subject, $body, $from, $extra);
@@ -5073,7 +5073,7 @@ class PHPMailer
     /**
      * Set an OAuthTokenProvider instance.
      */
-    public function setOAuth(OAuthTokenProvider $oauth)
+    public function setOAuth(OAuthTokenProvider $oauth): void
     {
         $this->oauth = $oauth;
     }
