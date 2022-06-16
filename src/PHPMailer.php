@@ -4105,12 +4105,12 @@ class PHPMailer
             //Is it a valid IPv4 address?
             return filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false;
         }
-        if (filter_var('http://' . $host, FILTER_VALIDATE_URL) !== false) {
+        return (bool) (filter_var('http://' . $host, FILTER_VALIDATE_URL) !== false) 
             //Is it a syntactically valid hostname?
-            return true;
-        }
+             
+        
 
-        return false;
+         ;
     }
 
     /**
