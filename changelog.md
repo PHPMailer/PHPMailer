@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+## WIP
+* Add a form to the OAuth setup script
+* Minor CS improvements
+
 ## Version 6.6.2 (June 14th, 2022)
 * Fix docs deployment GitHub action
 * Updates to parallel-lint and console highlighter, thanks to @jrfnl
