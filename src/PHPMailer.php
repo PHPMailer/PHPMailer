@@ -1815,7 +1815,7 @@ class PHPMailer
 
         if (
             escapeshellcmd($string) !== $string
-            || !in_array(escapeshellarg($string), ["'$string'", "\"$string\""])
+            || !in_array(escapeshellarg($string), ["'${string}'", "\"${string}\""])
         ) {
             return false;
         }
@@ -3441,7 +3441,7 @@ class PHPMailer
                         return $encoded;
                     }
 
-                    return "\"$encoded\"";
+                    return "\"${encoded}\"";
                 }
                 $matchcount = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
                 break;
@@ -3496,13 +3496,13 @@ class PHPMailer
                     $maxlen -= $maxlen % 4;
                     $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
                 }
-                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
+                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?${encoding}?\\1?=", $encoded);
                 break;
             case 'Q':
                 $encoded = $this->encodeQ($str, $position);
                 $encoded = $this->wrapText($encoded, $maxlen, true);
                 $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
-                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
+                $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?${encoding}?\\1?=", $encoded);
                 break;
             default:
                 return $str;

@@ -273,7 +273,7 @@ class POP3
         if (false === $this->pop_conn) {
             //It would appear not...
             $this->setError(
-                "Failed to connect to server $host on port $port. errno: $errno; errstr: $errstr"
+                "Failed to connect to server ${host} on port ${port}. errno: ${errno}; errstr: ${errstr}"
             );
 
             return false;
@@ -318,11 +318,11 @@ class POP3
         }
 
         //Send the Username
-        $this->sendString("USER $username" . static::LE);
+        $this->sendString("USER ${username}" . static::LE);
         $pop3_response = $this->getResponse();
         if ($this->checkResponse($pop3_response)) {
             //Send the Password
-            $this->sendString("PASS $password" . static::LE);
+            $this->sendString("PASS ${password}" . static::LE);
             $pop3_response = $this->getResponse();
             if ($this->checkResponse($pop3_response)) {
                 return true;
@@ -408,7 +408,7 @@ class POP3
     protected function checkResponse($string)
     {
         if (strpos($string, '+OK') !== 0) {
-            $this->setError("Server reported an error: $string");
+            $this->setError("Server reported an error: ${string}");
 
             return false;
         }
@@ -456,7 +456,7 @@ class POP3
     {
         $this->setError(
             'Connecting to the POP3 server raised a PHP warning:' .
-            "errno: $errno errstr: $errstr; errfile: $errfile; errline: $errline"
+            "errno: ${errno} errstr: ${errstr}; errfile: ${errfile}; errline: ${errline}"
         );
     }
 }

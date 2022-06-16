@@ -328,7 +328,7 @@ class SMTP
         }
         //Connect to the SMTP server
         $this->edebug(
-            "Connection: opening to $host:$port, timeout=$timeout, options=" .
+            "Connection: opening to ${host}:${port}, timeout=${timeout}, options=" .
             (count($options) > 0 ? var_export($options, true) : 'array()'),
             self::DEBUG_CONNECTION
         );
@@ -420,7 +420,7 @@ class SMTP
             );
             $this->edebug(
                 'SMTP ERROR: ' . $this->error['error']
-                . ": $errstr ($errno)",
+                . ": ${errstr} (${errno})",
                 self::DEBUG_CLIENT
             );
 
@@ -539,7 +539,7 @@ class SMTP
             }
 
             if (!in_array($authtype, $this->server_caps['AUTH'], true)) {
-                $this->setError("The requested authentication method \"$authtype\" is not supported by the server");
+                $this->setError("The requested authentication method \"${authtype}\" is not supported by the server");
 
                 return false;
             }
@@ -603,7 +603,7 @@ class SMTP
                 }
                 break;
             default:
-                $this->setError("Authentication method \"$authtype\" is not supported");
+                $this->setError("Authentication method \"${authtype}\" is not supported");
 
                 return false;
         }
@@ -988,13 +988,13 @@ class SMTP
     protected function sendCommand($command, $commandstring, $expect)
     {
         if (!$this->connected()) {
-            $this->setError("Called $command without being connected");
+            $this->setError("Called ${command} without being connected");
 
             return false;
         }
         //Reject line breaks in all commands
         if ((strpos($commandstring, "\n") !== false) || (strpos($commandstring, "\r") !== false)) {
-            $this->setError("Command '$command' contained line breaks");
+            $this->setError("Command '${command}' contained line breaks");
 
             return false;
         }
@@ -1024,7 +1024,7 @@ class SMTP
 
         if (!in_array($code, (array) $expect, true)) {
             $this->setError(
-                "$command command failed",
+                "${command} command failed",
                 $detail,
                 $code,
                 $code_ex
@@ -1061,7 +1061,7 @@ class SMTP
      */
     public function sendAndMail($from)
     {
-        return $this->sendCommand('SAML', "SAML FROM:$from", 250);
+        return $this->sendCommand('SAML', "SAML FROM:${from}", 250);
     }
 
     /**
@@ -1073,7 +1073,7 @@ class SMTP
      */
     public function verify($name)
     {
-        return $this->sendCommand('VRFY', "VRFY $name", [250, 251]);
+        return $this->sendCommand('VRFY', "VRFY ${name}", [250, 251]);
     }
 
     /**
@@ -1409,7 +1409,7 @@ class SMTP
             (string) $errno
         );
         $this->edebug(
-            "$notice Error #$errno: $errmsg [$errfile line $errline]",
+            "${notice} Error #${errno}: ${errmsg} [${errfile} line ${errline}]",
             self::DEBUG_CONNECTION
         );
     }
