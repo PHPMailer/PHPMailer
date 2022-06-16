@@ -46,23 +46,22 @@ use Hayageek\OAuth2\Client\Provider\Yahoo;
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
 if (!isset($_GET['code']) && !isset($_POST['provider'])) {
-    ?>
+?>
 <html>
 <body>
 <form method="post">
     <h1>Select Provider</h1>
-        <input type="radio" name="provider" value="Google" id="providerGoogle">
-        <label for="providerGoogle">Google</label><br>
-        <input type="radio" name="provider" value="Yahoo" id="providerYahoo">
-        <label for="providerYahoo">Yahoo</label><br>
-        <input type="radio" name="provider" value="Microsoft" id="providerMicrosoft">
-        <label for="providerMicrosoft">Microsoft</label><br>
-    <h1>Provide id and secret</h1>
-        <p>These details are obtained by setting up an app in the Google developer console,
-            or whichever provider you're using.
-        </p>
-        ClientId: <input type="text" name="clientId"><br>
-        ClientSecret: <input type="text" name="clientSecret"><br>
+    <input type="radio" name="provider" value="Google" id="providerGoogle">
+    <label for="providerGoogle">Google</label><br>
+    <input type="radio" name="provider" value="Yahoo" id="providerYahoo">
+    <label for="providerYahoo">Yahoo</label><br>
+    <input type="radio" name="provider" value="Microsoft" id="providerMicrosoft">
+    <label for="providerMicrosoft">Microsoft</label><br>
+    <h1>Enter id and secret</h1>
+    <p>These details are obtained by setting up an app in your provider's developer console.
+    </p>
+    <p>ClientId: <input type="text" name="clientId"><p>
+    <p>ClientSecret: <input type="text" name="clientSecret"></p>
     <input type="submit" value="Continue">
 </form>
 </body>
@@ -92,8 +91,7 @@ if (array_key_exists('provider', $_POST)) {
     $clientSecret = $_SESSION['clientSecret'];
 }
 
-//These details are obtained by setting up an app in the Google developer console,
-//or whichever provider you're using.
+//If you don't want to use the built-in form, set your client id and secret here
 //$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
 //$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
