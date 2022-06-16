@@ -45,13 +45,25 @@ use Hayageek\OAuth2\Client\Provider\Yahoo;
 //@see https://github.com/stevenmaguire/oauth2-microsoft
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
-if (!isset($_GET['code']) && !isset($_GET['provider'])) {
+if (!isset($_GET['code']) && !isset($_POST['provider'])) {
     ?>
 <html>
-<body>Select Provider:<br>
-<a href='?provider=Google'>Google</a><br>
-<a href='?provider=Yahoo'>Yahoo</a><br>
-<a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br>
+<body>
+<form method="post">
+    <h1>Select Provider</h1>
+    <input type="radio" name="provider" value="Google" id="providerGoogle">
+    <label for="providerGoogle">Google</label><br>
+    <input type="radio" name="provider" value="Yahoo" id="providerYahoo">
+    <label for="providerYahoo">Yahoo</label><br>
+    <input type="radio" name="provider" value="Microsoft" id="providerMicrosoft">
+    <label for="providerMicrosoft">Microsoft</label><br>
+    <h1>Enter id and secret</h1>
+    <p>These details are obtained by setting up an app in your provider's developer console.
+    </p>
+    <p>ClientId: <input type="text" name="clientId"><p>
+    <p>ClientSecret: <input type="text" name="clientSecret"></p>
+    <input type="submit" value="Continue">
+</form>
 </body>
 </html>
     <?php
@@ -63,21 +75,25 @@ require 'vendor/autoload.php';
 session_start();
 
 $providerName = '';
+$clientId = '';
+$clientSecret = '';
 
-if (array_key_exists('provider', $_GET)) {
-    $providerName = $_GET['provider'];
+if (array_key_exists('provider', $_POST)) {
+    $providerName = $_POST['provider'];
+    $clientId = $_POST['clientId'];
+    $clientSecret = $_POST['clientSecret'];
     $_SESSION['provider'] = $providerName;
+    $_SESSION['clientId'] = $clientId;
+    $_SESSION['clientSecret'] = $clientSecret;
 } elseif (array_key_exists('provider', $_SESSION)) {
     $providerName = $_SESSION['provider'];
-}
-if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
-    exit('Only Google, Microsoft and Yahoo OAuth2 providers are currently supported in this script.');
+    $clientId = $_SESSION['clientId'];
+    $clientSecret = $_SESSION['clientSecret'];
 }
 
-//These details are obtained by setting up an app in the Google developer console,
-//or whichever provider you're using.
-$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
-$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
+//If you don't want to use the built-in form, set your client id and secret here
+//$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
+//$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
 //If this automatic URL doesn't work, set it yourself manually to the URL of this script
 $redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
