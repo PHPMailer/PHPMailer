@@ -641,7 +641,7 @@ class SMTP
         }
         $key = str_pad($key, $bytelen, chr(0x00));
         $ipad = str_pad('', $bytelen, chr(0x36));
-        $opad = str_pad('', $bytelen, chr(0x5c));
+        $opad = str_pad('', $bytelen, chr(0x5C));
         $k_ipad = $key ^ $ipad;
         $k_opad = $key ^ $opad;
 
