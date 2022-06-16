@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * PHPMailer RFC821 SMTP email transport class.
