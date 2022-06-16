@@ -46,7 +46,7 @@ use Hayageek\OAuth2\Client\Provider\Yahoo;
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
 
 if (!isset($_GET['code']) && !isset($_POST['provider'])) {
-?>
+    ?>
 <html>
 <body>
 <form method="post">
