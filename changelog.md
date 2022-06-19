@@ -3,6 +3,7 @@
 ## WIP
 * Add a form to the OAuth setup script
 * Minor CS improvements
+* Add Mongolian translation
 
 ## Version 6.6.2 (June 14th, 2022)
 * Fix docs deployment GitHub action
