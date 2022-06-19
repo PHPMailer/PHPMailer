@@ -1,10 +1,9 @@
 <?php
 
 /**
- * Russian PHPMailer language file: refer to English translation for definitive list
+ * Mongolian PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Alexey Chumakov <alex@chumakov.ru>
- * @author Foster Snowhill <i18n@forstwoof.ru>
+ * @author @wispas
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Алдаа SMTP: Холбогдож чадсангүй.';
