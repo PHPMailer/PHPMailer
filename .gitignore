@@ -4,7 +4,6 @@ test/message.txt
 test/testbootstrap.php
 build/
 vendor/
-/.idea/
 *.pem
 composer.lock
 .phpcs.xml
