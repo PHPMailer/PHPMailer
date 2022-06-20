@@ -1,9 +1,10 @@
 # PHPMailer Change Log
 
-## WIP
-* Add a form to the OAuth setup script
+## Version 6.6.3 (June 20th, 2022)
+* Add an HTML form to the OAuth setup script
 * Minor CS improvements
 * Add Mongolian translation
+* Remove bogus "ch" translation
 
 ## Version 6.6.2 (June 14th, 2022)
 * Fix docs deployment GitHub action
