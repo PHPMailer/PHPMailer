@@ -1096,7 +1096,7 @@ class PHPMailer
 
             return false;
         }
-        if ($name !== null) {
+        if ($name !== null && is_string($name)) {
             $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         } else {
             $name = '';
