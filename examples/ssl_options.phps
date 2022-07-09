@@ -24,7 +24,7 @@ $mail->isSMTP();
 //SMTP::DEBUG_OFF = off (for production use)
 //SMTP::DEBUG_CLIENT = client messages
 //SMTP::DEBUG_SERVER = client and server messages
-$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+$mail->SMTPDebug = SMTP::DEBUG_CONNECTION;
 
 //Set the hostname of the mail server
 $mail->Host = 'smtp.example.com';
