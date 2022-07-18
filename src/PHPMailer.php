@@ -1738,7 +1738,7 @@ class PHPMailer
         $this->edebug('Sendmail path: ' . $this->Sendmail);
         $this->edebug('Sendmail command: ' . $sendmail);
         $this->edebug('Envelope sender: ' . $this->Sender);
-        $this->edebug('Headers: {' . $header . '}');
+        $this->edebug("Headers: {$header}");
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1746,7 +1746,7 @@ class PHPMailer
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
-                $this->edebug('To: {' . $toAddr . '}');
+                $this->edebug("To: {$toAddr}");
                 fwrite($mail, 'To: ' . $toAddr . PHP_EOL);
                 fwrite($mail, $header);
                 fwrite($mail, $body);
