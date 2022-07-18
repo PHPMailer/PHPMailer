@@ -866,14 +866,14 @@ class PHPMailer
         //Calling mail() with null params breaks
         $this->edebug('Sending with mail()');
         $this->edebug('Sendmail path: ' . ini_get('sendmail_path'));
-        $this->edebug('Envelope sender: {' . $this->Sender . '}');
-        $this->edebug('To: {' . $to . '}');
-        $this->edebug('Subject: {' . $subject . '}');
-        $this->edebug('Headers: {' . $header . '}');
+        $this->edebug("Envelope sender: {$this->Sender}");
+        $this->edebug("To: {$to}");
+        $this->edebug("Subject: {$subject}");
+        $this->edebug("Headers: {$header}");
         if (!$this->UseSendmailOptions || null === $params) {
             $result = @mail($to, $subject, $body, $header);
         } else {
-            $this->edebug('Additional params: {' . $params . '}');
+            $this->edebug("Additional params: {$params}");
             $result = @mail($to, $subject, $body, $header, $params);
         }
         $this->edebug('Result: ' . ($result ? 'true' : 'false'));
