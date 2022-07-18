@@ -866,14 +866,14 @@ class PHPMailer
         //Calling mail() with null params breaks
         $this->edebug('Sending with mail()');
         $this->edebug('Sendmail path: ' . ini_get('sendmail_path'));
-        $this->edebug("Envelope sender: {$this->Sender}");
-        $this->edebug("To: {$to}");
-        $this->edebug("Subject: {$subject}");
-        $this->edebug("Headers: {$header}");
+        $this->edebug('Envelope sender: {' . $this->Sender . '}');
+        $this->edebug('To: {' . $to . '}');
+        $this->edebug('Subject: {' . $subject . '}');
+        $this->edebug('Headers: {' . $header . '}');
         if (!$this->UseSendmailOptions || null === $params) {
             $result = @mail($to, $subject, $body, $header);
         } else {
-            $this->edebug("Additional params: {$params}");
+            $this->edebug('Additional params: {' . $params . '}');
             $result = @mail($to, $subject, $body, $header, $params);
         }
         $this->edebug('Result: ' . ($result ? 'true' : 'false'));
@@ -1738,7 +1738,7 @@ class PHPMailer
         $this->edebug('Sendmail path: ' . $this->Sendmail);
         $this->edebug('Sendmail command: ' . $sendmail);
         $this->edebug('Envelope sender: ' . $this->Sender);
-        $this->edebug("Headers: {$header}");
+        $this->edebug('Headers: {' . $header . '}');
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1746,7 +1746,7 @@ class PHPMailer
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
-                $this->edebug("To: {$toAddr}");
+                $this->edebug('To: {' . $toAddr . '}');
                 fwrite($mail, 'To: ' . $toAddr . PHP_EOL);
                 fwrite($mail, $header);
                 fwrite($mail, $body);
