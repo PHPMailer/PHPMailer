@@ -547,7 +547,7 @@ class PHPMailer
      * Value can be any php callable: http://www.php.net/is_callable
      *
      * Parameters:
-     *   bool $result        result of the send action
+     *   bool    $result        result of the send action
      *   array   $to            email addresses of the recipients
      *   array   $cc            cc email addresses
      *   array   $bcc           bcc email addresses
@@ -866,14 +866,14 @@ class PHPMailer
         //Calling mail() with null params breaks
         $this->edebug('Sending with mail()');
         $this->edebug('Sendmail path: ' . ini_get('sendmail_path'));
-        $this->edebug("Envelope sender: {$this->Sender}");
-        $this->edebug("To: {$to}");
-        $this->edebug("Subject: {$subject}");
-        $this->edebug("Headers: {$header}");
+        $this->edebug('Envelope sender: {' . $this->Sender . '}');
+        $this->edebug('To: {' . $to . '}');
+        $this->edebug('Subject: {' . $subject . '}');
+        $this->edebug('Headers: {' . $header . '}');
         if (!$this->UseSendmailOptions || null === $params) {
             $result = @mail($to, $subject, $body, $header);
         } else {
-            $this->edebug("Additional params: {$params}");
+            $this->edebug('Additional params: {' . $params . '}');
             $result = @mail($to, $subject, $body, $header, $params);
         }
         $this->edebug('Result: ' . ($result ? 'true' : 'false'));
@@ -918,7 +918,7 @@ class PHPMailer
                     preg_replace('/[\r\n]+/', '', $str),
                     ENT_QUOTES,
                     'UTF-8'
-                ), "<br>\n";
+                ), '<br>' . PHP_EOL;
                 break;
             case 'echo':
             default:
@@ -1003,7 +1003,7 @@ class PHPMailer
      * Add a "To" address.
      *
      * @param string $address The email address to send to
-     * @param string $name
+     * @param string $name    Recipient name (optional)
      *
      * @throws Exception
      *
@@ -1018,7 +1018,7 @@ class PHPMailer
      * Add a "CC" address.
      *
      * @param string $address The email address to send to
-     * @param string $name
+     * @param string $name    Recipient name
      *
      * @throws Exception
      *
@@ -1033,7 +1033,7 @@ class PHPMailer
      * Add a "BCC" address.
      *
      * @param string $address The email address to send to
-     * @param string $name
+     * @param string $name    Recipient name
      *
      * @throws Exception
      *
@@ -1738,7 +1738,7 @@ class PHPMailer
         $this->edebug('Sendmail path: ' . $this->Sendmail);
         $this->edebug('Sendmail command: ' . $sendmail);
         $this->edebug('Envelope sender: ' . $this->Sender);
-        $this->edebug("Headers: {$header}");
+        $this->edebug('Headers: {' . $header . '}');
 
         if ($this->SingleTo) {
             foreach ($this->SingleToArray as $toAddr) {
@@ -1746,8 +1746,8 @@ class PHPMailer
                 if (!$mail) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
-                $this->edebug("To: {$toAddr}");
-                fwrite($mail, 'To: ' . $toAddr . "\n");
+                $this->edebug('To: {' . $toAddr . '}');
+                fwrite($mail, 'To: ' . $toAddr . PHP_EOL);
                 fwrite($mail, $header);
                 fwrite($mail, $body);
                 $result = pclose($mail);
@@ -1762,7 +1762,7 @@ class PHPMailer
                     $this->From,
                     []
                 );
-                $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
+                $this->edebug('Result: ' . ($result === 0 ? 'true' : 'false'));
                 if (0 !== $result) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
                 }
@@ -1785,7 +1785,7 @@ class PHPMailer
                 $this->From,
                 []
             );
-            $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
+            $this->edebug('Result: ' . ($result === 0 ? 'true' : 'false'));
             if (0 !== $result) {
                 throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
             }

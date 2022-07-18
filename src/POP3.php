@@ -235,9 +235,9 @@ class POP3
     /**
      * Connect to a POP3 server.
      *
-     * @param string   $host
-     * @param int|bool $port
-     * @param int      $tval
+     * @param string   $host POP3 host
+     * @param int|bool $port POP3 port
+     * @param int      $tval Timeout
      *
      * @return bool
      */
@@ -264,8 +264,8 @@ class POP3
             $port, //Port #
             $errno, //Error Number
             $errstr, //Error Message
-            $tval
-        ); //Timeout (seconds)
+            $tval //Timeout (seconds)
+        );
         //Restore the error handler
         restore_error_handler();
 
@@ -273,7 +273,7 @@ class POP3
         if (false === $this->pop_conn) {
             //It would appear not...
             $this->setError(
-                "Failed to connect to server $host on port $port. errno: $errno; errstr: $errstr"
+                'Failed to connect to server ' . $host . ' on port ' . $port . '. errno: ' . $errno . '; errstr: ' . $errstr
             );
 
             return false;
@@ -299,12 +299,12 @@ class POP3
      * Log in to the POP3 server.
      * Does not support APOP (RFC 2828, 4949).
      *
-     * @param string $username
-     * @param string $password
+     * @param string|null $username
+     * @param string|null $password
      *
      * @return bool
      */
-    public function login($username = '', $password = '')
+    public function login($username = null, $password = null)
     {
         if (!$this->connected) {
             $this->setError('Not connected to POP3 server');
@@ -318,11 +318,11 @@ class POP3
         }
 
         //Send the Username
-        $this->sendString("USER $username" . static::LE);
+        $this->sendString('USER ' . $username . static::LE);
         $pop3_response = $this->getResponse();
         if ($this->checkResponse($pop3_response)) {
             //Send the Password
-            $this->sendString("PASS $password" . static::LE);
+            $this->sendString('PASS '.$password . static::LE);
             $pop3_response = $this->getResponse();
             if ($this->checkResponse($pop3_response)) {
                 return true;
@@ -399,7 +399,7 @@ class POP3
 
     /**
      * Checks the POP3 server response.
-     * Looks for for +OK or -ERR.
+     * Looks for +OK or -ERR.
      *
      * @param string $string
      *
@@ -408,7 +408,7 @@ class POP3
     protected function checkResponse($string)
     {
         if (strpos($string, '+OK') !== 0) {
-            $this->setError("Server reported an error: $string");
+            $this->setError('Server reported an error: ' . $string);
 
             return false;
         }
@@ -426,11 +426,7 @@ class POP3
     {
         $this->errors[] = $error;
         if ($this->do_debug >= self::DEBUG_SERVER) {
-            echo '<pre>';
-            foreach ($this->errors as $e) {
-                print_r($e);
-            }
-            echo '</pre>';
+            echo '<pre>' . implode(PHP_EOL, $this->errors) . '</pre>';
         }
     }
 
@@ -456,7 +452,7 @@ class POP3
     {
         $this->setError(
             'Connecting to the POP3 server raised a PHP warning:' .
-            "errno: $errno errstr: $errstr; errfile: $errfile; errline: $errline"
+            'errno: ' . $errno . ' errstr: '. $errstr . '; errfile: ' . $errfile . '; errline: ' . $errline
         );
     }
 }
