@@ -983,7 +983,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024AuthType",
             "name": "AuthType",
-            "summary": "SMTP\u0020auth\u0020type.",
+            "summary": "SMTP\u0020authentication\u0020type.\u0020Options\u0020are\u0020CRAM\u002DMD5,\u0020LOGIN,\u0020PLAIN,\u0020XOAUTH2.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_AuthType"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024oauth",

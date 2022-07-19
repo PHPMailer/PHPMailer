@@ -430,7 +430,7 @@
     <span>
                         &nbsp;: string            </span>
 </dt>
-<dd>SMTP auth type.</dd>
+<dd>SMTP authentication type. Options are CRAM-MD5, LOGIN, PLAIN, XOAUTH2.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PHPMailer-PHPMailer-PHPMailer.html#property_Body">$Body</a>
@@ -2866,7 +2866,7 @@ Clients that can read HTML will view the normal Body.</p>
 
     </aside>
 
-        <p class="phpdocumentor-summary">SMTP auth type.</p>
+        <p class="phpdocumentor-summary">SMTP authentication type. Options are CRAM-MD5, LOGIN, PLAIN, XOAUTH2.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
@@ -2874,7 +2874,7 @@ Clients that can read HTML will view the normal Body.</p>
     <span class="phpdocumentor-signature__name">$AuthType</span>
      = <span class="phpdocumentor-signature__default-value">&#039;&#039;</span></code>
 
-        <section class="phpdocumentor-description"><p>Options are CRAM-MD5, LOGIN, PLAIN, XOAUTH2, attempted in that order if not specified.</p>
+        <section class="phpdocumentor-description"><p>If not specified, the first one from that list that the server supports will be selected.</p>
 </section>
 
     
