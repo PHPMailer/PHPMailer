@@ -16,7 +16,7 @@ jobs:
       - name: Build Docs
         uses: ./.github/actions/build-docs
       - name: Publish Docs to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4.3.4
+        uses: JamesIves/github-pages-deploy-action@v4.4.0
         with:
           branch: gh-pages
           folder: docs
