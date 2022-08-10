@@ -847,11 +847,11 @@ class PHPMailer
      * claims to be sendmail), don't pass params (not a perfect fix,
      * but it will do).
      *
-     * @param string      $to      To
-     * @param string      $subject Subject
-     * @param string      $body    Message Body
-     * @param string      $header  Additional Header(s)
-     * @param string|null $params  Params
+     * @param string       $to      To
+     * @param string       $subject Subject
+     * @param string       $body    Message Body
+     * @param array|string $header  Additional Header(s)
+     * @param string|null  $params  Params
      *
      * @return bool
      */
@@ -869,7 +869,7 @@ class PHPMailer
         $this->edebug("Envelope sender: {$this->Sender}");
         $this->edebug("To: {$to}");
         $this->edebug("Subject: {$subject}");
-        $this->edebug("Headers: {$header}");
+        $this->edebug("Headers: " . var_export($header, true));
         if (!$this->UseSendmailOptions || null === $params) {
             $result = @mail($to, $subject, $body, $header);
         } else {
