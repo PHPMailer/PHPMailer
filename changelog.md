@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.6.4 (August 22nd, 2022)
 * Update Greek translation
 * Add text/csv MIME type
 * Fix DKIM when sending to anonymous group via mail()
