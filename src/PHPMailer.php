@@ -1892,7 +1892,7 @@ class PHPMailer
             $toArr[] = $this->addrFormat($toaddr);
         }
         $to = trim(implode(', ', $toArr));
-        
+
         //If there are no To-addresses (e.g. when sending only to BCC-addresses)
         //the following should be added to get a correct DKIM-signature.
         //Compare with $this->preSend()
