@@ -6,6 +6,7 @@
 * Fix DKIM when sending to anonymous group via mail()
 * Improve docs around auth following gmail & MS deprecations
 * Update GitHub action deps
+* Add OpenSSF Scorecard security health metrics
 
 ## Version 6.6.3 (June 20th, 2022)
 * Add an HTML form to the OAuth setup script
