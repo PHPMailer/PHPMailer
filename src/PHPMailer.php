@@ -1891,7 +1891,14 @@ class PHPMailer
         foreach ($this->to as $toaddr) {
             $toArr[] = $this->addrFormat($toaddr);
         }
-        $to = implode(', ', $toArr);
+        $to = trim(implode(', ', $toArr));
+
+        //If there are no To-addresses (e.g. when sending only to BCC-addresses)
+        //the following should be added to get a correct DKIM-signature.
+        //Compare with $this->preSend()
+        if ($to === '') {
+            $to = 'undisclosed-recipients:;';
+        }
 
         $params = null;
         //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
