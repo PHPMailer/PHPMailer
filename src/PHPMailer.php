@@ -2101,6 +2101,9 @@ class PHPMailer
         $this->smtp->setDebugLevel($this->SMTPDebug);
         $this->smtp->setDebugOutput($this->Debugoutput);
         $this->smtp->setVerp($this->do_verp);
+        if ($this->Host === null) {
+            $this->Host = 'localhost';
+        }
         $hosts = explode(';', $this->Host);
         $lastexception = null;
 
