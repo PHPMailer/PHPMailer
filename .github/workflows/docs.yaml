@@ -3,8 +3,12 @@ on:
   push:
     branches:
       - master
+permissions: {}
 jobs:
   build_and_publish:
+    permissions:
+      contents: write # to push changes in repo (jamesives/github-pages-deploy-action)
+
     name: Build and publish Docs
     runs-on: ubuntu-latest
     if: github.repository == 'PHPMailer/PHPMailer'
