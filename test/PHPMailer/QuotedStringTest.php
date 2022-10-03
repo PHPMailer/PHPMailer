@@ -29,7 +29,7 @@ final class QuotedStringTest extends TestCase
      * @dataProvider dataQuotedString
      *
      * @param string $input     Input text string.
-     * @param string $expected  Expected funtion output.
+     * @param string $expected  Expected function output.
      */
     public function testQuotedString($input, $expected)
     {

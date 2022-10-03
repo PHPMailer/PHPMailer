@@ -30,7 +30,7 @@ final class NormalizeBreaksTest extends TestCase
      * @dataProvider dataNormalizeBreaks
      *
      * @param string $input     Input text string.
-     * @param string $expected  Expected funtion output.
+     * @param string $expected  Expected function output.
      * @param string $breaktype Optional. What kind of line break to use.
      */
     public function testNormalizeBreaks($input, $expected, $breaktype = null)
@@ -46,8 +46,8 @@ final class NormalizeBreaksTest extends TestCase
      */
     public function dataNormalizeBreaks()
     {
-        $LE           = PHPMailer::getLE();
-        $baseExpected = 'hello' . PHPMailer::CRLF . 'World' . PHPMailer::CRLF . 'Again' . PHPMailer::CRLF;
+        $LE = PHPMailer::getLE();
+        $baseExpected = 'hello'.PHPMailer::CRLF.'World'.PHPMailer::CRLF.'Again'.PHPMailer::CRLF;
 
         return [
             'Text without line breaks' => [
@@ -93,7 +93,7 @@ final class NormalizeBreaksTest extends TestCase
      */
     public function testNormalizeBreaksWithCustomLineEnding()
     {
-        $input    = "hello\rWorld\rAgain\r";
+        $input = "hello\rWorld\rAgain\r";
         $expected = "hello\n\rWorld\n\rAgain\n\r";
 
         $origLE = PHPMailer::getLE();
