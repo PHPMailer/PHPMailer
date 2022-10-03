@@ -400,7 +400,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     }
 
     /**
-     * Test unsuccesfully adding an Reply-to address when an email address containing
+     * Test unsuccessfully adding an Reply-to address when an email address containing
      * an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
      *

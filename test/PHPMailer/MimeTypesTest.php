@@ -29,7 +29,7 @@ final class MimeTypesTest extends TestCase
      * @dataProvider dataMime_Types
      *
      * @param string $input     Input text string.
-     * @param string $expected  Expected funtion output.
+     * @param string $expected  Expected function output.
      */
     public function testMime_Types($input, $expected)
     {

@@ -33,7 +33,7 @@ final class PunyencodeAddressTest extends TestCase
      *
      * @param string $input    Input text string.
      * @param string $charset  The character set.
-     * @param string $expected Expected funtion output.
+     * @param string $expected Expected function output.
      */
     public function testPunyencodeAddressConversion($input, $charset, $expected)
     {
@@ -87,7 +87,7 @@ final class PunyencodeAddressTest extends TestCase
      *
      * @param string $input    Input text string.
      * @param string $charset  The character set.
-     * @param string $expected Expected funtion output.
+     * @param string $expected Expected function output.
      */
     public function testPunyencodeAddressNoConversion($input, $charset, $expected)
     {

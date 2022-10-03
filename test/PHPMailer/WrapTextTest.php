@@ -29,7 +29,7 @@ final class WrapTextTest extends TestCase
      * @dataProvider dataWrapText
      *
      * @param string $message  Input text string.
-     * @param string $expected Expected funtion output.
+     * @param string $expected Expected function output.
      * @param bool   $qp_mode  Optional. Whether to run in Quoted-Printable mode. Defaults to `false`.
      * @param int    $length   Optional. Length to wrap at. Defaults to `50`.
      */

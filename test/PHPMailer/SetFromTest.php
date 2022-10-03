@@ -25,11 +25,11 @@ use PHPMailer\Test\TestCase;
 final class SetFromTest extends TestCase
 {
     /**
-     * Test succesfully setting the From, FromName and Sender properties.
+     * Test successfully setting the From, FromName and Sender properties.
      *
      * @dataProvider dataSetFromSuccess
      *
-     * @param string $expected Expected funtion output.
+     * @param string $expected Expected function output.
      * @param string $address  Email address input to pass to the function.
      * @param string $name     Optional. Name input to pass to the function.
      */
@@ -126,7 +126,7 @@ final class SetFromTest extends TestCase
     }
 
     /**
-     * Test unsuccesfully setting the From, FromName and Sender properties.
+     * Test unsuccessfully setting the From, FromName and Sender properties.
      *
      * @dataProvider dataSetFromFail
      *
@@ -187,7 +187,7 @@ final class SetFromTest extends TestCase
     }
 
     /**
-     * Test unsuccesfully setting the From, FromName and Sender properties when an email address
+     * Test unsuccessfully setting the From, FromName and Sender properties when an email address
      * containing an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
      */
