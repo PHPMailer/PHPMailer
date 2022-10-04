@@ -840,6 +840,20 @@ EOT;
     }
 
     /**
+     * Expect errors on trying to attach a folder as an attachment
+     */
+    public function testAddFolderAsAttachment()
+    {
+        $mail = new PHPMailer();
+        self::assertFalse($mail->addAttachment(__DIR__, 'test.txt'));
+
+        $this->expectException(Exception::class);
+        $mail = new PHPMailer(true);
+        $mail->addAttachment(__DIR__, 'test.txt');
+    }
+
+
+    /**
      * Expect exceptions on sending after deleting a previously successfully attached file
      */
     public function testDeletedAttachmentException()
