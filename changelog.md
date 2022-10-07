@@ -1,5 +1,14 @@
 # PHPMailer Change Log
 
+## Version 6.6.5 (October 7th, 2022)
+* Don't try to issue RSET if there has been a connection error
+* Reject attempts to add folders as attachments
+* Don't suppress earlier error messages on close()
+* Handle Host === null better
+* Update Danish and Polish translations
+* Change recommendation for Microsoft OAuth package to thenetworg/oauth2-azure
+* Bump some GitHub action versions
+
 ## Version 6.6.4 (August 22nd, 2022)
 * Update Greek translation
 * Add text/csv MIME type
