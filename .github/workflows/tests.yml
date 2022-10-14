@@ -105,20 +105,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Set coverage variable
-        id: set_cov
-        run: |
-          if [ ${{ matrix.coverage }} == "true" ]; then
-            echo '::set-output name=COV::xdebug'
-          else
-            echo '::set-output name=COV::none'
-          fi
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: ${{ steps.set_cov.outputs.COV }}
+          coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, error_reporting=E_ALL, display_errors=On
           extensions: imap, mbstring, intl, ctype, filter, hash
 
