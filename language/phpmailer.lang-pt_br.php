@@ -8,6 +8,7 @@
  * @author Phelipe Alves <phelipealvesdesouza@gmail.com>
  * @author Fabio Beneditto <fabiobeneditto@gmail.com>
  * @author Geidson Benício Coelho <geidsonc@gmail.com>
+ * @author Vitor Pereira <vop1234@hotmail.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Erro de SMTP: Não foi possível autenticar.';
@@ -24,9 +25,9 @@ $PHPMAILER_LANG['from_failed']          = 'Os seguintes remetentes falharam: ';
 $PHPMAILER_LANG['instantiate']          = 'Não foi possível instanciar a função mail.';
 $PHPMAILER_LANG['invalid_address']      = 'Endereço de e-mail inválido: ';
 $PHPMAILER_LANG['invalid_header']       = 'Nome ou valor de cabeçalho inválido';
-$PHPMAILER_LANG['invalid_hostentry']    = 'hostentry inválido: ';
-$PHPMAILER_LANG['invalid_host']         = 'host inválido: ';
-$PHPMAILER_LANG['mailer_not_supported'] = ' mailer não é suportado.';
+$PHPMAILER_LANG['invalid_hostentry']    = 'Hospedagem inválida: ';
+$PHPMAILER_LANG['invalid_host']         = 'Host inválido: ';
+$PHPMAILER_LANG['mailer_not_supported'] = 'O remetente não é suportado.';
 $PHPMAILER_LANG['provide_address']      = 'Você deve informar pelo menos um destinatário.';
 $PHPMAILER_LANG['recipients_failed']    = 'Erro de SMTP: Os seguintes destinatários falharam: ';
 $PHPMAILER_LANG['signing']              = 'Erro de Assinatura: ';
