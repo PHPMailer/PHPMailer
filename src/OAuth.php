@@ -82,7 +82,7 @@ class OAuth implements OAuthTokenProvider
      * OAuth constructor.
      *
      * @param array $options Associative array containing
-     *                       `provider`, `userName`, `clientSecret`, `clientId` and `refreshToken` elements
+     * (`provider`, `userName`, `clientSecret`, `clientId`, `refreshToken`)
      */
     public function __construct($options)
     {
