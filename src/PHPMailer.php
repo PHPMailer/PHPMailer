@@ -1294,9 +1294,7 @@ class PHPMailer
         $pos = strrpos($address, '@');
         if (
             (false === $pos)
-            || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
-                && !static::validateAddress($address))
-        ) {
+            || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported()) && !static::validateAddress($address))) {
             $error_message = sprintf(
                 '%s (From): %s',
                 $this->lang('invalid_address'),
@@ -3451,7 +3449,7 @@ class PHPMailer
                 }
                 $matchcount = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
                 break;
-                /* @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
                 $matchcount = preg_match_all('/[()"]/', $str, $matches);
                 //fallthrough
