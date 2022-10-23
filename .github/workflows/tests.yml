@@ -32,10 +32,11 @@ jobs:
         uses: "ramsey/composer-install@v2"
 
       - name: Check coding standards
-        continue-on-error: true
+        id: phpcs
         run: ./vendor/bin/phpcs -s --report-full --report-checkstyle=./phpcs-report.xml
 
       - name: Show PHPCS results in PR
+        if: ${{ always() && steps.phpcs.outcome == 'failure' }}
         run: cs2pr ./phpcs-report.xml
 
   lint:
