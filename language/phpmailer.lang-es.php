@@ -25,3 +25,6 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() falló.';
 $PHPMAILER_LANG['smtp_error']           = 'Error del servidor SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'No se pudo configurar la variable: ';
 $PHPMAILER_LANG['extension_missing']    = 'Extensión faltante: ';
+$PHPMAILER_LANG['smtp_code']            = 'Código del servidor SMTP: ';
+$PHPMAILER_LANG['smtp_code_ex']         = 'Información adicional del servidor SMTP: ';
+$PHPMAILER_LANG['invalid_header']       = 'Nombre o valor de encabezado no válido';
