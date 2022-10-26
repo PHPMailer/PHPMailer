@@ -10,6 +10,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 require '../vendor/autoload.php';
 
+//Apply some basic validation and filtering to the 'to' message receiver
+//
 if (array_key_exists('to', $_POST)) {
     $err = false;
     $msg = '';
@@ -22,7 +24,7 @@ if (array_key_exists('to', $_POST)) {
     }
     //Apply some basic validation and filtering to the query
     if (array_key_exists('query', $_POST)) {
-        //Limit length and strip HTML tags
+        //Limit length and strip HTML tags 16384 character
         $query = substr(strip_tags($_POST['query']), 0, 16384);
     } else {
         $query = '';
