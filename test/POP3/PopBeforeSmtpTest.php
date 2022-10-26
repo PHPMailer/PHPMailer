@@ -42,7 +42,7 @@ final class PopBeforeSmtpTest extends TestCase
              * Set up default include path.
              * Default to the dir above the test dir, i.e. the project home dir.
              */
-            define('PHPMAILER_INCLUDE_DIR', dirname(__DIR__));
+            define('PHPMAILER_INCLUDE_DIR', dirname(dirname(__DIR__)));
         }
     }
 
@@ -54,6 +54,10 @@ final class PopBeforeSmtpTest extends TestCase
         if (DIRECTORY_SEPARATOR === '\\') {
             $this->markTestSkipped('This test needs a non-Windows OS to run');
         }
+
+        // Chdir to test directory as runfakepopserver.sh runs fakepopserver.sh
+        // from its working directory.
+        chdir(PHPMAILER_INCLUDE_DIR . "/test");
     }
 
     /**

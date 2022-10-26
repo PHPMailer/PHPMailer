@@ -123,4 +123,4 @@ while [ ${BREAK} -eq 0 ] ; do
   fi
 done
 
-echo "+OK Bye!\r\n"
+echo -en "+OK Bye!\r\n"
