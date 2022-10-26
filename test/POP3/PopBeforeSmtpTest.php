@@ -120,4 +120,16 @@ final class PopBeforeSmtpTest extends TestCase
         @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
+
+    /**
+     * Test case when POP3 server is unreachable.
+     */
+    public function testPopBeforeSmtpUnreachable()
+    {
+        // There is no POP3 server at all. Port is different again.
+        self::assertFalse(
+            POP3::popBeforeSmtp('localhost', 1102, 10, 'user', 'xxx'),
+            'POP before SMTP should have failed'
+        );
+    }
 }

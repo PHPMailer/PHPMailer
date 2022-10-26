@@ -337,6 +337,11 @@ class POP3
      */
     public function disconnect()
     {
+        // If could not connect at all, no need to disconnect
+        if ($this->pop_conn === false) {
+            return;
+        }
+
         $this->sendString('QUIT' . static::LE);
 
         // RFC 1939 shows POP3 server sending a +OK response to the QUIT command.
