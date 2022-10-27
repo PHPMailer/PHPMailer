@@ -42,7 +42,7 @@ final class PopBeforeSmtpTest extends TestCase
              * Set up default include path.
              * Default to the dir above the test dir, i.e. the project home dir.
              */
-            define('PHPMAILER_INCLUDE_DIR', dirname(__DIR__));
+            define('PHPMAILER_INCLUDE_DIR', dirname(dirname(__DIR__)));
         }
     }
 
@@ -54,6 +54,10 @@ final class PopBeforeSmtpTest extends TestCase
         if (DIRECTORY_SEPARATOR === '\\') {
             $this->markTestSkipped('This test needs a non-Windows OS to run');
         }
+
+        // Chdir to test directory as runfakepopserver.sh runs fakepopserver.sh
+        // from its working directory.
+        chdir(PHPMAILER_INCLUDE_DIR . "/test");
     }
 
     /**
@@ -119,5 +123,17 @@ final class PopBeforeSmtpTest extends TestCase
         // Kill the fake server, don't care if it fails.
         @shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
+    }
+
+    /**
+     * Test case when POP3 server is unreachable.
+     */
+    public function testPopBeforeSmtpUnreachable()
+    {
+        // There is no POP3 server at all. Port is different again.
+        self::assertFalse(
+            POP3::popBeforeSmtp('localhost', 1102, 10, 'user', 'xxx'),
+            'POP before SMTP should have failed'
+        );
     }
 }
