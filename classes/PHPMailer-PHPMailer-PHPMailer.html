@@ -998,7 +998,7 @@ even if `SMTPSecure` is not set to &#039;tls&#039;.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PHPMailer-PHPMailer-PHPMailer.html#method_addCustomHeader">addCustomHeader()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>Add a custom header.</dd>
 
@@ -6424,7 +6424,7 @@ This array is used only for addresses with IDN.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4381</span>
+    <span class="phpdocumentor-element-found-in__line">4382</span>
 
     </aside>
 
@@ -6781,7 +6781,7 @@ If you need to do that, fetch the resource yourself and pass it in via a local f
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4191</span>
+    <span class="phpdocumentor-element-found-in__line">4192</span>
 
     </aside>
 
@@ -6789,7 +6789,7 @@ If you need to do that, fetch the resource yourself and pass it in via a local f
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">addCustomHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">addCustomHeader</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string|null&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"><p>$name value can be overloaded to contain
 both header name and value (name:value).</p>
@@ -6834,9 +6834,11 @@ both header name and value (name:value).</p>
                                             </dl>
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">bool</span>
             &mdash;
-        
+            <section class="phpdocumentor-description"><p>True if a header was set successfully</p>
+</section>
+
     
 </article>
                     <article
@@ -7925,7 +7927,7 @@ without breaking lines within a character.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4826</span>
+    <span class="phpdocumentor-element-found-in__line">4827</span>
 
     </aside>
 
@@ -8002,7 +8004,7 @@ without breaking lines within a character.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4803</span>
+    <span class="phpdocumentor-element-found-in__line">4804</span>
 
     </aside>
 
@@ -8064,7 +8066,7 @@ Canonicalized bodies should <em>always</em> use CRLF, regardless of mailer setti
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4759</span>
+    <span class="phpdocumentor-element-found-in__line">4760</span>
 
     </aside>
 
@@ -8126,7 +8128,7 @@ Canonicalized headers should <em>always</em> use CRLF, regardless of mailer sett
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4692</span>
+    <span class="phpdocumentor-element-found-in__line">4693</span>
 
     </aside>
 
@@ -8175,7 +8177,7 @@ Canonicalized headers should <em>always</em> use CRLF, regardless of mailer sett
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4717</span>
+    <span class="phpdocumentor-element-found-in__line">4718</span>
 
     </aside>
 
@@ -8488,7 +8490,7 @@ See RFC822 definitions for phrase, comment and text positions.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4514</span>
+    <span class="phpdocumentor-element-found-in__line">4515</span>
 
     </aside>
 
@@ -8541,7 +8543,7 @@ See RFC822 definitions for phrase, comment and text positions.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5047</span>
+    <span class="phpdocumentor-element-found-in__line">5048</span>
 
     </aside>
 
@@ -8621,7 +8623,7 @@ See RFC822 definitions for phrase, comment and text positions.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5025</span>
+    <span class="phpdocumentor-element-found-in__line">5026</span>
 
     </aside>
 
@@ -8662,7 +8664,7 @@ See RFC822 definitions for phrase, comment and text positions.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5014</span>
+    <span class="phpdocumentor-element-found-in__line">5015</span>
 
     </aside>
 
@@ -8703,7 +8705,7 @@ See RFC822 definitions for phrase, comment and text positions.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4217</span>
+    <span class="phpdocumentor-element-found-in__line">4218</span>
 
     </aside>
 
@@ -8785,7 +8787,7 @@ pathological cases.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4654</span>
+    <span class="phpdocumentor-element-found-in__line">4655</span>
 
     </aside>
 
@@ -8863,7 +8865,7 @@ pathological cases.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5076</span>
+    <span class="phpdocumentor-element-found-in__line">5077</span>
 
     </aside>
 
@@ -8902,7 +8904,7 @@ pathological cases.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5036</span>
+    <span class="phpdocumentor-element-found-in__line">5037</span>
 
     </aside>
 
@@ -9035,7 +9037,7 @@ or set one with setSMTPInstance.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5003</span>
+    <span class="phpdocumentor-element-found-in__line">5004</span>
 
     </aside>
 
@@ -9164,7 +9166,7 @@ or set one with setSMTPInstance.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4970</span>
+    <span class="phpdocumentor-element-found-in__line">4971</span>
 
     </aside>
 
@@ -9321,7 +9323,7 @@ allowed by RFC 2822 section 2.1.1.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4361</span>
+    <span class="phpdocumentor-element-found-in__line">4362</span>
 
     </aside>
 
@@ -9778,7 +9780,7 @@ or provide your own callable for custom conversion.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4538</span>
+    <span class="phpdocumentor-element-found-in__line">4539</span>
 
     </aside>
 
@@ -9849,7 +9851,7 @@ or a string name to return only the specified piece</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4243</span>
+    <span class="phpdocumentor-element-found-in__line">4244</span>
 
     </aside>
 
@@ -9946,7 +9948,7 @@ or your own custom converter</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4622</span>
+    <span class="phpdocumentor-element-found-in__line">4623</span>
 
     </aside>
 
@@ -10253,7 +10255,7 @@ or fails for any reason (e.g. domain contains characters not allowed in an IDN).
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4985</span>
+    <span class="phpdocumentor-element-found-in__line">4986</span>
 
     </aside>
 
@@ -10352,7 +10354,7 @@ and escape any double quotes with a backslash.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4607</span>
+    <span class="phpdocumentor-element-found-in__line">4608</span>
 
     </aside>
 
@@ -10452,7 +10454,7 @@ and escape any double quotes with a backslash.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4588</span>
+    <span class="phpdocumentor-element-found-in__line">4589</span>
 
     </aside>
 
@@ -10659,7 +10661,7 @@ Do not set this from user input!</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5084</span>
+    <span class="phpdocumentor-element-found-in__line">5085</span>
 
     </aside>
 
@@ -10802,7 +10804,7 @@ This is called automatically by createBody(), so you don't need to call it yours
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4677</span>
+    <span class="phpdocumentor-element-found-in__line">4678</span>
 
     </aside>
 
@@ -10984,7 +10986,7 @@ This is called automatically by createBody(), so you don't need to call it yours
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4644</span>
+    <span class="phpdocumentor-element-found-in__line">4645</span>
 
     </aside>
 
@@ -11579,7 +11581,7 @@ be modified after calling this function), addition of such addresses is delayed 
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">5064</span>
+    <span class="phpdocumentor-element-found-in__line">5065</span>
 
     </aside>
 
@@ -12423,7 +12425,7 @@ such as addAttachment.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/PHPMailer.php"><a href="files/src-phpmailer.html"><abbr title="src/PHPMailer.php">PHPMailer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">4664</span>
+    <span class="phpdocumentor-element-found-in__line">4665</span>
 
     </aside>
 
