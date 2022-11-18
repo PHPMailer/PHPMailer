@@ -43,7 +43,7 @@
         "php-parallel-lint/php-parallel-lint": "^1.3.2",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "^3.6.2",
+        "squizlabs/php_codesniffer": "^3.7.1",
         "yoast/phpunit-polyfills": "^1.0.0"
     },
     "suggest": {
