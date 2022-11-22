@@ -544,6 +544,26 @@ th.phpdocumentor-heading:last-child,
 td.phpdocumentor-cell:last-child {
     padding-right: 0;
 }
+.phpdocumentor-label-line {
+    display: flex; flex-direction: row; gap: 1rem
+}
+
+.phpdocumentor-label {
+    background: #f6f6f6;
+    border-radius: .25rem;
+    font-size: 80%;
+    display: inline-block;
+    overflow: hidden
+}
+
+.phpdocumentor-label span {
+    display: inline-block;
+    padding: .125rem .5rem;
+}
+
+.phpdocumentor-label--success span:last-of-type {
+    background: #abe1ab;
+}
 
 .phpdocumentor-header {
     display: flex;
