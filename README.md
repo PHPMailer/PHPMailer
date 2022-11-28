@@ -67,13 +67,15 @@ can [download PHPMailer as a zip file](https://github.com/PHPMailer/PHPMailer/ar
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require 'path/to/PHPMailer/src/Exception.php';
 require 'path/to/PHPMailer/src/PHPMailer.php';
 require 'path/to/PHPMailer/src/SMTP.php';
 ```
 
-If you're not using the `SMTP` class explicitly (you're probably not), you don't need a `use` line for the SMTP class. Even if you're not using exceptions, you do still need to load the `Exception` class as it is used internally.
+* If you're not using the `SMTP` class explicitly (you're probably not), you don't need a `use`/`require` line for the SMTP class.
+* Even if you're not using exceptions, you do still need to load the `Exception` class as it is used internally.
 
 ## Legacy versions
 PHPMailer 5.2 (which is compatible with PHP 5.0 — 7.0) is no longer supported, even for security updates. You will find the latest version of 5.2 in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable). If you're using PHP 5.5 or later (which you should be), switch to the 6.x releases.
@@ -94,12 +96,19 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//Load Composer's autoloader
-require 'vendor/autoload.php';
+$use_loader = true;
 
+if ($use_loader)
+//Load Composer's autoloader
+  require 'vendor/autoload.php';
+else {
+// If using PHPMailer directly:
+  require 'path/to/PHPMailer/src/Exception.php';
+  require 'path/to/PHPMailer/src/PHPMailer.php';
+  require 'path/to/PHPMailer/src/SMTP.php';
+}
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
-
 try {
     //Server settings
     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
@@ -110,7 +119,6 @@ try {
     $mail->Password   = 'secret';                               //SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
     //Recipients
     $mail->setFrom('from@example.com', 'Mailer');
     $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
@@ -118,17 +126,14 @@ try {
     $mail->addReplyTo('info@example.com', 'Information');
     $mail->addCC('cc@example.com');
     $mail->addBCC('bcc@example.com');
-
     //Attachments
     $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
     $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
     $mail->Subject = 'Here is the subject';
     $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
     $mail->send();
     echo 'Message has been sent';
 } catch (Exception $e) {
