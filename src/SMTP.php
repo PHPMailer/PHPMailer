@@ -432,7 +432,7 @@ class SMTP
         if (strpos(PHP_OS, 'WIN') !== 0) {
             $max = (int)ini_get('max_execution_time');
             //Don't bother if unlimited, or if set_time_limit is disabled
-            if (0 !== $max && $timeout > $max && strpos(ini_get('disable_functions'), 'set_time_limit') === false) {
+            if (0 !== $max && $timeout > $max && function_exists( 'set_time_limit' ) ) {
                 @set_time_limit($timeout);
             }
             stream_set_timeout($connection, $timeout, 0);
