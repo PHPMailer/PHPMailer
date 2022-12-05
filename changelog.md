@@ -1,6 +1,16 @@
 # PHPMailer Change Log
 
+## WIP
+* Break out boundary definitions into a method (note that boundary format has also changed slightly)
+* Remove MIME preamble to match popular client behaviour, may help with DKIM too
+* Fix handling of trailing whitespace in simple DKIM canonicalisation
+* Fix some possible POP3 auth issues, including a TCP hang (thanks to @czirkoszoltan)
+* Add Azure XOAUTH2 example and docs (thanks to @greew)
+* Preserve errors during disconnect
+* Avoid some PHP 8.1 type issues
+
 ## Version 6.6.5 (October 7th, 2022)
+
 * Don't try to issue RSET if there has been a connection error
 * Reject attempts to add folders as attachments
 * Don't suppress earlier error messages on close()
@@ -92,7 +102,7 @@ Many thanks to @jrfnl for all her work.
 
 ## Version 6.3.0 (February 19th, 2021)
 * Handle early connection errors such as 421 during connection and EHLO states
-* Switch to Github Actions for CI
+* Switch to GitHub Actions for CI
 * Generate debug output for `mail()`, sendmail, and qmail transports. Enable using the same mechanism as for SMTP: set `SMTPDebug` > 0
 * Make the `mail()` and sendmail transports set the envelope sender the same way as SMTP does, i.e. use whatever `From` is set to, only falling back to the `sendmail_from` php.ini setting if `From` is unset. This avoids errors from the `mail()` function if `Sender` is not set explicitly and php.ini is not configured. This is a minor functionality change, so bumps the minor version number.
 * Extend `parseAddresses` to decode encoded names, improve tests
@@ -246,7 +256,7 @@ Many thanks to @jrfnl for all her work.
 * Update license doc
 * Updated upgrading docs
 * Clarify `addStringEmbeddedImage` docs
-* Hide auth credentials in all but lowest level debug output, prevents leakage in bug reports
+* Hide auth credentials in all but lowest-level debug output, prevents leakage in bug reports
 * Code style cleanup
 
 ## Version 6.0.1 (September 14th 2017)
@@ -305,7 +315,7 @@ This is a major update that breaks backwards compatibility.
 * Better handling of automatic transfer encoding switch in the presence of long lines
 * Simplification of address validation - now uses PHP's `FILTER_VALIDATE_EMAIL` pattern by default, retains advanced options
 * `Debugoutput` can accept a PSR-3 logger instance
-* To reduce code footprint, the examples folder is no longer included in composer deployments or github zip files
+* To reduce code footprint, the examples folder is no longer included in composer deployments or GitHub zip files
 * Trap low-level errors in SMTP, reports via debug output
 * More reliable folding of message headers
 * Inject your own SMTP implementation via `setSMTPInstance()` instead of having to subclass and override `getSMTPInstance()`.
@@ -319,7 +329,7 @@ This is a major update that breaks backwards compatibility.
 * This is the last official release in the legacy PHPMailer 5.2 series; there may be future security patches (which will be found in the [5.2-stable branch](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable)), but no further non-security PRs or issues will be accepted. Migrate to PHPMailer 6.0.
 
 ## Version 5.2.24 (July 26th 2017)
-* **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it it not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
+* **SECURITY** Fix XSS vulnerability in one of the code examples, [CVE-2017-11503](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-11503). The `code_generator.phps` example did not filter user input prior to output. This file is distributed with a `.phps` extension, so it is not normally executable unless it is explicitly renamed, so it is safe by default. There was also an undisclosed potential XSS vulnerability in the default exception handler (unused by default). Patches for both issues kindly provided by Patrick Monnerat of the Fedora Project.
 * Handle bare codes (an RFC contravention) in SMTP server responses
 * Make message timestamps more dynamic - calculate the date separately for each message
 * More thorough checks for reading attachments.
@@ -748,10 +758,10 @@ All new documentation
 * We have removed the /phpdoc from the downloads. All documentation is now on
   the http://phpmailer.codeworxtech.com website.
 
-## Version 2.2.1 () July 19 2008
+## Version 2.2.1 (July 19, 2008)
 * fixed line 1092 in class.smtp.php (my apologies, error on my part)
 
-## Version 2.2 () July 15 2008
+## Version 2.2 (July 15, 2008)
 * Fixed redirect issue (display of UTF-8 in thank you redirect)
 * fixed error in getResponse function declaration (class.pop3.php)
 * PHPMailer now PHP6 compliant
