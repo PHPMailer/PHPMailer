@@ -1,8 +1,9 @@
 
+
 :root {
     /* Typography */
-    --font-primary: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-    --font-secondary: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    --font-primary: 'Open Sans', Helvetica, Arial, sans-serif;
+    --font-secondary: 'Open Sans', Helvetica, Arial, sans-serif;
     --font-monospace: 'Source Code Pro', monospace;
     --line-height--primary: 1.6;
     --letter-spacing--primary: .05rem;
@@ -20,15 +21,34 @@
     --text-xxxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
     --text-xxxxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
 
+    --color-hue-red:     4;
+    --color-hue-pink:     340;
+    --color-hue-purple:     291;
+    --color-hue-deep-purple:     262;
+    --color-hue-indigo:     231;
+    --color-hue-blue:     207;
+    --color-hue-light-blue:     199;
+    --color-hue-cyan:     187;
+    --color-hue-teal:     174;
+    --color-hue-green:     122;
+    --color-hue-phpdocumentor-green:     96;
+    --color-hue-light-green:     88;
+    --color-hue-lime:     66;
+    --color-hue-yellow:     54;
+    --color-hue-amber:     45;
+    --color-hue-orange:     36;
+    --color-hue-deep-orange:     14;
+    --color-hue-brown:     16;
+
     /* Colors */
-    --primary-color-hue: 96;
+    --primary-color-hue: var(--color-hue-phpdocumentor-green, --color-hue-phpdocumentor-green);
     --primary-color-saturation: 57%;
     --primary-color: hsl(var(--primary-color-hue), var(--primary-color-saturation), 60%);
     --primary-color-darken: hsl(var(--primary-color-hue), var(--primary-color-saturation), 40%);
-    --primary-color-darker: hsl(var(--primary-color-hue), var(--primary-color-saturation), 20%);
+    --primary-color-darker: hsl(var(--primary-color-hue), var(--primary-color-saturation), 25%);
     --primary-color-darkest: hsl(var(--primary-color-hue), var(--primary-color-saturation), 10%);
-    --primary-color-lighten: hsl(var(--primary-color-hue), var(--primary-color-saturation), 80%);
-    --primary-color-lighter: hsl(var(--primary-color-hue), var(--primary-color-saturation), 99%);
+    --primary-color-lighten: hsl(var(--primary-color-hue), calc(var(--primary-color-saturation) - 20%), 85%);
+    --primary-color-lighter: hsl(var(--primary-color-hue), calc(var(--primary-color-saturation) - 45%), 97.5%);
     --dark-gray: #d1d1d1;
     --light-gray: #f0f0f0;
 
@@ -44,8 +64,8 @@
     --button-text-color: #555;
     --button-text-color-primary: white;
     --popover-background-color: rgba(255, 255, 255, 0.75);
-    --link-color-primary: var(--primary-color-darken);
-    --link-hover-color-primary: var(--primary-color-darker);
+    --link-color-primary: var(--primary-color-darker);
+    --link-hover-color-primary: var(--primary-color-darkest);
     --form-field-border-color: var(--dark-gray);
     --form-field-color: #fff;
     --admonition-success-color: var(--primary-color);
@@ -147,21 +167,32 @@ body {
 .phpdocumentor h5 .headerlink,
 .phpdocumentor h6 .headerlink
 {
-    transition: all .3s ease-in-out;
-    opacity: 0;
-    text-decoration: none;
-    color: silver;
-    font-size: 80%;
+    display: none;
 }
 
-.phpdocumentor h1:hover .headerlink,
-.phpdocumentor h2:hover .headerlink,
-.phpdocumentor h3:hover .headerlink,
-.phpdocumentor h4:hover .headerlink,
-.phpdocumentor h5:hover .headerlink,
-.phpdocumentor h6:hover .headerlink
-{
-    opacity: 1;
+@media (min-width: 550px) {
+    .phpdocumentor h1 .headerlink,
+    .phpdocumentor h2 .headerlink,
+    .phpdocumentor h3 .headerlink,
+    .phpdocumentor h4 .headerlink,
+    .phpdocumentor h5 .headerlink,
+    .phpdocumentor h6 .headerlink {
+        display: inline;
+        transition: all .3s ease-in-out;
+        opacity: 0;
+        text-decoration: none;
+        color: silver;
+        font-size: 80%;
+    }
+
+    .phpdocumentor h1:hover .headerlink,
+    .phpdocumentor h2:hover .headerlink,
+    .phpdocumentor h3:hover .headerlink,
+    .phpdocumentor h4:hover .headerlink,
+    .phpdocumentor h5:hover .headerlink,
+    .phpdocumentor h6:hover .headerlink {
+        opacity: 1;
+    }
 }
 .phpdocumentor p {
     margin-top: 0;
@@ -191,9 +222,15 @@ body {
     box-sizing: border-box;
     margin: 0 auto;
     max-width: var(--container-width);
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-sm);
     position: relative;
     width: 100%;
+}
+
+@media (min-width: 550px) {
+    .phpdocumentor-section {
+        padding: 0 var(--spacing-lg);
+    }
 }
 
 @media (min-width: 1200px) {
@@ -426,7 +463,7 @@ textarea {
     outline: 0;
 }
 
-.phpdocumentor-label {
+label.phpdocumentor-label {
     display: block;
     margin-bottom: var(--spacing-xs);
 }
@@ -458,8 +495,15 @@ div.phpdocumentor-list > ul,
 ol.phpdocumentor-list,
 ul.phpdocumentor-list {
     margin-top: 0;
-    padding-left: 1rem;
-    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.phpdocumentor-column ul.-clean,
+div.phpdocumentor-list > ul.-clean,
+ul.phpdocumentor-list.-clean {
+    list-style: none;
+    padding-left: 0;
 }
 
 dl {
@@ -473,7 +517,7 @@ ul.phpdocumentor-list ol.phpdocumentor-list,
 ol.phpdocumentor-list ol.phpdocumentor-list,
 ol.phpdocumentor-list ul.phpdocumentor-list {
     font-size: var(--text-sm);
-    margin: var(--spacing-xs) 0 var(--spacing-xs) calc(var(--spacing-xs) * 2);
+    margin: 0 0 0 calc(var(--spacing-xs) * 2);
 }
 
 .phpdocumentor-column ul li,
@@ -545,7 +589,9 @@ td.phpdocumentor-cell:last-child {
     padding-right: 0;
 }
 .phpdocumentor-label-line {
-    display: flex; flex-direction: row; gap: 1rem
+    display: flex;
+    flex-direction: row;
+    gap: 1rem
 }
 
 .phpdocumentor-label {
@@ -554,6 +600,14 @@ td.phpdocumentor-cell:last-child {
     font-size: 80%;
     display: inline-block;
     overflow: hidden
+}
+
+/*
+It would be better if the phpdocumentor-element class were to become a flex element with a gap, but for #3337 that
+is too big a fix and needs to be done in a new design iteration.
+*/
+.phpdocumentor-signature + .phpdocumentor-label-line .phpdocumentor-label {
+    margin-top: var(--spacing-sm);
 }
 
 .phpdocumentor-label span {
@@ -648,7 +702,7 @@ td.phpdocumentor-cell:last-child {
 
 @media (min-width: 1000px) {
     .phpdocumentor-title {
-        width: 30.6666666667%;
+        width: 22%;
         border-right: var(--sidebar-border-color) solid 1px;
     }
 
@@ -783,6 +837,7 @@ td.phpdocumentor-cell:last-child {
 
 .phpdocumentor .phpdocumentor-sidebar__category-header {
     font-size: var(--text-md);
+    margin-top: 0;
     margin-bottom: var(--spacing-xs);
     color: var(--link-color-primary);
     font-weight: 600;
@@ -953,10 +1008,6 @@ td.phpdocumentor-cell:last-child {
         margin: 0 0 0 auto;
     }
 }
-.phpdocumentor-content {
-    position: relative;
-}
-
 .phpdocumentor-search-results {
     backdrop-filter: blur(5px);
     background: var(--popover-background-color);
@@ -1110,6 +1161,61 @@ td.phpdocumentor-cell:last-child {
     border: 0px;
     font-weight: bold;
     cursor: pointer;
+}
+.phpdocumentor-on-this-page__sidebar {
+    display: none;
+}
+
+.phpdocumentor-on-this-page__title {
+    display: block;
+    font-weight: bold;
+    margin-bottom: var(--spacing-sm);
+    color: var(--link-color-primary);
+}
+
+@media (min-width: 1000px) {
+    .phpdocumentor-on-this-page__sidebar {
+        display: block;
+        position: relative;
+    }
+
+    .phpdocumentor-on-this-page__content::-webkit-scrollbar,
+    [scrollbars]::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    .phpdocumentor-on-this-page__content::-webkit-scrollbar-corner,
+    [scrollbars]::-webkit-scrollbar-corner {
+        background: 0;
+    }
+
+    .phpdocumentor-on-this-page__content::-webkit-scrollbar-thumb,
+    [scrollbars]::-webkit-scrollbar-thumb {
+        background: rgba(128,134,139,0.26);
+        border-radius: 8px;
+    }
+
+    .phpdocumentor-on-this-page__content {
+        position: sticky;
+        height: calc(100vh - var(--header-height));
+        overflow-y: auto;
+        border-left: 1px solid var(--sidebar-border-color);
+        padding-left: var(--spacing-lg);
+        font-size: 90%;
+        top: -1px; /* Needed for the javascript to make the .-stuck trick work */
+        flex: 0 1 auto;
+        width: 15vw;
+    }
+
+    .phpdocumentor-on-this-page__content.-stuck {
+        height: 100vh;
+    }
+
+    .phpdocumentor-on-this-page__content li {
+        word-break: break-all;
+        line-height: normal;
+    }
 }
 
 /* Used for screen readers and such */

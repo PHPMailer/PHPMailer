@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
@@ -52,7 +53,7 @@
 <label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
     Menu
 </label>
-<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
                                     <h4 class="phpdocumentor-sidebar__root-namespace">
@@ -87,8 +88,9 @@
     </section>
 </aside>
 
-            <div class="phpdocumentor-column -eight phpdocumentor-content">
-                    <ul class="phpdocumentor-breadcrumbs">
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/phpmailer.html">PHPMailer</a></li>
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/phpmailer-phpmailer.html">PHPMailer</a></li>
     </ul>
@@ -169,14 +171,21 @@
 
 
 
-
-
-
 <h3 id="toc">
     Table of Contents
-    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/PHPMailer-PHPMailer-SMTP.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 </h3>
 
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+</h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a>
@@ -250,7 +259,15 @@
 </dt>
 <dd>The PHPMailer SMTP version number.</dd>
 
-                    <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    </dl>
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput</a>
     <span>
                         &nbsp;: string|callable|<abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
@@ -335,7 +352,14 @@ if one was detected.</dd>
 </dt>
 <dd>Patterns to extract an SMTP transaction id from reply to a DATA command.</dd>
 
-                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a>
     <span>
                                 &nbsp;: bool    </span>
@@ -610,7 +634,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 </dt>
 <dd>Set error messages and codes.</dd>
 
-        </dl>
+    </dl>
+
 
 
 
@@ -1445,6 +1470,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">authenticate</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$username</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$password</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$authtype</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PHPMailer-PHPMailer-OAuthTokenProvider.html"><abbr title="\PHPMailer\PHPMailer\OAuthTokenProvider">OAuthTokenProvider</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$OAuth</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Must be run after hello().</p>
 </section>
 
@@ -1504,13 +1531,15 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
                                     </dd>
                                             </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if successfully authenticated</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if successfully authenticated</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1535,6 +1564,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">client_send</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$command</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1560,13 +1591,15 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">int|bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>The number of bytes sent to the server or false on error</p>
+        <span class="phpdocumentor-signature__response_type">int|bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The number of bytes sent to the server or false on error</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1591,6 +1624,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">close</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Don't use this function without first trying to use QUIT.</p>
 </section>
 
@@ -1611,10 +1646,6 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
                                     </dd>
                                             </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -1640,6 +1671,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">connect</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">30</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1683,11 +1716,11 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1712,17 +1745,21 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">connected</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True if connected</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if connected</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1747,6 +1784,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">data</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$msg_data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Issues a data command and sends the msg_data to the server,
 finalizing the mail transaction. $msg_data is the message
 that is to be send with the headers. Each header needs to be
@@ -1770,11 +1809,11 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1799,15 +1838,17 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getDebugLevel</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">int</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">int</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1832,15 +1873,17 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getDebugOutput</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1865,15 +1908,17 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getError</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1898,15 +1943,17 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getLastReply</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1932,6 +1979,8 @@ If no reply has been received yet, it will return null.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getLastTransactionID</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool|string|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>If no pattern was matched, it will return false.</p>
 </section>
 
@@ -1952,11 +2001,11 @@ If no reply has been received yet, it will return null.</p>
                                     </dd>
                                             </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool|string|null</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool|string|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -1981,6 +2030,8 @@ If no reply has been received yet, it will return null.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getServerExt</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|bool|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>The method works in three ways, dependent on argument value and current state:</p>
 <ol>
 <li>HELO/EHLO has not been sent - returns null and populates $this-&gt;error.</li>
@@ -2010,11 +2061,11 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string|bool|null</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string|bool|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2039,15 +2090,17 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getServerExtList</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2072,15 +2125,17 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getTimeout</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">int</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">int</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2105,15 +2160,17 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">getVerp</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2138,6 +2195,8 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">hello</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Used to identify the sending server to the receiving server.
 This makes sure that client and server are in a known state.
 Implements RFC 821: HELO &lt;SP&gt; <domain> &lt;CRLF&gt;
@@ -2159,11 +2218,11 @@ and RFC 2821 EHLO.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2188,6 +2247,8 @@ and RFC 2821 EHLO.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">mail</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Starts a mail transaction from the email address specified in
 $from. Returns true if successful or false otherwise. If True
 the mail transaction is started and then one or more recipient
@@ -2210,11 +2271,11 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2239,17 +2300,19 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">noop</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Used to keep keep-alives alive, doesn't actually do anything.</p>
 </section>
 
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2274,6 +2337,8 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">quit</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$close_on_error</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Closes the socket if there is no error or the $close_on_error argument is true.
 Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
 </section>
@@ -2293,11 +2358,11 @@ Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2322,6 +2387,8 @@ Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">recipient</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$address</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$dsn</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Sets the TO argument to $toaddr.
 Returns true if the recipient was accepted false if it was rejected.
 Implements from RFC 821: RCPT &lt;SP&gt; TO:<forward-path> &lt;CRLF&gt;.</p>
@@ -2352,11 +2419,11 @@ or DELAY. If you specify NEVER all other notifications are ignored.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2381,6 +2448,8 @@ or DELAY. If you specify NEVER all other notifications are ignored.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">reset</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Abort any transaction that is currently in progress.
 Implements RFC 821: RSET &lt;CRLF&gt;.</p>
 </section>
@@ -2388,13 +2457,15 @@ Implements RFC 821: RSET &lt;CRLF&gt;.</p>
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True on success</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True on success</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2419,6 +2490,8 @@ Implements RFC 821: RSET &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">sendAndMail</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Starts a mail transaction from the email address specified in $from.
 Returns true if successful or false otherwise. If True
 the mail transaction is started and then one or more recipient
@@ -2443,11 +2516,11 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2472,6 +2545,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setDebugLevel</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$level</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2486,10 +2561,6 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2515,6 +2586,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setDebugOutput</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string|callable&nbsp;</span><span class="phpdocumentor-signature__argument__name">$method</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;echo&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2531,10 +2604,6 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2560,6 +2629,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setTimeout</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2576,10 +2647,6 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2605,6 +2672,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">setVerp</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$enabled</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2619,10 +2688,6 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2648,15 +2713,17 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">startTLS</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2681,6 +2748,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">turn</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>This is an optional command for SMTP that this class does not support.
 This method is here to make the RFC821 Definition complete for this class
 and <em>may</em> be implemented in future.
@@ -2690,11 +2759,11 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2719,6 +2788,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">public</span>
                     <span class="phpdocumentor-signature__name">verify</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2735,11 +2806,11 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2764,6 +2835,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">edebug</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$str</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$level</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2811,10 +2884,6 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
                                     </dd>
                                             </dl>
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2840,6 +2909,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">errorHandler</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errno</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errmsg</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errfile</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$errline</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2883,10 +2954,6 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -2912,6 +2979,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">get_lines</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Either before eof or socket timeout occurs on the operation.
 With SMTP we can tell if we have more lines to read if the
 4th character is '-' symbol. If it is a space then we don't
@@ -2921,11 +2990,11 @@ need to read anything else.</p>
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -2950,6 +3019,8 @@ need to read anything else.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">getSMTPConnection</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$port</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeout</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">30</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">false|resource</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -2993,11 +3064,11 @@ need to read anything else.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">false|resource</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">false|resource</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -3022,6 +3093,8 @@ need to read anything else.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">hmac</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$key</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Works like hash_hmac('md5', $data, $key)
 in case that function is not available.</p>
 </section>
@@ -3050,11 +3123,11 @@ in case that function is not available.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">string</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -3079,6 +3152,8 @@ in case that function is not available.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">parseHelloFields</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$type</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>In case of HELO, the only parameter that can be discovered is a server name.</p>
 </section>
 
@@ -3097,10 +3172,6 @@ in case that function is not available.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
                     <article
@@ -3127,6 +3198,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">recordLastTransactionID</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool|string|null</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Relies on the host providing the ID in response to a DATA command.
 If no reply has been received yet, it will return null.
 If no pattern was matched, it will return false.</p>
@@ -3135,11 +3208,11 @@ If no pattern was matched, it will return false.</p>
     
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool|string|null</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool|string|null</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -3164,6 +3237,8 @@ If no pattern was matched, it will return false.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">sendCommand</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$command</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$commandstring</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int|array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$expect</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3198,13 +3273,15 @@ If no pattern was matched, it will return false.</p>
 
     
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>True on success</p>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True on success</p>
 </section>
 
-    
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -3229,6 +3306,8 @@ If no pattern was matched, it will return false.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">sendHello</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$hello</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$host</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
         <section class="phpdocumentor-description"><p>Low-level implementation used by hello().</p>
 </section>
 
@@ -3270,11 +3349,11 @@ If no pattern was matched, it will return false.</p>
                                     </dd>
                                             </dl>
 
+            <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
-            &mdash;
-        
-    
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
 </article>
                     <article
         class="phpdocumentor-element
@@ -3299,6 +3378,8 @@ If no pattern was matched, it will return false.</p>
     <span class="phpdocumentor-signature__visibility">protected</span>
                     <span class="phpdocumentor-signature__name">setError</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$detail</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$smtp_code</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$smtp_code_ex</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
+    <div class="phpdocumentor-label-line">
+        </div>
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3342,10 +3423,6 @@ If no pattern was matched, it will return false.</p>
 
     
 
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
-            &mdash;
-        
     
 </article>
             </section>
@@ -3443,7 +3520,105 @@ If no pattern was matched, it will return false.</p>
     </script>
 
     </article>
-                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-constants">Constants</a></li>
+                                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a></li>
+                                            </ul>
+                </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_error">$error<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_helo_rply">$helo_rply<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply">$last_reply<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_smtp_transaction_id">$last_smtp_transaction_id<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_server_caps">$server_caps<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_conn">$smtp_conn<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns">$smtp_transaction_id_patterns<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_client_send">client_send()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close">close()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connect">connect()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connected">connected()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_data">data()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugLevel">getDebugLevel()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugOutput">getDebugOutput()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getError">getError()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastReply">getLastReply()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_mail">mail()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_noop">noop()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_quit">quit()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recipient">recipient()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_reset">reset()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_turn">turn()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_verify">verify()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug">edebug()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_errorHandler">errorHandler()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_get_lines">get_lines()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPConnection">getSMTPConnection()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hmac">hmac()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_parseHelloFields">parseHelloFields()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recordLastTransactionID">recordLastTransactionID()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendCommand">sendCommand()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello">sendHello()</a></li>
+                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setError">setError()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
     <section class="phpdocumentor-search-results__dialog">
         <header class="phpdocumentor-search-results__header">
             <h2 class="phpdocumentor-search-results__title">Search results</h2>
@@ -3454,7 +3629,6 @@ If no pattern was matched, it will return false.</p>
         </section>
     </section>
 </section>
-            </div>
         </div>
         <a href="classes/PHPMailer-PHPMailer-SMTP.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 

@@ -558,8 +558,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AstripTrailingWSP\u0028\u0029",
             "name": "stripTrailingWSP",
-            "summary": "Remove\u0020trailing\u0020breaks\u0020from\u0020a\u0020string.",
+            "summary": "Remove\u0020trailing\u0020whitespace\u0020from\u0020a\u0020string.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_stripTrailingWSP"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AstripTrailingBreaks\u0028\u0029",
+            "name": "stripTrailingBreaks",
+            "summary": "Strip\u0020trailing\u0020line\u0020breaks\u0020from\u0020a\u0020string.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_stripTrailingBreaks"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AgetLE\u0028\u0029",
             "name": "getLE",
