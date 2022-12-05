@@ -151,6 +151,11 @@ Search.appendIndex(
             "summary": "Add\u0020an\u0020address\u0020to\u0020one\u0020of\u0020the\u0020recipient\u0020arrays\u0020or\u0020to\u0020the\u0020ReplyTo\u0020array.\u0020Because\u0020PHPMailer\ncan\u0027t\u0020validate\u0020addresses\u0020with\u0020an\u0020IDN\u0020without\u0020knowing\u0020the\u0020PHPMailer\u003A\u003A\u0024CharSet\u0020\u0028that\u0020can\u0020still\nbe\u0020modified\u0020after\u0020calling\u0020this\u0020function\u0029,\u0020addition\u0020of\u0020such\u0020addresses\u0020is\u0020delayed\u0020until\u0020send\u0028\u0029.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_addOrEnqueueAnAddress"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsetBoundaries\u0028\u0029",
+            "name": "setBoundaries",
+            "summary": "Set\u0020the\u0020boundaries\u0020to\u0020use\u0020for\u0020delimiting\u0020MIME\u0020parts.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_setBoundaries"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AaddAnAddress\u0028\u0029",
             "name": "addAnAddress",
             "summary": "Add\u0020an\u0020address\u0020to\u0020one\u0020of\u0020the\u0020recipient\u0020arrays\u0020or\u0020to\u0020the\u0020ReplyTo\u0020array.",
@@ -310,6 +315,11 @@ Search.appendIndex(
             "name": "createBody",
             "summary": "Assemble\u0020the\u0020message\u0020body.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_createBody"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AgetBoundaries\u0028\u0029",
+            "name": "getBoundaries",
+            "summary": "Get\u0020the\u0020boundaries\u0020that\u0020this\u0020message\u0020will\u0020use",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_getBoundaries"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AgetBoundary\u0028\u0029",
             "name": "getBoundary",
