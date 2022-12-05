@@ -12,7 +12,7 @@ permissions:
 jobs:
 
   coding-standard:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     name: Coding standards
 
     steps:
@@ -43,7 +43,7 @@ jobs:
         run: cs2pr ./phpcs-report.xml
 
   lint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         php: ['5.5', '7.2', '8.0', '8.1']
@@ -84,7 +84,7 @@ jobs:
 
   test:
     needs: ['coding-standard', 'lint']
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
