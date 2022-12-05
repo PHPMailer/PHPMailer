@@ -805,8 +805,7 @@ EOT;
         $this->buildBody();
         $this->Mail->preSend();
         self::assertMatchesRegularExpression(
-            "/Content-Transfer-Encoding: 8bit\r\n\r\n" .
-            'This is a multi-part message in MIME format./',
+            "/Content-Transfer-Encoding: 8bit\r\n\r\n/",
             $this->Mail->getSentMIMEMessage(),
             'MIME structure broken'
         );
