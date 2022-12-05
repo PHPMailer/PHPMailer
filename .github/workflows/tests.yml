@@ -147,7 +147,7 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 8
           command: |
-            sudo apt-get install -y -qq postfix qmail
+            sudo apt-get install -y postfix qmail
             sudo systemctl stop postfix.service
 
       - name: Set up sendmail
