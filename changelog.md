@@ -8,6 +8,7 @@
 * Add Azure XOAUTH2 example and docs (thanks to @greew)
 * Preserve errors during disconnect
 * Avoid some PHP 8.1 type issues
+* Update CI to run on Ubuntu 22.04
 
 ## Version 6.6.5 (October 7th, 2022)
 
