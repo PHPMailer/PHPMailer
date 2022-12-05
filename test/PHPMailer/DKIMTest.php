@@ -58,7 +58,11 @@ final class DKIMTest extends SendTestCase
         $prebody = " C \r\nD \t E\r\n\r\n\r\n";
         $postbody = " C \r\nD \t E\r\n";
 
-        self::assertSame("\r\n", $this->Mail->DKIM_BodyC(''), 'DKIM empty body canonicalization incorrect (Empty body)');
+        self::assertSame(
+            "\r\n",
+            $this->Mail->DKIM_BodyC(''),
+            'DKIM empty body canonicalization incorrect (Empty body)'
+        );
         self::assertSame(
             'frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=',
             base64_encode(hash('sha256', $this->Mail->DKIM_BodyC(''), true)),
@@ -69,7 +73,11 @@ final class DKIMTest extends SendTestCase
         //Ensure that non-break trailing whitespace in the body is preserved
         $prebody = " C \r\nD \t E \r\n\r\n\r\n";
         $postbody = " C \r\nD \t E \r\n";
-        self::assertSame($postbody, $this->Mail->DKIM_BodyC($prebody), 'DKIM body canonicalization incorrect (trailing WSP)');
+        self::assertSame(
+            $postbody,
+            $this->Mail->DKIM_BodyC($prebody),
+            'DKIM body canonicalization incorrect (trailing WSP)'
+        );
     }
 
     /**
