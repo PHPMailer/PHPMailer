@@ -95,6 +95,7 @@ jobs:
           - php: '5.5'
             coverage: true
             experimental: false
+            runs-on: ubuntu-20.04
           - php: '8.1'
             coverage: true
             experimental: false
@@ -138,7 +139,6 @@ jobs:
           custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
 
       # Install postfix and automatically retry if the install failed, which happens reguarly.
-      # We don't care if stopping postfix fails anyway
       # @link https://github.com/marketplace/actions/retry-step
       - name: Install postfix
         uses: nick-invision/retry@v2
