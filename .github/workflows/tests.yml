@@ -148,7 +148,7 @@ jobs:
           retry_wait_seconds: 8
           command: |
             sudo apt-get install -y -qq postfix qmail
-            sudo service postfix stop || true
+            sudo systemctl stop postfix.service
 
       - name: Set up sendmail
         run: |
