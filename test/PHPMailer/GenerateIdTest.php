@@ -49,7 +49,7 @@ final class GenerateIdTest extends PreSendTestCase
         self::assertSame(
             1,
             preg_match(
-                '`Content-Type: multipart/alternative;\s+boundary="(b[1-3]_[A-Za-z0-9]{32,})"`',
+                '`Content-Type: multipart/alternative;\s+boundary="(b[1-3]=_[A-Za-z0-9]{32,})"`',
                 $message,
                 $matches
             ),
@@ -63,5 +63,13 @@ final class GenerateIdTest extends PreSendTestCase
             $message,
             'No boundaries using the generated ID found in message'
         );
+    }
+
+    public function testBoundaries()
+    {
+        $boundaries = $this->Mail->getBoundaries();
+        self::assertMatchesRegularExpression('/b[1-3]=_[A-Za-z0-9]{32,}/', $boundaries[1]);
+        self::assertMatchesRegularExpression('/b[1-3]=_[A-Za-z0-9]{32,}/', $boundaries[2]);
+        self::assertMatchesRegularExpression('/b[1-3]=_[A-Za-z0-9]{32,}/', $boundaries[3]);
     }
 }
