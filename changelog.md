@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.7 (December 5th, 2022)
 * Break out boundary definitions into a method (note that boundary format has also changed slightly)
 * Remove MIME preamble to match popular client behaviour, may help with DKIM too
 * Fix handling of trailing whitespace in simple DKIM canonicalisation
