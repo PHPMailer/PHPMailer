@@ -144,7 +144,7 @@ jobs:
         with:
           timeout_minutes: 2
           max_attempts: 3
-          retry_wait_seconds: 5
+          retry_wait_seconds: 8
           command: |
             sudo apt-get install -y -qq postfix qmail
             sudo service postfix stop
