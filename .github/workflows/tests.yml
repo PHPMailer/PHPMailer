@@ -46,10 +46,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: ['5.5', '7.2', '8.0', '8.1']
+        php: ['5.5', '7.2', '8.0', '8.1', '8.2']
         experimental: [false]
         include:
-          - php: '8.2'
+          - php: '8.3'
             experimental: true
 
     name: "Lint: PHP ${{ matrix.php }}"
@@ -75,11 +75,11 @@ jobs:
           custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
 
       - name: Lint against parse errors
-        if: ${{ matrix.php != '8.2' }}
+        if: ${{ matrix.php != '8.3' }}
         run: composer lint -- --checkstyle | cs2pr
 
-      - name: Lint against future parse errors (PHP 8.2)
-        if: ${{ matrix.php == '8.2' }}
+      - name: Lint against future parse errors (PHP 8.3)
+        if: ${{ matrix.php == '8.3' }}
         run: composer lint
 
   test:
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
         coverage: [false]
         experimental: [false]
         include:
@@ -95,12 +95,12 @@ jobs:
           - php: '5.5'
             coverage: true
             experimental: false
-          - php: '8.1'
+          - php: '8.2'
             coverage: true
             experimental: false
 
           # Experimental builds. These are allowed to fail.
-          - php: '8.2'
+          - php: '8.3'
             coverage: false
             experimental: true
 
@@ -123,14 +123,14 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
       - name: Install PHP packages - normal
-        if: ${{ matrix.php != '8.2' }}
+        if: ${{ matrix.php != '8.3' }}
         uses: "ramsey/composer-install@v2"
         with:
           # Bust the cache at least once a month - output format: YYYY-MM-DD.
           custom-cache-suffix: $(date -u -d "-0 month -$(($(date +%d)-1)) days" "+%F")
 
       - name: Install PHP packages - ignore-platform-reqs
-        if: ${{ matrix.php == '8.2' }}
+        if: ${{ matrix.php == '8.3' }}
         uses: "ramsey/composer-install@v2"
         with:
           composer-options: --ignore-platform-reqs
