@@ -48,6 +48,7 @@
     },
     "suggest": {
         "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
+        "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
         "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
         "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
