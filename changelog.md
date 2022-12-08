@@ -1,5 +1,11 @@
 # PHPMailer Change Log
 
+## Version 6.7.1 (December 8th, 2022)
+* Add official support for PHP 8.2
+* Add PHP 8.3 to test suite with "experimental" status
+* Add ext-openssl to composer suggest list
+* Bump development dependencies
+
 ## Version 6.7 (December 5th, 2022)
 * Break out boundary definitions into a method (note that boundary format has also changed slightly)
 * Remove MIME preamble to match popular client behaviour, may help with DKIM too

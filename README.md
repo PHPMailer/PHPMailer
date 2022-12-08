@@ -25,7 +25,7 @@
 - Protects against header injection attacks
 - Error messages in over 50 languages!
 - DKIM and S/MIME signing support
-- Compatible with PHP 5.5 and later, including PHP 8.1
+- Compatible with PHP 5.5 and later, including PHP 8.2
 - Namespaced to prevent name clashes
 - Much more!
 
@@ -47,7 +47,7 @@ This software is distributed under the [LGPL 2.1](http://www.gnu.org/licenses/lg
 PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via [Composer](https://getcomposer.org) is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
 
 ```json
-"phpmailer/phpmailer": "^6.5"
+"phpmailer/phpmailer": "^6.7.1"
 ```
 
 or run
