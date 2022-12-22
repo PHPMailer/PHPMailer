@@ -13,14 +13,14 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\Test\PreSendTestCase;
+use PHPMailer\Test\TestCase;
 
 /**
  * Test address formatting.
  *
  * @covers \PHPMailer\PHPMailer\PHPMailer::addrFormat
  */
-final class AddrFormatTest extends PreSendTestCase
+final class AddrFormatTest extends TestCase
 {
     /**
      * Test formatting an address for use in a message header
