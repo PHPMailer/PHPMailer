@@ -971,7 +971,7 @@ class SMTP
     public function xclient(array $vars)
     {
         $xclient_options = "";
-        foreach($vars as $key => $value) {
+        foreach ($vars as $key => $value) {
             if (in_array($key, ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'])) {
                 $xclient_options .= " {$key}={$value}";
             }
