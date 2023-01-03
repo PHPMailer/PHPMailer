@@ -358,6 +358,14 @@ class PHPMailer
     public $AuthType = '';
 
     /**
+     * SMTP SMTPXClient command variables
+     * Options are NAME | ADDR | PORT | PROTO | HELO | LOGIN | DESTADDR | DESTPORT
+     *
+     * @var array
+     */
+    public $SMTPXClient = [];
+
+    /**
      * An implementation of the PHPMailer OAuthTokenProvider interface.
      *
      * @var OAuthTokenProvider
@@ -2024,6 +2032,9 @@ class PHPMailer
             $smtp_from = $this->From;
         } else {
             $smtp_from = $this->Sender;
+        }
+        if (count($this->SMTPXClient)) {
+            $this->smtp->xclient($this->SMTPXClient);
         }
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));

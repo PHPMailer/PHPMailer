@@ -964,6 +964,25 @@ class SMTP
     }
 
     /**
+     * Send SMTP XCLIENT command to server and check its return code.
+     * Possible keys NAME | ADDR | PORT | PROTO | HELO | LOGIN | DESTADDR | DESTPORT
+     * @return bool True on success
+     */
+    public function xclient(array $vars)
+    {
+        $xclient_options = "";
+        foreach($vars as $key => $value) {
+            if (in_array($key, ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'])) {
+                $xclient_options .= " {$key}={$value}";
+            }
+        }
+        if (!$xclient_options) {
+            return true;
+        }
+        return $this->sendCommand('XCLIENT', 'XCLIENT' . $xclient_options, 250);
+    }
+
+    /**
      * Send an SMTP RSET command.
      * Abort any transaction that is currently in progress.
      * Implements RFC 821: RSET <CRLF>.
