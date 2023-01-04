@@ -2010,7 +2010,7 @@ class PHPMailer
      *
      * @param string $name  Attribute name
      * @param ?string $value Attribute value
-     * 
+     *
      * @return bool
      */
     public function setSMTPXclientAttribute($name, $value)
@@ -2020,7 +2020,7 @@ class PHPMailer
         }
         if (isset($this->SMTPXClient[$name]) && $value === null) {
             unset($this->SMTPXClient[$name]);
-        } else if ($value !== null) {
+        } elseif ($value !== null) {
             $this->SMTPXClient[$name] = $value;
         }
 
