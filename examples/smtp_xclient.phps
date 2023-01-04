@@ -29,7 +29,9 @@ $mail->Host = 'mail.example.com';
 $mail->Port = 25;
 //Whether to use SMTP authentication
 $mail->SMTPAuth = false;
-$mail->SMTPXClient = ['LOGIN' => 'yourname@example.com'];
+$mail->setSMTPXclientAttribute('LOGIN', 'yourname@example.com');
+$mail->setSMTPXclientAttribute('ADDR', '10.10.10.10');
+$mail->setSMTPXclientAttribute('HELO', 'test.example.com');
 //Set who the message is to be sent from
 $mail->setFrom('from@example.com', 'First Last');
 //Set an alternative reply-to address

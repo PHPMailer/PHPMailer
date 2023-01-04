@@ -965,7 +965,7 @@ class SMTP
 
     /**
      * Send SMTP XCLIENT command to server and check its return code.
-     * Possible keys NAME | ADDR | PORT | PROTO | HELO | LOGIN | DESTADDR | DESTPORT
+     * Possible keys NAME, ADDR, PORT, PROTO, HELO, LOGIN, DESTADDR, DESTPORT
      * @return bool True on success
      */
     public function xclient(array $vars)

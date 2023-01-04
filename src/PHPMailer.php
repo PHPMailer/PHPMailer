@@ -358,12 +358,11 @@ class PHPMailer
     public $AuthType = '';
 
     /**
-     * SMTP SMTPXClient command variables
-     * Options are NAME | ADDR | PORT | PROTO | HELO | LOGIN | DESTADDR | DESTPORT
+     * SMTP SMTPXClient command attibutes
      *
      * @var array
      */
-    public $SMTPXClient = [];
+    protected $SMTPXClient = [];
 
     /**
      * An implementation of the PHPMailer OAuthTokenProvider interface.
@@ -2003,6 +2002,29 @@ class PHPMailer
         $this->smtp = $smtp;
 
         return $this->smtp;
+    }
+
+    /**
+     * Provide SMTP XCLIENT attributes
+     * Possible attributes are NAME, ADDR, PORT, PROTO, HELO, LOGIN, DESTADDR, DESTPORT
+     *
+     * @param string $name  Attribute name
+     * @param ?string $value Attribute value
+     * 
+     * @return bool
+     */
+    public function setSMTPXclientAttribute($name, $value)
+    {
+        if (!in_array($name, ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'])) {
+            return false;
+        }
+        if (isset($this->SMTPXClient[$name]) && $value === null) {
+            unset($this->SMTPXClient[$name]);
+        } else if ($value !== null) {
+            $this->SMTPXClient[$name] = $value;
+        }
+
+        return true;
     }
 
     /**
