@@ -72,6 +72,16 @@ class SMTP
     const MAX_REPLY_LENGTH = 512;
 
     /**
+     * Allowed SMTP XCLIENT attributes.
+     * Must be allowed by the SMTP server. EHLO response is not checked.
+     *
+     * @see https://www.postfix.org/XCLIENT_README.html
+     *
+     * @var array
+     */
+    const XCLIENT_ATTRIBUTES = ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'];
+
+    /**
      * Debug level for no output.
      *
      * @var int
@@ -965,14 +975,14 @@ class SMTP
 
     /**
      * Send SMTP XCLIENT command to server and check its return code.
-     * Possible keys NAME, ADDR, PORT, PROTO, HELO, LOGIN, DESTADDR, DESTPORT
+     *
      * @return bool True on success
      */
     public function xclient(array $vars)
     {
         $xclient_options = "";
         foreach ($vars as $key => $value) {
-            if (in_array($key, ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'])) {
+            if (in_array($key, SMTP::XCLIENT_ATTRIBUTES)) {
                 $xclient_options .= " {$key}={$value}";
             }
         }

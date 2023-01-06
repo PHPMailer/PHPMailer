@@ -2006,7 +2006,6 @@ class PHPMailer
 
     /**
      * Provide SMTP XCLIENT attributes
-     * Possible attributes are NAME, ADDR, PORT, PROTO, HELO, LOGIN, DESTADDR, DESTPORT
      *
      * @param string $name  Attribute name
      * @param ?string $value Attribute value
@@ -2015,7 +2014,7 @@ class PHPMailer
      */
     public function setSMTPXclientAttribute($name, $value)
     {
-        if (!in_array($name, ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'])) {
+        if (!in_array($name, SMTP::XCLIENT_ATTRIBUTES)) {
             return false;
         }
         if (isset($this->SMTPXClient[$name]) && $value === null) {
@@ -2025,6 +2024,16 @@ class PHPMailer
         }
 
         return true;
+    }
+
+    /**
+     * Get SMTP XCLIENT attributes
+     *
+     * @return array
+     */
+    public function getSMTPXclientAttributes()
+    {
+        return $this->SMTPXClient;
     }
 
     /**

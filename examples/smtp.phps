@@ -49,6 +49,11 @@ $mail->AltBody = 'This is a plain-text message body';
 //Attach an image file
 $mail->addAttachment('images/phpmailer_mini.png');
 
+//SMTP XCLIENT attributes can be passed with setSMTPXclientAttribute method
+//$mail->setSMTPXclientAttribute('LOGIN', 'yourname@example.com');
+//$mail->setSMTPXclientAttribute('ADDR', '10.10.10.10');
+//$mail->setSMTPXclientAttribute('HELO', 'test.example.com');
+
 //send the message, check for errors
 if (!$mail->send()) {
     echo 'Mailer Error: ' . $mail->ErrorInfo;
