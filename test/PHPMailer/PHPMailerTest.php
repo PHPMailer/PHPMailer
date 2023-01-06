@@ -1205,7 +1205,7 @@ EOT;
 
         $attributes = $this->Mail->getSMTPXclientAttributes();
         $this->assertEquals('test.example.com', $attributes['HELO']);
-        
+
         // remove attribute
         $this->Mail->setSMTPXclientAttribute('HELO', null);
         $attributes = $this->Mail->getSMTPXclientAttributes();
