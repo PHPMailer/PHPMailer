@@ -72,16 +72,6 @@ class SMTP
     const MAX_REPLY_LENGTH = 512;
 
     /**
-     * Allowed SMTP XCLIENT attributes.
-     * Must be allowed by the SMTP server. EHLO response is not checked.
-     *
-     * @see https://www.postfix.org/XCLIENT_README.html
-     *
-     * @var array
-     */
-    const XCLIENT_ATTRIBUTES = ['NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'];
-
-    /**
      * Debug level for no output.
      *
      * @var int
@@ -198,6 +188,18 @@ class SMTP
         'CampaignMonitor' => '/[\d]{3} 2.0.0 OK:([a-zA-Z\d]{48})/',
         'Haraka' => '/[\d]{3} Message Queued \((.*)\)/',
         'Mailjet' => '/[\d]{3} OK queued as (.*)/',
+    ];
+
+    /**
+     * Allowed SMTP XCLIENT attributes.
+     * Must be allowed by the SMTP server. EHLO response is not checked.
+     *
+     * @see https://www.postfix.org/XCLIENT_README.html
+     *
+     * @var array
+     */
+    public static $xclient_allowed_attributes = [
+        'NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'
     ];
 
     /**
@@ -982,7 +984,7 @@ class SMTP
     {
         $xclient_options = "";
         foreach ($vars as $key => $value) {
-            if (in_array($key, SMTP::XCLIENT_ATTRIBUTES)) {
+            if (in_array($key, SMTP::$xclient_allowed_attributes)) {
                 $xclient_options .= " {$key}={$value}";
             }
         }

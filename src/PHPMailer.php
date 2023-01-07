@@ -2014,7 +2014,7 @@ class PHPMailer
      */
     public function setSMTPXclientAttribute($name, $value)
     {
-        if (!in_array($name, SMTP::XCLIENT_ATTRIBUTES)) {
+        if (!in_array($name, SMTP::$xclient_allowed_attributes)) {
             return false;
         }
         if (isset($this->SMTPXClient[$name]) && $value === null) {
