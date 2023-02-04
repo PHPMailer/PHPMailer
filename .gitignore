@@ -5,8 +5,6 @@ test/testbootstrap.php
 build/
 vendor/
 *.pem
-.idea
-.vscode
 composer.lock
 .phpcs.xml
 phpcs.xml
