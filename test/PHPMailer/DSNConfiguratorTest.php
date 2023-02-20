@@ -15,6 +15,7 @@ namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\DSNConfigurator;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
 
@@ -40,6 +41,15 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'ftp://localhost');
     }
 
+    public function testConfigureMail()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'mail://localhost');
+
+        $this->assertEquals($this->Mail->Mailer, 'mail');
+    }
+
     public function testConfigureSendmail()
     {
         $configurator = new DSNConfigurator();
@@ -47,6 +57,15 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'sendmail://localhost');
 
         $this->assertEquals($this->Mail->Mailer, 'sendmail');
+    }
+
+    public function testConfigureQmail()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'qmail://localhost');
+
+        $this->assertEquals($this->Mail->Mailer, 'qmail');
     }
 
     public function testConfigureSmtpWithoutAuthentication()
@@ -67,10 +86,33 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'smtp://user:pass@remotehost');
 
         $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertTrue($this->Mail->SMTPAuth);
         $this->assertEquals($this->Mail->Host, 'remotehost');
+
+        $this->assertTrue($this->Mail->SMTPAuth);
         $this->assertEquals($this->Mail->Username, 'user');
         $this->assertEquals($this->Mail->Password, 'pass');
+    }
+
+    public function testConfigureSmtpWithoutPort()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'smtp://localhost');
+
+        $this->assertEquals($this->Mail->Mailer, 'smtp');
+        $this->assertEquals($this->Mail->Host, 'localhost');
+        $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_PORT);
+    }
+
+    public function testConfigureSmtpWitPort()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'smtp://localhost:2525');
+
+        $this->assertEquals($this->Mail->Mailer, 'smtp');
+        $this->assertEquals($this->Mail->Host, 'localhost');
+        $this->assertEquals($this->Mail->Port, 2525);
     }
 
     public function testConfigureSmtpsWithoutPort()
@@ -80,11 +122,13 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'smtps://user:pass@remotehost');
 
         $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->SMTPSecure, 'tls');
-        $this->assertTrue($this->Mail->SMTPAuth);
+        $this->assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+
         $this->assertEquals($this->Mail->Host, 'remotehost');
+        $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
+
+        $this->assertTrue($this->Mail->SMTPAuth);
         $this->assertEquals($this->Mail->Username, 'user');
         $this->assertEquals($this->Mail->Password, 'pass');
-        $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
     }
 }
