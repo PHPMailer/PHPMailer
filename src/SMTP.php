@@ -52,6 +52,13 @@ class SMTP
     const DEFAULT_PORT = 25;
 
     /**
+     * The SMTPs port to use if one is not specified.
+     *
+     * @var int
+     */
+    const DEFAULT_SECURE_PORT = 587;
+
+    /**
      * The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
      * *excluding* a trailing CRLF break.
      *

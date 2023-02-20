@@ -96,6 +96,7 @@ class DSNConfigurator
             case 'smtp':
             case 'smtps':
                 $mailer->isSMTP();
+                $this->configureSMTP($mailer, $config);
                 break;
             default:
                 throw new Exception(
@@ -104,6 +105,43 @@ class DSNConfigurator
                         $config['scheme'],
                     )
                 );
+        }
+
+        return $mailer;
+    }
+
+    /**
+     * Configure SMTP.
+     *
+     * @param PHPMailer $mailer PHPMailer instance
+     * @param array     $config Configuration
+     *
+     * @return PHPMailer
+     */
+    private function configureSMTP($mailer, $config)
+    {
+        $isSMTPS = 'smtps' === $config['scheme'];
+
+        if ($isSMTPS) {
+            $mailer->SMTPSecure = 'tls';
+        }
+
+        $mailer->Host = $config['host'];
+
+        if (isset($config['port'])) {
+            $mailer->Port = $config['port'];
+        } elseif ($isSMTPS) {
+            $mailer->Port = SMTP::DEFAULT_SECURE_PORT;
+        }
+
+        $mailer->SMTPAuth = isset($config['user']) || isset($config['pass']);
+
+        if (isset($config['user'])) {
+            $mailer->Username = $config['user'];
+        }
+
+        if (isset($config['pass'])) {
+            $mailer->Password = $config['pass'];
         }
 
         return $mailer;
