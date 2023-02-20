@@ -28,4 +28,32 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'localhost');
     }
+
+    public function testInvalidScheme()
+    {
+        $configurator = new DSNConfigurator();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid scheme: "ftp".');
+
+        $configurator->configure($this->Mail, 'ftp://localhost');
+    }
+
+    public function testConfigureSendmail()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'sendmail://localhost');
+
+        $this->assertEquals($this->Mail->Mailer, 'sendmail');
+    }
+
+    public function testConfigureSmtp()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'smtp://localhost');
+
+        $this->assertEquals($this->Mail->Mailer, 'smtp');
+    }
 }

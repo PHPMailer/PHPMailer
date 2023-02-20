@@ -40,6 +40,8 @@ class DSNConfigurator
     {
         $config = $this->parseDSN($dsn);
 
+        $this->applyConfig($mailer, $config);
+
         return $mailer;
     }
 
@@ -67,5 +69,43 @@ class DSNConfigurator
         }
 
         return $config;
+    }
+
+    /**
+     * Apply config to mailer.
+     *
+     * @param PHPMailer $mailer PHPMailer instance
+     * @param array     $config Configuration
+     *
+     * @throws Exception If scheme is invalid
+     *
+     * @return PHPMailer
+     */
+    private function applyConfig(PHPMailer $mailer, $config)
+    {
+        switch ($config['scheme']) {
+            case 'mail':
+                $mailer->isMail();
+                break;
+            case 'sendmail':
+                $mailer->isSendmail();
+                break;
+            case 'qmail':
+                $mailer->isQmail();
+                break;
+            case 'smtp':
+            case 'smtps':
+                $mailer->isSMTP();
+                break;
+            default:
+                throw new Exception(
+                    sprintf(
+                        'Invalid scheme: "%s". Allowed values: "mail", "sendmail", "qmail", "smtp", "smtps".',
+                        $config['scheme'],
+                    )
+                );
+        }
+
+        return $mailer;
     }
 }
