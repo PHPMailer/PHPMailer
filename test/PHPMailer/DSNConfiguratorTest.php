@@ -194,4 +194,27 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->AllowEmpty, true);
         $this->assertEquals($this->Mail->WordWrap, 78);
     }
+
+    /**
+     * Test shortcut.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::fromDSN
+     */
+    public function testShorcut()
+    {
+        $mailer = PHPMailer::fromDSN('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
+
+        $this->assertEquals($mailer->Mailer, 'smtp');
+        $this->assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+
+        $this->assertEquals($mailer->Host, 'smtp.gmail.com');
+        $this->assertEquals($mailer->Port, SMTP::DEFAULT_SECURE_PORT);
+
+        $this->assertTrue($mailer->SMTPAuth);
+        $this->assertEquals($mailer->Username, 'user@gmail.com');
+        $this->assertEquals($mailer->Password, 'secret');
+
+        $this->assertEquals($mailer->SMTPDebug, 3);
+        $this->assertEquals($mailer->Timeout, 1000);
+    }
 }

@@ -5123,4 +5123,19 @@ class PHPMailer
     {
         $this->oauth = $oauth;
     }
+
+    /**
+     * Create new instance configured by DSN.
+     *
+     * @param string $dsn        DSN
+     * @param bool   $exceptions Should we throw external exceptions?
+     *
+     * @return PHPMailer
+     */
+    public static function fromDSN($dsn, $exceptions = null)
+    {
+        static $configurator = new DSNConfigurator();
+
+        return $configurator->configure(new PHPMailer($exceptions), $dsn);
+    }
 }
