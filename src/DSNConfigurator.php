@@ -22,14 +22,16 @@
 namespace PHPMailer\PHPMailer;
 
 /**
- * Configure PHPMailer via DSN.
+ * Configure PHPMailer with DSN string.
  *
- * @author Oleg Voronkovich (voronkovich) <oleg-voronkovich@yandex.ru>
+ * @see https://en.wikipedia.org/wiki/Data_source_name
+ *
+ * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
  */
 class DSNConfigurator
 {
     /**
-     * Configure PHPMailer via DSN.
+     * Configure PHPMailer instance with DSN string.
      *
      * @param PHPMailer $mailer PHPMailer instance
      * @param string    $dsn    DSN
@@ -46,13 +48,13 @@ class DSNConfigurator
     }
 
     /**
-     * Parse DSN.
+     * Parse DSN string.
      *
      * @param string $dsn DSN
      *
      * @throws Exception If DSN is mailformed
      *
-     * @return array configruration
+     * @return array Configruration
      */
     private function parseDSN($dsn)
     {
@@ -72,7 +74,7 @@ class DSNConfigurator
     }
 
     /**
-     * Apply config to mailer.
+     * Apply configuration to mailer.
      *
      * @param PHPMailer $mailer PHPMailer instance
      * @param array     $config Configuration

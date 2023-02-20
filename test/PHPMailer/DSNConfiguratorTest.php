@@ -61,7 +61,7 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'mail://localhost');
 
-        $this->assertEquals($this->Mail->Mailer, 'mail');
+        self::assertEquals($this->Mail->Mailer, 'mail');
     }
 
     /**
@@ -73,7 +73,7 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'sendmail://localhost');
 
-        $this->assertEquals($this->Mail->Mailer, 'sendmail');
+        self::assertEquals($this->Mail->Mailer, 'sendmail');
     }
 
     /**
@@ -85,7 +85,7 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'qmail://localhost');
 
-        $this->assertEquals($this->Mail->Mailer, 'qmail');
+        self::assertEquals($this->Mail->Mailer, 'qmail');
     }
 
     /**
@@ -97,9 +97,9 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'smtp://localhost');
 
-        $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->Host, 'localhost');
-        $this->assertFalse($this->Mail->SMTPAuth);
+        self::assertEquals($this->Mail->Mailer, 'smtp');
+        self::assertEquals($this->Mail->Host, 'localhost');
+        self::assertFalse($this->Mail->SMTPAuth);
     }
 
     /**
@@ -111,12 +111,12 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'smtp://user:pass@remotehost');
 
-        $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->Host, 'remotehost');
+        self::assertEquals($this->Mail->Mailer, 'smtp');
+        self::assertEquals($this->Mail->Host, 'remotehost');
 
-        $this->assertTrue($this->Mail->SMTPAuth);
-        $this->assertEquals($this->Mail->Username, 'user');
-        $this->assertEquals($this->Mail->Password, 'pass');
+        self::assertTrue($this->Mail->SMTPAuth);
+        self::assertEquals($this->Mail->Username, 'user');
+        self::assertEquals($this->Mail->Password, 'pass');
     }
 
     /**
@@ -128,9 +128,9 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'smtp://localhost');
 
-        $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->Host, 'localhost');
-        $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_PORT);
+        self::assertEquals($this->Mail->Mailer, 'smtp');
+        self::assertEquals($this->Mail->Host, 'localhost');
+        self::assertEquals($this->Mail->Port, SMTP::DEFAULT_PORT);
     }
 
     /**
@@ -142,9 +142,9 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'smtp://localhost:2525');
 
-        $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->Host, 'localhost');
-        $this->assertEquals($this->Mail->Port, 2525);
+        self::assertEquals($this->Mail->Mailer, 'smtp');
+        self::assertEquals($this->Mail->Host, 'localhost');
+        self::assertEquals($this->Mail->Port, 2525);
     }
 
     /**
@@ -156,15 +156,15 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'smtps://user:pass@remotehost');
 
-        $this->assertEquals($this->Mail->Mailer, 'smtp');
-        $this->assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($this->Mail->Mailer, 'smtp');
+        self::assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
 
-        $this->assertEquals($this->Mail->Host, 'remotehost');
-        $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
+        self::assertEquals($this->Mail->Host, 'remotehost');
+        self::assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
 
-        $this->assertTrue($this->Mail->SMTPAuth);
-        $this->assertEquals($this->Mail->Username, 'user');
-        $this->assertEquals($this->Mail->Password, 'pass');
+        self::assertTrue($this->Mail->SMTPAuth);
+        self::assertEquals($this->Mail->Username, 'user');
+        self::assertEquals($this->Mail->Password, 'pass');
     }
 
     /**
@@ -189,10 +189,10 @@ final class DSNConfiguratorTest extends TestCase
 
         $configurator->configure($this->Mail, 'sendmail://localhost?Sendmail=/usr/local/bin/sendmail&AllowEmpty=1&WordWrap=78');
 
-        $this->assertEquals($this->Mail->Mailer, 'sendmail');
-        $this->assertEquals($this->Mail->Sendmail, '/usr/local/bin/sendmail');
-        $this->assertEquals($this->Mail->AllowEmpty, true);
-        $this->assertEquals($this->Mail->WordWrap, 78);
+        self::assertEquals($this->Mail->Mailer, 'sendmail');
+        self::assertEquals($this->Mail->Sendmail, '/usr/local/bin/sendmail');
+        self::assertEquals($this->Mail->AllowEmpty, true);
+        self::assertEquals($this->Mail->WordWrap, 78);
     }
 
     /**
@@ -204,17 +204,17 @@ final class DSNConfiguratorTest extends TestCase
     {
         $mailer = PHPMailer::fromDSN('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
 
-        $this->assertEquals($mailer->Mailer, 'smtp');
-        $this->assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($mailer->Mailer, 'smtp');
+        self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
 
-        $this->assertEquals($mailer->Host, 'smtp.gmail.com');
-        $this->assertEquals($mailer->Port, SMTP::DEFAULT_SECURE_PORT);
+        self::assertEquals($mailer->Host, 'smtp.gmail.com');
+        self::assertEquals($mailer->Port, SMTP::DEFAULT_SECURE_PORT);
 
-        $this->assertTrue($mailer->SMTPAuth);
-        $this->assertEquals($mailer->Username, 'user@gmail.com');
-        $this->assertEquals($mailer->Password, 'secret');
+        self::assertTrue($mailer->SMTPAuth);
+        self::assertEquals($mailer->Username, 'user@gmail.com');
+        self::assertEquals($mailer->Password, 'secret');
 
-        $this->assertEquals($mailer->SMTPDebug, 3);
-        $this->assertEquals($mailer->Timeout, 1000);
+        self::assertEquals($mailer->SMTPDebug, 3);
+        self::assertEquals($mailer->Timeout, 1000);
     }
 }
