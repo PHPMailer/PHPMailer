@@ -78,8 +78,6 @@ class DSNConfigurator
      * @param array     $config Configuration
      *
      * @throws Exception If scheme is invalid
-     *
-     * @return PHPMailer
      */
     private function applyConfig(PHPMailer $mailer, $config)
     {
@@ -145,6 +143,14 @@ class DSNConfigurator
         }
     }
 
+    /**
+     * Configure options.
+     *
+     * @param PHPMailer $mailer  PHPMailer instance
+     * @param array     $options Options
+     *
+     * @throws Exception If option is unknown
+     */
     private function configureOptions(PHPMailer $mailer, $options)
     {
         $allowedOptions = get_object_vars($mailer);
@@ -165,7 +171,7 @@ class DSNConfigurator
                     sprintf(
                         'Unknown option: "%s". Allowed values: "%s"',
                         $key,
-                        implode('", "', $allowedOptions),
+                        implode('", "', $allowedOptions)
                     )
                 );
             }

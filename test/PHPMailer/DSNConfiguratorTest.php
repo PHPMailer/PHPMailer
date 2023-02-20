@@ -19,8 +19,16 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\Test\TestCase;
 
+/**
+ * Test configuring with DSN.
+ *
+ * @covers \PHPMailer\PHPMailer\DSNConfigurator
+ */
 final class DSNConfiguratorTest extends TestCase
 {
+    /**
+     * Test throwing exception if DSN is invalid.
+     */
     public function testInvalidDSN()
     {
         $configurator = new DSNConfigurator();
@@ -31,6 +39,9 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'localhost');
     }
 
+    /**
+     * Test throwing exception if DSN scheme is invalid.
+     */
     public function testInvalidScheme()
     {
         $configurator = new DSNConfigurator();
@@ -41,6 +52,9 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'ftp://localhost');
     }
 
+    /**
+     * Test cofiguring mail.
+     */
     public function testConfigureMail()
     {
         $configurator = new DSNConfigurator();
@@ -50,6 +64,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Mailer, 'mail');
     }
 
+    /**
+     * Test cofiguring sendmail.
+     */
     public function testConfigureSendmail()
     {
         $configurator = new DSNConfigurator();
@@ -59,6 +76,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Mailer, 'sendmail');
     }
 
+    /**
+     * Test cofiguring qmail.
+     */
     public function testConfigureQmail()
     {
         $configurator = new DSNConfigurator();
@@ -68,6 +88,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Mailer, 'qmail');
     }
 
+    /**
+     * Test cofiguring SMTP without authentication.
+     */
     public function testConfigureSmtpWithoutAuthentication()
     {
         $configurator = new DSNConfigurator();
@@ -79,6 +102,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertFalse($this->Mail->SMTPAuth);
     }
 
+    /**
+     * Test cofiguring SMTP with authentication.
+     */
     public function testConfigureSmtpWithAuthentication()
     {
         $configurator = new DSNConfigurator();
@@ -93,6 +119,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Password, 'pass');
     }
 
+    /**
+     * Test cofiguring SMTP without port.
+     */
     public function testConfigureSmtpWithoutPort()
     {
         $configurator = new DSNConfigurator();
@@ -104,6 +133,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Port, SMTP::DEFAULT_PORT);
     }
 
+    /**
+     * Test cofiguring SMTP with port.
+     */
     public function testConfigureSmtpWitPort()
     {
         $configurator = new DSNConfigurator();
@@ -115,6 +147,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Port, 2525);
     }
 
+    /**
+     * Test cofiguring SMTPs without port.
+     */
     public function testConfigureSmtpsWithoutPort()
     {
         $configurator = new DSNConfigurator();
@@ -132,6 +167,9 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Password, 'pass');
     }
 
+    /**
+     * Test cofiguring SMTPs with port.
+     */
     public function testConfigureWithUnknownOption()
     {
         $configurator = new DSNConfigurator();
@@ -142,6 +180,9 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'mail://locahost?UnknownOption=Value');
     }
 
+    /**
+     * Test cofiguring options with query sting.
+     */
     public function testConfigureWithOptions()
     {
         $configurator = new DSNConfigurator();
