@@ -131,4 +131,26 @@ final class DSNConfiguratorTest extends TestCase
         $this->assertEquals($this->Mail->Username, 'user');
         $this->assertEquals($this->Mail->Password, 'pass');
     }
+
+    public function testConfigureWithUnknownOption()
+    {
+        $configurator = new DSNConfigurator();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown option: "UnknownOption".');
+
+        $configurator->configure($this->Mail, 'mail://locahost?UnknownOption=Value');
+    }
+
+    public function testConfigureWithOptions()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'sendmail://localhost?Sendmail=/usr/local/bin/sendmail&AllowEmpty=1&WordWrap=78');
+
+        $this->assertEquals($this->Mail->Mailer, 'sendmail');
+        $this->assertEquals($this->Mail->Sendmail, '/usr/local/bin/sendmail');
+        $this->assertEquals($this->Mail->AllowEmpty, true);
+        $this->assertEquals($this->Mail->WordWrap, 78);
+    }
 }

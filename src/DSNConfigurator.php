@@ -107,7 +107,9 @@ class DSNConfigurator
                 );
         }
 
-        return $mailer;
+        if (isset($config['query'])) {
+            $this->configureOptions($mailer, $config['query']);
+        }
     }
 
     /**
@@ -115,8 +117,6 @@ class DSNConfigurator
      *
      * @param PHPMailer $mailer PHPMailer instance
      * @param array     $config Configuration
-     *
-     * @return PHPMailer
      */
     private function configureSMTP($mailer, $config)
     {
@@ -143,7 +143,52 @@ class DSNConfigurator
         if (isset($config['pass'])) {
             $mailer->Password = $config['pass'];
         }
+    }
 
-        return $mailer;
+    private function configureOptions(PHPMailer $mailer, $options)
+    {
+        $allowedOptions = get_object_vars($mailer);
+
+        unset($allowedOptions['Mailer']);
+        unset($allowedOptions['SMTPAuth']);
+        unset($allowedOptions['Username']);
+        unset($allowedOptions['Password']);
+        unset($allowedOptions['Hostname']);
+        unset($allowedOptions['Port']);
+        unset($allowedOptions['ErrorInfo']);
+
+        $allowedOptions = \array_keys($allowedOptions);
+
+        foreach ($options as $key => $value) {
+            if (!in_array($key, $allowedOptions)) {
+                throw new Exception(
+                    sprintf(
+                        'Unknown option: "%s". Allowed values: "%s"',
+                        $key,
+                        implode('", "', $allowedOptions),
+                    )
+                );
+            }
+
+            switch ($key) {
+                case 'AllowEmpty':
+                case 'SMTPAutoTLS':
+                case 'SMTPKeepAlive':
+                case 'SingleTo':
+                case 'UseSendmailOptions':
+                case 'do_verp':
+                case 'DKIM_copyHeaderFields':
+                    $mailer->$key = (bool) $value;
+                    break;
+                case 'Priority':
+                case 'SMTPDebug':
+                case 'WordWrap':
+                    $mailer->$key = (integer) $value;
+                    break;
+                default:
+                    $mailer->$key = $value;
+                    break;
+            }
+        }
     }
 }
