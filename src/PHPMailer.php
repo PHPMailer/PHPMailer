@@ -1642,8 +1642,10 @@ class PHPMailer
 
             //To capture the complete message when using mail(), create
             //an extra header list which createHeader() doesn't fold in
-            if ('mail' === $this->Mailer
-                || 'ses' === $this->Mailer) {
+            if (
+                'mail' === $this->Mailer
+                || 'ses' === $this->Mailer
+            ) {
                 if (count($this->to) > 0) {
                     $this->mailHeader .= $this->addrAppend('To', $this->to);
                 } else {
@@ -2319,21 +2321,22 @@ class PHPMailer
     protected function sesConnect($options)
     {
         if (null === $this->ses) {
-            if (!$this->ses = $this->getSESInstance())
-            {
+            if (!$this->ses = $this->getSESInstance()) {
                 return false;
             }
         }
 
-        if (isset($options['credentials'])
-            && $options['credentials'])
-        {
+        if (
+            isset($options['credentials'])
+            && $options['credentials']
+        ) {
             $this->ses->setCredentials($options['credentials']);
         }
 
-        if (isset($options['region'])
-            && $options['region'])
-        {
+        if (
+            isset($options['region'])
+            && $options['region']
+        ) {
             $this->ses->setRegion($options['region']);
         }
 

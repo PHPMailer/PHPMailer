@@ -58,8 +58,7 @@ class SES
             'version' => 'latest'
         ];
 
-        if (!is_null($this->credentials))
-        {
+        if (!is_null($this->credentials)) {
             $options += [
                 'credentials' => $this->credentials
             ];
@@ -72,10 +71,8 @@ class SES
 
     public function sendRaw($message)
     {
-        try
-        {
-            if (is_null($this->sesClient))
-            {
+        try {
+            if (is_null($this->sesClient)) {
                 $this->initSesClient();
             }
 
@@ -87,8 +84,7 @@ class SES
 
             // If the message was sent, show the message ID.
             $this->last_transaction_id = $result->get('MessageId');
-        }
-        catch (Exception $error) {
+        } catch (Exception $error) {
             return false;
         }
 
