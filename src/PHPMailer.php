@@ -439,6 +439,16 @@ class PHPMailer
     public $SMTPKeepAlive = false;
 
     /**
+    * @var bool|Aws\Credentials\Credentials
+    */
+    public $SESCredentials = false;
+
+    /**
+    * @var string
+    */
+    public $SESRegion = '';
+
+    /**
      * Whether to split multiple to addresses into multiple messages
      * or send them all in one message.
      * Only supported in `mail` and `sendmail` transports, not in SMTP.
@@ -579,6 +589,13 @@ class PHPMailer
      * @var string|callable
      */
     public static $validator = 'php';
+
+    /**
+    * An instance of the SES sender class.
+    *
+    * @var SES
+    */
+    protected $ses;
 
     /**
      * An instance of the SMTP sender class.
@@ -997,6 +1014,14 @@ class PHPMailer
             $this->Sendmail = $ini_sendmail_path;
         }
         $this->Mailer = 'qmail';
+    }
+
+    /**
+    * Send messages using AWS SES.
+    */
+    public function isSes()
+    {
+        $this->Mailer = 'ses';
     }
 
     /**
@@ -1536,6 +1561,7 @@ class PHPMailer
     {
         if (
             'smtp' === $this->Mailer
+            || 'ses' === $this->Mailer
             || ('mail' === $this->Mailer && (\PHP_VERSION_ID >= 80000 || stripos(PHP_OS, 'WIN') === 0))
         ) {
             //SMTP mandates RFC-compliant line endings
@@ -1616,7 +1642,8 @@ class PHPMailer
 
             //To capture the complete message when using mail(), create
             //an extra header list which createHeader() doesn't fold in
-            if ('mail' === $this->Mailer) {
+            if ('mail' === $this->Mailer
+                || 'ses' === $this->Mailer) {
                 if (count($this->to) > 0) {
                     $this->mailHeader .= $this->addrAppend('To', $this->to);
                 } else {
@@ -1674,6 +1701,8 @@ class PHPMailer
                 case 'sendmail':
                 case 'qmail':
                     return $this->sendmailSend($this->MIMEHeader, $this->MIMEBody);
+                case 'ses':
+                    return $this->sesSend($this->MIMEHeader, $this->MIMEBody);
                 case 'smtp':
                     return $this->smtpSend($this->MIMEHeader, $this->MIMEBody);
                 case 'mail':
@@ -1998,6 +2027,34 @@ class PHPMailer
     }
 
     /**
+    * Get an instance to use for AWS SES operations.
+    * Override this function to load your own SES implementation,
+    * or set one with setSESInstance.
+    *
+    * @return SES
+    */
+    public function getSESInstance()
+    {
+        if (!is_object($this->ses)) {
+            $this->ses = new SES();
+        }
+
+        return $this->ses;
+    }
+
+    /**
+    * Provide an instance to use for AWS SES operations.
+    *
+    * @return SES
+    */
+    public function setSESInstance(SES $ses)
+    {
+        $this->ses = $ses;
+
+        return $this->ses;
+    }
+
+    /**
      * Send mail via SMTP.
      * Returns false if there is a bad MAIL FROM, RCPT, or DATA input.
      *
@@ -2248,6 +2305,103 @@ class PHPMailer
     }
 
     /**
+    * Create ses object instance
+    * Returns false if the operation failed.
+    *
+    * @param array $options An array of options with credentials and region, if needed
+    *
+    * @throws Exception
+    *
+    * @uses \PHPMailer\PHPMailer\SMTP
+    *
+    * @return bool
+    */
+    protected function sesConnect($options)
+    {
+        if (null === $this->ses) {
+            if (!$this->ses = $this->getSESInstance())
+            {
+                return false;
+            }
+        }
+
+        if (isset($options['credentials'])
+            && $options['credentials'])
+        {
+            $this->ses->setCredentials($options['credentials']);
+        }
+
+        if (isset($options['region'])
+            && $options['region'])
+        {
+            $this->ses->setRegion($options['region']);
+        }
+
+        return true;
+    }
+
+    /**
+    * Send mail via AWS SES.
+    * Returns false if something bad.
+    *
+    * @uses \PHPMailer\PHPMailer\SES
+    *
+    * @param string $header The message headers
+    * @param string $body   The message body
+    *
+    * @throws Exception
+    *
+    * @return bool
+    */
+    protected function sesSend($header, $body)
+    {
+        if (!$this->sesConnect([
+            'credentials' => $this->SESCredentials,
+            'region' => $this->SESRegion
+        ])) {
+            throw new Exception($this->lang('ses_connect_failed'), self::STOP_CRITICAL);
+        }
+
+        //Sender already validated in preSend()
+        if ('' === $this->Sender) {
+            $smtp_from = $this->From;
+        } else {
+            $smtp_from = $this->Sender;
+        }
+
+        $callbacks = [];
+        //Attempt to send to all recipients
+        foreach ([$this->to, $this->cc, $this->bcc] as $togroup) {
+            foreach ($togroup as $to) {
+                $isSent = true;
+                $callbacks[] = ['issent' => $isSent, 'to' => $to[0], 'name' => $to[1]];
+            }
+        }
+
+        // Try to send the email
+        if (!$this->ses->sendRaw($header . static::$LE . static::$LE . $body)) {
+            throw new Exception($this->lang('ses_not_accepted'), self::STOP_CRITICAL);
+        }
+
+        $smtp_transaction_id = $this->ses->getLastTransactionID();
+
+        foreach ($callbacks as $cb) {
+            $this->doCallback(
+                $cb['issent'],
+                [[$cb['to'], $cb['name']]],
+                [],
+                [],
+                $this->Subject,
+                $body,
+                $this->From,
+                ['smtp_transaction_id' => $smtp_transaction_id]
+            );
+        }
+
+        return true;
+    }
+
+    /**
      * Set the language for error messages.
      * The default language is English.
      *
@@ -2300,6 +2454,7 @@ class PHPMailer
             'mailer_not_supported' => ' mailer is not supported.',
             'provide_address' => 'You must provide at least one recipient email address.',
             'recipients_failed' => 'SMTP Error: The following recipients failed: ',
+            'ses_connect_failed' => 'SES initialization failed.',
             'signing' => 'Signing Error: ',
             'smtp_code' => 'SMTP code: ',
             'smtp_code_ex' => 'Additional SMTP info: ',
