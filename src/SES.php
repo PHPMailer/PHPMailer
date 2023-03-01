@@ -105,4 +105,3 @@ class SES
         return $this->last_transaction_id;
     }
 }
-
