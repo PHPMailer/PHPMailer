@@ -842,7 +842,11 @@ class PHPMailer
      */
     public static function fromDSN($dsn, $exceptions = null)
     {
-        static $configurator = new DSNConfigurator();
+        static $configurator = null;
+
+        if (null === $configurator) {
+            $configurator = new DSNConfigurator();
+        }
 
         return $configurator->configure(new PHPMailer($exceptions), $dsn);
     }
