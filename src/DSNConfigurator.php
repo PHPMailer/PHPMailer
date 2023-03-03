@@ -102,7 +102,7 @@ class DSNConfigurator
                 throw new Exception(
                     sprintf(
                         'Invalid scheme: "%s". Allowed values: "mail", "sendmail", "qmail", "smtp", "smtps".',
-                        $config['scheme'],
+                        $config['scheme']
                     )
                 );
         }
