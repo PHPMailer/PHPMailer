@@ -200,12 +200,10 @@ final class DSNConfiguratorTest extends TestCase
 
     /**
      * Test shortcut.
-     *
-     * @covers \PHPMailer\PHPMailer\PHPMailer::fromDSN
      */
     public function testShorcut()
     {
-        $mailer = PHPMailer::fromDSN('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
+        $mailer = DSNConfigurator::mailer('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
 
         self::assertEquals($mailer->Mailer, 'smtp');
         self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);

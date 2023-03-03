@@ -31,6 +31,25 @@ namespace PHPMailer\PHPMailer;
 class DSNConfigurator
 {
     /**
+     * Create new PHPMailer instance configured by DSN.
+     *
+     * @param string $dsn        DSN
+     * @param bool   $exceptions Should we throw external exceptions?
+     *
+     * @return PHPMailer
+     */
+    public static function mailer($dsn, $exceptions = null)
+    {
+        static $configurator = null;
+
+        if (null === $configurator) {
+            $configurator = new DSNConfigurator();
+        }
+
+        return $configurator->configure(new PHPMailer($exceptions), $dsn);
+    }
+
+    /**
      * Configure PHPMailer instance with DSN string.
      *
      * @param PHPMailer $mailer PHPMailer instance

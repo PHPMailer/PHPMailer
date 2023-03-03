@@ -833,24 +833,6 @@ class PHPMailer
     }
 
     /**
-     * Create new instance configured by DSN.
-     *
-     * @param string $dsn        DSN
-     * @param bool   $exceptions Should we throw external exceptions?
-     *
-     * @return PHPMailer
-     */
-    public static function fromDSN($dsn, $exceptions = null)
-    {
-        static $configurator = null;
-
-        if (null === $configurator) {
-            $configurator = new DSNConfigurator();
-        }
-
-        return $configurator->configure(new PHPMailer($exceptions), $dsn);
-    }
-    /**
      * Destructor.
      */
     public function __destruct()
