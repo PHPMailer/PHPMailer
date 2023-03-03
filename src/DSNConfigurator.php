@@ -77,7 +77,7 @@ class DSNConfigurator
      */
     private function parseDSN($dsn)
     {
-        $config = parse_url($dsn);
+        $config = $this->parseUrl($dsn);
 
         if (false === $config || !isset($config['scheme']) || !isset($config['host'])) {
             throw new Exception(
@@ -217,5 +217,26 @@ class DSNConfigurator
                     break;
             }
         }
+    }
+
+    /**
+     * Parse URL.
+     *
+     * @param string $url URL
+     *
+     * @return array Result
+     */
+    private function parseUrl($url)
+    {
+        if (\PHP_VERSION_ID >= 50600 || false === strpos($url, '?')) {
+            return parse_url($url);
+        }
+
+        $chunks = explode('?', $url);
+
+        $result = parse_url($chunks[0]);
+        $result['query'] = $chunks[1];
+
+        return $result;
     }
 }
