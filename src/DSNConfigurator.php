@@ -81,7 +81,7 @@ class DSNConfigurator
 
         if (false === $config || !isset($config['scheme']) || !isset($config['host'])) {
             throw new Exception(
-                sprintf('Mailformed DSN: "%s".', $dsn)
+                sprintf('Malformed DSN: "%s".', $dsn)
             );
         }
 
