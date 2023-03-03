@@ -187,7 +187,10 @@ final class DSNConfiguratorTest extends TestCase
     {
         $configurator = new DSNConfigurator();
 
-        $configurator->configure($this->Mail, 'sendmail://localhost?Sendmail=/usr/local/bin/sendmail&AllowEmpty=1&WordWrap=78');
+        $configurator->configure(
+            $this->Mail,
+            'sendmail://localhost?Sendmail=/usr/local/bin/sendmail&AllowEmpty=1&WordWrap=78'
+        );
 
         self::assertEquals($this->Mail->Mailer, 'sendmail');
         self::assertEquals($this->Mail->Sendmail, '/usr/local/bin/sendmail');
