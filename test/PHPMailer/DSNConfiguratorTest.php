@@ -201,7 +201,7 @@ final class DSNConfiguratorTest extends TestCase
     /**
      * Test shortcut.
      */
-    public function testShorcut()
+    public function testShortcut()
     {
         $mailer = DSNConfigurator::mailer('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
 
