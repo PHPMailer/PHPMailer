@@ -1,6 +1,46 @@
 Search.appendIndex(
     [
                 {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator",
+            "name": "DSNConfigurator",
+            "summary": "Configure\u0020PHPMailer\u0020with\u0020DSN\u0020string.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003Amailer\u0028\u0029",
+            "name": "mailer",
+            "summary": "Create\u0020new\u0020PHPMailer\u0020instance\u0020configured\u0020by\u0020DSN.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_mailer"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configure\u0020PHPMailer\u0020instance\u0020with\u0020DSN\u0020string.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_configure"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AparseDSN\u0028\u0029",
+            "name": "parseDSN",
+            "summary": "Parse\u0020DSN\u0020string.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_parseDSN"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AapplyConfig\u0028\u0029",
+            "name": "applyConfig",
+            "summary": "Apply\u0020configuration\u0020to\u0020mailer.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_applyConfig"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AconfigureSMTP\u0028\u0029",
+            "name": "configureSMTP",
+            "summary": "Configure\u0020SMTP.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_configureSMTP"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AconfigureOptions\u0028\u0029",
+            "name": "configureOptions",
+            "summary": "Configure\u0020options.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_configureOptions"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AparseUrl\u0028\u0029",
+            "name": "parseUrl",
+            "summary": "Parse\u0020URL.",
+            "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_parseUrl"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\Exception",
             "name": "Exception",
             "summary": "PHPMailer\u0020exception\u0020handler.",
@@ -1570,6 +1610,11 @@ Search.appendIndex(
             "name": "DEFAULT_PORT",
             "summary": "The\u0020SMTP\u0020port\u0020to\u0020use\u0020if\u0020one\u0020is\u0020not\u0020specified.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003ADEFAULT_SECURE_PORT",
+            "name": "DEFAULT_SECURE_PORT",
+            "summary": "The\u0020SMTPs\u0020port\u0020to\u0020use\u0020if\u0020one\u0020is\u0020not\u0020specified.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003AMAX_LINE_LENGTH",
             "name": "MAX_LINE_LENGTH",
