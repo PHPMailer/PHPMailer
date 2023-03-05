@@ -226,7 +226,7 @@ class DSNConfigurator
      *
      * @return array Result
      */
-    private function parseUrl($url)
+    protected function parseUrl($url)
     {
         if (\PHP_VERSION_ID >= 50600 || false === strpos($url, '?')) {
             return parse_url($url);
