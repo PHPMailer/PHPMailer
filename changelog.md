@@ -1,5 +1,11 @@
 # PHPMailer Change Log
 
+## Version 6.8.0 (March 6th, 2023)
+* Add DSN parsing class, thanks to @voronkovich
+* Fix some name edge cases, expand tests
+* Add pattern for ZonMTA message IDs
+* Improve Hindi translation
+
 ## Version 6.7.1 (December 8th, 2022)
 * Add official support for PHP 8.2
 * Add PHP 8.3 to test suite with "experimental" status
