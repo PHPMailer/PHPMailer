@@ -10,7 +10,7 @@
  * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
  * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author    Brent R. Matzelle (original founder)
- * @copyright 2012 - 2020 Marcus Bointon
+ * @copyright 2012 - 2023 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
@@ -71,9 +71,9 @@ class DSNConfigurator
      *
      * @param string $dsn DSN
      *
-     * @throws Exception If DSN is mailformed
+     * @throws Exception If DSN is malformed
      *
-     * @return array Configruration
+     * @return array Configuration
      */
     private function parseDSN($dsn)
     {
@@ -220,11 +220,12 @@ class DSNConfigurator
     }
 
     /**
-     * Parse URL.
+     * Parse a URL.
+     * Wrapper for the built-in parse_url function to work around a bug in PHP 5.5.
      *
      * @param string $url URL
      *
-     * @return array Result
+     * @return array|false
      */
     protected function parseUrl($url)
     {
