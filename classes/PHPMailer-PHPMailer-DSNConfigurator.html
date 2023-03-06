@@ -191,9 +191,9 @@
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
     <a href="classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_parseUrl">parseUrl()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                                &nbsp;: array&lt;string|int, mixed&gt;|false    </span>
 </dt>
-<dd>Parse URL.</dd>
+<dd>Parse a URL.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_applyConfig">applyConfig()</a>
@@ -366,19 +366,21 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/DSNConfigurator.php"><a href="files/src-dsnconfigurator.html"><abbr title="src/DSNConfigurator.php">DSNConfigurator.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">229</span>
+    <span class="phpdocumentor-element-found-in__line">230</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Parse URL.</p>
+        <p class="phpdocumentor-summary">Parse a URL.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
-                    <span class="phpdocumentor-signature__name">parseUrl</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+                    <span class="phpdocumentor-signature__name">parseUrl</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$url</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
-    
+        <section class="phpdocumentor-description"><p>Wrapper for the built-in parse_url function to work around a bug in PHP 5.5.</p>
+</section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -396,11 +398,7 @@
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
-                    &mdash;
-                <section class="phpdocumentor-description"><p>Result</p>
-</section>
-
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span>
             </section>
 
 </article>
@@ -650,7 +648,7 @@
                 <dd class="phpdocumentor-tag-list__definition">
                                                                 <span class="phpdocumentor-tag-link"><a href="classes/PHPMailer-PHPMailer-Exception.html"><abbr title="\PHPMailer\PHPMailer\Exception">Exception</abbr></a></span>
                                                             
-                                                 <section class="phpdocumentor-description"><p>If DSN is mailformed</p>
+                                                 <section class="phpdocumentor-description"><p>If DSN is malformed</p>
 </section>
 
                                     </dd>
@@ -660,7 +658,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>Configruration</p>
+                <section class="phpdocumentor-description"><p>Configuration</p>
 </section>
 
             </section>

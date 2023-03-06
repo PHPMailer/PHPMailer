@@ -38,7 +38,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003AparseUrl\u0028\u0029",
             "name": "parseUrl",
-            "summary": "Parse\u0020URL.",
+            "summary": "Parse\u0020a\u0020URL.",
             "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html#method_parseUrl"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\Exception",
