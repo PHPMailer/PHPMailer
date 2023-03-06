@@ -234,10 +234,14 @@ class DSNConfigurator
         }
 
         $chunks = explode('?', $url);
+        if (is_array($chunks)) {
+            $result = parse_url($chunks[0]);
+            if (is_array($result)) {
+                $result['query'] = $chunks[1];
+            }
+            return $result;
+        }
 
-        $result = parse_url($chunks[0]);
-        $result['query'] = $chunks[1];
-
-        return $result;
+        return false;
     }
 }
