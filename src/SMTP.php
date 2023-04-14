@@ -35,7 +35,7 @@ class SMTP
      *
      * @var string
      */
-    const VERSION = '6.7.1';
+    const VERSION = '6.8.0';
 
     /**
      * SMTP line break constant.
@@ -50,6 +50,13 @@ class SMTP
      * @var int
      */
     const DEFAULT_PORT = 25;
+
+    /**
+     * The SMTPs port to use if one is not specified.
+     *
+     * @var int
+     */
+    const DEFAULT_SECURE_PORT = 465;
 
     /**
      * The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
