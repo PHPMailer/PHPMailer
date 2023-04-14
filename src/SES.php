@@ -2,8 +2,7 @@
 
 namespace PHPMailer\PHPMailer;
 
-use Aws\Ses\SesClient;
-use Aws\Ses\Exception\SesException;
+use Aws\SesV2\SesV2Client;
 use Aws\Credentials\Credentials;
 
 class SES
@@ -64,7 +63,7 @@ class SES
             ];
         }
 
-        $this->sesClient = new SesClient($options);
+        $this->sesClient = new SesV2Client($options);
 
         return $this->sesClient;
     }
@@ -76,9 +75,11 @@ class SES
                 $this->initSesClient();
             }
 
-            $result = $this->sesClient->sendRawEmail([
-                'RawMessage' => [
-                    'Data' => $message
+            $result = $this->sesClient->sendEmail([
+                'Content' => [
+                    'Raw' => [
+                        'Data' => $message
+                    ]
                 ]
             ]);
 
