@@ -220,11 +220,11 @@ See [changelog](changelog.md).
 - PHPMailer moves to [the PHPMailer organisation](https://github.com/PHPMailer) on GitHub in 2013.
 
 ### What's changed since moving from SourceForge?
-- Official successor to the SourceForge and Google Code projects.
-- Test suite.
+- An official successor to the SourceForge and Google Code projects.
+- Test suite included.
 - Continuous integration with GitHub Actions.
 - Composer support.
 - Public development.
-- Additional languages and language strings.
+- Additional languages and localization support.
 - CRAM-MD5 authentication support.
-- Preserves full repo history of authors, commits, and branches from the original SourceForge project.
+- Preserves the full repository history, including authors, commits, and branches, from the original SourceForge project.
