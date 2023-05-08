@@ -2271,6 +2271,7 @@ class PHPMailer
             'rs' => 'sr',
             'tg' => 'tl',
             'am' => 'hy',
+            'zh-CN' => 'zh_cn',
         ];
 
         if (array_key_exists($langcode, $renamed_langcodes)) {
