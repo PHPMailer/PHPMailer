@@ -795,7 +795,7 @@ class PHPMailer
      * The maximum line length supported by mail().
      *
      * Background: mail() will sometimes corrupt messages
-     * with headers headers longer than 65 chars, see #818.
+     * with headers longer than 65 chars, see #818.
      *
      * @var int
      */
