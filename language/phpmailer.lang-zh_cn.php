@@ -24,7 +24,6 @@ $PHPMAILER_LANG['invalid_address']      = '发送失败，电子邮箱地址是�
 $PHPMAILER_LANG['mailer_not_supported'] = '发信客户端不被支持。';
 $PHPMAILER_LANG['provide_address']      = '必须提供至少一个收件人地址。';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP 错误：收件人地址错误：';
-$PHPMAILER_LANG['signing']              = '登录失败：';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP服务器连接失败。';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP服务器出错：';
 $PHPMAILER_LANG['variable_set']         = '无法设置或重置变量：';
