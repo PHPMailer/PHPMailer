@@ -150,7 +150,7 @@ PHPMailer defaults to English, but in the [language](https://github.com/PHPMaile
 $mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
 
-We welcome corrections and new languages – if you're looking for corrections, run the [PHPMailerLangTest.php](https://github.com/PHPMailer/PHPMailer/tree/master/test/PHPMailerLangTest.php) script in the tests folder and it will show any missing translations.
+We welcome corrections and new languages – if you're looking for corrections, run the [Language/TranslationCompletenessTest.php](https://github.com/PHPMailer/PHPMailer/blob/master/test/Language/TranslationCompletenessTest.php) script in the tests folder and it will show any missing translations.
 
 ## Documentation
 Start reading at the [GitHub wiki](https://github.com/PHPMailer/PHPMailer/wiki). If you're having trouble, head for [the troubleshooting guide](https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting) as it's frequently updated.
