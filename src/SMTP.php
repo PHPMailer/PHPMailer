@@ -1384,7 +1384,7 @@ class SMTP
      *
      * @param int $timeout The timeout duration in seconds
      */
-    public function setTimeout($timeout = 0)
+    public function setTimeout($timeout)
     {
         $this->Timeout = $timeout;
     }
@@ -1404,7 +1404,7 @@ class SMTP
      *
      * @param int $timelimit The timelimit duration in seconds
      */
-    public function setTimelimit($timelimit = 0)
+    public function setTimelimit($timelimit)
     {
         $this->Timelimit = $timelimit;
     }
