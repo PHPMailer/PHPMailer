@@ -210,15 +210,20 @@ abstract class TestCase extends PolyfillTestCase
     public static function updateStaticProperty($className, $propertyName, $value)
     {
         $reflProp = new ReflectionProperty($className, $propertyName);
-        $isPublic = $reflProp->isPublic();
-        if ($isPublic !== true) {
-            $reflProp->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            //setAccessible is only needed in PHP < 8.1
+            $isPublic = $reflProp->isPublic();
+            if ($isPublic !== true) {
+                $reflProp->setAccessible(true);
+            }
         }
 
         $reflProp->setValue(null, $value);
 
-        if ($isPublic !== true) {
-            $reflProp->setAccessible(false);
+        if (PHP_VERSION_ID < 80100) {
+            if ($isPublic !== true) {
+                $reflProp->setAccessible(false);
+            }
         }
     }
 
