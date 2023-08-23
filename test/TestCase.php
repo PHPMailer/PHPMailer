@@ -215,7 +215,7 @@ abstract class TestCase extends PolyfillTestCase
             $reflProp->setAccessible(true);
         }
 
-        $reflProp->setValue($value);
+        $reflProp->setValue(null, $value);
 
         if ($isPublic !== true) {
             $reflProp->setAccessible(false);
