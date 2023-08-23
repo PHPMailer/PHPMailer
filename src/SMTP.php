@@ -1400,6 +1400,26 @@ class SMTP
     }
 
     /**
+     * Set SMTP timelimit.
+     *
+     * @param int $timelimit The timelimit duration in seconds
+     */
+    public function setTimelimit($timelimit = 0)
+    {
+        $this->Timelimit = $timelimit;
+    }
+
+    /**
+     * Get SMTP timelimit.
+     *
+     * @return int
+     */
+    public function getTimelimit()
+    {
+        return $this->Timelimit;
+    }
+
+    /**
      * Reports an error number and string.
      *
      * @param int    $errno   The error number returned by PHP
