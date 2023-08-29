@@ -80,9 +80,7 @@ class DSNConfigurator
         $config = $this->parseUrl($dsn);
 
         if (false === $config || !isset($config['scheme']) || !isset($config['host'])) {
-            throw new Exception(
-                sprintf('Malformed DSN: "%s".', $dsn)
-            );
+            throw new Exception('Malformed DSN');
         }
 
         if (isset($config['query'])) {
