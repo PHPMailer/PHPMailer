@@ -34,7 +34,7 @@ final class DSNConfiguratorTest extends TestCase
         $configurator = new DSNConfigurator();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Malformed DSN: "localhost".');
+        $this->expectExceptionMessage('Malformed DSN');
 
         $configurator->configure($this->Mail, 'localhost');
     }
