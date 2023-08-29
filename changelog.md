@@ -1,5 +1,12 @@
 # PHPMailer Change Log
 
+## Version 6.8.1 (August 29th, 2023)
+* Don't reflect malformed DSNs in error messages to avert any risk of XSS
+* Improve Simplified Chinese, Sinhalese, and Norwegian translations
+* Don't use `setAccessible` in PHP >= 8.1 in tests
+* Avoid a deprecation notice in PHP 8.3
+* Fix link in readme
+
 ## Version 6.8.0 (March 6th, 2023)
 * Add DSN parsing class, thanks to @voronkovich
 * Fix some name edge cases, expand tests
