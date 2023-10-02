@@ -1571,6 +1571,10 @@ class PHPMailer
 
             //Validate From, Sender, and ConfirmReadingTo addresses
             foreach (['From', 'Sender', 'ConfirmReadingTo'] as $address_kind) {
+                if ($this->{$address_kind} === null) {
+                    $this->{$address_kind} = '';
+                    continue;
+                }
                 $this->{$address_kind} = trim($this->{$address_kind});
                 if (empty($this->{$address_kind})) {
                     continue;
