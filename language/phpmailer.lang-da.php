@@ -9,6 +9,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP fejl: Login mislykkedes.';
+$PHPMAILER_LANG['buggy_php']            = 'Din version af PHP er berørt af en fejl, som gør at dine beskeder muligvis vises forkert. For at rette dette kan du skifte til SMTP, slå mail.add_x_header headeren i din php.ini fil fra, skifte til MacOS eller Linux eller opgradere din version af PHP til 7.0.17+ eller 7.1.3+.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP fejl: Forbindelse til SMTP serveren kunne ikke oprettes.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP fejl: Data blev ikke accepteret.';
 $PHPMAILER_LANG['empty_message']        = 'Meddelelsen er uden indhold';
