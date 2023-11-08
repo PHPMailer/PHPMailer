@@ -2198,7 +2198,8 @@ class PHPMailer
                     if (
                         $this->SMTPAutoTLS &&
                         $this->Host !== 'localhost' &&
-                        $sslext && 'ssl' !== $secure &&
+                        $sslext &&
+                        $secure !== 'ssl' &&
                         $this->smtp->getServerExt('STARTTLS')
                     ) {
                         $tls = true;
