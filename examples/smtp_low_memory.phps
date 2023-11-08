@@ -4,9 +4,8 @@
  * SMTP low memory example.
  */
 
-namespace PHPMailer\PHPMailer;
-
-require '../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 /**
  * This class demonstrates sending an already-built RFC822 message via SMTP
@@ -31,8 +30,10 @@ class SMTPLowMemory extends SMTP
          * According to rfc821 we should not send more than 1000 characters on a single line (including the LE)
          * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
          * smaller lines to fit within the limit.
-         * We will also look for lines that start with a '.' and prepend an additional '.'.
-         * NOTE: this does not count towards line-length limit.
+         * We will also look for lines that start with a '.' and prepend an additional '.' (which does not count
+         * towards the line-length limit), in order to implement the "dot stuffing" required by RFC5321 sections:
+         * https://datatracker.ietf.org/doc/html/rfc5321#section-4.5.2
+         * https://datatracker.ietf.org/doc/html/rfc5321#section-4.5.3.1.6.
          */
 
         //Normalize line breaks
@@ -110,22 +111,7 @@ class SMTPLowMemory extends SMTP
     }
 }
 
-/**
- * We need to use a PHPMailer subclass to make it use our SMTP implementation.
- * @package PHPMailer\PHPMailer
- */
-class PHPMailerLowMemory extends PHPMailer
-{
-    /**
-     * Patch in the new SMTP class.
-     * @return SMTP
-     */
-    public function getSMTPInstance()
-    {
-        if (!is_object($this->smtp)) {
-            $this->smtp = new SMTPLowMemory();
-        }
-
-        return $this->smtp;
-    }
-}
+//To make PHPMailer use our custom SMTP class, we need to give it an instance
+$mail = new PHPMailer(true);
+$mail->setSMTPInstance(new SMTPLowMemory());
+//Now carry on as normal
