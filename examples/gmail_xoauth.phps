@@ -88,7 +88,7 @@ $mail->setOAuth(
 
 //Option 2: Another OAuth library as OAuth2 token provider
 //Set up the other oauth library as per its documentation
-//Then create the wrapper class that implementations OAuthTokenProvider
+//Then create the wrapper class that implements OAuthTokenProvider
 $oauthTokenProvider = new MyOAuthTokenProvider(/* Email, ClientId, ClientSecret, etc. */);
 
 //Pass the implementation of OAuthTokenProvider to PHPMailer
