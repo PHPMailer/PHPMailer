@@ -373,6 +373,17 @@ class PHPMailer
     public $Timeout = 300;
 
     /**
+     * DSN Sender Extensions
+     * 'RET=FULL'  shall return the complete message in case of any error
+     *   xor
+     * 'RET=HDRS'  shall return only the headers of the failed e-mail.
+     * 'ENVID=xyz' shall include the ID xyz on the way back of this e-mail if any error.
+     *
+     * @see https://tools.ietf.org/html/rfc3461 See section 4.3 and 4.4 regarding RET and ENVID
+     */
+    public $dsn_ret = '';
+
+    /**
      * Comma separated list of DSN notifications
      * 'NEVER' under no circumstances a DSN must be returned to the sender.
      *         If you use NEVER all other notifications will be ignored.
@@ -2029,7 +2040,7 @@ class PHPMailer
         } else {
             $smtp_from = $this->Sender;
         }
-        if (!$this->smtp->mail($smtp_from)) {
+        if (!$this->smtp->mail($smtp_from, $this->dsn_ret)) {
             $this->setError($this->lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));
             throw new Exception($this->ErrorInfo, self::STOP_CRITICAL);
         }

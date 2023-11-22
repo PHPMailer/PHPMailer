@@ -888,6 +888,87 @@ class SMTP
     }
 
     /**
+     * Enforse the content of the DSN to be compliant with the RFC 3461, section 4.
+     *
+     * @param string $s eg. câfé
+     */
+    protected static function xtext(string $s): string
+    {
+        $r = '';
+        for ($i = 0, $len = strlen($s); $i < $len; ++$i) {
+            $o = ord($s[$i]);
+            if (($o >= 0x21) && ($o < 0x7e) && ($o !== ord('+')) && ($o !== ord('='))) {
+                $r .= $s[$i];
+                continue;
+            }
+            $r .= sprintf('+%02X', $o & 0xff);
+        }
+
+        return $r;
+    }
+
+    /**
+     * Enforce the content of the DSN to be compliant with the RFC 3461, section 4.
+     *
+     * @param string $s eg. câfé
+     *
+     * @return false|string
+     */
+    protected static function dsnize(string $str)
+    {
+        $r = [];
+        $args = explode(' ', $str);
+        switch (count($args)) {
+            case 1: /* likely RET=HDRS|FULL */
+            case 2: /* likely RET=HDRS|FULL ENVID=xtext */
+            /* place holder if more arguments get required */
+                break;
+            default:
+                return false;
+        }
+
+        foreach ($args as $i => $arg) {
+            $tokens = explode('=', $arg);
+
+            if ($i === 0) {
+                if (count($tokens) !== 2) {
+                    return false;
+                }
+
+                if (strcasecmp($tokens[0], 'RET') !== 0) {
+                    return false;
+                }
+
+                if ((strcasecmp($tokens[1], 'FULL') !== 0) &&
+                    (strcasecmp($tokens[1], 'HDRS') !== 0)) {
+                    return false;
+                }
+
+                $r[] = sprintf('RET=%s', strtoupper($tokens[1])); /* FULL or HDRS */
+                continue;
+            }
+
+            if ($i == 1) {
+                /* support any cases including ENVID=ab=de */
+                if (count($tokens) <= 1) {
+                    return false;
+                }
+
+                if (strcasecmp($tokens[0], 'ENVID') !== 0) {
+                    return false;
+                }
+
+                array_shift($tokens); // pop ENVID
+                $id = implode('=', $tokens);
+                $r[] = sprintf('ENVID=%s', self::xtext($id));
+                continue;
+            }
+        }
+
+        return implode(' ', $r);
+    }
+
+    /**
      * Send an SMTP MAIL command.
      * Starts a mail transaction from the email address specified in
      * $from. Returns true if successful or false otherwise. If True
@@ -896,16 +977,27 @@ class SMTP
      * Implements RFC 821: MAIL <SP> FROM:<reverse-path> <CRLF>.
      *
      * @param string $from Source address of this message
+     * @param string $ret  DSN argument
      *
      * @return bool
      */
-    public function mail($from)
+    public function mail($from, $ret = '')
     {
         $useVerp = ($this->do_verp ? ' XVERP' : '');
 
+        $useRet = '';
+        if ($this->getServerExt('DSN') && !empty($ret)) {
+            $useRet = self::dsnize($ret);
+            if (!is_string($useRet)) {
+                $useRet = ''; // bad one
+            } else {
+                $useRet = ' ' . $useRet;
+            }
+        }
+
         return $this->sendCommand(
             'MAIL FROM',
-            'MAIL FROM:<' . $from . '>' . $useVerp,
+            'MAIL FROM:<' . $from . '>' . $useVerp . $useRet,
             250
         );
     }
