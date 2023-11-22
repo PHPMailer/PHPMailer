@@ -191,6 +191,23 @@ final class CustomHeaderTest extends TestCase
     }
 
     /**
+     * Test removing previously set custom header.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::clearCustomHeader
+     */
+    public function testClearCustomHeader()
+    {
+        $this->Mail->addCustomHeader('foo', 'bar');
+        self::assertSame([['foo', 'bar']], $this->Mail->getCustomHeaders());
+
+        $this->Mail->clearCustomHeader('foo');
+
+        $cleared = $this->Mail->getCustomHeaders();
+        self::assertIsArray($cleared);
+        self::assertEmpty($cleared);
+    }
+
+    /**
      * Test removing previously set custom headers.
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::clearCustomHeaders
@@ -221,5 +238,23 @@ final class CustomHeaderTest extends TestCase
 
         $mail = new PHPMailer(true);
         $mail->addCustomHeader('SomeHeader', "Some\n Value");
+    }
+
+    /**
+     * Test replacing a previously set custom header.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::replaceCustomHeader
+     */
+    public function testReplaceCustomHeader()
+    {
+        $this->Mail->addCustomHeader('foo', 'bar');
+        $this->Mail->replaceCustomHeader('foo', 'baz');
+
+        // Test retrieving the custom header(s) and verify the updated value is seet.
+        self::assertSame(
+            [['foo', 'baz']],
+            $this->Mail->getCustomHeaders(),
+            'Custom header does not contain expected update'
+        );
     }
 }

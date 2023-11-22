@@ -4059,6 +4059,39 @@ class PHPMailer
     }
 
     /**
+     * Clear a specific custom header.
+     */
+    public function clearCustomHeader($name)
+    {
+        foreach ($this->CustomHeader as $k => $pair) {
+            if ($pair[0] == $name) {
+                unset($this->CustomHeader[$k]);
+            }
+        }
+    }
+
+    /**
+     * Replace a custom header.
+     */
+    public function replaceCustomHeader($name, $value)
+    {
+        foreach ($this->CustomHeader as $k => $pair) {
+            if ($pair[0] == $name) {
+                if (strpbrk($name . $value, "\r\n") !== false) {
+                    if ($this->exceptions) {
+                        throw new Exception($this->lang('invalid_header'));
+                    }
+
+                    return false;
+                }
+                $this->CustomHeader[$k] = [$name, $value];
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Add an error message to the error container.
      *
      * @param string $msg
