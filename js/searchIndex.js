@@ -521,6 +521,16 @@ Search.appendIndex(
             "summary": "Clear\u0020all\u0020custom\u0020headers.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_clearCustomHeaders"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AclearCustomHeader\u0028\u0029",
+            "name": "clearCustomHeader",
+            "summary": "Clear\u0020a\u0020specific\u0020custom\u0020header.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_clearCustomHeader"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AreplaceCustomHeader\u0028\u0029",
+            "name": "replaceCustomHeader",
+            "summary": "Replace\u0020a\u0020custom\u0020header.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_replaceCustomHeader"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsetError\u0028\u0029",
             "name": "setError",
             "summary": "Add\u0020an\u0020error\u0020message\u0020to\u0020the\u0020error\u0020container.",
