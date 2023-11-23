@@ -28,7 +28,7 @@ $mail->Username = 'yourname@example.com';
 $mail->Password = 'yourpassword';
 $mail->setFrom('list@example.com', 'List manager');
 $mail->addReplyTo('list@example.com', 'List manager');
-
+$mail->addCustomHeader('List-Unsubscribe', '<mailto:unsubscribes@example.com>, <https://www.example.com/unsubscribe.php>');
 $mail->Subject = 'PHPMailer Simple database mailing list test';
 
 //Same body for all messages, so set this before the sending loop
@@ -55,6 +55,11 @@ foreach ($result as $row) {
         //Assumes the image data is stored in the DB
         $mail->addStringAttachment($row['photo'], 'YourPhoto.jpg');
     }
+    $mail->replaceCustomHeader(
+        'List-Unsubscribe',
+        '<mailto:unsubscribes@example.com>, <https://www.example.com/unsubscribe.php?email=' .
+        rawurlencode($row['email']).'>'
+    );
 
     try {
         $mail->send();
