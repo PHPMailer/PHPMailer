@@ -1192,6 +1192,35 @@ EOT;
     }
 
     /**
+     * Test SMTP Xclient options
+     */
+    public function testSmtpXclient()
+    {
+        $this->Mail->isSMTP();
+        $this->Mail->SMTPAuth = false;
+        $this->Mail->setSMTPXclientAttribute('ADDR', '127.0.0.1');
+        $this->Mail->setSMTPXclientAttribute('LOGIN', 'user@example.com');
+        $this->Mail->setSMTPXclientAttribute('HELO', 'test.example.com');
+        $this->assertFalse($this->Mail->setSMTPXclientAttribute('INVALID', 'value'));
+
+        $attributes = $this->Mail->getSMTPXclientAttributes();
+        $this->assertEquals('test.example.com', $attributes['HELO']);
+
+        // remove attribute
+        $this->Mail->setSMTPXclientAttribute('HELO', null);
+        $attributes = $this->Mail->getSMTPXclientAttributes();
+        $this->assertEquals(['ADDR' => '127.0.0.1', 'LOGIN' => 'user@example.com'], $attributes);
+
+        $this->Mail->Subject .= ': Testing XCLIENT';
+        $this->buildBody();
+        $this->Mail->clearAllRecipients();
+        self::assertTrue($this->Mail->addAddress('a@example.com'), 'Addressing failed');
+        $this->Mail->preSend();
+        self::assertTrue($this->Mail->send(), 'send failed');
+    }
+
+
+    /**
      * Test SMTP host connections.
      * This test can take a long time, so run it last.
      *

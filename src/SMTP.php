@@ -199,6 +199,18 @@ class SMTP
     ];
 
     /**
+     * Allowed SMTP XCLIENT attributes.
+     * Must be allowed by the SMTP server. EHLO response is not checked.
+     *
+     * @see https://www.postfix.org/XCLIENT_README.html
+     *
+     * @var array
+     */
+    public static $xclient_allowed_attributes = [
+        'NAME', 'ADDR', 'PORT', 'PROTO', 'HELO', 'LOGIN', 'DESTADDR', 'DESTPORT'
+    ];
+
+    /**
      * The last transaction ID issued in response to a DATA command,
      * if one was detected.
      *
@@ -969,6 +981,25 @@ class SMTP
             $rcpt,
             [250, 251]
         );
+    }
+
+    /**
+     * Send SMTP XCLIENT command to server and check its return code.
+     *
+     * @return bool True on success
+     */
+    public function xclient(array $vars)
+    {
+        $xclient_options = "";
+        foreach ($vars as $key => $value) {
+            if (in_array($key, SMTP::$xclient_allowed_attributes)) {
+                $xclient_options .= " {$key}={$value}";
+            }
+        }
+        if (!$xclient_options) {
+            return true;
+        }
+        return $this->sendCommand('XCLIENT', 'XCLIENT' . $xclient_options, 250);
     }
 
     /**
