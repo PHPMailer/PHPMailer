@@ -281,6 +281,16 @@ Search.appendIndex(
             "summary": "Provide\u0020an\u0020instance\u0020to\u0020use\u0020for\u0020SMTP\u0020operations.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_setSMTPInstance"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsetSMTPXclientAttribute\u0028\u0029",
+            "name": "setSMTPXclientAttribute",
+            "summary": "Provide\u0020SMTP\u0020XCLIENT\u0020attributes",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_setSMTPXclientAttribute"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AgetSMTPXclientAttributes\u0028\u0029",
+            "name": "getSMTPXclientAttributes",
+            "summary": "Get\u0020SMTP\u0020XCLIENT\u0020attributes",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_getSMTPXclientAttributes"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsmtpSend\u0028\u0029",
             "name": "smtpSend",
             "summary": "Send\u0020mail\u0020via\u0020SMTP.",
@@ -1051,6 +1061,11 @@ Search.appendIndex(
             "summary": "SMTP\u0020authentication\u0020type.\u0020Options\u0020are\u0020CRAM\u002DMD5,\u0020LOGIN,\u0020PLAIN,\u0020XOAUTH2.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_AuthType"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024SMTPXClient",
+            "name": "SMTPXClient",
+            "summary": "SMTP\u0020SMTPXClient\u0020command\u0020attibutes",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_SMTPXClient"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024oauth",
             "name": "oauth",
             "summary": "An\u0020implementation\u0020of\u0020the\u0020PHPMailer\u0020OAuthTokenProvider\u0020interface.",
@@ -1486,6 +1501,11 @@ Search.appendIndex(
             "summary": "Send\u0020an\u0020SMTP\u0020RCPT\u0020command.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_recipient"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003Axclient\u0028\u0029",
+            "name": "xclient",
+            "summary": "Send\u0020SMTP\u0020XCLIENT\u0020command\u0020to\u0020server\u0020and\u0020check\u0020its\u0020return\u0020code.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_xclient"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003Areset\u0028\u0029",
             "name": "reset",
             "summary": "Send\u0020an\u0020SMTP\u0020RSET\u0020command.",
@@ -1690,6 +1710,11 @@ Search.appendIndex(
             "name": "smtp_transaction_id_patterns",
             "summary": "Patterns\u0020to\u0020extract\u0020an\u0020SMTP\u0020transaction\u0020id\u0020from\u0020reply\u0020to\u0020a\u0020DATA\u0020command.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003A\u0024xclient_allowed_attributes",
+            "name": "xclient_allowed_attributes",
+            "summary": "Allowed\u0020SMTP\u0020XCLIENT\u0020attributes.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003A\u0024last_smtp_transaction_id",
             "name": "last_smtp_transaction_id",
