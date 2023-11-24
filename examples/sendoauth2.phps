@@ -18,8 +18,8 @@
  * this will provide support for Google's version of client credentials (Service Accounts) and client certificates)
  */
 
-//Set the wrapper namespace
-namespace decomplexity\SendOauth2;
+//Import SendOauth2B class into the global namespace
+use decomplexity\SendOauth2\SendOauth2B;
 
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
@@ -41,17 +41,13 @@ try {
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
     $mail->Username   = 'user@example.com';                     //SMTP username
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable implicit TLS encryption
-    $mail->Port       = 587;                                    //TCP port to connect to
+    $mail->Port       = 465;                                    //TCP port to connect to
     $mail->AuthType   = 'XOAUTH2';                              // Set AuthType to use XOAUTH2
 
     //Sender and recipients
     $mail->setFrom('from@example.com', 'Mailer');               // 'Header' From address with optional sender name
     $mail->addAddress('joe@example.net', 'Joe User');           //Add a recipient
-    $mail->addAddress('ellen@example.com');                     //Name is optional
-    $mail->addReplyTo('info@example.com', 'Information');
-    $mail->addCC('cc@example.com');
-    $mail->addBCC('bcc@example.com');
-
+   
     //Authentication
     $oauthTokenProvider = new SendOauth2B(
         ['mail' => $mail,                                                 // PHPMailer instance
@@ -66,7 +62,7 @@ try {
                 'hostedDomain'                => 'mydomain.com',          // Google only (and optional)
                 'refreshToken'                => 'very long string',
                 'grantTypeValue'              => 'authorization_code',    // or 'client_credentials' (Microsoft only)
-                 ];
+                 ]
     );
     /**
       * If an argument (above) has a null value, the argument can be omitted altogether.
@@ -74,12 +70,6 @@ try {
       */
 
     $mail->setOAuth($oauthTokenProvider);                                 //Pass OAuthTokenProvider to PHPMailer
-
-    //Attachments
-   
-    $mail->addAttachment('/var/tmp/file.tar.gz');                        //Add attachments
-    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');                   //Optional name
-   
 
     //Content
     $mail->isHTML(true);                                                 //Set email format to HTML
