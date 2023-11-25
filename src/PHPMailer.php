@@ -4101,24 +4101,63 @@ class PHPMailer
     }
 
     /**
-     * Clear a specific custom header.
+     * Clear a specific custom header by name or name and value.
+     * $name value can be overloaded to contain
+     * both header name and value (name:value).
+     *
+     * @param string      $name  Custom header name
+     * @param string|null $value Header value
+     *
+     * @return bool True if a header was replaced successfully
      */
-    public function clearCustomHeader($name)
+    public function clearCustomHeader($name, $value = null)
     {
+        if (null === $value && strpos($name, ':') !== false) {
+            //Value passed in as name:value
+            list($name, $value) = explode(':', $name, 2);
+        }
+        $name = trim($name);
+        $value = (null === $value) ? null : trim($value);
+
         foreach ($this->CustomHeader as $k => $pair) {
             if ($pair[0] == $name) {
-                unset($this->CustomHeader[$k]);
+                // We remove the header if the value is not provided or it matches.
+                if (null === $value ||  $pair[1] == $value) {
+                    unset($this->CustomHeader[$k]);
+                }
             }
         }
+
+        return true;
     }
 
     /**
      * Replace a custom header.
+     * $name value can be overloaded to contain
+     * both header name and value (name:value).
+     *
+     * @param string      $name  Custom header name
+     * @param string|null $value Header value
+     *
+     * @return bool True if a header was replaced successfully
+     * @throws Exception
      */
-    public function replaceCustomHeader($name, $value)
+    public function replaceCustomHeader($name, $value = null)
     {
+        if (null === $value && strpos($name, ':') !== false) {
+            //Value passed in as name:value
+            list($name, $value) = explode(':', $name, 2);
+        }
+        $name = trim($name);
+        $value = (null === $value) ? '' : trim($value);
+
+        $replaced = false;
         foreach ($this->CustomHeader as $k => $pair) {
             if ($pair[0] == $name) {
+                if ($replaced) {
+                    unset($this->CustomHeader[$k]);
+                    continue;
+                }
                 if (strpbrk($name . $value, "\r\n") !== false) {
                     if ($this->exceptions) {
                         throw new Exception($this->lang('invalid_header'));
@@ -4127,6 +4166,7 @@ class PHPMailer
                     return false;
                 }
                 $this->CustomHeader[$k] = [$name, $value];
+                $replaced = true;
             }
         }
 

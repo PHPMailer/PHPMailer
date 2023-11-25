@@ -197,14 +197,39 @@ final class CustomHeaderTest extends TestCase
      */
     public function testClearCustomHeader()
     {
+        // make sure 'foo' is cleared, even if there is more than one header set.
         $this->Mail->addCustomHeader('foo', 'bar');
-        self::assertSame([['foo', 'bar']], $this->Mail->getCustomHeaders());
+        $this->Mail->addCustomHeader('foo', 'baz');
+        self::assertSame([['foo', 'bar'], ['foo', 'baz']], $this->Mail->getCustomHeaders());
 
         $this->Mail->clearCustomHeader('foo');
 
         $cleared = $this->Mail->getCustomHeaders();
         self::assertIsArray($cleared);
         self::assertEmpty($cleared);
+    }
+
+    /**
+     * Test removing previously set custom header value.
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::clearCustomHeader
+     */
+    public function testClearCustomHeaderValue()
+    {
+        // Test clearing 'name', 'value'
+        $this->Mail->addCustomHeader('foo', 'bar');
+        $this->Mail->addCustomHeader('foo', 'baz');
+        self::assertSame([['foo', 'bar'], ['foo', 'baz']], $this->Mail->getCustomHeaders());
+
+        $this->Mail->clearCustomHeader('foo', 'bar');
+        self::assertSame([['foo', 'baz']], array_values($this->Mail->getCustomHeaders()));
+
+        // Test clearing 'name: value'
+        $this->Mail->addCustomHeader('foo', 'bar');
+        self::assertSame([['foo', 'baz'], ['foo', 'bar']], array_values($this->Mail->getCustomHeaders()));
+
+        $this->Mail->clearCustomHeader('foo: bar');
+        self::assertSame([['foo', 'baz']], array_values($this->Mail->getCustomHeaders()));
     }
 
     /**
