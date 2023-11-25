@@ -20,7 +20,6 @@
 
 //Import SendOauth2B class into the global namespace
 use decomplexity\SendOauth2\SendOauth2B;
-
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -47,7 +46,7 @@ try {
     //Sender and recipients
     $mail->setFrom('from@example.com', 'Mailer');               // 'Header' From address with optional sender name
     $mail->addAddress('joe@example.net', 'Joe User');           //Add a recipient
-   
+
     //Authentication
     $oauthTokenProvider = new SendOauth2B(
         ['mail' => $mail,                                                 // PHPMailer instance
