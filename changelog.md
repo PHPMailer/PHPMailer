@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## Version 6.9.1 (November 25th, 2023)
+* Finalise SendOauth2 example
+
 ## Version 6.9.0 (November 23rd, 2023)
 * Add support for official release of PHP 8.3, add experimental support for PHP 8.4
 * Add `clearCustomHeader` and `replaceCustomHeader` methods
