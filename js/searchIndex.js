@@ -533,7 +533,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AclearCustomHeader\u0028\u0029",
             "name": "clearCustomHeader",
-            "summary": "Clear\u0020a\u0020specific\u0020custom\u0020header.",
+            "summary": "Clear\u0020a\u0020specific\u0020custom\u0020header\u0020by\u0020name\u0020or\u0020name\u0020and\u0020value.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_clearCustomHeader"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AreplaceCustomHeader\u0028\u0029",
