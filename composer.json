@@ -47,6 +47,7 @@
         "yoast/phpunit-polyfills": "^1.0.4"
     },
     "suggest": {
+        "decomplexity/SendOauth2": "Adapter for using XOAUTH2 authentication",
         "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
         "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
         "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
