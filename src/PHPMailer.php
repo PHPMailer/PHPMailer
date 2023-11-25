@@ -4113,7 +4113,7 @@ class PHPMailer
         foreach ($this->CustomHeader as $k => $pair) {
             if ($pair[0] == $name) {
                 if ($replaced) {
-                    unset( $this->CustomHeader[$k]);
+                    unset($this->CustomHeader[$k]);
                     continue;
                 }
                 if (strpbrk($name . $value, "\r\n") !== false) {

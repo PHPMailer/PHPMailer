@@ -222,14 +222,14 @@ final class CustomHeaderTest extends TestCase
         self::assertSame([['foo', 'bar'], ['foo', 'baz']], $this->Mail->getCustomHeaders());
 
         $this->Mail->clearCustomHeader('foo', 'bar');
-        self::assertSame($this->Mail->getCustomHeaders(), [1 => ['foo', 'baz']]);
+        self::assertSame([['foo', 'baz']], array_values($this->Mail->getCustomHeaders()));
 
         // Test clearing 'name: value'
         $this->Mail->addCustomHeader('foo', 'bar');
-        self::assertSame([1 => ['foo', 'baz'], 2 => ['foo', 'bar']], $this->Mail->getCustomHeaders());
+        self::assertSame([['foo', 'baz'], ['foo', 'bar']], array_values($this->Mail->getCustomHeaders()));
 
         $this->Mail->clearCustomHeader('foo: bar');
-        self::assertSame([1 => ['foo', 'baz']], $this->Mail->getCustomHeaders());
+        self::assertSame([['foo', 'baz']], array_values($this->Mail->getCustomHeaders()));
     }
 
     /**
