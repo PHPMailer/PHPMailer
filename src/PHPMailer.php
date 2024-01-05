@@ -1072,7 +1072,7 @@ class PHPMailer
      * be modified after calling this function), addition of such addresses is delayed until send().
      * Addresses that have been added already return false, but do not throw exceptions.
      *
-     * @param string $kind    One of 'to', 'cc', 'bcc', or 'ReplyTo'
+     * @param string $kind    One of 'to', 'cc', 'bcc', or 'Reply-To'
      * @param string $address The email address
      * @param string $name    An optional username associated with the address
      *
