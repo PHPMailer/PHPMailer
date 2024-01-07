@@ -196,6 +196,7 @@ class SMTP
         'Haraka' => '/[\d]{3} Message Queued \((.*)\)/',
         'ZoneMTA' => '/[\d]{3} Message queued as (.*)/',
         'Mailjet' => '/[\d]{3} OK queued as (.*)/',
+        'VcMailer' => '/[\d]{3} 2.0.0 OK (.*)/'
     ];
 
     /**
