@@ -5249,14 +5249,4 @@ class PHPMailer
     {
         $this->oauth = $oauth;
     }
-
-    
-    /**
-     * Get the last transaction ID.
-     *
-     * @return string The last transaction ID.
-     */
-    public function getLastTransactionID() {
-        return $this->smtp->getLastTransactionID();
-    }
 }
