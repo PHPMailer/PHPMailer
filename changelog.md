@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Escape dots in SMTP transaction ID patterns
+
 ## Version 6.9.1 (November 25th, 2023)
 * Finalise SendOauth2 example
 
