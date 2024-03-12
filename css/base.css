@@ -99,6 +99,7 @@
 /* Base Styles
 -------------------------------------------------- */
 body {
+    background-color: #fff;
     color: var(--text-color);
     font-family: var(--font-primary);
     font-size: var(--text-md);
@@ -494,7 +495,7 @@ div.phpdocumentor-list > ul,
 ol.phpdocumentor-list,
 ul.phpdocumentor-list {
     margin-top: 0;
-    padding-left: var(--spacing-md);
+    padding-left: var(--spacing-lg);
     margin-bottom: var(--spacing-sm);
 }
 
