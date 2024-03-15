@@ -591,6 +591,13 @@ class PHPMailer
     public static $validator = 'php';
 
     /**
+     * cid default domain
+     *
+     * @var string
+     */
+    public $cid_default_domain = '@phpmailer.0';
+    
+    /**
      * An instance of the SMTP sender class.
      *
      * @var SMTP
@@ -4625,7 +4632,7 @@ class PHPMailer
                     }
                     //Hash the decoded data, not the URL, so that the same data-URI image used in multiple places
                     //will only be embedded once, even if it used a different encoding
-                    $cid = substr(hash('sha256', $data), 0, 32) . '@phpmailer.0'; //RFC2392 S 2
+                    $cid = substr(hash('sha256', $data), 0, 32) . $this->cid_default_domain; //RFC2392 S 2
 
                     if (!$this->cidExists($cid)) {
                         $this->addStringEmbeddedImage(
@@ -4659,7 +4666,7 @@ class PHPMailer
                         $directory = '';
                     }
                     //RFC2392 S 2
-                    $cid = substr(hash('sha256', $url), 0, 32) . '@phpmailer.0';
+                    $cid = substr(hash('sha256', $url), 0, 32) . $this->cid_default_domain;
                     if (strlen($basedir) > 1 && '/' !== substr($basedir, -1)) {
                         $basedir .= '/';
                     }
