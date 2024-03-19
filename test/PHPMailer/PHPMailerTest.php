@@ -614,6 +614,52 @@ EOT;
     }
 
     /**
+     * An embedded attachment test with custom cid domain.
+     */
+    public function testEmbeddedImageCustomCidDomain()
+    {
+        $this->Mail->msgHTML('<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>E-Mail Inline Image Test</title>
+  </head>
+  <body>
+    <p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+  </body>
+</html>', '', false, '@example.com');
+        $this->Mail->preSend();
+        self::assertStringContainsString(
+            'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@example.com>',
+            $this->Mail->getSentMIMEMessage(),
+            'Embedded image header encoding incorrect.'
+        );
+    }
+
+    /**
+     * An embedded attachment test with custom cid domain invalid.
+     */
+    public function testEmbeddedImageCustomCidDomainInvalid()
+    {
+        $this->Mail->msgHTML('<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>E-Mail Inline Image Test</title>
+  </head>
+  <body>
+    <p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+  </body>
+</html>', '', false, '@no a valid domain');
+        $this->Mail->preSend();
+        self::assertStringContainsString(
+            'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@phpmailer.0>',
+            $this->Mail->getSentMIMEMessage(),
+            'Embedded image header encoding incorrect.'
+        );
+    }
+
+    /**
      * An embedded attachment test.
      */
     public function testMultiEmbeddedImage()
