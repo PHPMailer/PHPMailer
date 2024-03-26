@@ -11,7 +11,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Hatası: Oturum açılamadı.';
-$PHPMAILER_LANG['buggy_php']         	= 'PHP sürümünüz iletilerin bozulmasına neden olabilecek bir hatadan etkileniyor. Bunu düzeltmek için, SMTP kullanarak göndermeye geçin, mail.add_x_header seçeneğini devre dışı bırakın php.ini dosyanızdaki mail.add_x_header seçeneğini devre dışı bırakın, MacOS veya Linux geçin veya PHP sürümünü 7.0.17+ veya 7.1.3+ sürümüne yükseltin,';
+$PHPMAILER_LANG['buggy_php']            = 'PHP sürümünüz iletilerin bozulmasına neden olabilecek bir hatadan etkileniyor. Bunu düzeltmek için, SMTP kullanarak göndermeye geçin, mail.add_x_header seçeneğini devre dışı bırakın php.ini dosyanızdaki mail.add_x_header seçeneğini devre dışı bırakın, MacOS veya Linux geçin veya PHP sürümünü 7.0.17+ veya 7.1.3+ sürümüne yükseltin,';
 $PHPMAILER_LANG['connect_host']         = 'SMTP Hatası: SMTP sunucusuna bağlanılamadı.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP Hatası: Veri kabul edilmedi.';
 $PHPMAILER_LANG['empty_message']        = 'Mesajın içeriği boş';
@@ -23,9 +23,9 @@ $PHPMAILER_LANG['file_open']            = 'Dosya Hatası: Dosya açılamadı: ';
 $PHPMAILER_LANG['from_failed']          = 'Belirtilen adreslere gönderme başarısız: ';
 $PHPMAILER_LANG['instantiate']          = 'Örnek e-posta fonksiyonu oluşturulamadı.';
 $PHPMAILER_LANG['invalid_address']      = 'Geçersiz e-posta adresi: ';
-$PHPMAILER_LANG['invalid_header']      	= 'Geçersiz başlık adı veya değeri: ';
-$PHPMAILER_LANG['invalid_hostentry']   	= 'Geçersiz ana bilgisayar girişi: ';
-$PHPMAILER_LANG['invalid_host']   		= 'Geçersiz ana bilgisayar: ';
+$PHPMAILER_LANG['invalid_header']       = 'Geçersiz başlık adı veya değeri: ';
+$PHPMAILER_LANG['invalid_hostentry']    = 'Geçersiz ana bilgisayar girişi: ';
+$PHPMAILER_LANG['invalid_host']         = 'Geçersiz ana bilgisayar: ';
 $PHPMAILER_LANG['mailer_not_supported'] = ' e-posta kütüphanesi desteklenmiyor.';
 $PHPMAILER_LANG['provide_address']      = 'En az bir alıcı e-posta adresi belirtmelisiniz.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Hatası: Belirtilen alıcılara ulaşılamadı: ';
