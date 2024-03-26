@@ -11,9 +11,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Hatası: Oturum açılamadı.';
-$PHPMAILER_LANG['buggy_php']         	= 'PHP sürümünüz iletilerin bozulmasına neden olabilecek bir hatadan etkileniyor.' .
- ' Bunu düzeltmek için, SMTP kullanarak göndermeye geçin, mail.add_x_header seçeneğini devre dışı bırakın'.
- ' php.ini dosyanızdaki mail.add_x_header seçeneğini devre dışı bırakın, MacOS veya Linux geçin veya PHP sürümünü 7.0.17+ veya 7.1.3+ sürümüne yükseltin,';
+$PHPMAILER_LANG['buggy_php']         	= 'PHP sürümünüz iletilerin bozulmasına neden olabilecek bir hatadan etkileniyor. Bunu düzeltmek için, SMTP kullanarak göndermeye geçin, mail.add_x_header seçeneğini devre dışı bırakın php.ini dosyanızdaki mail.add_x_header seçeneğini devre dışı bırakın, MacOS veya Linux geçin veya PHP sürümünü 7.0.17+ veya 7.1.3+ sürümüne yükseltin,';
 $PHPMAILER_LANG['connect_host']         = 'SMTP Hatası: SMTP sunucusuna bağlanılamadı.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP Hatası: Veri kabul edilmedi.';
 $PHPMAILER_LANG['empty_message']        = 'Mesajın içeriği boş';
