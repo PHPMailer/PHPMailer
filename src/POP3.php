@@ -250,7 +250,9 @@ class POP3
 
         //On Windows this will raise a PHP Warning error if the hostname doesn't exist.
         //Rather than suppress it with @fsockopen, capture it cleanly instead
-        set_error_handler([$this, 'catchWarning']);
+        set_error_handler(function () {
+            call_user_func_array([$this, 'catchWarning'], func_get_args());
+        });
 
         if (false === $port) {
             $port = static::DEFAULT_PORT;
