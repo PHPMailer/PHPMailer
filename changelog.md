@@ -4,7 +4,7 @@
 * Escape dots in SMTP transaction ID patterns
 * Add link to [aboutmy.email](https://aboutmy.email) testing service in docs
 * Add a more comprehensive example for using XOAUTH2 with gmail and Azure, thanks to @decomplexity
-* Update Turkish translation
+* Update Turkish and Spanish translation
 
 ## Version 6.9.1 (November 25th, 2023)
 * Finalise SendOauth2 example
