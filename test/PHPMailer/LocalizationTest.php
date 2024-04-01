@@ -8,7 +8,7 @@
  * @author    Andy Prevost
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @license   https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html GNU Lesser General Public License
  */
 
 namespace PHPMailer\Test\PHPMailer;
@@ -262,7 +262,7 @@ final class LocalizationTest extends TestCase
             ],
             'Custom path: not a local/permitted path' => [
                 'langCode' => 'xx', // Unassigned lang code.
-                'langPath' => 'http://example.com/files/',
+                'langPath' => 'https://example.com/files/',
             ],
             'Custom path: path traversal' => [
                 'langCode' => 'xx', // Unassigned lang code.

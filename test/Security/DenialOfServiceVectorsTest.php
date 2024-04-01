@@ -8,7 +8,7 @@
  * @author    Andy Prevost
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @license   https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html GNU Lesser General Public License
  */
 
 namespace PHPMailer\Test\Security;
@@ -24,8 +24,6 @@ final class DenialOfServiceVectorsTest extends SendTestCase
 {
     /**
      * Test this denial of service attack.
-     *
-     * @link http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */
     public function testDenialOfServiceAttack1()
     {

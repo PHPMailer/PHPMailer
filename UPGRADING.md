@@ -38,7 +38,7 @@ require 'src/Exception.php';
 ```
 
 ## Namespace
-PHPMailer 6 uses a [namespace](http://php.net/manual/en/language.namespaces.rationale.php) of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You **must** import (with a `use` statement) classes you're using explicitly into your own namespace, or reference them absolutely in the global namespace - all the examples do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it! If you are using other PHPMailer classes explicitly (such as `SMTP` or `Exception`), you will need to import them into your namespace too.
+PHPMailer 6 uses a [namespace](https://www.php.net/manual/en/language.namespaces.rationale.php) of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You **must** import (with a `use` statement) classes you're using explicitly into your own namespace, or reference them absolutely in the global namespace - all the examples do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it! If you are using other PHPMailer classes explicitly (such as `SMTP` or `Exception`), you will need to import them into your namespace too.
 
 For example you might create an instance like this:
 
@@ -91,7 +91,7 @@ try {
 ```
 
 ## OAuth2 Support
-The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](http://oauth2-client.thephpleague.com) from the [League of extraordinary packages](http://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
+The OAuth2 implementation has been completely redesigned using the [OAuth2 packages](https://oauth2-client.thephpleague.com) from the [League of extraordinary packages](https://thephpleague.com), providing support for many more OAuth services, and you'll need to update your code if you were using OAuth in 5.2. See [the examples](https://github.com/PHPMailer/PHPMailer/tree/master/examples) and documentation in the [PHPMailer wiki](https://github.com/PHPMailer/PHPMailer/wiki).
 
 ## Extras
 Additional classes previously bundled in the `Extras` folder (such as htmlfilter and EasyPeasyICS) have been removed - use equivalent packages from [packagist.org](https://packagist.org) instead.

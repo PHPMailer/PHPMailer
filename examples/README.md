@@ -8,15 +8,15 @@ This folder contains a collection of examples of using [PHPMailer](https://githu
 When working on email sending code you'll find yourself worrying about what might happen if all these test emails got sent to your mailing list. The solution is to use a fake mail server, one that acts just like the real thing, but just doesn't actually send anything out. Some offer web interfaces, feedback, logging, the ability to return specific error codes, all things that are useful for testing error handling, authentication etc. Here's a selection of mail testing tools you might like to try:
 
 *   [FakeEmail](https://github.com/tomwardill/FakeEmail), a Python-based fake mail server with a web interface.
-*   [smtp-sink](http://www.postfix.org/smtp-sink.1.html), part of the Postfix mail server, so you may have this installed already. This is used in the GitHub actions configuration to run PHPMailer's unit tests.
+*   [smtp-sink](https://www.postfix.org/smtp-sink.1.html), part of the Postfix mail server, so you may have this installed already. This is used in the GitHub actions configuration to run PHPMailer's unit tests.
 *   [smtp4dev](https://github.com/rnwood/smtp4dev), a dummy SMTP server for Windows and Linux.
 *   [fakesendmail.sh](https://github.com/PHPMailer/PHPMailer/blob/master/test/fakesendmail.sh), part of PHPMailer's test setup, this is a shell script that emulates sendmail for testing 'mail' or 'sendmail' methods in PHPMailer.
 *   [HELO](https://usehelo.com), a very nice (commercial) mail server desktop app from BeyondCode, and [how to set it up for local testing](https://usehelo.com/blog/how-to-use-helo-with-phps-mail-function).
-*   [msglint](http://tools.ietf.org/tools/msglint/), not a mail server, the IETF's MIME structure analyser checks the formatting of your messages.
+*   [msglint](https://www.splitbrain.org/_static/msglint/), not a mail server, the IETF's MIME structure analyser checks the formatting of your messages.
 *   [MailHog](https://github.com/les-enovateurs/mailhog-examples), a Go-based email testing tool for developers with a web interface. You can use it with Docker and GitHub Actions to test your mails. The repository also contains a small part of PHPMailer's setup.
 *   [aboutmy.email](https://aboutmy.email), a service for evaluating your email config – SPF, DKIM, DMARC, and compliance with list-unsubscribe, TLS, and many other settings.
 
-Most of these examples use the `example.com` and `example.net` domains. These domains are reserved by IANA for illustrative purposes, as documented in [RFC 2606](http://tools.ietf.org/html/rfc2606). Don't use made-up domains like 'mydomain.com' or 'somedomain.com' in examples as someone, somewhere, probably owns them!
+Most of these examples use the `example.com` and `example.net` domains. These domains are reserved by IANA for illustrative purposes, as documented in [RFC 2606](https://www.rfc-editor.org/rfc/rfc2606). Don't use made-up domains like 'mydomain.com' or 'somedomain.com' in examples as someone, somewhere, probably owns them!
 
 ## Security note
 Before running these examples in a web server, you'll need to rename them with '.php' extensions. They are supplied as '.phps' files which will usually be displayed with syntax highlighting by PHP instead of running them. This prevents potential security issues with running potential spam-gateway code if you happen to deploy these code examples on a live site - _please don't do that!_

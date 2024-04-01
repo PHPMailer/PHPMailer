@@ -3,13 +3,13 @@
 # Fake POP3 server
 # By Marcus Bointon <phpmailer@synchromedia.co.uk>
 # Copyright 2010 - 2020 Marcus Bointon
-# Based on code by 'Frater' found at http://www.linuxquestions.org/questions/programming-9/fake-pop3-server-to-capture-pop3-passwords-933733
+# Based on code by 'Frater' found at https://www.linuxquestions.org/questions/programming-9/fake-pop3-server-to-capture-pop3-passwords-933733/
 # Does not actually serve any mail, but supports commands sufficient to test POP-before SMTP
 # Can be run directly from a shell like this:
 # mkfifo fifo; nc -l 1100 <fifo |./fakepopserver.sh >fifo; rm fifo
 # It will accept any user name and will return a positive response for the password 'test'
 
-# Licensed under the GNU Lesser General Public License: http://www.gnu.org/copyleft/lesser.html
+# Licensed under the GNU Lesser General Public License: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
 
 # Enable debug output
 #set -xv

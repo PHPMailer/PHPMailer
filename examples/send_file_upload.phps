@@ -13,7 +13,7 @@ $msg = '';
 if (array_key_exists('userfile', $_FILES)) {
     //First handle the upload
     //Don't trust provided filename - same goes for MIME types
-    //See http://php.net/manual/en/features.file-upload.php#114004 for more thorough upload validation
+    //See https://www.php.net/manual/en/features.file-upload.php#114004 for more thorough upload validation
     //Extract an extension from the provided filename
     $ext = PHPMailer::mb_pathinfo($_FILES['userfile']['name'], PATHINFO_EXTENSION);
     //Define a safe location to move the uploaded file to, preserving the extension
