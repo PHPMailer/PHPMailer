@@ -100,7 +100,7 @@ EOT
                 'expected' => <<<EOT
 PHPMailer does HTML!
         This is a test message written in HTML.
-        Go to
+        Go to 
         https://github.com/PHPMailer/PHPMailer
         for new versions of PHPMailer.
         Thank you!
