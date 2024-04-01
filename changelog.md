@@ -5,6 +5,7 @@
 * Add link to [aboutmy.email](https://aboutmy.email) testing service in docs
 * Add a more comprehensive example for using XOAUTH2 with gmail and Azure, thanks to @decomplexity
 * Update Turkish and Spanish translation
+* Fix broken links in docs and comments, avoid http links, correct link to LGPL 2.1 license file
 
 ## Version 6.9.1 (November 25th, 2023)
 * Finalise SendOauth2 example
