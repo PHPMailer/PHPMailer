@@ -95,7 +95,7 @@ material is wood',
 </html>
 EOT
                 ,
-                // Note: be careful when updating & saving this file. The the trailing space on
+                // Note: be careful when updating & saving this file. The trailing space on
                 // the line with "Go to " needs to be preserved!
                 'expected' => <<<EOT
 PHPMailer does HTML!
