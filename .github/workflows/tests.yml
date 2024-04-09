@@ -170,9 +170,9 @@ jobs:
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true }}
         uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
           verbose: true
-          # see https://github.com/codecov/codecov-action/issues/557
-          token: ${{ secrets.CODECOV_TOKEN }}
