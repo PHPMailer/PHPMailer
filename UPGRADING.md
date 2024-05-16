@@ -6,7 +6,7 @@ If you're in doubt about how you should be using PHPMailer 6, take a look at the
 
 ## PHP Version
 
-PHPMailer 6.0 requires PHP 5.5 or later, and is fully compatible with PHP 7.0. PHPMailer 5.2 supported PHP 5.0 and upwards, so if you need to run on a legacy PHP version, see the [PHPMailer 5.2-stable branch on Github](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable).
+PHPMailer 6.0 requires PHP 5.5 or later, and is fully compatible with PHP versions all the way up to 8.4. PHPMailer 5.2 supported PHP 5.0 and upwards, so if you need to run on a legacy PHP version, see the [PHPMailer 5.2-stable branch on Github](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable), but bear in mind that this branch is no longer maintained.
 
 ## Loading PHPMailer
  
