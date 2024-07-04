@@ -1216,6 +1216,10 @@ is too big a fix and needs to be done in a new design iteration.
         word-break: break-all;
         line-height: normal;
     }
+
+    .phpdocumentor-on-this-page__content li.-deprecated {
+        text-decoration: line-through;
+    }
 }
 
 /* Used for screen readers and such */

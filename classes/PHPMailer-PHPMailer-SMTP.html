@@ -124,6 +124,7 @@
 
             <p class="phpdocumentor-summary">PHPMailer RFC821 SMTP email transport class.</p>
 
+
     <section class="phpdocumentor-description"><p>Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.</p>
 </section>
 
@@ -172,6 +173,8 @@
 
 
 
+
+
 <h3 id="toc">
     Table of Contents
     <a href="classes/PHPMailer-PHPMailer-SMTP.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
@@ -191,63 +194,63 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a>
     <span>
         &nbsp;= 1                            </span>
 </dt>
 <dd>Debug level to show client -&gt; server messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a>
     <span>
         &nbsp;= 3                            </span>
 </dt>
 <dd>Debug level to show connection status, client -&gt; server and server -&gt; client messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a>
     <span>
         &nbsp;= 4                            </span>
 </dt>
 <dd>Debug level to show all messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a>
     <span>
         &nbsp;= 0                            </span>
 </dt>
 <dd>Debug level for no output.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a>
     <span>
         &nbsp;= 2                            </span>
 </dt>
 <dd>Debug level to show client -&gt; server and server -&gt; client messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a>
     <span>
         &nbsp;= 25                            </span>
 </dt>
 <dd>The SMTP port to use if one is not specified.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT">DEFAULT_SECURE_PORT</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT">DEFAULT_SECURE_PORT</a>
     <span>
         &nbsp;= 465                            </span>
 </dt>
 <dd>The SMTPs port to use if one is not specified.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a>
     <span>
         &nbsp;= &quot;\r\n&quot;                            </span>
 </dt>
 <dd>SMTP line break constant.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a>
     <span>
         &nbsp;= 998                            </span>
 </dt>
@@ -255,7 +258,7 @@
 *excluding* a trailing CRLF break.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a>
     <span>
         &nbsp;= 512                            </span>
 </dt>
@@ -263,7 +266,7 @@
 *including* a trailing CRLF line break.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a>
     <span>
         &nbsp;= &#039;6.9.1&#039;                            </span>
 </dt>
@@ -279,70 +282,70 @@
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput</a>
     <span>
                         &nbsp;: string|callable|<abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>            </span>
 </dt>
 <dd>How to handle debug output.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 <dd>Debug output level.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp</a>
     <span>
                         &nbsp;: bool            </span>
 </dt>
 <dd>Whether to use VERP.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 <dd>How long to wait for commands to complete, in seconds.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout</a>
     <span>
                         &nbsp;: int            </span>
 </dt>
 <dd>The timeout value for connection, in seconds.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes">$xclient_allowed_attributes</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes">$xclient_allowed_attributes</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd>Allowed SMTP XCLIENT attributes.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_error">$error</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_error">$error</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd>Error information, if any, for the last SMTP command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_helo_rply">$helo_rply</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_helo_rply">$helo_rply</a>
     <span>
                         &nbsp;: string|null            </span>
 </dt>
 <dd>The reply the server sent to us for HELO.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply">$last_reply</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply">$last_reply</a>
     <span>
                         &nbsp;: string            </span>
 </dt>
 <dd>The most recent reply received from the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_smtp_transaction_id">$last_smtp_transaction_id</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_smtp_transaction_id">$last_smtp_transaction_id</a>
     <span>
                         &nbsp;: string|bool|null            </span>
 </dt>
@@ -350,21 +353,21 @@
 if one was detected.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_server_caps">$server_caps</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_server_caps">$server_caps</a>
     <span>
                         &nbsp;: array&lt;string|int, mixed&gt;|null            </span>
 </dt>
 <dd>The set of SMTP extensions sent in reply to EHLO command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_conn">$smtp_conn</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_conn">$smtp_conn</a>
     <span>
                         &nbsp;: resource|null            </span>
 </dt>
 <dd>The socket for the server connection.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns">$smtp_transaction_id_patterns</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns">$smtp_transaction_id_patterns</a>
     <span>
                         &nbsp;: array&lt;string|int, string&gt;            </span>
 </dt>
@@ -379,77 +382,77 @@ if one was detected.</dd>
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Perform SMTP authentication.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_client_send">client_send()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_client_send">client_send()</a>
     <span>
                                 &nbsp;: int|bool    </span>
 </dt>
 <dd>Send raw data to the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close">close()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_close">close()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Close the socket and clean up the state of the class.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connect">connect()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_connect">connect()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Connect to an SMTP server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connected">connected()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_connected">connected()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Check connection state.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_data">data()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_data">data()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP DATA command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugLevel">getDebugLevel()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugLevel">getDebugLevel()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
 <dd>Get debug output level.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugOutput">getDebugOutput()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugOutput">getDebugOutput()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Get debug output method.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getError">getError()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getError">getError()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </dt>
 <dd>Get the latest error.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastReply">getLastReply()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastReply">getLastReply()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Get the last reply from the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a>
     <span>
                                 &nbsp;: bool|string|null    </span>
 </dt>
@@ -457,182 +460,182 @@ if one was detected.</dd>
 If no reply has been received yet, it will return null.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a>
     <span>
                                 &nbsp;: string|bool|null    </span>
 </dt>
 <dd>Get metadata about the SMTP server from its HELO/EHLO response.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a>
     <span>
                                 &nbsp;: array&lt;string|int, mixed&gt;|null    </span>
 </dt>
 <dd>Get SMTP extensions available on the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a>
     <span>
                                 &nbsp;: int    </span>
 </dt>
 <dd>Get SMTP timeout.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Get VERP address generation mode.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP HELO or EHLO command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_mail">mail()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_mail">mail()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP MAIL command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_noop">noop()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_noop">noop()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP NOOP command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_quit">quit()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_quit">quit()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP QUIT command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recipient">recipient()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_recipient">recipient()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP RCPT command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_reset">reset()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_reset">reset()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP RSET command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP SAML command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Set debug output level.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Set debug output method.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Set SMTP timeout.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Enable or disable VERP address generation.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Initiate a TLS (encrypted) session.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_turn">turn()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_turn">turn()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP TURN command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_verify">verify()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_verify">verify()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP VRFY command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_xclient">xclient()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_xclient">xclient()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send SMTP XCLIENT command to server and check its return code.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug">edebug()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug">edebug()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Output debugging info via a user-selected method.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_errorHandler">errorHandler()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_errorHandler">errorHandler()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Reports an error number and string.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_get_lines">get_lines()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_get_lines">get_lines()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Read the SMTP server&#039;s response.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPConnection">getSMTPConnection()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPConnection">getSMTPConnection()</a>
     <span>
                                 &nbsp;: false|resource    </span>
 </dt>
 <dd>Create connection to the SMTP server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hmac">hmac()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_hmac">hmac()</a>
     <span>
                                 &nbsp;: string    </span>
 </dt>
 <dd>Calculate an MD5 HMAC hash.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_parseHelloFields">parseHelloFields()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_parseHelloFields">parseHelloFields()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Parse a reply to HELO/EHLO command to discover server extensions.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recordLastTransactionID">recordLastTransactionID()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_recordLastTransactionID">recordLastTransactionID()</a>
     <span>
                                 &nbsp;: bool|string|null    </span>
 </dt>
@@ -640,21 +643,21 @@ If no reply has been received yet, it will return null.</dd>
 a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendCommand">sendCommand()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendCommand">sendCommand()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send a command to an SMTP server and check its return code.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello">sendHello()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello">sendHello()</a>
     <span>
                                 &nbsp;: bool    </span>
 </dt>
 <dd>Send an SMTP HELO or EHLO command.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setError">setError()</a>
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setError">setError()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
@@ -663,9 +666,6 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
     </dl>
 
 
-
-
-        
 
         
     <section class="phpdocumentor-constants">
@@ -690,6 +690,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">Debug level to show client -&gt; server messages.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -700,6 +701,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -719,6 +722,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">Debug level to show connection status, client -&gt; server and server -&gt; client messages.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -729,6 +733,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -748,6 +754,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">Debug level to show all messages.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -758,6 +765,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -777,6 +786,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">Debug level for no output.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -787,6 +797,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -806,6 +818,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">Debug level to show client -&gt; server and server -&gt; client messages.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -816,6 +829,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -835,6 +850,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">The SMTP port to use if one is not specified.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -845,6 +861,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -864,6 +882,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">The SMTPs port to use if one is not specified.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -874,6 +893,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -893,6 +914,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">SMTP line break constant.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -903,6 +925,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -923,6 +947,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
         <p class="phpdocumentor-summary">The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
 *excluding* a trailing CRLF break.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -948,7 +973,9 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
                                         
                                              
                                     </dd>
-                                            </dl>
+                                                                </dl>
+
+    
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
@@ -968,6 +995,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
         <p class="phpdocumentor-summary">The maximum line length allowed for replies in RFC 5321 section 4.5.3.1.5,
 *including* a trailing CRLF line break.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -993,7 +1021,9 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
                                         
                                              
                                     </dd>
-                                            </dl>
+                                                                </dl>
+
+    
 
 </article>
                     <article class="phpdocumentor-element -constant -public ">
@@ -1012,6 +1042,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">The PHPMailer SMTP version number.</p>
 
+    
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -1022,6 +1053,8 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
     
     
+    
+
     
 
 </article>
@@ -1057,6 +1090,7 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <p class="phpdocumentor-summary">How to handle debug output.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">string|callable|<abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr></span>
@@ -1084,6 +1118,8 @@ level output is used:</p>
     
     
 
+    
+
 </article>
                     <article
         class="
@@ -1108,6 +1144,7 @@ level output is used:</p>
 
         <p class="phpdocumentor-summary">Debug output level.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -1125,6 +1162,8 @@ level output is used:</p>
 </section>
 
     
+    
+
     
 
 </article>
@@ -1151,6 +1190,7 @@ level output is used:</p>
 
         <p class="phpdocumentor-summary">Whether to use VERP.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">bool</span>
@@ -1186,6 +1226,8 @@ level output is used:</p>
                                     </dd>
                                             </dl>
 
+    
+
 </article>
                     <article
         class="
@@ -1210,6 +1252,7 @@ level output is used:</p>
 
         <p class="phpdocumentor-summary">How long to wait for commands to complete, in seconds.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -1220,6 +1263,8 @@ level output is used:</p>
 </section>
 
     
+    
+
     
 
 </article>
@@ -1246,6 +1291,7 @@ level output is used:</p>
 
         <p class="phpdocumentor-summary">The timeout value for connection, in seconds.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
         <span class="phpdocumentor-signature__type">int</span>
@@ -1274,6 +1320,8 @@ This needs to be quite high to function correctly with hosts using greetdelay as
                                     </dd>
                                             </dl>
 
+    
+
 </article>
                     <article
         class="
@@ -1298,6 +1346,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
         <p class="phpdocumentor-summary">Allowed SMTP XCLIENT attributes.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
     <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -1325,6 +1374,8 @@ This needs to be quite high to function correctly with hosts using greetdelay as
                                     </dd>
                                             </dl>
 
+    
+
 </article>
                     <article
         class="
@@ -1349,6 +1400,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
         <p class="phpdocumentor-summary">Error information, if any, for the last SMTP command.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
@@ -1357,6 +1409,8 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
     
     
+    
+
     
 
 </article>
@@ -1383,6 +1437,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
         <p class="phpdocumentor-summary">The reply the server sent to us for HELO.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string|null</span>
@@ -1393,6 +1448,8 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 </section>
 
     
+    
+
     
 
 </article>
@@ -1419,6 +1476,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
         <p class="phpdocumentor-summary">The most recent reply received from the server.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string</span>
@@ -1427,6 +1485,8 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
     
     
+    
+
     
 
 </article>
@@ -1454,6 +1514,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
         <p class="phpdocumentor-summary">The last transaction ID issued in response to a DATA command,
 if one was detected.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">string|bool|null</span>
@@ -1462,6 +1523,8 @@ if one was detected.</p>
 
     
     
+    
+
     
 
 </article>
@@ -1488,6 +1551,7 @@ if one was detected.</p>
 
         <p class="phpdocumentor-summary">The set of SMTP extensions sent in reply to EHLO command.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;|null</span>
@@ -1502,6 +1566,8 @@ If null, no HELO/EHLO string has yet been received.</p>
 </section>
 
     
+    
+
     
 
 </article>
@@ -1528,6 +1594,7 @@ If null, no HELO/EHLO string has yet been received.</p>
 
         <p class="phpdocumentor-summary">The socket for the server connection.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">resource|null</span>
@@ -1536,6 +1603,8 @@ If null, no HELO/EHLO string has yet been received.</p>
 
     
     
+    
+
     
 
 </article>
@@ -1562,6 +1631,7 @@ If null, no HELO/EHLO string has yet been received.</p>
 
         <p class="phpdocumentor-summary">Patterns to extract an SMTP transaction id from reply to a DATA command.</p>
 
+    
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type">array&lt;string|int, string&gt;</span>
@@ -1573,6 +1643,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 </section>
 
     
+    
+
     
 
 </article>
@@ -1610,6 +1682,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Must be run after hello().</p>
 </section>
 
@@ -1670,6 +1743,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
                                     </dd>
                                             </dl>
 
+    
+
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
@@ -1707,6 +1782,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1728,6 +1804,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1767,6 +1845,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Don't use this function without first trying to use QUIT.</p>
 </section>
 
@@ -1787,6 +1866,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
                                              
                                     </dd>
                                             </dl>
+
+    
 
     
 </article>
@@ -1816,6 +1897,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -1859,6 +1941,8 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     
 
+    
+
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
@@ -1893,6 +1977,9 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
         </div>
     
     
+    
+    
+
     
 
             <section>
@@ -1931,6 +2018,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Issues a data command and sends the msg_data to the server,
 finalizing the mail transaction. $msg_data is the message
 that is to be sent with the headers. Each header needs to be
@@ -1951,6 +2039,8 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -1989,6 +2079,9 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2024,6 +2117,9 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
         </div>
     
     
+    
+    
+
     
 
             <section>
@@ -2061,6 +2157,9 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2097,6 +2196,9 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2131,6 +2233,7 @@ If no reply has been received yet, it will return null.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>If no pattern was matched, it will return false.</p>
 </section>
 
@@ -2151,6 +2254,8 @@ If no reply has been received yet, it will return null.</p>
                                              
                                     </dd>
                                             </dl>
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2184,6 +2289,7 @@ If no reply has been received yet, it will return null.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>The method works in three ways, dependent on argument value and current state:</p>
 <ol>
 <li>HELO/EHLO has not been sent - returns null and populates $this-&gt;error.</li>
@@ -2210,6 +2316,8 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2248,6 +2356,9 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2283,6 +2394,9 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
         </div>
     
     
+    
+    
+
     
 
             <section>
@@ -2320,6 +2434,9 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2353,6 +2470,7 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Used to identify the sending server to the receiving server.
 This makes sure that client and server are in a known state.
 Implements RFC 821: HELO &lt;SP&gt; <domain> &lt;CRLF&gt;
@@ -2371,6 +2489,8 @@ and RFC 2821 EHLO.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2406,6 +2526,7 @@ and RFC 2821 EHLO.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Starts a mail transaction from the email address specified in
 $from. Returns true if successful or false otherwise. If True
 the mail transaction is started and then one or more recipient
@@ -2425,6 +2546,8 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2460,10 +2583,13 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Used to keep keep-alives alive, doesn't actually do anything.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -2498,6 +2624,7 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Closes the socket if there is no error or the $close_on_error argument is true.
 Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
 </section>
@@ -2514,6 +2641,8 @@ Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2549,6 +2678,7 @@ Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Sets the TO argument to $toaddr.
 Returns true if the recipient was accepted false if it was rejected.
 Implements from RFC 821: RCPT &lt;SP&gt; TO:<forward-path> &lt;CRLF&gt;.</p>
@@ -2576,6 +2706,8 @@ or DELAY. If you specify NEVER all other notifications are ignored.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2611,11 +2743,14 @@ or DELAY. If you specify NEVER all other notifications are ignored.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Abort any transaction that is currently in progress.
 Implements RFC 821: RSET &lt;CRLF&gt;.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -2654,6 +2789,7 @@ Implements RFC 821: RSET &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Starts a mail transaction from the email address specified in $from.
 Returns true if successful or false otherwise. If True
 the mail transaction is started and then one or more recipient
@@ -2675,6 +2811,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2711,6 +2849,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2721,6 +2860,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2753,6 +2894,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2765,6 +2907,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2797,6 +2941,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2809,6 +2954,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2841,6 +2988,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2851,6 +2999,8 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -2885,6 +3035,9 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     
     
     
+    
+
+    
 
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
@@ -2918,6 +3071,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>This is an optional command for SMTP that this class does not support.
 This method is here to make the RFC821 Definition complete for this class
 and <em>may</em> be implemented in future.
@@ -2925,6 +3079,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -2960,6 +3116,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -2972,6 +3129,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3008,6 +3167,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -3018,6 +3178,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
                 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3057,6 +3219,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3106,6 +3269,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
                                             </dl>
 
     
+
+    
 </article>
                     <article
         class="phpdocumentor-element
@@ -3133,6 +3298,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3177,6 +3343,8 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     
 
     
+
+    
 </article>
                     <article
         class="phpdocumentor-element
@@ -3204,6 +3372,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Either before eof or socket timeout occurs on the operation.
 With SMTP we can tell if we have more lines to read if the
 4th character is '-' symbol. If it is a space then we don't
@@ -3211,6 +3380,8 @@ need to read anything else.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -3245,6 +3416,7 @@ need to read anything else.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3288,6 +3460,8 @@ need to read anything else.</p>
 
     
 
+    
+
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">false|resource</span>
@@ -3320,6 +3494,7 @@ need to read anything else.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Works like hash_hmac('md5', $data, $key)
 in case that function is not available.</p>
 </section>
@@ -3345,6 +3520,8 @@ in case that function is not available.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3380,6 +3557,7 @@ in case that function is not available.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>In case of HELO, the only parameter that can be discovered is a server name.</p>
 </section>
 
@@ -3395,6 +3573,8 @@ in case that function is not available.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3427,12 +3607,15 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Relies on the host providing the ID in response to a DATA command.
 If no reply has been received yet, it will return null.
 If no pattern was matched, it will return false.</p>
 </section>
 
     
+    
+
     
 
             <section>
@@ -3468,6 +3651,7 @@ If no pattern was matched, it will return false.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -3498,6 +3682,8 @@ If no pattern was matched, it will return false.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3537,6 +3723,7 @@ If no pattern was matched, it will return false.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
         <section class="phpdocumentor-description"><p>Low-level implementation used by hello().</p>
 </section>
 
@@ -3579,6 +3766,8 @@ If no pattern was matched, it will return false.</p>
                                     </dd>
                                             </dl>
 
+    
+
             <section>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">bool</span>
@@ -3611,6 +3800,7 @@ If no pattern was matched, it will return false.</p>
 
     <div class="phpdocumentor-label-line">
         </div>
+    
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
@@ -3651,6 +3841,8 @@ If no pattern was matched, it will return false.</p>
 
             </dd>
             </dl>
+
+    
 
     
 
@@ -3769,82 +3961,82 @@ If no pattern was matched, it will return false.</p>
                             <li class="phpdocumentor-on-this-page-section__title">Constants</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT">DEFAULT_SECURE_PORT</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT">DEFAULT_SECURE_PORT</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a></li>
                                             </ul>
                 </li>
             
                             <li class="phpdocumentor-on-this-page-section__title">Properties</li>
                 <li>
                     <ul class="phpdocumentor-list -clean">
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes">$xclient_allowed_attributes<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_error">$error<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_helo_rply">$helo_rply<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply">$last_reply<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_smtp_transaction_id">$last_smtp_transaction_id<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_server_caps">$server_caps<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_conn">$smtp_conn<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
-                                                    <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns">$smtp_transaction_id_patterns<a href="classes/PHPMailer-PHPMailer-SMTP.html"></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes">$xclient_allowed_attributes</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_error">$error</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_helo_rply">$helo_rply</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply">$last_reply</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_last_smtp_transaction_id">$last_smtp_transaction_id</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_server_caps">$server_caps</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_conn">$smtp_conn</li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_smtp_transaction_id_patterns">$smtp_transaction_id_patterns</li>
                                             </ul>
                 </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_client_send">client_send()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close">close()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connect">connect()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connected">connected()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_data">data()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugLevel">getDebugLevel()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugOutput">getDebugOutput()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getError">getError()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastReply">getLastReply()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_mail">mail()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_noop">noop()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_quit">quit()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recipient">recipient()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_reset">reset()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_turn">turn()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_verify">verify()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_xclient">xclient()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug">edebug()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_errorHandler">errorHandler()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_get_lines">get_lines()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPConnection">getSMTPConnection()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hmac">hmac()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_parseHelloFields">parseHelloFields()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recordLastTransactionID">recordLastTransactionID()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendCommand">sendCommand()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello">sendHello()</a></li>
-                                            <li><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setError">setError()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate">authenticate()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_client_send">client_send()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close">close()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connect">connect()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_connected">connected()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_data">data()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugLevel">getDebugLevel()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getDebugOutput">getDebugOutput()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getError">getError()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastReply">getLastReply()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_mail">mail()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_noop">noop()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_quit">quit()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recipient">recipient()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_reset">reset()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_turn">turn()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_verify">verify()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_xclient">xclient()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug">edebug()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_errorHandler">errorHandler()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_get_lines">get_lines()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPConnection">getSMTPConnection()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hmac">hmac()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_parseHelloFields">parseHelloFields()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_recordLastTransactionID">recordLastTransactionID()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendCommand">sendCommand()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello">sendHello()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setError">setError()</a></li>
                                     </ul>
             </li>
                     </ul>
