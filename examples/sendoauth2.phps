@@ -70,7 +70,7 @@ try {
             'tenant'                      => 'long string',           // MSFT tenant GUID. Null for Gmail
 
             'hostedDomain'                => 'mydomain.com',          // Any Google (and optional). Null for MSFT
-            
+
             'projectID'                   => 'string',                // GoogleAPI only. Else null
             'serviceAccountName'          => 'string',                // GoogleAPI service account only. Else null
             'impersonate'                 => 'you@mydomain.com',      // Google API service account only. Else null
