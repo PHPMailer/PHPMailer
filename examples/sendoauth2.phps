@@ -70,10 +70,16 @@ try {
             'tenant'                      => 'long string',           // MSFT tenant GUID. Null for Gmail
 
             'hostedDomain'                => 'mydomain.com',          // Any Google (and optional). Null for MSFT
+
             'projectID'                   => 'string',                // GoogleAPI only. Else null
             'serviceAccountName'          => 'string',                // GoogleAPI service account only. Else null
             'impersonate'                 => 'you@mydomain.com',      // Google API service account only. Else null
-                                                                      // (Google Wspace email adddress, not @gmail)
+                                                                      // default to 'mailSMTPAddress', must be
+                                                                      // a Google Wspace email adddress, not @gmail
+            'gmailXoauth2Credentials'     => 'your credentials.json', // File name - defaults to:
+                                                                      // gmail-xoauth2-credentials.json
+            'writeGmailCredentialsFile'   => 'yes' or 'no',           // Defaults to 'yes'; meaning the
+                                                                      // credentials json is dynamically created
          ]
     );
 
