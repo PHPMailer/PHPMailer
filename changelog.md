@@ -4,7 +4,7 @@
 * Escape dots in SMTP transaction ID patterns
 * Add link to [aboutmy.email](https://aboutmy.email) testing service in docs
 * Add a more comprehensive example for using XOAUTH2 with gmail and Azure, thanks to @decomplexity
-* Update Turkish, Spanish, Japanese translations
+* Update Turkish, Spanish, Japanese, Russian translations
 * Add Urdu translation
 * Fix broken links in docs and comments, avoid http links, correct link to LGPL 2.1 license file
 * Cleaner PSR-3 SMTP debug logging
