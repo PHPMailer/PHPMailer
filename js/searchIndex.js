@@ -1063,7 +1063,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024SMTPXClient",
             "name": "SMTPXClient",
-            "summary": "SMTP\u0020SMTPXClient\u0020command\u0020attibutes",
+            "summary": "SMTP\u0020SMTPXClient\u0020command\u0020attributes",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_SMTPXClient"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024oauth",
