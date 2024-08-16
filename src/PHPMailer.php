@@ -31,34 +31,35 @@ namespace PHPMailer\PHPMailer;
  */
 class PHPMailer
 {
-    const CHARSET_ASCII = 'us-ascii';
-    const CHARSET_ISO88591 = 'iso-8859-1';
-    const CHARSET_UTF8 = 'utf-8';
-
-    const CONTENT_TYPE_PLAINTEXT = 'text/plain';
-    const CONTENT_TYPE_TEXT_CALENDAR = 'text/calendar';
-    const CONTENT_TYPE_TEXT_HTML = 'text/html';
-    const CONTENT_TYPE_MULTIPART_ALTERNATIVE = 'multipart/alternative';
-    const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
-    const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
-
-    const ENCODING_7BIT = '7bit';
-    const ENCODING_8BIT = '8bit';
-    const ENCODING_BASE64 = 'base64';
-    const ENCODING_BINARY = 'binary';
-    const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
-
-    const ENCRYPTION_STARTTLS = 'tls';
-    const ENCRYPTION_SMTPS = 'ssl';
-
-    const ICAL_METHOD_REQUEST = 'REQUEST';
-    const ICAL_METHOD_PUBLISH = 'PUBLISH';
-    const ICAL_METHOD_REPLY = 'REPLY';
-    const ICAL_METHOD_ADD = 'ADD';
-    const ICAL_METHOD_CANCEL = 'CANCEL';
-    const ICAL_METHOD_REFRESH = 'REFRESH';
-    const ICAL_METHOD_COUNTER = 'COUNTER';
-    const ICAL_METHOD_DECLINECOUNTER = 'DECLINECOUNTER';
+    const CHARSET_ASCII                         = 'us-ascii';
+    const CHARSET_ISO88591                      = 'iso-8859-1';
+    const CHARSET_UTF8                          = 'utf-8';
+    
+    const CONTENT_TYPE_PLAINTEXT                = 'text/plain';
+    const CONTENT_TYPE_TEXT_CALENDAR            = 'text/calendar';
+    const CONTENT_TYPE_TEXT_HTML                = 'text/html';
+    const CONTENT_TYPE_MULTIPART_ALTERNATIVE    = 'multipart/alternative';
+    const CONTENT_TYPE_MULTIPART_MIXED          = 'multipart/mixed';
+    const CONTENT_TYPE_MULTIPART_RELATED        = 'multipart/related';
+    
+    const ENCODING_7BIT                         = '7bit';
+    const ENCODING_8BIT                         = '8bit';
+    const ENCODING_BASE64                       = 'base64';
+    const ENCODING_BINARY                       = 'binary';
+    const ENCODING_QUOTED_PRINTABLE             = 'quoted-printable';
+    
+    const ENCRYPTION_STARTTLS                   = 'tls';
+    const ENCRYPTION_SMTPS                      = 'ssl';
+    
+    const ICAL_METHOD_ADD                       = 'ADD';
+    const ICAL_METHOD_CANCEL                    = 'CANCEL';
+    const ICAL_METHOD_COUNTER                   = 'COUNTER';
+    const ICAL_METHOD_DECLINECOUNTER            = 'DECLINECOUNTER';
+    const ICAL_METHOD_PUBLISH                   = 'PUBLISH';
+    const ICAL_METHOD_REFRESH                   = 'REFRESH';
+    const ICAL_METHOD_REPLY                     = 'REPLY';
+    const ICAL_METHOD_REQUEST                   = 'REQUEST';
+    
 
     /**
      * Email priority.
@@ -932,7 +933,7 @@ class PHPMailer
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
                 "\t",
-                    //Trim trailing space
+                //Trim trailing space
                 trim(
                     //Indent for readability, except for trailing break
                     str_replace(
@@ -1317,7 +1318,7 @@ class PHPMailer
         if (
             (false === $pos)
             || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
-            && !static::validateAddress($address))
+                && !static::validateAddress($address))
         ) {
             $error_message = sprintf(
                 '%s (From): %s',
@@ -1411,14 +1412,14 @@ class PHPMailer
                  */
                 return (bool) preg_match(
                     '/^(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){255,})(?!(?>(?1)"?(?>\\\[ -~]|[^"])"?(?1)){65,}@)' .
-                    '((?>(?>(?>((?>(?>(?>\x0D\x0A)?[\t ])+|(?>[\t ]*\x0D\x0A)?[\t ]+)?)(\((?>(?2)' .
-                    '(?>[\x01-\x08\x0B\x0C\x0E-\'*-\[\]-\x7F]|\\\[\x00-\x7F]|(?3)))*(?2)\)))+(?2))|(?2))?)' .
-                    '([!#-\'*+\/-9=?^-~-]+|"(?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\x7F]))*' .
-                    '(?2)")(?>(?1)\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)' .
-                    '(?>(?1)\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}' .
-                    '|(?!(?:.*[a-f0-9][:\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:' .
-                    '|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}' .
-                    '|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD',
+                        '((?>(?>(?>((?>(?>(?>\x0D\x0A)?[\t ])+|(?>[\t ]*\x0D\x0A)?[\t ]+)?)(\((?>(?2)' .
+                        '(?>[\x01-\x08\x0B\x0C\x0E-\'*-\[\]-\x7F]|\\\[\x00-\x7F]|(?3)))*(?2)\)))+(?2))|(?2))?)' .
+                        '([!#-\'*+\/-9=?^-~-]+|"(?>(?2)(?>[\x01-\x08\x0B\x0C\x0E-!#-\[\]-\x7F]|\\\[\x00-\x7F]))*' .
+                        '(?2)")(?>(?1)\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)' .
+                        '(?>(?1)\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}' .
+                        '|(?!(?:.*[a-f0-9][:\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:' .
+                        '|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}' .
+                        '|[1-9]?[0-9])(?>\.(?9)){3}))\])(?1)$/isD',
                     $address
                 );
             case 'html5':
@@ -1429,7 +1430,7 @@ class PHPMailer
                  */
                 return (bool) preg_match(
                     '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
-                    '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
+                        '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
                     $address
                 );
             case 'php':
@@ -2312,15 +2313,15 @@ class PHPMailer
     {
         //Backwards compatibility for renamed language codes
         $renamed_langcodes = [
+            'am' => 'hy',
             'br' => 'pt_br',
             'cz' => 'cs',
             'dk' => 'da',
             'no' => 'nb',
-            'se' => 'sv',
             'rs' => 'sr',
+            'se' => 'sv',
             'tg' => 'tl',
-            'am' => 'hy',
-        ];
+        ];        
 
         if (array_key_exists($langcode, $renamed_langcodes)) {
             $langcode = $renamed_langcodes[$langcode];
@@ -2328,34 +2329,34 @@ class PHPMailer
 
         //Define full set of translatable strings in English
         $PHPMAILER_LANG = [
-            'authenticate' => 'SMTP Error: Could not authenticate.',
-            'buggy_php' => 'Your version of PHP is affected by a bug that may result in corrupted messages.' .
-                ' To fix it, switch to sending using SMTP, disable the mail.add_x_header option in' .
-                ' your php.ini, switch to MacOS or Linux, or upgrade your PHP to version 7.0.17+ or 7.1.3+.',
-            'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
-            'data_not_accepted' => 'SMTP Error: data not accepted.',
-            'empty_message' => 'Message body empty',
-            'encoding' => 'Unknown encoding: ',
-            'execute' => 'Could not execute: ',
-            'extension_missing' => 'Extension missing: ',
-            'file_access' => 'Could not access file: ',
-            'file_open' => 'File Error: Could not open file: ',
-            'from_failed' => 'The following From address failed: ',
-            'instantiate' => 'Could not instantiate mail function.',
-            'invalid_address' => 'Invalid address: ',
-            'invalid_header' => 'Invalid header name or value',
-            'invalid_hostentry' => 'Invalid hostentry: ',
-            'invalid_host' => 'Invalid host: ',
-            'mailer_not_supported' => ' mailer is not supported.',
-            'provide_address' => 'You must provide at least one recipient email address.',
-            'recipients_failed' => 'SMTP Error: The following recipients failed: ',
-            'signing' => 'Signing Error: ',
-            'smtp_code' => 'SMTP code: ',
-            'smtp_code_ex' => 'Additional SMTP info: ',
+            'authenticate'        => 'SMTP Error: Could not authenticate.',
+            'buggy_php'           => 'Your version of PHP is affected by a bug that may result in corrupted messages.' .
+                                     ' To fix it, switch to sending using SMTP, disable the mail.add_x_header option in' .
+                                     ' your php.ini, switch to MacOS or Linux, or upgrade your PHP to version 7.0.17+ or 7.1.3+.',
+            'connect_host'        => 'SMTP Error: Could not connect to SMTP host.',
+            'data_not_accepted'   => 'SMTP Error: data not accepted.',
+            'empty_message'       => 'Message body empty',
+            'encoding'            => 'Unknown encoding: ',
+            'execute'             => 'Could not execute: ',
+            'extension_missing'   => 'Extension missing: ',
+            'file_access'         => 'Could not access file: ',
+            'file_open'           => 'File Error: Could not open file: ',
+            'from_failed'         => 'The following From address failed: ',
+            'instantiate'         => 'Could not instantiate mail function.',
+            'invalid_address'     => 'Invalid address: ',
+            'invalid_header'      => 'Invalid header name or value',
+            'invalid_host'        => 'Invalid host: ',
+            'invalid_hostentry'   => 'Invalid hostentry: ',
+            'mailer_not_supported'=> ' mailer is not supported.',
+            'provide_address'     => 'You must provide at least one recipient email address.',
+            'recipients_failed'   => 'SMTP Error: The following recipients failed: ',
+            'signing'             => 'Signing Error: ',
+            'smtp_code'           => 'SMTP code: ',
+            'smtp_code_ex'        => 'Additional SMTP info: ',
             'smtp_connect_failed' => 'SMTP connect() failed.',
-            'smtp_detail' => 'Detail: ',
-            'smtp_error' => 'SMTP server error: ',
-            'variable_set' => 'Cannot set or reset variable: ',
+            'smtp_detail'         => 'Detail: ',
+            'smtp_error'          => 'SMTP server error: ',
+            'variable_set'        => 'Cannot set or reset variable: ',
         ];
         if (empty($lang_path)) {
             //Calculate an absolute path so it can work if CWD is not here
@@ -2710,10 +2711,10 @@ class PHPMailer
             '' !== $this->MessageID &&
             preg_match(
                 '/^<((([a-z\d!#$%&\'*+\/=?^_`{|}~-]+(\.[a-z\d!#$%&\'*+\/=?^_`{|}~-]+)*)' .
-                '|("(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]|[\x21\x23-\x5B\x5D-\x7E])' .
-                '|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*"))@(([a-z\d!#$%&\'*+\/=?^_`{|}~-]+' .
-                '(\.[a-z\d!#$%&\'*+\/=?^_`{|}~-]+)*)|(\[(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]' .
-                '|[\x21-\x5A\x5E-\x7E])|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*\])))>$/Di',
+                    '|("(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]|[\x21\x23-\x5B\x5D-\x7E])' .
+                    '|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*"))@(([a-z\d!#$%&\'*+\/=?^_`{|}~-]+' .
+                    '(\.[a-z\d!#$%&\'*+\/=?^_`{|}~-]+)*)|(\[(([\x01-\x08\x0B\x0C\x0E-\x1F\x7F]' .
+                    '|[\x21-\x5A\x5E-\x7E])|(\\[\x01-\x09\x0B\x0C\x0E-\x7F]))*\])))>$/Di',
                 $this->MessageID
             )
         ) {
@@ -3483,7 +3484,7 @@ class PHPMailer
             case static::ENCODING_8BIT:
                 $encoded = static::normalizeBreaks($str);
                 //Make sure it ends with a line break
-                if (substr($encoded, -(strlen(static::$LE))) !== static::$LE) {
+                if (substr($encoded, - (strlen(static::$LE))) !== static::$LE) {
                     $encoded .= static::$LE;
                 }
                 break;
@@ -3530,10 +3531,10 @@ class PHPMailer
                 }
                 $matchcount = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
                 break;
-            /* @noinspection PhpMissingBreakStatementInspection */
+                /* @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
                 $matchcount = preg_match_all('/[()"]/', $str, $matches);
-            //fallthrough
+                //fallthrough
             case 'text':
             default:
                 $matchcount += preg_match_all('/[\000-\010\013\014\016-\037\177-\377]/', $str, $matches);
@@ -3703,14 +3704,14 @@ class PHPMailer
                 //RFC 2047 section 5.3
                 $pattern = '^A-Za-z0-9!*+\/ -';
                 break;
-            /*
+                /*
              * RFC 2047 section 5.2.
              * Build $pattern without including delimiters and []
              */
-            /* @noinspection PhpMissingBreakStatementInspection */
+                /* @noinspection PhpMissingBreakStatementInspection */
             case 'comment':
                 $pattern = '\(\)"';
-            /* Intentional fall through */
+                /* Intentional fall through */
             case 'text':
             default:
                 //RFC 2047 section 5.1
@@ -4529,120 +4530,121 @@ class PHPMailer
     public static function _mime_types($ext = '')
     {
         $mimes = [
-            'xl' => 'application/excel',
-            'js' => 'application/javascript',
-            'hqx' => 'application/mac-binhex40',
-            'cpt' => 'application/mac-compactpro',
-            'bin' => 'application/macbinary',
-            'doc' => 'application/msword',
-            'word' => 'application/msword',
-            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-            'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
-            'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'sldx' => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
-            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
-            'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
-            'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
-            'class' => 'application/octet-stream',
-            'dll' => 'application/octet-stream',
-            'dms' => 'application/octet-stream',
-            'exe' => 'application/octet-stream',
-            'lha' => 'application/octet-stream',
-            'lzh' => 'application/octet-stream',
-            'psd' => 'application/octet-stream',
-            'sea' => 'application/octet-stream',
-            'so' => 'application/octet-stream',
-            'oda' => 'application/oda',
-            'pdf' => 'application/pdf',
-            'ai' => 'application/postscript',
-            'eps' => 'application/postscript',
-            'ps' => 'application/postscript',
-            'smi' => 'application/smil',
-            'smil' => 'application/smil',
-            'mif' => 'application/vnd.mif',
-            'xls' => 'application/vnd.ms-excel',
-            'ppt' => 'application/vnd.ms-powerpoint',
-            'wbxml' => 'application/vnd.wap.wbxml',
-            'wmlc' => 'application/vnd.wap.wmlc',
-            'dcr' => 'application/x-director',
-            'dir' => 'application/x-director',
-            'dxr' => 'application/x-director',
-            'dvi' => 'application/x-dvi',
-            'gtar' => 'application/x-gtar',
-            'php3' => 'application/x-httpd-php',
-            'php4' => 'application/x-httpd-php',
-            'php' => 'application/x-httpd-php',
-            'phtml' => 'application/x-httpd-php',
-            'phps' => 'application/x-httpd-php-source',
-            'swf' => 'application/x-shockwave-flash',
-            'sit' => 'application/x-stuffit',
-            'tar' => 'application/x-tar',
-            'tgz' => 'application/x-tar',
-            'xht' => 'application/xhtml+xml',
-            'xhtml' => 'application/xhtml+xml',
-            'zip' => 'application/zip',
-            'mid' => 'audio/midi',
-            'midi' => 'audio/midi',
-            'mp2' => 'audio/mpeg',
-            'mp3' => 'audio/mpeg',
-            'm4a' => 'audio/mp4',
-            'mpga' => 'audio/mpeg',
-            'aif' => 'audio/x-aiff',
-            'aifc' => 'audio/x-aiff',
-            'aiff' => 'audio/x-aiff',
-            'ram' => 'audio/x-pn-realaudio',
-            'rm' => 'audio/x-pn-realaudio',
-            'rpm' => 'audio/x-pn-realaudio-plugin',
-            'ra' => 'audio/x-realaudio',
-            'wav' => 'audio/x-wav',
-            'mka' => 'audio/x-matroska',
-            'bmp' => 'image/bmp',
-            'gif' => 'image/gif',
-            'jpeg' => 'image/jpeg',
-            'jpe' => 'image/jpeg',
-            'jpg' => 'image/jpeg',
-            'png' => 'image/png',
-            'tiff' => 'image/tiff',
-            'tif' => 'image/tiff',
-            'webp' => 'image/webp',
-            'avif' => 'image/avif',
-            'heif' => 'image/heif',
-            'heifs' => 'image/heif-sequence',
-            'heic' => 'image/heic',
-            'heics' => 'image/heic-sequence',
-            'eml' => 'message/rfc822',
-            'css' => 'text/css',
-            'html' => 'text/html',
-            'htm' => 'text/html',
-            'shtml' => 'text/html',
-            'log' => 'text/plain',
-            'text' => 'text/plain',
-            'txt' => 'text/plain',
-            'rtx' => 'text/richtext',
-            'rtf' => 'text/rtf',
-            'vcf' => 'text/vcard',
-            'vcard' => 'text/vcard',
-            'ics' => 'text/calendar',
-            'xml' => 'text/xml',
-            'xsl' => 'text/xml',
-            'csv' => 'text/csv',
-            'wmv' => 'video/x-ms-wmv',
-            'mpeg' => 'video/mpeg',
-            'mpe' => 'video/mpeg',
-            'mpg' => 'video/mpeg',
-            'mp4' => 'video/mp4',
-            'm4v' => 'video/mp4',
-            'mov' => 'video/quicktime',
-            'qt' => 'video/quicktime',
-            'rv' => 'video/vnd.rn-realvideo',
-            'avi' => 'video/x-msvideo',
-            'movie' => 'video/x-sgi-movie',
-            'webm' => 'video/webm',
-            'mkv' => 'video/x-matroska',
+            'aif'    => 'audio/x-aiff',
+            'aifc'   => 'audio/x-aiff',
+            'aiff'   => 'audio/x-aiff',
+            'ai'     => 'application/postscript',
+            'avi'    => 'video/x-msvideo',
+            'avif'   => 'image/avif',
+            'bin'    => 'application/macbinary',
+            'bmp'    => 'image/bmp',
+            'class'  => 'application/octet-stream',
+            'cpt'    => 'application/mac-compactpro',
+            'csv'    => 'text/csv',
+            'css'    => 'text/css',
+            'dcr'    => 'application/x-director',
+            'dir'    => 'application/x-director',
+            'dll'    => 'application/octet-stream',
+            'dms'    => 'application/octet-stream',
+            'doc'    => 'application/msword',
+            'docx'   => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'dotx'   => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+            'dvi'    => 'application/x-dvi',
+            'dxr'    => 'application/x-director',
+            'eml'    => 'message/rfc822',
+            'eps'    => 'application/postscript',
+            'exe'    => 'application/octet-stream',
+            'gif'    => 'image/gif',
+            'gtar'   => 'application/x-gtar',
+            'heic'   => 'image/heic',
+            'heics'  => 'image/heic-sequence',
+            'heif'   => 'image/heif',
+            'heifs'  => 'image/heif-sequence',
+            'hqx'    => 'application/mac-binhex40',
+            'htm'    => 'text/html',
+            'html'   => 'text/html',
+            'ics'    => 'text/calendar',
+            'jpeg'   => 'image/jpeg',
+            'jpe'    => 'image/jpeg',
+            'jpg'    => 'image/jpeg',
+            'js'     => 'application/javascript',
+            'lha'    => 'application/octet-stream',
+            'log'    => 'text/plain',
+            'lzh'    => 'application/octet-stream',
+            'mid'    => 'audio/midi',
+            'midi'   => 'audio/midi',
+            'mif'    => 'application/vnd.mif',
+            'mka'    => 'audio/x-matroska',
+            'mkv'    => 'video/x-matroska',
+            'mov'    => 'video/quicktime',
+            'movie'  => 'video/x-sgi-movie',
+            'mp2'    => 'audio/mpeg',
+            'mp3'    => 'audio/mpeg',
+            'mp4'    => 'video/mp4',
+            'm4a'    => 'audio/mp4',
+            'm4v'    => 'video/mp4',
+            'mpga'   => 'audio/mpeg',
+            'mpeg'   => 'video/mpeg',
+            'mpe'    => 'video/mpeg',
+            'mpg'    => 'video/mpeg',
+            'oda'    => 'application/oda',
+            'pdf'    => 'application/pdf',
+            'php'    => 'application/x-httpd-php',
+            'php3'   => 'application/x-httpd-php',
+            'php4'   => 'application/x-httpd-php',
+            'phps'   => 'application/x-httpd-php-source',
+            'phtml'  => 'application/x-httpd-php',
+            'png'    => 'image/png',
+            'potx'   => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+            'ppsx'   => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+            'ppt'    => 'application/vnd.ms-powerpoint',
+            'pptx'   => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'ps'     => 'application/postscript',
+            'psd'    => 'application/octet-stream',
+            'qt'     => 'video/quicktime',
+            'ra'     => 'audio/x-realaudio',
+            'ram'    => 'audio/x-pn-realaudio',
+            'rm'     => 'audio/x-pn-realaudio',
+            'rpm'    => 'audio/x-pn-realaudio-plugin',
+            'rtf'    => 'text/rtf',
+            'rtx'    => 'text/richtext',
+            'rv'     => 'video/vnd.rn-realvideo',
+            'sea'    => 'application/octet-stream',
+            'shtml'  => 'text/html',
+            'sit'    => 'application/x-stuffit',
+            'sldx'   => 'application/vnd.openxmlformats-officedocument.presentationml.slide',
+            'smi'    => 'application/smil',
+            'smil'   => 'application/smil',
+            'so'     => 'application/octet-stream',
+            'swf'    => 'application/x-shockwave-flash',
+            'tar'    => 'application/x-tar',
+            'text'   => 'text/plain',
+            'tif'    => 'image/tiff',
+            'tiff'   => 'image/tiff',
+            'tgz'    => 'application/x-tar',
+            'txt'    => 'text/plain',
+            'vcf'    => 'text/vcard',
+            'vcard'  => 'text/vcard',
+            'wav'    => 'audio/x-wav',
+            'wbxml'  => 'application/vnd.wap.wbxml',
+            'webm'   => 'video/webm',
+            'webp'   => 'image/webp',
+            'wmlc'   => 'application/vnd.wap.wmlc',
+            'wmv'    => 'video/x-ms-wmv',
+            'word'   => 'application/msword',
+            'xht'    => 'application/xhtml+xml',
+            'xhtml'  => 'application/xhtml+xml',
+            'xl'     => 'application/excel',
+            'xlam'   => 'application/vnd.ms-excel.addin.macroEnabled.12',
+            'xls'    => 'application/vnd.ms-excel',
+            'xlsb'   => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+            'xlsx'   => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'xltx'   => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+            'xml'    => 'text/xml',
+            'xsl'    => 'text/xml',
+            'zip'    => 'application/zip',
         ];
+                
         $ext = strtolower($ext);
         if (array_key_exists($ext, $mimes)) {
             return $mimes[$ext];
@@ -4754,7 +4756,12 @@ class PHPMailer
      */
     public function secureHeader($str)
     {
-        return trim(str_replace(["\r", "\n"], '', $str));
+        // Remove any carriage return (CR) and line feed (LF) characters to prevent header injection
+        $str = str_replace(["\r", "\n"], '', $str);
+
+        // Remove any other characters that are not allowed in email headers
+        // Typically only alphanumeric characters and certain symbols are allowed
+        return preg_replace('/[^\x21-\x7E\x80-\xFF]/', '', $str);
     }
 
     /**
