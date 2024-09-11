@@ -12,6 +12,11 @@
     <testsuites>
         <testsuite name="PHPMailerTests">
             <directory>./test/</directory>
+            <exclude>test/PHPMailer/AddAddressWithIDNTest.php</exclude>
+        </testsuite>
+        <!-- Separate group for tests which include the `fakefunctions.php` file as it can screw up other tests. -->
+        <testsuite name="PHPMailerWithFakedFunctionsTests">
+            <file>./test/PHPMailer/AddAddressWithIDNTest.php</file>
         </testsuite>
     </testsuites>
     <listeners>
