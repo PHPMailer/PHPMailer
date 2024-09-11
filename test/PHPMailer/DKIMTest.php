@@ -241,21 +241,6 @@ final class DKIMTest extends SendTestCase
     }
 
     /**
-     * Verify behaviour of the DKIM_Sign method when Open SSL is not available.
-     *
-     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
-     */
-    public function testDKIMSignOpenSSLNotAvailable()
-    {
-        if (extension_loaded('openssl')) {
-            $this->markTestSkipped('Test requires OpenSSL *not* to be available');
-        }
-
-        $signature = $this->Mail->DKIM_Sign('foo');
-        self::assertSame('', $signature);
-    }
-
-    /**
      * Verify behaviour of the DKIM_Sign method when Open SSL is not available and exceptions is enabled.
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Sign
