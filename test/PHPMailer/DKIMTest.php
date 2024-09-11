@@ -13,7 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use Exception;
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\SendTestCase;
 
