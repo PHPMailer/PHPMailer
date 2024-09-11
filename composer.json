@@ -28,7 +28,8 @@
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
-        }
+        },
+        "lock": false
     },
     "require": {
         "php": ">=5.5.0",
