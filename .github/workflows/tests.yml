@@ -88,23 +88,39 @@ jobs:
     strategy:
       matrix:
         php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        extensions: ['optimal', 'minimal']
         coverage: [false]
         experimental: [false]
         include:
           # Run code coverage on high/low PHP.
           - php: '5.5'
+            extensions: 'optimal'
+            coverage: true
+            experimental: false
+          - php: '5.5'
+            extensions: 'minimal'
             coverage: true
             experimental: false
           - php: '8.3'
+            extensions: 'optimal'
+            coverage: true
+            experimental: false
+          - php: '8.3'
+            extensions: 'minimal'
             coverage: true
             experimental: false
 
           # Experimental builds. These are allowed to fail.
           - php: '8.4'
+            extensions: 'optimal'
+            coverage: false
+            experimental: true
+          - php: '8.4'
+            extensions: 'minimal'
             coverage: false
             experimental: true
 
-    name: "Test: PHP ${{ matrix.php }}"
+    name: "Test: PHP ${{ matrix.php }} - ${{ matrix.extensions }}"
 
     continue-on-error: ${{ matrix.experimental }}
 
@@ -112,13 +128,40 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+        # About the "extensions":
+        #
+        # In a "normal" test run, the "default" extension set for a PHP version is used
+        # and it is ensured that certain extensions will be available, no matter what.
+        #
+        # For the "minimal" test run, all extensions are disabled and then only
+        # a limited set of minimally required extensions are re-enabled.
+        # The minimal set is based on the required extensions from PHPUnit + PHPMailer combined
+        # + Curl for Composer.
+        # Whether Xdebug will be enabled depends on the code coverage settings.
+        #
+        # Also see:
+        # https://github.com/shivammathur/setup-php/?tab=readme-ov-file#heavy_plus_sign-php-extension-support
+        # https://github.com/shivammathur/setup-php/wiki
+      - name: Determine extensions to use
+        id: set_extensions
+        run: |
+          if [[ "${{ matrix.extensions }}" == "optimal" ]]; then
+            # Optimal.
+            echo 'EXT=imap, mbstring, openssl, intl, ctype, filter, hash' >> $GITHUB_OUTPUT
+            echo 'COMPOSER_OPTIONS=' >> $GITHUB_OUTPUT
+          else
+            # Minimal.
+            echo 'EXT=none, curl, dom, json, libxml, mbstring, tokenizer, xml, xmlwriter, ctype, filter, hash' >> $GITHUB_OUTPUT
+            echo 'COMPOSER_OPTIONS=--ignore-platform-req=ext-simplexml' >> $GITHUB_OUTPUT
+          fi
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
           ini-values: sendmail_path=/usr/sbin/sendmail -t -i, error_reporting=E_ALL, display_errors=On
-          extensions: imap, mbstring, intl, ctype, filter, hash
+          extensions: ${{ steps.set_extensions.outputs.EXT }}
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
@@ -126,6 +169,7 @@ jobs:
         if: ${{ matrix.php != '8.4' }}
         uses: "ramsey/composer-install@v3"
         with:
+          composer-options: ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
@@ -133,7 +177,7 @@ jobs:
         if: ${{ matrix.php == '8.4' }}
         uses: "ramsey/composer-install@v3"
         with:
-          composer-options: --ignore-platform-reqs
+          composer-options: --ignore-platform-reqs ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
