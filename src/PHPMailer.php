@@ -4224,7 +4224,7 @@ class PHPMailer
             $result = $_SERVER['SERVER_NAME'];
         } elseif (function_exists('gethostname') && gethostname() !== false) {
             $result = gethostname();
-        } elseif (php_uname('n') !== false) {
+        } elseif (php_uname('n') !== '') {
             $result = php_uname('n');
         }
         if (!static::isValidHost($result)) {
