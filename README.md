@@ -50,7 +50,7 @@ PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/p
 "phpmailer/phpmailer": "^6.9.1"
 ```
 
-or run
+or just run
 
 ```sh
 composer require phpmailer/phpmailer
