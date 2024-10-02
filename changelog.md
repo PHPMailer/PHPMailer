@@ -9,6 +9,7 @@
 * Fix broken links in docs and comments, avoid http links, correct link to LGPL 2.1 license file
 * Cleaner PSR-3 SMTP debug logging
 * Bump GitHub action versions
+* Fix error handler scope issue in POP3 and SMTP classes
 * Numerous test improvements by @jrfnl
 
 ## Version 6.9.1 (November 25th, 2023)
