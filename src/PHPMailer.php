@@ -4188,6 +4188,15 @@ class PHPMailer
                     $msg .= ' ' . $this->lang('smtp_code') . $lasterror['smtp_code'];
                 }
                 if (!empty($lasterror['smtp_code_ex'])) {
+                    if(function_exists('mb_detect_encoding')):
+                        $charset = strtoupper(ini_get('default_charset'));
+                        if($charset):
+                            $encoding = mb_detect_encoding($lasterror['smtp_code_ex'],array($charset,'GB18030','CP936','UTF-8'),true);
+                            if($encoding&&$charset != $encoding):
+                                $lasterror['smtp_code_ex'] = mb_convert_encoding($lasterror['smtp_code_ex'],$charset,$encoding);
+                            endif;
+                        endif;
+                    endif;
                     $msg .= ' ' . $this->lang('smtp_code_ex') . $lasterror['smtp_code_ex'];
                 }
             }
