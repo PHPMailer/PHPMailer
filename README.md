@@ -47,7 +47,7 @@ This software is distributed under the [LGPL 2.1](https://www.gnu.org/licenses/o
 PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via [Composer](https://getcomposer.org) is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
 
 ```json
-"phpmailer/phpmailer": "^6.9.1"
+"phpmailer/phpmailer": "^6.9.2"
 ```
 
 or run
