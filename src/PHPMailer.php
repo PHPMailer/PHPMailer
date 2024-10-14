@@ -1588,10 +1588,10 @@ class PHPMailer
             $this->error_count = 0; //Reset errors
             $this->mailHeader = '';
 
-            //The code below tries to support full use of unicode,
+            //The code below tries to support full use of Unicode,
             //while remaining compatible with legacy SMTP servers to
             //the greatest degree possible: If the message uses
-            //unicode in the localparts of any addresses, it is sent
+            //Unicode in the localparts of any addresses, it is sent
             //using SMTPUTF8. If not, it it sent using
             //pynycode-encoded domains and plain SMTP.
             if (
@@ -4309,7 +4309,7 @@ class PHPMailer
     }
 
     /**
-     * Check whether the supplied address uses unicode in the localpart.
+     * Check whether the supplied address uses Unicode in the localpart.
      *
      * @return bool
      */
@@ -4319,7 +4319,7 @@ class PHPMailer
     }
 
     /**
-     * Check whether any of the supplied addresses use unicode in the
+     * Check whether any of the supplied addresses use Unicode in the
      * localpart.
      *
      * @return bool

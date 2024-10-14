@@ -438,7 +438,7 @@ final class ValidateAddressTest extends TestCase
             'first.last@phplíst.com',
         ];
 
-        return $this->arrayToNamedDataProvider($unicodeaddresses, 'Invalid unicode: ');
+        return $this->arrayToNamedDataProvider($unicodeaddresses, 'Invalid Unicode: ');
     }
 
     /**

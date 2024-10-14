@@ -1225,7 +1225,7 @@ EOT;
         self::assertTrue($this->Mail->UseSMTPUTF8);
 
         //If using SMTPUTF8, then the To header should contain
-        //unicode@unicode, for better rendering by clients like Mac
+        //Unicode@Unicode, for better rendering by clients like Mac
         //Outlook.
         $this->Mail->addAddress('spın̈altap@spın̈altap.invalid', '');
         $this->Mail->preSend();
