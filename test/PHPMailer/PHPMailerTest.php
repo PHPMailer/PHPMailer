@@ -1197,8 +1197,8 @@ EOT;
      */
     public function testUnsuppoortedSmtpUTF8()
     {
-	$this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
-	self::assertFalse($this->Mail->addAddress('spın̈altap@example.com', ''));
+        $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
+        self::assertFalse($this->Mail->addAddress('spın̈altap@example.com', ''));
     }
 
     /**
