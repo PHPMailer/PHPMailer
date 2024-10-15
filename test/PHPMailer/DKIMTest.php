@@ -48,13 +48,13 @@ final class DKIMTest extends SendTestCase
     /**
      * DKIM body canonicalization tests.
      *
-     * @link https://tools.ietf.org/html/rfc6376#section-3.4.4
+     * @link https://www.rfc-editor.org/rfc/rfc6376.html#section-3.4.4
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_BodyC
      */
     public function testDKIMBodyCanonicalization()
     {
-        // Example from https://tools.ietf.org/html/rfc6376#section-3.4.5.
+        // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.4.5.
         $prebody = " C \r\nD \t E\r\n\r\n\r\n";
         $postbody = " C \r\nD \t E\r\n";
 
@@ -83,13 +83,13 @@ final class DKIMTest extends SendTestCase
     /**
      * DKIM header canonicalization tests.
      *
-     * @link https://tools.ietf.org/html/rfc6376#section-3.4.2
+     * @link https://www.rfc-editor.org/rfc/rfc6376.html#section-3.4.2
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_HeaderC
      */
     public function testDKIMHeaderCanonicalization()
     {
-        // Example from https://tools.ietf.org/html/rfc6376#section-3.4.5.
+        // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.4.5.
         $preheaders = "A: X\r\nB : Y\t\r\n\tZ  \r\n";
         $postheaders = "a:X\r\nb:Y Z\r\n";
         self::assertSame(
@@ -116,7 +116,7 @@ final class DKIMTest extends SendTestCase
     /**
      * DKIM copied header fields tests.
      *
-     * @link https://tools.ietf.org/html/rfc6376#section-3.5
+     * @link https://www.rfc-editor.org/rfc/rfc6376.html#section-3.5
      *
      * @requires extension openssl
      *
@@ -135,7 +135,7 @@ final class DKIMTest extends SendTestCase
         openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
-        // Example from https://tools.ietf.org/html/rfc6376#section-3.5.
+        // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.5.
         $from = 'from@example.com';
         $to = 'to@example.com';
         $date = 'date';
@@ -179,7 +179,7 @@ final class DKIMTest extends SendTestCase
         openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
-        // Example from https://tools.ietf.org/html/rfc6376#section-3.5.
+        // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.5.
         $from = 'from@example.com';
         $to = 'to@example.com';
         $date = 'date';

@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Use rfc-editor.org for all RFC docs links
+
 ## Version 6.9.2 (October 9th, 2024)
 * Escape dots in SMTP transaction ID patterns
 * Add link to [aboutmy.email](https://aboutmy.email) testing service in docs
@@ -227,7 +230,7 @@ Many thanks to @jrfnl for all her work.
 
 ## Version 6.1.0 (September 27th 2019)
 * Multiple bug fixes for folding of long header lines, thanks to @caugner
-* Add support for [RFC2387 child element content-type hint](https://tools.ietf.org/html/rfc2387#section-3.1) in `multipart/related` structures.
+* Add support for [RFC2387 child element content-type hint](https://www.rfc-editor.org/rfc/rfc2387#section-3.1) in `multipart/related` structures.
 * Support for Ical event methods other than `REQUEST`, thanks to @puhr-mde
 * Change header folding and param separation to use spaces instead of tabs
 * Use ; to separate multiple MIME header params
