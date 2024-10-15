@@ -1195,7 +1195,7 @@ EOT;
     /**
      * Test SMTPUTF8 usage, including when it is not to be used.
      */
-    public function testUnsuppoortedSmtpUTF8()
+    public function testUnsupportedSmtpUTF8()
     {
         $this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
         self::assertFalse($this->Mail->addAddress('spın̈altap@example.com', ''));
