@@ -1221,6 +1221,7 @@ EOT;
         //Need to use SMTPUTF8, and can.
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         PHPMailer::$validator = 'eai';
+        self::assertTrue(PHPMailer::validateAddress('spın̈altap@example.com'));
         self::assertTrue($this->Mail->addAddress('spın̈altap@example.com', ''));
         $this->Mail->preSend();
         self::assertTrue($this->Mail->UseSMTPUTF8);
