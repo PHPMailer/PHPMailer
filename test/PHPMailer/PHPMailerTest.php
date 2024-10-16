@@ -1212,7 +1212,7 @@ EOT;
         $this->Mail->addAddress('foo@example.com', '');
         $this->Mail->preSend();
 
-        //Using a punycoded domain is enough
+        //Using a punycoded domain does not need SMTPUTF8
         self::assertFalse($this->Mail->UseSMTPUTF8);
         $this->Mail->addAddress('foo@spın̈altap.example', '');
         $this->Mail->preSend();
