@@ -1192,6 +1192,46 @@ EOT;
     }
 
     /**
+     * Test SMTPUTF8 usage, including when it is not to be used.
+     */
+    public function testUnsuppoortedSmtpUTF8()
+    {
+	$this->Mail->CharSet = PHPMailer::CHARSET_ISO88591;
+	self::assertFalse($this->Mail->addAddress('spın̈altap@example.com', ''));
+    }
+
+    /**
+     * Test SMTPUTF8 usage, including when it is not to be used.
+     */
+    public function testSmtpUTF8()
+    {
+        //No reason to use SMTPUTF8
+        $this->Mail->isSMTP();
+        $this->Mail->addAddress('foo@example.com', '');
+        $this->Mail->preSend();
+
+        //Using a punycoded domain is enough
+        self::assertFalse($this->Mail->UseSMTPUTF8);
+        $this->Mail->addAddress('foo@spın̈altap.example', '');
+        $this->Mail->preSend();
+        self::assertFalse($this->Mail->UseSMTPUTF8);
+
+        //Need to use SMTPUTF8, and can.
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
+        PHPMailer::$validator = 'eai';
+        self::assertTrue($this->Mail->addAddress('spın̈altap@example.com', ''));
+        $this->Mail->preSend();
+        self::assertTrue($this->Mail->UseSMTPUTF8);
+
+        //If using SMTPUTF8, then the To header should contain
+        //unicode@unicode, for better rendering by clients like Mac
+        //Outlook.
+        $this->Mail->addAddress('spın̈altap@spın̈altap.invalid', '');
+        $this->Mail->preSend();
+        self::assertStringContainsString("spın̈altap@spın̈altap.invalid", $this->Mail->createHeader());
+    }
+
+    /**
      * Test SMTP Xclient options
      */
     public function testSmtpXclient()
