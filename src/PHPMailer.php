@@ -660,6 +660,14 @@ class PHPMailer
     protected $ReplyToQueue = [];
 
     /**
+     * Whether the need for SMTPUTF8 has been detected. Set by
+     * preSend() if necessary.
+     *
+     * @var bool
+     */
+    public $UseSMTPUTF8 = false;
+
+    /**
      * The array of attachments.
      *
      * @var array
@@ -1362,6 +1370,7 @@ class PHPMailer
      * * `pcre` Use old PCRE implementation;
      * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
+     * * `eai` Use a pattern similar to the HTML5 spec for 'email' and to firefox, extended to support EAI (RFC6530).
      * * `noregex` Don't use a regex: super fast, really dumb.
      * Alternatively you may pass in a callable to inject your own validator, for example:
      *
@@ -1430,6 +1439,20 @@ class PHPMailer
                 return (bool) preg_match(
                     '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}' .
                     '[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD',
+                    $address
+                );
+            case 'eai':
+                /*
+                 * This is the pattern used in the HTML5 spec for validation of 'email' type
+                 * form input elements (as above), modified to accept Unicode email addresses.
+                 * This is also more lenient than Firefox' html5 spec, in order to make the regex faster.
+                 *
+                 * @see https://html.spec.whatwg.org/#e-mail-state-(type=email)
+                 */
+                return (bool) preg_match(
+                    '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~\x80-\xff-]+@[a-zA-Z0-9\x80-\xff](?:[a-zA-Z0-9\x80-\xff-]{0,61}' .
+                    '[a-zA-Z0-9\x80-\xff])?(?:\.[a-zA-Z0-9\x80-\xff]' .
+                    '(?:[a-zA-Z0-9\x80-\xff-]{0,61}[a-zA-Z0-9\x80-\xff])?)*$/sD',
                     $address
                 );
             case 'php':
@@ -1565,9 +1588,26 @@ class PHPMailer
             $this->error_count = 0; //Reset errors
             $this->mailHeader = '';
 
+            //The code below tries to support full use of Unicode,
+            //while remaining compatible with legacy SMTP servers to
+            //the greatest degree possible: If the message uses
+            //Unicode in the localparts of any addresses, it is sent
+            //using SMTPUTF8. If not, it it sent using
+            //pynycode-encoded domains and plain SMTP.
+            if (
+                static::CHARSET_UTF8 === strtolower($this->CharSet) &&
+                ($this->anyAddressHasUnicodeLocalpart($this->RecipientsQueue) ||
+                 $this->anyAddressHasUnicodeLocalpart(array_keys($this->all_recipients)) ||
+                 $this->anyAddressHasUnicodeLocalpart($this->ReplyToQueue) ||
+                 $this->addressHasUnicodeLocalpart($this->From))
+            ) {
+                $this->UseSMTPUTF8 = true;
+            }
             //Dequeue recipient and Reply-To addresses with IDN
             foreach (array_merge($this->RecipientsQueue, $this->ReplyToQueue) as $params) {
-                $params[1] = $this->punyencodeAddress($params[1]);
+                if (!$this->UseSMTPUTF8) {
+                    $params[1] = $this->punyencodeAddress($params[1]);
+                }
                 call_user_func_array([$this, 'addAnAddress'], $params);
             }
             if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
@@ -2058,6 +2098,11 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
+        //If we have recipient addresses that need Unicode support,
+        //but the server doesn't support it, stop here
+        if ($this->UseSMTPUTF8 && $this->smtp->getServerExt('SMTPUTF8') === null) {
+            throw new Exception($this->lang('no_smtputf8'), self::STOP_CRITICAL);
+        }
         //Sender already validated in preSend()
         if ('' === $this->Sender) {
             $smtp_from = $this->From;
@@ -2159,6 +2204,7 @@ class PHPMailer
         $this->smtp->setDebugLevel($this->SMTPDebug);
         $this->smtp->setDebugOutput($this->Debugoutput);
         $this->smtp->setVerp($this->do_verp);
+        $this->smtp->setSMTPUTF8($this->UseSMTPUTF8);
         if ($this->Host === null) {
             $this->Host = 'localhost';
         }
@@ -2356,6 +2402,7 @@ class PHPMailer
             'smtp_detail' => 'Detail: ',
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: ',
+            'no_smtputf8' => 'Server does not support SMTPUTF8 needed to send to Unicode addresses',
         ];
         if (empty($lang_path)) {
             //Calculate an absolute path so it can work if CWD is not here
@@ -4265,6 +4312,35 @@ class PHPMailer
         }
         //Is it a syntactically valid hostname (when embedded in a URL)?
         return filter_var('https://' . $host, FILTER_VALIDATE_URL) !== false;
+    }
+
+    /**
+     * Check whether the supplied address uses Unicode in the localpart.
+     *
+     * @return bool
+     */
+    protected function addressHasUnicodeLocalpart($address)
+    {
+        return (bool) preg_match('/[\x80-\xFF].*@/', $address);
+    }
+
+    /**
+     * Check whether any of the supplied addresses use Unicode in the
+     * localpart.
+     *
+     * @return bool
+     */
+    protected function anyAddressHasUnicodeLocalpart($addresses)
+    {
+        foreach ($addresses as $address) {
+            if (is_array($address)) {
+                $address = $address[0];
+            }
+            if ($this->addressHasUnicodeLocalpart($address)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
