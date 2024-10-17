@@ -2098,6 +2098,11 @@ class PHPMailer
         if (!$this->smtpConnect($this->SMTPOptions)) {
             throw new Exception($this->lang('smtp_connect_failed'), self::STOP_CRITICAL);
         }
+        //If we have recipient addresses that need Unicode support,
+        //but the server doesn't support it, stop here
+        if ($this->UseSMTPUTF8 && $this->smtp->getServerExt('SMTPUTF8') === null) {
+            throw new Exception($this->lang('no_smtputf8'), self::STOP_CRITICAL);
+        }
         //Sender already validated in preSend()
         if ('' === $this->Sender) {
             $smtp_from = $this->From;
@@ -2397,6 +2402,7 @@ class PHPMailer
             'smtp_detail' => 'Detail: ',
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: ',
+            'no_smtputf8' => 'Server does not support SMTPUTF8 needed to send to Unicode addresses',
         ];
         if (empty($lang_path)) {
             //Calculate an absolute path so it can work if CWD is not here
