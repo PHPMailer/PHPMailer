@@ -1126,7 +1126,7 @@ EOT;
 
         $this->Mail->clearAllRecipients();
 
-        //This file is UTF-8 encoded. Create a domain encoded in "iso-8859-1".
+        //This file is UTF-8 encoded so we have to take a roundabout route to make a domain using an ISO-8859-1 character.
         $letter = html_entity_decode('&ccedil;', ENT_COMPAT, PHPMailer::CHARSET_ISO88591);
         $domain = '@' . 'fran' . $letter . 'ois.ch';
         $this->Mail->addAddress('test' . $domain);
