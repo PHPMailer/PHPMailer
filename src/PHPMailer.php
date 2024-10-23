@@ -580,6 +580,10 @@ class PHPMailer
      * May be a callable to inject your own validator, but there are several built-in validators.
      * The default validator uses PHP's FILTER_VALIDATE_EMAIL filter_var option.
      *
+     * If CharSet is UTF8, the validator is left at the default value,
+     * and you send to addresses that use non-ASCII locallparts, then
+     * PHPMailer automatically changes to the 'eai' validator.
+     *
      * @see PHPMailer::validateAddress()
      *
      * @var string|callable
@@ -1168,6 +1172,11 @@ class PHPMailer
      */
     protected function addAnAddress($kind, $address, $name = '')
     {
+        if ($this->CharSet === self::CHARSET_UTF8 &&
+            self::$validator === 'php' &&
+            $this->addressHasUnicodeLocalpart($address)) {
+            self::$validator = 'eai';
+        }
         if (!in_array($kind, ['to', 'cc', 'bcc', 'Reply-To'])) {
             $error_message = sprintf(
                 '%s: %s',
@@ -4342,6 +4351,18 @@ class PHPMailer
         }
         return false;
     }
+
+    /**
+     * Check whether the message requires SMTPUTF8 based on what's
+     * known so far.
+     *
+     * @return bool
+     */
+    public function needsSMTPUTF8()
+    {
+        return $this->UseSMTPUTF8;
+    }
+
 
     /**
      * Get an error message in the current language.

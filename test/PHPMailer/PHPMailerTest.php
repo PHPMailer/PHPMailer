@@ -1193,13 +1193,33 @@ EOT;
     }
 
     /**
-     * Test SMTPUTF8 usage, including when it is not to be used.
+     * Test that validation doesn't accidentally succeed.
      */
     public function testUnsupportedSmtpUTF8()
     {
+        $this->Mail = new PHPMailer(true);
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
         PHPMailer::$validator = 'html5';
-        self::assertFalse($this->Mail->addAddress('spın̈altap@example.com', ''));
+        self::assertFalse(PHPMailer::validateAddress('spın̈altap@example.com'));
+        PHPMailer::$validator = 'eai';
+        self::assertTrue(PHPMailer::validateAddress('spın̈altap@example.com'));
+    }
+
+    /**
+     * Test that SMTPUTF8 is automatically allowed if charset is UTF8.
+     */
+    public function testAutomaticEaiValidation()
+    {
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
+
+        $this->Mail = new PHPMailer(true);
+        PHPMailer::$validator = 'php';
+        $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
+        $this->Mail->Body = 'Test';
+        $this->Mail->isSMTP();
+        self::assertTrue($this->Mail->addAddress('spın̈altap@example.com', ''));
+        $this->Mail->preSend();
+        self::assertTrue($this->Mail->needsSMTPUTF8());
     }
 
     /**
@@ -1207,24 +1227,26 @@ EOT;
      */
     public function testSmtpUTF8()
     {
-        //No reason to use SMTPUTF8
+        PHPMailer::$validator = "eai";
+        $this->Mail = new PHPMailer(true);
+        $this->Mail->Body = 'Test';
         $this->Mail->isSMTP();
         $this->Mail->addAddress('foo@example.com', '');
         $this->Mail->preSend();
+        self::assertFalse($this->Mail->needsSMTPUTF8());
 
         //Using a punycoded domain does not need SMTPUTF8
-        self::assertFalse($this->Mail->UseSMTPUTF8);
+        self::assertFalse($this->Mail->needsSMTPUTF8());
+        PHPMailer::$validator = "eai";
         $this->Mail->addAddress('foo@spın̈altap.example', '');
         $this->Mail->preSend();
-        self::assertFalse($this->Mail->UseSMTPUTF8);
+        self::assertFalse($this->Mail->needsSMTPUTF8());
 
         //Need to use SMTPUTF8, and can.
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
-        PHPMailer::$validator = 'eai';
-        self::assertTrue(PHPMailer::validateAddress('spın̈altap@example.com'));
         self::assertTrue($this->Mail->addAddress('spın̈altap@example.com', ''));
         $this->Mail->preSend();
-        self::assertTrue($this->Mail->UseSMTPUTF8);
+        self::assertTrue($this->Mail->needsSMTPUTF8());
 
         //If using SMTPUTF8, then the To header should contain
         //Unicode@Unicode, for better rendering by clients like Mac
