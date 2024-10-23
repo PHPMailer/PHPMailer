@@ -2926,7 +2926,9 @@ class PHPMailer
         $bodyEncoding = $this->Encoding;
         $bodyCharSet = $this->CharSet;
         //Can we do a 7-bit downgrade?
-        if (static::ENCODING_8BIT === $bodyEncoding && !$this->has8bitChars($this->Body)) {
+        if ($this->UseSMTPUTF8) {
+            $bodyEncoding = static::ENCODING_8BIT;
+        } else if (static::ENCODING_8BIT === $bodyEncoding && !$this->has8bitChars($this->Body)) {
             $bodyEncoding = static::ENCODING_7BIT;
             //All ISO 8859, Windows codepage and UTF-8 charsets are ascii compatible up to 7-bit
             $bodyCharSet = static::CHARSET_ASCII;
@@ -3572,6 +3574,11 @@ class PHPMailer
      */
     public function encodeHeader($str, $position = 'text')
     {
+        $position = strtolower($position);
+        if($this->UseSMTPUTF8 && !("comment" === $position)) {
+           return trim(static::normalizeBreaks($str));
+        }
+
         $matchcount = 0;
         switch (strtolower($position)) {
             case 'phrase':

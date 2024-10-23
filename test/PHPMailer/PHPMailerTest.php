@@ -1254,6 +1254,17 @@ EOT;
         $this->Mail->addAddress('spın̈altap@spın̈altap.invalid', '');
         $this->Mail->preSend();
         self::assertStringContainsString("spın̈altap@spın̈altap.invalid", $this->Mail->createHeader());
+
+        //Sending unencoded UTF8 is legal when SMTPUTF8 is used,
+        //except that body parts have to be encoded if they
+        //accidentally contain any lines that match the MIME boundary
+        //lines. It also looks good, so let's do it.
+
+        $this->Mail->Subject = 'Spın̈al Tap';
+        self::assertStringContainsString("Spın̈al", $this->Mail->createHeader());
+        $this->Mail->Body = 'Spın̈al Tap';
+        $this->Mail->preSend();
+        self::assertStringContainsString("Spın̈al", $this->Mail->createBody());
     }
 
     /**
