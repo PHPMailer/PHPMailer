@@ -46,11 +46,11 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: ['5.5', '7.2', '8.0', '8.1', '8.2', '8.3']
+        php: ['5.5', '7.2', '8.0', '8.1', '8.2', '8.3','8.4']
         experimental: [false]
-        include:
-          - php: '8.4'
-            experimental: true
+#        include:
+#          - php: '8.5'
+#            experimental: true
 
     name: "Lint: PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.experimental }}
@@ -103,22 +103,22 @@ jobs:
             experimental: false
           - php: '8.3'
             extensions: 'optimal'
-            coverage: true
+            coverage: false
             experimental: false
           - php: '8.3'
+            extensions: 'minimal'
+            coverage: false
+            experimental: false
+          - php: '8.4'
+            extensions: 'optimal'
+            coverage: true
+            experimental: false
+          - php: '8.4'
             extensions: 'minimal'
             coverage: true
             experimental: false
 
           # Experimental builds. These are allowed to fail.
-          - php: '8.4'
-            extensions: 'optimal'
-            coverage: false
-            experimental: true
-          - php: '8.4'
-            extensions: 'minimal'
-            coverage: false
-            experimental: true
 
     name: "Test: PHP ${{ matrix.php }} - ${{ matrix.extensions }}"
 
@@ -166,20 +166,20 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install PHP packages - normal
-        if: ${{ matrix.php != '8.4' }}
+#        if: ${{ matrix.php != '8.4' }}
         uses: "ramsey/composer-install@v3"
         with:
           composer-options: ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      - name: Install PHP packages - ignore-platform-reqs
-        if: ${{ matrix.php == '8.4' }}
-        uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: --ignore-platform-reqs ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
-          # Bust the cache at least once a month - output format: YYYY-MM.
-          custom-cache-suffix: $(date -u "+%Y-%m")
+#      - name: Install PHP packages - ignore-platform-reqs
+#        if: ${{ matrix.php == '8.4' }}
+#        uses: "ramsey/composer-install@v3"
+#        with:
+#          composer-options: --ignore-platform-reqs ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
+#          # Bust the cache at least once a month - output format: YYYY-MM.
+#          custom-cache-suffix: $(date -u "+%Y-%m")
 
       # Install postfix and automatically retry if the install failed, which happens reguarly.
       # @link https://github.com/marketplace/actions/retry-step
