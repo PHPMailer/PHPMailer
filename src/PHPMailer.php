@@ -3567,7 +3567,8 @@ class PHPMailer
     /**
      * Encode a header value (not including its label) optimally.
      * Picks shortest of Q, B, or none. Result includes folding if needed.
-     * See RFC822 definitions for phrase, comment and text positions.
+     * See RFC822 definitions for phrase, comment and text positions,
+     * and RFC2047 for inline encodings.
      *
      * @param string $str      The header value to encode
      * @param string $position What context the string will be used in
