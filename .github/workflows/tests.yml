@@ -46,10 +46,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: ['5.5', '7.2', '8.0', '8.1', '8.2', '8.3']
+        php: ['5.5', '7.2', '8.0', '8.4']
         experimental: [false]
         include:
-          - php: '8.4'
+          - php: '8.5'
             experimental: true
 
     name: "Lint: PHP ${{ matrix.php }}"
@@ -75,11 +75,11 @@ jobs:
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: Lint against parse errors
-        if: ${{ matrix.php != '8.4' }}
+        if: ${{ matrix.php != '8.5' }}
         run: composer lint -- --checkstyle | cs2pr
 
-      - name: Lint against future parse errors (PHP 8.4)
-        if: ${{ matrix.php == '8.4' }}
+      - name: Lint against future parse errors (PHP 8.5)
+        if: ${{ matrix.php == '8.5' }}
         run: composer lint
 
   test:
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         extensions: ['optimal', 'minimal']
         coverage: [false]
         experimental: [false]
@@ -101,21 +101,21 @@ jobs:
             extensions: 'minimal'
             coverage: true
             experimental: false
-          - php: '8.3'
+          - php: '8.4'
             extensions: 'optimal'
             coverage: true
             experimental: false
-          - php: '8.3'
+          - php: '8.4'
             extensions: 'minimal'
             coverage: true
             experimental: false
 
           # Experimental builds. These are allowed to fail.
-          - php: '8.4'
+          - php: '8.5'
             extensions: 'optimal'
             coverage: false
             experimental: true
-          - php: '8.4'
+          - php: '8.5'
             extensions: 'minimal'
             coverage: false
             experimental: true
@@ -166,7 +166,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install PHP packages - normal
-        if: ${{ matrix.php != '8.4' }}
+        if: ${{ matrix.php != '8.5' }}
         uses: "ramsey/composer-install@v3"
         with:
           composer-options: ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
@@ -174,7 +174,7 @@ jobs:
           custom-cache-suffix: $(date -u "+%Y-%m")
 
       - name: Install PHP packages - ignore-platform-reqs
-        if: ${{ matrix.php == '8.4' }}
+        if: ${{ matrix.php == '8.5' }}
         uses: "ramsey/composer-install@v3"
         with:
           composer-options: --ignore-platform-reqs ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
