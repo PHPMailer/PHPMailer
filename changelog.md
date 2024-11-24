@@ -1,7 +1,7 @@
 # PHPMailer Change Log
 
-## WIP
-* Add support for release version of PHP 8.4
+## Version 6.9.3 (November 22nd, 2024)
+* Add support for the release version of PHP 8.4
 * Add experimental support for PHP 8.5
 * Use rfc-editor.org for all RFC docs links
 
