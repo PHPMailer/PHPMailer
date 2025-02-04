@@ -90,34 +90,41 @@ jobs:
         php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         extensions: ['optimal', 'minimal']
         coverage: [false]
+        test-results: [false]
         experimental: [false]
         include:
           # Run code coverage on high/low PHP.
           - php: '5.5'
             extensions: 'optimal'
             coverage: true
+            test-results: true
             experimental: false
           - php: '5.5'
             extensions: 'minimal'
             coverage: true
+            test-results: true
             experimental: false
           - php: '8.4'
             extensions: 'optimal'
             coverage: true
+            test-results: true
             experimental: false
           - php: '8.4'
             extensions: 'minimal'
             coverage: true
+            test-results: true
             experimental: false
 
           # Experimental builds. These are allowed to fail.
           - php: '8.5'
             extensions: 'optimal'
             coverage: false
+            test-results: false
             experimental: true
           - php: '8.5'
             extensions: 'minimal'
             coverage: false
+            test-results: false
             experimental: true
 
     name: "Test: PHP ${{ matrix.php }} - ${{ matrix.extensions }}"
@@ -207,16 +214,25 @@ jobs:
         if: ${{ matrix.coverage == false }}
         run: ./vendor/bin/phpunit --no-coverage
 
-      - name: Run tests with code coverage
-        if: ${{ matrix.coverage == true }}
-        run: vendor/bin/phpunit
+      - name: Run tests with code coverage and test results
+        if: ${{ matrix.coverage == true && matrix.test-results == true }}
+        run: vendor/bin/phpunit --log-junit ./build/logs/junit.xml
 
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
           verbose: true
+          flags: ${{ matrix.php }}_${{ matrix.extensions }}
+      
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() && matrix.test-results == true }}
+        uses: codecov/test-results-action@v1
+        with:
+          files: ./build/logs/junit.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.php }}_${{ matrix.extensions }}
