@@ -3114,7 +3114,14 @@ class PHPMailer
                     @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
-                    $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
+                    //In $parts[0] there is MIME-Version and Content-Type delimited by "\n".
+                    //Need to separate them, otherwise error with DKIM: "dkim=neutral (body hash did not verify)"
+                    //(The reason is in "h=Date:To:From:Reply-To:Subject:Message-ID:X-Mailer;" without MIME-Version and Content-Type)
+                    $subparts = array_map('trim', explode("\n", $parts[0]));
+                    foreach($subparts as $subpart) {
+                        $this->MIMEHeader .= $subpart . static::$LE;
+                    }
+                    $this->MIMEHeader .= static::$LE;
                     $body = $parts[1];
                 } else {
                     @unlink($signed);
