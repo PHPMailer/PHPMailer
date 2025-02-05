@@ -17,5 +17,3 @@ coverage:
         threshold: 0%
         paths:
           - "src"
-
-comment: false
