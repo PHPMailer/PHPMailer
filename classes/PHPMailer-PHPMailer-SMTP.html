@@ -1099,12 +1099,9 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
 
         <section class="phpdocumentor-description"><p>Options:</p>
 <ul>
-<li>
-<code class="prettyprint">echo</code> Output plain-text as-is, appropriate for CLI</li>
-<li>
-<code class="prettyprint">html</code> Output escaped, line breaks converted to <code class="prettyprint">&lt;br&gt;</code>, appropriate for browser output</li>
-<li>
-<code class="prettyprint">error_log</code> Output to error log as configured in php.ini
+<li><code class="prettyprint">echo</code> Output plain-text as-is, appropriate for CLI</li>
+<li><code class="prettyprint">html</code> Output escaped, line breaks converted to <code class="prettyprint">&lt;br&gt;</code>, appropriate for browser output</li>
+<li><code class="prettyprint">error_log</code> Output to error log as configured in php.ini
 Alternatively, you can provide a callable expecting two params: a message string and the debug level:</li>
 </ul>
 <pre class="prettyprint"><code class="language-php">$smtp-&gt;Debugoutput = function($str, $level) {echo &quot;debug level $level; message: $str&quot;;};

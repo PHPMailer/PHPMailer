@@ -3232,12 +3232,9 @@ Clients that can read HTML will view the normal Body.</p>
 
         <section class="phpdocumentor-description"><p>Options:</p>
 <ul>
-<li>
-<code class="prettyprint">echo</code> Output plain-text as-is, appropriate for CLI</li>
-<li>
-<code class="prettyprint">html</code> Output escaped, line breaks converted to <code class="prettyprint">&lt;br&gt;</code>, appropriate for browser output</li>
-<li>
-<code class="prettyprint">error_log</code> Output to error log as configured in php.ini
+<li><code class="prettyprint">echo</code> Output plain-text as-is, appropriate for CLI</li>
+<li><code class="prettyprint">html</code> Output escaped, line breaks converted to <code class="prettyprint">&lt;br&gt;</code>, appropriate for browser output</li>
+<li><code class="prettyprint">error_log</code> Output to error log as configured in php.ini
 By default PHPMailer will use <code class="prettyprint">echo</code> if run from a <code class="prettyprint">cli</code> or <code class="prettyprint">cli-server</code> SAPI, <code class="prettyprint">html</code> otherwise.
 Alternatively, you can provide a callable expecting two params: a message string and the debug level:</li>
 </ul>
@@ -11639,18 +11636,12 @@ quoted-printable encoded string.</p>
     
         <section class="phpdocumentor-description"><p>Validation patterns supported:</p>
 <ul>
-<li>
-<code class="prettyprint">auto</code> Pick best pattern automatically;</li>
-<li>
-<code class="prettyprint">pcre8</code> Use the squiloople.com pattern, requires PCRE &gt; 8.0;</li>
-<li>
-<code class="prettyprint">pcre</code> Use old PCRE implementation;</li>
-<li>
-<code class="prettyprint">php</code> Use PHP built-in FILTER_VALIDATE_EMAIL;</li>
-<li>
-<code class="prettyprint">html5</code> Use the pattern given by the HTML5 spec for 'email' type form input elements.</li>
-<li>
-<code class="prettyprint">noregex</code> Don't use a regex: super fast, really dumb.
+<li><code class="prettyprint">auto</code> Pick best pattern automatically;</li>
+<li><code class="prettyprint">pcre8</code> Use the squiloople.com pattern, requires PCRE &gt; 8.0;</li>
+<li><code class="prettyprint">pcre</code> Use old PCRE implementation;</li>
+<li><code class="prettyprint">php</code> Use PHP built-in FILTER_VALIDATE_EMAIL;</li>
+<li><code class="prettyprint">html5</code> Use the pattern given by the HTML5 spec for 'email' type form input elements.</li>
+<li><code class="prettyprint">noregex</code> Don't use a regex: super fast, really dumb.
 Alternatively you may pass in a callable to inject your own validator, for example:</li>
 </ul>
 <pre class="prettyprint"><code class="language-php">PHPMailer::validateAddress('user@example.com', function($address) {
