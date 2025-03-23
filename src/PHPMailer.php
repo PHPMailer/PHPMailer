@@ -4180,7 +4180,7 @@ class PHPMailer
         if ('smtp' === $this->Mailer && null !== $this->smtp) {
             $lasterror = $this->smtp->getError();
             if (!empty($lasterror['error'])) {
-                $msg .= $this->lang('smtp_error') . $lasterror['error'];
+                $msg .= ' ' . $this->lang('smtp_error') . $lasterror['error'];
                 if (!empty($lasterror['detail'])) {
                     $msg .= ' ' . $this->lang('smtp_detail') . $lasterror['detail'];
                 }
