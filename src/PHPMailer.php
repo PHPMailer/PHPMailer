@@ -335,6 +335,14 @@ class PHPMailer
     public $SMTPOptions = [];
 
     /**
+     * An array of addresses that should be used for the SMTP RCPT TO command.
+     * By default (if null or empty), the messages are sent to all 'to', 'cc' and 'bcc' addresses.
+     *
+     * @var array
+     */
+    protected $SMTPRecipientTo = null;
+
+    /**
      * SMTP username.
      *
      * @var string
@@ -1018,6 +1026,43 @@ class PHPMailer
     public function addAddress($address, $name = '')
     {
         return $this->addOrEnqueueAnAddress('to', $address, $name);
+    }
+    
+    /**
+     * Add an address the messages should be sent to when using SMTP (by invoking the SMTP RCPT TO command).
+     * 
+     * By default (if no SMTP recipients are set), the message is sent to all 'to', 'cc' and 'bcc' addresses.
+     *
+     * @throws Exception
+     * 
+     * @return bool true on success, false if address is invalid in some way
+     */
+    public function addSMTPRecipient($address)
+    {
+        if (!static::validateAddress($address)) {
+            $error_message = sprintf(
+                '%s (%s): %s',
+                $this->lang('invalid_address'),
+                'SMTP recipient',
+                $address
+            );
+            $this->setError($error_message);
+            $this->edebug($error_message);
+            if ($this->exceptions) {
+                throw new Exception($error_message);
+            }
+
+            return false;
+        }
+
+        $recipient = [$address, ''];
+        if($this->SMTPRecipientTo == null) {
+            $this->SMTPRecipientTo = [$recipient];
+        } else {
+            $this->SMTPRecipientTo[] = $recipient;
+        }
+
+        return true;
     }
 
     /**
@@ -2073,18 +2118,25 @@ class PHPMailer
         }
 
         $callbacks = [];
-        //Attempt to send to all recipients
-        foreach ([$this->to, $this->cc, $this->bcc] as $togroup) {
-            foreach ($togroup as $to) {
-                if (!$this->smtp->recipient($to[0], $this->dsn)) {
+        $recipient_groups = null;
+        if($this->SMTPRecipientTo != null && count($this->SMTPRecipientTo) > 0) {
+            $recipient_groups = [$this->SMTPRecipientTo];
+        } else {
+            //Attempt to send to all recipients
+            $recipient_groups = [$this->to, $this->cc, $this->bcc];
+        }
+        
+        foreach ($recipient_groups as $recipient_group) {
+            foreach ($recipient_group as $recipient) {
+                if (!$this->smtp->recipient($recipient[0], $this->dsn)) {
                     $error = $this->smtp->getError();
-                    $bad_rcpt[] = ['to' => $to[0], 'error' => $error['detail']];
+                    $bad_rcpt[] = ['to' => $recipient[0], 'error' => $error['detail']];
                     $isSent = false;
                 } else {
                     $isSent = true;
                 }
 
-                $callbacks[] = ['issent' => $isSent, 'to' => $to[0], 'name' => $to[1]];
+                $callbacks[] = ['issent' => $isSent, 'to' => $recipient[0], 'name' => $recipient[1]];
             }
         }
 
