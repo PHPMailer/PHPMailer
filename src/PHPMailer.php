@@ -581,7 +581,7 @@ class PHPMailer
      * The default validator uses PHP's FILTER_VALIDATE_EMAIL filter_var option.
      *
      * If CharSet is UTF8, the validator is left at the default value,
-     * and you send to addresses that use non-ASCII locallparts, then
+     * and you send to addresses that use non-ASCII local parts, then
      * PHPMailer automatically changes to the 'eai' validator.
      *
      * @see PHPMailer::validateAddress()
@@ -1175,7 +1175,7 @@ class PHPMailer
         if (
             $this->CharSet === self::CHARSET_UTF8 &&
             self::$validator === 'php' &&
-            $this->addressHasUnicodeLocalpart($address)
+            $this->addressHasUnicodeLocalPart($address)
         ) {
             self::$validator = 'eai';
         }
@@ -1602,15 +1602,15 @@ class PHPMailer
             //The code below tries to support full use of Unicode,
             //while remaining compatible with legacy SMTP servers to
             //the greatest degree possible: If the message uses
-            //Unicode in the localparts of any addresses, it is sent
+            //Unicode in the local parts of any addresses, it is sent
             //using SMTPUTF8. If not, it it sent using
-            //pynycode-encoded domains and plain SMTP.
+            //punycode-encoded domains and plain SMTP.
             if (
                 static::CHARSET_UTF8 === strtolower($this->CharSet) &&
-                ($this->anyAddressHasUnicodeLocalpart($this->RecipientsQueue) ||
-                 $this->anyAddressHasUnicodeLocalpart(array_keys($this->all_recipients)) ||
-                 $this->anyAddressHasUnicodeLocalpart($this->ReplyToQueue) ||
-                 $this->addressHasUnicodeLocalpart($this->From))
+                ($this->anyAddressHasUnicodeLocalPart($this->RecipientsQueue) ||
+                 $this->anyAddressHasUnicodeLocalPart(array_keys($this->all_recipients)) ||
+                 $this->anyAddressHasUnicodeLocalPart($this->ReplyToQueue) ||
+                 $this->addressHasUnicodeLocalPart($this->From))
             ) {
                 $this->UseSMTPUTF8 = true;
             }
@@ -4334,28 +4334,27 @@ class PHPMailer
     }
 
     /**
-     * Check whether the supplied address uses Unicode in the localpart.
+     * Check whether the supplied address uses Unicode in the local part.
      *
      * @return bool
      */
-    protected function addressHasUnicodeLocalpart($address)
+    protected function addressHasUnicodeLocalPart($address)
     {
         return (bool) preg_match('/[\x80-\xFF].*@/', $address);
     }
 
     /**
-     * Check whether any of the supplied addresses use Unicode in the
-     * localpart.
+     * Check whether any of the supplied addresses use Unicode in the local part.
      *
      * @return bool
      */
-    protected function anyAddressHasUnicodeLocalpart($addresses)
+    protected function anyAddressHasUnicodeLocalPart($addresses)
     {
         foreach ($addresses as $address) {
             if (is_array($address)) {
                 $address = $address[0];
             }
-            if ($this->addressHasUnicodeLocalpart($address)) {
+            if ($this->addressHasUnicodeLocalPart($address)) {
                 return true;
             }
         }
@@ -4363,8 +4362,7 @@ class PHPMailer
     }
 
     /**
-     * Check whether the message requires SMTPUTF8 based on what's
-     * known so far.
+     * Check whether the message requires SMTPUTF8 based on what's known so far.
      *
      * @return bool
      */
