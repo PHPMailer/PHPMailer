@@ -1227,7 +1227,7 @@ EOT;
      */
     public function testSmtpUTF8()
     {
-        PHPMailer::$validator = "eai";
+        PHPMailer::$validator = 'eai';
         $this->Mail = new PHPMailer(true);
         $this->Mail->Body = 'Test';
         $this->Mail->isSMTP();
@@ -1237,7 +1237,7 @@ EOT;
 
         //Using a punycoded domain does not need SMTPUTF8
         self::assertFalse($this->Mail->needsSMTPUTF8());
-        PHPMailer::$validator = "eai";
+        PHPMailer::$validator = 'eai';
         $this->Mail->addAddress('foo@spın̈altap.example', '');
         $this->Mail->preSend();
         self::assertFalse($this->Mail->needsSMTPUTF8());
@@ -1253,7 +1253,7 @@ EOT;
         //Outlook.
         $this->Mail->addAddress('spın̈altap@spın̈altap.invalid', '');
         $this->Mail->preSend();
-        self::assertStringContainsString("spın̈altap@spın̈altap.invalid", $this->Mail->createHeader());
+        self::assertStringContainsString('spın̈altap@spın̈altap.invalid', $this->Mail->createHeader());
 
         //Sending unencoded UTF8 is legal when SMTPUTF8 is used,
         //except that body parts have to be encoded if they
@@ -1261,10 +1261,10 @@ EOT;
         //lines. It also looks good, so let's do it.
 
         $this->Mail->Subject = 'Spın̈al Tap';
-        self::assertStringContainsString("Spın̈al", $this->Mail->createHeader());
+        self::assertStringContainsString('Spın̈al', $this->Mail->createHeader());
         $this->Mail->Body = 'Spın̈al Tap';
         $this->Mail->preSend();
-        self::assertStringContainsString("Spın̈al", $this->Mail->createBody());
+        self::assertStringContainsString('Spın̈al', $this->Mail->createBody());
     }
 
     /**
