@@ -1548,6 +1548,7 @@ class PHPMailer
             static::setLE(self::CRLF);
         } else {
             //Maintain backward compatibility with legacy Linux command line mailers
+            //Force PHP_EOL for all mail() calls on Linux
             static::setLE(PHP_EOL);
         }
         //Check for buggy PHP versions that add a header with an incorrect line break
