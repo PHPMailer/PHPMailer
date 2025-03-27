@@ -1173,10 +1173,10 @@ class PHPMailer
     protected function addAnAddress($kind, $address, $name = '')
     {
         if (
-            $this->CharSet === self::CHARSET_UTF8 &&
             self::$validator === 'php' &&
             $this->addressHasUnicodeLocalPart($address)
         ) {
+            $this->CharSet = self::CHARSET_UTF8;
             self::$validator = 'eai';
         }
         if (!in_array($kind, ['to', 'cc', 'bcc', 'Reply-To'])) {
