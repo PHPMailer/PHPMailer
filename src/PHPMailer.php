@@ -2111,7 +2111,7 @@ class PHPMailer
         }
         //If we have recipient addresses that need Unicode support,
         //but the server doesn't support it, stop here
-        if ($this->UseSMTPUTF8 && $this->smtp->getServerExt('SMTPUTF8') === null) {
+        if ($this->UseSMTPUTF8 && !$this->smtp->getServerExt('SMTPUTF8')) {
             throw new Exception($this->lang('no_smtputf8'), self::STOP_CRITICAL);
         }
         //Sender already validated in preSend()
