@@ -1460,7 +1460,7 @@ class PHPMailer
                  * form input elements (as above), modified to accept Unicode email addresses.
                  * This is also more lenient than Firefox' html5 spec, in order to make the regex faster.
                  * 'eai' is an acronym for Email Address Internationalization.
-                 * This validator is used automatically if you attempt to use recipient addresses
+                 * This validator is selected automatically if you attempt to use recipient addresses
                  * that contain Unicode characters in the local part.
                  *
                  * @see https://html.spec.whatwg.org/#e-mail-state-(type=email)
