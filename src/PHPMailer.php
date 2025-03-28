@@ -1459,8 +1459,10 @@ class PHPMailer
                  * This is the pattern used in the HTML5 spec for validation of 'email' type
                  * form input elements (as above), modified to accept Unicode email addresses.
                  * This is also more lenient than Firefox' html5 spec, in order to make the regex faster.
+                 * 'eai' is an acronym for Email Address Internationalization.
                  *
                  * @see https://html.spec.whatwg.org/#e-mail-state-(type=email)
+                 * @see https://en.wikipedia.org/wiki/International_email
                  */
                 return (bool) preg_match(
                     '/^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~\x80-\xff-]+@[a-zA-Z0-9\x80-\xff](?:[a-zA-Z0-9\x80-\xff-]{0,61}' .
