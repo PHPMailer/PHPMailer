@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Win $3,000!</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { max-width: 400px; margin: 50px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0px 0px 10px #aaa; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up & Win $3,000!</h2>
+        <form action="submit.php" method="post">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="tel" name="phone" placeholder="Your Phone (Optional)">
+            <button type="submit">Enter Now</button>
+        </form>
+    </div>
+</body>
+</html><!-- PHP Script (submit.php) --><?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/Exception.php';
+require 'PHPMailer/PHPMailer.php';
+require 'PHPMailer/SMTP.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = htmlspecialchars($_POST['name']);
+    $email = htmlspecialchars($_POST['email']);
+    $phone = htmlspecialchars($_POST['phone']);
+    
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'skyla.rpaige60@gmail.com'; // Your Gmail
+        $mail->Password = 'your-app-password'; // Use an App Password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        
+        $mail->setFrom('skyla.rpaige60@gmail.com', 'Giveaway Entry');
+        $mail->addAddress('skyla.rpaige60@gmail.com');
+        
+        $mail->Subject = 'New Giveaway Entry';
+        $mail->Body = "Name: $name\nEmail: $email\nPhone: $phone";
+        
+        $mail->send();
+        echo "<script>alert('Entry submitted successfully!'); window.location.href='index.html';</script>";
+    } catch (Exception $e) {
+        echo "<script>alert('Error submitting entry. Please try again.'); window.location.href='index.html';</script>";
+    }
+}
+?>
