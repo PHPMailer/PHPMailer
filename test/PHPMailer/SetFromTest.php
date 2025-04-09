@@ -194,7 +194,7 @@ final class SetFromTest extends TestCase
     public function testSetFromFailsOn8BitCharInDomainWithoutOptionalExtensions()
     {
         if (extension_loaded('mbstring') && function_exists('idn_to_ascii')) {
-            $this->markTestSkipped('Test requires MbString and/or Intl *not* to be available');
+            self::markTestSkipped('Test requires MbString and/or Intl *not* to be available');
         }
 
         $this->testSetFromFail("8bit@ex\x80mple.com");

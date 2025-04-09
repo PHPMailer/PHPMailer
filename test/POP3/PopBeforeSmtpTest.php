@@ -52,7 +52,7 @@ final class PopBeforeSmtpTest extends TestCase
     protected function set_up()
     {
         if (DIRECTORY_SEPARATOR === '\\') {
-            $this->markTestSkipped('This test needs a non-Windows OS to run');
+            self::markTestSkipped('This test needs a non-Windows OS to run');
         }
 
         // Chdir to test directory as runfakepopserver.sh runs fakepopserver.sh

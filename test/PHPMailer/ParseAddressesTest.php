@@ -102,7 +102,7 @@ final class ParseAddressesTest extends TestCase
     public function testAddressSplittingNativeNoMbstring($addrstr, $expected, $charset = null)
     {
         if (extension_loaded('mbstring')) {
-            $this->markTestSkipped('Test requires MbString *not* to be available');
+            self::markTestSkipped('Test requires MbString *not* to be available');
         }
 
         if (isset($charset)) {
@@ -136,7 +136,7 @@ final class ParseAddressesTest extends TestCase
     public function testAddressSplittingImapNoMbstring($addrstr, $expected, $charset = null)
     {
         if (extension_loaded('mbstring')) {
-            $this->markTestSkipped('Test requires MbString *not* to be available');
+            self::markTestSkipped('Test requires MbString *not* to be available');
         }
 
         if (isset($charset)) {

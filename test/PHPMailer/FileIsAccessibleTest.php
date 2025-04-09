@@ -83,7 +83,7 @@ final class FileIsAccessibleTest extends TestCase
     {
         if (\DIRECTORY_SEPARATOR === '\\') {
             // Windows does not respect chmod permissions.
-            $this->markTestSkipped('This test requires a non-Windows OS.');
+            self::markTestSkipped('This test requires a non-Windows OS.');
         }
 
         $path = dirname(__DIR__) . '/Fixtures/FileIsAccessibleTest/';

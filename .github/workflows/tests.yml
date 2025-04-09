@@ -151,7 +151,7 @@ jobs:
             echo 'COMPOSER_OPTIONS=' >> $GITHUB_OUTPUT
           else
             # Minimal.
-            echo 'EXT=none, curl, dom, json, libxml, tokenizer, xml, xmlwriter, ctype, filter, hash' >> $GITHUB_OUTPUT
+            echo 'EXT=none, curl, dom, json, libxml, mbstring, tokenizer, xml, xmlwriter, ctype, filter, hash' >> $GITHUB_OUTPUT
             echo 'COMPOSER_OPTIONS=--ignore-platform-req=ext-simplexml' >> $GITHUB_OUTPUT
           fi
 

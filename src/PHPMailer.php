@@ -1122,19 +1122,22 @@ class PHPMailer
         $params = [$kind, $address, $name];
         //Enqueue addresses with IDN until we know the PHPMailer::$CharSet.
         //Domain is assumed to be whatever is after the last @ symbol in the address
-        if (static::idnSupported() && $this->has8bitChars(substr($address, ++$pos))) {
-            if ('Reply-To' !== $kind) {
-                if (!array_key_exists($address, $this->RecipientsQueue)) {
-                    $this->RecipientsQueue[$address] = $params;
+        if ($this->has8bitChars(substr($address, ++$pos))) {
+            if (static::idnSupported()) {
+                if ('Reply-To' !== $kind) {
+                    if (!array_key_exists($address, $this->RecipientsQueue)) {
+                        $this->RecipientsQueue[$address] = $params;
+
+                        return true;
+                    }
+                } elseif (!array_key_exists($address, $this->ReplyToQueue)) {
+                    $this->ReplyToQueue[$address] = $params;
 
                     return true;
                 }
-            } elseif (!array_key_exists($address, $this->ReplyToQueue)) {
-                $this->ReplyToQueue[$address] = $params;
-
-                return true;
             }
-
+            //We have an 8-bit domain, but we are missing the necessary extensions to support it
+            //Or we are already sending to this address
             return false;
         }
 
