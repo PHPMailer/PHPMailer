@@ -248,7 +248,7 @@ final class DKIMTest extends SendTestCase
     public function testDKIMSignOpenSSLNotAvailableException()
     {
         if (extension_loaded('openssl')) {
-            $this->markTestSkipped('Test requires OpenSSL *not* to be available');
+            self::markTestSkipped('Test requires OpenSSL *not* to be available');
         }
 
         $this->expectException(Exception::class);
