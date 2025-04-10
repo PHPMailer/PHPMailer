@@ -38,7 +38,7 @@ final class DKIMWithoutExceptionsTest extends TestCase
     public function testDKIMSignOpenSSLNotAvailable()
     {
         if (extension_loaded('openssl')) {
-            $this->markTestSkipped('Test requires OpenSSL *not* to be available');
+            self::markTestSkipped('Test requires OpenSSL *not* to be available');
         }
 
         $signature = $this->Mail->DKIM_Sign('foo');

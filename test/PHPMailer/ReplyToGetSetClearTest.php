@@ -409,7 +409,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     public function testAddReplyToFailsOn8BitCharInDomainWithoutOptionalExtensions()
     {
         if (PHPMailer::idnSupported()) {
-            $this->markTestSkipped('Test requires MbString and/or Intl *not* to be available');
+            self::markTestSkipped('Test requires MbString and/or Intl *not* to be available');
         }
 
         self::assertFalse($this->Mail->addReplyTo('test@françois.ch'));
