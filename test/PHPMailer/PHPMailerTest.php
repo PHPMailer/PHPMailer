@@ -1215,7 +1215,7 @@ EOT;
     }
 
     /**
-     * Test that SMTPUTF8 is allowed unless the caller has made a concious choice against.
+     * Test that SMTPUTF8 is allowed unless the caller has made a conscious choice against it.
      */
     public function testAutomaticEaiValidation()
     {
@@ -1240,6 +1240,11 @@ EOT;
         $this->Mail->addAddress('foo@example.com', '');
         $this->Mail->preSend();
         self::assertFalse($this->Mail->needsSMTPUTF8());
+
+        //Beyond this point we need UTF-8 support
+        if (!PHPMailer::idnSupported()) {
+            self::markTestSkipped('intl and/or mbstring extensions are not available');
+        }
 
         //Using a punycodable domain does not need SMTPUTF8
         self::assertFalse($this->Mail->needsSMTPUTF8());
