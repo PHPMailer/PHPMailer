@@ -20,8 +20,9 @@
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Add attachments, including inline
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
+- Full UTF-8 support when using servers that support `SMTPUTF8`.
 - Support for iCal events in multiparts and attachments
-- SMTP authentication with LOGIN, PLAIN, CRAM-MD5, and XOAUTH2 mechanisms over SMTPS and SMTP+STARTTLS transports
+- SMTP authentication with `LOGIN`, `PLAIN`, `CRAM-MD5`, and `XOAUTH2` mechanisms over SMTPS and SMTP+STARTTLS transports
 - Validates email addresses automatically
 - Protects against header injection attacks
 - Error messages in over 50 languages!
@@ -47,7 +48,7 @@ This software is distributed under the [LGPL 2.1](https://www.gnu.org/licenses/o
 PHPMailer is available on [Packagist](https://packagist.org/packages/phpmailer/phpmailer) (using semantic versioning), and installation via [Composer](https://getcomposer.org) is the recommended way to install PHPMailer. Just add this line to your `composer.json` file:
 
 ```json
-"phpmailer/phpmailer": "^6.9.2"
+"phpmailer/phpmailer": "^6.10.0"
 ```
 
 or run
