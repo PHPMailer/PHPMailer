@@ -561,6 +561,21 @@ Search.appendIndex(
             "summary": "Validate\u0020whether\u0020a\u0020string\u0020contains\u0020a\u0020valid\u0020value\u0020to\u0020use\u0020as\u0020a\u0020hostname\u0020or\u0020IP\u0020address.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_isValidHost"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AaddressHasUnicodeLocalPart\u0028\u0029",
+            "name": "addressHasUnicodeLocalPart",
+            "summary": "Check\u0020whether\u0020the\u0020supplied\u0020address\u0020uses\u0020Unicode\u0020in\u0020the\u0020local\u0020part.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_addressHasUnicodeLocalPart"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AanyAddressHasUnicodeLocalPart\u0028\u0029",
+            "name": "anyAddressHasUnicodeLocalPart",
+            "summary": "Check\u0020whether\u0020any\u0020of\u0020the\u0020supplied\u0020addresses\u0020use\u0020Unicode\u0020in\u0020the\u0020local\u0020part.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_anyAddressHasUnicodeLocalPart"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AneedsSMTPUTF8\u0028\u0029",
+            "name": "needsSMTPUTF8",
+            "summary": "Check\u0020whether\u0020the\u0020message\u0020requires\u0020SMTPUTF8\u0020based\u0020on\u0020what\u0027s\u0020known\u0020so\u0020far.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_needsSMTPUTF8"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003Alang\u0028\u0029",
             "name": "lang",
             "summary": "Get\u0020an\u0020error\u0020message\u0020in\u0020the\u0020current\u0020language.",
@@ -1211,6 +1226,11 @@ Search.appendIndex(
             "summary": "An\u0020array\u0020of\u0020reply\u002Dto\u0020names\u0020and\u0020addresses\u0020queued\u0020for\u0020validation.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_ReplyToQueue"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024UseSMTPUTF8",
+            "name": "UseSMTPUTF8",
+            "summary": "Whether\u0020the\u0020need\u0020for\u0020SMTPUTF8\u0020has\u0020been\u0020detected.\u0020Set\u0020by\npreSend\u0028\u0029\u0020if\u0020necessary.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#property_UseSMTPUTF8"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003A\u0024attachment",
             "name": "attachment",
             "summary": "The\u0020array\u0020of\u0020attachments.",
@@ -1576,6 +1596,16 @@ Search.appendIndex(
             "summary": "Get\u0020VERP\u0020address\u0020generation\u0020mode.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003AsetSMTPUTF8\u0028\u0029",
+            "name": "setSMTPUTF8",
+            "summary": "Enable\u0020or\u0020disable\u0020use\u0020of\u0020SMTPUTF8.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_setSMTPUTF8"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003AgetSMTPUTF8\u0028\u0029",
+            "name": "getSMTPUTF8",
+            "summary": "Get\u0020SMTPUTF8\u0020use.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPUTF8"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003AsetError\u0028\u0029",
             "name": "setError",
             "summary": "Set\u0020error\u0020messages\u0020and\u0020codes.",
@@ -1695,6 +1725,11 @@ Search.appendIndex(
             "name": "do_verp",
             "summary": "Whether\u0020to\u0020use\u0020VERP.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003A\u0024do_smtputf8",
+            "name": "do_smtputf8",
+            "summary": "Whether\u0020to\u0020use\u0020SMTPUTF8.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003A\u0024Timeout",
             "name": "Timeout",

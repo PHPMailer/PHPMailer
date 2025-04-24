@@ -296,6 +296,13 @@
 <dd>Debug output level.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -public">
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8">$do_smtputf8</a>
+    <span>
+                        &nbsp;: bool            </span>
+</dt>
+<dd>Whether to use SMTPUTF8.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp</a>
     <span>
                         &nbsp;: bool            </span>
@@ -474,6 +481,13 @@ If no reply has been received yet, it will return null.</dd>
 <dd>Get SMTP extensions available on the server.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPUTF8">getSMTPUTF8()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Get SMTPUTF8 use.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a>
     <span>
                                 &nbsp;: int    </span>
@@ -549,6 +563,13 @@ If no reply has been received yet, it will return null.</dd>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Set debug output method.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setSMTPUTF8">setSMTPUTF8()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Enable or disable use of SMTPUTF8.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a>
@@ -1171,6 +1192,58 @@ level output is used:</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="property_do_smtputf8">
+        $do_smtputf8
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">169</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Whether to use SMTPUTF8.</p>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__name">$do_smtputf8</span>
+     = <span class="phpdocumentor-signature__default-value">false</span></code>
+
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="https://www.rfc-editor.org/rfc/rfc6531">https://www.rfc-editor.org/rfc/rfc6531</a></span>
+                                        
+                                             
+                                    </dd>
+                                            </dl>
+
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="property_do_verp">
         $do_verp
         <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1243,7 +1316,7 @@ level output is used:</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">179</span>
+    <span class="phpdocumentor-element-found-in__line">188</span>
 
     </aside>
 
@@ -1282,7 +1355,7 @@ level output is used:</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">171</span>
+    <span class="phpdocumentor-element-found-in__line">180</span>
 
     </aside>
 
@@ -1337,7 +1410,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">209</span>
+    <span class="phpdocumentor-element-found-in__line">218</span>
 
     </aside>
 
@@ -1391,7 +1464,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">233</span>
+    <span class="phpdocumentor-element-found-in__line">242</span>
 
     </aside>
 
@@ -1428,7 +1501,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">246</span>
+    <span class="phpdocumentor-element-found-in__line">255</span>
 
     </aside>
 
@@ -1467,7 +1540,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">265</span>
+    <span class="phpdocumentor-element-found-in__line">274</span>
 
     </aside>
 
@@ -1504,7 +1577,7 @@ This needs to be quite high to function correctly with hosts using greetdelay as
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">219</span>
+    <span class="phpdocumentor-element-found-in__line">228</span>
 
     </aside>
 
@@ -1542,7 +1615,7 @@ if one was detected.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">258</span>
+    <span class="phpdocumentor-element-found-in__line">267</span>
 
     </aside>
 
@@ -1585,7 +1658,7 @@ If null, no HELO/EHLO string has yet been received.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">226</span>
+    <span class="phpdocumentor-element-found-in__line">235</span>
 
     </aside>
 
@@ -1622,7 +1695,7 @@ If null, no HELO/EHLO string has yet been received.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">188</span>
+    <span class="phpdocumentor-element-found-in__line">197</span>
 
     </aside>
 
@@ -1667,7 +1740,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">518</span>
+    <span class="phpdocumentor-element-found-in__line">527</span>
 
     </aside>
 
@@ -1766,7 +1839,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1161</span>
+    <span class="phpdocumentor-element-found-in__line">1179</span>
 
     </aside>
 
@@ -1830,7 +1903,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">711</span>
+    <span class="phpdocumentor-element-found-in__line">720</span>
 
     </aside>
 
@@ -1882,7 +1955,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">337</span>
+    <span class="phpdocumentor-element-found-in__line">346</span>
 
     </aside>
 
@@ -1960,7 +2033,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">684</span>
+    <span class="phpdocumentor-element-found-in__line">693</span>
 
     </aside>
 
@@ -2003,7 +2076,7 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">736</span>
+    <span class="phpdocumentor-element-found-in__line">745</span>
 
     </aside>
 
@@ -2061,7 +2134,7 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1420</span>
+    <span class="phpdocumentor-element-found-in__line">1458</span>
 
     </aside>
 
@@ -2100,7 +2173,7 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1400</span>
+    <span class="phpdocumentor-element-found-in__line">1438</span>
 
     </aside>
 
@@ -2139,7 +2212,7 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1187</span>
+    <span class="phpdocumentor-element-found-in__line">1205</span>
 
     </aside>
 
@@ -2178,7 +2251,7 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1247</span>
+    <span class="phpdocumentor-element-found-in__line">1265</span>
 
     </aside>
 
@@ -2217,7 +2290,7 @@ Implements RFC 821: DATA &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1505</span>
+    <span class="phpdocumentor-element-found-in__line">1543</span>
 
     </aside>
 
@@ -2274,7 +2347,7 @@ If no reply has been received yet, it will return null.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1219</span>
+    <span class="phpdocumentor-element-found-in__line">1237</span>
 
     </aside>
 
@@ -2338,7 +2411,7 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1197</span>
+    <span class="phpdocumentor-element-found-in__line">1215</span>
 
     </aside>
 
@@ -2369,6 +2442,45 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_getSMTPUTF8">
+        getSMTPUTF8()
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPUTF8" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1400</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get SMTPUTF8 use.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getSMTPUTF8</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_getTimeout">
         getTimeout()
         <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout" class="headerlink"><i class="fas fa-link"></i></a>
@@ -2377,7 +2489,7 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1440</span>
+    <span class="phpdocumentor-element-found-in__line">1478</span>
 
     </aside>
 
@@ -2416,7 +2528,7 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1362</span>
+    <span class="phpdocumentor-element-found-in__line">1380</span>
 
     </aside>
 
@@ -2455,7 +2567,7 @@ or its options (e.g. AUTH mechanisms supported). Otherwise returns False.</li>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">829</span>
+    <span class="phpdocumentor-element-found-in__line">838</span>
 
     </aside>
 
@@ -2511,7 +2623,7 @@ and RFC 2821 EHLO.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">922</span>
+    <span class="phpdocumentor-element-found-in__line">939</span>
 
     </aside>
 
@@ -2528,7 +2640,13 @@ and RFC 2821 EHLO.</p>
 $from. Returns true if successful or false otherwise. If True
 the mail transaction is started and then one or more recipient
 commands may be called followed by a data command.
-Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
+Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt; and
+two extensions, namely XVERP and SMTPUTF8.</p>
+<p>The server's EHLO response is not checked. If use of either
+extensions is enabled even though the server does not support
+that, mail submission will fail.</p>
+<p>XVERP is documented at https://www.postfix.org/VERP_README.html
+and SMTPUTF8 is specified in RFC 6531.</p>
 </section>
 
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -2568,7 +2686,7 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1131</span>
+    <span class="phpdocumentor-element-found-in__line">1149</span>
 
     </aside>
 
@@ -2609,7 +2727,7 @@ Implements RFC 821: MAIL &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">942</span>
+    <span class="phpdocumentor-element-found-in__line">960</span>
 
     </aside>
 
@@ -2663,7 +2781,7 @@ Implements from RFC 821: QUIT &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">966</span>
+    <span class="phpdocumentor-element-found-in__line">984</span>
 
     </aside>
 
@@ -2728,7 +2846,7 @@ or DELAY. If you specify NEVER all other notifications are ignored.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1020</span>
+    <span class="phpdocumentor-element-found-in__line">1038</span>
 
     </aside>
 
@@ -2774,7 +2892,7 @@ Implements RFC 821: RSET &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1108</span>
+    <span class="phpdocumentor-element-found-in__line">1126</span>
 
     </aside>
 
@@ -2833,7 +2951,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1410</span>
+    <span class="phpdocumentor-element-found-in__line">1448</span>
 
     </aside>
 
@@ -2878,7 +2996,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1390</span>
+    <span class="phpdocumentor-element-found-in__line">1428</span>
 
     </aside>
 
@@ -2917,6 +3035,51 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_setSMTPUTF8">
+        setSMTPUTF8()
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setSMTPUTF8" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1390</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Enable or disable use of SMTPUTF8.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">setSMTPUTF8</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$enabled</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$enabled</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_setTimeout">
         setTimeout()
         <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout" class="headerlink"><i class="fas fa-link"></i></a>
@@ -2925,7 +3088,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1430</span>
+    <span class="phpdocumentor-element-found-in__line">1468</span>
 
     </aside>
 
@@ -2972,7 +3135,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1352</span>
+    <span class="phpdocumentor-element-found-in__line">1370</span>
 
     </aside>
 
@@ -3017,7 +3180,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">475</span>
+    <span class="phpdocumentor-element-found-in__line">484</span>
 
     </aside>
 
@@ -3056,7 +3219,7 @@ Implements RFC 821: SAML &lt;SP&gt; FROM:<reverse-path> &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1145</span>
+    <span class="phpdocumentor-element-found-in__line">1163</span>
 
     </aside>
 
@@ -3100,7 +3263,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1120</span>
+    <span class="phpdocumentor-element-found-in__line">1138</span>
 
     </aside>
 
@@ -3151,7 +3314,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">999</span>
+    <span class="phpdocumentor-element-found-in__line">1017</span>
 
     </aside>
 
@@ -3204,7 +3367,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">276</span>
+    <span class="phpdocumentor-element-found-in__line">285</span>
 
     </aside>
 
@@ -3283,7 +3446,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1453</span>
+    <span class="phpdocumentor-element-found-in__line">1491</span>
 
     </aside>
 
@@ -3357,7 +3520,7 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1261</span>
+    <span class="phpdocumentor-element-found-in__line">1279</span>
 
     </aside>
 
@@ -3401,7 +3564,7 @@ need to read anything else.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">396</span>
+    <span class="phpdocumentor-element-found-in__line">405</span>
 
     </aside>
 
@@ -3479,7 +3642,7 @@ need to read anything else.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">652</span>
+    <span class="phpdocumentor-element-found-in__line">661</span>
 
     </aside>
 
@@ -3542,7 +3705,7 @@ in case that function is not available.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">874</span>
+    <span class="phpdocumentor-element-found-in__line">883</span>
 
     </aside>
 
@@ -3591,7 +3754,7 @@ in case that function is not available.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1476</span>
+    <span class="phpdocumentor-element-found-in__line">1514</span>
 
     </aside>
 
@@ -3635,7 +3798,7 @@ If no pattern was matched, it will return false.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1034</span>
+    <span class="phpdocumentor-element-found-in__line">1052</span>
 
     </aside>
 
@@ -3708,7 +3871,7 @@ If no pattern was matched, it will return false.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">855</span>
+    <span class="phpdocumentor-element-found-in__line">864</span>
 
     </aside>
 
@@ -3785,7 +3948,7 @@ If no pattern was matched, it will return false.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="src/SMTP.php"><a href="files/src-smtp.html"><abbr title="src/SMTP.php">SMTP.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1375</span>
+    <span class="phpdocumentor-element-found-in__line">1413</span>
 
     </aside>
 
@@ -3977,6 +4140,7 @@ If no pattern was matched, it will return false.</p>
                     <ul class="phpdocumentor-list -clean">
                                                     <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput">$Debugoutput</a></li>
                                                     <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug">$do_debug</a></li>
+                                                    <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8">$do_smtputf8</a></li>
                                                     <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp">$do_verp</a></li>
                                                     <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timelimit">$Timelimit</a></li>
                                                     <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout">$Timeout</a></li>
@@ -4007,6 +4171,7 @@ If no pattern was matched, it will return false.</p>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID">getLastTransactionID()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExt">getServerExt()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getServerExtList">getServerExtList()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getSMTPUTF8">getSMTPUTF8()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getTimeout">getTimeout()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getVerp">getVerp()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_hello">hello()</a></li>
@@ -4018,6 +4183,7 @@ If no pattern was matched, it will return false.</p>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendAndMail">sendAndMail()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugLevel">setDebugLevel()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setDebugOutput">setDebugOutput()</a></li>
+                                            <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setSMTPUTF8">setSMTPUTF8()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setTimeout">setTimeout()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_setVerp">setVerp()</a></li>
                                             <li class=""><a href="classes/PHPMailer-PHPMailer-SMTP.html#method_startTLS">startTLS()</a></li>
