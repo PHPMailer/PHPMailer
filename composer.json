@@ -71,6 +71,7 @@
     "license": "LGPL-2.1-only",
     "scripts": {
         "check": "./vendor/bin/phpcs",
+        "style": "./vendor/bin/phpcbf",
         "test": "./vendor/bin/phpunit --no-coverage",
         "coverage": "./vendor/bin/phpunit",
         "lint": [
