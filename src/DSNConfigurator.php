@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PHPMailer - PHP email creation and transport class.
  * PHP Version 5.5.
@@ -18,7 +17,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
-
 namespace PHPMailer\PHPMailer;
 
 /**
@@ -31,55 +29,66 @@ namespace PHPMailer\PHPMailer;
 class DSNConfigurator
 {
     /**
+     * Allowed mailer schemes
+     */
+    private const ALLOWED_SCHEMES = ['mail', 'sendmail', 'qmail', 'smtp', 'smtps'];
+
+    /**
+     * Boolean options that should be cast to bool
+     */
+    private const BOOLEAN_OPTIONS = [
+        'AllowEmpty',
+        'SMTPAutoTLS',
+        'SMTPKeepAlive',
+        'SingleTo',
+        'UseSendmailOptions',
+        'do_verp',
+        'DKIM_copyHeaderFields'
+    ];
+
+    /**
+     * Integer options that should be cast to int
+     */
+    private const INTEGER_OPTIONS = ['Priority', 'SMTPDebug', 'WordWrap'];
+
+    /**
      * Create new PHPMailer instance configured by DSN.
      *
-     * @param string $dsn        DSN
-     * @param bool   $exceptions Should we throw external exceptions?
-     *
+     * @param string $dsn DSN string
+     * @param bool|null $exceptions Should we throw external exceptions?
      * @return PHPMailer
      */
-    public static function mailer($dsn, $exceptions = null)
+    public static function mailer(string $dsn, ?bool $exceptions = null): PHPMailer
     {
-        static $configurator = null;
-
-        if (null === $configurator) {
-            $configurator = new DSNConfigurator();
-        }
-
-        return $configurator->configure(new PHPMailer($exceptions), $dsn);
+        return (new self())->configure(new PHPMailer($exceptions), $dsn);
     }
 
     /**
      * Configure PHPMailer instance with DSN string.
      *
      * @param PHPMailer $mailer PHPMailer instance
-     * @param string    $dsn    DSN
-     *
+     * @param string $dsn DSN string
      * @return PHPMailer
      */
-    public function configure(PHPMailer $mailer, $dsn)
+    public function configure(PHPMailer $mailer, string $dsn): PHPMailer
     {
         $config = $this->parseDSN($dsn);
-
         $this->applyConfig($mailer, $config);
-
         return $mailer;
     }
 
     /**
      * Parse DSN string.
      *
-     * @param string $dsn DSN
-     *
+     * @param string $dsn DSN string
      * @throws Exception If DSN is malformed
-     *
      * @return array Configuration
      */
-    private function parseDSN($dsn)
+    private function parseDSN(string $dsn): array
     {
         $config = $this->parseUrl($dsn);
 
-        if (false === $config || !isset($config['scheme']) || !isset($config['host'])) {
+        if ($config === false || !isset($config['scheme'], $config['host'])) {
             throw new Exception('Malformed DSN');
         }
 
@@ -94,34 +103,15 @@ class DSNConfigurator
      * Apply configuration to mailer.
      *
      * @param PHPMailer $mailer PHPMailer instance
-     * @param array     $config Configuration
-     *
+     * @param array $config Configuration
      * @throws Exception If scheme is invalid
      */
-    private function applyConfig(PHPMailer $mailer, $config)
+    private function applyConfig(PHPMailer $mailer, array $config): void
     {
-        switch ($config['scheme']) {
-            case 'mail':
-                $mailer->isMail();
-                break;
-            case 'sendmail':
-                $mailer->isSendmail();
-                break;
-            case 'qmail':
-                $mailer->isQmail();
-                break;
-            case 'smtp':
-            case 'smtps':
-                $mailer->isSMTP();
-                $this->configureSMTP($mailer, $config);
-                break;
-            default:
-                throw new Exception(
-                    sprintf(
-                        'Invalid scheme: "%s". Allowed values: "mail", "sendmail", "qmail", "smtp", "smtps".',
-                        $config['scheme']
-                    )
-                );
+        $this->configureMailerType($mailer, $config['scheme']);
+
+        if ($config['scheme'] === 'smtp' || $config['scheme'] === 'smtps') {
+            $this->configureSMTP($mailer, $config);
         }
 
         if (isset($config['query'])) {
@@ -130,27 +120,47 @@ class DSNConfigurator
     }
 
     /**
-     * Configure SMTP.
+     * Configure mailer type based on scheme.
      *
-     * @param PHPMailer $mailer PHPMailer instance
-     * @param array     $config Configuration
+     * @param PHPMailer $mailer
+     * @param string $scheme
+     * @throws Exception
      */
-    private function configureSMTP($mailer, $config)
+    private function configureMailerType(PHPMailer $mailer, string $scheme): void
     {
-        $isSMTPS = 'smtps' === $config['scheme'];
+        if (!in_array($scheme, self::ALLOWED_SCHEMES, true)) {
+            throw new Exception(sprintf(
+                'Invalid scheme: "%s". Allowed values: "%s".',
+                $scheme,
+                implode('", "', self::ALLOWED_SCHEMES)
+            ));
+        }
+
+        switch ($scheme) {
+            case 'mail': $mailer->isMail(); break;
+            case 'sendmail': $mailer->isSendmail(); break;
+            case 'qmail': $mailer->isQmail(); break;
+            case 'smtp':
+            case 'smtps': $mailer->isSMTP(); break;
+        }
+    }
+
+    /**
+     * Configure SMTP settings.
+     *
+     * @param PHPMailer $mailer
+     * @param array $config
+     */
+    private function configureSMTP(PHPMailer $mailer, array $config): void
+    {
+        $isSMTPS = $config['scheme'] === 'smtps';
 
         if ($isSMTPS) {
             $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         }
 
         $mailer->Host = $config['host'];
-
-        if (isset($config['port'])) {
-            $mailer->Port = $config['port'];
-        } elseif ($isSMTPS) {
-            $mailer->Port = SMTP::DEFAULT_SECURE_PORT;
-        }
-
+        $mailer->Port = $config['port'] ?? ($isSMTPS ? SMTP::DEFAULT_SECURE_PORT : SMTP::DEFAULT_PORT);
         $mailer->SMTPAuth = isset($config['user']) || isset($config['pass']);
 
         if (isset($config['user'])) {
@@ -163,83 +173,69 @@ class DSNConfigurator
     }
 
     /**
-     * Configure options.
+     * Configure additional options.
      *
-     * @param PHPMailer $mailer  PHPMailer instance
-     * @param array     $options Options
-     *
-     * @throws Exception If option is unknown
+     * @param PHPMailer $mailer
+     * @param array $options
+     * @throws Exception
      */
-    private function configureOptions(PHPMailer $mailer, $options)
+    private function configureOptions(PHPMailer $mailer, array $options): void
     {
-        $allowedOptions = get_object_vars($mailer);
-
-        unset($allowedOptions['Mailer']);
-        unset($allowedOptions['SMTPAuth']);
-        unset($allowedOptions['Username']);
-        unset($allowedOptions['Password']);
-        unset($allowedOptions['Hostname']);
-        unset($allowedOptions['Port']);
-        unset($allowedOptions['ErrorInfo']);
-
-        $allowedOptions = \array_keys($allowedOptions);
+        $allowedOptions = array_diff_key(
+            get_object_vars($mailer),
+            array_flip(['Mailer', 'SMTPAuth', 'Username', 'Password', 'Hostname', 'Port', 'ErrorInfo'])
+        );
 
         foreach ($options as $key => $value) {
-            if (!in_array($key, $allowedOptions)) {
-                throw new Exception(
-                    sprintf(
-                        'Unknown option: "%s". Allowed values: "%s"',
-                        $key,
-                        implode('", "', $allowedOptions)
-                    )
+            if (!array_key_exists($key, $allowedOptions)) {
+                throw new Exception(sprintf(
+                    'Unknown option: "%s". Allowed values: "%s"',
+                    $key,
+                    implode('", "', array_keys($allowedOptions))
                 );
             }
 
-            switch ($key) {
-                case 'AllowEmpty':
-                case 'SMTPAutoTLS':
-                case 'SMTPKeepAlive':
-                case 'SingleTo':
-                case 'UseSendmailOptions':
-                case 'do_verp':
-                case 'DKIM_copyHeaderFields':
-                    $mailer->$key = (bool) $value;
-                    break;
-                case 'Priority':
-                case 'SMTPDebug':
-                case 'WordWrap':
-                    $mailer->$key = (int) $value;
-                    break;
-                default:
-                    $mailer->$key = $value;
-                    break;
-            }
+            $this->setOptionValue($mailer, $key, $value);
         }
     }
 
     /**
-     * Parse a URL.
-     * Wrapper for the built-in parse_url function to work around a bug in PHP 5.5.
+     * Set option value with proper type casting.
      *
-     * @param string $url URL
+     * @param PHPMailer $mailer
+     * @param string $key
+     * @param mixed $value
+     */
+    private function setOptionValue(PHPMailer $mailer, string $key, $value): void
+    {
+        if (in_array($key, self::BOOLEAN_OPTIONS, true)) {
+            $mailer->$key = (bool)$value;
+        } elseif (in_array($key, self::INTEGER_OPTIONS, true)) {
+            $mailer->$key = (int)$value;
+        } else {
+            $mailer->$key = $value;
+        }
+    }
+
+    /**
+     * Parse a URL with PHP 5.5 compatibility.
      *
+     * @param string $url
      * @return array|false
      */
-    protected function parseUrl($url)
+    protected function parseUrl(string $url)
     {
-        if (\PHP_VERSION_ID >= 50600 || false === strpos($url, '?')) {
+        if (PHP_VERSION_ID >= 50600 || strpos($url, '?') === false) {
             return parse_url($url);
         }
 
-        $chunks = explode('?', $url);
-        if (is_array($chunks)) {
-            $result = parse_url($chunks[0]);
-            if (is_array($result)) {
-                $result['query'] = $chunks[1];
-            }
-            return $result;
+        $chunks = explode('?', $url, 2);
+        $result = parse_url($chunks[0]);
+        
+        if (is_array($result)) {
+            $result['query'] = $chunks[1] ?? '';
         }
-
-        return false;
+        
+        return $result;
     }
 }
