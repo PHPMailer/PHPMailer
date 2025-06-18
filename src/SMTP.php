@@ -635,7 +635,8 @@ class SMTP
                 $oauth = $OAuth->getOauth64();
                 /*
                  * An SMTP command line can have a maximum length of 512 bytes, including the command name,
-                 * so the base64-encoded OAUTH token has a maximum length of 512 - 13 (AUTH XOAUTH2) - 2 (CRLF) = 497 bytes
+                 * so the base64-encoded OAUTH token has a maximum length of:
+                 * 512 - 13 (AUTH XOAUTH2) - 2 (CRLF) = 497 bytes
                  * If the token is longer than that, the command and the token must be sent separately as described in
                  * https://www.rfc-editor.org/rfc/rfc4954#section-4
                  */
