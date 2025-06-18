@@ -100,6 +100,7 @@
     display: block;
     font-size: var(--text-sm);
     border: 1px solid #f0f0f0;
+    margin-bottom: calc(var(--spacing-sm));
 }
 
 .phpdocumentor .phpdocumentor-signature.-deprecated .phpdocumentor-signature__name {
