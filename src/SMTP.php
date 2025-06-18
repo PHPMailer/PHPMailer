@@ -657,9 +657,9 @@ class SMTP
                         return false;
                     }
 
-                    // If the server answer with a code 334, send and empty line an wait for a code 235
+                    // If the server answer with a code 334, send an empty line and wait for a code 235
                     if (
-                        substr($this->last_reply, 0, 3) == 334
+                        substr($this->last_reply, 0, 3) === '334'
                         && $this->sendCommand('AUTH End', '', 235)
                     ) {
                         return false;
