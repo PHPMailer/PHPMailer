@@ -639,7 +639,13 @@ class SMTP
                  * If the token is longer than that, the command and the token must be sent separately as described in
                  * https://www.rfc-editor.org/rfc/rfc4954#section-4
                  */
-                if (strlen($oauth) <= 497) {
+                if ($oauth === '') {
+                    //Sending an empty auth token is legitimate, but it must be encoded as '='
+                    //to indicate it's not a 2-part command
+                    if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 =', 235)) {
+                        return false;
+                    }
+                } elseif (strlen($oauth) <= 497) {
                     //Authenticate using a token in the initial-response part
                     if (!$this->sendCommand('AUTH', 'AUTH XOAUTH2 ' . $oauth, 235)) {
                         return false;
