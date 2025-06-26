@@ -2852,6 +2852,8 @@ class PHPMailer
                 $result .= $this->headerLine('Content-Type', static::CONTENT_TYPE_MULTIPART_ALTERNATIVE . ';');
                 $result .= $this->textLine(' boundary="' . $this->boundary[1] . '"');
                 break;
+            case 'custom_content_type':
+                break;
             default:
                 //Catches case 'plain': and case '':
                 $result .= $this->textLine('Content-Type: ' . $this->ContentType . '; charset=' . $this->CharSet);
@@ -3277,6 +3279,9 @@ class PHPMailer
         }
         if ($this->attachmentExists()) {
             $type[] = 'attach';
+        }
+        if ($this->contentTypeExists()) {
+            $type[] = 'custom_content_type';
         }
         $this->message_type = implode('_', $type);
         if ('' === $this->message_type) {
@@ -4085,6 +4090,16 @@ class PHPMailer
     public function alternativeExists()
     {
         return !empty($this->AltBody);
+    }
+
+    /**
+     * Check if the content type is set.
+     *
+     * @return bool
+     */
+    public function contentTypeExists()
+    {
+        return !empty($this->ContentType);
     }
 
     /**
