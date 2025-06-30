@@ -4095,16 +4095,6 @@ class PHPMailer
     }
 
     /**
-     * Check if the content type is set.
-     *
-     * @return bool
-     */
-    public function contentTypeExists()
-    {
-        return !empty($this->ContentType);
-    }
-
-    /**
      * Clear queued addresses of given kind.
      *
      * @param string $kind 'to', 'cc', or 'bcc'
