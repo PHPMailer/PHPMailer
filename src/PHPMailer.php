@@ -2852,7 +2852,7 @@ class PHPMailer
                 $result .= $this->headerLine('Content-Type', static::CONTENT_TYPE_MULTIPART_ALTERNATIVE . ';');
                 $result .= $this->textLine(' boundary="' . $this->boundary[1] . '"');
                 break;
-            case 'custom_content_type':
+            case 'custom_multipart':
                 break;
             default:
                 //Catches case 'plain': and case '':
@@ -3280,13 +3280,15 @@ class PHPMailer
         if ($this->attachmentExists()) {
             $type[] = 'attach';
         }
-        if ($this->contentTypeExists()) {
-            $type[] = 'custom_content_type';
-        }
         $this->message_type = implode('_', $type);
+
         if ('' === $this->message_type) {
-            //The 'plain' message_type refers to the message having a single body element, not that it is plain-text
-            $this->message_type = 'plain';
+            if (false !== strpos($this->ContentType, 'multipart') ) {
+                $this->message_type = 'custom_multipart';
+            } else {
+                //The 'plain' message_type refers to the message having a single body element, not that it is plain-text
+                $this->message_type = 'plain';
+            }
         }
     }
 
