@@ -12,6 +12,9 @@ permissions: read-all
 
 jobs:
   analysis:
+    # Don't run the cron job on forks.
+    if: ${{ github.event_name != 'schedule' || github.event.repository.fork == false }}
+
     name: Scorecards analysis
     runs-on: ubuntu-latest
     permissions:
