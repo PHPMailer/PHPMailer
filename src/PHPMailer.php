@@ -563,7 +563,7 @@ class PHPMailer
      *   string  $extra         extra information of possible use
      *                          "smtp_transaction_id' => last smtp transaction id
      *
-     * @var string
+     * @var callable
      */
     public $action_function = '';
 
