@@ -561,9 +561,9 @@ class PHPMailer
      *   string  $body          the email body
      *   string  $from          email address of sender
      *   string  $extra         extra information of possible use
-     *                          "smtp_transaction_id' => last smtp transaction id
+     *                          'smtp_transaction_id' => last smtp transaction id
      *
-     * @var string
+     * @var callable|callable-string
      */
     public $action_function = '';
 
@@ -1813,8 +1813,10 @@ class PHPMailer
             } else {
                 $sendmailFmt = '%s -oi -f%s -t';
             }
+        } elseif ($this->Mailer === 'qmail') {
+            $sendmailFmt = '%s';
         } else {
-            //allow sendmail to choose a default envelope sender. It may
+            //Allow sendmail to choose a default envelope sender. It may
             //seem preferable to force it to use the From header as with
             //SMTP, but that introduces new problems (see
             //<https://github.com/PHPMailer/PHPMailer/issues/2298>), and
