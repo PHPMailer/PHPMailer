@@ -63,6 +63,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On
           coverage: none
           tools: cs2pr
 
@@ -160,7 +161,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
-          ini-values: sendmail_path=/usr/sbin/sendmail -t -i, error_reporting=E_ALL, display_errors=On
+          ini-values: sendmail_path=/usr/sbin/sendmail -t -i, error_reporting=-1, display_errors=On, display_startup_errors=On
           extensions: ${{ steps.set_extensions.outputs.EXT }}
 
       # Install dependencies and handle caching in one go.
