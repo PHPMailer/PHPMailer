@@ -91,13 +91,13 @@ final class TranslationCompletenessTest extends TestCase
             }
         }
 
-        // Make this test informational only: skip with details instead of failing.
+        // Make this test informational only.
         if ($err !== '') {
             $this->markTestSkipped("Translation completeness (informational):\n" . $err);
             return;
         }
 
-        // No differences found: count a dummy assertion so the test is not marked as risky.
+        // Avoid marking test as risky.
         $this->addToAssertionCount(1);
     }
 }
