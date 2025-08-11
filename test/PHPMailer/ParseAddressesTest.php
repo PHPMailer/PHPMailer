@@ -93,6 +93,7 @@ final class ParseAddressesTest extends TestCase
      * Test RFC822 address splitting using the PHPMailer native implementation
      * without the Mbstring extension.
      *
+     * @group nombstring
      * @dataProvider dataAddressSplitting
      *
      * @param string $addrstr  The address list string.
@@ -127,6 +128,7 @@ final class ParseAddressesTest extends TestCase
      *
      * @requires extension imap
      *
+     * @group nombstring
      * @dataProvider dataAddressSplitting
      *
      * @param string $addrstr  The address list string.

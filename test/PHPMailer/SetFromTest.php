@@ -190,6 +190,8 @@ final class SetFromTest extends TestCase
      * Test unsuccessfully setting the From, FromName and Sender properties when an email address
      * containing an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
+     *
+     * @group nombstring
      */
     public function testSetFromFailsOn8BitCharInDomainWithoutOptionalExtensions()
     {

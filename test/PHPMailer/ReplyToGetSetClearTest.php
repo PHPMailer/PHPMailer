@@ -404,6 +404,8 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      * an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
      *
+     * @group nombstring
+     *
      * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
      */
     public function testAddReplyToFailsOn8BitCharInDomainWithoutOptionalExtensions()
