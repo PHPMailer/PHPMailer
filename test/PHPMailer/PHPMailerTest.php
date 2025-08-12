@@ -1121,7 +1121,7 @@ EOT;
     public function testConvertEncoding()
     {
         if (!PHPMailer::idnSupported()) {
-            self::markTestSkipped('intl and/or mbstring extensions are not available');
+            self::markTestSkipped('Both intl and mbstring extensions are required.');
         }
 
         $this->Mail->clearAllRecipients();
@@ -1166,7 +1166,7 @@ EOT;
     public function testDuplicateIDNRemoved()
     {
         if (!PHPMailer::idnSupported()) {
-            self::markTestSkipped('intl and/or mbstring extensions are not available');
+            self::markTestSkipped('Both intl and mbstring extensions are required.');
         }
 
         $this->Mail->clearAllRecipients();
@@ -1243,7 +1243,7 @@ EOT;
 
         //Beyond this point we need UTF-8 support
         if (!PHPMailer::idnSupported()) {
-            self::markTestSkipped('intl and/or mbstring extensions are not available');
+            self::markTestSkipped('Both intl and mbstring extensions are required.');
         }
 
         //Using a punycodable domain does not need SMTPUTF8
