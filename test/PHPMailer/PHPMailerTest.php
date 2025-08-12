@@ -278,6 +278,9 @@ EOT;
 
     /**
      * Send a message containing ISO-8859-1 text.
+     * 
+     * @requires extension mbstring
+     * @group mbstringExtRequired
      */
     public function testHtmlIso8859()
     {
