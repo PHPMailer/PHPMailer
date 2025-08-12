@@ -1117,6 +1117,8 @@ EOT;
 
     /**
      * Tests CharSet and Unicode -> ASCII conversions for addresses with IDN.
+     * 
+     * @group mbstringExtRequired
      */
     public function testConvertEncoding()
     {
@@ -1162,6 +1164,8 @@ EOT;
 
     /**
      * Tests removal of duplicate recipients and reply-tos.
+     * 
+     * @group mbstringExtRequired
      */
     public function testDuplicateIDNRemoved()
     {
@@ -1230,6 +1234,8 @@ EOT;
 
     /**
      * Test SMTPUTF8 usage, including when it is not to be used.
+     * 
+     * @group mbstringExtRequired
      */
     public function testSmtpUTF8()
     {
