@@ -191,7 +191,7 @@ final class SetFromTest extends TestCase
      * containing an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
      *
-     * @group nombstring
+     * @group mbstringExtDisabled
      */
     public function testSetFromFailsOn8BitCharInDomainWithoutOptionalExtensions()
     {

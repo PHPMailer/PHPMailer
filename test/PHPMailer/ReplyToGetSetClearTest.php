@@ -270,6 +270,8 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      */
     public function testEnqueueAndAddIdnAddress()
     {
@@ -308,6 +310,8 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      */
     public function testNoDuplicateReplyToAddresses()
     {
@@ -404,7 +408,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      * an 8bit character is passed and either the MbString or the Intl extension are
      * not available.
      *
-     * @group nombstring
+     * @group mbstringExtDisabled
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::addAnAddress
      */
@@ -424,6 +428,8 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      */
     public function testClearReplyTos()
     {

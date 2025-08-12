@@ -1346,6 +1346,8 @@ EOT;
     /**
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      */
     public function testGivenIdnAddress_addAddress_returns_true()
     {
