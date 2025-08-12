@@ -28,6 +28,8 @@ final class PunyencodeAddressTest extends TestCase
      *
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      *
      * @dataProvider dataPunyencodeAddressConversion
      *
