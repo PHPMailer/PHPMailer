@@ -35,9 +35,9 @@ final class IsPermittedPathTest extends TestCase
     public function testIsPermittedPath($input, $expected)
     {
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'isPermittedPath');
-        $reflMethod->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
         $result = $reflMethod->invoke(null, $input);
-        $reflMethod->setAccessible(false);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         self::assertSame($expected, $result);
     }

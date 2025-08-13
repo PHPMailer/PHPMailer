@@ -253,7 +253,7 @@ EOT;
         $PHPMailer = new PHPMailer();
         $reflection = new \ReflectionClass($PHPMailer);
         $property = $reflection->getProperty('message_type');
-        $property->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $property->setAccessible(true);
         $property->setValue($PHPMailer, 'inline');
         self::assertIsString($PHPMailer->createBody());
 
