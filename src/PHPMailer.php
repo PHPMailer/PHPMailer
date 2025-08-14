@@ -1256,20 +1256,9 @@ class PHPMailer
                     '.SYNTAX-ERROR.' !== $address->host &&
                     static::validateAddress($address->mailbox . '@' . $address->host)
                 ) {
-                    //Decode the name part if it's present and encoded
-                    if (
-                        property_exists($address, 'personal') &&
-                        //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
-                        defined('MB_CASE_UPPER') &&
-                        preg_match('/^=\?.*\?=$/s', $address->personal)
-                    ) {
-                        $origCharset = mb_internal_encoding();
-                        mb_internal_encoding($charset);
-                        //Undo any RFC2047-encoded spaces-as-underscores
-                        $address->personal = str_replace('_', '=20', $address->personal);
-                        //Decode the name
-                        $address->personal = mb_decode_mimeheader($address->personal);
-                        mb_internal_encoding($origCharset);
+                    //Decode the name part if it's present and maybe encoded
+                    if (property_exists($address, 'personal') && is_string($address->personal) && $address->personal !== '') {
+                        $address->personal = static::decodeHeaderValue($address->personal, $charset);
                     }
 
                     $addresses[] = [
@@ -1297,17 +1286,8 @@ class PHPMailer
                     $email = trim(str_replace('>', '', $email));
                     $name = trim($name);
                     if (static::validateAddress($email)) {
-                        //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
-                        //If this name is encoded, decode it
-                        if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/s', $name)) {
-                            $origCharset = mb_internal_encoding();
-                            mb_internal_encoding($charset);
-                            //Undo any RFC2047-encoded spaces-as-underscores
-                            $name = str_replace('_', '=20', $name);
-                            //Decode the name
-                            $name = mb_decode_mimeheader($name);
-                            mb_internal_encoding($origCharset);
-                        }
+                        //Decode RFC2047-encoded words in the display name, even when mbstring is unavailable
+                        $name = static::decodeHeaderValue($name, $charset);
                         $addresses[] = [
                             //Remove any surrounding quotes and spaces from the name
                             'name' => trim($name, '\'" '),
@@ -1319,6 +1299,69 @@ class PHPMailer
         }
 
         return $addresses;
+    }
+
+    /**
+     * Decode an RFC2047-encoded header value
+     * Attempts multiple strategies so it works even when the mbstring extension is disabled.
+     *
+     * @param string $value   The header value to decode
+     * @param string $charset The target charset to convert to, defaults to ISO-8859-1 for BC
+     *
+     * @return string The decoded header value
+     */
+    protected static function decodeHeaderValue($value, $charset = self::CHARSET_ISO88591)
+    {
+        if (!is_string($value) || $value === '') {
+            return '';
+        }
+
+        $value = preg_replace('/(\?=)[\s\r\n]+(=\?)/s', '$1$2', $value);
+
+        // If mbstring is available, use it
+        if (defined('MB_CASE_UPPER') && function_exists('mb_decode_mimeheader')) {
+            $origCharset = mb_internal_encoding();
+            mb_internal_encoding($charset);
+            $prepared = str_replace('_', '=20', $value);
+            $decoded = mb_decode_mimeheader($prepared);
+            mb_internal_encoding($origCharset);
+
+            return trim($decoded, "'\" ");
+        }
+
+        // If no mbstring, use a manual decoder
+        $decoded = preg_replace_callback(
+            '/=\?([^?]+)\?([bqBQ])\?([^?]+)\?=/s',
+            static function ($matches) use ($charset) {
+                $sourceCharset = $matches[1];
+                $encoding = strtoupper($matches[2]);
+                $encodedText = $matches[3];
+
+                // When mbstring is unavailable, only safely decode ASCII/ISO-8859-1
+                // For other charsets (like UTF-8), leave the encoded-word intact to match expectations
+                $sourceLower = strtolower($sourceCharset);
+                if ($sourceLower !== 'iso-8859-1' && $sourceLower !== 'us-ascii') {
+                    return $matches[0];
+                }
+
+                if ($encoding === 'Q') {
+                    // Q-encoding
+                    $encodedText = str_replace('_', ' ', $encodedText);
+                    $decodedText = quoted_printable_decode($encodedText);
+                } else {
+                    // B-encoding
+                    $decodedText = base64_decode($encodedText);
+                    if ($decodedText === false) {
+                        $decodedText = '';
+                    }
+                }
+
+                return $decodedText;
+            },
+            $value
+        );
+
+        return trim($decoded, "'\" ");
     }
 
     /**
