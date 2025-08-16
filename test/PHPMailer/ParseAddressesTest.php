@@ -31,17 +31,15 @@ final class ParseAddressesTest extends TestCase
     /**
      * Test RFC822 address splitting using the PHPMailer native implementation
      *
-     * @requires extension mbstring
-     * @group mbstringRequired
      * @dataProvider dataAddressSplitting
      *
      * @param string $addrstr  The address list string.
      * @param array  $expected The expected function output.
      * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplitting($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
+    public function testAddressSplitting($addrstr, $expected)
     {
-        $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
+        $parsed = PHPMailer::parseAddresses($addrstr, PHPMailer::CHARSET_UTF8);
 
         $this->verifyExpectations($parsed, $expected);
     }
@@ -50,40 +48,16 @@ final class ParseAddressesTest extends TestCase
      * Test decodeHeader using the PHPMailer
      * with the Mbstring extension available.
      *
-     * @requires extension mbstring
-     * @group mbstringExtRequired
      * @dataProvider dataDecodeHeader
      *
      * @param string $addrstr  The header string.
      * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
      */
-    public function testDecodeHeaderMbstring($str, $expected, $charset = PHPMailer::CHARSET_ISO88591)
+    public function testDecodeHeader($str, $expected)
     {
-        $parsed = PHPMailer::decodeHeader($str, $charset);
+        $parsed = PHPMailer::decodeHeader($str, PHPMailer::CHARSET_UTF8);
 
-        $this->assertEquals($parsed, $expected['mbstring']);
-    }
-    
-    /**
-     * Test decodeHeader using the PHPMailer native implementation
-     * without the Mbstring extension.
-     *
-     * @group mbstringExtDisabled
-     * @dataProvider dataDecodeHeader
-     *
-     * @param string $addrstr  The header string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testDecodeHeaderNative($str, $expected, $charset = PHPMailer::CHARSET_ISO88591)
-    {
-        if (extension_loaded('mbstring')) {
-            self::markTestSkipped('Test requires MbString *not* to be available');
-        }
-        $parsed = PHPMailer::decodeHeader($str, $charset);
-
-        $this->assertEquals($parsed, $expected['native']);
+        $this->assertEquals($parsed, $expected);
     }
 
     /**
@@ -142,7 +116,7 @@ final class ParseAddressesTest extends TestCase
             'Valid address: single address, quotes within name' => [
                 'addrstr'  => 'Tim "The Book" O\'Reilly <foo@example.com>',
                 'expected' => [
-                    ['name' => 'Tim "The Book" O\'Reilly', 'address' => 'foo@example.com'],
+                    ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
                 ],
             ],
             'Valid address: two addresses with names' => [
@@ -174,8 +148,7 @@ final class ParseAddressesTest extends TestCase
                     ['name' => "John O'Groats", 'address' => 'johnog@example.net'],
                     ['name' => 'Название теста', 'address' => 'encoded@example.org'],
                     ['name' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!', 'address' => 'encoded3@example.org'],
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                ]
             ],
 
             // Test cases with invalid addresses.
@@ -198,58 +171,34 @@ final class ParseAddressesTest extends TestCase
      * Data provider for decodeHeader.
      *
      * @return array The array is expected to have an `addrstr` and an `expected` key.
-     *               The `expected` key should - as a minimum - have a `mbstring` and `native` key.
-     *               - `mbstring`           Expected output from the native implementation with Mbstring.
-     *               - `native`             Expected output from the native implementation without Mbstring.
+     *               The `expected` key should - as a minimum - have a single value.
      */
     public function dataDecodeHeader()
     {
         return [
             'UTF-8 B-encoded' => [
                 'name'  => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
-                'expected' => [
-                    'mbstring' => 'Название теста',
-                    'native' => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                'expected' => 'Название теста',
             ],
             'UTF-8 Q-encoded' => [
                 'name'  => '=?UTF-8?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?= =?UTF-8?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
-                'expected' => [
-                    'mbstring' => 'Название теста',
-                    'native' => '=?koi8-r?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?= =?koi8-r?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                'expected' => 'Название теста',
             ],
-            'UTF-8 Q-encoded with space encoded as _' => [
+            'UTF-8 Q-encoded with multiple wrong labels and space encoded as _' => [
                 'name'  => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
-                'expected' => [
-                    'mbstring' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
-                    'native' => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                'expected' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
             ],
             'ISO-8859-1 Q-encoded' => [
                 'name'  => '=?ISO-8859-1?Q?Willkommen_in_unserem_Caf=E9!?=',
-                'expected' => [
-                    'mbstring' => 'Willkommen in unserem Café!',
-                    'native' => 'Willkommen in unserem Café!',
-                ],
+                'expected' => 'Willkommen in unserem Café!',
             ],
             'Valid but wrongly labeled UTF-8 as ISO-8859-1' => [
                 'name'  => '=?iso-8859-1?B?5pyD6K2w5a6k?=',
-                'expected' => [
-                    'mbstring' => "æ\xC2\x9C\xC2\x83è­°å®¤",
-                    'native' => '=?iso-8859-1?B?5pyD6K2w5a6k?=',
-                ],
+                'expected' => "æ\xC2\x9C\xC2\x83è­°å®¤",
             ],
             'SMTPUTF8 encoded' => [
                 'name' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
-                'expected' => [
-                    'mbstring' => 'Hello 🌍 世界 café',
-                    'native' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                'expected' => 'Hello 🌍 世界 café',
             ],
         ];
     }

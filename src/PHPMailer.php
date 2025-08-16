@@ -1238,15 +1238,14 @@ class PHPMailer
      * @see https://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      *
      * @param string $addrstr The address list string
-     * @param bool   $useimap Whether to use the IMAP extension to parse the list
      * @param string $charset The charset to use when decoding the address list string.
      *
      * @return array
      */
-    public static function parseAddresses($addrstr, $useimap = true, $charset = self::CHARSET_ISO88591)
+    public static function parseAddresses($addrstr, $charset = self::CHARSET_ISO88591)
     {
         $addresses = [];
-        if ($useimap && function_exists('imap_rfc822_parse_adrlist')) {
+        if (function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             // Clear any potential IMAP errors to get rid of notices being thrown at end of script.
@@ -3671,17 +3670,25 @@ class PHPMailer
         if (!is_string($value) || $value === '') {
             return '';
         }
-        if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/s', $value)) {
+        // Detect the presence of any RFC2047 encoded-words
+        $hasEncodedWord = (bool) preg_match('/=\?.*\?=/s', $value);
+        if ($hasEncodedWord && defined('MB_CASE_UPPER')) {
             $origCharset = mb_internal_encoding();
             // Always decode to UTF-8 to provide a consistent, modern output encoding
-            mb_internal_encoding(self::CHARSET_UTF8);
+            mb_internal_encoding($charset);
             //Undo any RFC2047-encoded spaces-as-underscores
             $value = str_replace('_', '=20', $value);
-            //Decode the name
+            // Decode the header value
             $value = mb_decode_mimeheader($value);
             mb_internal_encoding($origCharset);
+        } elseif ($hasEncodedWord && function_exists('iconv_mime_decode')) {
+            // Use iconv as a fallback when mbstring is not available
+            $mode = defined('ICONV_MIME_DECODE_CONTINUE_ON_ERROR') ? ICONV_MIME_DECODE_CONTINUE_ON_ERROR : 0;
+            $decoded = @iconv_mime_decode($value, $mode, $charset);
+            if ($decoded !== false) {
+                $value = $decoded;
+            }
         }
-
         return $value;
     }
 
