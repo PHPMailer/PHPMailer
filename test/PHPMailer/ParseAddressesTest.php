@@ -39,13 +39,9 @@ final class ParseAddressesTest extends TestCase
      * @param array  $expected The expected function output.
      * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplitting($addrstr, $expected, $charset = null)
+    public function testAddressSplitting($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
+        $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
 
         $this->verifyExpectations($parsed, $expected);
     }
@@ -60,11 +56,11 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The header string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testDecodeHeaderMbstring($addrstr, $expected)
+    public function testDecodeHeaderMbstring($str, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
-
-        $parsed = PHPMailer::decodeHeader($addrstr);
+        $parsed = PHPMailer::decodeHeader($str, $charset);
 
         $this->assertEquals($parsed, $expected['mbstring']);
     }
@@ -78,13 +74,14 @@ final class ParseAddressesTest extends TestCase
      *
      * @param string $addrstr  The header string.
      * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
      */
-    public function testDecodeHeaderNative($addrstr, $expected)
+    public function testDecodeHeaderNative($str, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
         if (extension_loaded('mbstring')) {
             self::markTestSkipped('Test requires MbString *not* to be available');
         }
-        $parsed = PHPMailer::decodeHeader($addrstr);
+        $parsed = PHPMailer::decodeHeader($str, $charset);
 
         $this->assertEquals($parsed, $expected['native']);
     }
@@ -130,14 +127,14 @@ final class ParseAddressesTest extends TestCase
                 ],
             ],
             'Valid address: single RFC2047 address folded onto multiple lines' => [
-                'addrstr' => "=?iso-8859-1?B?QWJjZGVmZ2ggSWprbG3DsSDmnIPorbDlrqTpoJDntITn?=\r\n" .
-                    ' =?iso-8859-1?B?s7vntbE=?= <xyz@example.com>',
+                'addrstr' => "=?ISO-8859-1?Q?J=F6rg?=\r\n" .
+                    ' =?ISO-8859-1?Q?_M=FCller?= <xyz@example.com>',
                 'expected' => [
-                    ['name' => 'Abcdefgh Ijklmñ 會議室預約系統', 'address' => 'xyz@example.com'],
+                    ['name' => 'Jörg Müller', 'address' => 'xyz@example.com'],
                 ],
             ],
             'Valid address: single RFC2047 address with space encoded as _' => [
-                'addrstr' => '=?iso-8859-1?Q?Abcdefgh_ijklm=C3=B1?= <xyz@example.com>',
+                'addrstr' => '=?iso-8859-1?Q?Abcdefgh_ijklm=F1?= <xyz@example.com>',
                 'expected' => [
                     ['name' => 'Abcdefgh ijklmñ', 'address' => 'xyz@example.com'],
                 ],
@@ -208,40 +205,51 @@ final class ParseAddressesTest extends TestCase
     public function dataDecodeHeader()
     {
         return [
-            'UTF-8' => [
+            'UTF-8 B-encoded' => [
                 'name'  => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
                 'expected' => [
                     'mbstring' => 'Название теста',
                     'native' => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
                 ],
+                'charset' => PHPMailer::CHARSET_UTF8,
             ],
-            'KOI8-R' => [
-                'name'  => '=?koi8-r?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
+            'UTF-8 Q-encoded' => [
+                'name'  => '=?UTF-8?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?= =?UTF-8?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
                 'expected' => [
                     'mbstring' => 'Название теста',
-                    'native' => '=?koi8-r?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
+                    'native' => '=?koi8-r?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?= =?koi8-r?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
                 ],
+                'charset' => PHPMailer::CHARSET_UTF8,
             ],
-            'Simple ISO-8859-1' => [
-                'name'  => '=?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?=',
+            'UTF-8 Q-encoded with space encoded as _' => [
+                'name'  => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
+                'expected' => [
+                    'mbstring' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
+                    'native' => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
+                ],
+                'charset' => PHPMailer::CHARSET_UTF8,
+            ],
+            'ISO-8859-1 Q-encoded' => [
+                'name'  => '=?ISO-8859-1?Q?Willkommen_in_unserem_Caf=E9!?=',
                 'expected' => [
                     'mbstring' => 'Willkommen in unserem Café!',
                     'native' => 'Willkommen in unserem Café!',
                 ],
             ],
-            'Wrongly labeled ISO-8859-1' => [
-                'name'  => '=?iso-8859-1?B?QWJjZGVmZ2ggSWprbG3DsSDmnIPorbDlrqTpoJDntITns7vntbE=?=',
+            'Valid but wrongly labeled UTF-8 as ISO-8859-1' => [
+                'name'  => '=?iso-8859-1?B?5pyD6K2w5a6k?=',
                 'expected' => [
-                    'mbstring' => 'Abcdefgh Ijklmñ 會議室預約系統',
-                    'native' => '=?iso-8859-1?B?QWJjZGVmZ2ggSWprbG3DsSDmnIPorbDlrqTpoJDntITn?=',
+                    'mbstring' => "æ\xC2\x9C\xC2\x83è­°å®¤",
+                    'native' => '=?iso-8859-1?B?5pyD6K2w5a6k?=',
                 ],
             ],
-            'UTF-8' => [
+            'SMTPUTF8 encoded' => [
                 'name' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
                 'expected' => [
                     'mbstring' => 'Hello 🌍 世界 café',
                     'native' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
                 ],
+                'charset' => PHPMailer::CHARSET_UTF8,
             ],
         ];
     }

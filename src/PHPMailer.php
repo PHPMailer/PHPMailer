@@ -1258,7 +1258,7 @@ class PHPMailer
                 ) {
                     //Decode the name part if it's present and maybe encoded
                     if (property_exists($address, 'personal') && is_string($address->personal) && $address->personal !== '') {
-                        $address->personal = static::decodeHeaderValue($address->personal, $charset);
+                        $address->personal = static::decodeHeader($address->personal, $charset);
                     }
 
                     $addresses[] = [
@@ -1287,7 +1287,7 @@ class PHPMailer
                     $name = trim($name);
                     if (static::validateAddress($email)) {
                         //Decode RFC2047-encoded words in the display name, even when mbstring is unavailable
-                        $name = static::decodeHeaderValue($name, $charset);
+                        $name = static::decodeHeader($name, $charset);
                         $addresses[] = [
                             //Remove any surrounding quotes and spaces from the name
                             'name' => trim($name, '\'" '),
@@ -1299,69 +1299,6 @@ class PHPMailer
         }
 
         return $addresses;
-    }
-
-    /**
-     * Decode an RFC2047-encoded header value
-     * Attempts multiple strategies so it works even when the mbstring extension is disabled.
-     *
-     * @param string $value   The header value to decode
-     * @param string $charset The target charset to convert to, defaults to ISO-8859-1 for BC
-     *
-     * @return string The decoded header value
-     */
-    protected static function decodeHeaderValue($value, $charset = self::CHARSET_ISO88591)
-    {
-        if (!is_string($value) || $value === '') {
-            return '';
-        }
-
-        $value = preg_replace('/(\?=)[\s\r\n]+(=\?)/s', '$1$2', $value);
-
-        // If mbstring is available, use it
-        if (defined('MB_CASE_UPPER') && function_exists('mb_decode_mimeheader')) {
-            $origCharset = mb_internal_encoding();
-            mb_internal_encoding($charset);
-            $prepared = str_replace('_', '=20', $value);
-            $decoded = mb_decode_mimeheader($prepared);
-            mb_internal_encoding($origCharset);
-
-            return trim($decoded, "'\" ");
-        }
-
-        // If no mbstring, use a manual decoder
-        $decoded = preg_replace_callback(
-            '/=\?([^?]+)\?([bqBQ])\?([^?]+)\?=/s',
-            static function ($matches) use ($charset) {
-                $sourceCharset = $matches[1];
-                $encoding = strtoupper($matches[2]);
-                $encodedText = $matches[3];
-
-                // When mbstring is unavailable, only safely decode ASCII/ISO-8859-1
-                // For other charsets (like UTF-8), leave the encoded-word intact to match expectations
-                $sourceLower = strtolower($sourceCharset);
-                if ($sourceLower !== 'iso-8859-1' && $sourceLower !== 'us-ascii') {
-                    return $matches[0];
-                }
-
-                if ($encoding === 'Q') {
-                    // Q-encoding
-                    $encodedText = str_replace('_', ' ', $encodedText);
-                    $decodedText = quoted_printable_decode($encodedText);
-                } else {
-                    // B-encoding
-                    $decodedText = base64_decode($encodedText);
-                    if ($decodedText === false) {
-                        $decodedText = '';
-                    }
-                }
-
-                return $decodedText;
-            },
-            $value
-        );
-
-        return trim($decoded, "'\" ");
     }
 
     /**
@@ -3718,6 +3655,34 @@ class PHPMailer
         }
 
         return trim(static::normalizeBreaks($encoded));
+    }
+
+    /**
+     * Decode an RFC2047-encoded header value
+     * Attempts multiple strategies so it works even when the mbstring extension is disabled.
+     *
+     * @param string $value   The header value to decode
+     * @param string $charset The target charset to convert to, defaults to ISO-8859-1 for BC
+     *
+     * @return string The decoded header value
+     */
+    public static function decodeHeader($value, $charset = self::CHARSET_ISO88591)
+    {
+        if (!is_string($value) || $value === '') {
+            return '';
+        }
+        if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/s', $value)) {
+            $origCharset = mb_internal_encoding();
+            // Always decode to UTF-8 to provide a consistent, modern output encoding
+            mb_internal_encoding(self::CHARSET_UTF8);
+            //Undo any RFC2047-encoded spaces-as-underscores
+            $value = str_replace('_', '=20', $value);
+            //Decode the name
+            $value = mb_decode_mimeheader($value);
+            mb_internal_encoding($origCharset);
+        }
+
+        return $value;
     }
 
     /**
