@@ -1842,16 +1842,18 @@ class PHPMailer
                 fwrite($mail, $body);
                 $result = pclose($mail);
                 $addrinfo = static::parseAddresses($toAddr, true, $this->CharSet);
-                $this->doCallback(
-                    ($result === 0),
-                    [[$addrinfo['address'], $addrinfo['name']]],
-                    $this->cc,
-                    $this->bcc,
-                    $this->Subject,
-                    $body,
-                    $this->From,
-                    []
-                );
+                foreach ($addrinfo as $addr) {
+                    $this->doCallback(
+                        ($result === 0),
+                        [[$addr['address'], $addr['name']]],
+                        $this->cc,
+                        $this->bcc,
+                        $this->Subject,
+                        $body,
+                        $this->From,
+                        []  
+                    );
+                }
                 $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
                 if (0 !== $result) {
                     throw new Exception($this->lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
@@ -2017,16 +2019,18 @@ class PHPMailer
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
                 $addrinfo = static::parseAddresses($toAddr, true, $this->CharSet);
-                $this->doCallback(
-                    $result,
-                    [[$addrinfo['address'], $addrinfo['name']]],
-                    $this->cc,
-                    $this->bcc,
-                    $this->Subject,
-                    $body,
-                    $this->From,
-                    []
-                );
+                foreach ($addrinfo as $addr) {
+                    $this->doCallback(
+                        $result,
+                        [[$addr['address'], $addr['name']]],
+                        $this->cc,
+                        $this->bcc,
+                        $this->Subject,
+                        $body,
+                        $this->From,
+                        []
+                    );
+                }
             }
         } else {
             $result = $this->mailPassthru($to, $this->Subject, $body, $header, $params);
