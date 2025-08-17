@@ -1242,10 +1242,10 @@ class PHPMailer
      *
      * @return array
      */
-    public static function parseAddresses($addrstr, $charset = self::CHARSET_ISO88591)
+    public static function parseAddresses($addrstr, $useimap = true, $charset = self::CHARSET_ISO88591)
     {
         $addresses = [];
-        if (function_exists('imap_rfc822_parse_adrlist')) {
+        if ($useimap && function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             // Clear any potential IMAP errors to get rid of notices being thrown at end of script.
