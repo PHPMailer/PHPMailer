@@ -39,7 +39,7 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplitting($addrstr, $expected)
     {
-        $parsed = PHPMailer::parseAddresses($addrstr, true, PHPMailer::CHARSET_UTF8);
+        $parsed = PHPMailer::parseAddresses($addrstr, null, PHPMailer::CHARSET_UTF8);
 
         $this->verifyExpectations($parsed, $expected);
     }
@@ -202,5 +202,4 @@ final class ParseAddressesTest extends TestCase
             ],
         ];
     }
-
 }

@@ -1237,15 +1237,19 @@ class PHPMailer
      *
      * @see https://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      *
-     * @param string $addrstr The address list string
-     * @param string $charset The charset to use when decoding the address list string.
+     * @param string      $addrstr       The address list string
+     * @param string|null $deprecatedArg Deprecated argument since 6.10.1.
+     * @param string      $charset       The charset to use when decoding the address list string.
      *
      * @return array
      */
-    public static function parseAddresses($addrstr, $useimap = true, $charset = self::CHARSET_ISO88591)
+    public static function parseAddresses($addrstr, $deprecatedArg = null, $charset = self::CHARSET_ISO88591)
     {
+        if (func_num_args() > 2) {
+            trigger_error("Argument \$deprecatedArg is deprecated", E_USER_DEPRECATED);
+        }
         $addresses = [];
-        if ($useimap && function_exists('imap_rfc822_parse_adrlist')) {
+        if (function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             // Clear any potential IMAP errors to get rid of notices being thrown at end of script.
@@ -1820,7 +1824,7 @@ class PHPMailer
                 fwrite($mail, $header);
                 fwrite($mail, $body);
                 $result = pclose($mail);
-                $addrinfo = static::parseAddresses($toAddr, true, $this->CharSet);
+                $addrinfo = static::parseAddresses($toAddr, null, $this->CharSet);
                 $this->doCallback(
                     ($result === 0),
                     [[$addrinfo['address'], $addrinfo['name']]],
@@ -1995,7 +1999,7 @@ class PHPMailer
         if ($this->SingleTo && count($toArr) > 1) {
             foreach ($toArr as $toAddr) {
                 $result = $this->mailPassthru($toAddr, $this->Subject, $body, $header, $params);
-                $addrinfo = static::parseAddresses($toAddr, true, $this->CharSet);
+                $addrinfo = static::parseAddresses($toAddr, null, $this->CharSet);
                 $this->doCallback(
                     $result,
                     [[$addrinfo['address'], $addrinfo['name']]],
