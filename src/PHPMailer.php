@@ -1245,7 +1245,7 @@ class PHPMailer
      */
     public static function parseAddresses($addrstr, $deprecatedArg = null, $charset = self::CHARSET_ISO88591)
     {
-        if (func_num_args() > 2) {
+        if ($deprecatedArg !== null) {
             trigger_error("Argument \$deprecatedArg is deprecated", E_USER_DEPRECATED);
         }
         $addresses = [];
