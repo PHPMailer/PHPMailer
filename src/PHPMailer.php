@@ -1260,7 +1260,11 @@ class PHPMailer
                     static::validateAddress($address->mailbox . '@' . $address->host)
                 ) {
                     //Decode the name part if it's present and maybe encoded
-                    if (property_exists($address, 'personal') && is_string($address->personal) && $address->personal !== '') {
+                    if (
+                        property_exists($address, 'personal')
+                        && is_string($address->personal)
+                        && $address->personal !== ''
+                    ) {
                         $address->personal = static::decodeHeader($address->personal, $charset);
                     }
 

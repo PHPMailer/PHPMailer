@@ -140,14 +140,18 @@ final class ParseAddressesTest extends TestCase
                 'addrstr'  => 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
                     ' "John O\'Groats" <johnog@example.net>,' .
                     ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>,' .
-                    ' =?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?= <encoded3@example.org>',
+                    ' =?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?=' .
+                    ' =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?= <encoded3@example.org>',
                 'expected' => [
                     ['name' => '', 'address' => 'joe@example.com'],
                     ['name' => '', 'address' => 'me@example.com'],
                     ['name' => 'Joe Doe', 'address' => 'doe@example.com'],
                     ['name' => "John O'Groats", 'address' => 'johnog@example.net'],
                     ['name' => 'Название теста', 'address' => 'encoded@example.org'],
-                    ['name' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!', 'address' => 'encoded3@example.org'],
+                    [
+                        'name' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
+                        'address' => 'encoded3@example.org'
+                    ],
                 ]
             ],
 
@@ -181,11 +185,13 @@ final class ParseAddressesTest extends TestCase
                 'expected' => 'Название теста',
             ],
             'UTF-8 Q-encoded' => [
-                'name'  => '=?UTF-8?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?= =?UTF-8?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
+                'name'  => '=?UTF-8?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?=' .
+                    ' =?UTF-8?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
                 'expected' => 'Название теста',
             ],
             'UTF-8 Q-encoded with multiple wrong labels and space encoded as _' => [
-                'name'  => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?= =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
+                'name'  => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?=' .
+                    ' =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
                 'expected' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
             ],
             'ISO-8859-1 Q-encoded' => [
