@@ -1851,7 +1851,7 @@ class PHPMailer
                         $this->Subject,
                         $body,
                         $this->From,
-                        []  
+                        []
                     );
                 }
                 $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
