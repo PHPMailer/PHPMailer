@@ -447,9 +447,9 @@ final class LocalizationTest extends TestCase
         }
 
         $reflMethod = new ReflectionMethod($this->Mail, 'lang');
-        $reflMethod->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
         $result = $reflMethod->invoke($this->Mail, $input);
-        $reflMethod->setAccessible(false);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         self::assertSame($expected, $result);
     }

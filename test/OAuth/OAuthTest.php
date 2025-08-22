@@ -36,7 +36,7 @@ final class OAuthTest extends TestCase
         $PHPMailer = new PHPMailer(true);
         $reflection = new \ReflectionClass($PHPMailer);
         $property = $reflection->getProperty('oauth');
-        $property->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $property->setAccessible(true);
         $property->setValue($PHPMailer, true);
         self::assertTrue($PHPMailer->getOAuth(), 'Initial value of oauth property is not true');
 

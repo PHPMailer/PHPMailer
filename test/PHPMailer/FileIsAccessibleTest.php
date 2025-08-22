@@ -39,9 +39,9 @@ final class FileIsAccessibleTest extends TestCase
     public function testFileIsAccessible($input, $expected)
     {
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'fileIsAccessible');
-        $reflMethod->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
         $result = $reflMethod->invoke(null, $input);
-        $reflMethod->setAccessible(false);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         self::assertSame($expected, $result);
     }
@@ -91,9 +91,9 @@ final class FileIsAccessibleTest extends TestCase
         chmod($file, octdec('0'));
 
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'fileIsAccessible');
-        $reflMethod->setAccessible(true);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
         $result = $reflMethod->invoke(null, $file);
-        $reflMethod->setAccessible(false);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         // Reset to the default for git files before running assertions.
         chmod($file, octdec('644'));
