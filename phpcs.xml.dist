@@ -36,7 +36,24 @@
         <exclude name="PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet"/>
     </rule>
 
+
+    <!--
+    #############################################################################
+    SELECTIVE EXCLUSIONS
+    Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
+    #############################################################################
+    -->
+
     <rule ref="Generic.Files.LineLength.TooLong">
         <exclude-pattern>*/language/phpmailer\.lang*\.php$</exclude-pattern>
     </rule>
+
+	<!-- Excludes related to linting ignore comment for one specific test file. -->
+    <rule ref="PSR12.Files.OpenTag.NotAlone">
+        <exclude-pattern>*/test/Fixtures/LocalizationTest/phpmailer.lang-yz\.php</exclude-pattern>
+    </rule>
+    <rule ref="PSR12.Files.FileHeader.SpacingAfterBlock">
+        <exclude-pattern>*/test/Fixtures/LocalizationTest/phpmailer.lang-yz\.php</exclude-pattern>
+    </rule>
+
 </ruleset>
