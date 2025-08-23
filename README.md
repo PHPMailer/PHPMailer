@@ -170,7 +170,7 @@ If the documentation doesn't cover what you need, search the [many questions on 
 ## Tests
 [PHPMailer tests](https://github.com/PHPMailer/PHPMailer/tree/master/test/) use PHPUnit 9, with [a polyfill](https://github.com/Yoast/PHPUnit-Polyfills) to let 9-style tests run on older PHPUnit and PHP versions.
 
-[![Test status](https://github.com/PHPMailer/PHPMailer/workflows/Tests/badge.svg)](https://github.com/PHPMailer/PHPMailer/actions)
+
 
 If this isn't passing, is there something you can do to help?
 
