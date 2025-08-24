@@ -1338,6 +1338,8 @@ class PHPMailer
                 }
             }
         }
+
+        return $addresses;
     }
 
     /**
