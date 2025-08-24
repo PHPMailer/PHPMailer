@@ -30,129 +30,34 @@ final class ParseAddressesTest extends TestCase
 {
     /**
      * Test RFC822 address splitting using the PHPMailer native implementation
+     *
+     * @dataProvider dataAddressSplitting
+     *
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
+     */
+    public function testAddressSplitting($addrstr, $expected)
+    {
+        $parsed = PHPMailer::parseAddresses($addrstr, null, PHPMailer::CHARSET_UTF8);
+
+        $this->verifyExpectations($parsed, $expected);
+    }
+
+    /**
+     * Test decodeHeader using the PHPMailer
      * with the Mbstring extension available.
      *
-     * @requires extension mbstring
+     * @dataProvider dataDecodeHeader
      *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
+     * @param string $addrstr  The header string.
      * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
      */
-    public function testAddressSplittingNative($addrstr, $expected, $charset = null)
+    public function testDecodeHeader($str, $expected)
     {
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
+        $parsed = PHPMailer::decodeHeader($str, PHPMailer::CHARSET_UTF8);
 
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native+mbstring']) === false) {
-            $expectedOutput = $expected['native+mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
-     * Test RFC822 address splitting using the IMAP implementation
-     * with the Mbstring extension available.
-     *
-     * @requires extension imap
-     * @requires extension mbstring
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingImap($addrstr, $expected, $charset = null)
-    {
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, true, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, true);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['imap+mbstring']) === false) {
-            $expectedOutput = $expected['imap+mbstring'];
-        } elseif (empty($expected['imap']) === false) {
-            $expectedOutput = $expected['imap'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
-     * without the Mbstring extension.
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingNativeNoMbstring($addrstr, $expected, $charset = null)
-    {
-        if (extension_loaded('mbstring')) {
-            self::markTestSkipped('Test requires MbString *not* to be available');
-        }
-
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native--mbstring']) === false) {
-            $expectedOutput = $expected['native--mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
-     * Test RFC822 address splitting using the IMAP implementation
-     * without the Mbstring extension.
-     *
-     * @requires extension imap
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingImapNoMbstring($addrstr, $expected, $charset = null)
-    {
-        if (extension_loaded('mbstring')) {
-            self::markTestSkipped('Test requires MbString *not* to be available');
-        }
-
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, true, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, true);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['imap--mbstring']) === false) {
-            $expectedOutput = $expected['imap--mbstring'];
-        } elseif (empty($expected['imap']) === false) {
-            $expectedOutput = $expected['imap'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
+        $this->assertEquals($parsed, $expected);
     }
 
     /**
@@ -177,15 +82,7 @@ final class ParseAddressesTest extends TestCase
      * Data provider.
      *
      * @return array The array is expected to have an `addrstr` and an `expected` key.
-     *               The `expected` key should - as a minimum - have a `default` key.
-     *               Optionally, the following extra keys are supported:
-     *               - `native`           Expected output from the native implementation with or without Mbstring.
-     *               - `native+mbstring`  Expected output from the native implementation with Mbstring.
-     *               - `native--mbstring` Expected output from the native implementation without Mbstring.
-     *               - `imap`             Expected output from the IMAP implementation with or without Mbstring.
-     *               - `imap+mbstring`    Expected output from the IMAP implementation with Mbstring.
-     *               - `imap--mbstring`   Expected output from the IMAP implementation without Mbstring.
-     *               Also optionally, an additional `charset` key can be passed,
+     *               The `expected` key should - as a minimum.
      */
     public function dataAddressSplitting()
     {
@@ -194,54 +91,39 @@ final class ParseAddressesTest extends TestCase
             'Valid address: single address without name' => [
                 'addrstr'  => 'joe@example.com',
                 'expected' => [
-                    'default' => [
                         ['name' => '', 'address' => 'joe@example.com'],
-                    ],
                 ],
             ],
             'Valid address: single address with name' => [
                 'addrstr'  => 'Joe User <joe@example.com>',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                    ],
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
                 ],
             ],
             'Valid address: single RFC2047 address folded onto multiple lines' => [
-                'addrstr' => "=?iso-8859-1?B?QWJjZGVmZ2ggSWprbG3DsSDmnIPorbDlrqTpoJDntITn?=\r\n" .
-                    ' =?iso-8859-1?B?s7vntbE=?= <xyz@example.com>',
+                'addrstr' => "=?ISO-8859-1?Q?J=F6rg?=\r\n" .
+                    ' =?ISO-8859-1?Q?_M=FCller?= <xyz@example.com>',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Abcdefgh Ijklmñ 會議室預約系統', 'address' => 'xyz@example.com'],
-                    ],
+                    ['name' => 'Jörg Müller', 'address' => 'xyz@example.com'],
                 ],
             ],
             'Valid address: single RFC2047 address with space encoded as _' => [
-                'addrstr' => '=?iso-8859-1?Q?Abcdefgh_ijklm=C3=B1?= <xyz@example.com>',
+                'addrstr' => '=?iso-8859-1?Q?Abcdefgh_ijklm=F1?= <xyz@example.com>',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Abcdefgh ijklmñ', 'address' => 'xyz@example.com'],
-                    ],
+                    ['name' => 'Abcdefgh ijklmñ', 'address' => 'xyz@example.com'],
                 ],
             ],
             'Valid address: single address, quotes within name' => [
                 'addrstr'  => 'Tim "The Book" O\'Reilly <foo@example.com>',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Tim "The Book" O\'Reilly', 'address' => 'foo@example.com'],
-                    ],
-                    'imap' => [
-                        ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
-                    ],
+                    ['name' => 'Tim The Book O\'Reilly', 'address' => 'foo@example.com'],
                 ],
             ],
             'Valid address: two addresses with names' => [
                 'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                        ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                    ],
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
                 ],
             ],
             'Valid address: two addresses with names, one without' => [
@@ -249,106 +131,80 @@ final class ParseAddressesTest extends TestCase
                     . 'Jill User <jill@example.net>,'
                     . 'frank@example.com,',
                 'expected' => [
-                    'default' => [
-                        ['name' => 'Joe User', 'address' => 'joe@example.com'],
-                        ['name' => 'Jill User', 'address' => 'jill@example.net'],
-                        ['name' => '', 'address' => 'frank@example.com'],
-                    ],
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                    ['name' => '', 'address' => 'frank@example.com'],
                 ],
             ],
-            'Valid address: multiple address, various formats, including one utf8-encoded name' => [
+            'Valid address: multiple address, various formats, including one utf8-encoded names' => [
                 'addrstr'  => 'joe@example.com, <me@example.com>, Joe Doe <doe@example.com>,' .
                     ' "John O\'Groats" <johnog@example.net>,' .
-                    ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>',
+                    ' =?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?= <encoded@example.org>,' .
+                    ' =?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?=' .
+                    ' =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?= <encoded3@example.org>',
                 'expected' => [
-                    'default' => [
-                        [
-                            'name'    => '',
-                            'address' => 'joe@example.com',
-                        ],
-                        [
-                            'name'    => '',
-                            'address' => 'me@example.com',
-                        ],
-                        [
-                            'name'    => 'Joe Doe',
-                            'address' => 'doe@example.com',
-                        ],
-                        [
-                            'name'    => "John O'Groats",
-                            'address' => 'johnog@example.net',
-                        ],
-                        [
-                            'name'    => 'Название теста',
-                            'address' => 'encoded@example.org',
-                        ],
+                    ['name' => '', 'address' => 'joe@example.com'],
+                    ['name' => '', 'address' => 'me@example.com'],
+                    ['name' => 'Joe Doe', 'address' => 'doe@example.com'],
+                    ['name' => "John O'Groats", 'address' => 'johnog@example.net'],
+                    ['name' => 'Название теста', 'address' => 'encoded@example.org'],
+                    [
+                        'name' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
+                        'address' => 'encoded3@example.org'
                     ],
-                    'native--mbstring' => [
-                        [
-                            'name'    => '',
-                            'address' => 'joe@example.com',
-                        ],
-                        [
-                            'name'    => '',
-                            'address' => 'me@example.com',
-                        ],
-                        [
-                            'name'    => 'Joe Doe',
-                            'address' => 'doe@example.com',
-                        ],
-                        [
-                            'name'    => "John O'Groats",
-                            'address' => 'johnog@example.net',
-                        ],
-                        [
-                            'name'    => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
-                            'address' => 'encoded@example.org',
-                        ],
-                    ],
-                    'imap--mbstring' => [
-                        [
-                            'name'    => '',
-                            'address' => 'joe@example.com',
-                        ],
-                        [
-                            'name'    => '',
-                            'address' => 'me@example.com',
-                        ],
-                        [
-                            'name'    => 'Joe Doe',
-                            'address' => 'doe@example.com',
-                        ],
-                        [
-                            'name'    => "John O'Groats",
-                            'address' => 'johnog@example.net',
-                        ],
-                        [
-                            'name'    => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
-                            'address' => 'encoded@example.org',
-                        ],
-                    ],
-                ],
-                'charset' => PHPMailer::CHARSET_UTF8,
+                ]
             ],
 
             // Test cases with invalid addresses.
             'Invalid address: single address, incomplete email' => [
                 'addrstr'  => 'Jill User <doug@>',
-                'expected' => [
-                    'default' => [],
-                ],
+                'expected' => [],
             ],
             'Invalid address: single address, invalid characters in email' => [
                 'addrstr'  => 'Joe User <{^c\@**Dog^}@cartoon.com>',
-                'expected' => [
-                    'default' => [],
-                ],
+                'expected' => [],
             ],
             'Invalid address: multiple addresses, invalid periods' => [
                 'addrstr'  => 'Joe User <joe@example.com.>, Jill User <jill.@example.net>',
-                'expected' => [
-                    'default' => [],
-                ],
+                'expected' => [],
+            ],
+        ];
+    }
+
+    /**
+     * Data provider for decodeHeader.
+     *
+     * @return array The array is expected to have an `addrstr` and an `expected` key.
+     *               The `expected` key should - as a minimum - have a single value.
+     */
+    public function dataDecodeHeader()
+    {
+        return [
+            'UTF-8 B-encoded' => [
+                'name'  => '=?utf-8?B?0J3QsNC30LLQsNC90LjQtSDRgtC10YHRgtCw?=',
+                'expected' => 'Название теста',
+            ],
+            'UTF-8 Q-encoded' => [
+                'name'  => '=?UTF-8?Q?=D0=9D=D0=B0=D0=B7=D0=B2=D0=B0=D0=BD=D0=B8?=' .
+                    ' =?UTF-8?Q?=D0=B5_=D1=82=D0=B5=D1=81=D1=82=D0=B0?=',
+                'expected' => 'Название теста',
+            ],
+            'UTF-8 Q-encoded with multiple wrong labels and space encoded as _' => [
+                'name'  => '=?UTF-8?Q?Welcome_to_our_caf=C3=A9!?= =?ISO-8859-1?Q?_Willkommen_in_unserem_Caf=E9!?=' .
+                    ' =?KOI8-R?Q?_=F0=D2=C9=D7=C5=D4_=D7_=CE=C1=DB=C5_=CB=C1=C6=C5!?=',
+                'expected' => 'Welcome to our café! Willkommen in unserem Café! Привет в наше кафе!',
+            ],
+            'ISO-8859-1 Q-encoded' => [
+                'name'  => '=?ISO-8859-1?Q?Willkommen_in_unserem_Caf=E9!?=',
+                'expected' => 'Willkommen in unserem Café!',
+            ],
+            'Valid but wrongly labeled UTF-8 as ISO-8859-1' => [
+                'name'  => '=?iso-8859-1?B?5pyD6K2w5a6k?=',
+                'expected' => "æ\xC2\x9C\xC2\x83è­°å®¤",
+            ],
+            'SMTPUTF8 encoded' => [
+                'name' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
+                'expected' => 'Hello 🌍 世界 café',
             ],
         ];
     }
