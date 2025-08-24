@@ -278,6 +278,9 @@ EOT;
 
     /**
      * Send a message containing ISO-8859-1 text.
+     * 
+     * @requires extension mbstring
+     * @group mbstringExtRequired
      */
     public function testHtmlIso8859()
     {
@@ -1117,6 +1120,8 @@ EOT;
 
     /**
      * Tests CharSet and Unicode -> ASCII conversions for addresses with IDN.
+     * 
+     * @group mbstringExtRequired
      */
     public function testConvertEncoding()
     {
@@ -1162,6 +1167,8 @@ EOT;
 
     /**
      * Tests removal of duplicate recipients and reply-tos.
+     * 
+     * @group mbstringExtRequired
      */
     public function testDuplicateIDNRemoved()
     {
@@ -1230,6 +1237,8 @@ EOT;
 
     /**
      * Test SMTPUTF8 usage, including when it is not to be used.
+     * 
+     * @group mbstringExtRequired
      */
     public function testSmtpUTF8()
     {
@@ -1346,6 +1355,8 @@ EOT;
     /**
      * @requires extension mbstring
      * @requires function idn_to_ascii
+     * 
+     * @group mbstringExtRequired
      */
     public function testGivenIdnAddress_addAddress_returns_true()
     {
