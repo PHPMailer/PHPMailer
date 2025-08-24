@@ -15,6 +15,7 @@ namespace PHPMailer\Test\PHPMailer;
 
 use ReflectionMethod;
 use PHPMailer\Test\TestCase;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Test localized error message functionality.
@@ -443,12 +444,12 @@ final class LocalizationTest extends TestCase
     public function testLang($input, $expected, $langCode = null)
     {
         if (isset($langCode)) {
-            $this->Mail->setLanguage($langCode);
+            PHPMailer::setLanguage($langCode);
         }
 
-        $reflMethod = new ReflectionMethod($this->Mail, 'lang');
+        $reflMethod = new ReflectionMethod(PHPMailer::class, 'lang');
         (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
-        $result = $reflMethod->invoke($this->Mail, $input);
+        $result = $reflMethod->invoke(null, $input);
         (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         self::assertSame($expected, $result);
