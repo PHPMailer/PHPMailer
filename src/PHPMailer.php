@@ -1301,7 +1301,7 @@ class PHPMailer
     {
         // Emit a runtime notice to recommend using the IMAP extension for full RFC822 parsing
         trigger_error(self::lang('imap_recommended'), E_USER_NOTICE);
-        
+
         $list = explode(',', $addrstr);
         foreach ($list as $address) {
             $address = trim($address);
