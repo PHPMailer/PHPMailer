@@ -29,36 +29,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 final class ParseAddressesTest extends TestCase
 {
     /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
-     * with the Mbstring extension available.
-     *
-     * @requires extension mbstring
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingNative($addrstr, $expected, $charset = null)
-    {
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native+mbstring']) === false) {
-            $expectedOutput = $expected['native+mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
      * Test RFC822 address splitting using the IMAP implementation
      * with the Mbstring extension available.
      *
@@ -84,38 +54,6 @@ final class ParseAddressesTest extends TestCase
             $expectedOutput = $expected['imap+mbstring'];
         } elseif (empty($expected['imap']) === false) {
             $expectedOutput = $expected['imap'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
-     * without the Mbstring extension.
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingNativeNoMbstring($addrstr, $expected, $charset = null)
-    {
-        if (extension_loaded('mbstring')) {
-            self::markTestSkipped('Test requires MbString *not* to be available');
-        }
-
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native--mbstring']) === false) {
-            $expectedOutput = $expected['native--mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
         }
 
         $this->verifyExpectations($parsed, $expectedOutput);

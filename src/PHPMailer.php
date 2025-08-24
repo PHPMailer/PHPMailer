@@ -1288,7 +1288,7 @@ class PHPMailer
 
     /**
      * Parse a string containing one or more RFC822-style comma-separated email addresses
-     * of the form "display name <address>" into an array of name/address pairs.
+     * with the form "display name <address>" into an array of name/address pairs.
      * Uses a simpler parser that does not require the IMAP extension but doesnt support
      * the full RFC822 spec. For full RFC822 support, use the PHP IMAP extension.
      *
@@ -1301,6 +1301,7 @@ class PHPMailer
     {
         // Emit a runtime notice to recommend using the IMAP extension for full RFC822 parsing
         trigger_error(self::lang('imap_recommended'), E_USER_NOTICE);
+        
         $list = explode(',', $addrstr);
         foreach ($list as $address) {
             $address = trim($address);
