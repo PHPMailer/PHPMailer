@@ -3693,9 +3693,14 @@ class PHPMailer
         if (function_exists('mb_strlen')) {
             return strlen($str) > mb_strlen($str, $this->CharSet);
         }
+        
+        // Fallback to iconv if available
+        if (function_exists('iconv_strlen')) {
+            return strlen($str) > iconv_strlen($str, $this->CharSet);
+        }
 
-        //Assume no multibytes (we can't handle without mbstring functions anyway)
-        return false;
+        // If neither mbstring nor iconv is available, make a basic check for non-ASCII characters
+        return preg_match('/[^\x00-\x7F]/', $str) === 1;
     }
 
     /**
@@ -3713,7 +3718,7 @@ class PHPMailer
     /**
      * Encode and wrap long multibyte strings for mail headers
      * without breaking lines within a character.
-     * Adapted from a function by paravoid.
+     * Uses mbstring if available, with fallback to iconv or native functions.
      *
      * @see https://www.php.net/manual/en/function.mb-encode-mimeheader.php#60283
      *
@@ -3731,28 +3736,54 @@ class PHPMailer
             $linebreak = static::$LE;
         }
 
-        $mb_length = mb_strlen($str, $this->CharSet);
-        //Each line must have length <= 75, including $start and $end
-        $length = 75 - strlen($start) - strlen($end);
-        //Average multi-byte ratio
-        $ratio = $mb_length / strlen($str);
-        //Base64 has a 4:3 ratio
-        $avgLength = floor($length * $ratio * .75);
+        // Use mbstring if available
+        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+            $mb_length = mb_strlen($str, $this->CharSet);
+            // Each line must have length <= 75, including $start and $end
+            $length = 75 - strlen($start) - strlen($end);
+            // Average multi-byte ratio
+            $ratio = $mb_length / strlen($str);
+            // Base64 has a 4:3 ratio
+            $avgLength = floor($length * $ratio * .75);
 
-        $offset = 0;
-        for ($i = 0; $i < $mb_length; $i += $offset) {
-            $lookBack = 0;
-            do {
-                $offset = $avgLength - $lookBack;
-                $chunk = mb_substr($str, $i, $offset, $this->CharSet);
-                $chunk = base64_encode($chunk);
-                ++$lookBack;
-            } while (strlen($chunk) > $length);
-            $encoded .= $chunk . $linebreak;
+            $offset = 0;
+            for ($i = 0; $i < $mb_length; $i += $offset) {
+                $lookBack = 0;
+                do {
+                    $offset = $avgLength - $lookBack;
+                    $chunk = mb_substr($str, $i, $offset, $this->CharSet);
+                    $chunk = base64_encode($chunk);
+                    ++$lookBack;
+                } while (strlen($chunk) > $length);
+                $encoded .= $chunk . $linebreak;
+            }
+        } 
+        // Fallback to iconv if mbstring is not available
+        elseif (function_exists('iconv_strlen') && function_exists('iconv_substr')) {
+            $iconv_length = iconv_strlen($str, $this->CharSet);
+            $length = 75 - strlen($start) - strlen($end);
+            $ratio = $iconv_length / strlen($str);
+            $avgLength = floor($length * $ratio * .75);
+
+            $offset = 0;
+            for ($i = 0; $i < $iconv_length; $i += $offset) {
+                $lookBack = 0;
+                do {
+                    $offset = $avgLength - $lookBack;
+                    $chunk = iconv_substr($str, $i, $offset, $this->CharSet);
+                    $chunk = base64_encode($chunk);
+                    ++$lookBack;
+                } while (strlen($chunk) > $length);
+                $encoded .= $chunk . $linebreak;
+            }
+        }
+        // Fallback to basic implementation if neither mbstring nor iconv is available
+        else {
+            $encoded = chunk_split(base64_encode($str), 76, $linebreak);
+            $encoded = trim($encoded, $linebreak);
         }
 
-        //Chomp the last linefeed
-        return substr($encoded, 0, -strlen($linebreak));
+        return $encoded;
     }
 
     /**
