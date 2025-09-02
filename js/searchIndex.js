@@ -206,6 +206,11 @@ Search.appendIndex(
             "summary": "Parse\u0020and\u0020validate\u0020a\u0020string\u0020containing\u0020one\u0020or\u0020more\u0020RFC822\u002Dstyle\u0020comma\u002Dseparated\u0020email\u0020addresses\nof\u0020the\u0020form\u0020\u0022display\u0020name\u0020\u003Caddress\u003E\u0022\u0020into\u0020an\u0020array\u0020of\u0020name\/address\u0020pairs.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_parseAddresses"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AparseSimplerAddresses\u0028\u0029",
+            "name": "parseSimplerAddresses",
+            "summary": "Parse\u0020a\u0020string\u0020containing\u0020one\u0020or\u0020more\u0020RFC822\u002Dstyle\u0020comma\u002Dseparated\u0020email\u0020addresses\nwith\u0020the\u0020form\u0020\u0022display\u0020name\u0020\u003Caddress\u003E\u0022\u0020into\u0020an\u0020array\u0020of\u0020name\/address\u0020pairs.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_parseSimplerAddresses"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsetFrom\u0028\u0029",
             "name": "setFrom",
             "summary": "Set\u0020the\u0020From\u0020and\u0020FromName\u0020properties.",
