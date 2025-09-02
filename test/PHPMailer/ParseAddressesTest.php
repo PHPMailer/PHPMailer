@@ -14,6 +14,7 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use ReflectionMethod;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -28,36 +29,6 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
  */
 final class ParseAddressesTest extends TestCase
 {
-    /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
-     * with the Mbstring extension available.
-     *
-     * @requires extension mbstring
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingNative($addrstr, $expected, $charset = null)
-    {
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native+mbstring']) === false) {
-            $expectedOutput = $expected['native+mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
     /**
      * Test RFC822 address splitting using the IMAP implementation
      * with the Mbstring extension available.
@@ -84,38 +55,6 @@ final class ParseAddressesTest extends TestCase
             $expectedOutput = $expected['imap+mbstring'];
         } elseif (empty($expected['imap']) === false) {
             $expectedOutput = $expected['imap'];
-        }
-
-        $this->verifyExpectations($parsed, $expectedOutput);
-    }
-
-    /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
-     * without the Mbstring extension.
-     *
-     * @dataProvider dataAddressSplitting
-     *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplittingNativeNoMbstring($addrstr, $expected, $charset = null)
-    {
-        if (extension_loaded('mbstring')) {
-            self::markTestSkipped('Test requires MbString *not* to be available');
-        }
-
-        if (isset($charset)) {
-            $parsed = PHPMailer::parseAddresses($addrstr, false, $charset);
-        } else {
-            $parsed = PHPMailer::parseAddresses($addrstr, false);
-        }
-
-        $expectedOutput = $expected['default'];
-        if (empty($expected['native--mbstring']) === false) {
-            $expectedOutput = $expected['native--mbstring'];
-        } elseif (empty($expected['native']) === false) {
-            $expectedOutput = $expected['native'];
         }
 
         $this->verifyExpectations($parsed, $expectedOutput);
@@ -153,6 +92,52 @@ final class ParseAddressesTest extends TestCase
         }
 
         $this->verifyExpectations($parsed, $expectedOutput);
+    }
+
+    /**
+     * Test RFC822 address splitting using the native implementation
+     *
+     * @dataProvider dataAddressSplittingNative
+     *
+     * @param string $addrstr The address list string.
+     * @param array $expected The expected function output.
+     * @param string $charset Optional.The charset to use.
+     */
+    public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
+    {
+        error_reporting(E_ALL & ~E_USER_NOTICE);
+        $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+        $parsed = $reflMethod->invoke(null, $addrstr, $charset);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+        $this->verifyExpectations($parsed, $expected);
+    }
+
+    /**
+     * Data provider for testAddressSplittingNative.
+     *
+     * @return array
+     *      addrstr: string,
+     *      expected: array{name: string, address: string}[]
+     *      charset: string
+     */
+    public function dataAddressSplittingNative()
+    {
+        return [
+            'Valid address: single address without name' => [
+                'addrstr' => 'joe@example.com',
+                'expected' => [
+                    ['name' => '', 'address' => 'joe@example.com'],
+                ],
+            ],
+            'Valid address: two addresses with names' => [
+                'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                ],
+            ],
+        ];
     }
 
     /**
