@@ -206,6 +206,11 @@ final class ParseAddressesTest extends TestCase
                 'name' => '=?UTF-8?B?SGVsbG8g8J+MjSDkuJbnlYwgY2Fmw6k=?=',
                 'expected' => 'Hello 🌍 世界 café',
             ],
+            'Multiple lines' => [
+                'name'  => '=?UTF-8?B?0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg?='
+                . "\n =?UTF-8?B?0YLQtdGB0YIg0YLQtdGB0YI=?=",
+                'expected' => 'тест тест тест тест тест тест тест',
+            ],
         ];
     }
 }
