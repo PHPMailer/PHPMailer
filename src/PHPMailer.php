@@ -2961,10 +2961,6 @@ class PHPMailer
         //Create unique IDs and preset boundaries
         $this->setBoundaries();
 
-        if ($this->sign_key_file) {
-            $body .= $this->getMailMIME() . static::$LE;
-        }
-
         $this->setWordWrap();
 
         $bodyEncoding = $this->Encoding;
@@ -2996,6 +2992,12 @@ class PHPMailer
         if (static::ENCODING_BASE64 !== $altBodyEncoding && static::hasLineLongerThanMax($this->AltBody)) {
             $altBodyEncoding = static::ENCODING_QUOTED_PRINTABLE;
         }
+
+        if ($this->sign_key_file) {
+            $this->Encoding = $bodyEncoding;
+            $body .= $this->getMailMIME() . static::$LE;
+        }
+
         //Use this as a preamble in all multipart message types
         $mimepre = '';
         switch ($this->message_type) {
