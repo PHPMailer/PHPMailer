@@ -119,6 +119,7 @@ abstract class TestCase extends PolyfillTestCase
     private $PHPMailerStaticProps = [
         'LE'        => PHPMailer::CRLF,
         'validator' => 'php',
+        'language'  => [],
     ];
 
     /**
