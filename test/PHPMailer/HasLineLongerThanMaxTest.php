@@ -79,9 +79,9 @@ final class HasLineLongerThanMaxTest extends PreSendTestCase
         #$this->Mail->AltBody = $this->Mail->Body;
         $this->Mail->Encoding = '8bit';
         $this->Mail->sign(
-            __DIR__.'/../Fixtures/HasLineLongerThanMaxTest/cert.pem',
-            __DIR__.'/../Fixtures/HasLineLongerThanMaxTest/key.pem',
-            null,
+            __DIR__ . '/../Fixtures/HasLineLongerThanMaxTest/cert.pem',
+            __DIR__ . '/../Fixtures/HasLineLongerThanMaxTest/key.pem',
+            null
         );
         $this->Mail->preSend();
         $message = $this->Mail->getSentMIMEMessage();
