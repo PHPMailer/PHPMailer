@@ -58,7 +58,7 @@
         "psr/log": "For optional PSR-3 debug logging",
         "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication",
         "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
-        "ext-iconv": "To support UTF-8 if the mbstring PHP extension is not enabled"
+        "ext-imap": "Needed to support advanced email address parsing according to RFC822"
     },
     "autoload": {
         "psr-4": {

@@ -1276,31 +1276,61 @@ class PHPMailer
             }
         } else {
             //Use this simpler parser
-            $list = explode(',', $addrstr);
-            foreach ($list as $address) {
-                $address = trim($address);
-                //Is there a separate name part?
-                if (strpos($address, '<') === false) {
-                    //No separate name, just use the whole thing
-                    if (static::validateAddress($address)) {
-                        $addresses[] = [
-                            'name' => '',
-                            'address' => $address,
-                        ];
+            $addresses = self::parseSimplerAddresses($addrstr, $charset);
+        }
+
+        return $addresses;
+    }
+
+    /**
+     * Parse a string containing one or more RFC822-style comma-separated email addresses
+     * with the form "display name <address>" into an array of name/address pairs.
+     * Uses a simpler parser that does not require the IMAP extension but doesnt support
+     * the full RFC822 spec. For full RFC822 support, use the PHP IMAP extension.
+     *
+     * @param string $addrstr The address list string
+     * @param string $charset The charset to use when decoding the address list string.
+     *
+     * @return array
+     */
+    protected static function parseSimplerAddresses($addrstr, $charset)
+    {
+        // Emit a runtime notice to recommend using the IMAP extension for full RFC822 parsing
+        trigger_error(self::lang('imap_recommended'), E_USER_NOTICE);
+
+        $list = explode(',', $addrstr);
+        foreach ($list as $address) {
+            $address = trim($address);
+            //Is there a separate name part?
+            if (strpos($address, '<') === false) {
+                //No separate name, just use the whole thing
+                if (static::validateAddress($address)) {
+                    $addresses[] = [
+                        'name' => '',
+                        'address' => $address,
+                    ];
+                }
+            } else {
+                list($name, $email) = explode('<', $address);
+                $email = trim(str_replace('>', '', $email));
+                $name = trim($name);
+                if (static::validateAddress($email)) {
+                    //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
+                    //If this name is encoded, decode it
+                    if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/s', $name)) {
+                        $origCharset = mb_internal_encoding();
+                        mb_internal_encoding($charset);
+                        //Undo any RFC2047-encoded spaces-as-underscores
+                        $name = str_replace('_', '=20', $name);
+                        //Decode the name
+                        $name = mb_decode_mimeheader($name);
+                        mb_internal_encoding($origCharset);
                     }
-                } else {
-                    list($name, $email) = explode('<', $address);
-                    $email = trim(str_replace('>', '', $email));
-                    $name = trim($name);
-                    if (static::validateAddress($email)) {
-                        //Decode RFC2047-encoded words in the display name, even when mbstring is unavailable
-                        $name = static::decodeHeader($name, $charset);
-                        $addresses[] = [
-                            //Remove any surrounding quotes and spaces from the name
-                            'name' => trim($name, '\'" '),
-                            'address' => $email,
-                        ];
-                    }
+                    $addresses[] = [
+                        //Remove any surrounding quotes and spaces from the name
+                        'name' => trim($name, '\'" '),
+                        'address' => $email,
+                    ];
                 }
             }
         }
@@ -2420,6 +2450,8 @@ class PHPMailer
             'smtp_error' => 'SMTP server error: ',
             'variable_set' => 'Cannot set or reset variable: ',
             'no_smtputf8' => 'Server does not support SMTPUTF8 needed to send to Unicode addresses',
+            'imap_recommended' => 'Using simplified address parser is not recommended. ' .
+                'Install the PHP IMAP extension for full RFC822 parsing.',
         ];
         if (empty($lang_path)) {
             //Calculate an absolute path so it can work if CWD is not here

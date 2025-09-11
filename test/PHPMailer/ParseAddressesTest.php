@@ -14,6 +14,7 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use ReflectionMethod;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
@@ -58,6 +59,52 @@ final class ParseAddressesTest extends TestCase
         $parsed = PHPMailer::decodeHeader($str, PHPMailer::CHARSET_UTF8);
 
         $this->assertEquals($parsed, $expected);
+    }
+
+    /**
+     * Test RFC822 address splitting using the native implementation
+     *
+     * @dataProvider dataAddressSplittingNative
+     *
+     * @param string $addrstr The address list string.
+     * @param array $expected The expected function output.
+     * @param string $charset Optional.The charset to use.
+     */
+    public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
+    {
+        error_reporting(E_ALL & ~E_USER_NOTICE);
+        $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+        $parsed = $reflMethod->invoke(null, $addrstr, $charset);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+        $this->verifyExpectations($parsed, $expected);
+    }
+
+    /**
+     * Data provider for testAddressSplittingNative.
+     *
+     * @return array
+     *      addrstr: string,
+     *      expected: array{name: string, address: string}[]
+     *      charset: string
+     */
+    public function dataAddressSplittingNative()
+    {
+        return [
+            'Valid address: single address without name' => [
+                'addrstr' => 'joe@example.com',
+                'expected' => [
+                    ['name' => '', 'address' => 'joe@example.com'],
+                ],
+            ],
+            'Valid address: two addresses with names' => [
+                'addrstr'  => 'Joe User <joe@example.com>, Jill User <jill@example.net>',
+                'expected' => [
+                    ['name' => 'Joe User', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                ],
+            ],
+        ];
     }
 
     /**
