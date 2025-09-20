@@ -6,14 +6,16 @@ on:
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
-permissions:
-  contents: read # to fetch code (actions/checkout)
+permissions: {}
 
 jobs:
 
   coding-standard:
     runs-on: ubuntu-22.04
     name: Coding standards
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
 
     steps:
       - name: Check out code
@@ -56,6 +58,9 @@ jobs:
 
     name: "Lint: PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.experimental }}
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
 
     steps:
       - name: Checkout code
@@ -128,6 +133,9 @@ jobs:
     name: "Test: PHP ${{ matrix.php }} - ${{ matrix.extensions }}"
 
     continue-on-error: ${{ matrix.experimental }}
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
 
     steps:
       - name: Check out code
