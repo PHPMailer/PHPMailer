@@ -7,8 +7,7 @@ on:
   push:
     branches: [ "master" ]
 
-# Declare default permissions as read only.
-permissions: read-all
+permissions: {}
 
 jobs:
   analysis:
@@ -17,15 +16,12 @@ jobs:
 
     name: Scorecards analysis
     runs-on: ubuntu-latest
+
     permissions:
-      # Needed to upload the results to code-scanning dashboard.
+      # Required when publishing results (badge / API / code scanning)
       security-events: write
-      # Used to receive a badge. (Upcoming feature)
       id-token: write
-      # Needs for private repositories.
-      contents: read
-      actions: read
-    
+
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
