@@ -12,3 +12,9 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "GH Actions:"
+    groups:
+      action-runners:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
