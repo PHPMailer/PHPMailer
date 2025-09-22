@@ -3430,7 +3430,7 @@ class PHPMailer
     protected function attachAll($disposition_type, $boundary)
     {
         //Return text of body
-        $mime = [];
+        $mime = '';
         $cidUniq = [];
         $incl = [];
 
@@ -3463,17 +3463,17 @@ class PHPMailer
                 }
                 $cidUniq[$cid] = true;
 
-                $mime[] = sprintf('--%s%s', $boundary, static::$LE);
+                $mime .= sprintf('--%s%s', $boundary, static::$LE);
                 //Only include a filename property if we have one
                 if (!empty($name)) {
-                    $mime[] = sprintf(
+                    $mime .= sprintf(
                         'Content-Type: %s; name=%s%s',
                         $type,
                         static::quotedString($this->encodeHeader($this->secureHeader($name))),
                         static::$LE
                     );
                 } else {
-                    $mime[] = sprintf(
+                    $mime .= sprintf(
                         'Content-Type: %s%s',
                         $type,
                         static::$LE
@@ -3481,51 +3481,51 @@ class PHPMailer
                 }
                 //RFC1341 part 5 says 7bit is assumed if not specified
                 if (static::ENCODING_7BIT !== $encoding) {
-                    $mime[] = sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
+                    $mime .= sprintf('Content-Transfer-Encoding: %s%s', $encoding, static::$LE);
                 }
 
                 //Only set Content-IDs on inline attachments
                 if ((string) $cid !== '' && $disposition === 'inline') {
-                    $mime[] = 'Content-ID: <' . $this->encodeHeader($this->secureHeader($cid)) . '>' . static::$LE;
+                    $mime .= 'Content-ID: <' . $this->encodeHeader($this->secureHeader($cid)) . '>' . static::$LE;
                 }
 
                 //Allow for bypassing the Content-Disposition header
                 if (!empty($disposition)) {
                     $encoded_name = $this->encodeHeader($this->secureHeader($name));
                     if (!empty($encoded_name)) {
-                        $mime[] = sprintf(
+                        $mime .= sprintf(
                             'Content-Disposition: %s; filename=%s%s',
                             $disposition,
                             static::quotedString($encoded_name),
                             static::$LE . static::$LE
                         );
                     } else {
-                        $mime[] = sprintf(
+                        $mime .= sprintf(
                             'Content-Disposition: %s%s',
                             $disposition,
                             static::$LE . static::$LE
                         );
                     }
                 } else {
-                    $mime[] = static::$LE;
+                    $mime .= static::$LE;
                 }
 
                 //Encode as string attachment
                 if ($bString) {
-                    $mime[] = $this->encodeString($string, $encoding);
+                    $mime .= $this->encodeString($string, $encoding);
                 } else {
-                    $mime[] = $this->encodeFile($path, $encoding);
+                    $mime .= $this->encodeFile($path, $encoding);
                 }
                 if ($this->isError()) {
                     return '';
                 }
-                $mime[] = static::$LE;
+                $mime .= static::$LE;
             }
         }
 
-        $mime[] = sprintf('--%s--%s', $boundary, static::$LE);
+        $mime .= sprintf('--%s--%s', $boundary, static::$LE);
 
-        return implode('', $mime);
+        return $mime;
     }
 
     /**
