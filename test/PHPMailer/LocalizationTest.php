@@ -15,6 +15,7 @@ namespace PHPMailer\Test\PHPMailer;
 
 use ReflectionMethod;
 use PHPMailer\Test\TestCase;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Test localized error message functionality.
@@ -305,13 +306,6 @@ final class LocalizationTest extends TestCase
             'The "empty_message" translation is not as expected'
         );
 
-        self::assertArrayHasKey('encoding', $lang, 'The "encoding" translation key was not found');
-        self::assertSame(
-            'Unknown encoding: ',
-            $lang['encoding'],
-            'The "encoding" translation is not as expected'
-        );
-
         self::assertArrayHasKey('execute', $lang, 'The "execute" translation key was not found');
         self::assertSame(
             'Could not execute: ',
@@ -324,6 +318,37 @@ final class LocalizationTest extends TestCase
             'Double quoted but not interpolated $composer',
             $lang['signing'],
             'The "signing" translation is not as expected'
+        );
+    }
+
+    /**
+     * Test that arbitrary code in a language file does not get executed.
+     */
+    public function testSetLanguageDoesNotExecuteCodeWithBackticksInLangFile()
+    {
+        $result = $this->Mail->setLanguage(
+            'yz', // Unassigned lang code.
+            dirname(__DIR__) . '/Fixtures/LocalizationTest/'
+        );
+        $lang   = $this->Mail->getTranslations();
+
+        self::assertTrue($result, 'Setting the language failed. Translations set to: ' . var_export($lang, true));
+        self::assertIsArray($lang, 'Translations is not an array');
+
+        // Verify that the fixture file was loaded.
+        self::assertArrayHasKey('extension_missing', $lang, 'The "extension_missing" translation key was not found');
+        self::assertSame(
+            'Confirming that test fixture was loaded correctly (yz).',
+            $lang['extension_missing'],
+            'The "extension_missing" translation is not as expected'
+        );
+
+        // Verify that arbitrary code in a translation file does not get processed.
+        self::assertArrayHasKey('encoding', $lang, 'The "encoding" translation key was not found');
+        self::assertSame(
+            'Unknown encoding: ',
+            $lang['encoding'],
+            'The "encoding" translation is not as expected'
         );
     }
 
@@ -419,13 +444,13 @@ final class LocalizationTest extends TestCase
     public function testLang($input, $expected, $langCode = null)
     {
         if (isset($langCode)) {
-            $this->Mail->setLanguage($langCode);
+            PHPMailer::setLanguage($langCode);
         }
 
-        $reflMethod = new ReflectionMethod($this->Mail, 'lang');
-        $reflMethod->setAccessible(true);
-        $result = $reflMethod->invoke($this->Mail, $input);
-        $reflMethod->setAccessible(false);
+        $reflMethod = new ReflectionMethod(PHPMailer::class, 'lang');
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+        $result = $reflMethod->invoke(null, $input);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
 
         self::assertSame($expected, $result);
     }

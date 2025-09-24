@@ -12,6 +12,5 @@ echo $composer;
 
 $PHPMAILER_LANG['extension_missing'] = 'Confirming that test fixture was loaded correctly (yy).';
 $PHPMAILER_LANG['empty_message']     = $composer;
-$PHPMAILER_LANG['encoding']          = `ls -l`;
 $PHPMAILER_LANG['execute']           = exec('some harmful command');
 $PHPMAILER_LANG['signing']           = "Double quoted but not interpolated $composer";
