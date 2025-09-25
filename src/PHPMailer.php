@@ -1298,6 +1298,7 @@ class PHPMailer
         // Emit a runtime notice to recommend using the IMAP extension for full RFC822 parsing
         trigger_error(self::lang('imap_recommended'), E_USER_NOTICE);
 
+        $addresses = [];
         $list = explode(',', $addrstr);
         foreach ($list as $address) {
             $address = trim($address);
@@ -1311,21 +1312,10 @@ class PHPMailer
                     ];
                 }
             } else {
-                list($name, $email) = explode('<', $address);
-                $email = trim(str_replace('>', '', $email));
-                $name = trim($name);
+                $parsed = self::parseEmailString($address);
+                $email = $parsed['email'];
                 if (static::validateAddress($email)) {
-                    //Check for a Mbstring constant rather than using extension_loaded, which is sometimes disabled
-                    //If this name is encoded, decode it
-                    if (defined('MB_CASE_UPPER') && preg_match('/^=\?.*\?=$/s', $name)) {
-                        $origCharset = mb_internal_encoding();
-                        mb_internal_encoding($charset);
-                        //Undo any RFC2047-encoded spaces-as-underscores
-                        $name = str_replace('_', '=20', $name);
-                        //Decode the name
-                        $name = mb_decode_mimeheader($name);
-                        mb_internal_encoding($origCharset);
-                    }
+                    $name = static::decodeHeader($parsed['name'], $charset);
                     $addresses[] = [
                         //Remove any surrounding quotes and spaces from the name
                         'name' => trim($name, '\'" '),
@@ -1336,6 +1326,42 @@ class PHPMailer
         }
 
         return $addresses;
+    }
+
+    /**
+     * Parse a string containing an email address with an optional name
+     * and divide it into a name and email address.
+     *
+     * @param string $input The email with name.
+     *
+     * @return array{name: string, email: string}
+     */
+    private static function parseEmailString($input)
+    {
+        $input = trim((string)$input);
+
+        if ($input === '') {
+            return ['name' => '', 'email' => ''];
+        }
+
+        $pattern = '/^\s*(?:(?:"([^"]*)"|\'([^\']*)\'|([^<]*?))\s*)?<\s*([^>]+)\s*>\s*$/';
+        if (preg_match($pattern, $input, $matches)) {
+            $name = '';
+            // Double quotes including special scenarios.
+            if (isset($matches[1]) && $matches[1] !== '') {
+                $name = $matches[1];
+            // Single quotes including special scenarios.
+            } elseif (isset($matches[2]) && $matches[2] !== '') {
+                $name = $matches[2];
+            // Simplest scenario, name and email are in the format "Name <email>".
+            } elseif (isset($matches[3])) {
+                $name = trim($matches[3]);
+            }
+
+            return ['name' => $name, 'email' => trim($matches[4])];
+        }
+
+        return ['name' => '', 'email' => $input];
     }
 
     /**
@@ -3727,14 +3753,8 @@ class PHPMailer
             // Decode the header value
             $value = mb_decode_mimeheader($value);
             mb_internal_encoding($origCharset);
-        } elseif ($hasEncodedWord && function_exists('iconv_mime_decode')) {
-            // Use iconv as a fallback when mbstring is not available
-            $mode = defined('ICONV_MIME_DECODE_CONTINUE_ON_ERROR') ? ICONV_MIME_DECODE_CONTINUE_ON_ERROR : 0;
-            $decoded = @iconv_mime_decode($value, $mode, $charset);
-            if ($decoded !== false) {
-                $value = $decoded;
-            }
         }
+
         return $value;
     }
 

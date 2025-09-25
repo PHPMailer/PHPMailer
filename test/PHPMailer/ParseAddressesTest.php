@@ -19,52 +19,32 @@ use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Test RFC822 address splitting.
- *
- * @todo Additional tests need to be added to verify the correct handling of inputs which
- * include a different encoding than UTF8 or even mixed encoding. For more information
- * on what these test cases should look like and should test, please see
- * {@link https://github.com/PHPMailer/PHPMailer/pull/2449} for context.
- *
- * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
  */
 final class ParseAddressesTest extends TestCase
 {
     /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
+     * Verify the expectations.
      *
-     * @dataProvider dataAddressSplitting
+     * Abstracted out as the same verification needs to be done for every test, just with different data.
      *
-     * @param string $addrstr  The address list string.
-     * @param array  $expected The expected function output.
-     * @param string $charset  Optional. The charset to use.
-     */
-    public function testAddressSplitting($addrstr, $expected)
-    {
-        $parsed = PHPMailer::parseAddresses($addrstr, null, PHPMailer::CHARSET_UTF8);
-
-        $this->verifyExpectations($parsed, $expected);
-    }
-
-    /**
-     * Test decodeHeader using the PHPMailer
-     * with the Mbstring extension available.
-     *
-     * @dataProvider dataDecodeHeader
-     *
-     * @param string $addrstr  The header string.
+     * @param string $actual   The actual function output.
      * @param array  $expected The expected function output.
      */
-    public function testDecodeHeader($str, $expected)
+    protected function verifyExpectations($actual, $expected)
     {
-        $parsed = PHPMailer::decodeHeader($str, PHPMailer::CHARSET_UTF8);
-
-        $this->assertEquals($parsed, $expected);
+        self::assertIsArray($actual, 'parseAddresses() did not return an array');
+        self::assertSame(
+            $expected,
+            $actual,
+            'The return value from parseAddresses() did not match the expected output'
+        );
     }
 
     /**
      * Test RFC822 address splitting using the native implementation
      *
      * @dataProvider dataAddressSplittingNative
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseSimplerAddresses
      *
      * @param string $addrstr The address list string.
      * @param array $expected The expected function output.
@@ -72,6 +52,7 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
+        xdebug_break();
         error_reporting(E_ALL & ~E_USER_NOTICE);
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
         (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
@@ -107,22 +88,71 @@ final class ParseAddressesTest extends TestCase
         ];
     }
 
-    /**
-     * Verify the expectations.
+        /**
+     * Test if email addresses are parsed and split into a name and address.
      *
-     * Abstracted out as the same verification needs to be done for every test, just with different data.
-     *
-     * @param string $actual   The actual function output.
-     * @param array  $expected The expected function output.
+     * @dataProvider dataParseEmailString
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseEmailString
+     * @param mixed $addrstr
+     * @param mixed $expected
      */
-    protected function verifyExpectations($actual, $expected)
+    public function testParseEmailString($addrstr, $expected)
     {
-        self::assertIsArray($actual, 'parseAddresses() did not return an array');
-        self::assertSame(
-            $expected,
-            $actual,
-            'The return value from parseAddresses() did not match the expected output'
-        );
+        $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseEmailString');
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+        $parsed = $reflMethod->invoke(null, $addrstr);
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+        $this->assertEquals($parsed, $expected);
+    }
+
+    /**
+     * Data provider for testParseEmailString.
+     *
+     * @return array The array is expected to have an `addrstr` and an `expected` key.
+     */
+    public function dataParseEmailString()
+    {
+        return [
+            'Valid address: simple address' => [
+                'addrstr' => 'Joe User <joe@example.com>',
+                'expected' => ['name' => 'Joe User', 'email' => 'joe@example.com'],
+            ],
+            'Valid address: simple address with double quotes' => [
+                'addrstr' => '"Joe User" <joe@example.com>',
+                'expected' => ['name' => 'Joe User', 'email' => 'joe@example.com'],
+            ],
+            'Valid address: simple address with single quotes' => [
+                'addrstr' => '\'Joe User\' <joe@example.com>',
+                'expected' => ['name' => 'Joe User', 'email' => 'joe@example.com'],
+            ],
+            'Valid address: complex address with single quotes' => [
+                'addrstr' => '\'Joe<User\' <joe@example.com>',
+                'expected' => ['name' => 'Joe<User', 'email' => 'joe@example.com'],
+            ],
+            'Valid address: complex address with triangle bracket' => [
+                'addrstr' => '"test<stage" <test@example.com>',
+                'expected' => ['name' => 'test<stage', 'email' => 'test@example.com'],
+            ],
+        ];
+    }
+
+    /**
+     * Test RFC822 address splitting using the PHPMailer native implementation
+     *
+     * @dataProvider dataAddressSplitting
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
+     *
+     * @requires extension mbstring
+     *
+     * @param string $addrstr  The address list string.
+     * @param array  $expected The expected function output.
+     * @param string $charset  Optional. The charset to use.
+     */
+    public function testAddressSplitting($addrstr, $expected)
+    {
+        $parsed = PHPMailer::parseAddresses($addrstr, null, PHPMailer::CHARSET_UTF8);
+
+        $this->verifyExpectations($parsed, $expected);
     }
 
     /**
@@ -216,6 +246,25 @@ final class ParseAddressesTest extends TestCase
                 'expected' => [],
             ],
         ];
+    }
+
+    /**
+     * Test decodeHeader using the PHPMailer
+     * with the Mbstring extension available.
+     *
+     * @dataProvider dataDecodeHeader
+     * @covers \PHPMailer\PHPMailer\PHPMailer::decodeHeader
+     *
+     * @requires extension mbstring
+     *
+     * @param string $addrstr  The header string.
+     * @param array  $expected The expected function output.
+     */
+    public function testDecodeHeader($str, $expected)
+    {
+        $parsed = PHPMailer::decodeHeader($str, PHPMailer::CHARSET_UTF8);
+
+        $this->assertEquals($parsed, $expected);
     }
 
     /**
