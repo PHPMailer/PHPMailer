@@ -1246,7 +1246,7 @@ class PHPMailer
     public static function parseAddresses($addrstr, $deprecatedArg = null, $charset = self::CHARSET_ISO88591)
     {
         if ($deprecatedArg !== null) {
-            trigger_error("Argument \$deprecatedArg is deprecated", E_USER_DEPRECATED);
+            trigger_error(self::lang('deprecated_argument'), E_USER_DEPRECATED);
         }
         $addresses = [];
         if (function_exists('imap_rfc822_parse_adrlist')) {
@@ -2478,6 +2478,7 @@ class PHPMailer
             'no_smtputf8' => 'Server does not support SMTPUTF8 needed to send to Unicode addresses',
             'imap_recommended' => 'Using simplified address parser is not recommended. ' .
                 'Install the PHP IMAP extension for full RFC822 parsing.',
+            'deprecated_argument' => 'Argument $deprecatedArg is deprecated',
         ];
         if (empty($lang_path)) {
             //Calculate an absolute path so it can work if CWD is not here
