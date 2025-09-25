@@ -52,7 +52,6 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
-        xdebug_break();
         error_reporting(E_ALL & ~E_USER_NOTICE);
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
         (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
