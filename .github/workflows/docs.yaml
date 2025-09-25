@@ -14,13 +14,14 @@ jobs:
     if: github.repository == 'PHPMailer/PHPMailer'
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 1
+          persist-credentials: false
       - name: Build Docs
         uses: ./.github/actions/build-docs
       - name: Publish Docs to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4.7.3
         with:
           branch: gh-pages
           folder: docs

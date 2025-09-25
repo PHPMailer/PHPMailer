@@ -6,8 +6,7 @@ on:
   # Allow manually triggering the workflow.
   workflow_dispatch:
 
-permissions:
-  contents: read # to fetch code (actions/checkout)
+permissions: {}
 
 jobs:
 
@@ -15,12 +14,17 @@ jobs:
     runs-on: ubuntu-22.04
     name: Coding standards
 
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
         with:
           php-version: 'latest'
           coverage: none
@@ -29,7 +33,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v3"
+        uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -55,12 +59,17 @@ jobs:
     name: "Lint: PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.experimental }}
 
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Install PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
         with:
           php-version: ${{ matrix.php }}
           ini-values: error_reporting=-1, display_errors=On, display_startup_errors=On
@@ -70,7 +79,7 @@ jobs:
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v3"
+        uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -125,9 +134,14 @@ jobs:
 
     continue-on-error: ${{ matrix.experimental }}
 
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
         # About the "extensions":
         #
@@ -157,7 +171,7 @@ jobs:
           fi
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # 2.35.5
         with:
           php-version: ${{ matrix.php }}
           coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
@@ -168,7 +182,7 @@ jobs:
       # @link https://github.com/marketplace/actions/install-php-dependencies-with-composer
       - name: Install PHP packages - normal
         if: ${{ matrix.php != '8.5' }}
-        uses: "ramsey/composer-install@v3"
+        uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
         with:
           composer-options: ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
           # Bust the cache at least once a month - output format: YYYY-MM.
@@ -176,7 +190,7 @@ jobs:
 
       - name: Install PHP packages - ignore-platform-reqs
         if: ${{ matrix.php == '8.5' }}
-        uses: "ramsey/composer-install@v3"
+        uses: "ramsey/composer-install@3cf229dc2919194e9e36783941438d17239e8520" # 3.1.1
         with:
           composer-options: --ignore-platform-reqs ${{ steps.set_extensions.outputs.COMPOSER_OPTIONS }}
           # Bust the cache at least once a month - output format: YYYY-MM.
@@ -185,7 +199,7 @@ jobs:
       # Install postfix and automatically retry if the install failed, which happens reguarly.
       # @link https://github.com/marketplace/actions/retry-step
       - name: Install postfix
-        uses: nick-invision/retry@v3
+        uses: nick-invision/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         with:
           timeout_minutes: 2
           max_attempts: 3
@@ -214,7 +228,7 @@ jobs:
 
       - name: Send coverage report to Codecov
         if: ${{ success() && matrix.coverage == true }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
