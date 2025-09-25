@@ -1276,7 +1276,7 @@ class PHPMailer
             }
         } else {
             //Use this simpler parser
-            $addresses = self::parseSimplerAddresses($addrstr, $charset);
+            $addresses = static::parseSimplerAddresses($addrstr, $charset);
         }
 
         return $addresses;
@@ -1312,7 +1312,7 @@ class PHPMailer
                     ];
                 }
             } else {
-                $parsed = self::parseEmailString($address);
+                $parsed = static::parseEmailString($address);
                 $email = $parsed['email'];
                 if (static::validateAddress($email)) {
                     $name = static::decodeHeader($parsed['name'], $charset);
