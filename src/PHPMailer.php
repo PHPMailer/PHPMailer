@@ -1238,7 +1238,7 @@ class PHPMailer
      * @see https://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
      *
      * @param string      $addrstr       The address list string
-     * @param string|null $deprecatedArg Deprecated argument since 6.10.1.
+     * @param string|null $deprecatedArg Deprecated argument since 6.11.0.
      * @param string      $charset       The charset to use when decoding the address list string.
      *
      * @return array
