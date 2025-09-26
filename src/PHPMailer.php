@@ -3747,10 +3747,16 @@ class PHPMailer
         $hasEncodedWord = (bool) preg_match('/=\?.*\?=/s', $value);
         if ($hasEncodedWord && defined('MB_CASE_UPPER')) {
             $origCharset = mb_internal_encoding();
-            // Always decode to UTF-8 to provide a consistent, modern output encoding
+            // Always decode to UTF-8 to provide a consistent, modern output encoding.
             mb_internal_encoding($charset);
-            //Undo any RFC2047-encoded spaces-as-underscores
-            $value = str_replace('_', '=20', $value);
+            if (PHP_VERSION_ID < 80300) {
+                // Undo any RFC2047-encoded spaces-as-underscores.
+                $value = str_replace('_', '=20', $value);
+            } else {
+                // PHP 8.3+ already interprets underscores as spaces. Remove additional
+                // linear whitespace between adjacent encoded words to avoid double spacing.
+                $value = preg_replace('/(\?=)\s+(=\?)/', '$1$2', $value);
+            }
             // Decode the header value
             $value = mb_decode_mimeheader($value);
             mb_internal_encoding($origCharset);
