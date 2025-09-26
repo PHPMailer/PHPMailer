@@ -45,6 +45,7 @@ final class ParseAddressesTest extends TestCase
      *
      * @dataProvider dataAddressSplittingNative
      * @covers \PHPMailer\PHPMailer\PHPMailer::parseSimplerAddresses
+     * @expectedException PHPUnit\Framework\Error\UserNotice
      *
      * @param string $addrstr The address list string.
      * @param array $expected The expected function output.
@@ -52,7 +53,7 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
-        error_reporting(E_ALL & ~E_USER_NOTICE);
+        $this->expectError();
         $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
         (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
         $parsed = $reflMethod->invoke(null, $addrstr, $charset);
