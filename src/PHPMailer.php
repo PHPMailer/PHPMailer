@@ -1220,12 +1220,16 @@ class PHPMailer
 
                 return true;
             }
-        } elseif (!array_key_exists(strtolower($address), $this->ReplyTo)) {
-            $this->ReplyTo[strtolower($address)] = [$address, $name];
+        } else {
+            foreach ($this->ReplyTo as $replyTo) {
+                if (0 === strcasecmp($replyTo[0], $address)) {
+                    return false;
+                }
+            }
+            $this->ReplyTo[] = [$address, $name];
 
             return true;
         }
-
         return false;
     }
 
