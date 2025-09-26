@@ -45,7 +45,6 @@ final class ParseAddressesTest extends TestCase
      *
      * @dataProvider dataAddressSplittingNative
      * @covers \PHPMailer\PHPMailer\PHPMailer::parseSimplerAddresses
-     * @expectedException PHPUnit\Framework\Error\UserNotice
      *
      * @param string $addrstr The address list string.
      * @param array $expected The expected function output.
@@ -53,12 +52,21 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplittingNative($addrstr, $expected, $charset = PHPMailer::CHARSET_ISO88591)
     {
-        $this->expectError();
-        $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
-        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
-        $parsed = $reflMethod->invoke(null, $addrstr, $charset);
-        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
-        $this->verifyExpectations($parsed, $expected);
+        set_error_handler(static function ($errno, $errstr) {
+            throw new \Exception($errstr, $errno);
+        }, E_USER_NOTICE);
+
+        try {
+            $this->expectException(\Exception::class);
+
+            $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
+            (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+            $parsed = $reflMethod->invoke(null, $addrstr, $charset);
+            (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+            $this->verifyExpectations($parsed, $expected);
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**
@@ -88,7 +96,7 @@ final class ParseAddressesTest extends TestCase
         ];
     }
 
-        /**
+     /**
      * Test if email addresses are parsed and split into a name and address.
      *
      * @dataProvider dataParseEmailString
@@ -137,11 +145,12 @@ final class ParseAddressesTest extends TestCase
     }
 
     /**
-     * Test RFC822 address splitting using the PHPMailer native implementation
+     * Test RFC822 address splitting using the PHPMailer implementation
      *
      * @dataProvider dataAddressSplitting
      * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
      *
+     * @requires extension imap
      * @requires extension mbstring
      *
      * @param string $addrstr  The address list string.
