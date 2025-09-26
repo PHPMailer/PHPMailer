@@ -306,7 +306,6 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
     {
         $this->Mail->CharSet = PHPMailer::CHARSET_UTF8;
 
-        xdebug_break();
         self::assertTrue(
             $this->Mail->addReplyTo('test+replyto@françois.ch', 'UTF8 domain'),
             'Initial address + name not queued'
