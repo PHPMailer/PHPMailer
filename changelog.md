@@ -1,15 +1,20 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 6.11.0 (September 29th, 2025)
 * Add support for [RFC4954](https://www.rfc-editor.org/rfc/rfc4954#section-4) two-part authentication for large XOAUTH2 tokens.
 * Also support empty tokens.
 * Avoid bogus static analyser deprecation warnings in `setFrom`.
 * Make language loading entirely static, thanks to @SirLouen.
-* Emit warnings when `parseAddresses()` is used without IMAP extension.
+* Emit warnings when `parseAddresses()` is used without the IMAP extension.
+* Handle `mb_decode_mimeheader` changes from PHP 8.3+.
+* Deprecate the charset param to parseAddresses.
 * Fix PHP 8.5 linting issue.
 * Don't use `-t` switch when calling qmail.
 * Checking for interrupted system calls now works in languages other than English.
 * Add support for extracting gmail transaction IDs after sending.
+* For consistency, the protected `ReplyTo` property has been changed to match the format used for other address arrays.
+* Fix line length issues when using S/MIME signing.
+* Pin action runners to exact versions to avoid unexpected upstream changes.
 
 ## Version 6.10.0 (April 24th, 2025)
 * Add support for [RFC 6530 SMTPUTF8](https://www.rfc-editor.org/rfc/rfc6530), permitting use of UTF-8 Unicode characters everywhere, thanks to @arnt and ICANN. See `SMTPUTF8.md` for details.
