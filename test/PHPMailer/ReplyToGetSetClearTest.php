@@ -48,7 +48,6 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
         if (isset($expected) === false) {
             $expected = [
-                'key'     => $address,
                 'address' => $address,
                 'name'    => $name,
             ];
@@ -62,25 +61,19 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         self::assertIsArray($retrieved, 'ReplyTo property is not an array');
         self::assertCount(1, $retrieved, 'ReplyTo property does not contain exactly one address');
 
-        $key = $expected['key'];
-        self::assertArrayHasKey(
-            $key,
-            $retrieved,
-            'ReplyTo property does not contain an entry with this address as the key'
-        );
         self::assertCount(
             2,
-            $retrieved[$key],
+            $retrieved[0],
             'ReplyTo array for this address does not contain exactly two array items'
         );
         self::assertSame(
             $expected['address'],
-            $retrieved[$key][0],
+            $retrieved[0][0],
             'ReplyTo array for this address does not contain added address'
         );
         self::assertSame(
             $expected['name'],
-            $retrieved[$key][1],
+            $retrieved[0][1],
             'ReplyTo array for this address does not contain added name'
         );
     }
@@ -100,7 +93,6 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
                 'address' => " \tMiXeD@Example.Com  \r\n",
                 'name'    => null,
                 'expected' => [
-                    'key'     => 'mixed@example.com',
                     'address' => 'MiXeD@Example.Com',
                     'name'    => '',
                 ],
@@ -113,7 +105,6 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
                 'address'  => 'a@example.com',
                 'name'     => "\t\t  ReplyTo\r\nname  ",
                 'expected' => [
-                    'key'     => 'a@example.com',
                     'address' => 'a@example.com',
                     'name'    => 'ReplyToname',
                 ],
@@ -292,9 +283,11 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
 
         // Addresses with IDN are returned by get*Addresses() after preSend() call.
         $domain = $this->Mail->punyencodeAddress($domain);
+        $expected = array('test+replyto' . $domain, '');
+        $retrieved = $this->Mail->getReplyToAddresses();
         self::assertSame(
-            ['test+replyto' . $domain => ['test+replyto' . $domain, '']],
-            $this->Mail->getReplyToAddresses(),
+            $expected,
+            $retrieved[0],
             'Bad "reply-to" addresses'
         );
     }
@@ -377,24 +370,24 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
         self::assertCount(1, $retrieved, 'Stored addresses after preSend() is not 1');
 
         // Verify that the registered reply-to address is the initially added lowercase punycode one.
-        self::assertArrayHasKey(
+        self::assertSame(
             $expectedAddress,
-            $retrieved,
+            $retrieved[0][0],
             'ReplyTo property does not contain an entry with this address as the key'
         );
         self::assertCount(
             2,
-            $retrieved[$expectedAddress],
+            $retrieved[0],
             'ReplyTo array for this address does not contain exactly two array items'
         );
         self::assertSame(
             $expectedAddress,
-            $retrieved[$expectedAddress][0],
+            $retrieved[0][0],
             'ReplyTo array for this address does not contain added address'
         );
         self::assertSame(
             '',
-            $retrieved[$expectedAddress][1],
+            $retrieved[0][1],
             'ReplyTo array for this address does not contain added name'
         );
     }
