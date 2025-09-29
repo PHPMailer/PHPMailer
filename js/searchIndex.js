@@ -211,6 +211,11 @@ Search.appendIndex(
             "summary": "Parse\u0020a\u0020string\u0020containing\u0020one\u0020or\u0020more\u0020RFC822\u002Dstyle\u0020comma\u002Dseparated\u0020email\u0020addresses\nwith\u0020the\u0020form\u0020\u0022display\u0020name\u0020\u003Caddress\u003E\u0022\u0020into\u0020an\u0020array\u0020of\u0020name\/address\u0020pairs.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_parseSimplerAddresses"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AparseEmailString\u0028\u0029",
+            "name": "parseEmailString",
+            "summary": "Parse\u0020a\u0020string\u0020containing\u0020an\u0020email\u0020address\u0020with\u0020an\u0020optional\u0020name\nand\u0020divide\u0020it\u0020into\u0020a\u0020name\u0020and\u0020email\u0020address.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_parseEmailString"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsetFrom\u0028\u0029",
             "name": "setFrom",
             "summary": "Set\u0020the\u0020From\u0020and\u0020FromName\u0020properties.",
@@ -430,6 +435,11 @@ Search.appendIndex(
             "name": "encodeHeader",
             "summary": "Encode\u0020a\u0020header\u0020value\u0020\u0028not\u0020including\u0020its\u0020label\u0029\u0020optimally.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_encodeHeader"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AdecodeHeader\u0028\u0029",
+            "name": "decodeHeader",
+            "summary": "Decode\u0020an\u0020RFC2047\u002Dencoded\u0020header\u0020value\nAttempts\u0020multiple\u0020strategies\u0020so\u0020it\u0020works\u0020even\u0020when\u0020the\u0020mbstring\u0020extension\u0020is\u0020disabled.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_decodeHeader"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AhasMultiBytes\u0028\u0029",
             "name": "hasMultiBytes",
