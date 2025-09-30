@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## Version 6.11.1 (September 30th, 2025)
+* Avoid function signature problems with the deprecation of `$useimap` in `parseAddresses`.
+
 ## Version 6.11.0 (September 29th, 2025)
 * Add support for [RFC4954](https://www.rfc-editor.org/rfc/rfc4954#section-4) two-part authentication for large XOAUTH2 tokens.
 * Also support empty tokens.
