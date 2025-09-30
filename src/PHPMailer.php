@@ -1252,7 +1252,7 @@ class PHPMailer
     public static function parseAddresses($addrstr, $useimap = null, $charset = self::CHARSET_ISO88591)
     {
         if ($useimap !== null) {
-            trigger_error(self::lang('deprecated_argument'), E_USER_DEPRECATED);
+            trigger_error(self::lang('deprecated_argument_useimap'), E_USER_DEPRECATED);
         }
         $addresses = [];
         if (function_exists('imap_rfc822_parse_adrlist')) {
