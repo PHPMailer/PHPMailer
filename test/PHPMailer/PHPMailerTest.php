@@ -618,6 +618,9 @@ EOT;
      */
     public function testEmbeddedImageCustomCidDomain()
     {
+        $result = $this->Mail->setFrom('overruled@example.com');
+        self::assertTrue($result, 'setFrom failed');
+        
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -627,7 +630,7 @@ EOT;
   <body>
     <p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
   </body>
-</html>', '', false, '@example.com');
+</html>', '', false);
         $this->Mail->preSend();
         self::assertStringContainsString(
             'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@example.com>',
