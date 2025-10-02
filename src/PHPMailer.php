@@ -4397,7 +4397,7 @@ class PHPMailer
         $cid_domain = '@phpmailer.0';
         if (filter_var($this->From, FILTER_VALIDATE_EMAIL)) {
             //prepend with a character to create valid RFC822 string in order to validate
-            $cid_domain = substr( $this->From, strpos( $this->From, '@') + 1);
+            $cid_domain = substr( $this->From, strrpos( $this->From, '@') + 1);
         }
 
         preg_match_all('/(?<!-)(src|background)=["\'](.*)["\']/Ui', $message, $images);
