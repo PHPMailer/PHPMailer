@@ -618,7 +618,7 @@ EOT;
      */
     public function testEmbeddedImageCustomCidDomain()
     {
-        $result = $this->Mail->setFrom('overruled@example.com');
+        $result = $this->Mail->setFrom('test@example.com');
         self::assertTrue($result, 'setFrom failed');
         
         $this->Mail->msgHTML('<!DOCTYPE html>
