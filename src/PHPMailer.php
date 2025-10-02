@@ -4596,27 +4596,18 @@ class PHPMailer
      * @param string        $basedir    Absolute path to a base directory to prepend to relative paths to images
      * @param bool|callable $advanced   Whether to use the internal HTML to text converter
      *                                  or your own custom converter
-     * @param string        $cid_domain Domain part used in generated Content-ID.
-     *                                  If empty, a fallback value will be used.
-     *                                  You can set your own, but it must be in the format "@host.domain",
-     *                                  as defined in RFC2392 section 2, or it will be ignored.
-     *                                  {@see https://datatracker.ietf.org/doc/html/rfc2392#section-2}
      * @return string The transformed message body
      *
      * @throws Exception
      *
      * @see PHPMailer::html2text()
      */
-    public function msgHTML($message, $basedir = '', $advanced = false, $cid_domain = '')
+    public function msgHTML($message, $basedir = '', $advanced = false)
     {
-        $cid_domain_valid = false;
-        if ($cid_domain !== '' && strpos($cid_domain, '@') === 0) {
+        $cid_domain = '@phpmailer.0';
+        if (filter_var($this->From, FILTER_VALIDATE_EMAIL)) {
             //prepend with a character to create valid RFC822 string in order to validate
-            $cid_domain_valid = filter_var('a'.$cid_domain, FILTER_VALIDATE_EMAIL);
-        }
-
-        if (!$cid_domain_valid) {
-            $cid_domain = '@phpmailer.0';
+            $cid_domain = substr( $this->From, strpos( $this->From, '@') + 1);
         }
 
         preg_match_all('/(?<!-)(src|background)=["\'](.*)["\']/Ui', $message, $images);
