@@ -4592,10 +4592,10 @@ class PHPMailer
      * Converts data-uri images into embedded attachments.
      * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
      *
-     * @param string        $message  HTML message string
-     * @param string        $basedir  Absolute path to a base directory to prepend to relative paths to images
-     * @param bool|callable $advanced Whether to use the internal HTML to text converter
-     *                                or your own custom converter
+     * @param string        $message    HTML message string
+     * @param string        $basedir    Absolute path to a base directory to prepend to relative paths to images
+     * @param bool|callable $advanced   Whether to use the internal HTML to text converter
+     *                                  or your own custom converter
      * @return string The transformed message body
      *
      * @throws Exception
@@ -4604,6 +4604,12 @@ class PHPMailer
      */
     public function msgHTML($message, $basedir = '', $advanced = false)
     {
+        $cid_domain = 'phpmailer.0';
+        if (filter_var($this->From, FILTER_VALIDATE_EMAIL)) {
+            //prepend with a character to create valid RFC822 string in order to validate
+            $cid_domain = substr($this->From, strrpos($this->From, '@') + 1);
+        }
+
         preg_match_all('/(?<!-)(src|background)=["\'](.*)["\']/Ui', $message, $images);
         if (array_key_exists(2, $images)) {
             if (strlen($basedir) > 1 && '/' !== substr($basedir, -1)) {
@@ -4625,7 +4631,7 @@ class PHPMailer
                     }
                     //Hash the decoded data, not the URL, so that the same data-URI image used in multiple places
                     //will only be embedded once, even if it used a different encoding
-                    $cid = substr(hash('sha256', $data), 0, 32) . '@phpmailer.0'; //RFC2392 S 2
+                    $cid = substr(hash('sha256', $data), 0, 32) . '@' . $cid_domain; //RFC2392 S 2
 
                     if (!$this->cidExists($cid)) {
                         $this->addStringEmbeddedImage(
@@ -4659,7 +4665,7 @@ class PHPMailer
                         $directory = '';
                     }
                     //RFC2392 S 2
-                    $cid = substr(hash('sha256', $url), 0, 32) . '@phpmailer.0';
+                    $cid = substr(hash('sha256', $url), 0, 32) . '@' . $cid_domain;
                     if (strlen($basedir) > 1 && '/' !== substr($basedir, -1)) {
                         $basedir .= '/';
                     }

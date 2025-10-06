@@ -597,6 +597,7 @@ EOT;
      */
     public function testEmbeddedImage()
     {
+        $this->Mail->From = '';
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -610,6 +611,32 @@ EOT;
         $this->Mail->preSend();
         self::assertStringContainsString(
             'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@phpmailer.0>',
+            $this->Mail->getSentMIMEMessage(),
+            'Embedded image header encoding incorrect.'
+        );
+    }
+
+    /**
+     * An embedded attachment test with custom cid domain.
+     */
+    public function testEmbeddedImageCustomCidDomain()
+    {
+        $result = $this->Mail->setFrom('test@example.com');
+        self::assertTrue($result, 'setFrom failed');
+
+        $this->Mail->msgHTML('<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>E-Mail Inline Image Test</title>
+  </head>
+  <body>
+    <p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+  </body>
+</html>', '', false);
+        $this->Mail->preSend();
+        self::assertStringContainsString(
+            'Content-ID: <bb229a48bee31f5d54ca12dc9bd960c6@example.com>',
             $this->Mail->getSentMIMEMessage(),
             'Embedded image header encoding incorrect.'
         );
