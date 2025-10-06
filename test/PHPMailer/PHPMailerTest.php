@@ -620,7 +620,7 @@ EOT;
     {
         $result = $this->Mail->setFrom('test@example.com');
         self::assertTrue($result, 'setFrom failed');
-        
+
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
   <head>
