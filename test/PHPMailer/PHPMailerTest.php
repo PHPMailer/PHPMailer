@@ -597,6 +597,7 @@ EOT;
      */
     public function testEmbeddedImage()
     {
+        $this->Mail->From = '';
         $this->Mail->msgHTML('<!DOCTYPE html>
 <html lang="en">
   <head>
