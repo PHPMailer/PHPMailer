@@ -1,0 +1,5 @@
+/phpmailer/
+   ├── src/
+   │   ├── PHPMailer.php
+   │   ├── SMTP.php
+   │   └── Exception.php
