@@ -1,5 +1,37 @@
 # PHPMailer Change Log
 
+## Version 7.0.0 (October 15th, 2025)
+
+This is exactly the same as 6.11.1 but bumps the major version number to indicate the presence of a BC break in child
+classes. Specifically, `lang()`, `setLanguage()`, and `$language` are now static, and should be called statically.
+
+## Version 6.12.0 (October 15th, 2025)
+This is exactly the same as 6.10.0, reverting all the changes in 6.11.0 and 6.11.1, which inadvertently introduced a BC break affecting child classes. 6.11.1 has been re-released as 7.0.0.
+
+> [!IMPORTANT]
+> If you have code that depends on the changes that were in 6.11.0 and 6.11.1, please upgrade to 7.0.0 instead.
+
+## Version 6.11.1 (September 30th, 2025)
+* Avoid function signature problems with the deprecation of `$useimap` in `parseAddresses`.
+
+## Version 6.11.0 (September 29th, 2025)
+
+* Add support for [RFC4954](https://www.rfc-editor.org/rfc/rfc4954#section-4) two-part authentication for large XOAUTH2
+  tokens.
+* Also support empty tokens.
+* Avoid bogus static analyser deprecation warnings in `setFrom`.
+* Make language loading entirely static, thanks to @SirLouen.
+* Emit warnings when `parseAddresses()` is used without the IMAP extension.
+* Handle `mb_decode_mimeheader` changes from PHP 8.3+.
+* Deprecate the charset param to parseAddresses.
+* Fix PHP 8.5 linting issue.
+* Don't use `-t` switch when calling qmail.
+* Checking for interrupted system calls now works in languages other than English.
+* Add support for extracting gmail transaction IDs after sending.
+* For consistency, the protected `ReplyTo` property has been changed to match the format used for other address arrays.
+* Fix line length issues when using S/MIME signing.
+* Pin action runners to exact versions to avoid unexpected upstream changes.
+
 ## Version 6.10.0 (April 24th, 2025)
 * Add support for [RFC 6530 SMTPUTF8](https://www.rfc-editor.org/rfc/rfc6530), permitting use of UTF-8 Unicode characters everywhere, thanks to @arnt and ICANN. See `SMTPUTF8.md` for details.
 * More reliable checking for multibyte support.
