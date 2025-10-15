@@ -31,4 +31,3 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'Nie udało się nawiązać połączen
 $PHPMAILER_LANG['smtp_detail']          = 'Szczegóły błędu: ';
 $PHPMAILER_LANG['smtp_error']           = 'Błąd serwera SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'Nie można ustawić lub zmodyfikować zmiennej: ';
-
