@@ -3,6 +3,12 @@
 ## WIP
 * Use From domain when generating CIDs in msgHTML
 
+## Version 7.0.0 (October 15th, 2025)
+This is exactly the same as 6.11.1 but bumps the major version number to indicate the presence of a BC break in child classes. Specifically, `lang()`, `setLanguage()`, and `$language` are now static, and should be called statically.
+
+## Version 6.12.0 (October 15th, 2025)
+This is exactly the same as 6.10.0, reverting all the changes in 6.11.0 and 6.11.1, which inadvertently introduced a BC break affecting child classes. 6.11.1 has been re-released as 7.0.0.
+
 ## Version 6.11.1 (September 30th, 2025)
 * Avoid function signature problems with the deprecation of `$useimap` in `parseAddresses`.
 
