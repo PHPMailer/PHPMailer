@@ -633,7 +633,13 @@ class SMTP
                 if (null === $OAuth) {
                     return false;
                 }
-                $oauth = $OAuth->getOauth64();
+                try {
+                    $oauth = $OAuth->getOauth64();
+                } catch (\Exception $e) {
+                    // We catch all exceptions and convert them to PHPMailer exceptions to be able to
+                    // handle them correctly later
+                    throw new Exception("SMTP authentication error", 0, $e);
+                }
                 /*
                  * An SMTP command line can have a maximum length of 512 bytes, including the command name,
                  * so the base64-encoded OAUTH token has a maximum length of:
