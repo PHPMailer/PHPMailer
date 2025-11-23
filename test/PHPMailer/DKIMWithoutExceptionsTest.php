@@ -13,7 +13,6 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\TestCase;
 
 /**
