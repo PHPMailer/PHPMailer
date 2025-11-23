@@ -876,6 +876,7 @@ class PHPMailer
     private function mailPassthru($to, $subject, $body, $header, $params)
     {
         //Check overloading of mail function to avoid double-encoding
+        // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecatedRemoved
         if ((int)ini_get('mbstring.func_overload') & 1) {
             $subject = $this->secureHeader($subject);
         } else {
@@ -1585,9 +1586,11 @@ class PHPMailer
                     );
                 } elseif (defined('INTL_IDNA_VARIANT_2003')) {
                     //Fall back to this old, deprecated/removed encoding
+                    // phpcs:ignore PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003DeprecatedRemoved
                     $punycode = idn_to_ascii($domain, $errorcode, \INTL_IDNA_VARIANT_2003);
                 } else {
                     //Fall back to a default we don't know about
+                    // phpcs:ignore PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet
                     $punycode = idn_to_ascii($domain, $errorcode);
                 }
                 if (false !== $punycode) {
@@ -2958,6 +2961,7 @@ class PHPMailer
         $bytes = '';
         if (function_exists('random_bytes')) {
             try {
+                // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.random_bytesFound -- Wrapped in function_exists.
                 $bytes = random_bytes($len);
             } catch (\Exception $e) {
                 //Do nothing
