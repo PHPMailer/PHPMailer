@@ -1258,8 +1258,10 @@ class PHPMailer
         $addresses = [];
         if (function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
+            // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.imap_rfc822_parse_adrlistRemoved -- wrapped in function_exists()
             $list = imap_rfc822_parse_adrlist($addrstr, '');
             // Clear any potential IMAP errors to get rid of notices being thrown at end of script.
+            // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.imap_errorsRemoved -- wrapped in function_exists()
             imap_errors();
             foreach ($list as $address) {
                 if (
@@ -5117,12 +5119,14 @@ class PHPMailer
         }
         if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
             if (\PHP_MAJOR_VERSION < 8) {
+                // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.openssl_pkey_freeDeprecated
                 openssl_pkey_free($privKey);
             }
 
             return base64_encode($signature);
         }
         if (\PHP_MAJOR_VERSION < 8) {
+            // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.openssl_pkey_freeDeprecated
             openssl_pkey_free($privKey);
         }
 

@@ -8,6 +8,8 @@
  * Note: this test fixture uses a syntax (backticks) which has been deprecated in PHP 8.5 and
  * is slated for removal in PHP 9.0.
  * For that reason, the file is excluded from the linting check on PHP 8.5 and above.
+ *
+ * @phpcs:disable PHPCompatibility.LanguageConstructs.RemovedLanguageConstructs.t_backtickDeprecated
  */
 
 $PHPMAILER_LANG['extension_missing'] = 'Confirming that test fixture was loaded correctly (yz).';
