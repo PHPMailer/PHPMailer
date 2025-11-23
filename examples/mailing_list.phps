@@ -8,7 +8,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-error_reporting(E_STRICT | E_ALL);
+error_reporting(E_ALL);
 
 date_default_timezone_set('Etc/UTC');
 
