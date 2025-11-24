@@ -83,15 +83,14 @@ if (!$mail->send()) {
     echo 'Message sent!';
     //Section 2: IMAP
     //Uncomment these to save your message in the 'Sent Mail' folder.
-    #if (save_mail($mail->getSentMIMEMessage())) {
-    #    echo "Message saved!";
-    #}
+    #save_mail($mail->getSentMIMEMessage());
 }
 
 //Section 2: IMAP
 //This example uses the directorytree/imapengine IMAP library: https://imapengine.com
 //Earlier versions of this code used the deprecated PHP imap_* functions.
-function save_mail($message) {
+function save_mail($message)
+{
     $mailbox = new \DirectoryTree\ImapEngine\Mailbox([
         'host' => 'imap.gmail.com',
         'port' => 993,
@@ -104,5 +103,4 @@ function save_mail($message) {
     $folder = $mailbox->folders()->find('Sent Mail');
 
     $folder->messages()->append($message);
-    return true;
 }
