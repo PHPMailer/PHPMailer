@@ -45,6 +45,7 @@ class POP3
      * The POP3 PHPMailer Version number.
      *
      * @var string
+     * @deprecated This constant will be removed in PHPMailer 8.0. Use `PHPMailer::VERSION` instead.
      */
     const VERSION = '7.0.0';
 

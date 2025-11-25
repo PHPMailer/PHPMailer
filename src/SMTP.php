@@ -34,6 +34,7 @@ class SMTP
      * The PHPMailer SMTP version number.
      *
      * @var string
+     * @deprecated This constant will be removed in PHPMailer 8.0. Use `PHPMailer::VERSION` instead.
      */
     const VERSION = '7.0.0';
 
