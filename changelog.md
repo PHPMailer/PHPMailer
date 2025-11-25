@@ -1,7 +1,15 @@
 # PHPMailer Change Log
 
 ## WIP
-* Use From domain when generating CIDs in msgHTML
+* Use From domain when generating CIDs in msgHTML.
+* Update to PHPCompatibility 10, resolve numerous PHPCS issues in PHP 8.5.
+* Revise GitHub actions for PHP 8.5 and experimental 8.6 tests.
+* Switch gmail example from the deprecated IMAP extension to use `directorytree/imapengine` for IMAP uploads.
+* Set `htmlspecialchars()` flags explicitly and consistently.
+* Convert XOAUTH2 token exceptions into PHPMailer Exceptions. The original exception is available as an inner exception.
+* Deprecate VERSION constants in POP3 and SMTP classes.
+* Remove dependency on `roave/security-advisories`; it's now built into composer 2.9.
+* Update Dutch, Esperanto, and Norwegian translations.
 
 ## Version 7.0.0 (October 15th, 2025)
 This is exactly the same as 6.11.1 but bumps the major version number to indicate the presence of a BC break in child classes. Specifically, `lang()`, `setLanguage()`, and `$language` are now static, and should be called statically.
