@@ -54,7 +54,7 @@ if (array_key_exists('userfile', $_FILES)) {
         <input type="submit" value="Send File">
     </form>
 <?php } else {
-    echo htmlspecialchars($msg);
+    echo htmlspecialchars($msg, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401);
 } ?>
 </body>
 </html>

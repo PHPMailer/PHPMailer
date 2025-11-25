@@ -27,14 +27,7 @@
         <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
         <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
     </rule>
-    <rule ref="PHPCompatibility">
-        <exclude name="PHPCompatibility.Constants.NewConstants.stream_crypto_method_tlsv1_1_clientFound"/>
-        <exclude name="PHPCompatibility.Constants.NewConstants.stream_crypto_method_tlsv1_2_clientFound"/>
-        <exclude name="PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003Deprecated"/>
-        <exclude name="PHPCompatibility.FunctionUse.NewFunctions.random_bytesFound"/>
-        <exclude name="PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated"/>
-        <exclude name="PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet"/>
-    </rule>
+    <rule ref="PHPCompatibility"/>
 
 
     <!--

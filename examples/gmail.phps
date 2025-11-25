@@ -83,26 +83,24 @@ if (!$mail->send()) {
     echo 'Message sent!';
     //Section 2: IMAP
     //Uncomment these to save your message in the 'Sent Mail' folder.
-    #if (save_mail($mail)) {
-    #    echo "Message saved!";
-    #}
+    #save_mail($mail->getSentMIMEMessage());
 }
 
 //Section 2: IMAP
-//IMAP commands requires the PHP IMAP Extension, found at: https://php.net/manual/en/imap.setup.php
-//Function to call which uses the PHP imap_*() functions to save messages: https://php.net/manual/en/book.imap.php
-//You can use imap_getmailboxes($imapStream, '/imap/ssl', '*' ) to get a list of available folders or labels, this can
-//be useful if you are trying to get this working on a non-Gmail IMAP server.
-function save_mail($mail)
+//This example uses the directorytree/imapengine IMAP library: https://imapengine.com
+//Earlier versions of this code used the deprecated PHP imap_* functions.
+function save_mail($message)
 {
-    //You can change 'Sent Mail' to any other folder or tag
-    $path = '{imap.gmail.com:993/imap/ssl}[Gmail]/Sent Mail';
+    $mailbox = new \DirectoryTree\ImapEngine\Mailbox([
+        'host' => 'imap.gmail.com',
+        'port' => 993,
+        'encryption' => 'ssl',
+        'username' => 'user@example.com',
+        'password' => 'password',
+    ]);
 
-    //Tell your server to open an IMAP connection using the same username and password as you used for SMTP
-    $imapStream = imap_open($path, $mail->Username, $mail->Password);
+    // Find the "sent" messages folder – yours may have a different name.
+    $folder = $mailbox->folders()->find('Sent Mail');
 
-    $result = imap_append($imapStream, $path, $mail->getSentMIMEMessage());
-    imap_close($imapStream);
-
-    return $result;
+    $folder->messages()->append($message);
 }
