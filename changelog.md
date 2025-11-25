@@ -1,6 +1,6 @@
 # PHPMailer Change Log
 
-## WIP
+## Version 7.0.1 (November 25th, 2025)
 * Use From domain when generating CIDs in msgHTML.
 * Update to PHPCompatibility 10, resolve numerous PHPCS issues in PHP 8.5.
 * Revise GitHub actions for PHP 8.5 and experimental 8.6 tests.
