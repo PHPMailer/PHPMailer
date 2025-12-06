@@ -117,6 +117,14 @@ final class MailTransportTest extends SendTestCase
         self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
     }
 
+    /**
+     * Test sending using PHP mail() function with Sender address
+     * and explicit sendmail_from ini set.
+     * Test running required with:
+     * php -d sendmail_path="/usr/sbin/sendmail -t -i -frpath@example.com" ./vendor/bin/phpunit
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::isMail
+     */
     public function testMailSendWithSendmailParams()
     {
         if (strpos(ini_get('sendmail_path'), 'rpath@example.com') === false) {
