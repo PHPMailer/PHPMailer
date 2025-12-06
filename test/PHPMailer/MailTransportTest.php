@@ -20,6 +20,23 @@ use PHPMailer\Test\SendTestCase;
  */
 final class MailTransportTest extends SendTestCase
 {
+    /** @var string */
+    private $originalSendmailFrom = '';
+
+    protected function set_up()
+    {
+        parent::set_up();
+
+        $from = ini_get('sendmail_from');
+        $this->originalSendmailFrom = $from === false ? '' : $from;
+    }
+
+    protected function tear_down()
+    {
+        ini_set('sendmail_from', $this->originalSendmailFrom);
+        parent::tear_down();
+    }
+
     /**
      * Test sending using SendMail.
      *
@@ -104,5 +121,26 @@ final class MailTransportTest extends SendTestCase
 
         $msg = $this->Mail->getSentMIMEMessage();
         self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+    }
+
+    public function testMailSendWithSendmailParams()
+    {
+        if (strpos(ini_get('sendmail_path'), 'rpath@example.com') === false) {
+            self::markTestSkipped('Custom Sendmail php.ini not available');
+        }
+
+        $this->Mail->Body = 'Sending via mail()';
+        $this->buildBody();
+        $this->Mail->Subject = $this->Mail->Subject . ': mail()';
+        $this->Mail->clearAddresses();
+        $this->setAddress('testmailsend@example.com', 'totest');
+
+        $sender = 'rpath@example.org';
+
+        ini_set('sendmail_from', $sender);
+        $this->Mail->createHeader();
+        $this->Mail->isMail();
+
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
 }
