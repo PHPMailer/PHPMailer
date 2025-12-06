@@ -82,12 +82,6 @@ final class MailTransportTest extends SendTestCase
      */
     public function testMailSend()
     {
-        $sendmail = ini_get('sendmail_path');
-        // No path in sendmail_path.
-        if (strpos($sendmail, '/') === false) {
-            ini_set('sendmail_path', '/usr/sbin/sendmail -t -i ');
-        }
-
         $this->Mail->Body = 'Sending via mail()';
         $this->buildBody();
         $this->Mail->Subject = $this->Mail->Subject . ': mail()';
