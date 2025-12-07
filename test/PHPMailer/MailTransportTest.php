@@ -190,21 +190,23 @@ final class MailTransportTest extends SendTestCase
     {
         $mailer = $this->Mail;
 
-        $command = \Closure::bind(
+        $parseSendmailPath = \Closure::bind(
             function ($path) {
                 return $this->{'parseSendmailPath'}($path);
             },
             $mailer,
             \PHPMailer\PHPMailer\PHPMailer::class
-        )($sendmailPath);
+        );
+        $command = $parseSendmailPath($sendmailPath);
 
-        $params = \Closure::bind(
+        $getSendmailParams = \Closure::bind(
             function () {
                 return $this->{'SendmailParams'};
             },
             $mailer,
             \PHPMailer\PHPMailer\PHPMailer::class
-        )();
+        );
+        $params = $getSendmailParams();
 
         self::assertSame($expectedCommand, $command);
         self::assertSame($expectedParams, $params);
