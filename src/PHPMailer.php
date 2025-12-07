@@ -2063,7 +2063,7 @@ class PHPMailer
         }
         if (!empty($this->Sender) && static::validateAddress($this->Sender)) {
             $phpmailer_path = ini_get('sendmail_path');
-            if (self::isShellSafe($this->Sender) && strpos($phpmailer_path, '-f') !== false) {
+            if (self::isShellSafe($this->Sender) && strpos($phpmailer_path, '-f') === false) {
                 $params = sprintf('-f%s', $this->Sender);
             }
             $old_from = ini_get('sendmail_from');
