@@ -121,13 +121,13 @@ final class MailTransportTest extends SendTestCase
      * Test sending using PHP mail() function with Sender address
      * and explicit sendmail_from ini set.
      * Test running required with:
-     * php -d sendmail_path="/usr/sbin/sendmail -t -i -frpath@example.com" ./vendor/bin/phpunit
+     * php -d sendmail_path="/usr/sbin/sendmail -t -i -frpath@example.org" ./vendor/bin/phpunit
      *
      * @covers \PHPMailer\PHPMailer\PHPMailer::isMail
      */
     public function testMailSendWithSendmailParams()
     {
-        if (strpos(ini_get('sendmail_path'), 'rpath@example.com') === false) {
+        if (strpos(ini_get('sendmail_path'), 'rpath@example.org') === false) {
             self::markTestSkipped('Custom Sendmail php.ini not available');
         }
 
