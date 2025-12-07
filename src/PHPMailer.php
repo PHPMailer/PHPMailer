@@ -221,6 +221,13 @@ class PHPMailer
     public $Sendmail = '/usr/sbin/sendmail';
 
     /**
+     * Parsed sendmail parameters extracted from sendmail_path.
+     *
+     * @var array<string, string>
+     */
+    private $SendmailParams = [];
+
+    /**
      * Whether mail() uses a fully sendmail-compatible MTA.
      * One which supports sendmail's "-oi -f" options.
      *
@@ -989,6 +996,57 @@ class PHPMailer
     }
 
     /**
+     * Extract supported sendmail parameters from a path string.
+     *
+     * @param string $sendmailPath
+     *
+     * @return string The sendmail path without the parsed parameters
+     */
+    private function parseSendmailPath($sendmailPath)
+    {
+        $sendmailPath = trim((string)$sendmailPath);
+        if ($sendmailPath === '') {
+            return $sendmailPath;
+        }
+
+        $parts = preg_split('/\s+/', $sendmailPath);
+        if (empty($parts)) {
+            return $sendmailPath;
+        }
+
+        $command = array_shift($parts);
+        $remainder = [];
+
+        // Parse only -t, -i, and -f parameters.
+        for ($i = 0; $i < count($parts); ++$i) {
+            $part = $parts[$i];
+            if (preg_match('/^-(i|t)$/', $part, $matches)) {
+                $this->SendmailParams[$matches[0]] = '';
+                continue;
+            }
+            if (preg_match('/^-f(.*)$/', $part, $matches)) {
+                $address = $matches[1];
+                if ($address === '' && isset($parts[$i + 1]) && strpos($parts[$i + 1], '-') !== 0) {
+                    $address = $parts[++$i];
+                }
+                if (static::validateAddress($address)) {
+                    $this->SendmailParams['-f'] = $address;
+                    continue;
+                }
+            }
+
+            $remainder[] = $part;
+        }
+
+        // The params that are not parsed are added back to the command.
+        if (!empty($remainder)) {
+            $command .= ' ' . implode(' ', $remainder);
+        }
+
+        return $command;
+    }
+
+    /**
      * Send messages using $Sendmail.
      */
     public function isSendmail()
@@ -996,10 +1054,9 @@ class PHPMailer
         $ini_sendmail_path = ini_get('sendmail_path');
 
         if (false === stripos($ini_sendmail_path, 'sendmail')) {
-            $this->Sendmail = '/usr/sbin/sendmail';
-        } else {
-            $this->Sendmail = $ini_sendmail_path;
+            $ini_sendmail_path = '/usr/sbin/sendmail';
         }
+        $this->Sendmail = $this->parseSendmailPath($ini_sendmail_path);
         $this->Mailer = 'sendmail';
     }
 
@@ -1011,10 +1068,9 @@ class PHPMailer
         $ini_sendmail_path = ini_get('sendmail_path');
 
         if (false === stripos($ini_sendmail_path, 'qmail')) {
-            $this->Sendmail = '/var/qmail/bin/qmail-inject';
-        } else {
-            $this->Sendmail = $ini_sendmail_path;
+            $ini_sendmail_path = '/var/qmail/bin/qmail-inject';
         }
+        $this->Sendmail = $this->parseSendmailPath($ini_sendmail_path);
         $this->Mailer = 'qmail';
     }
 
@@ -1860,29 +1916,34 @@ class PHPMailer
             //PHP config has a sender address we can use
             $this->Sender = ini_get('sendmail_from');
         }
-        //CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-        if (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
-            if ($this->Mailer === 'qmail') {
-                $sendmailFmt = '%s -f%s';
-            } else {
-                if (strpos($this->Sendmail, '-f') === false) {
-                    $sendmailFmt = '%s -f%s -oi -t';
-                } else {
-                    $sendmailFmt = '%s -oi -t';
-                }
-            }
-        } elseif ($this->Mailer === 'qmail') {
-            $sendmailFmt = '%s';
-        } else {
-            //Allow sendmail to choose a default envelope sender. It may
-            //seem preferable to force it to use the From header as with
-            //SMTP, but that introduces new problems (see
-            //<https://github.com/PHPMailer/PHPMailer/issues/2298>), and
-            //it has historically worked this way.
-            $sendmailFmt = '%s -oi -t';
+
+        $sendmailArgs = [];
+
+        // CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
+        // Also don't add the -f automatically unless it has been set either via Sender
+        // or sendmail_path. Otherwise it can introduce new problems.
+        // @see http://github.com/PHPMailer/PHPMailer/issues/2298
+        if (isset($this->SendmailParams['-f']) && self::isShellSafe($this->SendmailParams['-f'])) {
+            $sendmailArgs[] = '-f' . $this->SendmailParams['-f'];
+        } elseif (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
+            $sendmailArgs[] = '-f' . $this->Sender;
         }
 
-        $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
+        // Qmail doesn't accept all the sendmail parameters
+        // @see https://github.com/PHPMailer/PHPMailer/issues/3189
+        if ($this->Mailer !== 'qmail') {
+            if (isset($this->SendmailParams['-i'])) {
+                $sendmailArgs[] = '-i';
+            }
+
+            if (isset($this->SendmailParams['-t'])) {
+                $sendmailArgs[] = '-t';
+            }
+        }
+
+        $resultArgs = (empty($sendmailArgs) ? '' : ' ' . implode(' ', $sendmailArgs));
+
+        $sendmail = trim(escapeshellcmd($this->Sendmail) . $resultArgs);
         $this->edebug('Sendmail path: ' . $this->Sendmail);
         $this->edebug('Sendmail command: ' . $sendmail);
         $this->edebug('Envelope sender: ' . $this->Sender);
@@ -2066,8 +2127,8 @@ class PHPMailer
             $this->Sender = ini_get('sendmail_from');
         }
         if (!empty($this->Sender) && static::validateAddress($this->Sender)) {
-            $phpmailer_path = ini_get('sendmail_path');
-            if (self::isShellSafe($this->Sender) && strpos($phpmailer_path, '-f') === false) {
+            $this->parseSendmailPath(ini_get('sendmail_path'));
+            if (self::isShellSafe($this->Sender) && !isset($this->SendmailParams['-f'])) {
                 $params = sprintf('-f%s', $this->Sender);
             }
             $old_from = ini_get('sendmail_from');

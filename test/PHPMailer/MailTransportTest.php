@@ -174,4 +174,74 @@ final class MailTransportTest extends SendTestCase
 
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
+
+    /**
+     * Test parsing of sendmail path and with certain parameters.
+     *
+     * @group sendmailparams
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseSendmailPath
+     * @dataProvider sendmailPathProvider
+     *
+     * @param string $sendmailPath The sendmail path to parse.
+     * @param string $expectedCommand The expected command after parsing.
+     * @param array  $expectedParams The expected parameters after parsing.
+     */
+    public function testParseSendmailPath($sendmailPath, $expectedCommand, array $expectedParams)
+    {
+        $mailer = $this->Mail;
+
+        $command = \Closure::bind(
+            function ($path) {
+                return $this->{'parseSendmailPath'}($path);
+            },
+            $mailer,
+            \PHPMailer\PHPMailer\PHPMailer::class
+        )($sendmailPath);
+
+        $params = \Closure::bind(
+            function () {
+                return $this->{'SendmailParams'};
+            },
+            $mailer,
+            \PHPMailer\PHPMailer\PHPMailer::class
+        )();
+
+        self::assertSame($expectedCommand, $command);
+        self::assertSame($expectedParams, $params);
+    }
+
+    /**
+     * Data provider for testParseSendmailPath.
+     */
+
+    public function sendmailPathProvider()
+    {
+        return [
+            'path only' => [
+                '/usr/sbin/sendmail',
+                '/usr/sbin/sendmail',
+                [],
+            ],
+            'with i and t' => [
+                '/usr/sbin/sendmail -i -t',
+                '/usr/sbin/sendmail',
+                ['-i' => '', '-t' => ''],
+            ],
+            'with f concatenated' => [
+                '/usr/sbin/sendmail -frpath@example.org -i',
+                '/usr/sbin/sendmail',
+                ['-f' => 'rpath@example.org', '-i' => ''],
+            ],
+            'with f separated' => [
+                '/usr/sbin/sendmail -f rpath@example.org -t',
+                '/usr/sbin/sendmail',
+                ['-f' => 'rpath@example.org', '-t' => ''],
+            ],
+            'with extra flags preserved' => [
+                '/opt/sendmail -fuser@example.org -x -y',
+                '/opt/sendmail -x -y',
+                ['-f' => 'user@example.org'],
+            ],
+        ];
+    }
 }
