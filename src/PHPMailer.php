@@ -1865,7 +1865,11 @@ class PHPMailer
             if ($this->Mailer === 'qmail') {
                 $sendmailFmt = '%s -f%s';
             } else {
-                $sendmailFmt = '%s -oi -f%s -t';
+                if (strpos($this->Sendmail, '-f') === false) {
+                    $sendmailFmt = '%s -f%s -oi -t';
+                } else {
+                    $sendmailFmt = '%s -oi -t';
+                }
             }
         } elseif ($this->Mailer === 'qmail') {
             $sendmailFmt = '%s';

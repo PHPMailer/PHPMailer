@@ -123,11 +123,14 @@ final class MailTransportTest extends SendTestCase
      * Test running required with:
      * php -d sendmail_path="/usr/sbin/sendmail -t -i -frpath@example.org" ./vendor/bin/phpunit
      *
+     * @group sendmailparams
      * @covers \PHPMailer\PHPMailer\PHPMailer::isMail
      */
     public function testMailSendWithSendmailParams()
     {
-        if (strpos(ini_get('sendmail_path'), 'rpath@example.org') === false) {
+        $sender = 'rpath@example.org';
+
+        if (strpos(ini_get('sendmail_path'), $sender) === false) {
             self::markTestSkipped('Custom Sendmail php.ini not available');
         }
 
@@ -137,11 +140,37 @@ final class MailTransportTest extends SendTestCase
         $this->Mail->clearAddresses();
         $this->setAddress('testmailsend@example.com', 'totest');
 
-        $sender = 'rpath@example.org';
-
         ini_set('sendmail_from', $sender);
         $this->Mail->createHeader();
         $this->Mail->isMail();
+
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+    }
+
+    /**
+     * Test sending using SendMail with Sender address
+     * and explicit sendmail_from ini set.
+     * Test running required with:
+     * php -d sendmail_path="/usr/sbin/sendmail -t -i -frpath@example.org" ./vendor/bin/phpunit
+     *
+     * @group sendmailparams
+     * @covers \PHPMailer\PHPMailer\PHPMailer::isSendmail
+     */
+    public function testSendmailSendWithSendmailParams()
+    {
+        $sender = 'rpath@example.org';
+
+        if (strpos(ini_get('sendmail_path'), $sender) === false) {
+            self::markTestSkipped('Custom Sendmail php.ini not available');
+        }
+
+        $this->Mail->Body = 'Sending via sendmail';
+        $this->buildBody();
+        $subject = $this->Mail->Subject;
+
+        $this->Mail->Subject = $subject . ': sendmail';
+        ini_set('sendmail_from', $sender);
+        $this->Mail->isSendmail();
 
         self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
     }
