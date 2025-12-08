@@ -989,11 +989,11 @@ class PHPMailer
     }
 
     /**
-     * Extract supported sendmail parameters from a path string.
+     * Extract sendmail path and parse to deal with known parameters.
      *
-     * @param string $sendmailPath
+     * @param string $sendmailPath The sendmail path as set in php.ini
      *
-     * @return string The sendmail path without the parsed parameters
+     * @return string The sendmail path without the known parameters
      */
     private function parseSendmailPath($sendmailPath)
     {
