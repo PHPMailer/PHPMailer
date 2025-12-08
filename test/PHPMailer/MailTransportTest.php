@@ -206,10 +206,10 @@ final class MailTransportTest extends SendTestCase
     /**
      * Data provider for testParseSendmailPath.
      *
-     * @return array<string, array<int, string>> {
-     *   @type string $0 The sendmail path to parse.
-     *   @type string $1 The expected command after parsing.
-     *   @type string $2 The expected Sender (-f parameter) after parsing.
+     * @return array{
+     *   0: string, // The sendmail path to parse.
+     *   1: string, // The expected command after parsing.
+     *   2: string  // The expected Sender (-f parameter) after parsing.
      * }
      */
 
