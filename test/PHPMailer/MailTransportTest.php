@@ -184,9 +184,9 @@ final class MailTransportTest extends SendTestCase
      *
      * @param string $sendmailPath The sendmail path to parse.
      * @param string $expectedCommand The expected command after parsing.
-     * @param array  $expectedParams The expected parameters after parsing.
+     * @param string  $expectedSender The expected Sender (-f parameter) after parsing.
      */
-    public function testParseSendmailPath($sendmailPath, $expectedCommand, array $expectedParams)
+    public function testParseSendmailPath($sendmailPath, $expectedCommand, $expectedSender)
     {
         $mailer = $this->Mail;
 
@@ -199,21 +199,18 @@ final class MailTransportTest extends SendTestCase
         );
         $command = $parseSendmailPath($sendmailPath);
 
-        $getSendmailParams = \Closure::bind(
-            function () {
-                return $this->{'SendmailParams'};
-            },
-            $mailer,
-            \PHPMailer\PHPMailer\PHPMailer::class
-        );
-        $params = $getSendmailParams();
-
-        self::assertSame($expectedCommand, $command);
-        self::assertSame($expectedParams, $params);
+        self::assertSame($expectedCommand, $command, 'Sendmail command not parsed correctly');
+        self::assertSame($expectedSender, $mailer->Sender, 'Sender property not set correctly');
     }
 
     /**
      * Data provider for testParseSendmailPath.
+     *
+     * @return array<string, array<int, string>> {
+     *   @type string $0 The sendmail path to parse.
+     *   @type string $1 The expected command after parsing.
+     *   @type string $2 The expected Sender (-f parameter) after parsing.
+     * }
      */
 
     public function sendmailPathProvider()
@@ -222,27 +219,27 @@ final class MailTransportTest extends SendTestCase
             'path only' => [
                 '/usr/sbin/sendmail',
                 '/usr/sbin/sendmail',
-                [],
+                ''
             ],
             'with i and t' => [
                 '/usr/sbin/sendmail -i -t',
                 '/usr/sbin/sendmail',
-                ['-i' => '', '-t' => ''],
+                ''
             ],
             'with f concatenated' => [
                 '/usr/sbin/sendmail -frpath@example.org -i',
                 '/usr/sbin/sendmail',
-                ['-f' => 'rpath@example.org', '-i' => ''],
+                'rpath@example.org'
             ],
             'with f separated' => [
                 '/usr/sbin/sendmail -f rpath@example.org -t',
                 '/usr/sbin/sendmail',
-                ['-f' => 'rpath@example.org', '-t' => ''],
+                'rpath@example.org',
             ],
             'with extra flags preserved' => [
-                '/opt/sendmail -fuser@example.org -x -y',
+                '/opt/sendmail -x -y -fuser@example.org',
                 '/opt/sendmail -x -y',
-                ['-f' => 'user@example.org'],
+                'user@example.org',
             ],
         ];
     }

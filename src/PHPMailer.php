@@ -221,13 +221,6 @@ class PHPMailer
     public $Sendmail = '/usr/sbin/sendmail';
 
     /**
-     * Parsed sendmail parameters extracted from sendmail_path.
-     *
-     * @var array<string, string>
-     */
-    private $SendmailParams = [];
-
-    /**
      * Whether mail() uses a fully sendmail-compatible MTA.
      * One which supports sendmail's "-oi -f" options.
      *
@@ -1021,7 +1014,6 @@ class PHPMailer
         for ($i = 0; $i < count($parts); ++$i) {
             $part = $parts[$i];
             if (preg_match('/^-(i|t)$/', $part, $matches)) {
-                $this->SendmailParams[$matches[0]] = '';
                 continue;
             }
             if (preg_match('/^-f(.*)$/', $part, $matches)) {
@@ -1029,10 +1021,8 @@ class PHPMailer
                 if ($address === '' && isset($parts[$i + 1]) && strpos($parts[$i + 1], '-') !== 0) {
                     $address = $parts[++$i];
                 }
-                if (static::validateAddress($address)) {
-                    $this->SendmailParams['-f'] = $address;
-                    continue;
-                }
+                $this->Sender = $address;
+                continue;
             }
 
             $remainder[] = $part;
@@ -1923,22 +1913,15 @@ class PHPMailer
         // Also don't add the -f automatically unless it has been set either via Sender
         // or sendmail_path. Otherwise it can introduce new problems.
         // @see http://github.com/PHPMailer/PHPMailer/issues/2298
-        if (isset($this->SendmailParams['-f']) && self::isShellSafe($this->SendmailParams['-f'])) {
-            $sendmailArgs[] = '-f' . $this->SendmailParams['-f'];
-        } elseif (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
+        if (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
             $sendmailArgs[] = '-f' . $this->Sender;
         }
 
         // Qmail doesn't accept all the sendmail parameters
         // @see https://github.com/PHPMailer/PHPMailer/issues/3189
         if ($this->Mailer !== 'qmail') {
-            if (isset($this->SendmailParams['-i'])) {
-                $sendmailArgs[] = '-i';
-            }
-
-            if (isset($this->SendmailParams['-t'])) {
-                $sendmailArgs[] = '-t';
-            }
+            $sendmailArgs[] = '-i';
+            $sendmailArgs[] = '-t';
         }
 
         $resultArgs = (empty($sendmailArgs) ? '' : ' ' . implode(' ', $sendmailArgs));
@@ -2127,8 +2110,8 @@ class PHPMailer
             $this->Sender = ini_get('sendmail_from');
         }
         if (!empty($this->Sender) && static::validateAddress($this->Sender)) {
-            $this->parseSendmailPath(ini_get('sendmail_path'));
-            if (self::isShellSafe($this->Sender) && !isset($this->SendmailParams['-f'])) {
+            $phpmailer_path = ini_get('sendmail_path');
+            if (self::isShellSafe($this->Sender) && strpos($phpmailer_path, '-f') === false) {
                 $params = sprintf('-f%s', $this->Sender);
             }
             $old_from = ini_get('sendmail_from');
