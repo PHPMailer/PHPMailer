@@ -241,6 +241,21 @@ final class MailTransportTest extends SendTestCase
                 '/opt/sendmail -x -y',
                 'user@example.org',
             ],
+            "extra flags with values preserved" => [
+                '/opt/sendmail -X /path/to/logfile -fuser@example.org',
+                '/opt/sendmail -X /path/to/logfile',
+                'user@example.org',
+            ],
+            "extra flags concatenated preserved" => [
+                '/opt/sendmail -X/path/to/logfile -t -i',
+                '/opt/sendmail -X/path/to/logfile',
+                '',
+            ],
+            "option values with regular parameters" => [
+                '/opt/sendmail -oi -t',
+                '/opt/sendmail',
+                '',
+            ],
         ];
     }
 }

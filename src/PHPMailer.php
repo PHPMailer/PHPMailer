@@ -1010,10 +1010,10 @@ class PHPMailer
         $command = array_shift($parts);
         $remainder = [];
 
-        // Parse only -t, -i, and -f parameters.
+        // Parse only -t, -i, -oi and -f parameters.
         for ($i = 0; $i < count($parts); ++$i) {
             $part = $parts[$i];
-            if (preg_match('/^-(i|t)$/', $part, $matches)) {
+            if (preg_match('/^-(i|oi|t)$/', $part, $matches)) {
                 continue;
             }
             if (preg_match('/^-f(.*)$/', $part, $matches)) {
