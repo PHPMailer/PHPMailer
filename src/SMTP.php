@@ -770,6 +770,25 @@ class SMTP
         }
     }
 
+    private function iterateLines($s)
+    {
+        $start = 0;
+        $length = strlen($s);
+
+        for ($i = 0; $i < $length; $i++) {
+            $c = $s[$i];
+            if ($c === "\n" || $c === "\r") {
+                yield substr($s, $start, $i - $start);
+                if ($c === "\r" && $i + 1 < $length && $s[$i + 1] === "\n") {
+                    $i++;
+                }
+                $start = $i + 1;
+            }
+        }
+
+        yield substr($s, $start);
+    }
+
     /**
      * Send an SMTP DATA command.
      * Issues a data command and sends the msg_data to the server,
@@ -798,15 +817,16 @@ class SMTP
          * NOTE: this does not count towards line-length limit.
          */
 
-        //Normalize line breaks before exploding
-        $lines = explode("\n", str_replace(["\r\n", "\r"], "\n", $msg_data));
+        //Iterate over lines with normalized line breaks
+        $lines = $this->iterateLines($msg_data);
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
          * of the first line (':' separated) does not contain a space then it _should_ be a header, and we will
          * process all lines before a blank line as headers.
          */
 
-        $field = substr($lines[0], 0, strpos($lines[0], ':'));
+        $first_line = $lines->current();
+        $field = substr($first_line, 0, strpos($first_line, ':'));
         $in_headers = false;
         if (!empty($field) && strpos($field, ' ') === false) {
             $in_headers = true;
