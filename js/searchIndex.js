@@ -1501,6 +1501,11 @@ Search.appendIndex(
             "summary": "Close\u0020the\u0020socket\u0020and\u0020clean\u0020up\u0020the\u0020state\u0020of\u0020the\u0020class.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_close"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003AiterateLines\u0028\u0029",
+            "name": "iterateLines",
+            "summary": "",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_iterateLines"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003Adata\u0028\u0029",
             "name": "data",
             "summary": "Send\u0020an\u0020SMTP\u0020DATA\u0020command.",
