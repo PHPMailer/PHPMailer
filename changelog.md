@@ -1,5 +1,9 @@
 # PHPMailer Change Log
 
+## Version 7.0.2 (January 9th, 2026)
+* Fixes for sendmail parameter problems in WordPress, thanks to @SirLouen
+* Reduce memory consumption when sending large attachments by @RobinvanderVliet
+
 ## Version 7.0.1 (November 25th, 2025)
 * Use From domain when generating CIDs in msgHTML.
 * Update to PHPCompatibility 10, resolve numerous PHPCS issues in PHP 8.5.
