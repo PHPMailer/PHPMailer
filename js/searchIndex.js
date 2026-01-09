@@ -156,6 +156,11 @@ Search.appendIndex(
             "summary": "Send\u0020messages\u0020using\u0020PHP\u0027s\u0020mail\u0028\u0029\u0020function.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_isMail"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AparseSendmailPath\u0028\u0029",
+            "name": "parseSendmailPath",
+            "summary": "Extract\u0020sendmail\u0020path\u0020and\u0020parse\u0020to\u0020deal\u0020with\u0020known\u0020parameters.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_parseSendmailPath"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AisSendmail\u0028\u0029",
             "name": "isSendmail",
             "summary": "Send\u0020messages\u0020using\u0020\u0024Sendmail.",
