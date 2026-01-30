@@ -31,3 +31,7 @@ $PHPMAILER_LANG['smtp_connect_failed']  = 'Αποτυχία σύνδεσης SMT
 $PHPMAILER_LANG['smtp_detail']          = 'Λεπτομέρεια: ';
 $PHPMAILER_LANG['smtp_error']           = 'Σφάλμα με τον διακομιστή SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'Αδυναμία ορισμού ή επαναφοράς μεταβλητής: ';
+$PHPMAILER_LANG['no_smtputf8']          = 'Ο διακομιστής δεν υποστηρίζει το SMTPUTF8 που απαιτείται για την αποστολή σε διευθύνσεις Unicode.';
+$PHPMAILER_LANG['imap_recommended']     = 'Η χρήση απλοποιημένου αναλυτή διευθύνσεων δεν συνιστάται.
+Εγκαταστήστε την επέκταση PHP IMAP για πλήρη ανάλυση σύμφωνα με το RFC822.';
+$PHPMAILER_LANG['deprecated_argument']  = 'Καταργημένο όρισμα: ';
