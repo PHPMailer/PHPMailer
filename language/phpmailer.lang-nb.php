@@ -24,7 +24,7 @@
  $PHPMAILER_LANG['invalid_host']         = 'Ugyldig vert: ';
  $PHPMAILER_LANG['mailer_not_supported'] = ' sender er ikke støttet.';
  $PHPMAILER_LANG['provide_address']      = 'Du må oppgi minst én mottaker-e-postadresse.';
- $PHPMAILER_LANG['recipients_failed']    = 'SMTP Feil: Følgende mottakeradresse feilet: ';
+ $PHPMAILER_LANG['recipients_failed']    = 'SMTP-feil: Følgende mottakeradresser feilet: ';
  $PHPMAILER_LANG['signing']              = 'Signeringsfeil: ';
  $PHPMAILER_LANG['smtp_code']            = 'SMTP-kode: ';
  $PHPMAILER_LANG['smtp_code_ex']         = 'Ytterligere SMTP-info: ';
