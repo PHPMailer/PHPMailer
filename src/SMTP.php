@@ -276,6 +276,12 @@ class SMTP
     protected $last_reply = '';
 
     /**
+     * Whether we are in the DATA phase or not
+     * @var bool
+     */
+    private $inData = false;
+
+    /**
      * Output debugging info via a user-selected method.
      *
      * @param string $str   Debug string to output
@@ -806,8 +812,11 @@ class SMTP
     {
         //This will use the standard timelimit
         if (!$this->sendCommand('DATA', 'DATA', 354)) {
+            $this->inData = false;
             return false;
         }
+
+        $this->inData = true;
 
         /* The server is ready to accept data!
          * According to rfc821 we should not send more than 1000 characters on a single line (including the LE)
@@ -881,6 +890,7 @@ class SMTP
         $this->recordLastTransactionID();
         //Restore timelimit
         $this->Timelimit = $savetimelimit;
+        $this->inData = false;
 
         return $result;
     }
@@ -1020,7 +1030,11 @@ class SMTP
      */
     public function quit($close_on_error = true)
     {
-        $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
+        if ($this->inData) {
+            $noerror = true;
+        } else {
+            $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
+        }
         $err = $this->error; //Save any error
         if ($noerror || $close_on_error) {
             $this->close();
