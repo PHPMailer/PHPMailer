@@ -96,6 +96,69 @@ final class ParseAddressesTest extends TestCase
         ];
     }
 
+    /**
+     * Verify native parsing results while suppressing the runtime notice that recommends IMAP.
+     *
+     * @dataProvider dataAddressSplittingNativeRegression
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseSimplerAddresses
+     *
+     * @param string $addrstr The address list string.
+     * @param array  $expected The expected function output.
+     * @param string $charset Optional. The charset to use.
+     */
+    public function testAddressSplittingNativeRegression(
+        $addrstr,
+        $expected,
+        $charset = PHPMailer::CHARSET_ISO88591
+    ) {
+        set_error_handler(static function ($errno, $errstr) {
+            if ($errno === E_USER_NOTICE && strpos($errstr, PHPMailer::lang('imap_recommended')) === 0) {
+                return true;
+            }
+
+            return false;
+        });
+
+        try {
+            $reflMethod = new ReflectionMethod(PHPMailer::class, 'parseSimplerAddresses');
+            (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+            $parsed = $reflMethod->invoke(null, $addrstr, $charset);
+            (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+
+            $this->verifyExpectations($parsed, $expected);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    /**
+     * Data provider for native parser regression coverage.
+     *
+     * @return array
+     *      addrstr: string,
+     *      expected: array{name: string, address: string}[]
+     *      charset: string
+     */
+    public static function dataAddressSplittingNativeRegression()
+    {
+        return [
+            'Valid address: quoted comma in display name' => [
+                'addrstr'  => '"Doe, Jane" <jane@example.com>, Bob User <bob@example.net>',
+                'expected' => [
+                    ['name' => 'Doe, Jane', 'address' => 'jane@example.com'],
+                    ['name' => 'Bob User', 'address' => 'bob@example.net'],
+                ],
+            ],
+            'Valid address: comma inside comment' => [
+                'addrstr'  => 'Joe User (Primary, Billing) <joe@example.com>, Jill User <jill@example.net>',
+                'expected' => [
+                    ['name' => 'Joe User (Primary, Billing)', 'address' => 'joe@example.com'],
+                    ['name' => 'Jill User', 'address' => 'jill@example.net'],
+                ],
+            ],
+        ];
+    }
+
      /**
      * Test if email addresses are parsed and split into a name and address.
      *

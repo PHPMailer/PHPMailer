@@ -1354,7 +1354,7 @@ class PHPMailer
         trigger_error(self::lang('imap_recommended'), E_USER_NOTICE);
 
         $addresses = [];
-        $list = explode(',', $addrstr);
+        $list = static::splitAddressList($addrstr);
         foreach ($list as $address) {
             $address = trim($address);
             //Is there a separate name part?
@@ -1379,6 +1379,94 @@ class PHPMailer
                 }
             }
         }
+
+        return $addresses;
+    }
+
+    /**
+     * Split a comma-separated address list while preserving commas inside quoted names,
+     * comments, and angle-bracketed address literals.
+     *
+     * @param string $addrstr The address list string.
+     *
+     * @return string[]
+     */
+    private static function splitAddressList($addrstr)
+    {
+        $addresses = [];
+        $current = '';
+        $inquote = false;
+        $quoteChar = '';
+        $escape = false;
+        $angleLevel = 0;
+        $commentLevel = 0;
+        $length = strlen($addrstr);
+
+        for ($i = 0; $i < $length; ++$i) {
+            $char = $addrstr[$i];
+
+            if ($escape) {
+                $current .= $char;
+                $escape = false;
+                continue;
+            }
+
+            if ($char === '\\') {
+                $current .= $char;
+                $escape = true;
+                continue;
+            }
+
+            if ($inquote) {
+                if ($char === $quoteChar) {
+                    $inquote = false;
+                    $quoteChar = '';
+                }
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === '"' || $char === '\'') {
+                $inquote = true;
+                $quoteChar = $char;
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === '(') {
+                ++$commentLevel;
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === ')' && $commentLevel > 0) {
+                --$commentLevel;
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === '<') {
+                ++$angleLevel;
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === '>' && $angleLevel > 0) {
+                --$angleLevel;
+                $current .= $char;
+                continue;
+            }
+
+            if ($char === ',' && $angleLevel === 0 && $commentLevel === 0) {
+                $addresses[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $char;
+        }
+
+        $addresses[] = $current;
 
         return $addresses;
     }
