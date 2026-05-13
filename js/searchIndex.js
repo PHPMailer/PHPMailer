@@ -568,8 +568,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003ArfcDate\u0028\u0029",
             "name": "rfcDate",
-            "summary": "Return\u0020an\u0020RFC\u0020822\u0020formatted\u0020date.",
+            "summary": "Return\u0020the\u0020current\u0020date\u0020and\u0020time\u0020as\u0020an\u0020RFC\u0020822\u0020formatted\u0020date.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_rfcDate"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AsanitiseDate\u0028\u0029",
+            "name": "sanitiseDate",
+            "summary": "Normalise\u0020a\u0020user\u002Dsupplied\u0020date\u0020into\u0020a\u0020correctly\u002Dformatted\u0020RFC\u00205322\u0020date\u0020value\nstring\u0020suitable\u0020for\u0020use\u0020in\u0020the\u0020Date\u0020header.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#method_sanitiseDate"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AserverHostname\u0028\u0029",
             "name": "serverHostname",
@@ -880,6 +885,11 @@ Search.appendIndex(
             "name": "ICAL_METHOD_DECLINECOUNTER",
             "summary": "",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#constant_ICAL_METHOD_DECLINECOUNTER"
+        },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003ARFC822_DATE_FORMAT",
+            "name": "RFC822_DATE_FORMAT",
+            "summary": "",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#constant_RFC822_DATE_FORMAT"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AVERSION",
             "name": "VERSION",
