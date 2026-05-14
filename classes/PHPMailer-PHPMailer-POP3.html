@@ -6,7 +6,10 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -146,43 +149,30 @@ If you want a more complete class there are other POP3 classes for PHP available
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Richard Davey (original author) <a href="mailto:rich@corephp.co.uk">rich@corephp.co.uk</a></p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">author</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Richard Davey (original author) <a href="mailto:rich@corephp.co.uk">rich@corephp.co.uk</a></p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Marcus Bointon (Synchro/coolbru) <a href="mailto:phpmailer@synchromedia.co.uk">phpmailer@synchromedia.co.uk</a></p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Marcus Bointon (Synchro/coolbru) <a href="mailto:phpmailer@synchromedia.co.uk">phpmailer@synchromedia.co.uk</a></p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Jim Jagielski (jimjag) <a href="mailto:jimjag@gmail.com">jimjag@gmail.com</a></p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Jim Jagielski (jimjag) <a href="mailto:jimjag@gmail.com">jimjag@gmail.com</a></p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Andy Prevost (codeworxtech) <a href="mailto:codeworxtech@users.sourceforge.net">codeworxtech@users.sourceforge.net</a></p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Andy Prevost (codeworxtech) <a href="mailto:codeworxtech@users.sourceforge.net">codeworxtech@users.sourceforge.net</a></p>
 </section>
 
                                     </dd>
-                                            </dl>
+                        </dl>
 
     
     
@@ -207,21 +197,21 @@ If you want a more complete class there are other POP3 classes for PHP available
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a>
     <span>
-        &nbsp;= 2                            </span>
+        &nbsp;: int&nbsp;= 2                            </span>
 </dt>
 <dd>Debug level to show client -&gt; server and server -&gt; client messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_DEBUG_OFF">DEBUG_OFF</a>
     <span>
-        &nbsp;= 0                            </span>
+        &nbsp;: int&nbsp;= 0                            </span>
 </dt>
 <dd>Debug level for no output.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_DEBUG_SERVER">DEBUG_SERVER</a>
     <span>
-        &nbsp;= 1                            </span>
+        &nbsp;: int&nbsp;= 1                            </span>
 </dt>
 <dd>Debug level to show server -&gt; client messages
 also shows clients connection errors or errors from server</dd>
@@ -229,28 +219,28 @@ also shows clients connection errors or errors from server</dd>
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_DEFAULT_PORT">DEFAULT_PORT</a>
     <span>
-        &nbsp;= 110                            </span>
+        &nbsp;: int&nbsp;= 110                            </span>
 </dt>
 <dd>Default POP3 port number.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_DEFAULT_TIMEOUT">DEFAULT_TIMEOUT</a>
     <span>
-        &nbsp;= 30                            </span>
+        &nbsp;: int&nbsp;= 30                            </span>
 </dt>
 <dd>Default timeout in seconds.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-POP3.html#constant_LE">LE</a>
     <span>
-        &nbsp;= &quot;\r\n&quot;                            </span>
+        &nbsp;: mixed&nbsp;= &quot;\r\n&quot;                            </span>
 </dt>
 <dd>Line break constant.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="-deprecated" href="classes/PHPMailer-PHPMailer-POP3.html#constant_VERSION">VERSION</a>
     <span>
-        &nbsp;= &#039;7.0.2&#039;                            </span>
+        &nbsp;: string&nbsp;= &#039;7.0.2&#039;                            </span>
 </dt>
 <dd>The POP3 PHPMailer Version number.</dd>
 
@@ -692,40 +682,31 @@ Options:</p>
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="property_do_debug_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-POP3.html#property_do_debug#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-POP3.html#property_do_debug_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>POP3::DEBUG_OFF: No output</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>POP3::DEBUG_OFF: No output</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>POP3::DEBUG_SERVER: Server messages, connection/server errors</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>POP3::DEBUG_SERVER: Server messages, connection/server errors</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>POP3::DEBUG_CLIENT: Client and Server messages, connection/server errors</p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>POP3::DEBUG_CLIENT: Client and Server messages, connection/server errors</p>
 </section>
 
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
         
@@ -1687,100 +1668,7 @@ appropriate for POP-before SMTP authorisation.</p>
 </article>
             </section>
 
-        <div class="phpdocumentor-modal" id="source-view">
-    <div class="phpdocumentor-modal-bg" data-exit-button></div>
-    <div class="phpdocumentor-modal-container">
-        <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/POP3.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
-        </div>
-        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
-    </div>
-</div>
-
-    <script type="text/javascript">
-        (function () {
-            function loadExternalCodeSnippet(el, url, line) {
-                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
-                    const language = 'php';
-
-                    const code = document.createElement('code');
-                    code.className = 'language-' + language;
-                    pre.textContent = '';
-                    pre.setAttribute('data-line', line)
-                    code.textContent = 'Loading…';
-                    pre.appendChild(code);
-
-                    var xhr = new XMLHttpRequest();
-
-                    xhr.open('GET', src, true);
-
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState !== 4) {
-                            return;
-                        }
-
-                        if (xhr.status < 400 && xhr.responseText) {
-                            code.textContent = xhr.responseText;
-                            Prism.highlightElement(code);
-                            d=document.getElementsByClassName("line-numbers");
-                            d[0].scrollTop = d[0].children[1].offsetTop;
-                            return;
-                        }
-
-                        if (xhr.status === 404) {
-                            code.textContent = '✖ Error: File could not be found';
-                            return;
-                        }
-
-                        if (xhr.status >= 400) {
-                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                            return;
-                        }
-
-                        code.textContent = '✖ Error: An unknown error occurred';
-                    };
-
-                    xhr.send(null);
-                });
-            }
-
-            const modalButtons = document.querySelectorAll("[data-modal]");
-            const openedAsLocalFile = window.location.protocol === 'file:';
-            if (modalButtons.length > 0 && openedAsLocalFile) {
-                console.warn(
-                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
-                    'browsers block XHR requests when a page is opened this way'
-                );
-            }
-
-            modalButtons.forEach(function (trigger) {
-                if (openedAsLocalFile) {
-                    trigger.setAttribute("hidden", "hidden");
-                }
-
-                trigger.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    const modal = document.getElementById(trigger.dataset.modal);
-                    if (!modal) {
-                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
-                        return;
-                    }
-                    modal.classList.add("phpdocumentor-modal__open");
-
-                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
-                    const exits = modal.querySelectorAll("[data-exit-button]");
-                    exits.forEach(function (exit) {
-                        exit.addEventListener("click", function (event) {
-                            event.preventDefault();
-                            modal.classList.remove("phpdocumentor-modal__open");
-                        });
-                    });
-                });
-            });
-        })();
-    </script>
-
+        
     </article>
                                 </section>
                 <section class="phpdocumentor-on-this-page__sidebar">

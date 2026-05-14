@@ -6,7 +6,10 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
     <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
             <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -135,41 +138,31 @@
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Chris Ryan</p>
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">author</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Chris Ryan</p>
 </section>
 
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">author</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>Marcus Bointon <a href="mailto:phpmailer@synchromedia.co.uk">phpmailer@synchromedia.co.uk</a></p>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Marcus Bointon <a href="mailto:phpmailer@synchromedia.co.uk">phpmailer@synchromedia.co.uk</a></p>
 </section>
 
                                     </dd>
-                                                <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">used-by</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">used-by</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/PHPMailer-PHPMailer-PHPMailer.html#method_smtpSend"><abbr title="\PHPMailer\PHPMailer\PHPMailer::smtpSend()">PHPMailer::smtpSend()</abbr></a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">used-by</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/PHPMailer-PHPMailer-PHPMailer.html#method_smtpConnect"><abbr title="\PHPMailer\PHPMailer\PHPMailer::smtpConnect()">PHPMailer::smtpConnect()</abbr></a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
     
     
@@ -194,63 +187,63 @@
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CLIENT">DEBUG_CLIENT</a>
     <span>
-        &nbsp;= 1                            </span>
+        &nbsp;: int&nbsp;= 1                            </span>
 </dt>
 <dd>Debug level to show client -&gt; server messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_CONNECTION">DEBUG_CONNECTION</a>
     <span>
-        &nbsp;= 3                            </span>
+        &nbsp;: int&nbsp;= 3                            </span>
 </dt>
 <dd>Debug level to show connection status, client -&gt; server and server -&gt; client messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_LOWLEVEL">DEBUG_LOWLEVEL</a>
     <span>
-        &nbsp;= 4                            </span>
+        &nbsp;: int&nbsp;= 4                            </span>
 </dt>
 <dd>Debug level to show all messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_OFF">DEBUG_OFF</a>
     <span>
-        &nbsp;= 0                            </span>
+        &nbsp;: int&nbsp;= 0                            </span>
 </dt>
 <dd>Debug level for no output.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEBUG_SERVER">DEBUG_SERVER</a>
     <span>
-        &nbsp;= 2                            </span>
+        &nbsp;: int&nbsp;= 2                            </span>
 </dt>
 <dd>Debug level to show client -&gt; server and server -&gt; client messages.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_PORT">DEFAULT_PORT</a>
     <span>
-        &nbsp;= 25                            </span>
+        &nbsp;: int&nbsp;= 25                            </span>
 </dt>
 <dd>The SMTP port to use if one is not specified.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_DEFAULT_SECURE_PORT">DEFAULT_SECURE_PORT</a>
     <span>
-        &nbsp;= 465                            </span>
+        &nbsp;: int&nbsp;= 465                            </span>
 </dt>
 <dd>The SMTPs port to use if one is not specified.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_LE">LE</a>
     <span>
-        &nbsp;= &quot;\r\n&quot;                            </span>
+        &nbsp;: string&nbsp;= &quot;\r\n&quot;                            </span>
 </dt>
 <dd>SMTP line break constant.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH">MAX_LINE_LENGTH</a>
     <span>
-        &nbsp;= 998                            </span>
+        &nbsp;: int&nbsp;= 998                            </span>
 </dt>
 <dd>The maximum line length allowed by RFC 5321 section 4.5.3.1.6,
 *excluding* a trailing CRLF break.</dd>
@@ -258,7 +251,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH">MAX_REPLY_LENGTH</a>
     <span>
-        &nbsp;= 512                            </span>
+        &nbsp;: int&nbsp;= 512                            </span>
 </dt>
 <dd>The maximum line length allowed for replies in RFC 5321 section 4.5.3.1.5,
 *including* a trailing CRLF line break.</dd>
@@ -266,7 +259,7 @@
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
     <a class="-deprecated" href="classes/PHPMailer-PHPMailer-SMTP.html#constant_VERSION">VERSION</a>
     <span>
-        &nbsp;= &#039;7.0.2&#039;                            </span>
+        &nbsp;: string&nbsp;= &#039;7.0.2&#039;                            </span>
 </dt>
 <dd>The PHPMailer SMTP version number.</dd>
 
@@ -976,21 +969,20 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
     
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="constant_MAX_LINE_LENGTH_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_LINE_LENGTH_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.6">https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.6</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     </article>
@@ -1023,21 +1015,20 @@ a list of patterns provided in SMTP::$smtp_transaction_id_patterns.</dd>
     
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="constant_MAX_REPLY_LENGTH_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#constant_MAX_REPLY_LENGTH_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.5">https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3.1.5</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     </article>
@@ -1220,21 +1211,20 @@ level output is used:</p>
     
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="property_do_smtputf8_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_smtputf8_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.rfc-editor.org/rfc/rfc6531">https://www.rfc-editor.org/rfc/rfc6531</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
         
@@ -1273,31 +1263,26 @@ level output is used:</p>
     
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="property_do_verp_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_verp_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://en.wikipedia.org/wiki/Variable_envelope_return_path">https://en.wikipedia.org/wiki/Variable_envelope_return_path</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.postfix.org/VERP_README.html">https://www.postfix.org/VERP_README.html</a></span>
-                                        
-                                                 <section class="phpdocumentor-description"><p>Info on VERP</p>
+                                                                    <section class="phpdocumentor-description"><p>Info on VERP</p>
 </section>
 
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
         
@@ -1379,21 +1364,20 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="property_Timeout_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Timeout_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.rfc-editor.org/rfc/rfc2821#section-4.5.3.2">https://www.rfc-editor.org/rfc/rfc2821#section-4.5.3.2</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
         
@@ -1434,21 +1418,20 @@ This needs to be quite high to function correctly with hosts using greetdelay as
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="property_xclient_allowed_attributes_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#property_xclient_allowed_attributes_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="https://www.postfix.org/XCLIENT_README.html">https://www.postfix.org/XCLIENT_README.html</a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
         
@@ -1811,21 +1794,20 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_authenticate_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_authenticate_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><abbr title="\PHPMailer\PHPMailer\hello()">hello()</abbr></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     
@@ -1935,21 +1917,20 @@ MS ESMTP returns the message ID, which may not be correct for internal tracking.
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_close_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_close_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><abbr title="\PHPMailer\PHPMailer\quit()">quit()</abbr></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     
@@ -2323,21 +2304,20 @@ If no reply has been received yet, it will return null.</p>
 
     
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_getLastTransactionID_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_getLastTransactionID_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><abbr title="\PHPMailer\PHPMailer\recordLastTransactionID()">recordLastTransactionID()</abbr></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     
@@ -3418,29 +3398,24 @@ Implements from RFC 821: TURN &lt;CRLF&gt;.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_edebug_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_edebug_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_Debugoutput"><abbr title="\PHPMailer\PHPMailer\SMTP::$Debugoutput">SMTP::$Debugoutput</abbr></a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                            <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><a href="classes/PHPMailer-PHPMailer-SMTP.html#property_do_debug"><abbr title="\PHPMailer\PHPMailer\SMTP::$do_debug">SMTP::$do_debug</abbr></a></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     
@@ -3924,21 +3899,20 @@ If no pattern was matched, it will return false.</p>
             </dl>
 
     
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+    <h5 class="phpdocumentor-tag-list__heading" id="method_sendHello_tags">
         Tags
-        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello#tags" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PHPMailer-PHPMailer-SMTP.html#method_sendHello_tags" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h5>
     <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">see</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">see</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
                                                                                     <span class="phpdocumentor-tag-link"><abbr title="\PHPMailer\PHPMailer\hello()">hello()</abbr></span>
-                                        
-                                             
+                                                                
                                     </dd>
-                                            </dl>
+                        </dl>
 
         
     
@@ -4068,100 +4042,7 @@ If no pattern was matched, it will return false.</p>
 </article>
             </section>
 
-        <div class="phpdocumentor-modal" id="source-view">
-    <div class="phpdocumentor-modal-bg" data-exit-button></div>
-    <div class="phpdocumentor-modal-container">
-        <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/src/SMTP.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
-        </div>
-        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
-    </div>
-</div>
-
-    <script type="text/javascript">
-        (function () {
-            function loadExternalCodeSnippet(el, url, line) {
-                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
-                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
-                    const language = 'php';
-
-                    const code = document.createElement('code');
-                    code.className = 'language-' + language;
-                    pre.textContent = '';
-                    pre.setAttribute('data-line', line)
-                    code.textContent = 'Loading…';
-                    pre.appendChild(code);
-
-                    var xhr = new XMLHttpRequest();
-
-                    xhr.open('GET', src, true);
-
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState !== 4) {
-                            return;
-                        }
-
-                        if (xhr.status < 400 && xhr.responseText) {
-                            code.textContent = xhr.responseText;
-                            Prism.highlightElement(code);
-                            d=document.getElementsByClassName("line-numbers");
-                            d[0].scrollTop = d[0].children[1].offsetTop;
-                            return;
-                        }
-
-                        if (xhr.status === 404) {
-                            code.textContent = '✖ Error: File could not be found';
-                            return;
-                        }
-
-                        if (xhr.status >= 400) {
-                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                            return;
-                        }
-
-                        code.textContent = '✖ Error: An unknown error occurred';
-                    };
-
-                    xhr.send(null);
-                });
-            }
-
-            const modalButtons = document.querySelectorAll("[data-modal]");
-            const openedAsLocalFile = window.location.protocol === 'file:';
-            if (modalButtons.length > 0 && openedAsLocalFile) {
-                console.warn(
-                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
-                    'browsers block XHR requests when a page is opened this way'
-                );
-            }
-
-            modalButtons.forEach(function (trigger) {
-                if (openedAsLocalFile) {
-                    trigger.setAttribute("hidden", "hidden");
-                }
-
-                trigger.addEventListener("click", function (event) {
-                    event.preventDefault();
-                    const modal = document.getElementById(trigger.dataset.modal);
-                    if (!modal) {
-                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
-                        return;
-                    }
-                    modal.classList.add("phpdocumentor-modal__open");
-
-                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
-                    const exits = modal.querySelectorAll("[data-exit-button]");
-                    exits.forEach(function (exit) {
-                        exit.addEventListener("click", function (event) {
-                            event.preventDefault();
-                            modal.classList.remove("phpdocumentor-modal__open");
-                        });
-                    });
-                });
-            });
-        })();
-    </script>
-
+        
     </article>
                                 </section>
                 <section class="phpdocumentor-on-this-page__sidebar">
