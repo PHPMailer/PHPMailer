@@ -1391,6 +1391,11 @@ Search.appendIndex(
             "summary": "POP3\u0020connection\u0020error\u0020handler.",
             "url": "classes/PHPMailer-PHPMailer-POP3.html#method_catchWarning"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\POP3\u003A\u003AstripControls\u0028\u0029",
+            "name": "stripControls",
+            "summary": "Strip\u0020all\u0020control\u0020chars\u0020from\u0020a\u0020string.",
+            "url": "classes/PHPMailer-PHPMailer-POP3.html#method_stripControls"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\POP3\u003A\u003AVERSION",
             "name": "VERSION",
             "summary": "The\u0020POP3\u0020PHPMailer\u0020Version\u0020number.",
