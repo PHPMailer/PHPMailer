@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## Version 7.1.1 (May 18th, 2026)
+* Make encoding validator case-insensitive
+
 ## Version 7.1.0 (May 15th, 2026)
 * Validate `MessageDate` before including it in headers.
 * Minor feature: some common non-RFC date formats and DateTime instances are now automatically converted to the right format for `MessageDate`.
