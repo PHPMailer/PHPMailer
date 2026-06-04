@@ -48,8 +48,8 @@ $mail->SMTPAuth = true;
 $mail->Username = 'username@gmail.com';
 
 //Password to use for SMTP authentication
-//For Gmail, use an app password if you have 2-Step Verification enabled.
-//For XOAUTH2 authentication, see the gmail_xoauth.phps example.
+//For Gmail accounts with 2-Step Verification enabled, use an app password:
+//https://support.google.com/accounts/answer/185833
 $mail->Password = 'yourpassword';
 
 //Set who the message is to be sent from
