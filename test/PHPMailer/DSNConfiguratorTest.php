@@ -157,7 +157,7 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'smtps://user:pass@remotehost');
 
         self::assertEquals($this->Mail->Mailer, 'smtp');
-        self::assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_SMTPS);
 
         self::assertEquals($this->Mail->Host, 'remotehost');
         self::assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
@@ -206,7 +206,7 @@ final class DSNConfiguratorTest extends TestCase
         $mailer = DSNConfigurator::mailer('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
 
         self::assertEquals($mailer->Mailer, 'smtp');
-        self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_SMTPS);
 
         self::assertEquals($mailer->Host, 'smtp.gmail.com');
         self::assertEquals($mailer->Port, SMTP::DEFAULT_SECURE_PORT);
