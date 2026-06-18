@@ -2115,7 +2115,13 @@ class PHPMailer
         }
         if (!empty($this->Sender) && static::validateAddress($this->Sender)) {
             $phpmailer_path = ini_get('sendmail_path');
-            if (self::isShellSafe($this->Sender) && strpos($phpmailer_path, ' -f') === false) {
+            if (self::isShellSafe($this->Sender)) {
+                // Strip any pre-existing -f flag from sendmail_path so our Sender takes precedence
+                // over server-configured defaults (e.g. a random hosting subdomain in sendmail_path)
+                $clean_path = preg_replace('/ -f\s*\S+/', '', $phpmailer_path);
+                if ($clean_path !== $phpmailer_path) {
+                    ini_set('sendmail_path', $clean_path);
+                }
                 $params = sprintf('-f%s', $this->Sender);
             }
             $old_from = ini_get('sendmail_from');
@@ -2145,6 +2151,9 @@ class PHPMailer
         }
         if (isset($old_from)) {
             ini_set('sendmail_from', $old_from);
+        }
+        if (isset($phpmailer_path) && isset($clean_path) && $clean_path !== $phpmailer_path) {
+            ini_set('sendmail_path', $phpmailer_path);
         }
         if (!$result) {
             throw new Exception(self::lang('instantiate'), self::STOP_CRITICAL);
