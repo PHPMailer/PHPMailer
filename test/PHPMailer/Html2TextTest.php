@@ -47,7 +47,7 @@ final class Html2TextTest extends TestCase
      *
      * @return array
      */
-    public function dataHtml2Text()
+    public static function dataHtml2Text()
     {
         return [
             'Plain text, no encoded entities, surrounded by whitespace' => [
@@ -172,8 +172,10 @@ EOT
      *
      * @return array
      */
-    public function dataHtml2TextAdvanced()
+    public static function dataHtml2TextAdvanced()
     {
+        $obj = new HasCallback();
+
         return [
             'No HTML, simple (unsafe) function name callback' => [
                 'input'    => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -191,13 +193,13 @@ EOT
             'Has HTML, simple (unsafe) static class method callback' => [
                 'input'    => 'Lorem <div>ipsum</div> dolor sit amet<br/>,'
                     . ' consectetur <script>adipiscing()</script> elit.',
-                'callback' => [__CLASS__, 'methodBasedCallback'],
+                'callback' => [HasCallback::class, 'methodBasedCallback'],
                 'expected' => 'Lorem ipsum dolor sit amet, consectetur adipiscing() elit.',
             ],
             'Has HTML, simple (unsafe) object method callback' => [
                 'input'    => 'Lorem <div>ipsum</div> dolor sit amet<br/>,'
                     . ' consectetur <script>adipiscing()</script> elit.',
-                'callback' => [$this, 'methodBasedCallback'],
+                'callback' => [$obj, 'methodBasedCallback'],
                 'expected' => 'Lorem ipsum dolor sit amet, consectetur adipiscing() elit.',
             ],
             'Has HTML, explicitly use internal converter (callback = true)' => [
@@ -220,7 +222,10 @@ EOT
             ],
         ];
     }
+}
 
+final class HasCallback
+{
     /**
      * Simplistic callback function.
      */

@@ -140,7 +140,7 @@ class DSNConfigurator
         $isSMTPS = 'smtps' === $config['scheme'];
 
         if ($isSMTPS) {
-            $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         }
 
         $mailer->Host = $config['host'];

@@ -1,8 +1,23 @@
 # PHPMailer Change Log
 
+## Version 7.1.1 (May 18th, 2026)
+* Make encoding validator case-insensitive
+
+## Version 7.1.0 (May 15th, 2026)
+* Validate `MessageDate` before including it in headers.
+* Minor feature: some common non-RFC date formats and DateTime instances are now automatically converted to the right format for `MessageDate`.
+* Strip breaks from `XMailer`, `ContentType`, and `CharSet` properties.
+* Strip breaks from `username` and `password` properties before use in `POP3`.
+* Enforce strict checks on `Encoding` values.
+* Ease BC IMAP issues by allowing the `parseAddresses` `$useimap` parameter to be `false` or `null` without triggering a deprecation warning.
+* Updated Turkish and Norwegian translations.
+* Test case cleanup and improvements by @jrfnl.
+* Fix crash if `Mailer` ended up empty.
+* Use Ubuntu 24.04 for tests.
+
 ## Version 7.0.2 (January 9th, 2026)
-* Fixes for sendmail parameter problems in WordPress, thanks to @SirLouen
-* Reduce memory consumption when sending large attachments by @RobinvanderVliet
+* Fixes for sendmail parameter problems in WordPress, thanks to @SirLouen.
+* Reduce memory consumption when sending large attachments by @RobinvanderVliet.
 
 ## Version 7.0.1 (November 25th, 2025)
 * Use From domain when generating CIDs in msgHTML.
@@ -191,7 +206,7 @@ Many thanks to @jrfnl for all her work.
 
 ## Version 6.4.0 (March 31st, 2021)
 * Revert change that made the `mail()` and sendmail transports set the envelope sender if one isn't explicitly provided, as it causes problems described in <https://github.com/PHPMailer/PHPMailer/issues/2298>
-* Check for mbstring extension before decoding addresss in `parseAddress`
+* Check for mbstring extension before decoding address in `parseAddress`
 * Add Serbian Latin translation (`sr_latn`)
 * Enrol PHPMailer in Tidelift
 
@@ -223,7 +238,7 @@ Many thanks to @jrfnl for all her work.
 * Prevent duplicate `To` headers in BCC-only messages when using `mail()`
 * Avoid file function problems when attaching files from Windows UNC paths
 * Improve German, Bahasa Indonesian, Filipino translations
-* Add Javascript-based example
+* Add JavaScript-based example
 * Increased test coverage
 
 ## Version 6.1.7 (July 14th, 2020)
@@ -298,7 +313,7 @@ Many thanks to @jrfnl for all her work.
 * Add PHPMailer logo images
 
 ## Version 6.0.7 (February 1st 2019)
-* Include RedHat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
+* Include Red Hat GPL Cooperation Commitment - see the `COMMITMENT` file for details.
 * Don't exclude composer.json from git exports as it breaks composer updates in projects that use PHPMailer
 * Updated Malay translation
 * Fix language tests
@@ -306,7 +321,7 @@ Many thanks to @jrfnl for all her work.
 ## Version 6.0.6 (November 14th 2018)
 * **SECURITY** Fix potential object injection vulnerability. Reported by Sehun Oh of cyberone.kr.
 * Added Tagalog translation, thanks to @StoneArtz
-* Added Malagache translation, thanks to @Hackinet
+* Added Malagasy translation, thanks to @Hackinet
 * Updated Serbian translation, fixed incorrect language code, thanks to @mmilanovic4
 * Updated Arabic translations (@MicroDroid)
 * Updated Hungarian translations
@@ -761,7 +776,7 @@ This is a major update that breaks backwards compatibility.
 
 ## Version 5.1 (October 20, 2009)
 * fixed filename issue with AddStringAttachment (thanks to Tony)
-* fixed "SingleTo" property, now works with Senmail, Qmail, and SMTP in
+* fixed "SingleTo" property, now works with Sendmail, Qmail, and SMTP in
   addition to PHP mail()
 * added DKIM digital signing functionality, new properties:
   - DKIM_domain (sets the domain name)

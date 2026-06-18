@@ -83,7 +83,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataAddReplyToValidAddressNonIdn()
+    public static function dataAddReplyToValidAddressNonIdn()
     {
         return [
             'Valid address' => [
@@ -158,7 +158,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataAddReplyToInvalidAddressNonIdn()
+    public static function dataAddReplyToInvalidAddressNonIdn()
     {
         return [
             'Invalid domain' => ['a@example..com'],
@@ -204,7 +204,7 @@ final class ReplyToGetSetClearTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataReplyToInMessageHeader()
+    public static function dataReplyToInMessageHeader()
     {
         $LE = PHPMailer::getLE();
 

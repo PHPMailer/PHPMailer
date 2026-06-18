@@ -133,7 +133,7 @@ final class AddStringAttachmentTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataFailToAttach()
+    public static function dataFailToAttach()
     {
         return [
             'Invalid: invalid encoding' => [

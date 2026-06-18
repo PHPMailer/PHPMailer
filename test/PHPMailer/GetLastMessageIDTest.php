@@ -45,7 +45,7 @@ final class GetLastMessageIDTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataMessageIDInvalid()
+    public static function dataMessageIDInvalid()
     {
         $hash = hash('sha256', 12345);
 
@@ -86,7 +86,7 @@ final class GetLastMessageIDTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataMessageIDValid()
+    public static function dataMessageIDValid()
     {
         $hash = hash('sha256', 12345);
 

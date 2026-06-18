@@ -51,7 +51,7 @@ final class FileIsAccessibleTest extends TestCase
      *
      * @return array
      */
-    public function dataFileIsAccessible()
+    public static function dataFileIsAccessible()
     {
         $fixturesPath = dirname(__DIR__) . '/Fixtures/FileIsAccessibleTest/';
 

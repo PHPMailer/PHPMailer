@@ -64,7 +64,7 @@ final class CustomHeaderTest extends TestCase
      *
      * @return array
      */
-    public function dataAddAndGetCustomHeader()
+    public static function dataAddAndGetCustomHeader()
     {
         return [
             'Single custom header' => [
@@ -170,7 +170,7 @@ final class CustomHeaderTest extends TestCase
      *
      * @return array
      */
-    public function dataAddCustomHeaderInvalid()
+    public static function dataAddCustomHeaderInvalid()
     {
         return [
             'Invalid: new line in value' => [

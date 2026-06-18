@@ -44,7 +44,7 @@ final class NormalizeBreaksTest extends TestCase
      *
      * @return array
      */
-    public function dataNormalizeBreaks()
+    public static function dataNormalizeBreaks()
     {
         $LE           = PHPMailer::getLE();
         $baseExpected = 'hello' . PHPMailer::CRLF . 'World' . PHPMailer::CRLF . 'Again' . PHPMailer::CRLF;

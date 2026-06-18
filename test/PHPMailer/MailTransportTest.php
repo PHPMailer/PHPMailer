@@ -213,7 +213,7 @@ final class MailTransportTest extends SendTestCase
      * }
      */
 
-    public function sendmailPathProvider()
+    public static function sendmailPathProvider()
     {
         return [
             'path only' => [

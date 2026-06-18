@@ -76,7 +76,7 @@ final class ICalTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataICalMethod()
+    public static function dataICalMethod()
     {
         return [
             'Valid method: request (default)' => [

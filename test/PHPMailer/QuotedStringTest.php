@@ -42,7 +42,7 @@ final class QuotedStringTest extends TestCase
      *
      * @return array
      */
-    public function dataQuotedString()
+    public static function dataQuotedString()
     {
         return [
             'No special chars' => [

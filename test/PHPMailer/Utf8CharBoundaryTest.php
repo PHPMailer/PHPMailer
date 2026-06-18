@@ -43,7 +43,7 @@ final class Utf8CharBoundaryTest extends TestCase
      *
      * @return array
      */
-    public function dataUtf8CharBoundary()
+    public static function dataUtf8CharBoundary()
     {
         return [
             'Encoded word with multibyte char first byte' => [

@@ -48,7 +48,7 @@ final class SetFromTest extends TestCase
      *
      * @return array
      */
-    public function dataSetFromSuccess()
+    public static function dataSetFromSuccess()
     {
         return [
             'Email, no name' => [
@@ -170,7 +170,7 @@ final class SetFromTest extends TestCase
      *
      * @return array
      */
-    public function dataSetFromFail()
+    public static function dataSetFromFail()
     {
         return [
             'Invalid email address' => [

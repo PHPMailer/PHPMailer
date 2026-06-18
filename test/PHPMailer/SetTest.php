@@ -40,7 +40,7 @@ final class SetTest extends TestCase
      *
      * @return array
      */
-    public function dataSetValidProperty()
+    public static function dataSetValidProperty()
     {
         return [
             'Valid: property exists, public' => [

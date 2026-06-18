@@ -45,7 +45,7 @@ final class AddrFormatTest extends TestCase
      *
      * @return array
      */
-    public function dataAddrFormat()
+    public static function dataAddrFormat()
     {
         return [
             // Test cases with valid addresses.

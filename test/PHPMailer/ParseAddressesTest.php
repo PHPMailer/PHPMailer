@@ -70,6 +70,92 @@ final class ParseAddressesTest extends TestCase
     }
 
     /**
+     * Test that falsy $useimap values use the simpler parser without a deprecation warning.
+     *
+     * @dataProvider dataParseAddressesFalsyUseimapValues
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
+     *
+     * @param mixed $useimap The $useimap argument.
+     */
+    public function testParseAddressesWithFalsyUseimapValues($useimap)
+    {
+        set_error_handler(static function ($errno, $errstr) {
+            if ($errno === E_USER_DEPRECATED) {
+                throw new \Exception($errstr, $errno);
+            }
+
+            return true;
+        }, E_USER_NOTICE | E_USER_DEPRECATED);
+
+        try {
+            $expected = [
+                ['name' => '', 'address' => 'joe@example.com'],
+            ];
+            $this->verifyExpectations(PHPMailer::parseAddresses('joe@example.com', $useimap), $expected);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    /**
+     * Test that truthy $useimap values request the deprecated IMAP parser.
+     *
+     * @dataProvider dataParseAddressesTruthyUseimapValues
+     * @covers \PHPMailer\PHPMailer\PHPMailer::parseAddresses
+     *
+     * @param mixed $useimap The $useimap argument.
+     */
+    public function testParseAddressesWithTruthyUseimapValues($useimap)
+    {
+        set_error_handler(static function ($errno, $errstr) {
+            if ($errno === E_USER_DEPRECATED) {
+                throw new \Exception($errstr, $errno);
+            }
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $this->expectException(\Exception::class);
+            $this->expectExceptionCode(E_USER_DEPRECATED);
+            PHPMailer::parseAddresses('joe@example.com', $useimap);
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    /**
+     * Data provider for falsy $useimap values.
+     *
+     * @return array
+     */
+    public static function dataParseAddressesFalsyUseimapValues()
+    {
+        return [
+            'null' => [null],
+            'false' => [false],
+            'zero integer' => [0],
+            'empty string' => [''],
+            'zero string' => ['0'],
+        ];
+    }
+
+    /**
+     * Data provider for truthy $useimap values.
+     *
+     * @return array
+     */
+    public static function dataParseAddressesTruthyUseimapValues()
+    {
+        return [
+            'true' => [true],
+            'one integer' => [1],
+            'one string' => ['1'],
+            'yes string' => ['yes'],
+        ];
+    }
+
+    /**
      * Data provider for testAddressSplittingNative.
      *
      * @return array
@@ -77,7 +163,7 @@ final class ParseAddressesTest extends TestCase
      *      expected: array{name: string, address: string}[]
      *      charset: string
      */
-    public function dataAddressSplittingNative()
+    public static function dataAddressSplittingNative()
     {
         return [
             'Valid address: single address without name' => [
@@ -118,7 +204,7 @@ final class ParseAddressesTest extends TestCase
      *
      * @return array The array is expected to have an `addrstr` and an `expected` key.
      */
-    public function dataParseEmailString()
+    public static function dataParseEmailString()
     {
         return [
             'Valid address: simple address' => [
@@ -159,7 +245,15 @@ final class ParseAddressesTest extends TestCase
      */
     public function testAddressSplitting($addrstr, $expected)
     {
-        $parsed = PHPMailer::parseAddresses($addrstr, null, PHPMailer::CHARSET_UTF8);
+        set_error_handler(static function () {
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $parsed = PHPMailer::parseAddresses($addrstr, true, PHPMailer::CHARSET_UTF8);
+        } finally {
+            restore_error_handler();
+        }
 
         $this->verifyExpectations($parsed, $expected);
     }
@@ -170,7 +264,7 @@ final class ParseAddressesTest extends TestCase
      * @return array The array is expected to have an `addrstr` and an `expected` key.
      *               The `expected` key should - as a minimum.
      */
-    public function dataAddressSplitting()
+    public static function dataAddressSplitting()
     {
         return [
             // Test cases with valid addresses.
@@ -282,7 +376,7 @@ final class ParseAddressesTest extends TestCase
      * @return array The array is expected to have an `addrstr` and an `expected` key.
      *               The `expected` key should - as a minimum - have a single value.
      */
-    public function dataDecodeHeader()
+    public static function dataDecodeHeader()
     {
         return [
             'UTF-8 B-encoded' => [

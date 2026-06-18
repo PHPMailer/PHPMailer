@@ -40,7 +40,7 @@ final class IsValidHostTest extends TestCase
      *
      * @return array
      */
-    public function dataValidHost()
+    public static function dataValidHost()
     {
         return [
             'localhost'                 => ['localhost'],
@@ -76,7 +76,7 @@ final class IsValidHostTest extends TestCase
      *
      * @return array
      */
-    public function dataInvalidHost()
+    public static function dataInvalidHost()
     {
         return [
             'Invalid type: null'                        => [null],

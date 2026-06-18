@@ -96,7 +96,7 @@ final class ValidateAddressCustomValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataRejectCallables()
+    public static function dataRejectCallables()
     {
         return [
             // If a `php` function defined in validators.php successfully overrides this built-in validator name,
@@ -105,7 +105,7 @@ final class ValidateAddressCustomValidatorTest extends TestCase
                 'callback' => 'php',
                 'message'  => 'Build-in php validator overridden',
             ],
-            // Check that a non-existent validator name falls back to a built-in validator
+            // Check that a nonexistent validator name falls back to a built-in validator
             // and does not call a global function with that name.
             'phpx' => [
                 'callback' => 'phpx',

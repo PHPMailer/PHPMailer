@@ -56,13 +56,13 @@ final class OAuthTest extends TestCase
         self::assertInstanceOf(
             OAuth::class,
             $PHPMailer->getOAuth(),
-            'Setting Oauth property to an instance of the OAuth class failed'
+            'Setting OAuth property to an instance of the OAuth class failed'
         );
         $PHPMailer->setOAuth(new DummyOAuthProvider());
         self::assertInstanceOf(
             OAuthTokenProvider::class,
             $PHPMailer->getOAuth(),
-            'Setting Oauth property to an instance of the OAuth class failed (2)'
+            'Setting OAuth property to an instance of the OAuth class failed (2)'
         );
     }
 }

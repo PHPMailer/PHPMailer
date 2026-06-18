@@ -68,7 +68,7 @@ final class LocalizationTest extends TestCase
      *
      * @return array
      */
-    public function dataSetLanguageSuccess()
+    public static function dataSetLanguageSuccess()
     {
         $customPath = dirname(__DIR__) . '/Fixtures/LocalizationTest/';
 
@@ -141,7 +141,7 @@ final class LocalizationTest extends TestCase
      *
      * @return array
      */
-    public function dataSetLanguageSuccessFallBackLogic()
+    public static function dataSetLanguageSuccessFallBackLogic()
     {
         $customPath = dirname(__DIR__) . '/Fixtures/LocalizationTest/';
 
@@ -228,7 +228,7 @@ final class LocalizationTest extends TestCase
      *
      * @return array
      */
-    public function dataSetLanguageFail()
+    public static function dataSetLanguageFail()
     {
         $customPath = dirname(__DIR__) . '/Fixtures/LocalizationTest/';
 
@@ -253,7 +253,7 @@ final class LocalizationTest extends TestCase
              * Note: The first two letters of this three letter language code should match an existing
              * language file for this test to test this properly.
              */
-            'Invalid language code (ISO 639-2 "hrv"): fallback to default (en)' => [
+            'Invalid language code (ISO 639-2 "hrv"): fall back to default (en)' => [
                 'phrase'   => 'Message body empty',
                 'langCode' => 'hrv',
             ],
@@ -420,7 +420,7 @@ final class LocalizationTest extends TestCase
      *
      * @return array
      */
-    public function dataGetTranslations()
+    public static function dataGetTranslations()
     {
         return [
             'No explicit language set' => [
@@ -460,7 +460,7 @@ final class LocalizationTest extends TestCase
      *
      * @return array
      */
-    public function dataLang()
+    public static function dataLang()
     {
         return [
             'Key: "invalid_address", default language (en)' => [
@@ -491,11 +491,11 @@ final class LocalizationTest extends TestCase
                'expected' => 'SMTP Connect() falló. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting',
                'langCode' => 'es',
             ],
-            'Non-existent key returns key, default language (en)' => [
+            'Nonexistent key returns key, default language (en)' => [
                'input'    => 'notasupportedkey',
                'expected' => 'notasupportedkey',
             ],
-            'Non-existent key returns key, explicit language: es' => [
+            'Nonexistent key returns key, explicit language: es' => [
                'input'    => 'notasupportedkey',
                'expected' => 'notasupportedkey',
                'langCode' => 'es',

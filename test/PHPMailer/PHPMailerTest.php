@@ -710,7 +710,7 @@ EOT;
             return;
         }
 
-        //Test using non-existent UNC path
+        //Test using nonexistent UNC path
         self::assertFalse($this->Mail->addAttachment('\\\\nowhere\\nothing'));
 
         $this->buildBody();

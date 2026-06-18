@@ -53,7 +53,7 @@ final class EncodeQTest extends TestCase
      *
      * @return array
      */
-    public function dataEncodeQ()
+    public static function dataEncodeQ()
     {
         return [
             'Encode for text; char encoding default (iso88591)' => [

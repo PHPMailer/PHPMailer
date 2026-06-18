@@ -158,10 +158,10 @@ final class AddEmbeddedImageTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataFailToAttach()
+    public static function dataFailToAttach()
     {
         return [
-            'Invalid: non-existent file' => [
+            'Invalid: nonexistent file' => [
                 'path'             => 'thisfiledoesntexist',
                 'cid'              => 'xyz',
                 'exceptionMessage' => 'Could not access file: thisfiledoesntexist',

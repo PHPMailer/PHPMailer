@@ -53,7 +53,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring mail.
+     * Test configuring mail.
      */
     public function testConfigureMail()
     {
@@ -65,7 +65,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring sendmail.
+     * Test configuring sendmail.
      */
     public function testConfigureSendmail()
     {
@@ -77,7 +77,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring qmail.
+     * Test configuring qmail.
      */
     public function testConfigureQmail()
     {
@@ -89,7 +89,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTP without authentication.
+     * Test configuring SMTP without authentication.
      */
     public function testConfigureSmtpWithoutAuthentication()
     {
@@ -103,7 +103,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTP with authentication.
+     * Test configuring SMTP with authentication.
      */
     public function testConfigureSmtpWithAuthentication()
     {
@@ -120,7 +120,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTP without port.
+     * Test configuring SMTP without port.
      */
     public function testConfigureSmtpWithoutPort()
     {
@@ -134,7 +134,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTP with port.
+     * Test configuring SMTP with port.
      */
     public function testConfigureSmtpWitPort()
     {
@@ -148,7 +148,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTPs without port.
+     * Test configuring SMTPs without port.
      */
     public function testConfigureSmtpsWithoutPort()
     {
@@ -157,7 +157,7 @@ final class DSNConfiguratorTest extends TestCase
         $configurator->configure($this->Mail, 'smtps://user:pass@remotehost');
 
         self::assertEquals($this->Mail->Mailer, 'smtp');
-        self::assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($this->Mail->SMTPSecure, PHPMailer::ENCRYPTION_SMTPS);
 
         self::assertEquals($this->Mail->Host, 'remotehost');
         self::assertEquals($this->Mail->Port, SMTP::DEFAULT_SECURE_PORT);
@@ -168,7 +168,7 @@ final class DSNConfiguratorTest extends TestCase
     }
 
     /**
-     * Test cofiguring SMTPs with port.
+     * Test configuring SMTPs with port.
      */
     public function testConfigureWithUnknownOption()
     {
@@ -177,11 +177,11 @@ final class DSNConfiguratorTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unknown option: "UnknownOption".');
 
-        $configurator->configure($this->Mail, 'mail://locahost?UnknownOption=Value');
+        $configurator->configure($this->Mail, 'mail://localhost?UnknownOption=Value');
     }
 
     /**
-     * Test cofiguring options with query sting.
+     * Test configuring options with query sting.
      */
     public function testConfigureWithOptions()
     {
@@ -206,7 +206,7 @@ final class DSNConfiguratorTest extends TestCase
         $mailer = DSNConfigurator::mailer('smtps://user@gmail.com:secret@smtp.gmail.com?SMTPDebug=3&Timeout=1000');
 
         self::assertEquals($mailer->Mailer, 'smtp');
-        self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_STARTTLS);
+        self::assertEquals($mailer->SMTPSecure, PHPMailer::ENCRYPTION_SMTPS);
 
         self::assertEquals($mailer->Host, 'smtp.gmail.com');
         self::assertEquals($mailer->Port, SMTP::DEFAULT_SECURE_PORT);

@@ -47,7 +47,7 @@ final class IsPermittedPathTest extends TestCase
      *
      * @return array
      */
-    public function dataIsPermittedPath()
+    public static function dataIsPermittedPath()
     {
         return [
             'Valid: full, local path; Linux style, forward slashes' => [

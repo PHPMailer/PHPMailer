@@ -43,7 +43,7 @@ final class WrapTextTest extends TestCase
      *
      * @return array
      */
-    public function dataWrapText()
+    public static function dataWrapText()
     {
         return [
             'empty string' => [

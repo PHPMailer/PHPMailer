@@ -42,7 +42,7 @@ final class MbPathinfoTest extends TestCase
      *
      * @return array
      */
-    public function dataMb_pathinfoWithoutOptions()
+    public static function dataMb_pathinfoWithoutOptions()
     {
         return [
             'Empty string' => [
@@ -131,7 +131,7 @@ final class MbPathinfoTest extends TestCase
      *
      * @return array
      */
-    public function dataMb_pathinfoWithOptions()
+    public static function dataMb_pathinfoWithOptions()
     {
         return [
             'Option: PATHINFO_DIRNAME' => [

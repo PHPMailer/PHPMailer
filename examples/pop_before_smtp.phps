@@ -2,7 +2,7 @@
 
 /**
  * This example shows how to use POP-before-SMTP for authentication.
- * POP-before-SMTP is a very old technology that is hardly used any more.
+ * POP-before-SMTP is a very old technology that is hardly used anymore.
  */
 
 //Import PHPMailer classes into the global namespace

@@ -47,7 +47,7 @@ final class XMailerTest extends TestCase
      *
      * @return array
      */
-    public function dataXMailer()
+    public static function dataXMailer()
     {
         return [
             'empty string' => [

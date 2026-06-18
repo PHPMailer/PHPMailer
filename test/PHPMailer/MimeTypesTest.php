@@ -42,7 +42,7 @@ final class MimeTypesTest extends TestCase
      *
      * @return array
      */
-    public function dataMime_Types()
+    public static function dataMime_Types()
     {
         return [
             'Extension: pdf (lowercase)' => [

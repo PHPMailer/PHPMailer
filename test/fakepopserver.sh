@@ -24,7 +24,7 @@ DEBUG=1
 TIMEOUT=60
 
 POP_USER=
-POP_PASSWRD=test
+POP_PASSWORD=test
 
 LINES=1
 BREAK=0
@@ -78,7 +78,7 @@ while [ ${BREAK} -eq 0 ] ; do
         ANSWER="+OK Capabilities include\r\nUSER\r\nCAPA\r\n."
         ;;
       PASS)
-        if [ "${POP_PASSWRD}" == "${ARGS}" ] ; then
+        if [ "${POP_PASSWORD}" == "${ARGS}" ] ; then
           ANSWER="+OK Logged in."
           AUTH=1
         else

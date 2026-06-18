@@ -42,7 +42,7 @@ final class FilenameToTypeTest extends TestCase
      *
      * @return array
      */
-    public function dataFilenameToType()
+    public static function dataFilenameToType()
     {
         return [
             'Empty string' => [

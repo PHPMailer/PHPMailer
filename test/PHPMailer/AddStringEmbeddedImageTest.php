@@ -27,7 +27,7 @@ use PHPMailer\Test\PreSendTestCase;
 final class AddStringEmbeddedImageTest extends PreSendTestCase
 {
     /**
-     * Test successfully adding a stingified embedded image without a name.
+     * Test successfully adding a stringified embedded image without a name.
      */
     public function testHtmlStringEmbedNoName()
     {
@@ -146,7 +146,7 @@ final class AddStringEmbeddedImageTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataFailToAttach()
+    public static function dataFailToAttach()
     {
         return [
             'Invalid: invalid encoding' => [

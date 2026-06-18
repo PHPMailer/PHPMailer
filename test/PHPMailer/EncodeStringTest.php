@@ -49,7 +49,7 @@ final class EncodeStringTest extends TestCase
      *
      * @return array
      */
-    public function dataEncodeString()
+    public static function dataEncodeString()
     {
         $input           = 'hello';
         $LE              = PHPMailer::getLE();

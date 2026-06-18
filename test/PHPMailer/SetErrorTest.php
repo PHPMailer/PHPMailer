@@ -25,7 +25,7 @@ use PHPMailer\Test\TestCase;
 final class SetErrorTest extends TestCase
 {
     /**
-     * Test simple, non-STMP, error registration.
+     * Test simple, non-SMTP, error registration.
      */
     public function testSetErrorNonSmtp()
     {
@@ -43,7 +43,7 @@ final class SetErrorTest extends TestCase
     }
 
     /**
-     * Test simple, non-STMP, error registration, where only one of the two SMTP conditions is met.
+     * Test simple, non-SMTP, error registration, where only one of the two SMTP conditions is met.
      */
     public function testSetErrorNonSmtpWithMailerSmtp()
     {
@@ -53,7 +53,7 @@ final class SetErrorTest extends TestCase
     }
 
     /**
-     * Test simple, non-STMP, error registration, where the other one of the two SMTP conditions is met.
+     * Test simple, non-SMTP, error registration, where the other one of the two SMTP conditions is met.
      */
     public function testSetErrorNonSmtpWithSmtpInstanceSet()
     {
@@ -92,7 +92,7 @@ final class SetErrorTest extends TestCase
      *
      * @return array
      */
-    public function dataSetErrorSmtp()
+    public static function dataSetErrorSmtp()
     {
         return [
             'No SMTP error' => [

@@ -1,12 +1,12 @@
-# Upgrading from PHPMailer 5.2 to 6.0
+# Upgrading from PHPMailer 5.2
 
-PHPMailer 6.0 is a major update, breaking backward compatibility.
+PHPMailer versions 6.0 and later are major updates from 5.2, breaking backward compatibility.
 
-If you're in doubt about how you should be using PHPMailer 6, take a look at the examples as they have all been updated to work in a PHPMailer 6.0 style.
+If you're in doubt about how you should be using PHPMailer in more recent versions, take a look at the examples as they have all been updated.
 
 ## PHP Version
 
-PHPMailer 6.0 requires PHP 5.5 or later, and is fully compatible with PHP versions all the way up to 8.4. PHPMailer 5.2 supported PHP 5.0 and upwards, so if you need to run on a legacy PHP version, see the [PHPMailer 5.2-stable branch on Github](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable), but bear in mind that this branch is no longer maintained.
+PHPMailer 6.0 requires PHP 5.5 or later, and is fully compatible with PHP versions all the way up to 8.5. PHPMailer 5.2 supported PHP 5.0 and upwards, so if you need to run on a legacy PHP version, see the [PHPMailer 5.2-stable branch on GitHub](https://github.com/PHPMailer/PHPMailer/tree/5.2-stable), but bear in mind that this branch is no longer maintained.
 
 ## Loading PHPMailer
  
@@ -38,9 +38,9 @@ require 'src/Exception.php';
 ```
 
 ## Namespace
-PHPMailer 6 uses a [namespace](https://www.php.net/manual/en/language.namespaces.rationale.php) of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You **must** import (with a `use` statement) classes you're using explicitly into your own namespace, or reference them absolutely in the global namespace - all the examples do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it! If you are using other PHPMailer classes explicitly (such as `SMTP` or `Exception`), you will need to import them into your namespace too.
+PHPMailer now uses a [namespace](https://www.php.net/manual/en/language.namespaces.rationale.php) of `PHPMailer\PHPMailer`, because it's the PHPMailer project within the PHPMailer organisation. You **must** import (with a `use` statement) classes you're using explicitly into your own namespace, or reference them absolutely in the global namespace - all the examples do this. This means the fully-qualified name of the main PHPMailer class is `PHPMailer\PHPMailer\PHPMailer`, which is a bit of a mouthful, but there's no harm in it! If you are using other PHPMailer classes explicitly (such as `SMTP` or `Exception`), you will need to import them into your namespace too.
 
-For example you might create an instance like this:
+For example, you might create an instance like this:
 
 ```php
 <?php

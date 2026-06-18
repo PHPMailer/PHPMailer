@@ -51,7 +51,7 @@ final class PunyencodeAddressTest extends TestCase
      *
      * @return array
      */
-    public function dataPunyencodeAddressConversion()
+    public static function dataPunyencodeAddressConversion()
     {
         return [
             // This source file is in UTF-8, so characters here are in native charset.
@@ -108,7 +108,7 @@ final class PunyencodeAddressTest extends TestCase
      *
      * @return array
      */
-    public function dataPunyencodeAddressNoConversion()
+    public static function dataPunyencodeAddressNoConversion()
     {
         return [
             'ASCII' => [

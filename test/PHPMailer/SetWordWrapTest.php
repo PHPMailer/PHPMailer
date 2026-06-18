@@ -68,7 +68,7 @@ final class SetWordWrapTest extends PreSendTestCase
      *
      * @return array
      */
-    public function dataWordWrap()
+    public static function dataWordWrap()
     {
         return [
             'ascii message' => [
