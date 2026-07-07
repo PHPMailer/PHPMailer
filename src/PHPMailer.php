@@ -1300,11 +1300,11 @@ class PHPMailer
      */
     public static function parseAddresses($addrstr, $useimap = null, $charset = self::CHARSET_ISO88591)
     {
-        if ($useimap == true) {
+        if ($useimap) {
             trigger_error(self::lang('deprecated_argument') . '$useimap', E_USER_DEPRECATED);
         }
         $addresses = [];
-        if ($useimap == true && function_exists('imap_rfc822_parse_adrlist')) {
+        if ($useimap !== false && function_exists('imap_rfc822_parse_adrlist')) {
             //Use this built-in parser if it's available
             // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.imap_rfc822_parse_adrlistRemoved -- wrapped in function_exists()
             $list = imap_rfc822_parse_adrlist($addrstr, '');
