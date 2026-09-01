@@ -3,7 +3,7 @@ Search.appendIndex(
                 {
             "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator",
             "name": "DSNConfigurator",
-            "summary": "Configure\u0020PHPMailer\u0020with\u0020DSN\u0020string.",
+            "summary": "Configure\u0020PHPMailer\u0020with\u0020a\u0020DSN\u0020string.",
             "url": "classes/PHPMailer-PHPMailer-DSNConfigurator.html"
         },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\DSNConfigurator\u003A\u003Amailer\u0028\u0029",
