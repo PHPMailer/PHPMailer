@@ -971,6 +971,11 @@ EOT;
 
         $msg = $this->Mail->getSentMIMEMessage();
         self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+        self::assertSame(
+            0,
+            preg_match_all("/(?<!\r)\n/", $msg),
+            'Signed message contains bare line feeds'
+        );
         unlink($certfile);
         unlink($keyfile);
     }
