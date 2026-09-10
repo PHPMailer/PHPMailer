@@ -3320,8 +3320,9 @@ class PHPMailer
                     @unlink($signed);
                     //The message returned by openssl contains both headers and body, so need to split them up
                     $parts = explode("\n\n", $body, 2);
-                    $this->MIMEHeader .= $parts[0] . static::$LE . static::$LE;
-                    $body = $parts[1];
+                    //openssl emits bare LF breaks, which SMTP servers may reject
+                    $this->MIMEHeader .= static::normalizeBreaks($parts[0]) . static::$LE . static::$LE;
+                    $body = static::normalizeBreaks($parts[1]);
                 } else {
                     @unlink($signed);
                     throw new Exception(self::lang('signing') . openssl_error_string());
