@@ -2,6 +2,7 @@
 
 ## WIP
 * XOAUTH authentication with long tokens could report success when it had failed.
+* S/MIME signed messages no longer contain bare LF line breaks.
 
 ## Version 7.1.1 (May 18th, 2026)
 * Make encoding validator case-insensitive
