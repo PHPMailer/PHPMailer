@@ -1117,6 +1117,37 @@ EOT;
     }
 
     /**
+     * Closing a connection in the middle of DATA must not send QUIT, as the server would take it as message content.
+     */
+    public function testQuitDuringData()
+    {
+        self::assertTrue($this->Mail->smtpConnect(), 'SMTP connect failed');
+        $smtp = $this->Mail->getSMTPInstance();
+        //Don't wait long for a reply that should never be requested
+        $smtp->Timelimit = 5;
+        self::assertTrue($smtp->mail('phpunit@example.com'));
+        self::assertTrue($smtp->recipient('somebody@example.com'));
+
+        //Start DATA without sending the message, as if the send had been interrupted
+        $reflMethod = new \ReflectionMethod($smtp, 'sendCommand');
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(true);
+        self::assertTrue($reflMethod->invoke($smtp, 'DATA', 'DATA', 354));
+        (\PHP_VERSION_ID < 80100) && $reflMethod->setAccessible(false);
+
+        $sent = '';
+        $smtp->setDebugLevel(SMTP::DEBUG_CLIENT);
+        $smtp->setDebugOutput(
+            static function ($str) use (&$sent) {
+                $sent .= $str;
+            }
+        );
+        $smtp->quit();
+
+        self::assertStringNotContainsString('QUIT', $sent, 'QUIT was sent during DATA');
+        self::assertFalse($smtp->connected(), 'Connection was not closed');
+    }
+
+    /**
      * Tests setting and retrieving ConfirmReadingTo address, also known as "read receipt" address.
      */
     public function testConfirmReadingTo()

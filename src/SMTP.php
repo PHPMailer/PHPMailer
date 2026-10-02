@@ -276,6 +276,14 @@ class SMTP
     protected $last_reply = '';
 
     /**
+     * The last command sent to the server.
+     * Used to avoid sending QUIT while a DATA command is still in progress.
+     *
+     * @var string
+     */
+    protected $state = '';
+
+    /**
      * Output debugging info via a user-selected method.
      *
      * @param string $str   Debug string to output
@@ -763,6 +771,7 @@ class SMTP
     {
         $this->server_caps = null;
         $this->helo_rply = null;
+        $this->state = '';
         if (is_resource($this->smtp_conn)) {
             //Close the connection and cleanup
             fclose($this->smtp_conn);
@@ -1021,7 +1030,12 @@ class SMTP
      */
     public function quit($close_on_error = true)
     {
-        $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
+        if ($this->state === 'DATA') {
+            //The server would take QUIT as part of an unfinished message, so just close the connection
+            $noerror = true;
+        } else {
+            $noerror = $this->sendCommand('QUIT', 'QUIT', 221);
+        }
         $err = $this->error; //Save any error
         if ($noerror || $close_on_error) {
             $this->close();
@@ -1124,6 +1138,7 @@ class SMTP
 
             return false;
         }
+        $this->state = $command;
         $this->client_send($commandstring . static::LE, $command);
 
         $this->last_reply = $this->get_lines();
