@@ -157,11 +157,11 @@ class DSNConfigurator
         $mailer->SMTPAuth = isset($config['user']) || isset($config['pass']);
 
         if (isset($config['user'])) {
-            $mailer->Username = $config['user'];
+            $mailer->Username = rawurldecode($config['user']);
         }
 
         if (isset($config['pass'])) {
-            $mailer->Password = $config['pass'];
+            $mailer->Password = rawurldecode($config['pass']);
         }
     }
 
