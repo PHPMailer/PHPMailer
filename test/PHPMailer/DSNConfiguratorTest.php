@@ -218,4 +218,17 @@ final class DSNConfiguratorTest extends TestCase
         self::assertEquals($mailer->SMTPDebug, 3);
         self::assertEquals($mailer->Timeout, 1000);
     }
+
+    /**
+     * Test that percent-encoded credentials are decoded.
+     */
+    public function testConfigureSMTPDecodesCredentials()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'smtp://us%40er:p%40ss%3Aw%2Frd@localhost');
+
+        self::assertSame('us@er', $this->Mail->Username);
+        self::assertSame('p@ss:w/rd', $this->Mail->Password);
+    }
 }
