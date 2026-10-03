@@ -206,7 +206,7 @@ class DSNConfigurator
                 case 'UseSendmailOptions':
                 case 'do_verp':
                 case 'DKIM_copyHeaderFields':
-                    $mailer->$key = (bool) $value;
+                    $mailer->$key = filter_var($value, FILTER_VALIDATE_BOOLEAN);
                     break;
                 case 'Priority':
                 case 'SMTPDebug':
