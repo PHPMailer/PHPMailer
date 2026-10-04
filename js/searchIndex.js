@@ -1821,6 +1821,11 @@ Search.appendIndex(
             "summary": "The\u0020most\u0020recent\u0020reply\u0020received\u0020from\u0020the\u0020server.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_last_reply"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003A\u0024state",
+            "name": "state",
+            "summary": "The\u0020last\u0020command\u0020sent\u0020to\u0020the\u0020server.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#property_state"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
