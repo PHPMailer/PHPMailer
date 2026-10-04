@@ -2647,7 +2647,22 @@ class PHPMailer
             $addresses[] = $this->addrFormat($address);
         }
 
-        return $type . ': ' . implode(', ', $addresses) . static::$LE;
+        //Fold between addresses so that no line exceeds the RFC 2822 line length limit
+        $header = $type . ': ' . array_shift($addresses);
+        $lineLength = strlen($header);
+        foreach ($addresses as $address) {
+            //The address goes after ', ' and must still leave room for the ',' that ends
+            //the line if the next address gets folded
+            if ($lineLength + strlen(', ') + strlen($address) + strlen(',') > static::MAX_LINE_LENGTH) {
+                $header .= ',' . static::$LE . ' ' . $address;
+                $lineLength = strlen(' ') + strlen($address);
+            } else {
+                $header .= ', ' . $address;
+                $lineLength += strlen(', ') + strlen($address);
+            }
+        }
+
+        return $header . static::$LE;
     }
 
     /**
