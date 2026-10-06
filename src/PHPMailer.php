@@ -2090,7 +2090,8 @@ class PHPMailer
         foreach ($this->to as $toaddr) {
             $toArr[] = $this->addrFormat($toaddr);
         }
-        $to = trim(implode(', ', $toArr));
+        //Fold long lists the same way as the To header, mail() keeps CRLF + WSP folds intact
+        $to = trim(substr($this->addrAppend('To', $this->to), strlen('To:')));
 
         //If there are no To-addresses (e.g. when sending only to BCC-addresses)
         //the following should be added to get a correct DKIM-signature.
