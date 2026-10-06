@@ -4,6 +4,8 @@
 * XOAUTH authentication with long tokens could report success when it had failed.
 * S/MIME signed messages no longer contain bare LF line breaks.
 * `PHPMailer::parseAddresses()` is deprecated, and will be removed in 8.0; it's too difficult to maintain consistently with the removal of the PHP IMAP extension, and is the only part of PHPMailer that handles existing messages.
+* `DSNConfigurator` now URL-decodes the username and password, so credentials containing characters such as `@`, `:` or `/` work when percent-encoded in the DSN.
+* `DSNConfigurator` boolean options now honour `false`, `off`, `no` and `0` instead of treating any non-empty string as true.
 * Long address lines are now folded correctly.
 * Don't send `QUIT` if the connection is closed while `DATA` is in progress. Thanks to @dualfroz.
 
