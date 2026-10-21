@@ -136,4 +136,13 @@ class OAuth implements OAuthTokenProvider
             "\001\001"
         );
     }
+    /**
+     * Getter for oathRefreshToken.
+     *
+     * @return AccessToken
+     */
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
+    }
 }
