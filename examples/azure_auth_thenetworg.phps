@@ -70,7 +70,7 @@ $provider = new Azure(
         'clientSecret' => $clientSecret
     ]
 );
-//Pass the OAuth provider instance to PHPMailer            
+//Pass the OAuth provider instance to PHPMailer
 $oauth = new OAuth(
     [
         'provider' => $provider,
