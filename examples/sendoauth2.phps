@@ -95,6 +95,11 @@ try {
 
     $mail->send();
     echo 'Message has been sent';
+    $newRefreshToken = $oauthTokenProvider->getOauthToken()->getRefreshToken();
+    // Check to see if a new refresh token has been issued by the provider
+    if ($newRefreshToken !== $refreshToken && $newRefreshToken !== "") {
+    // A new refresh token has been issued.
+    }
 } catch (Exception $e) {
     echo 'Message could not be sent. Mailer Error: ' . htmlspecialchars($mail->ErrorInfo, ENT_QUOTES);
 }
