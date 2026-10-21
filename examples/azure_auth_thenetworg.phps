@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
 //Use the TheNetworg OAuth2 provider class
-use \TheNetworg\OAuth2\Client\Provider\Azure;
+use TheNetworg\OAuth2\Client\Provider\Azure;
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
@@ -64,21 +64,21 @@ $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
 //Create a new OAuth2 provider instance
 $provider = new Azure(
-	[
-			'clientId' => $clientId,
-            'tenant' => $tenantId,
-            'clientSecret' => $clientSecret
-	]
+    [
+        'clientId' => $clientId,
+        'tenant' => $tenantId,
+        'clientSecret' => $clientSecret
+    ]
 );
 //Pass the OAuth provider instance to PHPMailer            
 $oauth = new OAuth(
-	[
-		'provider' => $provider,
-		'clientId' => $clientId,
-		'refreshToken' => $refreshToken,
-		'clientSecret' => $clientSecret,
-		'userName' => $email
-	]
+    [
+        'provider' => $provider,
+        'clientId' => $clientId,
+        'refreshToken' => $refreshToken,
+        'clientSecret' => $clientSecret,
+        'userName' => $email
+    ]
 );
 $mail->setOAuth($oauth);
 //End Option 1
@@ -95,24 +95,24 @@ $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 //The Fingerprint/Thumbprint needs to be uploaded to Azure Portal
 $clientKey = 'RANDOMCHARS........';
 $clientThumbprint = 'RANDOMCHARS............';
-//Create a new OAuth2 provider instance. 
+//Create a new OAuth2 provider instance.
 $provider = new Azure(
-	[
-		'clientId' => $clientid,
-		'tenant' => $tenantid,
-		'clientCertificatePrivateKey' => $clientKey,
-		'clientCertificateThumbprint' => $clientThumbprint
-	]
+    [
+        'clientId' => $clientid,
+        'tenant' => $tenantid,
+        'clientCertificatePrivateKey' => $clientKey,
+        'clientCertificateThumbprint' => $clientThumbprint
+    ]
 );
-//Pass the OAuth provider instance to PHPMailer   
+//Pass the OAuth provider instance to PHPMailer
 $oauth = new OAuth(
-	[
-		'provider' => $provider,
-		'clientId' => $clientId,
-		'refreshToken' => $refreshToken,
-		'userName' => $email
-	]
-);         
+    [
+        'provider' => $provider,
+        'clientId' => $clientId,
+        'refreshToken' => $refreshToken,
+        'userName' => $email
+    ]
+);
 
 $mail->setOAuth($oauth);
 
