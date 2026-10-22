@@ -3747,9 +3747,10 @@ class PHPMailer
         $matchcount = 0;
         switch (strtolower($position)) {
             case 'phrase':
-                if (!preg_match('/[\200-\377]/', $str)) {
+                //Control characters can't be backslash-escaped in a quoted-string, so encode them
+                if (!preg_match('/[\000-\037\177-\377]/', $str)) {
                     //Can't use addslashes as we don't know the value of magic_quotes_sybase
-                    $encoded = addcslashes($str, "\0..\37\177\\\"");
+                    $encoded = addcslashes($str, "\\\"");
                     if (($str === $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) {
                         return $encoded;
                     }
