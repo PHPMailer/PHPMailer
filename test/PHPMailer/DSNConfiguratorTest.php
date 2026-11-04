@@ -218,4 +218,36 @@ final class DSNConfiguratorTest extends TestCase
         self::assertEquals($mailer->SMTPDebug, 3);
         self::assertEquals($mailer->Timeout, 1000);
     }
+
+    /**
+     * Test that percent-encoded credentials are decoded.
+     */
+    public function testConfigureSMTPDecodesCredentials()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure($this->Mail, 'smtp://us%40er:p%40ss%3Aw%2Frd@localhost');
+
+        self::assertSame('us@er', $this->Mail->Username);
+        self::assertSame('p@ss:w/rd', $this->Mail->Password);
+    }
+
+    /**
+     * Test that boolean options honour textual false values.
+     */
+    public function testBooleanOptionsParsing()
+    {
+        $configurator = new DSNConfigurator();
+
+        $configurator->configure(
+            $this->Mail,
+            'smtp://localhost?SMTPKeepAlive=false&SMTPAutoTLS=0&SingleTo=off&AllowEmpty=true&do_verp=1'
+        );
+
+        self::assertFalse($this->Mail->SMTPKeepAlive);
+        self::assertFalse($this->Mail->SMTPAutoTLS);
+        self::assertFalse($this->Mail->SingleTo);
+        self::assertTrue($this->Mail->AllowEmpty);
+        self::assertTrue($this->Mail->do_verp);
+    }
 }

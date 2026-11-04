@@ -157,11 +157,11 @@ class DSNConfigurator
         $mailer->SMTPAuth = isset($config['user']) || isset($config['pass']);
 
         if (isset($config['user'])) {
-            $mailer->Username = $config['user'];
+            $mailer->Username = rawurldecode($config['user']);
         }
 
         if (isset($config['pass'])) {
-            $mailer->Password = $config['pass'];
+            $mailer->Password = rawurldecode($config['pass']);
         }
     }
 
@@ -206,7 +206,7 @@ class DSNConfigurator
                 case 'UseSendmailOptions':
                 case 'do_verp':
                 case 'DKIM_copyHeaderFields':
-                    $mailer->$key = (bool) $value;
+                    $mailer->$key = filter_var($value, FILTER_VALIDATE_BOOLEAN);
                     break;
                 case 'Priority':
                 case 'SMTPDebug':
