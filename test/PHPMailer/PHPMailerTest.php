@@ -1372,6 +1372,20 @@ EOT;
             $this->Mail->smtpClose();
             self::markTestSkipped('XCLIENT not supported by the SMTP test server');
         }
+        /*
+         * Skip if the server's XCLIENT implementation is not spec-conformant:
+         * per the Postfix XCLIENT spec the server must respond with 220 and
+         * reset to the greeting stage, so a probe must succeed. Some test
+         * servers (e.g. smtp-sink) acknowledge all commands with 250, which
+         * a spec-conformant client must reject.
+         */
+        if (!$this->Mail->getSMTPInstance()->xclient(['ADDR' => '127.0.0.1'])) {
+            $this->Mail->smtpClose();
+            self::markTestSkipped(
+                'XCLIENT not supported by the SMTP test server: ' .
+                $this->Mail->getSMTPInstance()->getError()['error']
+            );
+        }
 
         $this->Mail->preSend();
         self::assertTrue($this->Mail->send(), 'send failed');
