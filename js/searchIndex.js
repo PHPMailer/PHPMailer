@@ -1561,6 +1561,11 @@ Search.appendIndex(
             "summary": "Send\u0020an\u0020SMTP\u0020RCPT\u0020command.",
             "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_recipient"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003Axtext\u0028\u0029",
+            "name": "xtext",
+            "summary": "Encode\u0020a\u0020string\u0020using\u0020xtext\u0020encoding\u0020as\u0020defined\u0020in\u0020RFC\u00201891\u0020\u0026\u00203461,\nas\u0020required\u0020for\u0020XCLIENT\u0020attribute\u0020values\u003A\u0020any\u0020octet\u0020outside\nprintable\u0020US\u002DASCII\u0020\u002833\u002D126\u0029,\u0020including\u0020\u0027\u002B\u0027,\u0020whitespace,\u0020and\u0020control\ncharacters,\u0020is\u0020encoded\u0020as\u0020\u0027\u002B\u0027\u0020followed\u0020by\u0020two\u0020uppercase\u0020hexadecimal\ndigits.\u0020Values\u0020encoded\u0020this\u0020way\u0020cannot\u0020inject\u0020additional\u0020attributes.",
+            "url": "classes/PHPMailer-PHPMailer-SMTP.html#method_xtext"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\SMTP\u003A\u003Axclient\u0028\u0029",
             "name": "xclient",
             "summary": "Send\u0020SMTP\u0020XCLIENT\u0020command\u0020to\u0020server\u0020and\u0020check\u0020its\u0020return\u0020code.",
