@@ -6,6 +6,7 @@
 * `PHPMailer::parseAddresses()` is deprecated, and will be removed in 8.0; it's too difficult to maintain consistently with the removal of the PHP IMAP extension, and is the only part of PHPMailer that handles existing messages.
 * Long address lines are now folded correctly.
 * Don't send `QUIT` if the connection is closed while `DATA` is in progress. Thanks to @dualfroz.
+* XCLIENT commands should expect a 220 response, not 250, and reset to a pre-HELO state.
 
 ## Version 7.1.1 (May 18th, 2026)
 * Make encoding validator case-insensitive
