@@ -1365,6 +1365,14 @@ EOT;
         $this->buildBody();
         $this->Mail->clearAllRecipients();
         self::assertTrue($this->Mail->addAddress('a@example.com'), 'Addressing failed');
+
+        //Skip if the test server does not support the XCLIENT extension
+        self::assertTrue($this->Mail->smtpConnect(), 'SMTP connect failed');
+        if (!$this->Mail->getSMTPInstance()->getServerExt('XCLIENT')) {
+            $this->Mail->smtpClose();
+            self::markTestSkipped('XCLIENT not supported by the SMTP test server');
+        }
+
         $this->Mail->preSend();
         self::assertTrue($this->Mail->send(), 'send failed');
     }

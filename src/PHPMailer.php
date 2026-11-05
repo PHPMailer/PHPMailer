@@ -2249,7 +2249,17 @@ class PHPMailer
             $smtp_from = $this->Sender;
         }
         if (count($this->SMTPXClient)) {
-            $this->smtp->xclient($this->SMTPXClient);
+            if (!$this->smtp->xclient($this->SMTPXClient)) {
+                throw new Exception($this->smtp->getError()['error'], self::STOP_CRITICAL);
+            }
+            //XCLIENT success resets the session to the greeting protocol stage,
+            //so the client must send EHLO again before starting a transaction.
+            if ($this->Helo) {
+                $hello = $this->Helo;
+            } else {
+                $hello = $this->serverHostname();
+            }
+            $this->smtp->hello($hello);
         }
         if (!$this->smtp->mail($smtp_from)) {
             $this->setError(self::lang('from_failed') . $smtp_from . ' : ' . implode(',', $this->smtp->getError()));

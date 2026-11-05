@@ -1087,6 +1087,11 @@ class SMTP
 
     /**
      * Send SMTP XCLIENT command to server and check its return code.
+     * On success the server resets the session to the initial greeting
+     * protocol stage and responds with 220, so a new EHLO is required
+     * before any MAIL command.
+     *
+     * @see https://www.postfix.org/XCLIENT_README.html
      *
      * @return bool True on success
      */
@@ -1101,7 +1106,7 @@ class SMTP
         if (!$xclient_options) {
             return true;
         }
-        return $this->sendCommand('XCLIENT', 'XCLIENT' . $xclient_options, 250);
+        return $this->sendCommand('XCLIENT', 'XCLIENT' . $xclient_options, 220);
     }
 
     /**
