@@ -1408,8 +1408,13 @@ EOT;
         $this->Mail->smtpClose();
 
         //Need to pick a harmless option so as not cause problems of its own! socket:bind doesn't work with Travis-CI
+        //Preserve any configured SMTPOptions (e.g. test servers using self-signed certificates).
         $this->Mail->Host = $_REQUEST['mail_host'];
-        self::assertTrue($this->Mail->smtpConnect(['ssl' => ['verify_depth' => 10]]));
+        $options = ['ssl' => ['verify_depth' => 10]];
+        if (isset($_REQUEST['mail_options']['ssl']) && is_array($_REQUEST['mail_options']['ssl'])) {
+            $options['ssl'] += $_REQUEST['mail_options']['ssl'];
+        }
+        self::assertTrue($this->Mail->smtpConnect($options));
 
         $this->Smtp = $this->Mail->getSMTPInstance();
         self::assertInstanceOf(\get_class($this->Smtp), $this->Mail->setSMTPInstance($this->Smtp));

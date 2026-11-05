@@ -35,6 +35,7 @@ abstract class SendTestCase extends PreSendTestCase
         'mail_to'       => 'to',
         'mail_cc'       => 'cc',
         'mail_bcc'      => 'bcc',
+        'mail_options'  => 'SMTPOptions',
     ];
 
     /**
