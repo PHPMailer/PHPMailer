@@ -940,26 +940,21 @@ EOT;
             'commonName' => 'PHPMailer Test',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = [
-            'digest_alg' => 'sha256',
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ];
         $password = 'password';
         $certfile = 'certfile.pem';
         $keyfile = 'keyfile.pem';
 
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($dn, $pk);
+        $csr = $this->makeCsr($dn, $pk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $pk, 1);
+        $cert = $this->signCsr($csr, null, $pk, 1);
         //Save the cert
         openssl_x509_export($cert, $certout);
         file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
+        $this->exportKey($pk, $pkeyout, $password);
         file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
@@ -1012,11 +1007,6 @@ EOT;
             'commonName' => 'PHPMailer Test CA',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = [
-            'digest_alg' => 'sha256',
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ];
         $password = 'password';
         $cacertfile = 'cacertfile.pem';
         $cakeyfile = 'cakeyfile.pem';
@@ -1025,31 +1015,31 @@ EOT;
 
         //Create a CA cert
         //Make a new key pair
-        $capk = openssl_pkey_new($keyconfig);
+        $capk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($cacertprops, $capk);
+        $csr = $this->makeCsr($cacertprops, $capk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $capk, 1);
+        $cert = $this->signCsr($csr, null, $capk, 1);
         //Save the CA cert
         openssl_x509_export($cert, $certout);
         file_put_contents($cacertfile, $certout);
         //Save the CA key
-        openssl_pkey_export($capk, $pkeyout, $password);
+        $this->exportKey($capk, $pkeyout, $password);
         file_put_contents($cakeyfile, $pkeyout);
 
         //Create a cert signed by our CA
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($certprops, $pk);
+        $csr = $this->makeCsr($certprops, $pk);
         //Create a self-signed cert
         $cacert = file_get_contents($cacertfile);
-        $cert = openssl_csr_sign($csr, $cacert, $capk, 1);
+        $cert = $this->signCsr($csr, $cacert, $capk, 1);
         //Save the cert
         openssl_x509_export($cert, $certout);
         file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
+        $this->exportKey($pk, $pkeyout, $password);
         file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
@@ -1371,6 +1361,20 @@ EOT;
         if (!$this->Mail->getSMTPInstance()->getServerExt('XCLIENT')) {
             $this->Mail->smtpClose();
             self::markTestSkipped('XCLIENT not supported by the SMTP test server');
+        }
+        /*
+         * Skip if the server's XCLIENT implementation is not spec-conformant:
+         * per the Postfix XCLIENT spec the server must respond with 220 and
+         * reset to the greeting stage, so a probe must succeed. Some test
+         * servers (e.g. smtp-sink) acknowledge all commands with 250, which
+         * a spec-conformant client must reject.
+         */
+        if (!$this->Mail->getSMTPInstance()->xclient(['ADDR' => '127.0.0.1'])) {
+            $this->Mail->smtpClose();
+            self::markTestSkipped(
+                'XCLIENT not supported by the SMTP test server: ' .
+                $this->Mail->getSMTPInstance()->getError()['error']
+            );
         }
 
         $this->Mail->preSend();

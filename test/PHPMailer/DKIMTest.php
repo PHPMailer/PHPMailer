@@ -125,13 +125,8 @@ final class DKIMTest extends SendTestCase
      */
     public function testDKIMOptionalHeaderFieldsCopy()
     {
-        $pk = openssl_pkey_new(
-            [
-                'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            ]
-        );
-        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+        $pk = $this->makeKey();
+        $this->exportKeyToFile($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
         // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.5.
@@ -169,13 +164,8 @@ final class DKIMTest extends SendTestCase
      */
     public function testDKIMExtraHeaders()
     {
-        $pk = openssl_pkey_new(
-            [
-                'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            ]
-        );
-        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+        $pk = $this->makeKey();
+        $this->exportKeyToFile($pk, self::PRIVATE_KEY_FILE);
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
 
         // Example from https://www.rfc-editor.org/rfc/rfc6376.html#section-3.5.
@@ -221,13 +211,8 @@ final class DKIMTest extends SendTestCase
 
         // Make a new key pair.
         // Note: 2048 bits is the recommended minimum key length - gmail won't accept less than 1024 bits.
-        $pk = openssl_pkey_new(
-            [
-                'private_key_bits' => 2048,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            ]
-        );
-        openssl_pkey_export_to_file($pk, self::PRIVATE_KEY_FILE);
+        $pk = $this->makeKey();
+        $this->exportKeyToFile($pk, self::PRIVATE_KEY_FILE);
 
         $this->Mail->DKIM_domain = 'example.com';
         $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;

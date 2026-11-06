@@ -2193,12 +2193,17 @@ class PHPMailer
      */
     public function setSMTPXclientAttribute($name, $value)
     {
-        if (!in_array($name, SMTP::$xclient_allowed_attributes)) {
+        if (!in_array($name, SMTP::$xclient_allowed_attributes, true)) {
             return false;
         }
         if (isset($this->SMTPXClient[$name]) && $value === null) {
             unset($this->SMTPXClient[$name]);
         } elseif ($value !== null) {
+            if (!is_string($value)) {
+                //Reject invalid XCLIENT attributes
+                return false;
+            }
+            //Values are stored raw and xtext-encoded at send time
             $this->SMTPXClient[$name] = $value;
         }
 

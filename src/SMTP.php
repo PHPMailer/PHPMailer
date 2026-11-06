@@ -212,6 +212,7 @@ class SMTP
     /**
      * Allowed SMTP XCLIENT attributes.
      * Must be allowed by the SMTP server. EHLO response is not checked.
+     * This is a static rather than a constant because PHP 5.5 doesn't allow constant arrays.
      *
      * @see https://www.postfix.org/XCLIENT_README.html
      *
@@ -1086,12 +1087,38 @@ class SMTP
     }
 
     /**
+     * Encode a string using xtext encoding as defined in RFC 1891 & 3461,
+     * as required for XCLIENT attribute values: any octet outside
+     * printable US-ASCII (33-126), including '+', whitespace, and control
+     * characters, is encoded as '+' followed by two uppercase hexadecimal
+     * digits. Values encoded this way cannot inject additional attributes.
+     *
+     * @param string $value The string to encode
+     *
+     * @return string The xtext-encoded string
+     */
+    public static function xtext($value)
+    {
+        return preg_replace_callback(
+            '/[^\x21-\x7E]|\+/',
+            static function ($matches) {
+                return sprintf('+%02X', ord($matches[0]));
+            },
+            $value
+        );
+    }
+
+    /**
      * Send SMTP XCLIENT command to server and check its return code.
      * On success the server resets the session to the initial greeting
      * protocol stage and responds with 220, so a new EHLO is required
      * before any MAIL command.
      *
+     * Attribute values are xtext-encoded (RFC 1891 & 3461) before being
+     * sent.
+     *
      * @see https://www.postfix.org/XCLIENT_README.html
+     * @see https://www.rfc-editor.org/info/rfc3461/#section-4
      *
      * @return bool True on success
      */
@@ -1099,9 +1126,15 @@ class SMTP
     {
         $xclient_options = "";
         foreach ($vars as $key => $value) {
-            if (in_array($key, SMTP::$xclient_allowed_attributes)) {
-                $xclient_options .= " {$key}={$value}";
+            if (!in_array($key, SMTP::$xclient_allowed_attributes)) {
+                $this->setError("Invalid XCLIENT attribute name: $key");
+                return false;
             }
+            if (!is_string($value)) {
+                $this->setError("XCLIENT attribute value for $key must be a string");
+                return false;
+            }
+            $xclient_options .= " {$key}=" . static::xtext($value);
         }
         if (!$xclient_options) {
             return true;
