@@ -64,7 +64,19 @@ final class AddrFormatTest extends TestCase
             'Valid address: address with truthy name' => [
                 'addr'     => ['joe@example.com', 'Joe'],
                 'expected' => 'Joe <joe@example.com>',
-            ]
+            ],
+            'Valid address: name with double quotes and a backslash' => [
+                'addr'     => ['joe@example.com', 'Joe "JB" Blo\\ggs'],
+                'expected' => '"Joe \\"JB\\" Blo\\\\ggs" <joe@example.com>',
+            ],
+            'Valid address: name with a tab' => [
+                'addr'     => ['joe@example.com', "Joe\tBloggs"],
+                'expected' => '=?us-ascii?Q?Joe=09Bloggs?= <joe@example.com>',
+            ],
+            'Valid address: name with a DEL control character' => [
+                'addr'     => ['joe@example.com', "Joe\x7FBloggs"],
+                'expected' => '=?us-ascii?Q?Joe=7FBloggs?= <joe@example.com>',
+            ],
         ];
     }
 }
