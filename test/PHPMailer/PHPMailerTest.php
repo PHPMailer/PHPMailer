@@ -940,19 +940,15 @@ EOT;
             'commonName' => 'PHPMailer Test',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = [
-            'digest_alg' => 'sha256',
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ];
+        $keyconfig = $this->getKeyConfig();
         $password = 'password';
         $certfile = 'certfile.pem';
         $keyfile = 'keyfile.pem';
 
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($dn, $pk);
+        $csr = openssl_csr_new($dn, $pk, $keyconfig);
         //Create a self-signed cert
         $cert = openssl_csr_sign($csr, null, $pk, 1);
         //Save the cert
@@ -1012,11 +1008,7 @@ EOT;
             'commonName' => 'PHPMailer Test CA',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = [
-            'digest_alg' => 'sha256',
-            'private_key_bits' => 2048,
-            'private_key_type' => OPENSSL_KEYTYPE_RSA,
-        ];
+        $keyconfig = $this->getKeyConfig();
         $password = 'password';
         $cacertfile = 'cacertfile.pem';
         $cakeyfile = 'cakeyfile.pem';
@@ -1025,9 +1017,9 @@ EOT;
 
         //Create a CA cert
         //Make a new key pair
-        $capk = openssl_pkey_new($keyconfig);
+        $capk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($cacertprops, $capk);
+        $csr = openssl_csr_new($cacertprops, $capk, $keyconfig);
         //Create a self-signed cert
         $cert = openssl_csr_sign($csr, null, $capk, 1);
         //Save the CA cert
@@ -1039,9 +1031,9 @@ EOT;
 
         //Create a cert signed by our CA
         //Make a new key pair
-        $pk = openssl_pkey_new($keyconfig);
+        $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($certprops, $pk);
+        $csr = openssl_csr_new($certprops, $pk, $keyconfig);
         //Create a self-signed cert
         $cacert = file_get_contents($cacertfile);
         $cert = openssl_csr_sign($csr, $cacert, $capk, 1);
