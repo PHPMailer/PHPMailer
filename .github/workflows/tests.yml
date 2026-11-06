@@ -202,21 +202,14 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      # Install postfix and automatically retry if the install failed, which happens regularly.
-      # @link https://github.com/marketplace/actions/retry-step
-      - name: Install postfix
-        uses: nick-invision/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
-        with:
-          timeout_minutes: 2
-          max_attempts: 3
-          retry_wait_seconds: 8
-          command: |
-            sudo apt-get install --fix-broken -y libsqlite3-0 postfix
-            sudo systemctl stop postfix.service
+      # Set up badsmtp, the fake SMTP server used by the test suite.
+      # @link https://badsmtp.com
+      - name: Set up badsmtp
+        run: |
+          test/badsmtp.sh start
 
       - name: Set up sendmail
         run: |
-          smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
           mkdir -p build/logs
           sudo cp test/testbootstrap-dist.php test/testbootstrap.php
           sudo chmod +x test/fakesendmail.sh
@@ -241,3 +234,7 @@ jobs:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
           verbose: true
+
+      - name: Stop badsmtp
+        if: ${{ always() }}
+        run: test/badsmtp.sh stop
