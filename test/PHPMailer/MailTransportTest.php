@@ -13,6 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\SendTestCase;
 
 /**
@@ -115,6 +116,42 @@ final class MailTransportTest extends SendTestCase
 
         $msg = $this->Mail->getSentMIMEMessage();
         self::assertStringNotContainsString("\r\n\r\nMIME-Version:", $msg, 'Incorrect MIME headers');
+    }
+
+    /**
+     * Test that a long To list is folded before it is passed to mail().
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::mailSend
+     */
+    public function testMailSendFoldsLongToList()
+    {
+        $this->Mail->Body = 'Sending via mail()';
+        $this->buildBody();
+        $this->Mail->Subject = $this->Mail->Subject . ': mail()';
+        $this->Mail->clearAddresses();
+        for ($i = 1; $i <= 100; ++$i) {
+            $this->Mail->addAddress('recipient' . $i . '@example.com', 'Recipient ' . $i);
+        }
+
+        $to = '';
+        $this->Mail->Debugoutput = static function ($str) use (&$to) {
+            if (strpos($str, 'To: ') === 0) {
+                $to = substr($str, 4);
+            }
+        };
+        $this->Mail->isMail();
+        self::assertTrue($this->Mail->send(), $this->Mail->ErrorInfo);
+
+        $lines = explode(PHPMailer::getLE(), 'To: ' . $to);
+        self::assertGreaterThan(1, count($lines), 'The To list was not folded');
+        foreach ($lines as $index => $line) {
+            self::assertLessThanOrEqual(PHPMailer::MAX_LINE_LENGTH, strlen($line), "Line $index is too long");
+        }
+        self::assertStringContainsString(
+            'To: ' . $to . PHPMailer::getLE(),
+            $this->Mail->getSentMIMEMessage(),
+            'mail() did not get the same To list as the message header'
+        );
     }
 
     /**
