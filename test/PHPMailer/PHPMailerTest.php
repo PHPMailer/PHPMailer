@@ -940,7 +940,6 @@ EOT;
             'commonName' => 'PHPMailer Test',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = $this->getKeyConfig();
         $password = 'password';
         $certfile = 'certfile.pem';
         $keyfile = 'keyfile.pem';
@@ -948,14 +947,14 @@ EOT;
         //Make a new key pair
         $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($dn, $pk, $keyconfig);
+        $csr = $this->makeCsr($dn, $pk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $pk, 1);
+        $cert = $this->signCsr($csr, null, $pk, 1);
         //Save the cert
         openssl_x509_export($cert, $certout);
         file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
+        $this->exportKey($pk, $pkeyout, $password);
         file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
@@ -1008,7 +1007,6 @@ EOT;
             'commonName' => 'PHPMailer Test CA',
             'emailAddress' => 'phpmailer@example.com',
         ];
-        $keyconfig = $this->getKeyConfig();
         $password = 'password';
         $cacertfile = 'cacertfile.pem';
         $cakeyfile = 'cakeyfile.pem';
@@ -1019,29 +1017,29 @@ EOT;
         //Make a new key pair
         $capk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($cacertprops, $capk, $keyconfig);
+        $csr = $this->makeCsr($cacertprops, $capk);
         //Create a self-signed cert
-        $cert = openssl_csr_sign($csr, null, $capk, 1);
+        $cert = $this->signCsr($csr, null, $capk, 1);
         //Save the CA cert
         openssl_x509_export($cert, $certout);
         file_put_contents($cacertfile, $certout);
         //Save the CA key
-        openssl_pkey_export($capk, $pkeyout, $password);
+        $this->exportKey($capk, $pkeyout, $password);
         file_put_contents($cakeyfile, $pkeyout);
 
         //Create a cert signed by our CA
         //Make a new key pair
         $pk = $this->makeKey();
         //Create a certificate signing request
-        $csr = openssl_csr_new($certprops, $pk, $keyconfig);
+        $csr = $this->makeCsr($certprops, $pk);
         //Create a self-signed cert
         $cacert = file_get_contents($cacertfile);
-        $cert = openssl_csr_sign($csr, $cacert, $capk, 1);
+        $cert = $this->signCsr($csr, $cacert, $capk, 1);
         //Save the cert
         openssl_x509_export($cert, $certout);
         file_put_contents($certfile, $certout);
         //Save the key
-        openssl_pkey_export($pk, $pkeyout, $password);
+        $this->exportKey($pk, $pkeyout, $password);
         file_put_contents($keyfile, $pkeyout);
 
         $this->Mail->sign(
