@@ -8,6 +8,7 @@
 * Don't send `QUIT` if the connection is closed while `DATA` is in progress. Thanks to @dualfroz.
 * XCLIENT commands should expect a 220 response, not 250, and reset to a pre-HELO state.
 * XCLIENT properties are now expected to be raw values, and are `xtext`-encoded at send time. Strictly speaking this is a BC break, but the above issue meant that XCLIENT was broken anyway, so the break is academic.
+* Switch tests to use badsmtp instead of postfix's smtp-sink for more reliable CI
 
 ## Version 7.1.1 (May 18th, 2026)
 * Make encoding validator case-insensitive

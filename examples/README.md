@@ -7,8 +7,9 @@ This folder contains a collection of examples of using [PHPMailer](https://githu
 
 When working on email sending code you'll find yourself worrying about what might happen if all these test emails got sent to your mailing list. The solution is to use a fake mail server, one that acts just like the real thing, but just doesn't actually send anything out. Some offer web interfaces, feedback, logging, the ability to return specific error codes, all things that are useful for testing error handling, authentication etc. Here's a selection of mail testing tools you might like to try:
 
+*   [BadSMTP](https://badsmtp.com), by the same author as PHPMailer, a Go-based fake mail server for testing SMTP clients, with pluggable extensions, dynamic behaviour, and config-free error generation. This is used in the GitHub Actions configuration to run PHPMailer's unit tests.
 *   [FakeEmail](https://github.com/tomwardill/FakeEmail), a Python-based fake mail server with a web interface.
-*   [smtp-sink](https://www.postfix.org/smtp-sink.1.html), part of the Postfix mail server, so you may have this installed already. This is used in the GitHub actions configuration to run PHPMailer's unit tests.
+*   [smtp-sink](https://www.postfix.org/smtp-sink.1.html), part of the Postfix mail server, so you may have this installed already.
 *   [smtp4dev](https://github.com/rnwood/smtp4dev), a dummy SMTP server for Windows and Linux.
 *   [fakesendmail.sh](https://github.com/PHPMailer/PHPMailer/blob/master/test/fakesendmail.sh), part of PHPMailer's test setup, this is a shell script that emulates sendmail for testing 'mail' or 'sendmail' methods in PHPMailer.
 *   [HELO](https://usehelo.com), a very nice (commercial) mail server desktop app from BeyondCode, and [how to set it up for local testing](https://usehelo.com/blog/how-to-use-helo-with-phps-mail-function).

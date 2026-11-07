@@ -202,23 +202,27 @@ jobs:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
 
-      # Install postfix and automatically retry if the install failed, which happens regularly.
-      # @link https://github.com/marketplace/actions/retry-step
-      - name: Install postfix
-        uses: nick-invision/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
-        with:
-          timeout_minutes: 2
-          max_attempts: 3
-          retry_wait_seconds: 8
-          command: |
-            sudo apt-get install --fix-broken -y libsqlite3-0 postfix
-            sudo systemctl stop postfix.service
+      # Set up badsmtp, the fake SMTP server used by the test suite.
+      # @link https://badsmtp.com
+      # badsmtp discards messages by default; on PHP 8.5 they are retained
+      # in Maildir format under build/badsmtp-mailbox and uploaded as an
+      # artefact for inspection.
+      - name: Set up badsmtp
+        run: |
+          if [ "${{ matrix.php }}" = "8.5" ]; then
+            export BADSMTP_MAILBOX_DIR=build/badsmtp-mailbox
+          fi
+          test/badsmtp.sh start
 
       - name: Set up sendmail
         run: |
-          smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
           mkdir -p build/logs
           sudo cp test/testbootstrap-dist.php test/testbootstrap.php
+          # PHP 5.5's OpenSSL only supports TLS 1.0, which badsmtp's main port
+          # rejects; use its dedicated legacy-STARTTLS port instead.
+          if [ "${{ matrix.php }}" = "5.5" ]; then
+            echo '$_REQUEST["mail_port"] = 25590;' | sudo tee -a test/testbootstrap.php
+          fi
           sudo chmod +x test/fakesendmail.sh
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
@@ -241,3 +245,19 @@ jobs:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
           verbose: true
+
+      # Retain all messages sent during the test run as a Maildir artifact
+      # for later inspection. badsmtp stores messages in Maildir format
+      # (new/, cur/, tmp/) under the mailbox directory set at startup.
+      - name: Upload sent messages as artefacts
+        if: ${{ always() && matrix.php == '8.5' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sent-messages-${{ matrix.extensions }}
+          path: build/badsmtp-mailbox/
+          if-no-files-found: warn
+          retention-days: 5
+
+      - name: Stop badsmtp
+        if: ${{ always() }}
+        run: test/badsmtp.sh stop
