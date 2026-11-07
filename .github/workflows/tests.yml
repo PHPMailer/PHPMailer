@@ -204,8 +204,14 @@ jobs:
 
       # Set up badsmtp, the fake SMTP server used by the test suite.
       # @link https://badsmtp.com
+      # badsmtp discards messages by default; on PHP 8.5 they are retained
+      # in Maildir format under build/badsmtp-mailbox and uploaded as an
+      # artefact for inspection.
       - name: Set up badsmtp
         run: |
+          if [ "${{ matrix.php }}" = "8.5" ]; then
+            export BADSMTP_MAILBOX_DIR=build/badsmtp-mailbox
+          fi
           test/badsmtp.sh start
 
       - name: Set up sendmail
@@ -239,6 +245,18 @@ jobs:
           files: ./build/logs/clover.xml
           fail_ci_if_error: true
           verbose: true
+
+      # Retain all messages sent during the test run as a Maildir artifact
+      # for later inspection. badsmtp stores messages in Maildir format
+      # (new/, cur/, tmp/) under the mailbox directory set at startup.
+      - name: Upload sent messages as artefacts
+        if: ${{ always() && matrix.php == '8.5' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sent-messages-${{ matrix.extensions }}
+          path: build/badsmtp-mailbox/
+          if-no-files-found: warn
+          retention-days: 5
 
       - name: Stop badsmtp
         if: ${{ always() }}

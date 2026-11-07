@@ -20,7 +20,9 @@ HOST="127.0.0.1"
 BIN_DIR=".badsmtp"
 PID_FILE="build/badsmtp.pid"
 LOG_FILE="build/badsmtp.log"
-MAILBOX_DIR="build/badsmtp-mailbox"
+# badsmtp discards messages by default; set BADSMTP_MAILBOX_DIR to retain
+# them in Maildir format under that directory.
+MAILBOX_DIR="${BADSMTP_MAILBOX_DIR:-}"
 
 # Work from the project root, no matter where the script is called from.
 cd "$(dirname "$0")/.."
@@ -70,7 +72,7 @@ port_open() {
 }
 
 start() {
-    mkdir -p build "$MAILBOX_DIR"
+    mkdir -p build
 
     # Reuse an already-running server on the port (e.g. a developer's own instance).
     if port_open; then
@@ -81,7 +83,13 @@ start() {
     local bin
     bin="$(find_badsmtp)"
 
-    "${bin}" --mailbox "$MAILBOX_DIR" >"$LOG_FILE" 2>&1 &
+    local mailbox_args=()
+    if [ -n "$MAILBOX_DIR" ]; then
+        mkdir -p "$MAILBOX_DIR"
+        mailbox_args=(--mailbox "$MAILBOX_DIR")
+    fi
+
+    "${bin}" ${mailbox_args[@]+"${mailbox_args[@]}"} >"$LOG_FILE" 2>&1 &
     local pid=$!
     echo "$pid" > "$PID_FILE"
 
