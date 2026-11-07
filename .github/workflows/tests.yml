@@ -212,6 +212,11 @@ jobs:
         run: |
           mkdir -p build/logs
           sudo cp test/testbootstrap-dist.php test/testbootstrap.php
+          # PHP 5.5's OpenSSL only supports TLS 1.0, which badsmtp's main port
+          # rejects; use its dedicated legacy-STARTTLS port instead.
+          if [ "${{ matrix.php }}" = "5.5" ]; then
+            echo '$_REQUEST["mail_port"] = 25590;' | sudo tee -a test/testbootstrap.php
+          fi
           sudo chmod +x test/fakesendmail.sh
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
