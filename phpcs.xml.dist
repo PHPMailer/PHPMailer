@@ -41,11 +41,16 @@
         <exclude-pattern>*/language/phpmailer\.lang*\.php$</exclude-pattern>
     </rule>
 
-	<!-- Excludes related to linting ignore comment for one specific test file. -->
+    <!-- Excludes related to linting ignore comment for one specific test file. -->
     <rule ref="PSR12.Files.OpenTag.NotAlone">
         <exclude-pattern>*/test/Fixtures/LocalizationTest/phpmailer.lang-yz\.php</exclude-pattern>
     </rule>
+    <!-- PHPCS 3.x. This exclusion can be removed once support for 3.x is dropped (min PHP 7.2). -->
     <rule ref="PSR12.Files.FileHeader.SpacingAfterBlock">
+        <exclude-pattern>*/test/Fixtures/LocalizationTest/phpmailer.lang-yz\.php</exclude-pattern>
+    </rule>
+    <!-- PHPCS 4.x for the same. -->
+    <rule ref="PSR12.Files.FileHeader.SpacingAfterTagBlock">
         <exclude-pattern>*/test/Fixtures/LocalizationTest/phpmailer.lang-yz\.php</exclude-pattern>
     </rule>
 

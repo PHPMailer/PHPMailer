@@ -43,7 +43,7 @@
         "php-parallel-lint/php-console-highlighter": "^1.0.0",
         "php-parallel-lint/php-parallel-lint": "^1.3.2",
         "phpcompatibility/php-compatibility": "^10.0.0@dev",
-        "squizlabs/php_codesniffer": "^3.13.5",
+        "squizlabs/php_codesniffer": "^3.13.6 || ^4.0.2",
         "yoast/phpunit-polyfills": "^1.0.4"
     },
     "suggest": {
