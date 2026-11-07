@@ -1,15 +1,16 @@
 # PHPMailer Change Log
 
-## WIP
+## 7.2.0
 * XOAUTH authentication with long tokens could report success when it had failed.
 * S/MIME signed messages no longer contain bare LF line breaks.
 * `PHPMailer::parseAddresses()` is deprecated, and will be removed in 8.0; it's too difficult to maintain consistently with the removal of the PHP IMAP extension, and it is the only part of PHPMailer that handles existing messages.
+* The `pcre8` validation pattern is deprecated. The default PHP validator is fine, and the pattern has some distant possibilities for ReDoS problems, so it's going.
 * Long address lines are now folded correctly.
 * Don't send `QUIT` if the connection is closed while `DATA` is in progress. Thanks to @dualfroz.
 * XCLIENT commands should expect a 220 response, not 250, and reset to a pre-HELO state.
 * XCLIENT properties are now expected to be raw values, and are `xtext`-encoded at send time. Strictly speaking this is a BC break, but the above issue meant that XCLIENT was broken anyway, so the break is academic.
-* Switch tests to use badsmtp instead of postfix's smtp-sink for more reliable CI
-* Enable PHP 8.7 in CI, don't allow PHP 8.6 to fail any more
+* Switch tests to use [BadSMTP](https://badsmtp.com) instead of postfix's smtp-sink for more reliable CI.
+* Enable PHP 8.7 in CI, don't allow PHP 8.6 to fail any more.
 
 ## Version 7.1.1 (May 18th, 2026)
 * Make encoding validator case-insensitive
