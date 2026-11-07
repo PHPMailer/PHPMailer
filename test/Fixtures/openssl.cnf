@@ -1,0 +1,15 @@
+# Minimal OpenSSL config for use by the PHPMailer test suite.
+# Some PHP builds (especially very old ones) have a compiled-in default
+# openssl.cnf path that does not exist on newer OSes, which makes
+# openssl_pkey_new() and openssl_csr_new() fail. Passing this file via
+# the "config" option makes key generation hermetic and OS-independent.
+
+openssl_conf = openssl_init
+
+[openssl_init]
+
+[req]
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+# Empty is fine; the DN is supplied by the caller.

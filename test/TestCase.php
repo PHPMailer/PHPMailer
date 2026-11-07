@@ -389,4 +389,94 @@ abstract class TestCase extends PolyfillTestCase
 
         return false;
     }
+
+    /**
+     * Generate an RSA private key for use by signing tests.
+     * An explicit config file is passed because some PHP builds have a
+     * compiled-in default openssl.cnf path that does not exist on newer
+     * OSes, which makes key generation fail.
+     *
+     * @return resource|bool
+     */
+    protected function makeKey()
+    {
+        return openssl_pkey_new($this->getKeyConfig());
+    }
+
+    /**
+     * Get the OpenSSL configuration array used for key and CSR generation
+     * in signing tests. The same array should be passed to the related
+     * openssl_csr_new() and openssl_csr_sign() calls, as those also read
+     * the OpenSSL config file.
+     *
+     * @return array
+     */
+    protected function getKeyConfig()
+    {
+        return [
+            'digest_alg'       => 'sha256',
+            'private_key_bits' => 2048,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            'config'           => __DIR__ . '/Fixtures/openssl.cnf',
+        ];
+    }
+
+    /**
+     * Create a certificate signing request, using the same explicit
+     * OpenSSL config as key generation.
+     *
+     * @param array        $dn  The distinguished name fields.
+     * @param resource     $key Private key to sign the CSR with.
+     *
+     * @return resource|bool
+     */
+    protected function makeCsr($dn, $key)
+    {
+        return openssl_csr_new($dn, $key, $this->getKeyConfig());
+    }
+
+    /**
+     * Sign a CSR to produce an X.509 certificate, using the same explicit
+     * OpenSSL config as key generation.
+     *
+     * @param resource     $csr    The CSR to sign.
+     * @param resource|string|null $caCert The CA cert to sign with, or null for self-signed.
+     * @param resource     $key    Private key to sign the certificate with.
+     * @param int          $days   Number of days the certificate is valid.
+     *
+     * @return resource|bool
+     */
+    protected function signCsr($csr, $caCert, $key, $days)
+    {
+        return openssl_csr_sign($csr, $caCert, $key, $days, $this->getKeyConfig());
+    }
+
+    /**
+     * Export a private key to a file in PEM format, using the same
+     * explicit OpenSSL config as key generation.
+     *
+     * @param resource $key      The private key to export.
+     * @param string   $filename Path of the output file.
+     *
+     * @return bool
+     */
+    protected function exportKeyToFile($key, $filename)
+    {
+        return openssl_pkey_export_to_file($key, $filename, null, $this->getKeyConfig());
+    }
+
+    /**
+     * Export a private key to a string in PEM format, using the same
+     * explicit OpenSSL config as key generation.
+     *
+     * @param resource $key       The private key to export.
+     * @param string   $out       Exported key is returned by reference.
+     * @param string   $passphrase Optional passphrase to encrypt the key with.
+     *
+     * @return bool
+     */
+    protected function exportKey($key, &$out, $passphrase = null)
+    {
+        return openssl_pkey_export($key, $out, $passphrase, $this->getKeyConfig());
+    }
 }
