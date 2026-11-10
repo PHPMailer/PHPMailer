@@ -1290,6 +1290,7 @@ class PHPMailer
      *
      * @deprecated This method will be removed in the next major release of PHPMailer.
      * @see https://www.andrew.cmu.edu/user/agreen1/testing/mrbs/web/Mail/RFC822.php A more careful implementation
+     * @see examples/parse_addresses_replacement.phps Standalone copy-paste replacement (no IMAP needed)
      *
      * @param string $addrstr The address list string
      * @param bool|null $useimap Deprecated in PHPMailer 6.11.0.
