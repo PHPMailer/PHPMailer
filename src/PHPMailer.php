@@ -3768,8 +3768,9 @@ class PHPMailer
                 break;
         }
 
-        //ISO-2022 charsets such as ISO-2022-JP are 7-bit, but text using their escape sequences isn't us-ascii
-        if ($this->has8bitChars($str) || strpos($str, "\x1B") !== false) {
+        //7-bit charsets such as ISO-2022-JP or UTF-7 write non-ASCII text with ASCII bytes,
+        //so only an ASCII-compatible charset can be relabelled as us-ascii
+        if ($this->has8bitChars($str) || preg_match('/^(iso-2022-|utf-7|hz-gb-2312)/i', $this->CharSet)) {
             $charset = $this->CharSet;
         } else {
             $charset = static::CHARSET_ASCII;

@@ -62,6 +62,11 @@ final class EncodeHeaderTest extends TestCase
                 'expected' => 'Test',
                 'charset'  => 'ISO-2022-JP',
             ],
+            'ASCII text with a control character keeps an ISO-2022-JP charset label' => [
+                'input'    => "Joe\x7FBloggs",
+                'expected' => '=?ISO-2022-JP?Q?Joe=7FBloggs?=',
+                'charset'  => 'ISO-2022-JP',
+            ],
             'ASCII text with a control character still falls back to us-ascii' => [
                 'input'    => "Joe\x7FBloggs",
                 'expected' => '=?us-ascii?Q?Joe=7FBloggs?=',
