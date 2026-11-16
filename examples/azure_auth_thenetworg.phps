@@ -95,7 +95,7 @@ $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 //The Fingerprint/Thumbprint needs to be uploaded to Azure Portal
 $clientKey = 'RANDOMCHARS........';
 $clientThumbprint = 'RANDOMCHARS............';
-//Create a new OAuth2 provider instance. 
+//Create a new OAuth2 provider instance.
 $provider = new Azure(
     [
         'clientId' => $clientid,
@@ -104,7 +104,7 @@ $provider = new Azure(
         'clientCertificateThumbprint' => $clientThumbprint
     ]
 );
-//Pass the OAuth provider instance to PHPMailer   
+//Pass the OAuth provider instance to PHPMailer
 $oauth = new OAuth(
     [
         'provider' => $provider,
@@ -112,7 +112,7 @@ $oauth = new OAuth(
         'refreshToken' => $refreshToken,
         'userName' => $email
     ]
-);         
+);
 
 $mail->setOAuth($oauth);
 
