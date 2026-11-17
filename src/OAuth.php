@@ -123,9 +123,10 @@ class OAuth implements OAuthTokenProvider
      */
     public function getOauth64()
     {
-        //Get a new token if it's not available or has expired
+        //Get a new token if it's not available or has expired. Update the refresh token.
         if (null === $this->oauthToken || $this->oauthToken->hasExpired()) {
             $this->oauthToken = $this->getToken();
+            $this->oauthRefreshToken = $this->oauthToken->getRefreshToken();
         }
 
         return base64_encode(
@@ -135,5 +136,14 @@ class OAuth implements OAuthTokenProvider
             $this->oauthToken .
             "\001\001"
         );
+    }
+    /**
+     * Getter for the Refresh Token.
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->oauthRefreshToken;
     }
 }
