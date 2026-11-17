@@ -76,6 +76,11 @@ Search.appendIndex(
             "summary": "Generate\u0020a\u0020base64\u002Dencoded\u0020OAuth\u0020token.",
             "url": "classes/PHPMailer-PHPMailer-OAuth.html#method_getOauth64"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\OAuth\u003A\u003AgetRefreshToken\u0028\u0029",
+            "name": "getRefreshToken",
+            "summary": "Getter\u0020for\u0020the\u0020Refresh\u0020Token.",
+            "url": "classes/PHPMailer-PHPMailer-OAuth.html#method_getRefreshToken"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\OAuth\u003A\u003A\u0024provider",
             "name": "provider",
             "summary": "An\u0020instance\u0020of\u0020the\u0020League\u0020OAuth\u0020Client\u0020Provider.",
