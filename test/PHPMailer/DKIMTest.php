@@ -14,6 +14,7 @@
 namespace PHPMailer\Test\PHPMailer;
 
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\SendTestCase;
 
 /**
@@ -239,5 +240,163 @@ final class DKIMTest extends SendTestCase
         $this->expectExceptionMessage('Extension missing: openssl');
 
         $this->Mail->DKIM_Sign('foo');
+    }
+
+    /**
+     * Check DKIM signatures on messages as the SMTP test server received them.
+     * SMTP::data() splits long lines and dot-stuffs messages after they have been signed,
+     * so read each one back from the Maildir the server stores it in, and verify it with
+     * the public half of the key instead of looking it up in DNS.
+     *
+     * @dataProvider dataDKIMSignatureSurvivesSMTP
+     *
+     * @requires extension openssl
+     *
+     * @covers \PHPMailer\PHPMailer\PHPMailer::DKIM_Add
+     * @covers \PHPMailer\PHPMailer\SMTP::data
+     *
+     * @param callable $setup Sets up the message to send.
+     */
+    public function testDKIMSignatureSurvivesSMTP($setup)
+    {
+        if (empty($_REQUEST['mail_mailbox_dir'])) {
+            self::markTestSkipped('No Maildir for the SMTP test server; set mail_mailbox_dir in testbootstrap.php');
+        }
+
+        $this->Mail->Subject .= ': DKIM signature after SMTP';
+        $setup($this->Mail);
+        $this->buildBody();
+
+        $pk = $this->makeKey();
+        $this->exportKeyToFile($pk, self::PRIVATE_KEY_FILE);
+
+        $this->Mail->DKIM_domain = 'example.com';
+        $this->Mail->DKIM_private = self::PRIVATE_KEY_FILE;
+        $this->Mail->DKIM_selector = 'phpmailer';
+        $this->Mail->DKIM_passphrase = ''; //key is not encrypted
+        self::assertTrue($this->Mail->send(), 'DKIM signed mail failed');
+
+        $message = $this->getReceivedMessage($this->Mail->getLastMessageID());
+        $details = openssl_pkey_get_details($pk);
+        $this->assertDKIMSignature($message, $details['key']);
+    }
+
+    /**
+     * Data provider.
+     *
+     * @return array
+     */
+    public static function dataDKIMSignatureSurvivesSMTP()
+    {
+        return [
+            'Plain text' => [
+                'setup' => static function (PHPMailer $mail) {
+                    // SMTP::data() dot-stuffs the second line.
+                    $mail->Body = "This message is DKIM signed.\r\n.This line starts with a dot.";
+                },
+            ],
+            'HTML with AltBody' => [
+                'setup' => static function (PHPMailer $mail) {
+                    $mail->isHTML(true);
+                    $mail->Body = 'This is the <strong>HTML</strong> part of the email.';
+                    $mail->AltBody = 'This is the text part of the email.';
+                },
+            ],
+            'Attachment' => [
+                'setup' => static function (PHPMailer $mail) {
+                    $mail->Body = 'This message has an attachment.';
+                    $mail->addAttachment(__FILE__, 'test.txt');
+                },
+            ],
+            'Embedded image' => [
+                'setup' => static function (PHPMailer $mail) {
+                    $mail->isHTML(true);
+                    $mail->Body = 'Embedded Image: <img alt="phpmailer" src="cid:my-attach">';
+                    $mail->addEmbeddedImage(
+                        realpath(\PHPMAILER_INCLUDE_DIR . '/examples/images/phpmailer.png'),
+                        'my-attach'
+                    );
+                },
+            ],
+            'UTF-8 subject' => [
+                'setup' => static function (PHPMailer $mail) {
+                    $mail->CharSet = PHPMailer::CHARSET_UTF8;
+                    $mail->Subject .= ' Пустое тело сообщения';
+                    $mail->Body = 'This message has a UTF-8 subject.';
+                },
+            ],
+        ];
+    }
+
+    /**
+     * Find a message in the SMTP test server's Maildir by its Message-ID,
+     * allowing the server a moment to store it.
+     *
+     * @param string $messageId
+     *
+     * @return string
+     */
+    private function getReceivedMessage($messageId)
+    {
+        for ($i = 0; $i < 50; ++$i) {
+            foreach (glob($_REQUEST['mail_mailbox_dir'] . '/new/*') as $file) {
+                $message = file_get_contents($file);
+                if (strpos($message, $messageId) !== false) {
+                    return $message;
+                }
+            }
+            usleep(100000);
+        }
+
+        self::fail('Message ' . $messageId . ' not found in ' . $_REQUEST['mail_mailbox_dir']);
+    }
+
+    /**
+     * Verify the DKIM signature of a received message with the signer's public key.
+     *
+     * @param string $message   The message as stored by the SMTP test server.
+     * @param string $publicKey The public key in PEM format.
+     */
+    private function assertDKIMSignature($message, $publicKey)
+    {
+        // badsmtp 0.3.3 stores the message with LF line breaks, after its own From, To and Received headers
+        // and a blank line, so convert the line breaks back to CRLF (they can't be checked here), and start
+        // from the header block that holds the DKIM-Signature field.
+        $message = PHPMailer::normalizeBreaks($message, "\r\n");
+        $blankLine = strrpos(strstr($message, "\r\nDKIM-Signature:", true), "\r\n\r\n");
+        if ($blankLine !== false) {
+            $message = substr($message, $blankLine + 4);
+        }
+        list($header, $body) = explode("\r\n\r\n", $message, 2);
+        // Index the header fields by lower-case name, keeping folded lines with their field.
+        $fields = [];
+        foreach (preg_split('/\r\n(?![ \t])/', $header) as $field) {
+            $fields[strtolower(strstr($field, ':', true))] = $field;
+        }
+        preg_match_all('/(\w+)=([^;]*)/', $fields['dkim-signature'], $tags);
+        $tags = array_combine($tags[1], preg_replace('/\s+/', '', $tags[2]));
+
+        self::assertSame(
+            $tags['bh'],
+            base64_encode(hash('sha256', $this->Mail->DKIM_BodyC($body), true)),
+            'DKIM body hash mismatch'
+        );
+
+        $signedFields = [];
+        foreach (explode(':', $tags['h']) as $name) {
+            $signedFields[] = $fields[strtolower($name)];
+        }
+        // The signature also covers the DKIM-Signature field itself, with an empty b= tag.
+        $signedFields[] = preg_replace('/(;\s*b=)[^;]*/', '$1', $fields['dkim-signature']);
+        self::assertSame(
+            1,
+            openssl_verify(
+                $this->Mail->DKIM_HeaderC(implode("\r\n", $signedFields)),
+                base64_decode($tags['b']),
+                $publicKey,
+                'sha256WithRSAEncryption'
+            ),
+            'DKIM signature verification failed'
+        );
     }
 }
