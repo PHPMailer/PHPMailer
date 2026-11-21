@@ -126,7 +126,11 @@ class OAuth implements OAuthTokenProvider
         //Get a new token if it's not available or has expired. Update the refresh token.
         if (null === $this->oauthToken || $this->oauthToken->hasExpired()) {
             $this->oauthToken = $this->getToken();
-            $this->oauthRefreshToken = $this->oauthToken->getRefreshToken();
+            //Providers may not issue a new refresh token, in which case the current one remains valid
+            $refreshToken = $this->oauthToken->getRefreshToken();
+            if (!empty($refreshToken)) {
+                $this->oauthRefreshToken = $refreshToken;
+            }
         }
 
         return base64_encode(
