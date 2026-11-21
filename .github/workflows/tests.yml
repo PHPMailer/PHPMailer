@@ -223,6 +223,9 @@ jobs:
           if [ "${{ matrix.php }}" = "5.5" ]; then
             echo '$_REQUEST["mail_port"] = 25590;' | sudo tee -a test/testbootstrap.php
           fi
+          if [ "${{ matrix.php }}" = "8.5" ]; then
+            echo '$_REQUEST["mail_mailbox_dir"] = "build/badsmtp-mailbox";' | sudo tee -a test/testbootstrap.php
+          fi
           sudo chmod +x test/fakesendmail.sh
           sudo mkdir -p /var/qmail/bin
           sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
