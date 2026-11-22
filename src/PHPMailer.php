@@ -1720,7 +1720,7 @@ class PHPMailer
             //while remaining compatible with legacy SMTP servers to
             //the greatest degree possible: If the message uses
             //Unicode in the local parts of any addresses, it is sent
-            //using SMTPUTF8. If not, it it sent using
+            //using SMTPUTF8. If not, it is sent using
             //punycode-encoded domains and plain SMTP.
             if (
                 static::CHARSET_UTF8 === strtolower($this->CharSet) &&
