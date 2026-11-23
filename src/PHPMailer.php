@@ -1793,7 +1793,6 @@ class PHPMailer
             //Trim subject consistently
             $this->Subject = trim($this->Subject, self::TRIM_CHARACTERS);
 
-
             //Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEHeader = '';
             $this->MIMEBody = $this->createBody();
@@ -4637,7 +4636,6 @@ class PHPMailer
     {
         return $this->UseSMTPUTF8;
     }
-
 
     /**
      * Get an error message in the current language.

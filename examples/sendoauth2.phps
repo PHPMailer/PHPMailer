@@ -83,7 +83,6 @@ try {
          ]
     );
 
-
     $mail->setOAuth($oauthTokenProvider);                                 // Pass OAuthTokenProvider to PHPMailer
     $mail->Host    = 'smtp.office365.com';                                // Set SMTP server (smtp.gmail.com for Gmail)
 
