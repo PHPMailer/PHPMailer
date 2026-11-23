@@ -1,5 +1,8 @@
 # PHPMailer Change Log
 
+## WIP
+* Ensure that all `trim` calls have a consistent, explicit character list to avoid different behaviour in PHP 8.6.
+
 ## 7.2.0
 * XOAUTH authentication with long tokens could report success when it had failed.
 * S/MIME signed messages no longer contain bare LF line breaks.

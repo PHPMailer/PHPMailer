@@ -880,7 +880,6 @@ EOT;
         $mail->addAttachment(__DIR__, 'test.txt');
     }
 
-
     /**
      * Expect exceptions on sending after deleting a previously successfully attached file
      */
@@ -1380,7 +1379,6 @@ EOT;
         $this->Mail->preSend();
         self::assertTrue($this->Mail->send(), 'send failed');
     }
-
 
     /**
      * Test SMTP host connections.

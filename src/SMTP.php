@@ -337,8 +337,9 @@ class SMTP
                     str_replace(
                         "\n",
                         "\n                   \t                  ",
-                        trim($str)
-                    )
+                        trim($str, PHPMailer::TRIM_CHARACTERS)
+                    ),
+                    PHPMailer::TRIM_CHARACTERS
                 ),
                 "\n";
         }
@@ -959,7 +960,7 @@ class SMTP
 
         foreach ($lines as $n => $s) {
             //First 4 chars contain response code followed by - or space
-            $s = trim(substr($s, 4));
+            $s = trim(substr($s, 4), PHPMailer::TRIM_CHARACTERS);
             if (empty($s)) {
                 continue;
             }
@@ -1455,7 +1456,7 @@ class SMTP
 
             //Deliberate noise suppression - errors are handled afterwards
             $str = @fgets($this->smtp_conn, self::MAX_REPLY_LENGTH);
-            $this->edebug('SMTP INBOUND: "' . trim($str) . '"', self::DEBUG_LOWLEVEL);
+            $this->edebug('SMTP INBOUND: "' . trim($str, PHPMailer::TRIM_CHARACTERS) . '"', self::DEBUG_LOWLEVEL);
             $data .= $str;
             //If response is only 3 chars (not valid, but RFC5321 S4.2 says it must be handled),
             //or 4th character is a space or a line break char, we are done reading, break the loop.
@@ -1646,7 +1647,7 @@ class SMTP
             foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
                 $matches = [];
                 if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
-                    $this->last_smtp_transaction_id = trim($matches[1]);
+                    $this->last_smtp_transaction_id = trim($matches[1], PHPMailer::TRIM_CHARACTERS);
                     break;
                 }
             }
