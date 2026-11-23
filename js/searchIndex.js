@@ -926,6 +926,11 @@ Search.appendIndex(
             "summary": "\u0022Folding\u0020White\u0020Space\u0022\u0020a\u0020white\u0020space\u0020string\u0020used\u0020for\u0020line\u0020folding.",
             "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#constant_FWS"
         },                {
+            "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003ATRIM_CHARACTERS",
+            "name": "TRIM_CHARACTERS",
+            "summary": "The\u0020character\u0020list\u0020trimmed\u0020by\u0020default.",
+            "url": "classes/PHPMailer-PHPMailer-PHPMailer.html#constant_TRIM_CHARACTERS"
+        },                {
             "fqsen": "\\PHPMailer\\PHPMailer\\PHPMailer\u003A\u003AMAIL_MAX_LINE_LENGTH",
             "name": "MAIL_MAX_LINE_LENGTH",
             "summary": "The\u0020maximum\u0020line\u0020length\u0020supported\u0020by\u0020mail\u0028\u0029.",
