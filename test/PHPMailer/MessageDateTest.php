@@ -15,6 +15,7 @@ namespace PHPMailer\Test\PHPMailer;
 
 use DateTime;
 use DateTimeImmutable;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\TestCase;
 
 /**
@@ -49,7 +50,7 @@ final class MessageDateTest extends TestCase
     {
         $headers = $this->Mail->createHeader();
         if (preg_match('/^Date: (.+)$/m', $headers, $matches)) {
-            return rtrim($matches[1]);
+            return rtrim($matches[1], PHPMailer::TRIM_CHARACTERS);
         }
         return '';
     }
@@ -211,7 +212,7 @@ final class MessageDateTest extends TestCase
         // The Date value itself must be a clean, single-line RFC 5322 string.
         $dateValue = '';
         if (preg_match('/^Date: (.+)$/m', $headers, $matches)) {
-            $dateValue = rtrim($matches[1]);
+            $dateValue = rtrim($matches[1], PHPMailer::TRIM_CHARACTERS);
         }
         self::assertMatchesRegularExpression(
             self::RFC5322_PATTERN,

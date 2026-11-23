@@ -73,9 +73,9 @@ $publickey = str_replace(["\r", "\n"], '', $publickey);
 $keyparts = str_split($publickey, 253); //Becomes 255 when quotes are included
 //Quote each chunk
 foreach ($keyparts as $keypart) {
-    $dnsvalue .= '"' . trim($keypart) . '" ';
-    $dnsvalue2 .= '"' . trim($keypart) . '" ';
+    $dnsvalue .= '"' . trim($keypart, \PHPMailer\PHPMailer\PHPMailer::TRIM_CHARACTERS) . '" ';
+    $dnsvalue2 .= '"' . trim($keypart, \PHPMailer\PHPMailer\PHPMailer::TRIM_CHARACTERS) . '" ';
 }
-echo "\n\nDNS key:\n\n" . trim($dnskey);
-echo "\n\nDNS value:\n\n" . trim($dnsvalue);
-echo "\n\nDNS value (with escaping):\n\n" . trim($dnsvalue2);
+echo "\n\nDNS key:\n\n" . trim($dnskey, \PHPMailer\PHPMailer\PHPMailer::TRIM_CHARACTERS);
+echo "\n\nDNS value:\n\n" . trim($dnsvalue, \PHPMailer\PHPMailer\PHPMailer::TRIM_CHARACTERS);
+echo "\n\nDNS value (with escaping):\n\n" . trim($dnsvalue2, \PHPMailer\PHPMailer\PHPMailer::TRIM_CHARACTERS);

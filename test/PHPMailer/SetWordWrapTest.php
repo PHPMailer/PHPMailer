@@ -13,6 +13,7 @@
 
 namespace PHPMailer\Test\PHPMailer;
 
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\Test\PreSendTestCase;
 
 /**
@@ -56,7 +57,7 @@ final class SetWordWrapTest extends PreSendTestCase
         foreach ($lines as $i => $line) {
             self::assertLessThanOrEqual(
                 $wrapAt,
-                strlen(trim($line)),
+                strlen(trim($line, PHPMailer::TRIM_CHARACTERS)),
                 'Character count for line ' . ($i + 1) . ' does not comply with the expected ' . $wrapAt
                 . ' characters.' . PHP_EOL . 'Line contents: "' . $line . '"'
             );
