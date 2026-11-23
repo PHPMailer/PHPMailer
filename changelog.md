@@ -2,6 +2,9 @@
 
 ## WIP
 * Ensure that all `trim` calls have a consistent, explicit character list to avoid different behaviour in PHP 8.6.
+* OAuth requests that receive a refresh token will only update the stored refresh token if one is present in the response.
+* Added Kazakh language translation, thanks to @rgusseinov.
+* Make use of BadSMTP's message saving to apply DKIM tests to received messages.
 
 ## 7.2.0
 * XOAUTH authentication with long tokens could report success when it had failed.
