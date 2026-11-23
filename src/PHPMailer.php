@@ -804,6 +804,14 @@ class PHPMailer
     const FWS = ' ';
 
     /**
+     * The character list trimmed by default.
+     * This matches the default charlist of trim(), rtrim(), and ltrim()
+     * before PHP 8.6, which added the form feed character (\f) to it.
+     * Passing this explicitly keeps behavior consistent across PHP versions.
+     */
+    const TRIM_CHARACTERS = " \n\r\t\v\x00";
+
+    /**
      * SMTP RFC standard line ending; Carriage Return, Line Feed.
      *
      * @var string
@@ -952,8 +960,9 @@ class PHPMailer
                     str_replace(
                         "\n",
                         "\n                   \t                  ",
-                        trim($str)
-                    )
+                        trim($str, self::TRIM_CHARACTERS)
+                    ),
+                    self::TRIM_CHARACTERS
                 ),
                 "\n";
         }
@@ -998,7 +1007,7 @@ class PHPMailer
      */
     private function parseSendmailPath($sendmailPath)
     {
-        $sendmailPath = trim((string)$sendmailPath);
+        $sendmailPath = trim((string)$sendmailPath, self::TRIM_CHARACTERS);
         if ($sendmailPath === '') {
             return $sendmailPath;
         }
@@ -1143,7 +1152,7 @@ class PHPMailer
     {
         $pos = false;
         if ($address !== null) {
-            $address = trim($address);
+            $address = trim($address, self::TRIM_CHARACTERS);
             $pos = strrpos($address, '@');
         }
         if (false === $pos) {
@@ -1163,7 +1172,7 @@ class PHPMailer
             return false;
         }
         if ($name !== null && is_string($name)) {
-            $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+            $name = trim(preg_replace('/[\r\n]+/', '', $name), self::TRIM_CHARACTERS); //Strip breaks and trim
         } else {
             $name = '';
         }
@@ -1359,7 +1368,7 @@ class PHPMailer
         $addresses = [];
         $list = explode(',', $addrstr);
         foreach ($list as $address) {
-            $address = trim($address);
+            $address = trim($address, self::TRIM_CHARACTERS);
             //Is there a separate name part?
             if (strpos($address, '<') === false) {
                 //No separate name, just use the whole thing
@@ -1396,7 +1405,7 @@ class PHPMailer
      */
     private static function parseEmailString($input)
     {
-        $input = trim((string)$input);
+        $input = trim((string)$input, self::TRIM_CHARACTERS);
 
         if ($input === '') {
             return ['name' => '', 'email' => ''];
@@ -1413,10 +1422,10 @@ class PHPMailer
                 $name = $matches[2];
             // Simplest scenario, name and email are in the format "Name <email>".
             } elseif (isset($matches[3])) {
-                $name = trim($matches[3]);
+                $name = trim($matches[3], self::TRIM_CHARACTERS);
             }
 
-            return ['name' => $name, 'email' => trim($matches[4])];
+            return ['name' => $name, 'email' => trim($matches[4], self::TRIM_CHARACTERS)];
         }
 
         return ['name' => '', 'email' => $input];
@@ -1439,8 +1448,8 @@ class PHPMailer
             //Helps avoid a deprecation warning in the preg_replace() below
             $name = '';
         }
-        $address = trim((string)$address);
-        $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
+        $address = trim((string)$address, self::TRIM_CHARACTERS);
+        $name = trim(preg_replace('/[\r\n]+/', '', $name), self::TRIM_CHARACTERS); //Strip breaks and trim
         //Don't validate now addresses with IDN. Will be done in send().
         $pos = strrpos($address, '@');
         if (
@@ -1720,7 +1729,7 @@ class PHPMailer
             //while remaining compatible with legacy SMTP servers to
             //the greatest degree possible: If the message uses
             //Unicode in the local parts of any addresses, it is sent
-            //using SMTPUTF8. If not, it it sent using
+            //using SMTPUTF8. If not, it is sent using
             //punycode-encoded domains and plain SMTP.
             if (
                 static::CHARSET_UTF8 === strtolower($this->CharSet) &&
@@ -1748,7 +1757,7 @@ class PHPMailer
                     $this->{$address_kind} = '';
                     continue;
                 }
-                $this->{$address_kind} = trim($this->{$address_kind});
+                $this->{$address_kind} = trim($this->{$address_kind}, self::TRIM_CHARACTERS);
                 if (empty($this->{$address_kind})) {
                     continue;
                 }
@@ -1782,8 +1791,7 @@ class PHPMailer
             }
 
             //Trim subject consistently
-            $this->Subject = trim($this->Subject);
-
+            $this->Subject = trim($this->Subject, self::TRIM_CHARACTERS);
 
             //Create body before headers in case body makes changes to headers (e.g. altering transfer encoding)
             $this->MIMEHeader = '';
@@ -1932,7 +1940,7 @@ class PHPMailer
 
         $resultArgs = (empty($sendmailArgs) ? '' : ' ' . implode(' ', $sendmailArgs));
 
-        $sendmail = trim(escapeshellcmd($this->Sendmail) . $resultArgs);
+        $sendmail = trim(escapeshellcmd($this->Sendmail) . $resultArgs, self::TRIM_CHARACTERS);
         $this->edebug('Sendmail path: ' . $this->Sendmail);
         $this->edebug('Sendmail command: ' . $sendmail);
         $this->edebug('Envelope sender: ' . $this->Sender);
@@ -2091,7 +2099,7 @@ class PHPMailer
         foreach ($this->to as $toaddr) {
             $toArr[] = $this->addrFormat($toaddr);
         }
-        $to = trim(implode(', ', $toArr));
+        $to = trim(implode(', ', $toArr), self::TRIM_CHARACTERS);
 
         //If there are no To-addresses (e.g. when sending only to BCC-addresses)
         //the following should be added to get a correct DKIM-signature.
@@ -2370,11 +2378,11 @@ class PHPMailer
             if (
                 !preg_match(
                     '/^(?:(ssl|tls):\/\/)?(.+?)(?::(\d+))?$/',
-                    trim($hostentry),
+                    trim($hostentry, self::TRIM_CHARACTERS),
                     $hostinfo
                 )
             ) {
-                $this->edebug(self::lang('invalid_hostentry') . ' ' . trim($hostentry));
+                $this->edebug(self::lang('invalid_hostentry') . ' ' . trim($hostentry, self::TRIM_CHARACTERS));
                 //Not a valid host entry
                 continue;
             }
@@ -2900,7 +2908,7 @@ class PHPMailer
                 $result .= $this->headerLine('To', 'undisclosed-recipients:;');
             }
         }
-        $result .= $this->addrAppend('From', [[trim($this->From), $this->FromName]]);
+        $result .= $this->addrAppend('From', [[trim($this->From, self::TRIM_CHARACTERS), $this->FromName]]);
 
         //sendmail and mail() extract Cc from the header before sending
         if (count($this->cc) > 0) {
@@ -2953,9 +2961,9 @@ class PHPMailer
                 'X-Mailer',
                 'PHPMailer ' . self::VERSION . ' (https://github.com/PHPMailer/PHPMailer)'
             );
-        } elseif (is_string($this->XMailer) && trim($this->XMailer) !== '') {
+        } elseif (is_string($this->XMailer) && trim($this->XMailer, self::TRIM_CHARACTERS) !== '') {
             //Some string
-            $result .= $this->headerLine('X-Mailer', $this->secureHeader(trim($this->XMailer)));
+            $result .= $this->headerLine('X-Mailer', $this->secureHeader(trim($this->XMailer, self::TRIM_CHARACTERS)));
         } //Other values result in no X-Mailer header
 
         if ('' !== $this->ConfirmReadingTo) {
@@ -2965,8 +2973,8 @@ class PHPMailer
         //Add custom headers
         foreach ($this->CustomHeader as $header) {
             $result .= $this->headerLine(
-                trim($header[0]),
-                $this->encodeHeader(trim($header[1]))
+                trim($header[0], self::TRIM_CHARACTERS),
+                $this->encodeHeader(trim($header[1], self::TRIM_CHARACTERS))
             );
         }
         if (!$this->sign_key_file) {
@@ -3757,7 +3765,7 @@ class PHPMailer
     {
         $position = strtolower($position);
         if ($this->UseSMTPUTF8 && !("comment" === $position)) {
-            return trim(static::normalizeBreaks($str));
+            return trim(static::normalizeBreaks($str), self::TRIM_CHARACTERS);
         }
 
         $matchcount = 0;
@@ -3823,21 +3831,21 @@ class PHPMailer
                 } else {
                     $encoded = base64_encode($str);
                     $maxlen -= $maxlen % 4;
-                    $encoded = trim(chunk_split($encoded, $maxlen, "\n"));
+                    $encoded = trim(chunk_split($encoded, $maxlen, "\n"), self::TRIM_CHARACTERS);
                 }
                 $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
                 break;
             case 'Q':
                 $encoded = $this->encodeQ($str, $position);
                 $encoded = $this->wrapText($encoded, $maxlen, true);
-                $encoded = str_replace('=' . static::$LE, "\n", trim($encoded));
+                $encoded = str_replace('=' . static::$LE, "\n", trim($encoded, self::TRIM_CHARACTERS));
                 $encoded = preg_replace('/^(.*)$/m', ' =?' . $charset . "?$encoding?\\1?=", $encoded);
                 break;
             default:
                 return $str;
         }
 
-        return trim(static::normalizeBreaks($encoded));
+        return trim(static::normalizeBreaks($encoded), self::TRIM_CHARACTERS);
     }
 
     /**
@@ -4392,8 +4400,8 @@ class PHPMailer
             //Value passed in as name:value
             list($name, $value) = explode(':', $name, 2);
         }
-        $name = trim($name);
-        $value = (null === $value) ? null : trim($value);
+        $name = trim($name, self::TRIM_CHARACTERS);
+        $value = (null === $value) ? null : trim($value, self::TRIM_CHARACTERS);
 
         foreach ($this->CustomHeader as $k => $pair) {
             if ($pair[0] == $name) {
@@ -4424,8 +4432,8 @@ class PHPMailer
             //Value passed in as name:value
             list($name, $value) = explode(':', $name, 2);
         }
-        $name = trim($name);
-        $value = (null === $value) ? '' : trim($value);
+        $name = trim($name, self::TRIM_CHARACTERS);
+        $value = (null === $value) ? '' : trim($value, self::TRIM_CHARACTERS);
 
         $replaced = false;
         foreach ($this->CustomHeader as $k => $pair) {
@@ -4629,7 +4637,6 @@ class PHPMailer
         return $this->UseSMTPUTF8;
     }
 
-
     /**
      * Get an error message in the current language.
      *
@@ -4705,8 +4712,8 @@ class PHPMailer
             //Value passed in as name:value
             list($name, $value) = explode(':', $name, 2);
         }
-        $name = trim($name);
-        $value = (null === $value) ? '' : trim($value);
+        $name = trim($name, self::TRIM_CHARACTERS);
+        $value = (null === $value) ? '' : trim($value, self::TRIM_CHARACTERS);
         //Ensure name is not empty, and that neither name nor value contain line breaks
         if (empty($name) || strpbrk($name . $value, "\r\n") !== false) {
             if ($this->exceptions) {
@@ -4882,7 +4889,10 @@ class PHPMailer
         }
 
         return html_entity_decode(
-            trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/si', '', $html))),
+            trim(
+                strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/si', '', $html)),
+                self::TRIM_CHARACTERS
+            ),
             ENT_QUOTES,
             $this->CharSet
         );
@@ -5123,7 +5133,7 @@ class PHPMailer
      */
     public function secureHeader($str)
     {
-        return trim(str_replace(["\r", "\n"], '', $str));
+        return trim(str_replace(["\r", "\n"], '', $str), self::TRIM_CHARACTERS);
     }
 
     /**
@@ -5485,7 +5495,10 @@ class PHPMailer
             $headerValues . static::$LE . $dkimSignatureHeader
         );
         $signature = $this->DKIM_Sign($canonicalizedHeaders);
-        $signature = trim(chunk_split($signature, self::STD_LINE_LENGTH - 3, static::$LE . self::FWS));
+        $signature = trim(
+            chunk_split($signature, self::STD_LINE_LENGTH - 3, static::$LE . self::FWS),
+            self::TRIM_CHARACTERS
+        );
 
         return static::normalizeBreaks($dkimSignatureHeader . $signature);
     }
