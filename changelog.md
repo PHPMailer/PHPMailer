@@ -5,6 +5,7 @@
 * OAuth requests that receive a refresh token will only update the stored refresh token if one is present in the response.
 * Added Kazakh language translation, thanks to @rgusseinov.
 * Make use of BadSMTP's message saving to apply DKIM tests to received messages.
+* Further to the deprecation of `parseAddresses()` in 7.2.0, calling `parseSimplerAddresses()` when the IMAP extension is not available will no longer trigger a runtime notice. Plan to stop relying on PHPMailer for this function! See #3359.
 
 ## 7.2.0
 * XOAUTH authentication with long tokens could report success when it had failed.
