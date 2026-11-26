@@ -173,7 +173,7 @@ if (!isset($_GET['code'])) {
 } else {
     unset($_SESSION['provider']);
     //Restore the PKCE code verifier before redeeming the code (no effect for providers without PKCE)
-    $provider->setPkceCode($_SESSION['oauth2pkce'] ?? null);
+    $provider->setPkceCode(isset($_SESSION['oauth2pkce']) ? $_SESSION['oauth2pkce'] : null);
     unset($_SESSION['oauth2pkce']);
     //Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
