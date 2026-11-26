@@ -11,8 +11,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\OAuth;
-//Alias the League Google OAuth2 provider class
-use Greew\OAuth2\Client\Provider\Azure;
+//Alias the Microsoft Entra ID OAuth2 provider class
+use IpwSystems\OAuth2\Client\Provider\EntraID;
 
 //SMTP needs accurate times, and the PHP time zone MUST be set
 //This should be done in your php.ini, but this is how to do it if you don't have access to that
@@ -62,11 +62,11 @@ $clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 $tenantId = 'RANDOMCHARS-----HSFTAOIlagss';
 
 //Obtained by configuring and running get_oauth_token.php
-//after setting up an app in Google Developer Console.
+//after setting up an app in the Microsoft Entra admin center.
 $refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';
 
 //Create a new OAuth2 provider instance
-$provider = new Azure(
+$provider = new EntraID(
     [
         'clientId' => $clientId,
         'clientSecret' => $clientSecret,

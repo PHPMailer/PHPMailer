@@ -47,7 +47,7 @@
         "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
         "decomplexity/SendOauth2": "Adapter for using XOAUTH2 authentication",
         "directorytree/imapengine": "For uploading sent messages via IMAP, see gmail example",
-        "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
+        "ipwsystems/oauth2-entraid-provider": "Needed for Microsoft Azure (Entra ID) XOAUTH2 authentication",
         "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
         "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
         "psr/log": "For optional PSR-3 debug logging",
