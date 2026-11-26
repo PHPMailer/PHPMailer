@@ -44,8 +44,8 @@ use League\OAuth2\Client\Provider\Google;
 use Hayageek\OAuth2\Client\Provider\Yahoo;
 //@see https://github.com/stevenmaguire/oauth2-microsoft
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
-//@see https://github.com/greew/oauth2-azure-provider
-use Greew\OAuth2\Client\Provider\Azure;
+//@see https://packagist.org/packages/ipwsystems/oauth2-entraid-provider
+use IpwSystems\OAuth2\Client\Provider\EntraID;
 
 if (!isset($_GET['code']) && !isset($_POST['provider'])) {
     ?>
@@ -60,7 +60,7 @@ if (!isset($_GET['code']) && !isset($_POST['provider'])) {
     <input type="radio" name="provider" value="Microsoft" id="providerMicrosoft">
     <label for="providerMicrosoft">Microsoft</label><br>
     <input type="radio" name="provider" value="Azure" id="providerAzure">
-    <label for="providerAzure">Azure</label><br>
+    <label for="providerAzure">Azure / EntraID</label><br>
     <h1>Enter id and secret</h1>
     <p>These details are obtained by setting up an app in your provider's developer console.
     </p>
@@ -142,7 +142,7 @@ switch ($providerName) {
     case 'Azure':
         $params['tenantId'] = $tenantId;
 
-        $provider = new Azure($params);
+        $provider = new EntraID($params);
         $options = [
             'scope' => [
                 'https://outlook.office.com/SMTP.Send',
@@ -160,15 +160,21 @@ if (!isset($_GET['code'])) {
     //If we don't have an authorization code then get one
     $authUrl = $provider->getAuthorizationUrl($options);
     $_SESSION['oauth2state'] = $provider->getState();
+    //Providers that use PKCE need the code verifier again when the code is redeemed
+    $_SESSION['oauth2pkce'] = $provider->getPkceCode();
     header('Location: ' . $authUrl);
     exit;
     //Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
     unset($_SESSION['oauth2state']);
+    unset($_SESSION['oauth2pkce']);
     unset($_SESSION['provider']);
     exit('Invalid state');
 } else {
     unset($_SESSION['provider']);
+    //Restore the PKCE code verifier before redeeming the code (no effect for providers without PKCE)
+    $provider->setPkceCode(isset($_SESSION['oauth2pkce']) ? $_SESSION['oauth2pkce'] : null);
+    unset($_SESSION['oauth2pkce']);
     //Try to get an access token (using the authorization code grant)
     $token = $provider->getAccessToken(
         'authorization_code',
