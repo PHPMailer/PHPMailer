@@ -1098,6 +1098,28 @@ EOT;
         $this->Mail->createHeader();
     }
 
+    public function testSmtpAuthenticationErrorIncludesServerResponse()
+    {
+        $mail = new PHPMailer();
+        $smtp = new class extends SMTP {
+            public function getError(): array
+            {
+                return [
+                    'error' => '535 5.7.139',
+                    'detail' => 'SmtpClientAuthentication is disabled for the Tenant.',
+                ];
+            }
+        };
+        $mail->setSMTPInstance($smtp);
+
+        $method = new \ReflectionMethod($mail, 'getSmtpErrorMessage');
+
+        self::assertSame(
+            'SMTP Error: Could not authenticate. 535 5.7.139 SmtpClientAuthentication is disabled for the Tenant.',
+            $method->invoke($mail, 'authenticate')
+        );
+    }
+
     public function testBadSMTP()
     {
         $this->Mail->smtpConnect();

@@ -2463,7 +2463,7 @@ class PHPMailer
                             $this->oauth
                         )
                     ) {
-                        throw new Exception(self::lang('authenticate'));
+                        throw new Exception($this->getSmtpErrorMessage('authenticate'));
                     }
 
                     return true;
